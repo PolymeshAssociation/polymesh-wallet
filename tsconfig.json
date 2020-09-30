@@ -1,0 +1,16 @@
+{
+  "extends": "./node_modules/@polkadot/dev/config/tsconfig",
+  "exclude": ["build/**/*", "**/build/*", "**/build/**/*"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@polymathnetwork/extension": ["packages/extension/src"],
+      "@polymathnetwork/extension/*": ["packages/extension/src/*"],
+      "@polymathnetwork/extension-ui": ["packages/ui/src"],
+      "@polymathnetwork/extension-ui/*": ["packages/ui/src/*"],
+      "@polymathnetwork/extension-core": ["packages/core/src"],
+      "@polymathnetwork/extension-core/*": ["packages/core/src/*"],
+    },
+    "skipLibCheck": true
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "polymesh-wallet",
+  "version": "0.1.0",
+  "description": "A Wallet extension for Polymesh blockchain",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "yarn build:code && yarn build:zip",
+    "build:code": "NODE_ENV=production polkadot-dev-build-ts",
+    "build:release": "polkadot-ci-ghact-build",
+    "build:zip": "yarn build:zip:dst && yarn build:zip:src",
+    "build:zip:dst": "rm -rf ./master-build.zip && cd packages/extension/build && zip -r -FS ../../../master-build.zip .",
+    "build:zip:src": "rm -rf ./master-src.zip && zip -r -x '*build/*' -x '*node_modules*' -FS ./master-src.zip packages .babelrc.js .editorconfig .eslintignore .eslintrc.js babel.config.js CHANGELOG.md CONTRIBUTING.md i18next-scanner.config.js jest.config.js lerna.json LICENSE package.json README.md tsconfig.json yarn.lock",
+    "lint": "polkadot-dev-run-lint",
+    "lint:fix": "polkadot-dev-run-lint --fix",
+    "lint:css": "stylelint './packages/**/src/**/*.tsx'",
+    "clean": "polkadot-dev-clean-build",
+    "postinstall": "polkadot-dev-yarn-only",
+    "start": "yarn watch",
+    "test": "polkadot-dev-run-test",
+    "watch": "cd packages/extension && yarn polkadot-exec-webpack --config webpack.config.js --watch"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@polkadot/dev": "^0.55.49",
+    "@polkadot/typegen": "^1.32.1",
+    "ts-jest": "^26.4.1"
+  },
+  "author": "Remon Nashid <remon.sherin@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PolymathNetwork/polymesh-wallet/issues"
+  },
+  "homepage": "https://github.com/PolymathNetwork/polymesh-wallet#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PolymathNetwork/polymesh-wallet.git"
+  },
+  "keywords": [
+    "polymesh",
+    "polkadot",
+    "substrate",
+    "keyring",
+    "signing"
+  ]
+}
