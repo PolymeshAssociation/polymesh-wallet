@@ -13,7 +13,6 @@ import { subscribeAccounts, subscribePolyIsReady, subscribeAuthorizeRequests, su
 import { buildHierarchy } from '../util/buildHierarchy';
 import Accounts from './Accounts';
 import Authorize from './Authorize';
-import CreateAccount from './CreateAccount';
 import Derive from './Derive';
 import Export from './Export';
 import Forget from './Forget';
@@ -25,6 +24,7 @@ import Signing from './Signing';
 import Welcome from './Welcome';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { PolymeshContext as PolymeshContextType } from '../types';
+import { NewAccount } from './NewAccount';
 const startSettings = uiSettings.get();
 
 // Request permission for video, based on access we can hide/show import
@@ -141,7 +141,7 @@ export default function Popup (): React.ReactElement {
                     <PolymeshContext.Provider value={polymeshCtx}>
                       <ToastProvider>
                         <Switch>
-                          <Route path='/account/create'><CreateAccount /></Route>
+                          <Route path='/account/create'><NewAccount /></Route>
                           <Route path='/account/forget/:address'><Forget /></Route>
                           <Route path='/account/export/:address'><Export /></Route>
                           <Route path='/account/import-qr'><ImportQr /></Route>

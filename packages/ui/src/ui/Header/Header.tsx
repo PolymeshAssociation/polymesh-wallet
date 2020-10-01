@@ -7,5 +7,5 @@ export const Header = styled(Box)({
   paddingBottom: ({ theme }: { theme: any }) => theme.space.m as string,
   paddingLeft: ({ theme }: { theme: any }) => theme.space.s as string,
   paddingRight: ({ theme }: { theme: any }) => theme.space.s as string,
-  backgroundImage: 'linear-gradient(to right, #170087, #1813E4)'
+  backgroundImage: 'linear-gradient(to right, #170087, #1348E4)'
 });

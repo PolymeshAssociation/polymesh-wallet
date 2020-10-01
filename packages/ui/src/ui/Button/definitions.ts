@@ -19,6 +19,7 @@ export type ButtonProps = HtmlButtonProps & {
    */
   variant?: variants;
   fluid?: boolean;
+  minsize?: boolean;
   tight?: boolean;
   /**
    * Optionally specify an href for your Button

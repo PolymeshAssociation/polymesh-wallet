@@ -57,8 +57,8 @@ const Main = styled.main`
   }
 
   > * {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 8px;
+    padding-right: 8px;
   }
 `;
 

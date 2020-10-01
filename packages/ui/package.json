@@ -5,6 +5,7 @@
   "license": "Apache-2",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
+    "@hookform/error-message": "^0.0.4",
     "@polkadot/extension-base": "0.34.1",
     "@polkadot/extension-chains": "0.34.1",
     "@polkadot/extension-inject": "0.34.1",
@@ -22,6 +23,7 @@
     "react-contexify": "^4.1.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.3",
+    "react-hook-form": "^6.8.6",
     "react-i18next": "^11.7.2",
     "react-is": "^16.13.1",
     "react-router": "^5.2.0",

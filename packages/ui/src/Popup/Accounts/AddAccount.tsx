@@ -16,8 +16,8 @@ function AddAccount (): React.ReactElement {
   return (
     <>
       <Header>
-        <Box mt='l'
-          pb='5'>
+        <Box pb='xl'
+          pt='xxl'>
           <Box
             backgroundColor='brandLightest'
             border='solid'
@@ -25,13 +25,13 @@ function AddAccount (): React.ReactElement {
             borderRadius='50%'
             borderWidth={4}
             height={80}
-            padding={13}
+            padding={23}
             width={80}
           >
             <Icon Asset={SvgPolyNew}
               color='brandMain'
-              height={50}
-              width={50} />
+              height={30}
+              width={30} />
           </Box>
           <Box pt='m'
             width={220}>
@@ -52,21 +52,21 @@ function AddAccount (): React.ReactElement {
       <Box mt='m'>
         <Button fluid
           onClick={onCreateAccount}>
-          Create account
+          Create account from new phrase
         </Button>
       </Box>
       <Box mt='s'>
         <Button fluid
           onClick={onImportSeed}
           variant='secondary'>
-          Import account from seed
+          Restore account from phrase
         </Button>
       </Box>
       <Box mt='s'>
         <Button fluid
           onClick={onImportJson}
-          variant='ghost'>
-          Import account from JSON
+          variant='secondary'>
+          Import account from JSON file
         </Button>
       </Box>
     </>

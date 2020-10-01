@@ -27,7 +27,7 @@ const ButtonComponent: ForwardRefRenderFunction<HTMLButtonElement, React.PropsWi
 const ButtonWithRef = React.forwardRef(ButtonComponent);
 
 export const Button = styled(ButtonWithRef)<ButtonProps>(
-  ({ fluid, iconPosition, theme, tight }) => ({
+  ({ fluid, iconPosition, minsize, theme, tight }) => ({
     whiteSpace: 'nowrap',
     position: 'relative',
     display: 'inline-flex',
@@ -38,9 +38,9 @@ export const Button = styled(ButtonWithRef)<ButtonProps>(
     textDecoration: 'none',
     letterSpacing: '0.75px',
     border: 'none',
-    padding: '0.75rem 1.75rem',
+    padding: minsize ? '0.75rem 0.25rem' : '0.75rem 1.75rem',
     minHeight: '2.5rem',
-    minWidth: tight ? '100px' : '128px',
+    minWidth: minsize ? '2.5rem' : tight ? '100px' : '128px',
     lineHeight: theme.lineHeights.tight,
     fontFamily: theme.fontFamilies.baseText,
     fontSize: theme.fontSizes[1],

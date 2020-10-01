@@ -53,7 +53,7 @@ export const Wrapper = styled.label<StyledProps<BaseInputProps>>((props) => ({
     border: `1px solid ${props.theme.colors.placeholder}`,
     borderRadius: props.theme.radii[1],
     color: props.theme.colors.highlightText,
-    height: '1.5rem',
+    height: '40px',
     backgroundColor: 'white'
   },
   ...getInputStyles(props)
@@ -64,8 +64,8 @@ export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, unit }) =>
   width: '100%',
   flexGrow: 1,
   boxSizing: 'border-box',
-  height: '100%',
-  padding: '0 5px',
+  // height: '100%',
+  padding: '10px 16px 10px 16px',
   marginLeft: '2px',
   marginRight: '2px',
   backgroundColor: 'transparent',
@@ -94,7 +94,7 @@ export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, unit }) =>
     /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: theme.colors.placeholder,
     opacity: 1 /* Firefox */,
-    fontFamily: 'Inter',
+    fontFamily: theme.fontFamilies.baseText,
     fontStyle: 'normal',
     fontWeight: theme.fontWeights.normal,
     fontSize: '14px',
@@ -104,7 +104,7 @@ export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, unit }) =>
   ':-ms-input-placeholder': {
     /* Internet Explorer 10-11 */
     color: theme.colors.placeholder,
-    fontFamily: 'Inter',
+    fontFamily: theme.fontFamilies.baseText,
     fontStyle: 'normal',
     fontWeight: theme.fontWeights.normal,
     fontSize: '14px',
@@ -114,7 +114,7 @@ export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, unit }) =>
   '::-ms-input-placeholder': {
     /* Microsoft Edge */
     color: theme.colors.placeholder,
-    fontFamily: 'Inter',
+    fontFamily: theme.fontFamilies.baseText,
     fontStyle: 'normal',
     fontWeight: theme.fontWeights.normal,
     fontSize: '14px',
