@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { Message } from '@polkadot/extension-base/types';
-import { AccountJson, AuthorizeRequest, SigningRequest, RequestTypes, MessageTypes, ResponseTypes, SeedLengths, SubscriptionMessageTypes, MetadataRequest, MessageTypesWithNullRequest, MessageTypesWithNoSubscriptions, MessageTypesWithSubscriptions, ResponseDeriveValidate, ResponseJsonRestore, ResponsePolyCallDetails } from '@polkadot/extension-base/background/types';
+import { AccountJson, AuthorizeRequest, SigningRequest, RequestTypes, MessageTypes, ResponseTypes, SeedLengths, SubscriptionMessageTypes, MetadataRequest, MessageTypesWithNullRequest, MessageTypesWithNoSubscriptions, MessageTypesWithSubscriptions, ResponseDeriveValidate, ResponseJsonRestore } from '@polkadot/extension-base/background/types';
 import { Chain } from '@polkadot/extension-chains/types';
 import { MetadataDef } from '@polkadot/extension-inject/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
@@ -15,6 +15,7 @@ import chrome from '@polkadot/extension-inject/chrome';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
+import { PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 
 interface Handler {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,6 +60,19 @@ function sendMessage<TMessageType extends MessageTypesWithNullRequest>(message: 
 function sendMessage<TMessageType extends MessageTypesWithNoSubscriptions>(message: TMessageType, request: RequestTypes[TMessageType]): Promise<ResponseTypes[TMessageType]>;
 function sendMessage<TMessageType extends MessageTypesWithSubscriptions>(message: TMessageType, request: RequestTypes[TMessageType], subscriber: (data: SubscriptionMessageTypes[TMessageType]) => void): Promise<ResponseTypes[TMessageType]>;
 function sendMessage<TMessageType extends MessageTypes> (message: TMessageType, request?: RequestTypes[TMessageType], subscriber?: (data: unknown) => void): Promise<ResponseTypes[TMessageType]> {
+  return new Promise((resolve, reject): void => {
+    const id = `${Date.now()}.${++idCounter}`;
+
+    handlers[id] = { reject, resolve, subscriber };
+
+    port.postMessage({ id, message, request: request || {} });
+  });
+}
+
+function polyMessage<TMessageType extends PolyMessageTypesWithNullRequest>(message: TMessageType): Promise<PolyRequestTypes[TMessageType]>;
+function polyMessage<TMessageType extends PolyMessageTypesWithNoSubscriptions>(message: TMessageType, request: PolyRequestTypes[TMessageType]): Promise<PolyResponseTypes[TMessageType]>;
+function polyMessage<TMessageType extends PolyMessageTypesWithSubscriptions>(message: TMessageType, request: PolyRequestTypes[TMessageType], subscriber: (data: PolySubscriptionMessageTypes[TMessageType]) => void): Promise<PolyResponseTypes[TMessageType]>;
+function polyMessage<TMessageType extends PolyMessageTypes> (message: TMessageType, request?: PolyRequestTypes[TMessageType], subscriber?: (data: unknown) => void): Promise<PolyResponseTypes[TMessageType]> {
   return new Promise((resolve, reject): void => {
     const id = `${Date.now()}.${++idCounter}`;
 
@@ -129,15 +143,15 @@ export async function createSeed (length?: SeedLengths, type?: KeypairType): Pro
 }
 
 export async function subscribePolyAccounts (cb: (accounts: IdentifiedAccount[]) => void): Promise<boolean> {
-  return sendMessage('pri(polyAccounts.subscribe)', null, cb);
+  return polyMessage('poly:pri(accounts.subscribe)', null, cb);
 }
 
 export async function subscribePolyNetwork (cb: (network: NetworkName) => void): Promise<boolean> {
-  return sendMessage('pri(polyNetwork.subscribe)', null, cb);
+  return polyMessage('poly:pri(network.subscribe)', null, cb);
 }
 
 export async function setNetwork (network: NetworkName): Promise<boolean> {
-  return sendMessage('pri(polyNetwork.set)', { network });
+  return polyMessage('poly:pri(network.set)', { network });
 }
 
 export async function getMetadata (genesisHash?: string | null, isPartial = false): Promise<Chain | null> {
@@ -186,27 +200,27 @@ export async function subscribeAccounts (cb: (accounts: AccountJson[]) => void):
 }
 
 export async function subscribePolySelectedAccount (cb: (selected: string | undefined) => void): Promise<boolean> {
-  return sendMessage('pri(polySelectedAccount.subscribe)', null, cb);
+  return polyMessage('poly:pri(selectedAccount.subscribe)', null, cb);
 }
 
 export async function subscribePolyIsReady (cb: (isReady: boolean) => void): Promise<boolean> {
-  return sendMessage('pri(polyIsReady.subscribe)', null, cb);
+  return polyMessage('poly:pri(isReady.subscribe)', null, cb);
 }
 
 export async function setPolySelectedAccount (account: string): Promise<boolean> {
-  return sendMessage('pri(polySelectedAccount.set)', { account });
+  return polyMessage('poly:pri(selectedAccount.set)', { account });
 }
 
 export async function setPolyNetwork (network: NetworkName): Promise<boolean> {
-  return sendMessage('pri(polyNetwork.set)', { network });
+  return polyMessage('poly:pri(network.set)', { network });
 }
 
 export async function renameIdentity (network: NetworkName, did: string, name: string): Promise<boolean> {
-  return sendMessage('pri(polyIdentity.rename)', { network, did, name });
+  return polyMessage('poly:pri(identity.rename)', { network, did, name });
 }
 
 export async function getPolyCallDetails (request: SignerPayloadJSON): Promise<ResponsePolyCallDetails> {
-  return sendMessage('pri(polyCallDetails.get)', { request });
+  return polyMessage('poly:pri(callDetails.get)', { request });
 }
 
 export async function subscribeAuthorizeRequests (cb: (accounts: AuthorizeRequest[]) => void): Promise<boolean> {

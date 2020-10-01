@@ -1,10 +1,10 @@
 import apiPromise from './apiPromise';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { upperFirst } from 'lodash-es';
-import { ResponseCallDetails } from '@polkadot/extension-core/background/types';
+import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 import { NetworkName } from '../types';
 
-async function callDetails (request: SignerPayloadJSON, network: NetworkName): Promise<ResponseCallDetails> {
+async function callDetails (request: SignerPayloadJSON, network: NetworkName): Promise<ResponsePolyCallDetails> {
   const api = await apiPromise[network];
   let protocolFee = '0';
   let networkFee = '0';

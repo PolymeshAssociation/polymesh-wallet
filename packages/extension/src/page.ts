@@ -6,7 +6,7 @@ import { Message } from '@polkadot/extension-base/types';
 
 import { handleResponse } from '@polkadot/extension-base/page';
 import { injectExtension } from '@polkadot/extension-inject';
-import { enable } from '@polymathnetwork/extension-core/injected';
+import { enable } from '@polymathnetwork/extension-core/page';
 
 // setup a response listener (events created by the loader for extension responses)
 window.addEventListener('message', ({ data, source }: Message): void => {

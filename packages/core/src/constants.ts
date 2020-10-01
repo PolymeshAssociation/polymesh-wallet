@@ -12,8 +12,11 @@ const networkLabels: Record<NetworkName, string> = {
 
 const defaultNetwork: NetworkName = NetworkName.pmf;
 
+const messagePrefix = 'poly:';
+
 export {
   networkURLs,
   networkLabels,
-  defaultNetwork
+  defaultNetwork,
+  messagePrefix
 };

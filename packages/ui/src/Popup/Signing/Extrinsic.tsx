@@ -15,7 +15,7 @@ import { Table } from '../../components';
 import useMetadata from '../../hooks/useMetadata';
 import useTranslation from '../../hooks/useTranslation';
 import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
-import { ResponsePolyCallDetails } from '@polkadot/extension-base/background/types';
+import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 
 interface Decoded {
   args: AnyJson | null;

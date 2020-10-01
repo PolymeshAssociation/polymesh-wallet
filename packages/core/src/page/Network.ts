@@ -1,4 +1,4 @@
-import { SendRequest } from '@polkadot/extension-base/page/types';
+import { SendRequest } from '@polymathnetwork/extension-core/page/types';
 import { Unsubcall } from '@polkadot/extension-inject/types';
 import { InjectedNetwork, NetworkMeta } from '../types';
 
@@ -11,11 +11,11 @@ export default class Network implements InjectedNetwork {
   }
 
   public get (): Promise<NetworkMeta> {
-    return sendRequest('pub(polyNetwork.get)');
+    return sendRequest('poly:pub(network.get)');
   }
 
   public subscribe (cb: (networkMeta: NetworkMeta) => unknown): Unsubcall {
-    sendRequest('pub(polyNetwork.subscribe)', null, cb)
+    sendRequest('poly:pub(network.subscribe)', null, cb)
       .catch((error: Error) => console.error(error));
 
     return (): void => {

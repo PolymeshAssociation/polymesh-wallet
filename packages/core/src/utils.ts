@@ -1,3 +1,5 @@
+import { messagePrefix } from './constants';
+
 // Sort an array by prioritizing a certain element
 function prioritize<P, T> (first: P, extractor: (a: T) => P) {
   return function (a: T, b: T): number {
@@ -5,6 +7,13 @@ function prioritize<P, T> (first: P, extractor: (a: T) => P) {
   };
 }
 
+function isPolyMessage (message: string) {
+  return message.indexOf(messagePrefix) === 0 ||
+  message === 'pub(accounts.list)' ||
+  message === 'pub(accounts.subscribe)';
+}
+
 export {
-  prioritize
+  prioritize,
+  isPolyMessage
 };

@@ -36,7 +36,7 @@ import { StyledComponentProps } from 'styled-components';
 import { styled } from '../../styles';
 import { MaxWidthScale } from '../../styles/utils';
 import { ScaleProps } from '../../styles/themeTypes';
-import { Theme } from '@polkadot/extension-ui/types';
+import { Theme } from '../../types';
 
 export type BoxThemeProps = MinWidthProps &
 MaxWidthProps &
