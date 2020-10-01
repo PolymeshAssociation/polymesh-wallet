@@ -1,7 +1,3 @@
-// Copyright 2019-2020 @polkadot/extension authors & contributors
-// This software may be modified and distributed under the terms
-// of the Apache-2.0 license. See the LICENSE file for details.
-
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { PolyRequestTypes, PolyResponseTypes, PolyMessageTypes } from '../types';
