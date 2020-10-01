@@ -6,9 +6,12 @@
   "workspaces": [
     "packages/*"
   ],
+  "bin": {
+    "poly-dev-build-ts": "./scripts/poly-dev-build-ts.js"
+  },
   "scripts": {
     "build": "yarn build:code && yarn build:zip",
-    "build:code": "NODE_ENV=production polkadot-dev-build-ts",
+    "build:code": "NODE_ENV=production node ./scripts/poly-dev-build-ts.js",
     "build:release": "polkadot-ci-ghact-build",
     "build:zip": "yarn build:zip:dst && yarn build:zip:src",
     "build:zip:dst": "rm -rf ./master-build.zip && cd packages/extension/build && zip -r -FS ../../../master-build.zip .",
@@ -36,7 +39,11 @@
     "@babel/core": "^7.11.6",
     "@polkadot/dev": "^0.55.49",
     "@polkadot/typegen": "^1.32.1",
-    "ts-jest": "^26.4.1"
+    "ts-jest": "^26.4.1",
+    "@types/jest": "^26.0.14",
+    "copy-webpack-plugin": "^6.1.0",
+    "i18next-scanner": "^2.11.0",
+    "sinon-chrome": "^3.0.1"
   },
   "author": "Remon Nashid <remon.sherin@gmail.com>",
   "license": "ISC",
