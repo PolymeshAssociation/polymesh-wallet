@@ -18,13 +18,13 @@ import Export from './Export';
 import Forget from './Forget';
 import ImportQr from './ImportQr';
 import { ImportSeed } from './ImportSeed';
-import RestoreJson from './RestoreJson';
 import Metadata from './Metadata';
 import Signing from './Signing';
 import Welcome from './Welcome';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { PolymeshContext as PolymeshContextType } from '../types';
 import { NewAccount } from './NewAccount';
+import { ImportJSon } from './ImportJson';
 const startSettings = uiSettings.get();
 
 // Request permission for video, based on access we can hide/show import
@@ -146,7 +146,7 @@ export default function Popup (): React.ReactElement {
                           <Route path='/account/export/:address'><Export /></Route>
                           <Route path='/account/import-qr'><ImportQr /></Route>
                           <Route path='/account/import-seed'><ImportSeed /></Route>
-                          <Route path='/account/restore-json'><RestoreJson /></Route>
+                          <Route path='/account/restore-json'><ImportJSon /></Route>
                           <Route path='/account/derive/:address/locked'><Derive isLocked /></Route>
                           <Route path='/account/derive/:address'><Derive /></Route>
                           <Route
