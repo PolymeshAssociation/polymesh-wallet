@@ -195,7 +195,7 @@ export default function Accounts (): React.ReactElement {
                 variant='c2'>
                 ACCOUNTS
               </Text>
-              <Link to='/account/import-seed'>
+              <Link to='/account/restore-json'>
                 { /* /account/create */ }
                 <Flex justifyContent='center'>
                   <Box mx='s'>

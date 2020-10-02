@@ -3,8 +3,8 @@ import { ActionContext, PolymeshContext } from '../../components';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { Box, Button, ButtonSmall, Flex, Header, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { jsonRestore, jsonVerifyPassword, jsonVerifyFile, validateAccount } from '../../messaging';
-import { formatNumber, isHex, u8aToString, hexToU8a } from '@polkadot/util';
+import { jsonRestore, jsonVerifyFile, validateAccount } from '../../messaging';
+import { isHex, u8aToString, hexToU8a } from '@polkadot/util';
 import { FieldError, useForm } from 'react-hook-form';
 
 interface FileState {
@@ -32,7 +32,7 @@ export const ImportJSon: FC = () => {
       try {
         // Check the wallet password
         if (selectedAccount && selectedAccount !== '') {
-          const isValidPassword = await validateAccount(selectedAccount, data.password);
+          const isValidPassword = await validateAccount(selectedAccount, data.walletPassword);
 
           if (!isValidPassword) {
             setError('walletPassword', { type: 'manual' });
@@ -295,7 +295,7 @@ export const ImportJSon: FC = () => {
                       <Text color='alert'
                         variant='b3'>
                         {(errors.walletPassword as FieldError).type === 'required' && 'Required field'}
-                        {(errors.walletPassword as FieldError).type === 'minLength' && 'Invalid'}
+                        {(errors.walletPassword as FieldError).type === 'manual' && 'Invalid password'}
                       </Text>
                     </Box>
                   }
