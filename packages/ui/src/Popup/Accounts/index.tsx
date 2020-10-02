@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
-import { AccountContext, Link, PolymeshContext } from '../../components';
+import { AccountContext, PolymeshContext } from '../../components';
 import AddAccount from './AddAccount';
 import { Button } from 'react-aria-menubutton';
 import { Text, Box, Header, TextEllipsis, Flex, Icon, Heading, LabelWithCopy, Menu, MenuItem, Wrapper } from '../../ui';
