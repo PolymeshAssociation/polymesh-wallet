@@ -1,9 +1,9 @@
 import React, { FC, useContext, useRef, useState } from 'react';
 import { ActionContext, PolymeshContext } from '../../components';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { Box, Button, ButtonSmall, Flex, Header, Heading, Icon, LabelWithCopy, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
-import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { jsonRestore, jsonVerifyPassword, jsonVerifyFile } from '../../messaging';
+import { Box, Button, ButtonSmall, Flex, Header, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { jsonRestore, jsonVerifyPassword, jsonVerifyFile, validateAccount } from '../../messaging';
 import { formatNumber, isHex, u8aToString, hexToU8a } from '@polkadot/util';
 import { FieldError, useForm } from 'react-hook-form';
 
@@ -15,20 +15,46 @@ interface FileState {
 
 export const ImportJSon: FC = () => {
   const { selectedAccount } = useContext(PolymeshContext);
-  const [isValid, setIsValid] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState<File>();
+  const [filename, setFilename] = useState('');
   const fileRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [accountName, setAccountName] = useState('');
-  const [accountJson, setAccountJson] = useState<FileState>();
-  const { errors, handleSubmit, register, setError, watch } = useForm({
+  const [accountJson, setAccountJson] = useState<FileState | undefined>();
+  const { errors, handleSubmit, register, setError } = useForm({
     defaultValues: {
       jsonPassword: '',
       walletPassword: ''
     }
   });
-  const formValues: { [x: string]: string; } = watch();
+  const onAction = useContext(ActionContext);
 
-  const onSubmit = async (data: { [x: string]: string; }) => {}
+  const onSubmit = async (data: { [x: string]: string; }) => {
+    if (accountJson && accountJson?.json) {
+      try {
+        // Check the wallet password
+        if (selectedAccount && selectedAccount !== '') {
+          const isValidPassword = await validateAccount(selectedAccount, data.password);
+
+          if (!isValidPassword) {
+            setError('walletPassword', { type: 'manual' });
+
+            return;
+          }
+        }
+
+        const decodedAccount = await jsonRestore(accountJson?.json, data.jsonPassword);
+
+        if (decodedAccount.error) {
+          setError('jsonPassword', { type: 'manual' });
+
+          return;
+        }
+
+        onAction('/');
+      } catch (e) {
+        console.log('ERROR', e);
+      }
+    }
+  };
 
   const BYTE_STR_0 = '0'.charCodeAt(0);
   const BYTE_STR_X = 'x'.charCodeAt(0);
@@ -83,6 +109,7 @@ export const ImportJSon: FC = () => {
         const data = convertResult(target.result as ArrayBuffer, false);
 
         setAccountName(name.split('_exported_account_')[0]);
+        setFilename(name);
 
         const fileContent = await parseFile(data);
 
@@ -91,6 +118,12 @@ export const ImportJSon: FC = () => {
     };
 
     reader.readAsArrayBuffer(file);
+  };
+
+  const clearUploadedFile = () => {
+    setAccountJson(undefined);
+    setFilename('');
+    setAccountName('');
   };
 
   return (
@@ -131,19 +164,56 @@ export const ImportJSon: FC = () => {
           JSON file
         </Text>
       </Box>
-      <input hidden={true}
-        name='jsonFile'
-        onChange={handleFileChange}
-        ref={fileRef}
-        type='file'
-      />
-      <Box mt='s'>
-        <ButtonSmall fluid
-          onClick={showUpload}
-          variant='secondary'>Choose file</ButtonSmall>
-      </Box>
+      {!accountJson?.isFileValid &&
+        <>
+          <input hidden={true}
+            name='jsonFile'
+            onChange={handleFileChange}
+            ref={fileRef}
+            type='file'
+          />
+          <Box mt='s'>
+            <ButtonSmall fluid
+              onClick={showUpload}
+              variant='secondary'>Choose file</ButtonSmall>
+          </Box>
+        </>
+      }
       {accountJson?.isFileValid &&
         <>
+          <Flex>
+            <Box>
+              <Box
+                backgroundColor='gray.4'
+                borderRadius='50%'
+                height={24}
+                px='1'
+                py='0'
+                width={24}
+              >
+                <Icon Asset={SvgFileLockOutline}
+                  color='gray.3'
+                  height={14}
+                  width={14} />
+              </Box>
+            </Box>
+            <Flex justifyContent='space-between'
+              ml='s'>
+              <Text color='gray.1'
+                variant='b2'>
+                <TextEllipsis size={32}>
+                  {filename}
+                </TextEllipsis>
+              </Text>
+            </Flex>
+            <Box onClick={clearUploadedFile}
+              style={{ cursor: 'pointer' }}>
+              <Icon Asset={SvgDeleteOutline}
+                color='gray.3'
+                height={18}
+                width={18} />
+            </Box>
+          </Flex>
           <Box mt='m'>
             <Flex justifyContent='space-between'>
               <Box>
@@ -201,7 +271,7 @@ export const ImportJSon: FC = () => {
                     <Text color='alert'
                       variant='b3'>
                       {(errors.jsonPassword as FieldError).type === 'required' && 'Required field'}
-                      {(errors.jsonPassword as FieldError).type === 'minLength' && 'Invalid'}
+                      {(errors.jsonPassword as FieldError).type === 'manual' && 'Invalid password'}
                     </Text>
                   </Box>
                 }
@@ -240,7 +310,7 @@ export const ImportJSon: FC = () => {
         justifyContent='flex-end'
         mb='s'
         mx='xs'>
-        <Button disabled={!isValid}
+        <Button disabled={!accountJson?.isFileValid}
           fluid
           form='accountForm'
           type='submit'>
