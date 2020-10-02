@@ -2,12 +2,12 @@ import React, { FC, useState, useContext } from 'react';
 import BigNumber from 'bignumber.js';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { formatters } from '../../util';
-import { Box, Text, Flex, Icon, StatusBadge, TextInput, ButtonSmall, LabelWithCopy } from '../../ui';
-import { SvgPencilOutline,
-  SvgWindowClose,
-  SvgCheck } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Text, Flex, Icon, StatusBadge, TextInput, ButtonSmall, LabelWithCopy, Menu, MenuItem, Wrapper } from '../../ui';
+import { SvgPencilOutline, SvgWindowClose, SvgCheck, SvgDotsVertical } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
 import { ActionContext } from '../../components';
+import { useHistory } from 'react-router-dom';
+import { Button } from 'react-aria-menubutton';
 
 export interface Props {
   account: IdentifiedAccount;
@@ -18,10 +18,51 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   const { address, balance, did, keyType, name } = account;
 
   const onAction = useContext(ActionContext);
+  const history = useHistory();
 
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState(name);
   const [hover, setHover] = useState(false);
+
+  const renderMenuItems = (address: string) => {
+    return (
+      <>
+        {/* @ts-ignore */}
+        <MenuItem value={`export:${address}`}>Export account</MenuItem>
+        {/* @ts-ignore */}
+        <MenuItem value={`forget:${address}`}>Forget account</MenuItem>
+      </>
+    );
+  };
+
+  const handleMenuClick = (event: string) => {
+    const [action, address] = event.split(':');
+
+    switch (action) {
+      case 'export':
+        return history.push(`/account/export/${address}`);
+      case 'forget':
+        return history.push(`/account/forget/${address}`);
+    }
+  };
+
+  const renderActionsMenu = (address: string) => {
+    return (
+      <>
+        {/* @ts-ignore */}
+        <Wrapper onSelection={handleMenuClick}>
+          <Button>
+            <Icon Asset={SvgDotsVertical}
+              color='gray.1'
+              height={16}
+              width={16} />
+          </Button>
+          {/* @ts-ignore */}
+          <Menu>{renderMenuItems(address)}</Menu>
+        </Wrapper>
+      </>
+    );
+  };
 
   const renderType = (keyType: string) => {
     const color = keyType === 'primary' ? 'green' : 'blue';
@@ -141,6 +182,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               {formatters.formatAmount(new BigNumber(balance || 0), 2, true)} POLYX
             </Text>
           </Box>
+          {renderActionsMenu(address)}
         </Flex>
       </>
     );
@@ -198,6 +240,9 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           </Box>
           <Box>
             <ButtonSmall variant='secondary'>Assign</ButtonSmall>
+          </Box>
+          <Box>
+            {renderActionsMenu(address)}
           </Box>
         </Flex>
       </>

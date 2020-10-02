@@ -1,10 +1,7 @@
 import React, { FC } from 'react';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
-import { Button } from 'react-aria-menubutton';
-import { useHistory } from 'react-router-dom';
-import { Box, Text, Flex, Icon, Menu, MenuItem, Wrapper, LabelWithCopy } from '../../ui';
-import { SvgDotsVertical,
-  SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Text, Flex, Icon, LabelWithCopy } from '../../ui';
+import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountView } from './AccountView';
 
 export interface Props {
@@ -15,30 +12,6 @@ export interface Props {
 }
 
 export const AccountsContainer: FC<Props> = ({ accounts, headerColor, headerText, selectedAccount }) => {
-  const history = useHistory();
-
-  const renderMenuItems = () => {
-    return (
-      <>
-        {/* @ts-ignore */}
-        <MenuItem value='export'>Export account</MenuItem>
-        {/* @ts-ignore */}
-        <MenuItem value='forget'>Forget account</MenuItem>
-      </>
-    );
-  };
-
-  const handleMenuClick = (event: string) => {
-    const { address } = accounts[0];
-
-    switch (event) {
-      case 'export':
-        return history.push(`/account/export/${address}`);
-      case 'forget':
-        return history.push(`/account/forget/${address}`);
-    }
-  };
-
   const renderContainerHeader = (isAssigned: boolean) => {
     if (isAssigned) {
       return (
@@ -66,17 +39,6 @@ export const AccountsContainer: FC<Props> = ({ accounts, headerColor, headerText
                         width={14} />
                     </Box>
                 }
-                {/* @ts-ignore */}
-                <Wrapper onSelection={handleMenuClick}>
-                  <Button>
-                    <Icon Asset={SvgDotsVertical}
-                      color='gray.1'
-                      height={16}
-                      width={16} />
-                  </Button>
-                  {/* @ts-ignore */}
-                  <Menu>{renderMenuItems()}</Menu>
-                </Wrapper>
               </Flex>
             </Box>
           </Flex>
