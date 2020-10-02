@@ -28,9 +28,9 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
 
   useEffect(() => {
     if (existingAccount !== '') {
-      setValidForm(formValues.accountName.length >= 4);
+      setValidForm(formValues.accountName.length >= 4 && formValues.password.length >= 8);
     } else {
-      setValidForm(formValues.accountName.length >= 4 && formValues.password === formValues.confirmPassword);
+      setValidForm(formValues.accountName.length >= 4 && formValues.password.length >= 8 && formValues.password === formValues.confirmPassword);
     }
   }, [formValues, setValidForm, existingAccount]);
 
@@ -38,8 +38,6 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
     if (existingAccount !== '') {
       // Existing wallet
       const isValidPassword = await validateAccount(existingAccount, data.password);
-
-      console.log('existing account', existingAccount);
 
       if (isValidPassword) {
         // All good
@@ -111,13 +109,10 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
             </Text>
           </Box>
           <Box>
-            <TextInput inputRef={register({ required: true
-            // ,
-            // minLength: 8
-            })}
-            name='password'
-            placeholder='Enter 8 characters or more'
-            type='password' />
+            <TextInput inputRef={register({ required: true, minLength: 8 })}
+              name='password'
+              placeholder='Enter 8 characters or more'
+              type='password' />
             {errors.password &&
               <Box>
                 <Text color='alert'
