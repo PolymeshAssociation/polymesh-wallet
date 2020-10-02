@@ -15,7 +15,7 @@ import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/
 import { AccountsContainer } from './AccountsContainer';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
 import { defaultNetwork, networkLabels } from '@polymathnetwork/extension-core/constants';
-import { setPolyNetwork } from '@polymathnetwork/extension-ui/messaging';
+import { setPolyNetwork, windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { useHistory } from 'react-router';
 
 export default function Accounts (): React.ReactElement {
@@ -89,7 +89,7 @@ export default function Accounts (): React.ReactElement {
     return colors[index % (colors.length - 1)];
   };
 
-  const renderMenuItems = () => {
+  const renderAccountMenuItems = () => {
     return (
       <>
         {/* @ts-ignore */}
@@ -102,7 +102,7 @@ export default function Accounts (): React.ReactElement {
     );
   };
 
-  const handleMenuClick = (event: string) => {
+  const handleAccountMenuClick = (event: string) => {
     switch (event) {
       case 'new':
         return history.push('/account/create');
@@ -111,6 +111,39 @@ export default function Accounts (): React.ReactElement {
       case 'fromJson':
         return history.push('/account/restore-json');
     }
+  };
+
+  const renderTopMenuButton = () => {
+    const _handleSelection = (event: string) => {
+      switch (event) {
+        case 'changePassword':
+          return history.push('/account/change-password');
+        case 'newWindow':
+          return windowOpen();
+      }
+    };
+
+    return (
+      <>
+        {/* @ts-ignore */}
+        <Wrapper onSelection={_handleSelection}>
+          <Button>
+            <Icon Asset={SvgDotsVertical}
+              color='gray.0'
+              height={24}
+              width={24} />
+          </Button>
+          {/* @ts-ignore */}
+          <Menu>
+            {/* @ts-ignore */}
+            <MenuItem value='changePassword'>Change password</MenuItem>
+            {/* @ts-ignore */}
+            <MenuItem value='newWindow'>Open extension in a new window</MenuItem>
+          </Menu>
+        </Wrapper>
+      </>
+
+    );
   };
 
   return (
@@ -131,10 +164,7 @@ export default function Accounts (): React.ReactElement {
                   color='gray.0'
                   height={24}
                   width={24} />
-                <Icon Asset={SvgDotsVertical}
-                  color='gray.0'
-                  height={24}
-                  width={24} />
+                {renderTopMenuButton()}
               </Flex>
             </Flex>
             {
@@ -223,7 +253,7 @@ export default function Accounts (): React.ReactElement {
                 ACCOUNTS
               </Text>
               {/* @ts-ignore */}
-              <Wrapper onSelection={handleMenuClick}>
+              <Wrapper onSelection={handleAccountMenuClick}>
                 <Button>
                   <Flex justifyContent='center'>
                     <Box mx='s'>
@@ -239,7 +269,7 @@ export default function Accounts (): React.ReactElement {
                   </Flex>
                 </Button>
                 {/* @ts-ignore */}
-                <Menu>{renderMenuItems()}</Menu>
+                <Menu>{renderAccountMenuItems()}</Menu>
               </Wrapper>
             </Flex>
             {
