@@ -25,6 +25,7 @@ import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { PolymeshContext as PolymeshContextType } from '../types';
 import { NewAccount } from './NewAccount';
 import { ImportJSon } from './ImportJson';
+import { ChangePassword } from './ChangePassword';
 const startSettings = uiSettings.get();
 
 // Request permission for video, based on access we can hide/show import
@@ -149,6 +150,7 @@ export default function Popup (): React.ReactElement {
                           <Route path='/account/restore-json'><ImportJSon /></Route>
                           <Route path='/account/derive/:address/locked'><Derive isLocked /></Route>
                           <Route path='/account/derive/:address'><Derive /></Route>
+                          <Route path='/account/change-password'><ChangePassword /></Route>
                           <Route
                             exact
                             path='/'
