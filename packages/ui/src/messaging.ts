@@ -262,3 +262,7 @@ export async function jsonVerifyPassword (password: string): Promise<boolean> {
 export async function jsonRestore (json: KeyringPair$Json, password: string): Promise<ResponseJsonRestore> {
   return sendMessage('pri(json.restore)', { json, password });
 }
+
+export async function changePassword (address: string, oldPass: string, newPass: string): Promise<boolean> {
+  return sendMessage('pri(accounts.changePassword)', { address, newPass, oldPass });
+}
