@@ -46,7 +46,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     }
   };
 
-  const renderActionsMenu = (address: string) => {
+  const renderActionsMenuButton = (address: string) => {
     return (
       <>
         {/* @ts-ignore */}
@@ -182,7 +182,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               {formatters.formatAmount(new BigNumber(balance || 0), 2, true)} POLYX
             </Text>
           </Box>
-          {renderActionsMenu(address)}
+          {renderActionsMenuButton(address)}
         </Flex>
       </>
     );
@@ -242,7 +242,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             <ButtonSmall variant='secondary'>Assign</ButtonSmall>
           </Box>
           <Box>
-            {renderActionsMenu(address)}
+            {renderActionsMenuButton(address)}
           </Box>
         </Flex>
       </>
