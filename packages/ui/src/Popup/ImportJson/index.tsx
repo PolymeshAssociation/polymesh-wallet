@@ -3,7 +3,7 @@ import { ActionContext, PolymeshContext } from '../../components';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { Box, Button, ButtonSmall, Flex, Header, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { jsonRestore, jsonVerifyFile, validateAccount } from '../../messaging';
+import { changePassword, jsonRestore, jsonVerifyFile, validateAccount } from '../../messaging';
 import { isHex, u8aToString, hexToU8a } from '@polkadot/util';
 import { FieldError, useForm } from 'react-hook-form';
 
@@ -28,7 +28,7 @@ export const ImportJSon: FC = () => {
   const onAction = useContext(ActionContext);
 
   const onSubmit = async (data: { [x: string]: string; }) => {
-    if (accountJson && accountJson?.json) {
+    if (accountJson && accountJson?.json && accountJson.address) {
       try {
         // Check the wallet password
         if (selectedAccount && selectedAccount !== '') {
@@ -47,6 +47,11 @@ export const ImportJSon: FC = () => {
           setError('jsonPassword', { type: 'manual' });
 
           return;
+        }
+
+        if (selectedAccount && selectedAccount !== '') {
+          // Adding  an account to existing accounts, change password to match
+          await changePassword(accountJson.address, data.jsonPassword, data.walletPassword);
         }
 
         onAction('/');
