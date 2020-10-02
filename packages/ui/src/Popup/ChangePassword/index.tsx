@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext } from 'react';
 import { Box, Button, Flex, Header, Heading, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { FieldError, useForm } from 'react-hook-form';
