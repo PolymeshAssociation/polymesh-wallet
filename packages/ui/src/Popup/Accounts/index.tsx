@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
 import { AccountContext, Link, PolymeshContext } from '../../components';
 import AddAccount from './AddAccount';
-import { Text, Box, Header, TextEllipsis, Flex, Icon, Heading, LabelWithCopy } from '../../ui';
+import { Button } from 'react-aria-menubutton';
+import { Text, Box, Header, TextEllipsis, Flex, Icon, Heading, LabelWithCopy, Menu, MenuItem, Wrapper } from '../../ui';
 import { SvgCheckboxMarkedCircle,
   SvgAlertCircle,
   SvgViewDashboard,
@@ -15,11 +16,13 @@ import { AccountsContainer } from './AccountsContainer';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
 import { defaultNetwork, networkLabels } from '@polymathnetwork/extension-core/constants';
 import { setPolyNetwork } from '@polymathnetwork/extension-ui/messaging';
+import { useHistory } from 'react-router';
 
 export default function Accounts (): React.ReactElement {
   const [currentAccount, setCurrentAccount] = useState<IdentifiedAccount>();
   const { hierarchy } = useContext(AccountContext);
   const { network, polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
+  const history = useHistory();
 
   useEffect(() => {
     polymeshAccounts && setCurrentAccount(polymeshAccounts.find((account) => (account.address === selectedAccount)));
@@ -84,6 +87,30 @@ export default function Accounts (): React.ReactElement {
     const colors = ['#DCEFFE', '#F2E6FF', '#F1FEE1', '#FFEBF1', '#FFEAE1', '#E6F9FE', '#FAF5FF', '#E6FFFA', '#EBF4FF'];
 
     return colors[index % (colors.length - 1)];
+  };
+
+  const renderMenuItems = () => {
+    return (
+      <>
+        {/* @ts-ignore */}
+        <MenuItem value='new'>Create new account</MenuItem>
+        {/* @ts-ignore */}
+        <MenuItem value='fromSeed'>Import from seed</MenuItem>
+        {/* @ts-ignore */}
+        <MenuItem value='fromJson'>Restore  from JSON</MenuItem>
+      </>
+    );
+  };
+
+  const handleMenuClick = (event: string) => {
+    switch (event) {
+      case 'new':
+        return history.push('/account/create');
+      case 'fromSeed':
+        return history.push('/account/import-seed');
+      case 'fromJson':
+        return history.push('/account/restore-json');
+    }
   };
 
   return (
@@ -195,21 +222,25 @@ export default function Accounts (): React.ReactElement {
                 variant='c2'>
                 ACCOUNTS
               </Text>
-              <Link to='/account/restore-json'>
-                { /* /account/create */ }
-                <Flex justifyContent='center'>
-                  <Box mx='s'>
-                    <Icon Asset={SvgPlus}
-                      color='brandMain'
-                      height={14}
-                      width={14} />
-                  </Box>
-                  <Text color='brandMain'
-                    variant='b2'>
-                    Add a key
-                  </Text>
-                </Flex>
-              </Link>
+              {/* @ts-ignore */}
+              <Wrapper onSelection={handleMenuClick}>
+                <Button>
+                  <Flex justifyContent='center'>
+                    <Box mx='s'>
+                      <Icon Asset={SvgPlus}
+                        color='brandMain'
+                        height={14}
+                        width={14} />
+                    </Box>
+                    <Text color='brandMain'
+                      variant='b2'>
+                      Add a key
+                    </Text>
+                  </Flex>
+                </Button>
+                {/* @ts-ignore */}
+                <Menu>{renderMenuItems()}</Menu>
+              </Wrapper>
             </Flex>
             {
               Object.keys(groupedAccounts).sort((a) => (a === 'unassigned' ? 1 : -1)).map((did: string, index) => {
