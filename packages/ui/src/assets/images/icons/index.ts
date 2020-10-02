@@ -129,6 +129,7 @@ export { SvgFileDocumentSearchOutline } from './generated/FileDocumentSearchOutl
 export { SvgFileDownloadOutline } from './generated/FileDownloadOutline';
 export { SvgFileConfigOutline } from './generated/FileConfigOutline';
 export { SvgFileOutline } from './generated/FileOutline';
+export { SvgFileLockOutline } from './generated/FileLockOutline';
 export { SvgFilter } from './generated/Filter';
 export { SvgFilterVariant } from './generated/FilterVariant';
 export { SvgFinance } from './generated/Finance';
