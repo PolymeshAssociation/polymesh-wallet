@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
-import { AccountContext, PolymeshContext } from '../../components';
+import { AccountContext, Dropdown, PolymeshContext } from '../../components';
 import AddAccount from './AddAccount';
 import { Button } from 'react-aria-menubutton';
 import { Text, Box, Header, TextEllipsis, Flex, Icon, Heading, LabelWithCopy, Menu, MenuItem, Wrapper } from '../../ui';
@@ -54,20 +54,25 @@ export default function Accounts (): React.ReactElement {
   };
 
   const renderNetworksSelector = (network: NetworkName = defaultNetwork) => {
+    const options = Object.keys(networkLabels).map((_network: string) =>
+      ({
+        value: _network,
+        text: networkLabels[_network as NetworkName]
+      })
+    );
+
     return (
-      <select onChange={handleNetworkChange}
-        value={network}>
-        {Object.keys(networkLabels).map((_network) => <option key={_network}
-          value={_network}>{networkLabels[_network as NetworkName]}</option>
-        )}
-      </select>
+      <Dropdown
+        label=''
+        onChange={handleNetworkChange}
+        options={options}
+        value={network}
+      />
     );
   };
 
-  const handleNetworkChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as NetworkName;
-
-    setPolyNetwork(value).then(() => {
+  const handleNetworkChange = (value: string) => {
+    setPolyNetwork(value as NetworkName).then(() => {
       // @TODO Handle this properly. Perhaps by showing a Loader until this promise has resolved?
     }).catch(console.error);
   };
