@@ -38,8 +38,10 @@ function meshAccountsEnhancer (dispatch: Dispatch): void {
     // Unsubscribe from all subscriptions before preparing a new list of subscriptions
     // to the newly selected network.
     Object.keys(unsubCallbacks).forEach((key) => {
-      unsubCallbacks[key]();
-      delete unsubCallbacks[key];
+      if (unsubCallbacks[key]) {
+        unsubCallbacks[key]();
+        delete unsubCallbacks[key];
+      }
     });
 
     apiPromise[network].then((api) => {
@@ -65,9 +67,12 @@ function meshAccountsEnhancer (dispatch: Dispatch): void {
 
         // A) If account is removed, clean up any associated subscriptions
         removedAccounts.forEach((account) => {
-          unsubCallbacks[account]();
-          delete unsubCallbacks[account];
           dispatch(accountActions.removeAccount({ address: account, network }));
+
+          if (unsubCallbacks[account]) {
+            unsubCallbacks[account]();
+            delete unsubCallbacks[account];
+          }
         });
 
         // B) Subscribe to new accounts
@@ -163,10 +168,15 @@ function meshAccountsEnhancer (dispatch: Dispatch): void {
         });
 
         removedDids.forEach((did) => {
-          unsubCallbacks[did]();
-          delete unsubCallbacks[did];
-          unsubCallbacks[`${did}:cdd`]();
-          delete unsubCallbacks[`${did}:cdd`];
+          if (unsubCallbacks[did]) {
+            unsubCallbacks[did]();
+            delete unsubCallbacks[did];
+          }
+
+          if (unsubCallbacks[`${did}:cdd`]) {
+            unsubCallbacks[`${did}:cdd`]();
+            delete unsubCallbacks[`${did}:cdd`];
+          }
         });
 
         prevDids = dids;
