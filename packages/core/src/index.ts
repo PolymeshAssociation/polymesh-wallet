@@ -16,6 +16,8 @@ import { actions as statusActions } from './store/features/status';
 import store, { Dispatch } from './store';
 import { AccountData, IdentityData, UnsubCallback } from './types';
 import { subscribeDidsList, subscribeIsRehydrated, subscribeNetwork } from './store/subscribers';
+import { getDids } from './store/getters';
+import { pollInterval } from './constants';
 
 type KeyringAccountData = {
   address: string,
@@ -125,36 +127,19 @@ function meshAccountsEnhancer (port: chrome.runtime.Port) {
                   prevAccounts = accounts;
                 });
 
+                /**
+                 * Accounts
+                 */
                 unsubCallbacks.accounts && unsubCallbacks.accounts();
                 unsubCallbacks.accounts = () => accountsSub.unsubscribe();
 
-                // eslint-disable-next-line dot-notation
-                unsubCallbacks['dids'] && unsubCallbacks['dids']();
+                /**
+                 * Identities
+                 */
+                unsubCallbacks.dids && unsubCallbacks.dids();
                 unsubCallbacks.dids = subscribeDidsList((dids: string[]) => {
                   const newDids = difference(dids, prevDids);
                   const removedDids = difference(prevDids, dids);
-
-                  api.rpc.chain.subscribeNewHeads(() => {
-                    dids.forEach((did) => {
-                      // Get the CDD claims associated with this DID.
-                      const res: [unknown, IdentityClaim][] = (api.query.identity.claims.entries as any)(
-                        { target: did, claim_type: 'CustomerDueDiligence' });
-                      // Out of those, get the ones issued by active claim issuers
-                      const claims = res
-                        .map(([, claim]) => claim)
-                        .filter((claim) => activeIssuers.indexOf(claim.claim_issuer.toString()) !== -1);
-                      // Save CDD data
-                      const cdd = claims.length > 0 ? {
-                        issuer: claims[0].claim_issuer.toString(),
-                        expiry: !claims[0].expiry.isEmpty ? Number(claims[0].expiry.toString()) : undefined
-                      } : undefined;
-
-                      dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
-                    });
-                  }).then((unsub) => {
-                    unsubCallbacks.newHeads && unsubCallbacks.newHeads();
-                    unsubCallbacks.newHeads = unsub;
-                  }).catch(console.error);
 
                   newDids.forEach((did) => {
                   // Get the keys associated with this DID.
@@ -195,6 +180,42 @@ function meshAccountsEnhancer (port: chrome.runtime.Port) {
 
                   prevDids = dids;
                 });
+
+                /**
+                 * CDD
+                 */
+                unsubCallbacks.newHeads && unsubCallbacks.newHeads();
+                api.rpc.chain.subscribeNewHeads((newHeader) => {
+                  // Run this every four block to save resources
+                  if (newHeader.number.toNumber() % pollInterval === 0) return;
+                  const dids = getDids();
+                  const promises = dids.map((did) =>
+                    api.query.identity.claims.entries({ target: did, claim_type: 'CustomerDueDiligence' }));
+
+                  Promise.all(promises)
+                    .then((results) =>
+                      (results as [unknown, IdentityClaim][][]).map((result) => result.length
+                        ? result.map(([, claim]) => claim)
+                          .filter((claim) => activeIssuers.indexOf(claim.claim_issuer.toString()) !== -1)
+                        : undefined))
+                    .then((results) => {
+                      dids.forEach((did, index) => {
+                        const didClaims = results[index];
+
+                        // Save CDD data
+                        const cdd = didClaims && didClaims.length > 0 ? {
+                          issuer: didClaims[0].claim_issuer.toString(),
+                          expiry: !didClaims[0].expiry.isEmpty ? Number(didClaims[0].expiry.toString()) : undefined
+                        } : undefined;
+
+                        dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
+                      });
+                    })
+                    .catch(console.error);
+                }).then((unsub) => {
+                  unsubCallbacks.newHeads && unsubCallbacks.newHeads();
+                  unsubCallbacks.newHeads = unsub;
+                }).catch(console.error);
               }
             ).catch(console.error);
 
