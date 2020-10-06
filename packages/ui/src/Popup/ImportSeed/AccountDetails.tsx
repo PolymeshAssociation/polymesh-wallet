@@ -95,7 +95,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
                 <Text color='alert'
                   variant='b3'>
                   {(errors.accountName as FieldError).type === 'required' && 'Required field'}
-                  {(errors.accountName as FieldError).type === 'minLength' && 'Invalid'}
+                  {(errors.accountName as FieldError).type === 'minLength' && 'Passwordtooshort'}
                 </Text>
               </Box>
             }
@@ -105,7 +105,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
           <Box>
             <Text color='gray.1'
               variant='b2m'>
-              {existingAccount !== '' ? 'Current password' : 'Password'}
+              {existingAccount !== '' ? 'Wallet password' : 'Password'}
             </Text>
           </Box>
           <Box>
