@@ -14,7 +14,7 @@ import { buildHierarchy } from '../util/buildHierarchy';
 import Accounts from './Accounts';
 import Authorize from './Authorize';
 import Derive from './Derive';
-import Export from './Export';
+import { ExportAccount } from './ExportAccount';
 import Forget from './Forget';
 import ImportQr from './ImportQr';
 import { ImportSeed } from './ImportSeed';
@@ -144,7 +144,7 @@ export default function Popup (): React.ReactElement {
                         <Switch>
                           <Route path='/account/create'><NewAccount /></Route>
                           <Route path='/account/forget/:address'><Forget /></Route>
-                          <Route path='/account/export/:address'><Export /></Route>
+                          <Route path='/account/export/:address'><ExportAccount /></Route>
                           <Route path='/account/import-qr'><ImportQr /></Route>
                           <Route path='/account/import-seed'><ImportSeed /></Route>
                           <Route path='/account/restore-json'><ImportJSon /></Route>
