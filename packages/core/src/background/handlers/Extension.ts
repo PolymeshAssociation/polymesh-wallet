@@ -83,7 +83,6 @@ export default class Extension {
     return callDetails(request, network);
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   public async handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], port: chrome.runtime.Port): Promise<PolyResponseType<TMessageType>> {
     switch (type) {
       case 'poly:pri(accounts.subscribe)':
