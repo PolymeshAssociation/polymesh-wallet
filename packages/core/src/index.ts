@@ -6,7 +6,7 @@ import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
 import apiPromise from './api/apiPromise';
-import { DidRecord, LinkedKeyInfo, IdentityClaim, CddStatus } from './api/apiPromise/types';
+import { DidRecord, LinkedKeyInfo, IdentityClaim } from './api/apiPromise/types';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
 
