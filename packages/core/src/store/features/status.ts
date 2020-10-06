@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type State = { isReady: boolean };
-const initialState: State = { isReady: false };
+type State = { isReady: boolean, rehydrated: boolean };
+const initialState: State = { isReady: false, rehydrated: false };
 
 const statusSlice = createSlice({
   name: 'status',
@@ -9,6 +9,9 @@ const statusSlice = createSlice({
   reducers: {
     setIsReady (state, action: PayloadAction<boolean>) {
       state.isReady = action.payload;
+    },
+    setRehydrated (state) {
+      state.rehydrated = true;
     }
   }
 });
