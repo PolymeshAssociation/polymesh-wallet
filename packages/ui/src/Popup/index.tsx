@@ -14,7 +14,7 @@ import { buildHierarchy } from '../util/buildHierarchy';
 import Accounts from './Accounts';
 import Authorize from './Authorize';
 import Derive from './Derive';
-import { ExportAccount } from './ExportAccount';
+import ExportAccount from './ExportAccount';
 import Forget from './Forget';
 import ImportQr from './ImportQr';
 import { ImportSeed } from './ImportSeed';

@@ -5,7 +5,7 @@ import { exportAccount } from '../../messaging';
 import { SvgAlertCircle, SvgOpenInNew } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { FieldError, useForm } from 'react-hook-form';
 
-export const ExportAccount: FC = () => {
+const ExportAccount: FC = () => {
   const onAction = useContext(ActionContext);
   const { selectedAccount } = useContext(PolymeshContext);
   const { errors, handleSubmit, register, setError } = useForm({
@@ -130,3 +130,5 @@ export const ExportAccount: FC = () => {
     </>
   );
 };
+
+export default ExportAccount;
