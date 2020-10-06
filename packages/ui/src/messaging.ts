@@ -146,10 +146,6 @@ export async function subscribePolyNetwork (cb: (network: NetworkName) => void):
   return polyMessage('poly:pri(network.subscribe)', null, cb);
 }
 
-export async function setNetwork (network: NetworkName): Promise<boolean> {
-  return polyMessage('poly:pri(network.set)', { network });
-}
-
 export async function getMetadata (genesisHash?: string | null, isPartial = false): Promise<Chain | null> {
   if (!genesisHash) {
     return null;
