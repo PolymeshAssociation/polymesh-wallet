@@ -18,6 +18,7 @@ chrome.runtime.onConnect.addListener((port): void => {
   // shouldn't happen, however... only listen to what we know about
   assert([PORT_CONTENT, PORT_EXTENSION].includes(port.name), `Unknown connection from ${port.name}`);
 
+  initPolymesh(port);
   // message and disconnect handlers
   port.onMessage.addListener((data): void => {
     if (isPolyMessage(data.message)) return polyHandlers(data, port);
@@ -33,8 +34,6 @@ cryptoWaitReady()
 
     // load all the keyring data
     keyring.loadAll({ store: new AccountsStore(), type: 'sr25519' });
-
-    initPolymesh();
 
     console.log('initialization completed');
   })

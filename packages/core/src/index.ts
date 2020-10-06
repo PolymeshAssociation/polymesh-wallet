@@ -9,6 +9,7 @@ import apiPromise from './api/apiPromise';
 import { DidRecord, LinkedKeyInfo, IdentityClaim } from './api/apiPromise/types';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
+import chrome from '@polkadot/extension-inject/chrome';
 
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
@@ -30,169 +31,194 @@ function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
   });
 }
 
-function meshAccountsEnhancer (dispatch: Dispatch): void {
-  const unsubCallbacks: Record<string, UnsubCallback> = {};
+const unsubCallbacks: Record<string, UnsubCallback> = {};
 
-  subscribeIsRehydrated((isRehydrated) => {
-    if (isRehydrated) {
-      subscribeNetwork((network) => {
-        dispatch(statusActions.setIsReady(false));
-        // Unsubscribe from all subscriptions before preparing a new list of subscriptions
-        // to the newly selected network.
-        Object.keys(unsubCallbacks).forEach((key) => {
-          if (unsubCallbacks[key]) {
-            unsubCallbacks[key]();
-            delete unsubCallbacks[key];
-          }
-        });
+function meshAccountsEnhancer (port: chrome.runtime.Port) {
+  return (dispatch: Dispatch): void => {
+    function unsubAll (): void {
+      console.log('unsubAll callback', Object.keys(unsubCallbacks));
+      Object.keys(unsubCallbacks).forEach((key) => {
+        if (unsubCallbacks[key]) {
+          unsubCallbacks[key]();
+          delete unsubCallbacks[key];
+        }
+      });
+    }
 
-        apiPromise[network].then((api) => {
-          let prevAccounts: string[] = [];
-          let prevDids: string[] = [];
-          let activeIssuers: string[] = [];
+    console.log('>>>> PORT', port);
 
-          api.query.cddServiceProviders.activeMembers().then(
-            (members) => {
-              activeIssuers = (members as unknown as string[]).map((member) => member.toString());
+    port.onDisconnect.addListener((): void => {
+      unsubAll();
+      console.log(`Disconnected from ${port.name}`);
+    });
 
-              const accountsSub = observeAccounts((accountsData: KeyringAccountData[]) => {
-                function accountName (_address: string): string | undefined {
-                  return accountsData.find(({ address }) => address === _address)?.name;
-                }
+    subscribeIsRehydrated((isRehydrated) => {
+      if (isRehydrated) {
+        subscribeNetwork((network) => {
+          dispatch(statusActions.setIsReady(false));
+          // Unsubscribe from all subscriptions before preparing a new list of subscriptions
+          // to the newly selected network.
+          unsubAll();
 
-                const accounts = accountsData.map(({ address }) => address);
-                const newAccounts = difference(accounts, prevAccounts);
-                const removedAccounts = difference(prevAccounts, accounts);
-                const preExistingAccounts = intersection(prevAccounts, accounts);
+          apiPromise[network].then((api) => {
+            let prevAccounts: string[] = [];
+            let prevDids: string[] = [];
+            let activeIssuers: string[] = [];
 
-                // A) If account is removed, clean up any associated subscriptions
-                removedAccounts.forEach((account) => {
-                  dispatch(accountActions.removeAccount({ address: account, network }));
+            api.query.cddServiceProviders.activeMembers().then(
+              (members) => {
+                activeIssuers = (members as unknown as string[]).map((member) => member.toString());
 
-                  if (unsubCallbacks[account]) {
-                    unsubCallbacks[account]();
-                    delete unsubCallbacks[account];
+                const accountsSub = observeAccounts((accountsData: KeyringAccountData[]) => {
+                  function accountName (_address: string): string | undefined {
+                    return accountsData.find(({ address }) => address === _address)?.name;
                   }
-                });
 
-                // B) Subscribe to new accounts
-                newAccounts.forEach((account) => {
-                  api.queryMulti([
-                    [api.query.system.account, account],
-                    [api.query.identity.keyToIdentityIds, account]
-                  ], ([accData, linkedKeyInfo]: [AccountInfo, Option<LinkedKeyInfo>]) => {
+                  const accounts = accountsData.map(({ address }) => address);
+                  const newAccounts = difference(accounts, prevAccounts);
+                  const removedAccounts = difference(prevAccounts, accounts);
+                  const preExistingAccounts = intersection(prevAccounts, accounts);
+
+                  // A) If account is removed, clean up any associated subscriptions
+                  removedAccounts.forEach((account) => {
+                    dispatch(accountActions.removeAccount({ address: account, network }));
+
+                    if (unsubCallbacks[account]) {
+                      unsubCallbacks[account]();
+                      delete unsubCallbacks[account];
+                    }
+                  });
+
+                  // B) Subscribe to new accounts
+                  newAccounts.forEach((account) => {
+                    api.queryMulti([
+                      [api.query.system.account, account],
+                      [api.query.identity.keyToIdentityIds, account]
+                    ], ([accData, linkedKeyInfo]: [AccountInfo, Option<LinkedKeyInfo>]) => {
+                      const accountData: AccountData = {
+                        address: account,
+                        balance: accData.data.free.toString(),
+                        name: accountName(account)
+                      };
+
+                      dispatch(accountActions.setAccount({ data: accountData, network }));
+
+                      if (!linkedKeyInfo.unwrapOrDefault().isEmpty) {
+                        dispatch(identityActions.setIdentity({ data: {
+                          did: linkedKeyInfo.unwrapOrDefault().asUnique.toString(),
+                          priKey: account
+                        },
+                        network }));
+                      }
+                    }).then((unsub) => {
+                      unsubCallbacks[account] && unsubCallbacks[account]();
+                      unsubCallbacks[account] = unsub;
+                    }).catch(console.error);
+                  });
+
+                  // C) Update data of pre-existing accounts.
+                  preExistingAccounts.forEach((account) => {
                     const accountData: AccountData = {
                       address: account,
-                      balance: accData.data.free.toString(),
                       name: accountName(account)
                     };
 
                     dispatch(accountActions.setAccount({ data: accountData, network }));
+                  });
 
-                    if (!linkedKeyInfo.unwrapOrDefault().isEmpty) {
-                      dispatch(identityActions.setIdentity({ data: {
-                        did: linkedKeyInfo.unwrapOrDefault().asUnique.toString(),
-                        priKey: account
-                      },
-                      network }));
-                    }
+                  dispatch(statusActions.setIsReady(true));
+                  prevAccounts = accounts;
+                });
+
+                unsubCallbacks.accounts && unsubCallbacks.accounts();
+                unsubCallbacks.accounts = () => accountsSub.unsubscribe();
+
+                // eslint-disable-next-line dot-notation
+                unsubCallbacks['dids'] && unsubCallbacks['dids']();
+                unsubCallbacks.dids = subscribeDidsList((dids: string[]) => {
+                  const newDids = difference(dids, prevDids);
+                  const removedDids = difference(prevDids, dids);
+
+                  api.rpc.chain.subscribeNewHeads((lastHeader) => {
+                    console.log(`last block #${lastHeader.number} has hash ${lastHeader.hash}`);
                   }).then((unsub) => {
-                    unsubCallbacks[account] = unsub;
+                    unsubCallbacks.newHeads && unsubCallbacks.newHeads();
+                    unsubCallbacks.newHeads = unsub;
                   }).catch(console.error);
-                });
 
-                // C) Update data of pre-existing accounts.
-                preExistingAccounts.forEach((account) => {
-                  const accountData: AccountData = {
-                    address: account,
-                    name: accountName(account)
-                  };
-
-                  dispatch(accountActions.setAccount({ data: accountData, network }));
-                });
-
-                dispatch(statusActions.setIsReady(true));
-                prevAccounts = accounts;
-              });
-
-              unsubCallbacks.accounts = () => accountsSub.unsubscribe();
-
-              // eslint-disable-next-line dot-notation
-              unsubCallbacks['dids'] = subscribeDidsList((dids: string[]) => {
-                const newDids = difference(dids, prevDids);
-                const removedDids = difference(prevDids, dids);
-
-                newDids.forEach((did) => {
+                  newDids.forEach((did) => {
                   // Get the keys associated with this DID.
-                  api.query.identity.didRecords<DidRecord>(did, (didRecords) => {
-                    const priKey = encodeAddress(didRecords.primary_key);
-                    const secKeys = didRecords.secondary_keys.toArray().reduce((keys, item) => {
-                      return item.signer.isAccount
-                        ? keys.concat(encodeAddress(item.signer.asAccount))
-                        : keys;
-                    }, [] as string[]);
+                    api.query.identity.didRecords<DidRecord>(did, (didRecords) => {
+                      const priKey = encodeAddress(didRecords.primary_key);
+                      const secKeys = didRecords.secondary_keys.toArray().reduce((keys, item) => {
+                        return item.signer.isAccount
+                          ? keys.concat(encodeAddress(item.signer.asAccount))
+                          : keys;
+                      }, [] as string[]);
 
-                    const identityData: IdentityData = {
-                      did,
-                      priKey,
-                      secKeys
-                    };
+                      const identityData: IdentityData = {
+                        did,
+                        priKey,
+                        secKeys
+                      };
 
-                    dispatch(identityActions.setIdentity({ data: identityData, network }));
-                  })
-                    .then((unsub) => {
-                      unsubCallbacks[did] = unsub;
+                      dispatch(identityActions.setIdentity({ data: identityData, network }));
                     })
-                    .catch(console.error);
+                      .then((unsub) => {
+                        unsubCallbacks[did] && unsubCallbacks[did]();
+                        unsubCallbacks[did] = unsub;
+                      })
+                      .catch(console.error);
 
-                  // Get the claims associated with this DID.
-                  (api.query.identity.claims.entries as any)(
-                    { target: did, claim_type: 'CustomerDueDiligence' },
-                    (res: [unknown, IdentityClaim][]) => {
-                      const claims = res
-                        .map(([, claim]) => claim)
-                        .filter((claim) => activeIssuers.indexOf(claim.claim_issuer.toString()) !== -1);
-                      // .filter((claim) => claim.expiry.isEmpty || Number(claim.expiry.toString()) > Date.now());
+                    // Get the claims associated with this DID.
+                    (api.query.identity.claims.entries as any)(
+                      { target: did, claim_type: 'CustomerDueDiligence' },
+                      (res: [unknown, IdentityClaim][]) => {
+                        const claims = res
+                          .map(([, claim]) => claim)
+                          .filter((claim) => activeIssuers.indexOf(claim.claim_issuer.toString()) !== -1);
+                        // .filter((claim) => claim.expiry.isEmpty || Number(claim.expiry.toString()) > Date.now());
 
-                      const cdd = claims.length > 0 ? {
-                        issuer: claims[0].claim_issuer.toString(),
-                        expiry: !claims[0].expiry.isEmpty ? Number(claims[0].expiry.toString()) : undefined
-                      } : undefined;
+                        const cdd = claims.length > 0 ? {
+                          issuer: claims[0].claim_issuer.toString(),
+                          expiry: !claims[0].expiry.isEmpty ? Number(claims[0].expiry.toString()) : undefined
+                        } : undefined;
 
-                      console.log('claims and cdd of ', did, claims, cdd);
+                        console.log('claims and cdd of ', did, claims, cdd);
 
-                      dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
+                        dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
+                      }
+                    ).then((unsub: UnsubCallback) => {
+                      unsubCallbacks[`${did}:cdd`] = unsub as unknown as UnsubCallback;
+                    })
+                      .catch(console.error);
+                  });
+
+                  removedDids.forEach((did) => {
+                    if (unsubCallbacks[did]) {
+                      unsubCallbacks[did]();
+                      delete unsubCallbacks[did];
                     }
-                  ).then((unsub: UnsubCallback) => {
-                    unsubCallbacks[`${did}:cdd`] = unsub as unknown as UnsubCallback;
-                  })
-                    .catch(console.error);
+
+                    if (unsubCallbacks[`${did}:cdd`]) {
+                      unsubCallbacks[`${did}:cdd`]();
+                      delete unsubCallbacks[`${did}:cdd`];
+                    }
+                  });
+
+                  prevDids = dids;
                 });
+              }
+            ).catch(console.error);
 
-                removedDids.forEach((did) => {
-                  if (unsubCallbacks[did]) {
-                    unsubCallbacks[did]();
-                    delete unsubCallbacks[did];
-                  }
-
-                  if (unsubCallbacks[`${did}:cdd`]) {
-                    unsubCallbacks[`${did}:cdd`]();
-                    delete unsubCallbacks[`${did}:cdd`];
-                  }
-                });
-
-                prevDids = dids;
-              });
-            }
-          ).catch(console.error);
-
-          console.log('meshAccountsEnhancer initialization completed');
-        }).catch((err) => console.error('meshAccountsEnhancer initialization failed', err));
-      });
-    }
-  });
+            console.log('meshAccountsEnhancer initialization completed');
+          }).catch((err) => console.error('meshAccountsEnhancer initialization failed', err));
+        });
+      }
+    });
+  };
 }
 
-export default function init (): void {
-  store.dispatch(meshAccountsEnhancer);
+export default function init (port: chrome.runtime.Port): void {
+  store.dispatch(meshAccountsEnhancer(port));
 }
