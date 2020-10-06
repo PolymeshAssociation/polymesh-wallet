@@ -159,7 +159,7 @@ export const ChangePassword: FC = () => {
           fluid
           form='passwordForm'
           type='submit'>
-          Change Password
+          Change password
         </Button>
       </Flex>
     </>
