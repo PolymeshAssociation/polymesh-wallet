@@ -9,6 +9,7 @@
   "bin": {
     "poly-dev-build-ts": "./scripts/poly-dev-build-ts.js"
   },
+  "engines" : { "node" : "^12" },
   "scripts": {
     "build": "yarn build:code && yarn build:zip",
     "build:code": "NODE_ENV=production node ./scripts/poly-dev-build-ts.js",

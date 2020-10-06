@@ -2,6 +2,7 @@
   "name": "@polymathnetwork/extension",
   "description": "A Wallet extension for Polymesh blockchain",
   "version": "0.1.0",
+  "engines" : { "node" : "^12" },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "@polkadot/extension-base": "0.34.1",
