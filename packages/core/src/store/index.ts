@@ -1,5 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
+
 import rootReducer from './rootReducer';
 import { localStorage } from 'redux-persist-webextension-storage';
 import { persistStore,
@@ -10,6 +11,7 @@ import { persistStore,
   PERSIST,
   PURGE,
   REGISTER } from 'redux-persist';
+import { actions as statusActions } from './features/status';
 
 const persistConfig = {
   key: 'root',
@@ -23,11 +25,11 @@ const middleware = [...getDefaultMiddleware({ serializableCheck: {
   ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
 } })];
 
-if (process.env.NODE_ENV === 'development' && logger) {
+if (process.env.NODE_ENV === 'development') {
   middleware.push(logger);
 }
 
-const store: any = configureStore({ middleware, reducer: persistedReducer });
+const store: any = configureStore({ middleware, reducer: persistedReducer, devTools: process.env.NODE_ENV === 'development' });
 
 // Reducer hot module reloading
 if (process.env.NODE_ENV === 'development' && (module as any).hot) {
@@ -40,6 +42,8 @@ if (process.env.NODE_ENV === 'development' && (module as any).hot) {
 
 export type Dispatch = typeof store.dispatch
 
-export const persister = persistStore(store);
+export const persister = persistStore(store, null, () => {
+  store.dispatch(statusActions.setRehydrated());
+});
 
 export default store;
