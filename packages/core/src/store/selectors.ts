@@ -72,7 +72,7 @@ export const selectedAccount = createSelector(
 );
 
 export const selectIsRehydrated = createSelector(
-  (state: RootState) => state.meta,
+  (state: RootState) => state.status,
   ({ rehydrated }) => rehydrated
 );
 

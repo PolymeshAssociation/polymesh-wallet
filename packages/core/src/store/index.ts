@@ -11,7 +11,7 @@ import { persistStore,
   PERSIST,
   PURGE,
   REGISTER } from 'redux-persist';
-import { actions as metaActions } from './features/meta';
+import { actions as statusActions } from './features/status';
 
 const persistConfig = {
   key: 'root',
@@ -43,7 +43,7 @@ if (process.env.NODE_ENV === 'development' && (module as any).hot) {
 export type Dispatch = typeof store.dispatch
 
 export const persister = persistStore(store, null, () => {
-  store.dispatch(metaActions.setRehydrated());
+  store.dispatch(statusActions.setRehydrated());
 });
 
 export default store;
