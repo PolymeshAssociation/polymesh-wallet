@@ -2,13 +2,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import isEqual from 'lodash-es/isEqual';
 import merge from 'lodash/merge';
-
 import { AccountData, NetworkName } from '../../types';
+import { initialFeatureState } from '../utils';
+
 type State = {selected?: string} & Record<NetworkName, Record<string, AccountData>>;
-const initialState: State = {
-  [NetworkName.pmf]: {},
-  [NetworkName.alcyone]: {}
-};
+const initialState: State = initialFeatureState() as Record<NetworkName, Record<string, AccountData>>;
 
 type SetAccountPayload = { network: NetworkName, data: AccountData };
 type RemoveAccountPayload = { network: NetworkName, address: string };
