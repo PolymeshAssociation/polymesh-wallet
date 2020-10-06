@@ -6,10 +6,9 @@ import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
 import apiPromise from './api/apiPromise';
-import { DidRecord, LinkedKeyInfo, IdentityClaim } from './api/apiPromise/types';
+import { DidRecord, LinkedKeyInfo, IdentityClaim, CddStatus } from './api/apiPromise/types';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
-import chrome from '@polkadot/extension-inject/chrome';
 
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
@@ -36,7 +35,6 @@ const unsubCallbacks: Record<string, UnsubCallback> = {};
 function meshAccountsEnhancer (port: chrome.runtime.Port) {
   return (dispatch: Dispatch): void => {
     function unsubAll (): void {
-      console.log('unsubAll callback', Object.keys(unsubCallbacks));
       Object.keys(unsubCallbacks).forEach((key) => {
         if (unsubCallbacks[key]) {
           unsubCallbacks[key]();
@@ -45,11 +43,8 @@ function meshAccountsEnhancer (port: chrome.runtime.Port) {
       });
     }
 
-    console.log('>>>> PORT', port);
-
     port.onDisconnect.addListener((): void => {
       unsubAll();
-      console.log(`Disconnected from ${port.name}`);
     });
 
     subscribeIsRehydrated((isRehydrated) => {
@@ -139,8 +134,23 @@ function meshAccountsEnhancer (port: chrome.runtime.Port) {
                   const newDids = difference(dids, prevDids);
                   const removedDids = difference(prevDids, dids);
 
-                  api.rpc.chain.subscribeNewHeads((lastHeader) => {
-                    console.log(`last block #${lastHeader.number} has hash ${lastHeader.hash}`);
+                  api.rpc.chain.subscribeNewHeads(() => {
+                    dids.forEach((did) => {
+                      // Get the CDD claims associated with this DID.
+                      const res: [unknown, IdentityClaim][] = (api.query.identity.claims.entries as any)(
+                        { target: did, claim_type: 'CustomerDueDiligence' });
+                      // Out of those, get the ones issued by active claim issuers
+                      const claims = res
+                        .map(([, claim]) => claim)
+                        .filter((claim) => activeIssuers.indexOf(claim.claim_issuer.toString()) !== -1);
+                      // Save CDD data
+                      const cdd = claims.length > 0 ? {
+                        issuer: claims[0].claim_issuer.toString(),
+                        expiry: !claims[0].expiry.isEmpty ? Number(claims[0].expiry.toString()) : undefined
+                      } : undefined;
+
+                      dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
+                    });
                   }).then((unsub) => {
                     unsubCallbacks.newHeads && unsubCallbacks.newHeads();
                     unsubCallbacks.newHeads = unsub;
@@ -168,29 +178,6 @@ function meshAccountsEnhancer (port: chrome.runtime.Port) {
                         unsubCallbacks[did] && unsubCallbacks[did]();
                         unsubCallbacks[did] = unsub;
                       })
-                      .catch(console.error);
-
-                    // Get the claims associated with this DID.
-                    (api.query.identity.claims.entries as any)(
-                      { target: did, claim_type: 'CustomerDueDiligence' },
-                      (res: [unknown, IdentityClaim][]) => {
-                        const claims = res
-                          .map(([, claim]) => claim)
-                          .filter((claim) => activeIssuers.indexOf(claim.claim_issuer.toString()) !== -1);
-                        // .filter((claim) => claim.expiry.isEmpty || Number(claim.expiry.toString()) > Date.now());
-
-                        const cdd = claims.length > 0 ? {
-                          issuer: claims[0].claim_issuer.toString(),
-                          expiry: !claims[0].expiry.isEmpty ? Number(claims[0].expiry.toString()) : undefined
-                        } : undefined;
-
-                        console.log('claims and cdd of ', did, claims, cdd);
-
-                        dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
-                      }
-                    ).then((unsub: UnsubCallback) => {
-                      unsubCallbacks[`${did}:cdd`] = unsub as unknown as UnsubCallback;
-                    })
                       .catch(console.error);
                   });
 
