@@ -3,7 +3,7 @@ import { Box, Button, Flex, Header, Heading, Icon, Text, TextInput } from '@poly
 import { ActionContext, PolymeshContext } from '../../components';
 import { exportAccount } from '../../messaging';
 import { SvgAlertCircle, SvgOpenInNew } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { useForm } from 'react-hook-form';
+import { FieldError, useForm } from 'react-hook-form';
 
 export const ExportAccount: FC = () => {
   const onAction = useContext(ActionContext);
@@ -84,7 +84,7 @@ export const ExportAccount: FC = () => {
           </Flex>
           <Text color='gray.1'
             variant='b2m'>
-            You are exporting your account. Keep it safe and don't share it with anyone.
+            You are exporting your account. Keep it safe and don&apos;t share it with anyone.
           </Text>
         </Box>
       </Box>
