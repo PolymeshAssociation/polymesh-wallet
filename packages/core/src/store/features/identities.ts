@@ -3,12 +3,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CDD, IdentityData, NetworkName } from '../../types';
 import isEqual from 'lodash/isEqual';
 import merge from 'lodash/merge';
+import { initialFeatureState } from '../utils';
 
 type State = Record<NetworkName, Record<string, IdentityData>>;
-const initialState: State = {
-  [NetworkName.alcyone]: {},
-  [NetworkName.pmf]: {}
-};
+const initialState: State = initialFeatureState() as Record<NetworkName, Record<string, IdentityData>>;
 
 type SetIdentityPayload = { network: NetworkName, data: IdentityData };
 type RemoveIdentityPayload = { network: NetworkName, did: string };

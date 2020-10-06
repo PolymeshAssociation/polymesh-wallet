@@ -38,7 +38,8 @@ export type ReversedDidList =
 
 export enum NetworkName {
   pmf = 'pmf',
-  alcyone = 'alcyone'
+  alcyone = 'alcyone',
+  pme = 'pme'
 }
 
 export type CDD = {
