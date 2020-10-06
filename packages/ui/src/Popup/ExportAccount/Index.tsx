@@ -16,6 +16,8 @@ export const ExportAccount: FC = () => {
     }
   });
 
+  console.log('TEST');
+
   const onSubmit = async (data: { [x: string]: string; }) => {
     if (!selectedAccount) {
       return;
