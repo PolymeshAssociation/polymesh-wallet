@@ -17,9 +17,10 @@ chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
 chrome.runtime.onConnect.addListener((port): void => {
   // shouldn't happen, however... only listen to what we know about
   assert([PORT_CONTENT, PORT_EXTENSION].includes(port.name), `Unknown connection from ${port.name}`);
+  let unsub: () => void;
 
   if (port.name === PORT_EXTENSION) {
-    initPolymesh(port);
+    unsub = initPolymesh();
   }
 
   // message and disconnect handlers
@@ -27,7 +28,10 @@ chrome.runtime.onConnect.addListener((port): void => {
     if (isPolyMessage(data.message)) return polyHandlers(data, port);
     else return handlers(data, port);
   });
-  port.onDisconnect.addListener((): void => console.log(`Disconnected from ${port.name}`));
+  port.onDisconnect.addListener((): void => {
+    console.log(`Disconnected from ${port.name}`);
+    unsub && unsub();
+  });
 });
 
 // initial setup
