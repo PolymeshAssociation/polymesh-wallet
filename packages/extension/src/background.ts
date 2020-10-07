@@ -8,7 +8,7 @@ import chrome from '@polkadot/extension-inject/chrome';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import initPolymesh from '@polymathnetwork/extension-core';
+import subscribePolymesh from '@polymathnetwork/extension-core';
 import { isPolyMessage } from '@polymathnetwork/extension-core/utils';
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
@@ -20,7 +20,7 @@ chrome.runtime.onConnect.addListener((port): void => {
   let unsub: () => void;
 
   if (port.name === PORT_EXTENSION) {
-    unsub = initPolymesh();
+    unsub = subscribePolymesh();
   }
 
   // message and disconnect handlers
