@@ -57,3 +57,8 @@ export interface InjectedNetwork {
   get: () => Promise<NetworkMeta>;
   subscribe: (cb: (network: NetworkMeta) => void) => Unsubcall;
 }
+
+export type KeyringAccountData = {
+  address: string,
+  name?: string,
+}
