@@ -53,29 +53,8 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
 
   return (
     <>
-      <Header>
-        <Box pt='m'>
-          <Box
-            backgroundColor='brandLightest'
-            borderRadius='50%'
-            height={48}
-            px={14}
-            py={9}
-            width={48}
-          >
-            <Icon Asset={SvgAccountCardDetailsOutline}
-              color='brandMain'
-              height={20}
-              width={20} />
-          </Box>
-          <Box pt='m'
-            width={220}>
-            <Heading color='white'
-              variant='h5'>
-              Restore your account with your recovery phrase
-            </Heading>
-          </Box>
-        </Box>
+      <Header headerText='Restore your account with your recovery phrase'
+        iconAsset={SvgAccountCardDetailsOutline}>
       </Header>
       <form id='accountForm'
         onSubmit={handleSubmit(onSubmit)}>

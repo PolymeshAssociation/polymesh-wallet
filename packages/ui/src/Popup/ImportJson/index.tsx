@@ -1,7 +1,7 @@
 import React, { FC, useContext, useRef, useState } from 'react';
 import { ActionContext, PolymeshContext } from '../../components';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { Box, Button, ButtonSmall, Flex, Header, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, ButtonSmall, Flex, Header, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { changePassword, jsonRestore, jsonVerifyFile, validateAccount } from '../../messaging';
 import { isHex, u8aToString, hexToU8a } from '@polkadot/util';
@@ -133,34 +133,13 @@ export const ImportJSon: FC = () => {
 
   return (
     <>
-      <Header>
-        <Box pt='m'>
-          <Box
-            backgroundColor='brandLightest'
-            borderRadius='50%'
-            height={48}
-            px={14}
-            py={9}
-            width={48}
-          >
-            <Icon Asset={SvgFileLockOutline}
-              color='brandMain'
-              height={20}
-              width={20} />
-          </Box>
-          <Box pt='m'
-            width={220}>
-            <Heading color='white'
-              variant='h5'>
-              Import account from JSON file
-            </Heading>
-          </Box>
-          <Box>
-            <Text color='gray.0'
-              variant='b2'>
-              Upload JSON file with account details below to access via Polymesh wallet.
-            </Text>
-          </Box>
+      <Header headerText='Import account from JSON file'
+        iconAsset={SvgFileLockOutline}>
+        <Box>
+          <Text color='gray.0'
+            variant='b2'>
+            Upload JSON file with account details below to access via Polymesh wallet.
+          </Text>
         </Box>
       </Header>
       <Box pt='m'>

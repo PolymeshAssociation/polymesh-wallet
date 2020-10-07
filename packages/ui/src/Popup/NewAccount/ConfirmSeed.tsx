@@ -95,29 +95,8 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
 
   return (
     <>
-      <Header>
-        <Box pt='m'>
-          <Box
-            backgroundColor='brandLightest'
-            borderRadius='50%'
-            height={48}
-            px={14}
-            py={9}
-            width={48}
-          >
-            <Icon Asset={SvgClipboardListOutline}
-              color='brandMain'
-              height={20}
-              width={20} />
-          </Box>
-          <Box pt='m'
-            width={220}>
-            <Heading color='white'
-              variant='h5'>
-              Confirm your recovery phrase
-            </Heading>
-          </Box>
-        </Box>
+      <Header headerText='Confirm your recovery phrase'
+        iconAsset={SvgClipboardListOutline}>
       </Header>
       <Box pt='m'>
         <Text color='gray.1'
