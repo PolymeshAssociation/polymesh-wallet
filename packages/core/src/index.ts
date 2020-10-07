@@ -13,7 +13,7 @@ import { encodeAddress } from '@polkadot/util-crypto';
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as statusActions } from './store/features/status';
-import store, { Dispatch } from './store';
+import store from './store';
 import { AccountData, IdentityData, UnsubCallback } from './types';
 import { subscribeDidsList, subscribeIsRehydrated, subscribeNetwork } from './store/subscribers';
 import { getDids } from './store/getters';
@@ -34,7 +34,7 @@ function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
-function meshAccountsEnhancer () {
+function subscribePolymesh (): () => void {
   function unsubAll (): void {
     Object.keys(unsubCallbacks).forEach((key) => {
       if (unsubCallbacks[key]) {
@@ -61,6 +61,9 @@ function meshAccountsEnhancer () {
             (members) => {
               activeIssuers = (members as unknown as string[]).map((member) => member.toString());
 
+              /**
+               * Accounts
+               */
               const accountsSub = observeAccounts((accountsData: KeyringAccountData[]) => {
                 function accountName (_address: string): string | undefined {
                   return accountsData.find(({ address }) => address === _address)?.name;
@@ -122,15 +125,12 @@ function meshAccountsEnhancer () {
                 prevAccounts = accounts;
               });
 
-              /**
-                 * Accounts
-                 */
               unsubCallbacks.accounts && unsubCallbacks.accounts();
               unsubCallbacks.accounts = () => accountsSub.unsubscribe();
 
               /**
-                 * Identities
-                 */
+               * Identities
+               */
               unsubCallbacks.dids && unsubCallbacks.dids();
               unsubCallbacks.dids = subscribeDidsList((dids: string[]) => {
                 const newDids = difference(dids, prevDids);
@@ -177,8 +177,8 @@ function meshAccountsEnhancer () {
               });
 
               /**
-                 * CDD
-                 */
+               * CDD
+               */
               unsubCallbacks.newHeads && unsubCallbacks.newHeads();
               api.rpc.chain.subscribeNewHeads((newHeader) => {
                 // Run this every four block to save resources
@@ -223,4 +223,4 @@ function meshAccountsEnhancer () {
   return unsubAll;
 }
 
-export default meshAccountsEnhancer;
+export default subscribePolymesh;
