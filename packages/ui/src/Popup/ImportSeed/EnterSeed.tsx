@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, useState } from 'react';
-import { Box, Button, Flex, Header, Heading, Icon, Text, TextArea } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Header, Text, TextArea } from '@polymathnetwork/extension-ui/ui';
 import { SvgClipboardListOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { validateSeed } from '../../messaging';
 
