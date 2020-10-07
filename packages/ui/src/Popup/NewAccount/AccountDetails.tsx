@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Controller, FieldError, useForm } from 'react-hook-form';
-import { Box, Button, Checkbox, Flex, Header, Heading, Icon, Link, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Checkbox, Flex, Header, Icon, Link, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
 
 export interface Props {
@@ -32,29 +32,8 @@ export const AccountDetails: FC<Props> = ({ onBack, onContinue, setAccountDetail
 
   return (
     <>
-      <Header>
-        <Box pt='m'>
-          <Box
-            backgroundColor='brandLightest'
-            borderRadius='50%'
-            height={48}
-            px={14}
-            py={9}
-            width={48}
-          >
-            <Icon Asset={SvgAccountCardDetailsOutline}
-              color='brandMain'
-              height={20}
-              width={20} />
-          </Box>
-          <Box pt='m'
-            width={220}>
-            <Heading color='white'
-              variant='h5'>
-              Create and confirm your account name and wallet password
-            </Heading>
-          </Box>
-        </Box>
+      <Header headerText='Create and confirm your account name and wallet password'
+        iconAsset={SvgAccountCardDetailsOutline}>
       </Header>
 
       <form id='accountForm'

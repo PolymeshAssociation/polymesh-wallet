@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, useState } from 'react';
-import { Box, Button, Flex, Header, Heading, Icon, Text, TextArea } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Header, Text, TextArea } from '@polymathnetwork/extension-ui/ui';
 import { SvgClipboardListOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { validateSeed } from '../../messaging';
 
@@ -38,29 +38,8 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
 
   return (
     <>
-      <Header>
-        <Box pt='m'>
-          <Box
-            backgroundColor='brandLightest'
-            borderRadius='50%'
-            height={48}
-            px={14}
-            py={9}
-            width={48}
-          >
-            <Icon Asset={SvgClipboardListOutline}
-              color='brandMain'
-              height={20}
-              width={20} />
-          </Box>
-          <Box pt='m'
-            width={220}>
-            <Heading color='white'
-              variant='h5'>
-              Restore your account with your recovery phrase
-            </Heading>
-          </Box>
-        </Box>
+      <Header headerText='Restore your account with your recovery phrase'
+        iconAsset={SvgClipboardListOutline}>
       </Header>
       <Box pt='m'>
         <Text color='gray.1'
