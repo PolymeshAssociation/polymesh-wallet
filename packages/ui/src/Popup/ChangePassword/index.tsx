@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react';
-import { Box, Button, Flex, Header, Heading, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { FieldError, useForm } from 'react-hook-form';
 import { ActionContext, PolymeshContext } from '../../components';
@@ -51,29 +51,8 @@ export const ChangePassword: FC = () => {
 
   return (
     <>
-      <Header>
-        <Box pt='m'>
-          <Box
-            backgroundColor='brandLightest'
-            borderRadius='50%'
-            height={48}
-            px={14}
-            py={9}
-            width={48}
-          >
-            <Icon Asset={SvgFileLockOutline}
-              color='brandMain'
-              height={20}
-              width={20} />
-          </Box>
-          <Box pt='m'
-            width={220}>
-            <Heading color='white'
-              variant='h5'>
-              Change password
-            </Heading>
-          </Box>
-        </Box>
+      <Header headerText='Change password'
+        iconAsset={SvgFileLockOutline}>
       </Header>
       <form id='passwordForm'
         onSubmit={handleSubmit(onSubmit)}>

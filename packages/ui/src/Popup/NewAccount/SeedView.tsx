@@ -13,36 +13,14 @@ export const SeedView: FC<Props> = ({ onContinue, seedPhrase }) => {
 
   return (
     <>
-      <Header>
-        <Box pb='m'
-          pt='m'>
-          <Box
-            backgroundColor='brandLightest'
-            borderRadius='50%'
-            height={48}
-            px={14}
-            py={9}
-            width={48}
-          >
-            <Icon Asset={SvgClipboardListOutline}
-              color='brandMain'
-              height={20}
-              width={20} />
-          </Box>
-          <Box pt='m'
-            width={220}>
-            <Heading color='white'
-              variant='h5'>
-              Your recovery phrase
-            </Heading>
-          </Box>
-          <Box
-            mt='s'>
-            <Text color='white'
-              variant='b3'>
-              These 12 words in order will recover your account should you lose or forget your password. It is recommended you store a hard copy in a secure place.
-            </Text>
-          </Box>
+      <Header headerText='Your recovery phrase'
+        iconAsset={SvgClipboardListOutline}>
+        <Box
+          mt='s'>
+          <Text color='white'
+            variant='b3'>
+            These 12 words in order will recover your account should you lose or forget your password. It is recommended you store a hard copy in a secure place.
+          </Text>
         </Box>
       </Header>
       <SeedPhrase seedPhrase={seedPhrase} />

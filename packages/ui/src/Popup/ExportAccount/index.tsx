@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react';
-import { Box, Button, Flex, Header, Heading, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { ActionContext, PolymeshContext } from '../../components';
 import { exportAccount } from '../../messaging';
 import { SvgAlertCircle, SvgOpenInNew } from '@polymathnetwork/extension-ui/assets/images/icons';
@@ -39,29 +39,8 @@ export const ExportAccount: FC = () => {
 
   return (
     <>
-      <Header>
-        <Box pt='m'>
-          <Box
-            backgroundColor='brandLightest'
-            borderRadius='50%'
-            height={48}
-            px={14}
-            py={9}
-            width={48}
-          >
-            <Icon Asset={SvgOpenInNew}
-              color='brandMain'
-              height={20}
-              width={20} />
-          </Box>
-          <Box pt='m'
-            width={220}>
-            <Heading color='white'
-              variant='h5'>
-              Export account
-            </Heading>
-          </Box>
-        </Box>
+      <Header headerText='Export account'
+        iconAsset={SvgOpenInNew}>
       </Header>
       <Box pt='m'>
         <Box borderColor='gray.4'
