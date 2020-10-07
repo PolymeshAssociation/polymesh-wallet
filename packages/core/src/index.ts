@@ -1,6 +1,3 @@
-// eslint-disable-next-line header/header
-import accountsObservable from '@polkadot/ui-keyring/observable/accounts';
-import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { Option } from '@polkadot/types/codec';
 import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
@@ -14,23 +11,11 @@ import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as statusActions } from './store/features/status';
 import store from './store';
-import { AccountData, IdentityData, UnsubCallback } from './types';
+import { AccountData, IdentityData, KeyringAccountData, UnsubCallback } from './types';
 import { subscribeDidsList, subscribeIsRehydrated, subscribeNetwork } from './store/subscribers';
 import { getDids } from './store/getters';
 import { pollInterval } from './constants';
-
-type KeyringAccountData = {
-  address: string,
-  name?: string,
-}
-
-function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
-  return accountsObservable.subject.subscribe((accountsSubject: SubjectInfo) => {
-    const accounts = Object.values(accountsSubject).map(({ json: { address, meta: { name } } }) => ({ address, name }));
-
-    cb(accounts);
-  });
-}
+import { observeAccounts } from './utils';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
