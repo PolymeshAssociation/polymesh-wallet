@@ -167,7 +167,8 @@ function subscribePolymesh (): () => void {
               unsubCallbacks.newHeads && unsubCallbacks.newHeads();
               api.rpc.chain.subscribeNewHeads((newHeader) => {
                 // Run this every four block to save resources
-                if (newHeader.number.toNumber() % pollInterval === 0) return;
+                if (newHeader.number.toNumber() % pollInterval !== 0) return;
+
                 const dids = getDids();
                 const promises = dids.map((did) =>
                   api.query.identity.claims.entries({ target: did, claim_type: 'CustomerDueDiligence' }));
