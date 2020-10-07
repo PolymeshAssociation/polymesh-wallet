@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { Box, Button, ButtonSmall, Flex, Header, Heading, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, ButtonSmall, Flex, Header, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import { SvgArrowLeft, SvgCheckboxMarkedCircle, SvgClipboardListOutline, SvgCloseCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { SeedWord } from './components/SeedWord';
 

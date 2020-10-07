@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Controller, FieldError, useForm } from 'react-hook-form';
-import { Box, Button, Checkbox, Flex, Header, Heading, Icon, Link, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Checkbox, Flex, Header, Icon, Link, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
 
 export interface Props {
