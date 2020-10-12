@@ -16,8 +16,6 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
     try {
       const account = await validateSeed(seed);
 
-      console.log(account);
-
       return true;
     } catch (error) {
       return false;

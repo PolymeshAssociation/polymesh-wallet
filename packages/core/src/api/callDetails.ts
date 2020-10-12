@@ -13,8 +13,6 @@ async function callDetails (request: SignerPayloadJSON, network: NetworkName): P
   const method: Call = api.registry.createType('Call', request.method);
   const args: AnyJson = (method.toHuman() as { args: AnyJson }).args;
 
-  console.log('METHOD', method);
-
   // Protocol fee
   try {
     const opName = upperFirst(method.sectionName) + upperFirst(method.methodName);
