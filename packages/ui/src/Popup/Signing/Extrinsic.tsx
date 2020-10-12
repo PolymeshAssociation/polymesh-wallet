@@ -17,8 +17,6 @@ function renderMethod (call: ResponsePolyCallDetails, t: TFunction): React.React
   const { args, meta, method, networkFee, protocolFee, section } = call;
   const totalFees = (new BN(networkFee)).add(new BN(protocolFee));
 
-  console.log('> Call', call);
-
   return (
     <>
       <tr>
