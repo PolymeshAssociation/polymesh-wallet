@@ -2,15 +2,17 @@ import { SignerPayloadJSON } from '@polkadot/types/types';
 
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
-import { Loading, SigningReqContext } from '../../components';
+import { Loading, PolymeshContext, SigningReqContext } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
-import { Header } from '../../partials';
 import Request from './Request';
 import TransactionIndex from './TransactionIndex';
+import { Box, Header, Text } from '@polymathnetwork/extension-ui/ui';
+import AccountsHeader from '../Accounts/AccountsHeader';
 
 export default function Signing (): React.ReactElement {
   const { t } = useTranslation();
   const requests = useContext(SigningReqContext);
+  const { currentAccount } = useContext(PolymeshContext);
   const [requestIndex, setRequestIndex] = useState(0);
 
   const _onNextClick = useCallback(
@@ -44,15 +46,22 @@ export default function Signing (): React.ReactElement {
   return request
     ? (
       <>
-        <Header text={isTransaction ? t<string>('Transaction') : t<string>('Sign message')}>
-          {requests.length > 1 && (
-            <TransactionIndex
-              index={requestIndex}
-              onNextClick={_onNextClick}
-              onPreviousClick={_onPreviousClick}
-              totalItems={requests.length}
-            />
-          )}
+        <Header>
+          {currentAccount && <AccountsHeader account={currentAccount}
+            details={false} />}
+          <Box>
+            <Text color='gray.0'
+              variant='b2'>
+              {requests.length > 1 && (
+                <TransactionIndex
+                  index={requestIndex}
+                  onNextClick={_onNextClick}
+                  onPreviousClick={_onPreviousClick}
+                  totalItems={requests.length}
+                />
+              )}
+            </Text>
+          </Box>
         </Header>
         <Request
           account={request.account}
