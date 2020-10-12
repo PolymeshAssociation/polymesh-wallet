@@ -56,11 +56,12 @@ function initAccountContext (accounts: AccountJson[]): AccountsContext {
   };
 }
 
-function initPolymeshContext (network: string, polymeshAccounts:IdentifiedAccount[], selectedAccount: string): PolymeshContextType {
+function initPolymeshContext (network: string, polymeshAccounts:IdentifiedAccount[], selectedAccount: string, currentAccount?: IdentifiedAccount): PolymeshContextType {
   return {
     network,
     polymeshAccounts,
-    selectedAccount
+    selectedAccount,
+    currentAccount
   };
 }
 
@@ -110,8 +111,12 @@ export default function Popup (): React.ReactElement {
   }, []);
 
   useEffect((): void => {
+    const currentAccount = selectedAccountAddress && polymeshAccounts
+      ? polymeshAccounts.find((account) => (account.address === selectedAccountAddress))
+      : undefined;
+
     setAccountCtx(initAccountContext(accounts || []));
-    setPolymeshCtx(initPolymeshContext(network, polymeshAccounts, selectedAccountAddress || ''));
+    setPolymeshCtx(initPolymeshContext(network, polymeshAccounts, selectedAccountAddress || '', currentAccount));
   }, [accounts, network, polymeshAccounts, selectedAccountAddress]);
 
   useEffect((): void => {

@@ -38,6 +38,8 @@ function subscribePolymesh (): () => void {
         unsubAll();
 
         apiPromise[network].then((api) => {
+          console.log('>>> humanized', api.createType('Balance', '123456').toHuman());
+
           let prevAccounts: string[] = [];
           let prevDids: string[] = [];
           let activeIssuers: string[] = [];

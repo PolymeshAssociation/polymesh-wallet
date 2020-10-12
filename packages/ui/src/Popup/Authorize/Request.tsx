@@ -4,10 +4,12 @@ import { ThemeProps } from '../../types';
 import React, { useCallback, useContext } from 'react';
 import { Trans } from 'react-i18next';
 import styled from 'styled-components';
-
-import { ActionBar, ActionContext, Button, Icon, Link, Warning } from '../../components';
+import { Button, Box, Flex } from '../../ui';
+import { ActionContext, PolymeshContext, Warning } from '../../components';
 import useTranslation from '../../hooks/useTranslation';
 import { approveAuthRequest, rejectAuthRequest } from '../../messaging';
+import AccountsHeader from '../Accounts/AccountsHeader';
+import { Header } from '@polymathnetwork/extension-ui/ui';
 
 interface Props {
   authId: string;
@@ -17,9 +19,10 @@ interface Props {
   url: string;
 }
 
-function Request ({ authId, className, isFirst, request: { origin }, url }: Props): React.ReactElement<Props> {
+function Request ({ authId, isFirst, request: { origin }, url }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
+  const { currentAccount } = useContext(PolymeshContext);
 
   const _onApprove = useCallback(
     () => approveAuthRequest(authId)
@@ -36,51 +39,50 @@ function Request ({ authId, className, isFirst, request: { origin }, url }: Prop
   );
 
   return (
-    <div className={className}>
-      <RequestInfo>
-        <Info>
-          <Icon
-            icon='X'
-            onClick={_onReject}
-          />
-          <div className='tab-info'>
-            <Trans key='accessRequest'>An application, self-identifying as <span className='tab-name'>{origin}</span> is requesting access from{' '}
-              <a
-                href={url}
-                rel='noopener noreferrer'
-                target='_blank'
-              >
-                <span className='tab-url'>{url}</span>
-              </a>.
-            </Trans>
-          </div>
-        </Info>
-        {isFirst && (
-          <>
-            <RequestWarning>{t<string>('Only approve this request if you trust the application. Approving gives the application access to the addresses of your accounts.')}</RequestWarning>
-            <AcceptButton onClick={_onApprove}>{t<string>('Yes, allow this application access')}</AcceptButton>
-          </>
-        )}
-        <RejectButton>
-          <Link
-            isDanger
-            onClick={_onReject}
-          >
-            Reject
-          </Link>
-        </RejectButton>
-      </RequestInfo>
-    </div>
+    <>
+      <Header>
+        {currentAccount && <AccountsHeader account={currentAccount}
+          details={false} />}
+      </Header>
+      <Info>
+        <div className='tab-info'>
+          <Trans key='accessRequest'>An application, self-identifying as <span className='tab-name'>{origin}</span> is requesting access from{' '}
+            <a
+              href={url}
+              rel='noopener noreferrer'
+              target='_blank'
+            >
+              <span className='tab-url'>{url}</span>
+            </a>.
+          </Trans>
+        </div>
+      </Info>
+      <RequestWarning>{t<string>('Only approve this request if you trust the application. Approving gives the application access to the addresses of your accounts.')}</RequestWarning>
+
+      <Flex flex={2}
+        flexDirection='row'
+        mb='s'
+        mx='xs'>
+
+        {isFirst && <Box>
+          <Button
+            fluid
+            onClick={_onApprove}
+            type='submit'>
+            {t<string>('Authorize')}
+          </Button>
+        </Box> }
+        <Box>
+          <Button
+            fluid
+            onClick={_onReject}>
+            {t<string>('Reject')}
+          </Button>
+        </Box>
+      </Flex>
+    </>
   );
 }
-
-const RequestInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 8px;
-  background: ${({ theme }: ThemeProps): string => theme.highlightedAreaBackground};
-`;
 
 const Info = styled.div`
   display: flex;
@@ -97,11 +99,6 @@ const RequestWarning = styled(Warning)`
 `;
 
 AcceptButton.displayName = 'AcceptButton';
-
-const RejectButton = styled(ActionBar)`
-  margin: 8px 0 15px 0;
-  text-decoration: underline;
-`;
 
 export default styled(Request)`
 

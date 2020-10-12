@@ -5,14 +5,14 @@ import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import React, { useCallback, useContext, useState, useEffect } from 'react';
 import { TypeRegistry } from '@polkadot/types';
 
-import { ActionBar, ActionContext, Address, Button, ButtonArea, Checkbox, Link, VerticalSpace } from '../../components';
-import useTranslation from '../../hooks/useTranslation';
+import { ActionContext } from '../../components';
+import { Button } from '../../ui';
+
 import { approveSignPassword, approveSignSignature, cancelSignRequest, isSignLocked } from '../../messaging';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
 import Qr from './Qr';
 import Unlock from './Unlock';
-import styled from 'styled-components';
 
 interface Props {
   account: AccountJson;
@@ -36,11 +36,10 @@ function isRawPayload (payload: SignerPayloadJSON | SignerPayloadRaw): payload i
 }
 
 export default function Request ({ account: { isExternal }, buttonText, isFirst, request, signId, url }: Props): React.ReactElement<Props> | null {
-  const { t } = useTranslation();
   const onAction = useContext(ActionContext);
   const [{ hexBytes, payload }, setData] = useState<Data>({ hexBytes: null, payload: null });
   const [error, setError] = useState<string | null>(null);
-  const [isBusy, setIsBusy] = useState(false);
+  // const [isBusy, setIsBusy] = useState(false);
   const [isLocked, setIsLocked] = useState<boolean | null>(null);
   const [isSavedPass, setIsSavedPass] = useState(false);
 
@@ -79,15 +78,11 @@ export default function Request ({ account: { isExternal }, buttonText, isFirst,
 
   const _onSign = useCallback(
     (password: string): Promise<void> => {
-      setIsBusy(true);
-
       return approveSignPassword(signId, password, !!(password && isSavedPass))
         .then((): void => {
-          setIsBusy(false);
           onAction();
         })
         .catch((error: Error): void => {
-          setIsBusy(false);
           setError(error.message);
           console.error(error);
         });
@@ -111,115 +106,64 @@ export default function Request ({ account: { isExternal }, buttonText, isFirst,
     [onAction, signId]
   );
 
-  const signButton = isLocked
+  const content = () => {
+    if (payload !== null) {
+      const json = request.payload as SignerPayloadJSON;
+
+      return isExternal
+        ? (
+          <Qr
+            onSignature={_onSignature}
+            payload={payload}
+            request={json}
+          />
+        ) : (
+          <Extrinsic
+            request={json}
+          />
+        );
+    } else if (hexBytes !== null) {
+      const raw = request.payload as SignerPayloadRaw;
+
+      return (
+        <>
+          <Bytes
+            bytes={raw.data}
+            url={url}
+          />
+        </>
+      );
+    }
+
+    return null;
+  };
+
+  const signArea = isLocked
     ? (
       <Unlock
         buttonText={buttonText}
         error={error}
-        isBusy={isBusy}
+        isFirst={isFirst}
+        isLocked={isLocked}
+        isSavedPass={!!isSavedPass}
+        onCancel={_onCancel}
+        onIsSavedPassChange={setIsSavedPass}
         onSign={_onSign}
-      >
-        <Checkbox
-          checked={!!isSavedPass}
-          label={t<string>("Don't ask me again for the next 15 minutes")}
-          onChange={setIsSavedPass}
-        />
-      </Unlock>
+      />
     )
     : (
       <Button
-        isBusy={isBusy}
-        isDisabled={isLocked === null}
+        disabled={isLocked === null}
         onClick={_onSignQuick}
       >
         {buttonText}
       </Button>
     );
 
-  if (payload !== null) {
-    const json = request.payload as SignerPayloadJSON;
-
-    return (
-      <>
-        <div>
-          <Address
-            address={json.address}
-            genesisHash={json.genesisHash}
-          />
-        </div>
-        {isExternal
-          ? (
-            <Qr
-              onSignature={_onSignature}
-              payload={payload}
-              request={json}
-            />
-          ) : (
-            <Extrinsic
-              isDecoded={true}
-              payload={payload}
-              request={json}
-              url={url}
-            />
-          )
-        }
-        <SignArea>
-          {isFirst && !isExternal && signButton}
-          <CancelButton>
-            <Link
-              isDanger
-              onClick={_onCancel}
-            >
-              {t<string>('Cancel')}
-            </Link>
-          </CancelButton>
-        </SignArea>
-      </>
-    );
-  } else if (hexBytes !== null) {
-    const raw = request.payload as SignerPayloadRaw;
-
-    return (
-      <>
-        <div>
-          <Address address={raw.address} />
-        </div>
-        <Bytes
-          bytes={raw.data}
-          url={url}
-        />
-        <VerticalSpace />
-        <SignArea>
-          {!isExternal && signButton}
-          <CancelButton>
-            <Link
-              isDanger
-              onClick={_onCancel}
-            >
-              {t<string>('Reject')}
-            </Link>
-          </CancelButton>
-        </SignArea>
-      </>
-    );
-  }
-
-  return null;
+  return (
+    <>
+      {content()}
+      {signArea}
+    </>
+  );
 }
-
-const SignArea = styled(ButtonArea)`
-  flex-direction: column;
-  padding: 6px 24px;
-`;
-
-const CancelButton = styled(ActionBar)`
-  margin-top: 4px;
-  margin-bottom: 4px;
-  text-decoration: underline;
-
-  a {
-    margin: auto;
-  }
-`;
-
-CancelButton.displayName = 'CancelButton';
