@@ -3,7 +3,6 @@ import { SignerPayloadJSON, AnyJson } from '@polkadot/types/types';
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { RequestAccountList, RequestAccountSubscribe } from '@polkadot/extension-base/background/types';
 import { InjectedAccount } from '@polkadot/extension-inject/types';
-import BN from 'bn.js';
 
 export interface ResponsePolyCallDetails {
   networkFee: string,
