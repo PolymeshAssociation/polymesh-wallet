@@ -28,6 +28,31 @@ const port = chrome.runtime.connect({ name: PORT_EXTENSION });
 const handlers: Handlers = {};
 let idCounter = 0;
 
+type CB = (isBusy: boolean) => void
+class BusyStateSubscriber {
+  private isBusy = false;
+  private listeners: CB[] = [];
+  private notifyListeners () {
+    this.listeners.forEach((listener) => listener(this.isBusy));
+  }
+
+  public addListener (cb: CB) {
+    this.listeners.push(cb);
+  }
+
+  public sentMessage () {
+    this.isBusy = true;
+    this.notifyListeners();
+  }
+
+  public receivedResponse () {
+    this.isBusy = false;
+    this.notifyListeners();
+  }
+}
+
+export const busySubscriber = new BusyStateSubscriber();
+
 // setup a listener for messages, any incoming resolves the promise
 port.onMessage.addListener((data: Message['data']): void => {
   const handler = handlers[data.id];
@@ -37,6 +62,8 @@ port.onMessage.addListener((data: Message['data']): void => {
 
     return;
   }
+
+  busySubscriber.receivedResponse();
 
   if (!handler.subscriber) {
     delete handlers[data.id];
@@ -62,6 +89,8 @@ function sendMessage<TMessageType extends MessageTypes> (message: TMessageType, 
     handlers[id] = { reject, resolve, subscriber };
 
     port.postMessage({ id, message, request: request || {} });
+
+    busySubscriber.sentMessage();
   });
 }
 
@@ -75,6 +104,8 @@ function polyMessage<TMessageType extends PolyMessageTypes> (message: TMessageTy
     handlers[id] = { reject, resolve, subscriber };
 
     port.postMessage({ id, message, request: request || {} });
+
+    busySubscriber.sentMessage();
   });
 }
 
