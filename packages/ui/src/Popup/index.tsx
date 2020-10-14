@@ -15,7 +15,6 @@ import Accounts from './Accounts';
 import Authorize from './Authorize';
 import Derive from './Derive';
 import { ExportAccount } from './ExportAccount';
-import Forget from './Forget';
 import ImportQr from './ImportQr';
 import { ImportSeed } from './ImportSeed';
 import Metadata from './Metadata';
@@ -26,6 +25,7 @@ import { PolymeshContext as PolymeshContextType } from '../types';
 import { NewAccount } from './NewAccount';
 import { ImportJSon } from './ImportJson';
 import { ChangePassword } from './ChangePassword';
+import { ForgetAccount } from './ForgetAccount';
 const startSettings = uiSettings.get();
 
 // Request permission for video, based on access we can hide/show import
@@ -143,7 +143,7 @@ export default function Popup (): React.ReactElement {
                       <ToastProvider>
                         <Switch>
                           <Route path='/account/create'><NewAccount /></Route>
-                          <Route path='/account/forget/:address'><Forget /></Route>
+                          <Route path='/account/forget/:address'><ForgetAccount /></Route>
                           <Route path='/account/export/:address'><ExportAccount /></Route>
                           <Route path='/account/import-qr'><ImportQr /></Route>
                           <Route path='/account/import-seed'><ImportSeed /></Route>

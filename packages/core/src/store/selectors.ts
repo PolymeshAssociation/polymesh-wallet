@@ -61,7 +61,7 @@ export const selectedAccount = createSelector(
   (state: RootState) => state.accounts.selected,
   accounts,
   (selectedAccount, accounts) => {
-    if (selectedAccount) {
+    if (selectedAccount && accounts[selectedAccount]) {
       return selectedAccount;
     } else if (Object.keys(accounts).length) {
       return Object.values(accounts)[0].address;
