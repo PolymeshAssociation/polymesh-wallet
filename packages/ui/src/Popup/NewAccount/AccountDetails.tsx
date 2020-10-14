@@ -2,14 +2,16 @@ import React, { FC, useEffect, useState } from 'react';
 import { Controller, FieldError, useForm } from 'react-hook-form';
 import { Box, Button, Checkbox, Flex, Header, Icon, Link, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
 
 export interface Props {
+  existingAccount?: string;
   onBack: () => void;
   onContinue: () => void;
   setAccountDetails: (name: string, password:string) => void;
 }
 
-export const AccountDetails: FC<Props> = ({ onBack, onContinue, setAccountDetails }) => {
+export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue, setAccountDetails }) => {
   const [isValidForm, setValidForm] = useState(false);
   const { control, errors, handleSubmit, register, setError, watch } = useForm();
   const formValues: { [x: string]: any; } = watch();
@@ -18,16 +20,31 @@ export const AccountDetails: FC<Props> = ({ onBack, onContinue, setAccountDetail
     setValidForm(formValues.hasAcceptTerms && formValues.hasAcceptedPolicy);
   }, [formValues, setValidForm]);
 
-  const onSubmit = (data: { [x: string]: any; }) => {
-    if (data.password !== data.confirmPassword) {
-      setError('confirmPassword', {
-        type: 'manual',
-        message: 'Passwords do not  match'
-      });
+  const onSubmit = async (data: { [x: string]: any; }) => {
+    if (existingAccount) {
+      const isValidPassword = await validateAccount(existingAccount, data.password);
+
+      if (!isValidPassword) {
+        setError('password', {
+          type: 'invalidPassword',
+          message: 'Password is incorrect'
+        });
+
+        return;
+      }
     } else {
-      setAccountDetails(data.accountName, data.password);
-      onContinue();
+      if (data.password !== data.confirmPassword) {
+        setError('confirmPassword', {
+          type: 'manual',
+          message: 'Passwords do not match'
+        });
+
+        return;
+      }
     }
+
+    setAccountDetails(data.accountName, data.password);
+    onContinue();
   };
 
   return (
@@ -64,7 +81,7 @@ export const AccountDetails: FC<Props> = ({ onBack, onContinue, setAccountDetail
           <Box>
             <Text color='gray.1'
               variant='b2m'>
-              Password
+              {existingAccount ? 'Wallet password' : 'Password'}
             </Text>
           </Box>
           <Box>
@@ -77,71 +94,76 @@ export const AccountDetails: FC<Props> = ({ onBack, onContinue, setAccountDetail
                 <Text color='alert'
                   variant='b3'>
                   {(errors.password as FieldError).type === 'required' && 'Required field'}
-                  {(errors.password as FieldError).type === 'minLength' && 'Invalid'}
+                  {(errors.password as FieldError).type === 'minLength' && 'Password should be at least 8 characters'}
+                  {(errors.password as FieldError).type === 'invalidPassword' && 'Invalid password'}
                 </Text>
               </Box>
             }
           </Box>
         </Box>
-        <Box mb='s'
-          mt='m'>
-          <Box>
-            <Text color='gray.1'
-              variant='b2m'>
-              Confirm password
-            </Text>
+        {!existingAccount &&
+          <Box
+            mt='m'>
+            <Box>
+              <Text color='gray.1'
+                variant='b2m'>
+                Confirm password
+              </Text>
+            </Box>
+            <Box>
+              <TextInput inputRef={register({ required: true, minLength: 8 })}
+                name='confirmPassword'
+                placeholder='Enter 8 characters or more'
+                type='password' />
+              {errors.confirmPassword &&
+                <Box>
+                  <Text color='alert'
+                    variant='b3'>
+                    {(errors.confirmPassword as FieldError).type === 'required' && 'Required field'}
+                    {(errors.confirmPassword as FieldError).type === 'minLength' && 'Invalid'}
+                    {(errors.confirmPassword as FieldError).type === 'manual' && 'Passwords do not match'}
+                  </Text>
+                </Box>
+              }
+            </Box>
           </Box>
-          <Box>
-            <TextInput inputRef={register({ required: true, minLength: 8 })}
-              name='confirmPassword'
-              placeholder='Enter 8 characters or more'
-              type='password' />
-            {errors.confirmPassword &&
-              <Box>
-                <Text color='alert'
-                  variant='b3'>
-                  {(errors.confirmPassword as FieldError).type === 'required' && 'Required field'}
-                  {(errors.confirmPassword as FieldError).type === 'minLength' && 'Invalid'}
-                  {(errors.confirmPassword as FieldError).type === 'manual' && 'Passwords do not match'}
-                </Text>
-              </Box>
+        }
+        <Box mt='s'>
+          <Controller
+            as={<Checkbox />}
+            control={control}
+            defaultValue={false}
+            label={
+              <Text color='gray.3'
+                variant='b3'>
+                I have read and accept the Polymath{' '}
+                <Link href='#'
+                  id='sign-up-privacy-link'>
+                  Privacy Policy
+                </Link>
+                .
+              </Text>
             }
-          </Box>
+            name='hasAcceptedPolicy'
+          />
+          <Controller
+            as={<Checkbox />}
+            control={control}
+            defaultValue={false}
+            label={
+              <Text color='gray.3'
+                variant='b3'>
+                I have read and accept the Polymath{' '}
+                <Link href='#'
+                  id='sign-up-privacy-link'>
+                  Terms of Service
+                </Link>
+                .
+              </Text>
+            }
+            name='hasAcceptTerms'
+          />
         </Box>
-        <Controller
-          as={<Checkbox />}
-          control={control}
-          defaultValue={false}
-          label={
-            <Text color='gray.3'
-              variant='b3'>
-              I have read and accept the Polymath{' '}
-              <Link href='#'
-                id='sign-up-privacy-link'>
-                Privacy Policy
-              </Link>
-              .
-            </Text>
-          }
-          name='hasAcceptedPolicy'
-        />
-        <Controller
-          as={<Checkbox />}
-          control={control}
-          defaultValue={false}
-          label={
-            <Text color='gray.3'
-              variant='b3'>
-              I have read and accept the Polymath{' '}
-              <Link href='#'
-                id='sign-up-privacy-link'>
-                Terms of Service
-              </Link>
-              .
-            </Text>
-          }
-          name='hasAcceptTerms'
-        />
       </form>
 
       <Flex flex={1}
