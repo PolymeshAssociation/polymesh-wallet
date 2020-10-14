@@ -22,7 +22,6 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
 
   const onSubmit = async (data: { [x: string]: any; }) => {
     if (existingAccount) {
-      // Check if the password is correct for the existing account
       const isValidPassword = await validateAccount(existingAccount, data.password);
 
       if (!isValidPassword) {
@@ -34,7 +33,6 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
         return;
       }
     } else {
-      // check if the passwords match
       if (data.password !== data.confirmPassword) {
         setError('confirmPassword', {
           type: 'manual',
