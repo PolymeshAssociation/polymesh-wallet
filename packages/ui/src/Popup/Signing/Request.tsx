@@ -38,7 +38,6 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
   const onAction = useContext(ActionContext);
   const [{ hexBytes, payload }, setData] = useState<Data>({ hexBytes: null, payload: null });
   const [error, setError] = useState<string | null>(null);
-  // const [isBusy, setIsBusy] = useState(false);
   const [isLocked, setIsLocked] = useState<boolean | null>(null);
   const [isSavedPass, setIsSavedPass] = useState(false);
   const isBusy = useContext(ActivityContext);

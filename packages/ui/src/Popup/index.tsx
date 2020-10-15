@@ -62,7 +62,6 @@ export default function Popup (): React.ReactElement {
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
   const [isPolyReady, setIsPolyReady] = useState<boolean>(false);
   const [isBusy, setIsBusy] = useState(false);
-
   const handleError = useErrorHandler();
 
   const _onAction = (to?: string): void => {
