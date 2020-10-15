@@ -3,10 +3,11 @@ import { styled } from '../../styles';
 import { Icon } from '../Icon';
 import { getVariant, getIconStyle } from './styles';
 import { ButtonProps, ButtonDefaultProps } from './definitions';
+import { Loading } from '../Loading';
 
 const ButtonComponent: ForwardRefRenderFunction<HTMLButtonElement, React.PropsWithChildren<ButtonProps>> = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  { RouterLink, fluid, href, iconPosition, onClick, variant, ...otherProps },
+  { RouterLink, busy, children, disabled, fluid, href, iconPosition, onClick, variant, ...otherProps },
   ref
 ) => {
   if (RouterLink) {
@@ -14,12 +15,18 @@ const ButtonComponent: ForwardRefRenderFunction<HTMLButtonElement, React.PropsWi
   } else {
     return (
       <button
+        disabled={busy || disabled}
         onClick={onClick}
         ref={ref}
         role={href && 'button'}
         {...(href && { type: undefined })}
         {...otherProps}
-      />
+      >
+        {busy &&
+          <Loading small />
+        }
+        {!busy && children}
+      </button>
     );
   }
 };

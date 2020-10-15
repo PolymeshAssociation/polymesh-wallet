@@ -2,7 +2,7 @@ import React, { FC, useContext } from 'react';
 import { Box, Button, Flex, Header, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import { SvgAlertCircle, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { forgetAccount } from '../../messaging';
-import { ActionContext } from '../../components';
+import { ActionContext, ActivityContext } from '../../components';
 import { useParams } from 'react-router';
 
 interface ParamTypes {
@@ -12,6 +12,7 @@ interface ParamTypes {
 export const ForgetAccount: FC = () => {
   const onAction = useContext(ActionContext);
   const { address } = useParams<ParamTypes>();
+  const isBusy = useContext(ActivityContext);
 
   const onExport = async () => {
     try {
@@ -58,7 +59,7 @@ export const ForgetAccount: FC = () => {
         justifyContent='flex-end'
         mb='s'
         mx='xs'>
-        <Button
+        <Button busy={isBusy}
           fluid
           onClick={onExport}>
           Forget account

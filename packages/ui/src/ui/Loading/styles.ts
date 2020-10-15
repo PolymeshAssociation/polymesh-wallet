@@ -31,16 +31,16 @@ const mask = keyframes`
 
 export const Wrapper = styled.div<LoadingProps>`
   position: relative;
-  width: ${({ small }) => (small ? '32px' : '64px')};
-  height: ${({ small }) => (small ? '32px' : '64px')};
+  width: ${({ small }) => (small ? '18px' : '64px')};
+  height: ${({ small }) => (small ? '18px' : '64px')};
   animation: 1s ${spin} infinite cubic-bezier(0.255, 0.2, 0.315, 0.455);
   span,
   span:before {
     position: absolute;
     top: 0;
     left: 0;
-    width: ${({ small }) => (small ? '16px' : '32px')};
-    height: ${({ small }) => (small ? '32px' : '64px')};
+    width: ${({ small }) => (small ? '9px' : '32px')};
+    height: ${({ small }) => (small ? '18px' : '64px')};
     overflow: hidden;
     box-sizing: border-box;
     transform-origin: 100% 50%;
@@ -49,7 +49,7 @@ export const Wrapper = styled.div<LoadingProps>`
   }
   span:before {
     content: '';
-    border-width: ${({ small }) => (small ? '4px' : '5px')};
+    border-width: ${({ small }) => (small ? '2px' : '5px')};
     border-color: ${({ theme }) => theme.colors.primary};
     border-style: solid;
     border-right-color: transparent;
