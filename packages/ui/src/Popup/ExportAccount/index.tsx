@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
-import { ActionContext, PolymeshContext } from '../../components';
+import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
 import { exportAccount } from '../../messaging';
 import { SvgAlertCircle, SvgOpenInNew } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { FieldError, useForm } from 'react-hook-form';
@@ -15,6 +15,7 @@ export const ExportAccount: FC = () => {
       confirmPassword: ''
     }
   });
+  const isBusy = useContext(ActivityContext);
 
   const onSubmit = async (data: { [x: string]: string; }) => {
     if (!selectedAccount) {
@@ -99,7 +100,7 @@ export const ExportAccount: FC = () => {
         justifyContent='flex-end'
         mb='s'
         mx='xs'>
-        <Button
+        <Button busy={isBusy}
           fluid
           form='passwordForm'
           type='submit'>
