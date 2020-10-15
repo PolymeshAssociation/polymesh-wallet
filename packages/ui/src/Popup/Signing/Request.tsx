@@ -160,9 +160,9 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
     );
 
   return (
-    <>
+    <div style={{ display: isFirst ? 'block' : 'none' }}>
       {content()}
       {signArea}
-    </>
+    </div>
   );
 }
