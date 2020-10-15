@@ -1,13 +1,16 @@
 import { IdentifiedAccount, NetworkMeta, NetworkName } from '../types';
-import { SignerPayloadJSON } from '@polkadot/types/types';
+import { SignerPayloadJSON, AnyJson } from '@polkadot/types/types';
+import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { RequestAccountList, RequestAccountSubscribe } from '@polkadot/extension-base/background/types';
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 
 export interface ResponsePolyCallDetails {
   networkFee: string,
   protocolFee: string,
-  module: string,
   method: string,
+  section: string,
+  meta: FunctionMetadataLatest,
+  args: AnyJson;
 }
 
 export type RequestPolyAccountsSubscribe = null;

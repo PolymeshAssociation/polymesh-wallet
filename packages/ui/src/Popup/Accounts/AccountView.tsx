@@ -103,7 +103,6 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   const selectAccount = () => {
-    console.log('SELECTING', address);
     setPolySelectedAccount(address)
       .then(() => {
         onAction();

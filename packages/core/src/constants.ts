@@ -16,7 +16,7 @@ const defaultNetwork: NetworkName = NetworkName.pmf;
 
 const messagePrefix = 'poly:';
 
-const pollInterval = 4;
+const pollInterval = 2;
 
 export {
   networkURLs,
