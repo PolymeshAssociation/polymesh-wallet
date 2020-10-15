@@ -20,3 +20,4 @@ export { TextArea } from './TextArea';
 export { LabelWithCopy } from './LabelWithCopy';
 export { ScrollableContainer } from './ScrollableContainer';
 export { Link } from './Link';
+export { Loading } from './Loading';

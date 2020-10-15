@@ -1,4 +1,5 @@
 import React from 'react';
+import { Flex, Loading as LoadingIndicator } from '../ui';
 
 interface Props {
   children?: React.ReactNode;
@@ -7,7 +8,12 @@ interface Props {
 export default function Loading ({ children }: Props): React.ReactElement<Props> {
   if (!children) {
     return (
-      <div>... loading ...</div>
+      <Flex alignItems='center'
+        flex={1}
+        flexDirection='column'
+        justifyContent='center'>
+        <LoadingIndicator />
+      </Flex>
     );
   }
 

@@ -1,12 +1,13 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { createAccountSuri, createSeed } from '../../messaging';
-import { ActionContext } from '../../components';
+import { ActionContext, PolymeshContext } from '../../components';
 import { AccountDetails } from './AccountDetails';
 import { ConfirmSeed } from './ConfirmSeed';
 import { SeedView } from './SeedView';
 
 export const NewAccount: FC = () => {
   const onAction = useContext(ActionContext);
+  const { selectedAccount } = useContext(PolymeshContext);
   const [account, setAccount] = useState<null | { address: string; seed: string }>(null);
   const [step, setStep] = useState(0);
   const [credentials, setCredentials] = useState<{ name: string; password: string }>();
@@ -56,7 +57,8 @@ export const NewAccount: FC = () => {
         );
       case 2:
         return (
-          <AccountDetails onBack={prevStep}
+          <AccountDetails existingAccount={selectedAccount}
+            onBack={prevStep}
             onContinue={nextStep}
             setAccountDetails={setAccountDetails} />
         );
