@@ -35,7 +35,7 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
   );
 
   return (
-    <>
+    <div style={{ display: isFirst ? 'block' : 'none' }}>
       <Header>
         {currentAccount && <AccountsHeader account={currentAccount}
           details={false} />}
@@ -107,7 +107,7 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
           </Flex>
         </Box>
       </Flex>
-    </>
+    </div>
   );
 }
 
