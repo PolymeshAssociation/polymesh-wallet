@@ -1,4 +1,6 @@
 import { Unsubcall } from '@polkadot/extension-inject/types';
+import { Call } from '@polkadot/types/interfaces';
+import { AnyJson } from '@polkadot/types/types';
 
 export enum DidType {
   primary = 'primary',
@@ -61,4 +63,9 @@ export interface InjectedNetwork {
 export type KeyringAccountData = {
   address: string,
   name?: string,
+}
+
+export interface Decoded {
+  args: AnyJson;
+  method: Call;
 }

@@ -11,4 +11,5 @@ export type PolymeshContext = {
   selectedAccount?: string;
   polymeshAccounts?: IdentifiedAccount[];
   network?: string;
+  currentAccount?: IdentifiedAccount
 }
