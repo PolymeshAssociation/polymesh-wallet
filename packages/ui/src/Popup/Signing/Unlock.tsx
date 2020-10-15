@@ -1,14 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-
-import useTranslation from '../../hooks/useTranslation';
 import { Button, Box, Checkbox, Text, Flex, TextInput } from '../../ui';
 import { FieldError, useForm } from 'react-hook-form';
 import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
-import { PolymeshContext } from '../../components';
+import { ActivityContext, PolymeshContext } from '../../components';
 
 interface Props {
   isFirst: boolean | undefined;
-  buttonText: string;
   isLocked: boolean;
   isSavedPass: boolean;
   onCancel: () => Promise<void>;
@@ -17,8 +14,8 @@ interface Props {
   onSign: (password: string) => Promise<void>;
 }
 
-function Unlock ({ buttonText, error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPassChange, onSign }: Props): React.ReactElement<Props> {
-  const { t } = useTranslation();
+function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPassChange, onSign }: Props): React.ReactElement<Props> {
+  const isBusy = useContext(ActivityContext);
   const { selectedAccount } = useContext(PolymeshContext);
 
   const { errors, handleSubmit, register, setError } = useForm({
@@ -49,14 +46,9 @@ function Unlock ({ buttonText, error, isFirst, isLocked, isSavedPass, onCancel, 
     <>
       {isLocked && (
         <>
-          <Checkbox
-            checked={isSavedPass}
-            label={t<string>("Don't ask me again for the next 15 minutes")}
-            onChange={onIsSavedPassChange}
-          />
           <form id='passwordForm'
             onSubmit={handleSubmit(onSubmit)}>
-            <Box mt='m'>
+            <Box mt='l'>
               <Box>
                 <Text color='gray.1'
                   variant='b2m'>
@@ -81,6 +73,18 @@ function Unlock ({ buttonText, error, isFirst, isLocked, isSavedPass, onCancel, 
               </Box>
             </Box>
           </form>
+          <Box mt='s'>
+            <Checkbox
+              checked={isSavedPass}
+              label={
+                <Text color='gray.1'
+                  fontSize='1'>
+                  Don&apos;t ask me again for the next 15 minutes
+                </Text>
+              }
+              onChange={onIsSavedPassChange}
+            />
+          </Box>
         </>
       ) }
       <Flex flex={2}
@@ -88,21 +92,22 @@ function Unlock ({ buttonText, error, isFirst, isLocked, isSavedPass, onCancel, 
         mb='s'
         mx='xs'>
 
-        {isFirst && <Box>
+        <Box mx='xs'>
           <Button
+            fluid
+            onClick={onCancel}
+            variant='secondary'>
+            Reject
+          </Button>
+        </Box>
+        {isFirst && <Box mx='xs'>
+          <Button busy={isBusy}
             fluid
             form='passwordForm'
             type='submit'>
-            {buttonText}
+            Sign
           </Button>
         </Box> }
-        <Box>
-          <Button
-            fluid
-            onClick={onCancel}>
-            {t<string>('Reject')}
-          </Button>
-        </Box>
       </Flex>
     </>
   );

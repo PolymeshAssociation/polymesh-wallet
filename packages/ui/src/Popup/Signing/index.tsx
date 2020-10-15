@@ -1,16 +1,11 @@
-import { SignerPayloadJSON } from '@polkadot/types/types';
-
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-
 import { Loading, PolymeshContext, SigningReqContext } from '../../components';
-import useTranslation from '../../hooks/useTranslation';
 import Request from './Request';
 import TransactionIndex from './TransactionIndex';
 import { Box, Header, Text } from '@polymathnetwork/extension-ui/ui';
 import AccountsHeader from '../Accounts/AccountsHeader';
 
 export default function Signing (): React.ReactElement {
-  const { t } = useTranslation();
   const requests = useContext(SigningReqContext);
   const { currentAccount } = useContext(PolymeshContext);
   const [requestIndex, setRequestIndex] = useState(0);
@@ -41,7 +36,6 @@ export default function Signing (): React.ReactElement {
         : requests[requests.length - 1]
       : requests[0]
     : null;
-  const isTransaction = !!((request?.request?.payload as SignerPayloadJSON)?.blockNumber);
 
   return request
     ? (
@@ -65,7 +59,6 @@ export default function Signing (): React.ReactElement {
         </Header>
         <Request
           account={request.account}
-          buttonText={isTransaction ? t('Sign the transaction') : t('Sign the message')}
           isFirst={requestIndex === 0}
           request={request.request}
           signId={request.id}

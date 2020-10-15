@@ -1,61 +1,105 @@
 import { SignerPayloadJSON } from '@polkadot/types/types';
 
 import React, { useEffect, useState } from 'react';
-import { TFunction } from 'i18next';
 import { formatBalance } from '@polkadot/util';
 import BN from 'bn.js';
-import { Table } from '../../components';
-import useTranslation from '../../hooks/useTranslation';
 import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { Box, Text } from '@polymathnetwork/extension-ui/ui';
 
 interface Props {
   request: SignerPayloadJSON;
 }
 
-function renderMethod (call: ResponsePolyCallDetails, t: TFunction): React.ReactNode {
+function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
   const { args, meta, method, networkFee, protocolFee, section } = call;
   const totalFees = (new BN(networkFee)).add(new BN(protocolFee));
 
   return (
     <>
-      <tr>
-        <td className='label'>{t<string>('Method')}</td>
-        <td className='data'>
-          <details>
-            <summary>{section}.{method}{
+      <Box mt='m'>
+        <Box>
+          <Text color='gray.2'
+            variant='b2'>
+            Method
+          </Text>
+        </Box>
+        <Box>
+          <Text color='gray.1'
+            variant='b1'>
+            {section}.{method}{
               meta
                 ? `(${meta.args.map(({ name }) => name).join(', ')})`
                 : ''
-            }</summary>
-            <pre>{JSON.stringify(args, null, 2)}</pre>
-          </details>
-        </td>
-      </tr>
-      <tr>
-        <td className='label'>{t<string>('Network Fee')}</td>
-        <td className='data'>
-          {formatBalance(new BN(networkFee), { withUnit: false, decimals: 6 })} POLYX
-        </td>
-      </tr>
-      <tr>
-        <td className='label'>{t<string>('Protocol Fee')}</td>
-        <td className='data'>
-          {formatBalance(new BN(protocolFee), { withUnit: false })} POLYX
-        </td>
-      </tr>
-      <tr>
-        <td className='label'>{t<string>('Total Fees')}</td>
-        <td className='data'>
-          {formatBalance(totalFees, { withUnit: false })} POLYX
-        </td>
-      </tr>
+            }
+          </Text>
+        </Box>
+      </Box>
+
+      <Box mt='m'>
+        <Box>
+          <Text color='gray.2'
+            variant='b2'>
+            Params
+          </Text>
+        </Box>
+        <Box>
+          <Text color='gray.1'
+            variant='b1'>
+            {JSON.stringify(args, null, 2)}
+          </Text>
+        </Box>
+      </Box>
+
+      <Box>
+        <Box>
+          <Text color='gray.2'
+            variant='b2'>
+            Network fee
+          </Text>
+        </Box>
+        <Box>
+          <Text color='gray.1'
+            variant='b1'>
+            {formatBalance(new BN(networkFee), { withUnit: false, decimals: 6 })} POLYX
+          </Text>
+        </Box>
+      </Box>
+
+      <Box>
+        <Box>
+          <Text color='gray.2'
+            variant='b2'>
+            Protocol fee
+          </Text>
+        </Box>
+        <Box>
+          <Text color='gray.1'
+            variant='b1'>
+            {formatBalance(new BN(protocolFee), { withUnit: false })} POLYX
+          </Text>
+        </Box>
+      </Box>
+
+      <Box>
+        <Box>
+          <Text color='gray.2'
+            variant='b2'>
+            Total fees
+          </Text>
+        </Box>
+        <Box>
+          <Text color='gray.1'
+            variant='b1'>
+            {formatBalance(totalFees, { withUnit: false })} POLYX
+          </Text>
+        </Box>
+      </Box>
     </>
   );
 }
 
 function Extrinsic ({ request }: Props): React.ReactElement<Props> {
-  const { t } = useTranslation();
   const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
 
   useEffect(() => {
@@ -65,11 +109,9 @@ function Extrinsic ({ request }: Props): React.ReactElement<Props> {
   }, [request]);
 
   return (
-    <Table
-      isFull
-    >
-      {callDetails && renderMethod(callDetails, t)}
-    </Table>
+    <>
+      {callDetails && renderMethod(callDetails)}
+    </>
   );
 }
 

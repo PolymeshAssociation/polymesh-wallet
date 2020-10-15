@@ -2,7 +2,7 @@ import { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
 import { ThemeProps } from '../../types';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
-import { Button, Box, Flex, Header, Icon, Text, VerticalSpace } from '../../ui';
+import { Button, Box, Flex, Header, Icon, Text } from '../../ui';
 import { ActionContext, PolymeshContext } from '../../components';
 import { approveAuthRequest, rejectAuthRequest } from '../../messaging';
 import AccountsHeader from '../Accounts/AccountsHeader';

@@ -1,7 +1,5 @@
-import styled from 'styled-components';
 import React from 'react';
-
-import useTranslation from '../../hooks/useTranslation';
+import { Box, Text } from '@polymathnetwork/extension-ui/ui';
 
 interface Props {
   className?: string;
@@ -9,51 +7,35 @@ interface Props {
   url: string;
 }
 
-function Bytes ({ bytes, className, url }: Props): React.ReactElement<Props> {
-  const { t } = useTranslation();
-
+function Bytes ({ bytes, url }: Props): React.ReactElement<Props> {
   return (
-    <table className={className}>
-      <tbody>
-        <tr>
-          <td className='label'>{t<string>('from')}</td>
-          <td className='data'>{url}</td>
-        </tr>
-        <tr>
-          <td className='label'>{t<string>('bytes')}</td>
-          <td className='data'>{bytes}</td>
-        </tr>
-      </tbody>
-    </table>
+    <Box mt='m'>
+      <Box>
+        <Text color='gray.2'
+          variant='b2'>
+          From
+        </Text>
+      </Box>
+      <Box>
+        <Text color='gray.1'
+          variant='b1'>
+          {url}
+        </Text>
+      </Box>
+      <Box mt='s'>
+        <Text color='gray.2'
+          variant='b2'>
+          Bytes
+        </Text>
+      </Box>
+      <Box>
+        <Text color='gray.1'
+          variant='b1'>
+          {bytes}
+        </Text>
+      </Box>
+    </Box>
   );
 }
 
-export default styled(Bytes)`
-  border: 0;
-  display: block;
-  font-size: 0.75rem;
-  margin-top: 0.75rem;
-
-  td.data {
-    max-width: 0;
-    overflow: hidden;
-    text-align: left;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    width: 100%;
-
-    pre {
-      font-family: inherit;
-      font-size: 0.75rem;
-      margin: 0;
-    }
-  }
-
-  td.label {
-    opacity: 0.5;
-    padding: 0 0.5rem;
-    text-align: right;
-    vertical-align: middle;
-    white-space: nowrap;
-  }
-`;
+export default Bytes;
