@@ -5,7 +5,7 @@ import { formatBalance } from '@polkadot/util';
 import BN from 'bn.js';
 import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
-import { Box, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Loading, Text } from '@polymathnetwork/extension-ui/ui';
 
 interface Props {
   request: SignerPayloadJSON;
@@ -101,15 +101,30 @@ function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
 
 function Extrinsic ({ request }: Props): React.ReactElement<Props> {
   const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     getPolyCallDetails(request)
-      .then(setCallDetails)
-      .catch(console.error);
+      .then((callDetails) => {
+        setCallDetails(callDetails);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   }, [request]);
 
   return (
     <>
+      {loading &&
+        <Flex alignItems='center'
+          justifyContent='center'
+          my='l'>
+          <Loading />
+        </Flex>
+      }
       {callDetails && renderMethod(callDetails)}
     </>
   );
