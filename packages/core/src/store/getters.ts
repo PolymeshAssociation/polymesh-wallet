@@ -1,4 +1,4 @@
-import { accountsCount, network, networkUrl, selectedAccount, didsList } from './selectors';
+import { accountsCount, network, networkUrl, selectedAccount, didsList, accountsAddresses } from './selectors';
 
 import store from '.';
 import { NetworkName } from '../types';
@@ -23,10 +23,15 @@ function getDids (): string[] {
   return didsList(store.getState());
 }
 
+function getAccountsList (): string[] {
+  return accountsAddresses(store.getState());
+}
+
 export {
   getNetwork,
   getNetworkUrl,
   getSelectedAccount,
   getAccountsCount,
-  getDids
+  getDids,
+  getAccountsList
 };
