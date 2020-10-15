@@ -22,11 +22,36 @@ interface Handler {
 }
 
 type Handlers = Record<string, Handler>;
+type CB = (isBusy: boolean) => void
 
 const metadataGets = new Map<string, Promise<MetadataDef | null>>();
 const port = chrome.runtime.connect({ name: PORT_EXTENSION });
 const handlers: Handlers = {};
 let idCounter = 0;
+
+class BusyStateSubscriber {
+  private isBusy = false;
+  private listeners: CB[] = [];
+  private notifyListeners () {
+    this.listeners.forEach((listener) => listener(this.isBusy));
+  }
+
+  public addListener (cb: CB) {
+    this.listeners.push(cb);
+  }
+
+  public sentMessage () {
+    this.isBusy = true;
+    this.notifyListeners();
+  }
+
+  public receivedResponse () {
+    this.isBusy = false;
+    this.notifyListeners();
+  }
+}
+
+export const busySubscriber = new BusyStateSubscriber();
 
 // setup a listener for messages, any incoming resolves the promise
 port.onMessage.addListener((data: Message['data']): void => {
@@ -37,6 +62,8 @@ port.onMessage.addListener((data: Message['data']): void => {
 
     return;
   }
+
+  busySubscriber.receivedResponse();
 
   if (!handler.subscriber) {
     delete handlers[data.id];
@@ -61,6 +88,8 @@ function sendMessage<TMessageType extends MessageTypes> (message: TMessageType, 
 
     handlers[id] = { reject, resolve, subscriber };
 
+    busySubscriber.sentMessage();
+
     port.postMessage({ id, message, request: request || {} });
   });
 }
@@ -73,6 +102,8 @@ function polyMessage<TMessageType extends PolyMessageTypes> (message: TMessageTy
     const id = `${Date.now()}.${++idCounter}`;
 
     handlers[id] = { reject, resolve, subscriber };
+
+    busySubscriber.sentMessage();
 
     port.postMessage({ id, message, request: request || {} });
   });
