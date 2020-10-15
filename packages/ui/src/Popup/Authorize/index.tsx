@@ -26,7 +26,7 @@ export default function Authorize (): React.ReactElement {
 
 const Scroll = styled.div<{isLastRequest: boolean}>`
   overflow-y: ${({ isLastRequest }): string => isLastRequest ? 'hidden' : 'auto'};
-
+  height: 600px;
   && {
     padding: 0;
   }
