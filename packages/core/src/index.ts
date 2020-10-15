@@ -14,7 +14,6 @@ import store from './store';
 import { AccountData, IdentityData, KeyringAccountData, UnsubCallback } from './types';
 import { subscribeDidsList, subscribeIsRehydrated, subscribeNetwork } from './store/subscribers';
 import { getAccountsList, getDids } from './store/getters';
-import { pollInterval } from './constants';
 import { observeAccounts } from './utils';
 import { union } from 'lodash-es';
 
@@ -170,10 +169,7 @@ function subscribePolymesh (): () => void {
                * CDD
                */
               unsubCallbacks.newHeads && unsubCallbacks.newHeads();
-              api.rpc.chain.subscribeNewHeads((newHeader) => {
-                // Run this every four block to save resources
-                if (newHeader.number.toNumber() % pollInterval !== 0) return;
-
+              api.rpc.chain.subscribeNewHeads(() => {
                 const dids = getDids();
                 const promises = dids.map((did) =>
                   api.query.identity.claims.entries({ target: did, claim_type: 'CustomerDueDiligence' }));
