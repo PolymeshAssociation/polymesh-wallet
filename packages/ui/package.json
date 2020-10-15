@@ -23,6 +23,7 @@
     "react-contexify": "^4.1.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.3",
+    "react-error-boundary": "^3.0.2",
     "react-hook-form": "^6.8.6",
     "react-i18next": "^11.7.2",
     "react-is": "^16.13.1",
