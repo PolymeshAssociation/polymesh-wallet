@@ -13,9 +13,10 @@ import { actions as statusActions } from './store/features/status';
 import store from './store';
 import { AccountData, IdentityData, KeyringAccountData, UnsubCallback } from './types';
 import { subscribeDidsList, subscribeIsRehydrated, subscribeNetwork } from './store/subscribers';
-import { getDids } from './store/getters';
+import { getAccountsList, getDids } from './store/getters';
 import { pollInterval } from './constants';
 import { observeAccounts } from './utils';
+import { union } from 'lodash-es';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
@@ -59,8 +60,12 @@ function subscribePolymesh (): () => void {
                 const removedAccounts = difference(prevAccounts, accounts);
                 const preExistingAccounts = intersection(prevAccounts, accounts);
 
+                // 0) Check for orphan accounts that don't have a corresponding key
+                const storeAccounts = getAccountsList();
+                const orphanAccounts = difference(storeAccounts, accounts);
+
                 // A) If account is removed, clean up any associated subscriptions
-                removedAccounts.forEach((account) => {
+                union(removedAccounts, orphanAccounts).forEach((account) => {
                   store.dispatch(accountActions.removeAccount({ address: account, network }));
 
                   if (unsubCallbacks[account]) {
