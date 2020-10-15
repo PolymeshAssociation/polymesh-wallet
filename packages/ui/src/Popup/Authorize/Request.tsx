@@ -85,7 +85,7 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
         flexDirection='column'
         justifyContent='flex-end'
         mb='s'
-        mt='xxxl'
+        mt='xxl'
         mx='xs'>
         <Box>
           <Flex>
