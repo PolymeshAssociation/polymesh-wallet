@@ -1,8 +1,9 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { FieldError, useForm } from 'react-hook-form';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import { ActivityContext } from '@polymathnetwork/extension-ui/components';
 
 export interface AccountInfo {
   accountName: string;
@@ -25,6 +26,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
   });
   const [isValidForm, setValidForm] = useState(false);
   const formValues: { [x: string]: string; } = watch();
+  const isBusy = useContext(ActivityContext);
 
   useEffect(() => {
     if (existingAccount !== '') {
@@ -148,7 +150,8 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
           </Button>
           <Box ml='s'
             width={255}>
-            <Button disabled={!isValidForm}
+            <Button busy={isBusy}
+              disabled={!isValidForm}
               fluid
               form='accountForm'
               type='submit'>
