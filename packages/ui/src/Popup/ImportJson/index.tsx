@@ -1,5 +1,5 @@
 import React, { FC, useContext, useRef, useState } from 'react';
-import { ActionContext, PolymeshContext } from '../../components';
+import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { Box, Button, ButtonSmall, Flex, Header, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
@@ -26,6 +26,7 @@ export const ImportJSon: FC = () => {
     }
   });
   const onAction = useContext(ActionContext);
+  const isBusy = useContext(ActivityContext);
 
   const onSubmit = async (data: { [x: string]: string; }) => {
     if (accountJson && accountJson?.json && accountJson.address) {
@@ -294,7 +295,8 @@ export const ImportJSon: FC = () => {
         justifyContent='flex-end'
         mb='s'
         mx='xs'>
-        <Button disabled={!accountJson?.isFileValid}
+        <Button busy={isBusy}
+          disabled={!accountJson?.isFileValid}
           fluid
           form='accountForm'
           type='submit'>

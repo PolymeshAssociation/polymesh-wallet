@@ -21,6 +21,7 @@ export type ButtonProps = HtmlButtonProps & {
   fluid?: boolean;
   minsize?: boolean;
   tight?: boolean;
+  busy?: boolean;
   /**
    * Optionally specify an href for your Button
    */
@@ -33,6 +34,7 @@ export const ButtonDefaultProps = {
   onClick: () => {},
   variant: 'primary' as variants,
   fluid: false,
+  busy: false,
   tabIndex: 0,
   type: 'button' as HtmlButtonProps['type']
 };
