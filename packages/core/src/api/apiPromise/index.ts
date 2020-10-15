@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import meshSchema from './schema';
+import schema from './schema';
 import { NetworkName } from '../../types';
 import { networkURLs } from '../../constants';
 
@@ -12,8 +12,8 @@ const apiPromise: Record<NetworkName, Promise<ApiPromise>> =
     acc[network as NetworkName] = new Promise((resolve, reject) => {
       ApiPromise.create({
         provider: new WsProvider(networkURLs[network as NetworkName]),
-        rpc: meshSchema.rpc,
-        types: meshSchema.types
+        rpc: schema[network as NetworkName].rpc,
+        types: schema[network as NetworkName].types
       }).then((api) => {
         api.isReady.then((api) => {
           resolve(api);

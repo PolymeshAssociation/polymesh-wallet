@@ -1,42 +1,44 @@
 import apiPromise from './apiPromise';
-import { SignerPayloadJSON } from '@polkadot/types/types';
+import { SignerPayloadJSON, AnyJson } from '@polkadot/types/types';
 import { upperFirst } from 'lodash-es';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 import { NetworkName } from '../types';
+import { Call } from '@polkadot/types/interfaces';
 
 async function callDetails (request: SignerPayloadJSON, network: NetworkName): Promise<ResponsePolyCallDetails> {
   const api = await apiPromise[network];
   let protocolFee = '0';
   let networkFee = '0';
 
-  // Parse method
-  const res = api.registry.createType('Call', request.method);
-  const { args, method, section } = res;
+  const method: Call = api.registry.createType('Call', request.method);
+  const args: AnyJson = (method.toHuman() as { args: AnyJson }).args;
 
   // Protocol fee
   try {
-    const opName = upperFirst(section) + upperFirst(method);
+    const opName = upperFirst(method.sectionName) + upperFirst(method.methodName);
 
     protocolFee = (await api.query.protocolFee.baseFees(opName)).toString();
   } catch (error) {
-    console.error(`Error: Protocol fee retrieval for method ${section}:${method} has failed`, error);
+    console.error(`Error: Protocol fee retrieval for method ${method.sectionName}:${method.methodName} has failed`, error);
   }
 
   // Network fee
   try {
-    const extrinsic = api.tx[section][method](...args);
+    const extrinsic = api.tx[method.sectionName][method.methodName](...method.args);
     const { partialFee } = await extrinsic.paymentInfo(request.address);
 
     networkFee = partialFee.toString();
   } catch (error) {
-    console.error(`Error: Network fee retrieval for method ${section}:${method} has failed`, error);
+    console.error(`Error: Network fee retrieval for method ${method.sectionName}:${method.methodName} has failed`, error);
   }
 
   return {
     protocolFee,
     networkFee,
-    module: section,
-    method
+    method: method.methodName,
+    section: method.sectionName,
+    meta: method.meta,
+    args: args
   };
 }
 

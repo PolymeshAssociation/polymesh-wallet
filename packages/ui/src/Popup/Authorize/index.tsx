@@ -2,18 +2,14 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { AuthorizeReqContext } from '../../components';
-import useTranslation from '../../hooks/useTranslation';
-import { Header } from '../../partials';
 import Request from './Request';
 
 export default function Authorize (): React.ReactElement {
-  const { t } = useTranslation();
   const requests = useContext(AuthorizeReqContext);
 
   return (
     <>
       <Scroll isLastRequest={requests.length === 1}>
-        <Header text={t<string>('Authorize')} />
         {requests.map(({ id, request, url }, index): React.ReactNode => (
           <Request
             authId={id}
@@ -30,7 +26,7 @@ export default function Authorize (): React.ReactElement {
 
 const Scroll = styled.div<{isLastRequest: boolean}>`
   overflow-y: ${({ isLastRequest }): string => isLastRequest ? 'hidden' : 'auto'};
-
+  height: 600px;
   && {
     padding: 0;
   }
