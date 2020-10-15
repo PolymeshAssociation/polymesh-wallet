@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import uiSettings from '@polkadot/ui-settings';
 import { setSS58Format } from '@polkadot/util-crypto';
-
 import { Loading } from '../components';
 import { AccountContext, ActionContext, AuthorizeReqContext, MediaContext, MetadataReqContext, SettingsContext, SigningReqContext, PolymeshContext } from '../components/contexts';
 import ToastProvider from '../components/Toast/ToastProvider';
