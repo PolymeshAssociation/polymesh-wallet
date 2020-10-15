@@ -19,10 +19,12 @@ const SigningReqContext = React.createContext<SigningRequest[]>([]);
 const ThemeSwitchContext = React.createContext<(theme: AvailableThemes) => void>(noop);
 const ToastContext = React.createContext<({show: (message: string) => void})>({ show: noop });
 const PolymeshContext = React.createContext<PolymeshContextType>({ network: '', polymeshAccounts: [] });
+const ActivityContext = React.createContext<boolean>(false);
 
 export {
   AccountContext,
   ActionContext,
+  ActivityContext,
   AuthorizeReqContext,
   MediaContext,
   MetadataReqContext,
