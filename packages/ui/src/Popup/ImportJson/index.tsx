@@ -42,7 +42,10 @@ export const ImportJSon: FC = () => {
           }
         }
 
-        const decodedAccount = await jsonRestore(accountJson?.json, data.jsonPassword);
+        // Accounts should be visible by default.
+        accountJson.json.meta.isHidden = undefined;
+
+        const decodedAccount = await jsonRestore(accountJson.json, data.jsonPassword);
 
         if (decodedAccount.error) {
           setError('jsonPassword', { type: 'manual' });
