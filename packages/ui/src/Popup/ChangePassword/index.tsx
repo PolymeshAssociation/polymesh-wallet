@@ -2,7 +2,7 @@ import React, { FC, useContext } from 'react';
 import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { FieldError, useForm } from 'react-hook-form';
-import { ActionContext, PolymeshContext } from '../../components';
+import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
 import { changePassword, validateAccount } from '@polymathnetwork/extension-ui/messaging';
 
 export const ChangePassword: FC = () => {
@@ -15,6 +15,7 @@ export const ChangePassword: FC = () => {
       confirmPassword: ''
     }
   });
+  const isBusy = useContext(ActivityContext);
 
   const onSubmit = async (data: { [x: string]: string; }) => {
     if (!selectedAccount) { return; }
@@ -134,7 +135,7 @@ export const ChangePassword: FC = () => {
         justifyContent='flex-end'
         mb='s'
         mx='xs'>
-        <Button
+        <Button busy={isBusy}
           fluid
           form='passwordForm'
           type='submit'>
