@@ -1,15 +1,12 @@
 import { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
 import { ThemeProps } from '../../types';
-
 import React, { useCallback, useContext } from 'react';
-import { Trans } from 'react-i18next';
 import styled from 'styled-components';
-import { Button, Box, Flex } from '../../ui';
-import { ActionContext, PolymeshContext, Warning } from '../../components';
-import useTranslation from '../../hooks/useTranslation';
+import { Button, Box, Flex, Header, Icon, Text, VerticalSpace } from '../../ui';
+import { ActionContext, PolymeshContext } from '../../components';
 import { approveAuthRequest, rejectAuthRequest } from '../../messaging';
 import AccountsHeader from '../Accounts/AccountsHeader';
-import { Header } from '@polymathnetwork/extension-ui/ui';
+import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 
 interface Props {
   authId: string;
@@ -20,7 +17,6 @@ interface Props {
 }
 
 function Request ({ authId, isFirst, request: { origin }, url }: Props): React.ReactElement<Props> {
-  const { t } = useTranslation();
   const onAction = useContext(ActionContext);
   const { currentAccount } = useContext(PolymeshContext);
 
@@ -44,61 +40,76 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
         {currentAccount && <AccountsHeader account={currentAccount}
           details={false} />}
       </Header>
-      <Info>
-        <div className='tab-info'>
-          <Trans key='accessRequest'>An application, self-identifying as <span className='tab-name'>{origin}</span> is requesting access from{' '}
-            <a
-              href={url}
-              rel='noopener noreferrer'
-              target='_blank'
-            >
-              <span className='tab-url'>{url}</span>
-            </a>.
-          </Trans>
-        </div>
-      </Info>
-      <RequestWarning>{t<string>('Only approve this request if you trust the application. Approving gives the application access to the addresses of your accounts.')}</RequestWarning>
+      <Box mt='m'
+        mx='s'>
+        <Text color='gray.1'
+          variant='b2'>
+          An application, self-identifying as {origin}
+          is requesting access from{' '}
+          <a
+            href={url}
+            rel='noopener noreferrer'
+            target='_blank'
+          >
+            <span className='tab-url'>{url}</span>
+          </a>.
+        </Text>
+      </Box>
 
-      <Flex flex={2}
-        flexDirection='row'
+      <Box pt='m'>
+        <Box borderColor='gray.4'
+          borderRadius={3}
+          borderStyle='solid'
+          borderWidth={2}
+          m='xs'
+          p='s'>
+          <Flex>
+            <Icon Asset={SvgAlertCircle}
+              color='warning'
+              height={20}
+              width={20} />
+            <Box ml='s'>
+              <Text color='warning'
+                variant='b3m'>
+                Attention
+              </Text>
+            </Box>
+          </Flex>
+          <Text color='gray.1'
+            variant='b2m'>
+            Only approve this request if you trust the application. Approving gives the application access to the addresses of your accounts.
+          </Text>
+        </Box>
+      </Box>
+      <Flex flex={1}
+        flexDirection='column'
+        justifyContent='flex-end'
         mb='s'
+        mt='xxxl'
         mx='xs'>
-
-        {isFirst && <Box>
-          <Button
-            fluid
-            onClick={_onApprove}
-            type='submit'>
-            {t<string>('Authorize')}
-          </Button>
-        </Box> }
         <Box>
-          <Button
-            fluid
-            onClick={_onReject}>
-            {t<string>('Reject')}
-          </Button>
+          <Flex>
+            {isFirst && <Box mx='xs'>
+              <Button
+                fluid
+                onClick={_onApprove}
+                type='submit'>
+                Authorize
+              </Button>
+            </Box> }
+            <Box mx='xs'>
+              <Button
+                fluid
+                onClick={_onReject}>
+                Reject
+              </Button>
+            </Box>
+          </Flex>
         </Box>
       </Flex>
     </>
   );
 }
-
-const Info = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const AcceptButton = styled(Button)`
-  width: 90%;
-  margin: 25px auto 0;
-`;
-
-const RequestWarning = styled(Warning)`
-  margin: 24px 24px 0 1.45rem;
-`;
-
-AcceptButton.displayName = 'AcceptButton';
 
 export default styled(Request)`
 
