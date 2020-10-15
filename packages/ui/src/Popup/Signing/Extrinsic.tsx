@@ -1,156 +1,132 @@
-import { Chain } from '@polkadot/extension-chains/types';
-import { Call, ExtrinsicEra, ExtrinsicPayload } from '@polkadot/types/interfaces';
-import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
+import { SignerPayloadJSON } from '@polkadot/types/types';
 
+import React, { useEffect, useState } from 'react';
+import { formatBalance } from '@polkadot/util';
 import BN from 'bn.js';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { TFunction } from 'i18next';
-import { formatNumber, bnToBn } from '@polkadot/util';
-
-import { Table } from '../../components';
-import useMetadata from '../../hooks/useMetadata';
-import useTranslation from '../../hooks/useTranslation';
 import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
-
-interface Decoded {
-  args: AnyJson | null;
-  method: Call | null;
-}
+import { Box, Flex, Loading, Text } from '@polymathnetwork/extension-ui/ui';
 
 interface Props {
-  className?: string;
-  isDecoded: boolean;
-  payload: ExtrinsicPayload;
   request: SignerPayloadJSON;
-  url: string;
 }
 
-function decodeMethod (data: string, isDecoded: boolean, chain: Chain | null, specVersion: BN): Decoded {
-  let args: AnyJson | null = null;
-  let method: Call | null = null;
-
-  try {
-    if (isDecoded && chain && chain.hasMetadata && specVersion.eqn(chain.specVersion)) {
-      method = chain.registry.createType('Call', data);
-      args = (method.toHuman() as { args: AnyJson }).args;
-    }
-  } catch (error) {
-    args = null;
-    method = null;
-  }
-
-  return { args, method };
-}
-
-function renderMethod (data: string, { args, method }: Decoded, t: TFunction): React.ReactNode {
-  if (!args || !method) {
-    return (
-      <tr>
-        <td className='label'>{t<string>('method data')}</td>
-        <td className='data'>{data}</td>
-      </tr>
-    );
-  }
+function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
+  const { args, meta, method, networkFee, protocolFee, section } = call;
+  const totalFees = (new BN(networkFee)).add(new BN(protocolFee));
 
   return (
     <>
-      <tr>
-        <td className='label'>{t<string>('method')}</td>
-        <td className='data'>
-          <details>
-            <summary>{method.sectionName}.{method.methodName}{
-              method.meta
-                ? `(${method.meta.args.map(({ name }) => name).join(', ')})`
+      <Box mt='m'>
+        <Box>
+          <Text color='gray.2'
+            variant='b2'>
+            Method
+          </Text>
+        </Box>
+        <Box>
+          <Text color='gray.1'
+            variant='b1'>
+            {section}.{method}{
+              meta
+                ? `(${meta.args.map(({ name }) => name).join(', ')})`
                 : ''
-            }</summary>
-            <pre>{JSON.stringify(args, null, 2)}</pre>
-          </details>
-        </td>
-      </tr>
-      {method.meta && (
-        <tr>
-          <td className='label'>{t<string>('info')}</td>
-          <td className='data'>
-            <details>
-              <summary>{method.meta.documentation.map((d) => d.toString().trim()).join(' ')}</summary>
-            </details>
-          </td>
-        </tr>
-      )}
+            }
+          </Text>
+        </Box>
+      </Box>
+
+      <Box mt='m'>
+        <Box>
+          <Text color='gray.2'
+            variant='b2'>
+            Params
+          </Text>
+        </Box>
+        <Box>
+          <Text color='gray.1'
+            variant='b1'>
+            {JSON.stringify(args, null, 2)}
+          </Text>
+        </Box>
+      </Box>
+
+      <Box>
+        <Box>
+          <Text color='gray.2'
+            variant='b2'>
+            Network fee
+          </Text>
+        </Box>
+        <Box>
+          <Text color='gray.1'
+            variant='b1'>
+            {formatBalance(new BN(networkFee), { withUnit: false, decimals: 6 })} POLYX
+          </Text>
+        </Box>
+      </Box>
+
+      <Box>
+        <Box>
+          <Text color='gray.2'
+            variant='b2'>
+            Protocol fee
+          </Text>
+        </Box>
+        <Box>
+          <Text color='gray.1'
+            variant='b1'>
+            {formatBalance(new BN(protocolFee), { withUnit: false })} POLYX
+          </Text>
+        </Box>
+      </Box>
+
+      <Box>
+        <Box>
+          <Text color='gray.2'
+            variant='b2'>
+            Total fees
+          </Text>
+        </Box>
+        <Box>
+          <Text color='gray.1'
+            variant='b1'>
+            {formatBalance(totalFees, { withUnit: false })} POLYX
+          </Text>
+        </Box>
+      </Box>
     </>
   );
 }
 
-function mortalityAsString (era: ExtrinsicEra, hexBlockNumber: string, t: TFunction): string {
-  if (era.isImmortalEra) {
-    return t<string>('immortal');
-  }
-
-  const blockNumber = bnToBn(hexBlockNumber);
-  const mortal = era.asMortalEra;
-
-  return t<string>('mortal, valid from {{birth}} to {{death}}', {
-    replace: {
-      birth: formatNumber(mortal.birth(blockNumber)),
-      death: formatNumber(mortal.death(blockNumber))
-    }
-  });
-}
-
-function Extrinsic ({ className, isDecoded, payload: { era, nonce, tip }, request, url }: Props): React.ReactElement<Props> {
-  const { t } = useTranslation();
-  const { blockNumber, genesisHash, method, specVersion: hexSpec } = request;
+function Extrinsic ({ request }: Props): React.ReactElement<Props> {
   const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
-  const chain = useMetadata(genesisHash);
-  const specVersion = useRef(bnToBn(hexSpec)).current;
-  const decoded = useMemo(
-    () => decodeMethod(method, isDecoded, chain, specVersion),
-    [method, isDecoded, chain, specVersion]
-  );
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     getPolyCallDetails(request)
-      .then(setCallDetails)
-      .catch(console.error);
+      .then((callDetails) => {
+        setCallDetails(callDetails);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   }, [request]);
 
-  // Added to remove build error, willbe removed once the variable is used
-  console.log(callDetails);
-
   return (
-    <Table
-      className={className}
-      isFull
-    >
-      <tr>
-        <td className='label'>{t<string>('from')}</td>
-        <td className='data'>{url}</td>
-      </tr>
-      <tr>
-        <td className='label'>{chain ? t<string>('chain') : t<string>('genesis')}</td>
-        <td className='data'>{chain ? chain.name : genesisHash}</td>
-      </tr>
-      <tr>
-        <td className='label'>{t<string>('version')}</td>
-        <td className='data'>{specVersion.toNumber()}</td>
-      </tr>
-      <tr>
-        <td className='label'>{t<string>('nonce')}</td>
-        <td className='data'>{formatNumber(nonce)}</td>
-      </tr>
-      {!tip.isEmpty && (
-        <tr>
-          <td className='label'>{t<string>('tip')}</td>
-          <td className='data'>{formatNumber(tip)}</td>
-        </tr>
-      )}
-      {renderMethod(method, decoded, t)}
-      <tr>
-        <td className='label'>lifetime</td>
-        <td className='data'>{mortalityAsString(era, blockNumber, t)}</td>
-      </tr>
-    </Table>
+    <>
+      {loading &&
+        <Flex alignItems='center'
+          justifyContent='center'
+          my='l'>
+          <Loading />
+        </Flex>
+      }
+      {callDetails && renderMethod(callDetails)}
+    </>
   );
 }
 
