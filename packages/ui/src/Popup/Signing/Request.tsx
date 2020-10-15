@@ -5,7 +5,7 @@ import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import React, { useCallback, useContext, useState, useEffect } from 'react';
 import { TypeRegistry } from '@polkadot/types';
 
-import { ActionContext } from '../../components';
+import { ActionContext, ActivityContext } from '../../components';
 import { Button } from '../../ui';
 
 import { approveSignPassword, approveSignSignature, cancelSignRequest, isSignLocked } from '../../messaging';
@@ -41,6 +41,7 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
   // const [isBusy, setIsBusy] = useState(false);
   const [isLocked, setIsLocked] = useState<boolean | null>(null);
   const [isSavedPass, setIsSavedPass] = useState(false);
+  const isBusy = useContext(ActivityContext);
 
   useEffect((): void => {
     setIsLocked(null);
@@ -150,7 +151,7 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       />
     )
     : (
-      <Button
+      <Button busy={isBusy}
         disabled={isLocked === null}
         onClick={_onSignQuick}
       >
