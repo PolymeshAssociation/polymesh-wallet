@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { Box, Text, Flex, Icon, LabelWithCopy } from '../../ui';
-import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgAlertCircle, SvgCheckboxMarkedCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountView } from './AccountView';
 
 export interface Props {
@@ -28,12 +28,21 @@ export const AccountsContainer: FC<Props> = ({ accounts, headerColor, headerText
               textVariant='c2'
             />
             <Box>
-              <Flex flexDirection='row'>
+              <Flex>
                 {
                   !accounts[0].cdd &&
-                    <Box mr='m'>
+                    <Box>
                       <Icon Asset={SvgAlertCircle}
                         color='alert'
+                        height={14}
+                        width={14} />
+                    </Box>
+                }
+                {
+                  accounts[0].cdd &&
+                    <Box>
+                      <Icon Asset={SvgCheckboxMarkedCircle}
+                        color='success'
                         height={14}
                         width={14} />
                     </Box>
