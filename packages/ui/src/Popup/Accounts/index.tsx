@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { AccountContext, Dropdown, PolymeshContext } from '../../components';
+import { AccountContext, PolymeshContext } from '../../components';
 import AddAccount from './AddAccount';
 import AccountsHeader from './AccountsHeader';
-import { Button } from 'react-aria-menubutton';
-import { Text, Box, Header, Flex, Icon, Menu, MenuItem, Wrapper } from '../../ui';
+import { Text, Box, Header, Flex, Icon, Menu, MenuItem, ContextMenuTrigger, StatusBadge } from '../../ui';
 import { SvgViewDashboard,
   SvgDotsVertical,
   SvgPlus } from '@polymathnetwork/extension-ui/assets/images/icons';
@@ -21,20 +20,35 @@ export default function Accounts (): React.ReactElement {
   const history = useHistory();
 
   const renderNetworksSelector = (network: NetworkName = defaultNetwork) => {
-    const options = Object.keys(networkLabels).map((_network: string) =>
-      ({
-        value: _network,
-        text: networkLabels[_network as NetworkName]
-      })
-    );
-
     return (
-      <Dropdown
-        label=''
-        onChange={handleNetworkChange}
-        options={options}
-        value={network}
-      />
+      <ContextMenuTrigger id='network_select'
+        mouseButton={0}>
+        <Box style={{ cursor: 'pointer' }}>
+          <StatusBadge variant='yellow'>{networkLabels[network]}</StatusBadge>
+        </Box>
+      </ContextMenuTrigger>
+    );
+  };
+
+  const renderNetworkDropdown = () => {
+    return (
+      <>
+        {/* @ts-ignore */}
+        <Menu id='network_select'>
+          {
+            Object.keys(networkLabels).map((_network, index) => {
+              return (
+                <>
+                  {/* @ts-ignore */}
+                  <MenuItem data={{ networkKey: _network }}
+                    key={index}
+                    onClick={handleNetworkChange}>{networkLabels[_network as NetworkName]}</MenuItem>
+                </>
+              );
+            })
+          }
+        </Menu>
+      </>
     );
   };
 
@@ -42,10 +56,10 @@ export default function Accounts (): React.ReactElement {
     return networkLinks[network as NetworkName].dashboard;
   };
 
-  const handleNetworkChange = (value: string) => {
-    setPolyNetwork(value as NetworkName).then(() => {
-      // @TODO Handle this properly. Perhaps by showing a Loader until this promise has resolved?
-    }).catch(console.error);
+  const handleNetworkChange = async (event: string, data: {networkKey: NetworkName}) => {
+    console.log(data);
+
+    await setPolyNetwork(data.networkKey);
   };
 
   const groupAccounts = () => (array:IdentifiedAccount[]) =>
@@ -69,17 +83,23 @@ export default function Accounts (): React.ReactElement {
     return (
       <>
         {/* @ts-ignore */}
-        <MenuItem value='new'>Create new account</MenuItem>
-        {/* @ts-ignore */}
-        <MenuItem value='fromSeed'>Import from seed</MenuItem>
-        {/* @ts-ignore */}
-        <MenuItem value='fromJson'>Restore  from JSON</MenuItem>
+        <Menu id='add_account_menu'>
+          {/* @ts-ignore */}
+          <MenuItem data={{ action: 'new' }}
+            onClick={handleAccountMenuClick}>Create new account</MenuItem>
+          {/* @ts-ignore */}
+          <MenuItem data={{ action: 'fromSeed' }}
+            onClick={handleAccountMenuClick}>Import from seed</MenuItem>
+          {/* @ts-ignore */}
+          <MenuItem data={{ action: 'fromJson' }}
+            onClick={handleAccountMenuClick}>Restore  from JSON</MenuItem>
+        </Menu>
       </>
     );
   };
 
-  const handleAccountMenuClick = (event: string) => {
-    switch (event) {
+  const handleAccountMenuClick = (event: string, data: {action: string}) => {
+    switch (data.action) {
       case 'new':
         return history.push('/account/create');
       case 'fromSeed':
@@ -89,34 +109,26 @@ export default function Accounts (): React.ReactElement {
     }
   };
 
-  const renderTopMenuButton = () => {
-    const _handleSelection = (event: string) => {
-      switch (event) {
-        case 'changePassword':
-          return history.push('/account/change-password');
-        case 'newWindow':
-          return windowOpen();
-      }
-    };
+  const handleTopMenuSelection = (event: string, data: {action: string}) => {
+    switch (data.action) {
+      case 'changePassword':
+        return history.push('/account/change-password');
+      case 'newWindow':
+        return windowOpen();
+    }
+  };
 
+  const renderTopMenuButton = () => {
     return (
       <>
         {/* @ts-ignore */}
-        <Wrapper onSelection={_handleSelection}>
-          <Button>
-            <Icon Asset={SvgDotsVertical}
-              color='gray.0'
-              height={24}
-              width={24} />
-          </Button>
-          {/* @ts-ignore */}
-          <Menu>
-            {/* @ts-ignore */}
-            <MenuItem value='changePassword'>Change password</MenuItem>
-            {/* @ts-ignore */}
-            <MenuItem value='newWindow'>Open extension in a new window</MenuItem>
-          </Menu>
-        </Wrapper>
+        <ContextMenuTrigger id='top_menu'
+          mouseButton={0}>
+          <Icon Asset={SvgDotsVertical}
+            color='gray.0'
+            height={24}
+            width={24} />
+        </ContextMenuTrigger>
       </>
 
     );
@@ -126,8 +138,27 @@ export default function Accounts (): React.ReactElement {
     chrome.tabs.create({ url: getNetworkDashboardLink() });
   };
 
+  const renderTopMenu = () => {
+    return (
+      <>
+        {/* @ts-ignore */}
+        <Menu id='top_menu'>
+          {/* @ts-ignore */}
+          <MenuItem data={{ action: 'changePassword' }}
+            onClick={handleTopMenuSelection}>Change password</MenuItem>
+          {/* @ts-ignore */}
+          <MenuItem data={{ action: 'newWindow' }}
+            onClick={handleTopMenuSelection}>Open extension in a new window</MenuItem>
+        </Menu>
+      </>
+    );
+  };
+
   return (
     <>
+      {renderTopMenu()}
+      {renderAccountMenuItems()}
+      {renderNetworkDropdown()}
       {hierarchy.length === 0 ? (
         <AddAccount />
       ) : (
@@ -160,24 +191,22 @@ export default function Accounts (): React.ReactElement {
                 ACCOUNTS
               </Text>
               {/* @ts-ignore */}
-              <Wrapper onSelection={handleAccountMenuClick}>
-                <Button>
-                  <Flex justifyContent='center'>
-                    <Box mx='s'>
-                      <Icon Asset={SvgPlus}
-                        color='brandMain'
-                        height={14}
-                        width={14} />
-                    </Box>
-                    <Text color='brandMain'
-                      variant='b2'>
-                      Add a key
-                    </Text>
-                  </Flex>
-                </Button>
-                {/* @ts-ignore */}
-                <Menu>{renderAccountMenuItems()}</Menu>
-              </Wrapper>
+              <ContextMenuTrigger id='add_account_menu'
+                mouseButton={0}>
+                <Flex justifyContent='center'
+                  style={{ cursor: 'pointer' }}>
+                  <Box mx='s'>
+                    <Icon Asset={SvgPlus}
+                      color='brandMain'
+                      height={14}
+                      width={14} />
+                  </Box>
+                  <Text color='brandMain'
+                    variant='b2'>
+                    Add a key
+                  </Text>
+                </Flex>
+              </ContextMenuTrigger>
             </Flex>
             {
               Object.keys(groupedAccounts).sort((a) => (a === 'unassigned' ? 1 : -1)).map((did: string, index) => {
