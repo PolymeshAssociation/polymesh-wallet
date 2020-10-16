@@ -116,7 +116,6 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   const renderAccountInfo = () => {
     return (
       <>
-        {renderMenuItems(address)}
         <Flex
           flexDirection='row'
           justifyContent='space-between'
@@ -262,35 +261,38 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   return (
-    <Box
-      bg={isSelected ? 'gray.5' : 'gray.0'}
-      mt='s'
-      onClick={selectAccount}
-      onMouseEnter={mouseEnter}
-      onMouseLeave={mouseLeave}
-      px='s'>
-      <Flex justifyContent='space-between'>
-        <Box>
-          <Box
-            backgroundColor='brandLightest'
-            borderRadius='50%'
-            height={32}
-            px='2'
-            width={32}
-          >
-            <Flex justifyContent='center'
-              pt='xs'>
-              <Text color='brandMain'
-                variant='b2m'>{name?.substr(0, 1)}</Text>
-            </Flex>
+    <>
+      {renderMenuItems(address)}
+      <Box
+        bg={isSelected ? 'gray.5' : 'gray.0'}
+        mt='s'
+        onClick={selectAccount}
+        onMouseEnter={mouseEnter}
+        onMouseLeave={mouseLeave}
+        px='s'>
+        <Flex justifyContent='space-between'>
+          <Box>
+            <Box
+              backgroundColor='brandLightest'
+              borderRadius='50%'
+              height={32}
+              px='2'
+              width={32}
+            >
+              <Flex justifyContent='center'
+                pt='xs'>
+                <Text color='brandMain'
+                  variant='b2m'>{name?.substr(0, 1)}</Text>
+              </Flex>
+            </Box>
           </Box>
-        </Box>
-        <Box ml='s'
-          width='100%'>
-          {(!hover || did) && renderAccountInfo()}
-          {(hover && !did) && renderHoverAccountInfo()}
-        </Box>
-      </Flex>
-    </Box>
+          <Box ml='s'
+            width='100%'>
+            {(!hover || did) && renderAccountInfo()}
+            {(hover && !did) && renderHoverAccountInfo()}
+          </Box>
+        </Flex>
+      </Box>
+    </>
   );
 };
