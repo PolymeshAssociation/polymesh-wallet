@@ -2,12 +2,11 @@ import React, { FC, useState, useContext } from 'react';
 import BigNumber from 'bignumber.js';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { formatters } from '../../util';
-import { Box, Text, Flex, Icon, StatusBadge, TextInput, ButtonSmall, LabelWithCopy, Menu, MenuItem, Wrapper } from '../../ui';
+import { Box, Text, Flex, Icon, StatusBadge, TextInput, ButtonSmall, LabelWithCopy, Menu, MenuItem, ContextMenuTrigger } from '../../ui';
 import { SvgPencilOutline, SvgWindowClose, SvgCheck, SvgDotsVertical } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
 import { ActionContext, PolymeshContext } from '../../components';
 import { useHistory } from 'react-router-dom';
-import { Button } from 'react-aria-menubutton';
 import { networkLinks } from '@polymathnetwork/extension-core/constants';
 
 export interface Props {
@@ -31,15 +30,24 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     return (
       <>
         {/* @ts-ignore */}
-        <MenuItem value={`export:${address}`}>Export account</MenuItem>
-        {/* @ts-ignore */}
-        <MenuItem value={`forget:${address}`}>Forget account</MenuItem>
+        <Menu id={`account_menu_${address}`}>
+          {/* @ts-ignore */}
+          <MenuItem data={{ action: 'export', address }}
+            onClick={handleMenuClick}>
+            Export account
+          </MenuItem>
+          {/* @ts-ignore */}
+          <MenuItem data={{ action: 'forget', address }}
+            onClick={handleMenuClick}>
+            Forget account
+          </MenuItem>
+        </Menu>
       </>
     );
   };
 
-  const handleMenuClick = (event: string) => {
-    const [action, address] = event.split(':');
+  const handleMenuClick = (event: string, data: {action:string, address: string}) => {
+    const { action, address } = data;
 
     switch (action) {
       case 'export':
@@ -52,17 +60,13 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   const renderActionsMenuButton = (address: string) => {
     return (
       <>
-        {/* @ts-ignore */}
-        <Wrapper onSelection={handleMenuClick}>
-          <Button>
-            <Icon Asset={SvgDotsVertical}
-              color='gray.1'
-              height={16}
-              width={16} />
-          </Button>
-          {/* @ts-ignore */}
-          <Menu>{renderMenuItems(address)}</Menu>
-        </Wrapper>
+        <ContextMenuTrigger id={`account_menu_${address}`}
+          mouseButton={0}>
+          <Icon Asset={SvgDotsVertical}
+            color='gray.1'
+            height={16}
+            width={16} />
+        </ContextMenuTrigger>
       </>
     );
   };
@@ -88,13 +92,10 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     setNewName(e.target.value);
   };
 
-  const save = () => {
-    editAccount(address, newName || '')
-      .then(() => {
-        onAction();
-        setEditing(false);
-      })
-      .catch(console.error);
+  const save = async () => {
+    await editAccount(address || '', newName || '');
+    onAction();
+    setEditing(false);
   };
 
   const mouseEnter = () => {
@@ -105,12 +106,11 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     setHover(false);
   };
 
-  const selectAccount = () => {
-    setPolySelectedAccount(address)
-      .then(() => {
-        onAction();
-      })
-      .catch(console.error);
+  const selectAccount = async () => {
+    if (address) {
+      await setPolySelectedAccount(address);
+      onAction();
+    }
   };
 
   const renderAccountInfo = () => {
@@ -261,35 +261,38 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   return (
-    <Box
-      bg={isSelected ? 'gray.5' : 'gray.0'}
-      mt='s'
-      onClick={selectAccount}
-      onMouseEnter={mouseEnter}
-      onMouseLeave={mouseLeave}
-      px='s'>
-      <Flex justifyContent='space-between'>
-        <Box>
-          <Box
-            backgroundColor='brandLightest'
-            borderRadius='50%'
-            height={32}
-            px='2'
-            width={32}
-          >
-            <Flex justifyContent='center'
-              pt='xs'>
-              <Text color='brandMain'
-                variant='b2m'>{name?.substr(0, 1)}</Text>
-            </Flex>
+    <>
+      {renderMenuItems(address)}
+      <Box
+        bg={isSelected ? 'gray.5' : 'gray.0'}
+        mt='s'
+        onClick={selectAccount}
+        onMouseEnter={mouseEnter}
+        onMouseLeave={mouseLeave}
+        px='s'>
+        <Flex justifyContent='space-between'>
+          <Box>
+            <Box
+              backgroundColor='brandLightest'
+              borderRadius='50%'
+              height={32}
+              px='2'
+              width={32}
+            >
+              <Flex justifyContent='center'
+                pt='xs'>
+                <Text color='brandMain'
+                  variant='b2m'>{name?.substr(0, 1)}</Text>
+              </Flex>
+            </Box>
           </Box>
-        </Box>
-        <Box ml='s'
-          width='100%'>
-          {(!hover || did) && renderAccountInfo()}
-          {(hover && !did) && renderHoverAccountInfo()}
-        </Box>
-      </Flex>
-    </Box>
+          <Box ml='s'
+            width='100%'>
+            {(!hover || did) && renderAccountInfo()}
+            {(hover && !did) && renderHoverAccountInfo()}
+          </Box>
+        </Flex>
+      </Box>
+    </>
   );
 };
