@@ -13692,6 +13692,13 @@ react-dropzone@^11.0.3:
     file-selector "^0.1.12"
     prop-types "^15.7.2"
 
+react-error-boundary@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.0.2.tgz#74399a4d9a68bfede1f3f4261ea0aabfc65d9868"
+  integrity sha512-KVzCusRTFpUYG0OFJbzbdRuxNQOBiGXVCqyNpBXM9z5NFsFLzMjUXMjx8gTja6M6WH+D2PvP3yKz4d8gD1PRaA==
+  dependencies:
+    "@babel/runtime" "^7.11.2"
+
 react-hook-form@^6.8.6:
   version "6.8.6"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.8.6.tgz#c82b38b01e0a77689214c3ceb873eab9405d27a0"
