@@ -44,6 +44,11 @@ export const accounts = createSelector(
   (network, accounts) => accounts[network]
 );
 
+export const accountsAddresses = createSelector(
+  accounts,
+  (accounts) => Object.keys(accounts)
+);
+
 export const accountsCount = createSelector(
   accounts,
   (accounts): number => Object.values(accounts).length

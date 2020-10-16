@@ -12,16 +12,13 @@ const networkLabels: Record<NetworkName, string> = {
   pme: 'PME'
 };
 
-const defaultNetwork: NetworkName = NetworkName.pmf;
+const defaultNetwork: NetworkName = NetworkName.pme;
 
 const messagePrefix = 'poly:';
-
-const pollInterval = 2;
 
 export {
   networkURLs,
   networkLabels,
   defaultNetwork,
-  messagePrefix,
-  pollInterval
+  messagePrefix
 };
