@@ -40,7 +40,7 @@ function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
         <Box>
           <Text color='gray.2'
             variant='b2'>
-            Params
+            Parameters
           </Text>
         </Box>
         <Box>

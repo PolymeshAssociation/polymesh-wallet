@@ -5,9 +5,8 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import uiSettings from '@polkadot/ui-settings';
 import { setSS58Format } from '@polkadot/util-crypto';
-
 import { Loading } from '../components';
-import { AccountContext, ActionContext, AuthorizeReqContext, MediaContext, MetadataReqContext, SettingsContext, SigningReqContext, PolymeshContext, ActivityContext } from '../components/contexts';
+import { AccountContext, ActionContext, AuthorizeReqContext, MetadataReqContext, SettingsContext, SigningReqContext, PolymeshContext, ActivityContext } from '../components/contexts';
 import ToastProvider from '../components/Toast/ToastProvider';
 import { subscribeAccounts, subscribePolyIsReady, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeSigningRequests, subscribePolyAccounts, subscribePolyNetwork, subscribePolySelectedAccount, busySubscriber } from '../messaging';
 import { buildHierarchy } from '../util/buildHierarchy';
@@ -26,24 +25,8 @@ import { NewAccount } from './NewAccount';
 import { ImportJSon } from './ImportJson';
 import { ChangePassword } from './ChangePassword';
 import { ForgetAccount } from './ForgetAccount';
+import { useErrorHandler } from 'react-error-boundary';
 const startSettings = uiSettings.get();
-
-// Request permission for video, based on access we can hide/show import
-async function requestMediaAccess (cameraOn: boolean): Promise<boolean> {
-  if (!cameraOn) {
-    return false;
-  }
-
-  try {
-    await navigator.mediaDevices.getUserMedia({ video: true });
-
-    return true;
-  } catch (error) {
-    console.error('Permission for video declined', (error as Error).message);
-  }
-
-  return false;
-}
 
 function initAccountContext (accounts: AccountJson[]): AccountsContext {
   const hierarchy = buildHierarchy(accounts);
@@ -70,8 +53,6 @@ export default function Popup (): React.ReactElement {
   const [accountCtx, setAccountCtx] = useState<AccountsContext>({ accounts: [], hierarchy: [] });
   const [polymeshCtx, setPolymeshCtx] = useState<PolymeshContextType>({ network: '', polymeshAccounts: [] });
   const [authRequests, setAuthRequests] = useState<null | AuthorizeRequest[]>(null);
-  const [cameraOn, setCameraOn] = useState(startSettings.camera === 'on');
-  const [mediaAllowed, setMediaAllowed] = useState(false);
   const [metaRequests, setMetaRequests] = useState<null | MetadataRequest[]>(null);
   const [signRequests, setSignRequests] = useState<null | SigningRequest[]>(null);
   const [isWelcomeDone, setWelcomeDone] = useState(false);
@@ -81,6 +62,7 @@ export default function Popup (): React.ReactElement {
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
   const [isPolyReady, setIsPolyReady] = useState<boolean>(false);
   const [isBusy, setIsBusy] = useState(false);
+  const handleError = useErrorHandler();
 
   const _onAction = (to?: string): void => {
     setWelcomeDone(window.localStorage.getItem('welcome_read') === 'ok');
@@ -101,16 +83,17 @@ export default function Popup (): React.ReactElement {
       subscribeMetadataRequests(setMetaRequests),
       subscribeSigningRequests(setSignRequests),
       busySubscriber.addListener(setIsBusy)
-    ]).catch(console.error);
+    ])
+      .then(() => undefined, handleError)
+      .catch(handleError);
 
     uiSettings.on('change', (settings): void => {
       setSettingsCtx(settings);
-      setCameraOn(settings.camera === 'on');
       setSS58Format(settings.prefix === -1 ? 42 : settings.prefix);
     });
 
     _onAction();
-  }, []);
+  }, [handleError]);
 
   useEffect((): void => {
     const currentAccount = selectedAccountAddress && polymeshAccounts
@@ -120,12 +103,6 @@ export default function Popup (): React.ReactElement {
     setAccountCtx(initAccountContext(accounts || []));
     setPolymeshCtx(initPolymeshContext(network, polymeshAccounts, selectedAccountAddress || '', currentAccount));
   }, [accounts, network, polymeshAccounts, selectedAccountAddress]);
-
-  useEffect((): void => {
-    requestMediaAccess(cameraOn)
-      .then(setMediaAllowed)
-      .catch(console.error);
-  }, [cameraOn]);
 
   const Root = isWelcomeDone
     ? authRequests && authRequests.length
@@ -144,33 +121,31 @@ export default function Popup (): React.ReactElement {
           <SettingsContext.Provider value={settingsCtx}>
             <AccountContext.Provider value={accountCtx}>
               <AuthorizeReqContext.Provider value={authRequests}>
-                <MediaContext.Provider value={cameraOn && mediaAllowed}>
-                  <MetadataReqContext.Provider value={metaRequests}>
-                    <SigningReqContext.Provider value={signRequests}>
-                      <PolymeshContext.Provider value={polymeshCtx}>
-                        <ToastProvider>
-                          <Switch>
-                            <Route path='/account/create'><NewAccount /></Route>
-                            <Route path='/account/forget/:address'><ForgetAccount /></Route>
-                            <Route path='/account/export/:address'><ExportAccount /></Route>
-                            <Route path='/account/import-qr'><ImportQr /></Route>
-                            <Route path='/account/import-seed'><ImportSeed /></Route>
-                            <Route path='/account/restore-json'><ImportJSon /></Route>
-                            <Route path='/account/derive/:address/locked'><Derive isLocked /></Route>
-                            <Route path='/account/derive/:address'><Derive /></Route>
-                            <Route path='/account/change-password'><ChangePassword /></Route>
-                            <Route
-                              exact
-                              path='/'
-                            >
-                              <Root />
-                            </Route>
-                          </Switch>
-                        </ToastProvider>
-                      </PolymeshContext.Provider>
-                    </SigningReqContext.Provider>
-                  </MetadataReqContext.Provider>
-                </MediaContext.Provider>
+                <MetadataReqContext.Provider value={metaRequests}>
+                  <SigningReqContext.Provider value={signRequests}>
+                    <PolymeshContext.Provider value={polymeshCtx}>
+                      <ToastProvider>
+                        <Switch>
+                          <Route path='/account/create'><NewAccount /></Route>
+                          <Route path='/account/forget/:address'><ForgetAccount /></Route>
+                          <Route path='/account/export/:address'><ExportAccount /></Route>
+                          <Route path='/account/import-qr'><ImportQr /></Route>
+                          <Route path='/account/import-seed'><ImportSeed /></Route>
+                          <Route path='/account/restore-json'><ImportJSon /></Route>
+                          <Route path='/account/derive/:address/locked'><Derive isLocked /></Route>
+                          <Route path='/account/derive/:address'><Derive /></Route>
+                          <Route path='/account/change-password'><ChangePassword /></Route>
+                          <Route
+                            exact
+                            path='/'
+                          >
+                            <Root />
+                          </Route>
+                        </Switch>
+                      </ToastProvider>
+                    </PolymeshContext.Provider>
+                  </SigningReqContext.Provider>
+                </MetadataReqContext.Provider>
               </AuthorizeReqContext.Provider>
             </AccountContext.Provider>
           </SettingsContext.Provider>
