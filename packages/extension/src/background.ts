@@ -10,8 +10,16 @@ import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import subscribePolymesh from '@polymathnetwork/extension-core';
 import { isPolyMessage } from '@polymathnetwork/extension-core/utils';
+import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
+
+// This listener is invoked every time the extension is installed, updated, or reloaded.
+chrome.runtime.onInstalled.addListener(() => {
+  // Reset stored state to avoid integrity issues. Store will be repopulated next time the wallet is opened.
+  resetState();
+  setIsRehydrated();
+});
 
 // listen to all messages and handle appropriately
 chrome.runtime.onConnect.addListener((port): void => {
