@@ -21,6 +21,7 @@
     "react": "^16.13.1",
     "react-aria-menubutton": "^7.0.0",
     "react-contexify": "^4.1.1",
+    "react-contextmenu": "^2.14.0",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.3",
     "react-error-boundary": "^3.0.2",
