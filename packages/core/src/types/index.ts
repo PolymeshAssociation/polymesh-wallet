@@ -44,6 +44,11 @@ export enum NetworkName {
   pme = 'pme'
 }
 
+export enum LinkName {
+  dashboard = 'dashboard',
+  explorer = 'explorer'
+}
+
 export type CDD = {
   issuer: string,
   expiry?: number
