@@ -11,7 +11,7 @@ import { SvgViewDashboard,
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { AccountsContainer } from './AccountsContainer';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
-import { defaultNetwork, networkLabels } from '@polymathnetwork/extension-core/constants';
+import { defaultNetwork, networkLabels, networkLinks } from '@polymathnetwork/extension-core/constants';
 import { setPolyNetwork, windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { useHistory } from 'react-router';
 
@@ -36,6 +36,10 @@ export default function Accounts (): React.ReactElement {
         value={network}
       />
     );
+  };
+
+  const getNetworkDashboardLink = () => {
+    return networkLinks[network as NetworkName].dashboard;
   };
 
   const handleNetworkChange = (value: string) => {
@@ -118,6 +122,10 @@ export default function Accounts (): React.ReactElement {
     );
   };
 
+  const openDashboard = () => {
+    chrome.tabs.create({ url: getNetworkDashboardLink() });
+  };
+
   return (
     <>
       {hierarchy.length === 0 ? (
@@ -135,6 +143,7 @@ export default function Accounts (): React.ReactElement {
                 <Icon Asset={SvgViewDashboard}
                   color='gray.0'
                   height={24}
+                  onClick={openDashboard}
                   width={24} />
                 {renderTopMenuButton()}
               </Flex>

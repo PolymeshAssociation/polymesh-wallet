@@ -1,13 +1,14 @@
 import React, { FC, useState, useContext } from 'react';
 import BigNumber from 'bignumber.js';
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { formatters } from '../../util';
 import { Box, Text, Flex, Icon, StatusBadge, TextInput, ButtonSmall, LabelWithCopy, Menu, MenuItem, Wrapper } from '../../ui';
 import { SvgPencilOutline, SvgWindowClose, SvgCheck, SvgDotsVertical } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
-import { ActionContext } from '../../components';
+import { ActionContext, PolymeshContext } from '../../components';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'react-aria-menubutton';
+import { networkLinks } from '@polymathnetwork/extension-core/constants';
 
 export interface Props {
   account: IdentifiedAccount;
@@ -23,6 +24,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState(name);
   const [hover, setHover] = useState(false);
+
+  const { network } = useContext(PolymeshContext);
 
   const renderMenuItems = (address: string) => {
     return (
@@ -187,6 +190,14 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     );
   };
 
+  const getNetworkDashboardLink = () => {
+    return networkLinks[network as NetworkName].dashboard;
+  };
+
+  const assign = () => {
+    chrome.tabs.create({ url: `${getNetworkDashboardLink()}account` });
+  };
+
   const renderHoverAccountInfo = () => {
     return (
       <>
@@ -238,7 +249,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             />
           </Box>
           <Box>
-            <ButtonSmall variant='secondary'>Assign</ButtonSmall>
+            <ButtonSmall onClick={assign}
+              variant='secondary'>Assign</ButtonSmall>
           </Box>
           <Box>
             {renderActionsMenuButton(address)}
