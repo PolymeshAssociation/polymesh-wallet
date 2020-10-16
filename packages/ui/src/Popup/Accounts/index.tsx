@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { AccountContext, Dropdown, PolymeshContext } from '../../components';
+import { AccountContext, PolymeshContext } from '../../components';
 import AddAccount from './AddAccount';
 import AccountsHeader from './AccountsHeader';
 import { Text, Box, Header, Flex, Icon, Menu, MenuItem, ContextMenuTrigger, StatusBadge } from '../../ui';
