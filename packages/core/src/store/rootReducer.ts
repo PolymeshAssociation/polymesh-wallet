@@ -1,5 +1,4 @@
 import { AnyAction, combineReducers } from '@reduxjs/toolkit';
-import store from './index';
 import accounts from './features/accounts';
 import identities from './features/identities';
 import network from './features/network';
