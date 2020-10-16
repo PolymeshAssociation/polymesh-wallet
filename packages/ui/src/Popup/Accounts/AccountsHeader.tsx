@@ -4,6 +4,7 @@ import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { SvgCheckboxMarkedCircle, SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { formatters } from '../../util';
 import BigNumber from 'bignumber.js';
+import { useHistory } from 'react-router';
 
 type Props = {
   account: IdentifiedAccount;
@@ -11,6 +12,12 @@ type Props = {
 }
 
 export default function AccountsHeader ({ account, details = true }: Props): React.ReactElement<Props> {
+  const history = useHistory();
+
+  const showAccountDetails = () => {
+    history.push(`/account/details/${account?.address}`);
+  };
+
   const renderStatus = (isVerified: boolean) => {
     const color = isVerified ? 'success' : 'alert';
     const statusText = isVerified ? 'Verified' : 'Not verified';
@@ -38,31 +45,31 @@ export default function AccountsHeader ({ account, details = true }: Props): Rea
     <>
       {
         account?.did &&
-  <Box bg='brandLightest'
-    borderRadius='2'>
-    {account && (
-      <Flex flexDirection='row'
-        justifyContent='space-between'
-        mx='1'>
-        <Flex flexDirection='row'>
-          {
-            account.didAlias &&
-            <Box mr='1'>
-              <Text color='brandMain'
-                variant='c2m'>
-                Did Label
-              </Text>
-            </Box>
-          }
-          <Text color='gray.2'
-            variant='c2'>
-            <TextEllipsis size={29}>{account?.did}</TextEllipsis>
-          </Text>
-        </Flex>
-        {renderStatus(account.cdd !== undefined)}
-      </Flex>
-    )}
-  </Box>
+        <Box bg='brandLightest'
+          borderRadius='2'>
+          {account && (
+            <Flex flexDirection='row'
+              justifyContent='space-between'
+              mx='1'>
+              <Flex flexDirection='row'>
+                {
+                  account.didAlias &&
+                  <Box mr='1'>
+                    <Text color='brandMain'
+                      variant='c2m'>
+                      Did Label
+                    </Text>
+                  </Box>
+                }
+                <Text color='gray.2'
+                  variant='c2'>
+                  <TextEllipsis size={29}>{account?.did}</TextEllipsis>
+                </Text>
+              </Flex>
+              {renderStatus(account.cdd !== undefined)}
+            </Flex>
+          )}
+        </Box>
       }
       {
         !account?.did &&
@@ -93,7 +100,7 @@ export default function AccountsHeader ({ account, details = true }: Props): Rea
         <Box ml='s'>
           <Text color='gray.0'
             variant='b2'>
-      POLYX
+            POLYX
           </Text>
         </Box>
       </Flex>
@@ -101,13 +108,15 @@ export default function AccountsHeader ({ account, details = true }: Props): Rea
         <Box borderColor='gray.0'
           borderRadius='3'
           borderStyle='solid'
-          borderWidth={2}>
+          borderWidth={2}
+          onClick={showAccountDetails}
+          style={{ cursor: 'pointer' }}>
           <Flex alignItems='center'
             height={32}
             justifyContent='center'>
             <Text color='gray.0'
               variant='b2m'>
-        View details
+              View details
             </Text>
           </Flex>
         </Box>

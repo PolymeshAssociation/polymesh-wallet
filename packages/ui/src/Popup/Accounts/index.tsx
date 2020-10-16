@@ -140,7 +140,7 @@ export default function Accounts (): React.ReactElement {
               </Flex>
             </Flex>
             {currentAccount && <AccountsHeader account={currentAccount}
-              details={false} />}
+              details={true} />}
           </Header>
           <AccountsArea>
             <Flex justifyContent='space-between'

@@ -26,6 +26,7 @@ import { ImportJSon } from './ImportJson';
 import { ChangePassword } from './ChangePassword';
 import { ForgetAccount } from './ForgetAccount';
 import { useErrorHandler } from 'react-error-boundary';
+import { AccountDetails } from './AccountDetails';
 const startSettings = uiSettings.get();
 
 function initAccountContext (accounts: AccountJson[]): AccountsContext {
@@ -135,6 +136,7 @@ export default function Popup (): React.ReactElement {
                           <Route path='/account/derive/:address/locked'><Derive isLocked /></Route>
                           <Route path='/account/derive/:address'><Derive /></Route>
                           <Route path='/account/change-password'><ChangePassword /></Route>
+                          <Route path='/account/details/:address'><AccountDetails /></Route>
                           <Route
                             exact
                             path='/'
