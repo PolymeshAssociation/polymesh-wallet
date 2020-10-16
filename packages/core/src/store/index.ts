@@ -11,7 +11,7 @@ import { persistStore,
   PERSIST,
   PURGE,
   REGISTER } from 'redux-persist';
-import { actions as statusActions } from './features/status';
+import { setIsRehydrated } from './setters';
 
 const persistConfig = {
   key: 'root',
@@ -29,7 +29,11 @@ if (process.env.NODE_ENV === 'development') {
   middleware.push(logger);
 }
 
-const store: any = configureStore({ middleware, reducer: persistedReducer, devTools: process.env.NODE_ENV === 'development' });
+const store: any = configureStore({
+  middleware,
+  reducer: persistedReducer,
+  devTools: process.env.NODE_ENV === 'development'
+});
 
 // Reducer hot module reloading
 if (process.env.NODE_ENV === 'development' && (module as any).hot) {
@@ -43,7 +47,7 @@ if (process.env.NODE_ENV === 'development' && (module as any).hot) {
 export type Dispatch = typeof store.dispatch
 
 export const persister = persistStore(store, null, () => {
-  store.dispatch(statusActions.setRehydrated());
+  setIsRehydrated();
 });
 
 export default store;
