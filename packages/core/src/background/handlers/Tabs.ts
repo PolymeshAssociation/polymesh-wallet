@@ -57,13 +57,14 @@ export default class Tabs {
 
   // FIXME This looks very much like what we have in Extension
   private accountsSubscribe (url: string, id: string, port: chrome.runtime.Port): boolean {
+    const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
+
     // Call the callback every time the selected account changes, so that we return
     // that account first.
     const selectedAccUnsub = subscribeSelectedAccount(() => {
       cb(transformAccounts(accountsObservable.subject.getValue()));
     });
 
-    const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
     const subscription = accountsObservable.subject.subscribe((accounts: SubjectInfo): void =>
       cb(transformAccounts(accounts))
     );
