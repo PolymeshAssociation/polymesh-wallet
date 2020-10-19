@@ -2,15 +2,15 @@ name: PR
 on: [pull_request]
 
 jobs:
-  pr:
-    strategy:
-      matrix:
-        step: ['lint', 'build']
-    name: ${{ matrix.step }}
+  test-and-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: ${{ matrix.step }}
-      run: |
-        yarn install --immutable | grep -v 'YN0013'
-        yarn ${{ matrix.step }}
+      - uses: actions/checkout@v1
+      - run: yarn install --immutable | grep -v 'YN0013'
+      - run: yarn lint
+      - run: yarn build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: |
+            master-build.zip
