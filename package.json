@@ -39,11 +39,11 @@
     "@babel/core": "^7.11.6",
     "@polkadot/dev": "^0.55.49",
     "@polkadot/typegen": "^1.32.1",
-    "ts-jest": "^26.4.1",
     "@types/jest": "^26.0.14",
     "copy-webpack-plugin": "^6.1.0",
     "i18next-scanner": "^2.11.0",
-    "sinon-chrome": "^3.0.1"
+    "sinon-chrome": "^3.0.1",
+    "ts-jest": "^26.4.1"
   },
   "author": "Remon Nashid <remon.sherin@gmail.com>",
   "license": "ISC",
