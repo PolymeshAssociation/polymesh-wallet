@@ -61,7 +61,7 @@ const darkTheme = {
   buttonTextColor: '#FFFFFF',
   errorBorderColor: '#7E3530',
   errorColor: '#E42F2F',
-  fontFamily: 'Inter, sans-serif',
+  fontFamily: '',
   fontSize: '16px',
   highlightedAreaBackground: '#212226',
   iconDangerColor: '#AF1111',

@@ -80,19 +80,22 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     );
   };
 
-  const cancelEditing = () => {
+  const cancelEditing = (e: React.MouseEvent<HTMLElement>) => {
     setEditing(false);
+    if (e.stopPropagation) e.stopPropagation();
   };
 
-  const editName = () => {
+  const editName = (e: React.MouseEvent<HTMLElement>) => {
     setEditing(true);
+    if (e.stopPropagation) e.stopPropagation();
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewName(e.target.value);
   };
 
-  const save = async () => {
+  const save = async (e: React.MouseEvent<HTMLElement>) => {
+    if (e.stopPropagation) e.stopPropagation();
     await editAccount(address || '', newName || '');
     onAction();
     setEditing(false);
@@ -194,7 +197,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     return networkLinks[network as NetworkName].dashboard;
   };
 
-  const assign = () => {
+  const assign = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.stopPropagation) e.stopPropagation();
     chrome.tabs.create({ url: `${getNetworkDashboardLink()}account` });
   };
 
