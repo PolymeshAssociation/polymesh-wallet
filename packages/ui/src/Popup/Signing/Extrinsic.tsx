@@ -26,7 +26,7 @@ function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
         </Box>
         <Box>
           <Text color='gray.1'
-            variant='b1'>
+            variant='code'>
             {section}.{method}{
               meta
                 ? `(${meta.args.map(({ name }) => name).join(', ')})`
@@ -45,7 +45,7 @@ function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
         </Box>
         <Box>
           <Text color='gray.1'
-            variant='b1'>
+            variant='code'>
             {JSON.stringify(args, null, 2)}
           </Text>
         </Box>
