@@ -6,7 +6,7 @@ import React, { useCallback, useContext, useState, useEffect } from 'react';
 import { TypeRegistry } from '@polkadot/types';
 
 import { ActionContext, ActivityContext } from '../../components';
-import { Button } from '../../ui';
+import { Button, Box, Flex } from '../../ui';
 
 import { approveSignPassword, approveSignSignature, cancelSignRequest, isSignLocked } from '../../messaging';
 import Bytes from './Bytes';
@@ -150,12 +150,27 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       />
     )
     : (
-      <Button busy={isBusy}
-        disabled={isLocked === null}
-        onClick={_onSignQuick}
-      >
-        Sign
-      </Button>
+      <Flex flex={2}
+        flexDirection='row'
+        mb='s'
+        mx='xs'>
+        <Box mx='xs'>
+          <Button
+            fluid
+            onClick={_onCancel}
+            variant='secondary'>
+            Reject
+          </Button>
+        </Box>
+        {isFirst && <Box mx='xs'>
+          <Button busy={isBusy}
+            disabled={isLocked === null}
+            fluid
+            onClick={_onSignQuick}>
+            Sign
+          </Button>
+        </Box> }
+      </Flex>
     );
 
   return (
