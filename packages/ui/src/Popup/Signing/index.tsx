@@ -1,13 +1,13 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Loading, PolymeshContext, SigningReqContext } from '../../components';
+import { Loading, SigningReqContext } from '../../components';
 import Request from './Request';
 import TransactionIndex from './TransactionIndex';
-import { Box, Header, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Header, ScrollableContainer, Text } from '@polymathnetwork/extension-ui/ui';
 import AccountsHeader from '../Accounts/AccountsHeader';
+import { getIdentifiedAccounts } from '@polymathnetwork/extension-core/store/getters';
 
 export default function Signing (): React.ReactElement {
   const requests = useContext(SigningReqContext);
-  const { currentAccount } = useContext(PolymeshContext);
   const [requestIndex, setRequestIndex] = useState(0);
 
   const _onNextClick = useCallback(
@@ -37,11 +37,15 @@ export default function Signing (): React.ReactElement {
       : requests[0]
     : null;
 
+  // The singing account, whose details will be displayed in the header.
+  const signingAccount = request &&
+  getIdentifiedAccounts().find((account) => account.address === request?.account.address);
+
   return request
     ? (
       <>
         <Header>
-          {currentAccount && <AccountsHeader account={currentAccount}
+          {signingAccount && <AccountsHeader account={signingAccount}
             details={false} />}
           <Box>
             <Text color='gray.0'
@@ -57,13 +61,15 @@ export default function Signing (): React.ReactElement {
             </Text>
           </Box>
         </Header>
-        <Request
-          account={request.account}
-          isFirst={requestIndex === 0}
-          request={request.request}
-          signId={request.id}
-          url={request.url}
-        />
+        <ScrollableContainer>
+          <Request
+            account={request.account}
+            isFirst={requestIndex === 0}
+            request={request.request}
+            signId={request.id}
+            url={request.url}
+          />
+        </ScrollableContainer>
       </>
     )
     : <Loading />;
