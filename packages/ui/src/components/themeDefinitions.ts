@@ -29,7 +29,8 @@ export const borderWidths = {
 };
 
 export const fontFamilies = {
-  baseText: "'Inter', sans-serif"
+  baseText: "'Inter', sans-serif",
+  code: 'CodeFont, monospace, sans-serif'
 };
 
 export const lineHeights = {
@@ -161,51 +162,59 @@ export const radii = {
   4: '16px'
 };
 
-export type TTextVariant = 'b1m' | 'b1' | 'b2m' | 'b2' | 'b3m' | 'b3' | 'sh1' | 'c1' | 'c2' | 'c2m';
+export type TTextVariant = 'b1m' | 'b1' | 'b2m' | 'b2' | 'b3m' | 'b3' | 'sh1' | 'c1' | 'c2' | 'c2m' | 'code';
 
 export const texts = {
   b1: {
+    fontFamily: fontFamilies.baseText,
     color: colors.gray[5],
     fontSize: fontSizes[2],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.normal
   },
   b1m: {
+    fontFamily: fontFamilies.baseText,
     color: colors.highlightText,
     fontSize: fontSizes[2],
     fontWeight: fontWeights.semiBold,
     lineHeight: lineHeights.normal
   },
   b2: {
+    fontFamily: fontFamilies.baseText,
     color: colors.gray[5],
     fontSize: fontSizes[1],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.normal
   },
   b2m: {
+    fontFamily: fontFamilies.baseText,
     color: colors.highlightText,
     fontSize: fontSizes[1],
     fontWeight: fontWeights.semiBold,
     lineHeight: lineHeights.normal
   },
   b3: {
+    fontFamily: fontFamilies.baseText,
     color: colors.highlightText,
     fontSize: fontSizes[0],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.none
   },
   b3m: {
+    fontFamily: fontFamilies.baseText,
     color: colors.highlightText,
     fontSize: fontSizes[0],
     fontWeight: fontWeights.semiBold
   },
   sh1: {
+    fontFamily: fontFamilies.baseText,
     color: colors.gray[5],
     fontSize: fontSizes[3],
     lineHeight: lineHeights.normal,
     fontWeight: fontWeights.normal
   },
   c1: {
+    fontFamily: fontFamilies.baseText,
     color: colors.gray[1],
     fontSize: fontSizes[1],
     lineHeight: lineHeights.none,
@@ -213,6 +222,7 @@ export const texts = {
     letterSpacing: '0.4px'
   },
   c2: {
+    fontFamily: fontFamilies.baseText,
     color: colors.brandMain,
     fontSize: fontSizes[0],
     lineHeight: lineHeights.none,
@@ -220,10 +230,19 @@ export const texts = {
     letterSpacing: '0.4px'
   },
   c2m: {
+    fontFamily: fontFamilies.baseText,
     color: colors.brandMain,
     fontSize: fontSizes[0],
     lineHeight: lineHeights.none,
     fontWeight: fontWeights.semiBold,
+    letterSpacing: '0.4px'
+  },
+  code: {
+    fontFamily: fontFamilies.code,
+    color: colors.gray[1],
+    fontSize: fontSizes[0],
+    lineHeight: lineHeights.none,
+    fontWeight: fontWeights.normal,
     letterSpacing: '0.4px'
   }
 };
