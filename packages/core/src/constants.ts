@@ -27,7 +27,7 @@ const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   }
 };
 
-const defaultNetwork: NetworkName = NetworkName.pme;
+const defaultNetwork: NetworkName = NetworkName.alcyone;
 
 const messagePrefix = 'poly:';
 
