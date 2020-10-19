@@ -197,7 +197,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     return networkLinks[network as NetworkName].dashboard;
   };
 
-  const assign = () => {
+  const assign = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.stopPropagation) e.stopPropagation();
     chrome.tabs.create({ url: `${getNetworkDashboardLink()}account` });
   };
 
