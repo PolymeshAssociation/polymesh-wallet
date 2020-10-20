@@ -83,13 +83,13 @@ export default function AccountsHeader ({ account, details = true }: Props): Rea
           {account?.name}
         </Text>
       </Flex>
-      <Box>
+      <Flex>
         <LabelWithCopy color='gray.0'
           text={account?.address || ''}
           textSize={30}
           textVariant='b3'
         />
-      </Box>
+      </Flex>
       <Flex alignItems='flex-end'
         flexDirection='row'
         mt='1'>
