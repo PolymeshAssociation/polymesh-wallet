@@ -12,11 +12,8 @@ import { subscribeAccounts, subscribePolyIsReady, subscribeAuthorizeRequests, su
 import { buildHierarchy } from '../util/buildHierarchy';
 import Accounts from './Accounts';
 import Authorize from './Authorize';
-import Derive from './Derive';
 import { ExportAccount } from './ExportAccount';
-import ImportQr from './ImportQr';
 import { ImportSeed } from './ImportSeed';
-import Metadata from './Metadata';
 import Signing from './Signing';
 import Welcome from './Welcome';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
@@ -108,11 +105,9 @@ export default function Popup (): React.ReactElement {
   const Root = isWelcomeDone
     ? authRequests && authRequests.length
       ? Authorize
-      : metaRequests && metaRequests.length
-        ? Metadata
-        : signRequests && signRequests.length
-          ? Signing
-          : Accounts
+      : signRequests && signRequests.length
+        ? Signing
+        : Accounts
     : Welcome;
 
   return (
@@ -130,11 +125,8 @@ export default function Popup (): React.ReactElement {
                           <Route path='/account/create'><NewAccount /></Route>
                           <Route path='/account/forget/:address'><ForgetAccount /></Route>
                           <Route path='/account/export/:address'><ExportAccount /></Route>
-                          <Route path='/account/import-qr'><ImportQr /></Route>
                           <Route path='/account/import-seed'><ImportSeed /></Route>
                           <Route path='/account/restore-json'><ImportJSon /></Route>
-                          <Route path='/account/derive/:address/locked'><Derive isLocked /></Route>
-                          <Route path='/account/derive/:address'><Derive /></Route>
                           <Route path='/account/change-password'><ChangePassword /></Route>
                           <Route path='/account/details/:address'><AccountDetails /></Route>
                           <Route
