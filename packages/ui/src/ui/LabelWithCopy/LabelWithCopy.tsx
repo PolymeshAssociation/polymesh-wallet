@@ -25,6 +25,10 @@ export const LabelWithCopy: FC<Props> = ({ color, text, textSize, textVariant })
     setHover(true);
   };
 
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.stopPropagation) e.stopPropagation();
+  };
+
   return (
     <Flex
       onMouseOut={onMouseOut}
@@ -41,7 +45,8 @@ export const LabelWithCopy: FC<Props> = ({ color, text, textSize, textVariant })
       {
         hover &&
           <CopyToClipboard text={text}>
-            <Box ml='xs'>
+            <Box ml='xs'
+              onClick={handleClick}>
               <Icon Asset={SvgContentCopy}
                 color={color}
                 height={16}
