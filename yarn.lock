@@ -2262,7 +2262,7 @@
     memoizee "^0.4.14"
     rxjs "^6.6.3"
 
-"@polkadot/api@1.34.1", "@polkadot/api@^1.34.0-beta.10", "@polkadot/api@^1.34.0-beta.3":
+"@polkadot/api@1.34.1", "@polkadot/api@^1.34.0-beta.3":
   version "1.34.1"
   resolved "https://registry.yarnpkg.com/@polkadot/api/-/api-1.34.1.tgz#c222ac743a427e36dda20a72d95a3a7d83cea094"
   integrity sha512-3gCibNRchH+XbEdULS1bwiV1RgarZW1PDw1Y1mAQBVqPrUpkYqntp1D52SQOpAbRzldkwk296Sj+mx9/IeDRXA==
@@ -2378,7 +2378,7 @@
   dependencies:
     "@babel/runtime" "^7.11.2"
 
-"@polkadot/keyring@^3.4.1", "@polkadot/keyring@^^3.4.1":
+"@polkadot/keyring@^3.4.1":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@polkadot/keyring/-/keyring-3.5.1.tgz#6a884be3812640efc26e6a7bc0a72eb590023790"
   integrity sha512-Wg8PBACl+RobbmcShl659/5a+foU1j7PGdvdr2pZowkZul8jvwyAN+piIyPSfrsaJkbUoDUR9Pe+oVoeF4ZoXg==
@@ -2520,7 +2520,7 @@
     "@babel/runtime" "^7.11.2"
     color "^3.1.2"
 
-"@polkadot/util-crypto@3.5.1", "@polkadot/util-crypto@^3.4.1", "@polkadot/util-crypto@^^3.4.1":
+"@polkadot/util-crypto@3.5.1", "@polkadot/util-crypto@^3.4.1":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-3.5.1.tgz#7f8d8b5982f9d2df2432ff017d89110e7212f330"
   integrity sha512-7SWxOYG+dUCAkGW2xCJc9gutLJ02T9LwiumTW8cXFysRai4qLA3XRl+XQHAEdRzKA+97IQmtGMl4/Tjq9TGwYw==
@@ -2539,7 +2539,7 @@
     tweetnacl "^1.0.3"
     xxhashjs "^0.2.2"
 
-"@polkadot/util@3.5.1", "@polkadot/util@^3.4.1", "@polkadot/util@^^3.4.1":
+"@polkadot/util@3.5.1", "@polkadot/util@^3.4.1":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-3.5.1.tgz#65b7f2669dde043088d925274070bf2e51f9c045"
   integrity sha512-9CBVeQlhmghlVeOttZDxwOtDVWLKpHSP0iAE2vG2bnI6T1dSjD0cFHCG9q7GeD6UAN8z+m17/M9WDV2WXzT6kA==
