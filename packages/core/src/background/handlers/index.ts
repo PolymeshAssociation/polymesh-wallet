@@ -5,6 +5,7 @@ import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 import Tabs from './Tabs';
 import Extension from './Extension';
 import { PolyMessageTypes, PolyTransportRequestMessage } from '../types';
+import { nonFatalErrorHandler } from '@polymathnetwork/extension-core/utils';
 
 const extension = new Extension();
 const tabs = new Tabs();
@@ -32,7 +33,7 @@ export default function polyHandler<TMessageType extends PolyMessageTypes> ({ id
       assert(port, 'Port has been disconnected');
 
       port.postMessage({ id, response });
-    })
+    }, nonFatalErrorHandler)
     .catch((error: Error): void => {
       console.log(`[err] ${source}:: ${error.message}`);
 

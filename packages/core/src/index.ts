@@ -11,17 +11,13 @@ import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as statusActions } from './store/features/status';
 import store from './store';
-import { AccountData, ErrorCodes, IdentityData, KeyringAccountData, UnsubCallback } from './types';
+import { AccountData, IdentityData, KeyringAccountData, UnsubCallback } from './types';
 import { subscribeDidsList, subscribeIsRehydrated, subscribeNetwork } from './store/subscribers';
 import { getAccountsList, getDids } from './store/getters';
-import { observeAccounts } from './utils';
+import { fatalErrorHandler, nonFatalErrorHandler, observeAccounts } from './utils';
 import { union } from 'lodash-es';
-import { setError } from './store/setters';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
-
-const fatalErrorHandler = (error: Error) => error && setError({ code: ErrorCodes.FatalError, msg: error.message });
-const nonFatalErrorHandler = (error: Error) => error && setError({ code: ErrorCodes.NonFatalError, msg: error.message });
 
 function subscribePolymesh (): () => void {
   function unsubAll (): void {
