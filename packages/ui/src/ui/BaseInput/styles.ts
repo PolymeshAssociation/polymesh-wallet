@@ -53,7 +53,7 @@ export const Wrapper = styled.label<StyledProps<BaseInputProps>>((props) => ({
     border: `1px solid ${props.theme.colors.placeholder}`,
     borderRadius: props.theme.radii[1],
     color: props.theme.colors.highlightText,
-    height: '40px',
+    // height: '40px',
     backgroundColor: 'white'
   },
   ...getInputStyles(props)
@@ -65,7 +65,7 @@ export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, unit }) =>
   flexGrow: 1,
   boxSizing: 'border-box',
   // height: '100%',
-  padding: '10px 16px 10px 16px',
+  padding: '8px 8px 8px 8px',
   marginLeft: '2px',
   marginRight: '2px',
   backgroundColor: 'transparent',
