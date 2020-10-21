@@ -83,7 +83,7 @@ export enum ErrorCodes {
 
 export type Error = {
   code: ErrorCodes,
-  msg?: string
+  msg: string
 }
 
 export type StoreStatus = {
