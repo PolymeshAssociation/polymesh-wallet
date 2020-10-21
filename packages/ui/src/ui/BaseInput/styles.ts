@@ -53,7 +53,6 @@ export const Wrapper = styled.label<StyledProps<BaseInputProps>>((props) => ({
     border: `1px solid ${props.theme.colors.placeholder}`,
     borderRadius: props.theme.radii[1],
     color: props.theme.colors.highlightText,
-    // height: '40px',
     backgroundColor: 'white'
   },
   ...getInputStyles(props)
