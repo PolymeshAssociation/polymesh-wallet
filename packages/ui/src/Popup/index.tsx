@@ -5,10 +5,11 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import uiSettings from '@polkadot/ui-settings';
 import { setSS58Format } from '@polkadot/util-crypto';
+import { useErrorHandler } from 'react-error-boundary';
 import { Loading } from '../components';
 import { AccountContext, ActionContext, AuthorizeReqContext, MetadataReqContext, SettingsContext, SigningReqContext, PolymeshContext, ActivityContext } from '../components/contexts';
 import ToastProvider from '../components/Toast/ToastProvider';
-import { subscribeAccounts, subscribePolyIsReady, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeSigningRequests, subscribePolyAccounts, subscribePolyNetwork, subscribePolySelectedAccount, busySubscriber } from '../messaging';
+import { subscribeAccounts, subscribePolyStatus, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeSigningRequests, subscribePolyAccounts, subscribePolyNetwork, subscribePolySelectedAccount, busySubscriber } from '../messaging';
 import { buildHierarchy } from '../util/buildHierarchy';
 import Accounts from './Accounts';
 import Authorize from './Authorize';
@@ -19,13 +20,13 @@ import { ImportSeed } from './ImportSeed';
 import Metadata from './Metadata';
 import Signing from './Signing';
 import Welcome from './Welcome';
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount, StoreStatus } from '@polymathnetwork/extension-core/types';
 import { PolymeshContext as PolymeshContextType } from '../types';
 import { NewAccount } from './NewAccount';
 import { ImportJSon } from './ImportJson';
 import { ChangePassword } from './ChangePassword';
 import { ForgetAccount } from './ForgetAccount';
-import { useErrorHandler } from 'react-error-boundary';
+
 import { AccountDetails } from './AccountDetails';
 const startSettings = uiSettings.get();
 
@@ -61,9 +62,13 @@ export default function Popup (): React.ReactElement {
   const [network, setNetwork] = useState('');
   const [polymeshAccounts, setPolymeshAccounts] = useState<IdentifiedAccount[]>([]);
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
-  const [isPolyReady, setIsPolyReady] = useState<boolean>(false);
+  const [status, setStatus] = useState<undefined | StoreStatus>();
   const [isBusy, setIsBusy] = useState(false);
   const handleError = useErrorHandler();
+
+  if (status?.error) {
+    handleError(status.error as unknown as (prevState: Error) => Error);
+  }
 
   const _onAction = (to?: string): void => {
     setWelcomeDone(window.localStorage.getItem('welcome_read') === 'ok');
@@ -75,7 +80,7 @@ export default function Popup (): React.ReactElement {
 
   useEffect((): void => {
     Promise.all([
-      subscribePolyIsReady(setIsPolyReady),
+      subscribePolyStatus(setStatus),
       subscribePolyAccounts(setPolymeshAccounts),
       subscribePolyNetwork(setNetwork),
       subscribePolySelectedAccount(setSelectedAccountAddress),
@@ -116,7 +121,7 @@ export default function Popup (): React.ReactElement {
     : Welcome;
 
   return (
-    <Loading>{accounts && authRequests && metaRequests && signRequests && isPolyReady && (
+    <Loading>{accounts && authRequests && metaRequests && signRequests && status?.isReady && (
       <ActivityContext.Provider value={isBusy}>
         <ActionContext.Provider value={_onAction}>
           <SettingsContext.Provider value={settingsCtx}>

@@ -43,7 +43,8 @@
     "copy-webpack-plugin": "^6.1.0",
     "i18next-scanner": "^2.11.0",
     "sinon-chrome": "^3.0.1",
-    "ts-jest": "^26.4.1"
+    "ts-jest": "^26.4.1",
+    "ts-node": "^9.0.0"
   },
   "author": "Remon Nashid <remon.sherin@gmail.com>",
   "license": "ISC",
