@@ -9,7 +9,7 @@ import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import subscribePolymesh from '@polymathnetwork/extension-core';
-import { isPolyMessage } from '@polymathnetwork/extension-core/utils';
+import { fatalErrorHandler, isPolyMessage } from '@polymathnetwork/extension-core/utils';
 import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
@@ -51,7 +51,5 @@ cryptoWaitReady()
     keyring.loadAll({ store: new AccountsStore(), type: 'sr25519' });
 
     console.log('initialization completed');
-  })
-  .catch((error): void => {
-    console.error('initialization failed', error);
-  });
+  }, fatalErrorHandler)
+  .catch(fatalErrorHandler);
