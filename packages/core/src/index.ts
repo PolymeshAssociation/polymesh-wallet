@@ -14,7 +14,7 @@ import store from './store';
 import { AccountData, IdentityData, KeyringAccountData, UnsubCallback } from './types';
 import { subscribeDidsList, subscribeIsRehydrated, subscribeNetwork } from './store/subscribers';
 import { getAccountsList, getDids } from './store/getters';
-import { observeAccounts } from './utils';
+import { fatalErrorHandler, nonFatalErrorHandler, observeAccounts } from './utils';
 import { union } from 'lodash-es';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
@@ -97,7 +97,7 @@ function subscribePolymesh (): () => void {
                   }).then((unsub) => {
                     unsubCallbacks[account] && unsubCallbacks[account]();
                     unsubCallbacks[account] = unsub;
-                  }).catch(console.error);
+                  }).catch(nonFatalErrorHandler);
                 });
 
                 // C) Update data of pre-existing accounts.
@@ -147,7 +147,7 @@ function subscribePolymesh (): () => void {
                       unsubCallbacks[did] && unsubCallbacks[did]();
                       unsubCallbacks[did] = unsub;
                     })
-                    .catch(console.error);
+                    .catch(nonFatalErrorHandler);
                 });
 
                 removedDids.forEach((did) => {
@@ -193,16 +193,17 @@ function subscribePolymesh (): () => void {
                       store.dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
                     });
                   })
-                  .catch(console.error);
+                  .catch(nonFatalErrorHandler);
               }).then((unsub) => {
                 unsubCallbacks.newHeads && unsubCallbacks.newHeads();
                 unsubCallbacks.newHeads = unsub;
-              }).catch(console.error);
+              }).catch(nonFatalErrorHandler);
             }
-          ).catch(console.error);
-
+          ).catch(fatalErrorHandler);
           console.log('meshAccountsEnhancer initialization completed');
-        }).catch((err) => console.error('meshAccountsEnhancer initialization failed', err));
+        },
+        fatalErrorHandler
+        ).catch(fatalErrorHandler);
       });
     }
   });

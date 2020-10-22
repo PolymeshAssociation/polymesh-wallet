@@ -74,3 +74,20 @@ export interface Decoded {
   args: AnyJson;
   method: Call;
 }
+
+export enum ErrorCodes {
+  FatalError = 'Fatal Error',
+  NonFatalError = 'Non-fatal Error',
+  Offline = 'Offline'
+}
+
+export type Error = {
+  code: ErrorCodes,
+  msg: string
+}
+
+export type StoreStatus = {
+  isReady: boolean,
+  rehydrated: boolean,
+  error: Error | null
+};

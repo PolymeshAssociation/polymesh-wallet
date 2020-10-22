@@ -1,7 +1,8 @@
 import accountsObservable from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { messagePrefix } from './constants';
-import { KeyringAccountData } from './types';
+import { setError } from './store/setters';
+import { ErrorCodes, KeyringAccountData } from './types';
 
 // Sort an array by prioritizing a certain element
 export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
@@ -23,3 +24,6 @@ export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
     cb(accounts);
   });
 }
+
+export const fatalErrorHandler = (error: Error): void => error && setError({ code: ErrorCodes.FatalError, msg: error.message });
+export const nonFatalErrorHandler = (error: Error): void => error && setError({ code: ErrorCodes.NonFatalError, msg: error.message });
