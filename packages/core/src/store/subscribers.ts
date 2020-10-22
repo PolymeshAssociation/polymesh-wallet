@@ -1,7 +1,7 @@
 import { Unsubscribe } from '@reduxjs/toolkit';
-import { IdentifiedAccount, NetworkName } from '../types';
+import { IdentifiedAccount, NetworkName, StoreStatus } from '../types';
 import reduxSubscribe from './reduxSubscribe';
-import { accountsCount, didsList, identifiedAccounts, isReady, network, selectedAccount, selectIsRehydrated } from './selectors';
+import { accountsCount, didsList, identifiedAccounts, selectStatus, network, selectedAccount, selectIsRehydrated } from './selectors';
 
 export function subscribeDidsList (cb: (dids: string[]) => void): Unsubscribe {
   return reduxSubscribe(didsList, cb);
@@ -23,8 +23,8 @@ export function subscribeAccountsCount (cb: (count: number) => void): Unsubscrib
   return reduxSubscribe(accountsCount, cb);
 }
 
-export function subscribeIsReady (cb: (isReady: boolean) => void): Unsubscribe {
-  return reduxSubscribe(isReady, cb);
+export function subscribeStatus (cb: (status: StoreStatus) => void): Unsubscribe {
+  return reduxSubscribe(selectStatus, cb);
 }
 
 export function subscribeIsRehydrated (cb: (isRehydrated: boolean) => void): Unsubscribe {
