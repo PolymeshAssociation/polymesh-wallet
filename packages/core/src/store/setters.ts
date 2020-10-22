@@ -1,5 +1,5 @@
 import store from '.';
-import { NetworkName } from '../types';
+import { NetworkName, Error } from '../types';
 import { actions as networkActions } from './features/network';
 import { actions as accountActions } from './features/accounts';
 import { actions as identityActions } from './features/identities';
@@ -25,10 +25,15 @@ function resetState () {
   store.dispatch({ type: 'RESET' });
 }
 
+function setError (error: Error) {
+  store.dispatch(statusActions.error(error));
+}
+
 export {
   setNetwork,
   setSelectedAccount,
   renameIdentity,
   setIsRehydrated,
-  resetState
+  resetState,
+  setError
 };

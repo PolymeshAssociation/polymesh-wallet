@@ -1,4 +1,4 @@
-import { IdentifiedAccount, NetworkMeta, NetworkName } from '../types';
+import { IdentifiedAccount, NetworkMeta, NetworkName, StoreStatus } from '../types';
 import { SignerPayloadJSON, AnyJson } from '@polkadot/types/types';
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { RequestAccountList, RequestAccountSubscribe } from '@polkadot/extension-base/background/types';
@@ -47,7 +47,7 @@ export interface PolyRequestSignatures {
   'poly:pri(accounts.subscribe)': [RequestPolyAccountsSubscribe, boolean, IdentifiedAccount[]];
   'poly:pri(network.subscribe)': [RequestPolyNetworkSubscribe, boolean, NetworkName];
   'poly:pri(selectedAccount.subscribe)': [RequestPolySelectedAccountSubscribe, boolean, string | undefined];
-  'poly:pri(isReady.subscribe)': [RequestPolyIsReadySubscribe, boolean, boolean]
+  'poly:pri(status.subscribe)': [RequestPolyIsReadySubscribe, boolean, StoreStatus]
   'poly:pri(network.set)': [RequestPolyNetworkSet, boolean];
   'poly:pri(selectedAccount.set)': [RequestPolySelectedAccountSet, boolean];
   'poly:pri(callDetails.get)': [RequestPolyCallDetails, ResponsePolyCallDetails];

@@ -81,7 +81,7 @@ export const selectIsRehydrated = createSelector(
   ({ rehydrated }) => rehydrated
 );
 
-export const isReady = createSelector(
-  (state: RootState) => state.status.isReady,
-  (isReady) => isReady
+export const selectStatus = createSelector(
+  (state: RootState) => state.status,
+  (status) => status
 );

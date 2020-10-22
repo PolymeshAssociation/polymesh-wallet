@@ -1,7 +1,7 @@
+import { Error, StoreStatus } from '@polymathnetwork/extension-core/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type State = { isReady: boolean, rehydrated: boolean };
-const initialState: State = { isReady: false, rehydrated: false };
+const initialState: StoreStatus = { isReady: false, rehydrated: false, error: null };
 
 const statusSlice = createSlice({
   name: 'status',
@@ -9,9 +9,13 @@ const statusSlice = createSlice({
   reducers: {
     setIsReady (state, action: PayloadAction<boolean>) {
       state.isReady = action.payload;
+      state.error = null;
     },
     setRehydrated (state) {
       state.rehydrated = true;
+    },
+    error (state, action: PayloadAction<Error | null>) {
+      state.error = action.payload;
     }
   }
 });

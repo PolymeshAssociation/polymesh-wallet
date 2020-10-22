@@ -10,7 +10,7 @@ import { metadataExpand } from '@polkadot/extension-chains';
 import chrome from '@polkadot/extension-inject/chrome';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
-import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount, NetworkName, StoreStatus } from '@polymathnetwork/extension-core/types';
 import { PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 
 interface Handler {
@@ -226,8 +226,8 @@ export async function subscribePolySelectedAccount (cb: (selected: string | unde
   return polyMessage('poly:pri(selectedAccount.subscribe)', null, cb);
 }
 
-export async function subscribePolyIsReady (cb: (isReady: boolean) => void): Promise<boolean> {
-  return polyMessage('poly:pri(isReady.subscribe)', null, cb);
+export async function subscribePolyStatus (cb: (status: StoreStatus) => void): Promise<boolean> {
+  return polyMessage('poly:pri(status.subscribe)', null, cb);
 }
 
 export async function setPolySelectedAccount (account: string): Promise<boolean> {
