@@ -250,7 +250,7 @@ export const ImportJSon: FC = () => {
                 </Text>
               </Box>
               <Box>
-                <TextInput inputRef={register({ required: true, minLength: 4 })}
+                <TextInput inputRef={register({ required: true })}
                   name='jsonPassword'
                   placeholder='Enter JSON file password'
                   type='password' />
@@ -274,7 +274,7 @@ export const ImportJSon: FC = () => {
                   </Text>
                 </Box>
                 <Box>
-                  <TextInput inputRef={register({ required: true, minLength: 4 })}
+                  <TextInput inputRef={register({ required: true, minLength: 8 })}
                     name='walletPassword'
                     placeholder='Enter 8 characters or more'
                     type='password' />
