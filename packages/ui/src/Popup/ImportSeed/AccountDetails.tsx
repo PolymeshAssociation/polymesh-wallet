@@ -17,7 +17,7 @@ export interface Props {
 }
 
 export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue }) => {
-  const { clearErrors, errors, getValues, handleSubmit, register, setError, watch } = useForm({
+  const { clearErrors, errors, getValues, handleSubmit, register, setError } = useForm({
     defaultValues: {
       accountName: '',
       password: '',
