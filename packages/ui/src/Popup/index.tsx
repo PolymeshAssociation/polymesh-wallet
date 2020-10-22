@@ -16,7 +16,6 @@ import Authorize from './Authorize';
 import { ExportAccount } from './ExportAccount';
 import { ImportSeed } from './ImportSeed';
 import Signing from './Signing';
-import Welcome from './Welcome';
 import { ErrorCodes, IdentifiedAccount, StoreStatus } from '@polymathnetwork/extension-core/types';
 import { PolymeshContext as PolymeshContextType } from '../types';
 import { NewAccount } from './NewAccount';
@@ -53,7 +52,6 @@ export default function Popup (): React.ReactElement {
   const [authRequests, setAuthRequests] = useState<null | AuthorizeRequest[]>(null);
   const [metaRequests, setMetaRequests] = useState<null | MetadataRequest[]>(null);
   const [signRequests, setSignRequests] = useState<null | SigningRequest[]>(null);
-  const [isWelcomeDone, setWelcomeDone] = useState(false);
   const [settingsCtx, setSettingsCtx] = useState<SettingsStruct>(startSettings);
   const [network, setNetwork] = useState('');
   const [polymeshAccounts, setPolymeshAccounts] = useState<IdentifiedAccount[]>([]);
@@ -75,8 +73,6 @@ export default function Popup (): React.ReactElement {
   }, [handleError, status?.error]);
 
   const _onAction = (to?: string): void => {
-    setWelcomeDone(window.localStorage.getItem('welcome_read') === 'ok');
-
     if (to) {
       window.location.hash = to;
     }
@@ -114,13 +110,11 @@ export default function Popup (): React.ReactElement {
     setPolymeshCtx(initPolymeshContext(network, polymeshAccounts, selectedAccountAddress || '', currentAccount));
   }, [accounts, network, polymeshAccounts, selectedAccountAddress]);
 
-  const Root = isWelcomeDone
-    ? authRequests && authRequests.length
-      ? Authorize
-      : signRequests && signRequests.length
-        ? Signing
-        : Accounts
-    : Welcome;
+  const Root = authRequests && authRequests.length
+    ? Authorize
+    : signRequests && signRequests.length
+      ? Signing
+      : Accounts;
 
   return (
     <Loading>{accounts && authRequests && metaRequests && signRequests && status?.isReady && (
