@@ -70,13 +70,12 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
           <Box>
             <TextInput inputRef={register({ required: true })}
               name='accountName'
-              placeholder='Enter 4 characters or more' />
+              placeholder='Enter account name' />
             {errors.accountName &&
               <Box>
                 <Text color='alert'
                   variant='b3'>
                   {(errors.accountName as FieldError).type === 'required' && 'Required field'}
-                  {(errors.accountName as FieldError).type === 'minLength' && 'Passwordtooshort'}
                 </Text>
               </Box>
             }
