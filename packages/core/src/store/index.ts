@@ -16,7 +16,8 @@ import { setIsRehydrated } from './setters';
 const persistConfig = {
   key: 'root',
   storage: localStorage,
-  version: 1
+  version: 1,
+  blacklist: ['status']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
