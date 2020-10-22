@@ -89,10 +89,10 @@ export default function Accounts (): React.ReactElement {
             onClick={handleAccountMenuClick}>Create new account</MenuItem>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'fromSeed' }}
-            onClick={handleAccountMenuClick}>Import from seed</MenuItem>
+            onClick={handleAccountMenuClick}>Restore with recovery phrase</MenuItem>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'fromJson' }}
-            onClick={handleAccountMenuClick}>Restore  from JSON</MenuItem>
+            onClick={handleAccountMenuClick}>Import account with JSON file</MenuItem>
         </Menu>
       </>
     );
