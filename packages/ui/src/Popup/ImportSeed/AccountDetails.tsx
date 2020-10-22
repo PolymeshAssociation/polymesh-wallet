@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { FieldError, useForm } from 'react-hook-form';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
@@ -28,37 +28,6 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
   // const formValues: { [x: string]: string; } = watch();
   const isBusy = useContext(ActivityContext);
 
-  useEffect(() => {
-    console.log('Checking...');
-    // const accountName = watch('accountName') as string;
-    // const password = watch('password') as string;
-    // const confirmPassword = watch('confirmPassword') as string;
-
-    // const { accountName, confirmPassword, password } = getValues(['accountName', 'password', 'confirmPassword']) as { [x: string]: string; };
-
-    // if (existingAccount !== '') {
-    //   setValidForm(accountName.length >= 4 && password.length >= 8);
-    // } else {
-    //   setValidForm(accountName.length >= 4 && password.length >= 8 && password === confirmPassword);
-    // }
-
-    // if (password.length > 0) {
-    //   if (password.length < 8) {
-    //     setError('password', { type: 'minLength' });
-    //   } else {
-    //     clearErrors('password');
-    //   }
-    // }
-
-    // if (confirmPassword.length > 0) {
-    //   if (password !== confirmPassword) {
-    //     setError('confirmPassword', { type: 'manual' });
-    //   } else {
-    //     clearErrors('confirmPassword');
-    //   }
-    // }
-  }, [setValidForm, existingAccount, setError, clearErrors, getValues, watch]);
-
   const checkValues = () => {
     const { accountName, confirmPassword, password } = getValues(['accountName', 'password', 'confirmPassword']) as { [x: string]: string; };
 
@@ -83,7 +52,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
         clearErrors('confirmPassword');
       }
     }
-  }
+  };
 
   const onSubmit = async (data: { [x: string]: string; }) => {
     if (existingAccount !== '') {

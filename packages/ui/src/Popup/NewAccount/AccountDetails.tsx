@@ -14,13 +14,39 @@ export interface Props {
 
 export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue, setAccountDetails }) => {
   const [isValidForm, setValidForm] = useState(false);
-  const { control, errors, handleSubmit, register, setError, watch } = useForm();
+  const { clearErrors, control, errors, getValues, handleSubmit, register, setError, watch } = useForm();
   const formValues: { [x: string]: any; } = watch();
   const isBusy = useContext(ActivityContext);
 
   useEffect(() => {
     setValidForm(formValues.hasAcceptTerms && formValues.hasAcceptedPolicy);
   }, [formValues, setValidForm]);
+
+  const checkValues = () => {
+    const { accountName, confirmPassword, password } = getValues(['accountName', 'password', 'confirmPassword']) as { [x: string]: string; };
+
+    if (existingAccount !== '') {
+      setValidForm(accountName.length >= 4 && password.length >= 8);
+    } else {
+      setValidForm(accountName.length >= 4 && password.length >= 8 && password === confirmPassword);
+    }
+
+    if (password.length > 0) {
+      if (password.length < 8) {
+        setError('password', { type: 'minLength' });
+      } else {
+        clearErrors('password');
+      }
+    }
+
+    if (confirmPassword.length > 0) {
+      if (password !== confirmPassword) {
+        setError('confirmPassword', { type: 'manual' });
+      } else {
+        clearErrors('confirmPassword');
+      }
+    }
+  };
 
   const onSubmit = async (data: { [x: string]: any; }) => {
     if (existingAccount) {
@@ -67,6 +93,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
           <Box>
             <TextInput inputRef={register({ required: true, minLength: 4 })}
               name='accountName'
+              onChange={checkValues}
               placeholder='Enter 4 characters or more' />
             {errors.accountName &&
               <Box>
@@ -89,6 +116,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
           <Box>
             <TextInput inputRef={register({ required: true, minLength: 8 })}
               name='password'
+              onChange={checkValues}
               placeholder='Enter 8 characters or more'
               type='password' />
             {errors.password &&
@@ -115,6 +143,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
             <Box>
               <TextInput inputRef={register({ required: true, minLength: 8 })}
                 name='confirmPassword'
+                onChange={checkValues}
                 placeholder='Enter 8 characters or more'
                 type='password' />
               {errors.confirmPassword &&
