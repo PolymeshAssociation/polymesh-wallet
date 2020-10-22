@@ -17,7 +17,7 @@ export interface Props {
 }
 
 export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue }) => {
-  const { errors, handleSubmit, register, setError, watch } = useForm({
+  const { clearErrors, errors, getValues, handleSubmit, register, setError, watch } = useForm({
     defaultValues: {
       accountName: '',
       password: '',
@@ -25,16 +25,65 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
     }
   });
   const [isValidForm, setValidForm] = useState(false);
-  const formValues: { [x: string]: string; } = watch();
+  // const formValues: { [x: string]: string; } = watch();
   const isBusy = useContext(ActivityContext);
 
   useEffect(() => {
+    console.log('Checking...');
+    // const accountName = watch('accountName') as string;
+    // const password = watch('password') as string;
+    // const confirmPassword = watch('confirmPassword') as string;
+
+    // const { accountName, confirmPassword, password } = getValues(['accountName', 'password', 'confirmPassword']) as { [x: string]: string; };
+
+    // if (existingAccount !== '') {
+    //   setValidForm(accountName.length >= 4 && password.length >= 8);
+    // } else {
+    //   setValidForm(accountName.length >= 4 && password.length >= 8 && password === confirmPassword);
+    // }
+
+    // if (password.length > 0) {
+    //   if (password.length < 8) {
+    //     setError('password', { type: 'minLength' });
+    //   } else {
+    //     clearErrors('password');
+    //   }
+    // }
+
+    // if (confirmPassword.length > 0) {
+    //   if (password !== confirmPassword) {
+    //     setError('confirmPassword', { type: 'manual' });
+    //   } else {
+    //     clearErrors('confirmPassword');
+    //   }
+    // }
+  }, [setValidForm, existingAccount, setError, clearErrors, getValues, watch]);
+
+  const checkValues = () => {
+    const { accountName, confirmPassword, password } = getValues(['accountName', 'password', 'confirmPassword']) as { [x: string]: string; };
+
     if (existingAccount !== '') {
-      setValidForm(formValues.accountName.length >= 4 && formValues.password.length >= 8);
+      setValidForm(accountName.length >= 4 && password.length >= 8);
     } else {
-      setValidForm(formValues.accountName.length >= 4 && formValues.password.length >= 8 && formValues.password === formValues.confirmPassword);
+      setValidForm(accountName.length >= 4 && password.length >= 8 && password === confirmPassword);
     }
-  }, [formValues, setValidForm, existingAccount]);
+
+    if (password.length > 0) {
+      if (password.length < 8) {
+        setError('password', { type: 'minLength' });
+      } else {
+        clearErrors('password');
+      }
+    }
+
+    if (confirmPassword.length > 0) {
+      if (password !== confirmPassword) {
+        setError('confirmPassword', { type: 'manual' });
+      } else {
+        clearErrors('confirmPassword');
+      }
+    }
+  }
 
   const onSubmit = async (data: { [x: string]: string; }) => {
     if (existingAccount !== '') {
@@ -70,6 +119,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
           <Box>
             <TextInput inputRef={register({ required: true, minLength: 4 })}
               name='accountName'
+              onChange={checkValues}
               placeholder='Enter 4 characters or more' />
             {errors.accountName &&
               <Box>
@@ -92,6 +142,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
           <Box>
             <TextInput inputRef={register({ required: true, minLength: 8 })}
               name='password'
+              onChange={checkValues}
               placeholder='Enter 8 characters or more'
               type='password' />
             {errors.password &&
@@ -99,7 +150,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
                 <Text color='alert'
                   variant='b3'>
                   {(errors.password as FieldError).type === 'required' && 'Required field'}
-                  {(errors.password as FieldError).type === 'minLength' && 'Invalid'}
+                  {(errors.password as FieldError).type === 'minLength' && 'Password should be 8 characters or more'}
                   {(errors.password as FieldError).type === 'manual' && 'Invalid password'}
                 </Text>
               </Box>
@@ -118,6 +169,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
             <Box>
               <TextInput inputRef={register({ required: true, minLength: 8 })}
                 name='confirmPassword'
+                onChange={checkValues}
                 placeholder='Enter 8 characters or more'
                 type='password' />
               {errors.confirmPassword &&
