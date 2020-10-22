@@ -3,7 +3,7 @@ import { Loading, SigningReqContext } from '../../components';
 import Request from './Request';
 import TransactionIndex from './TransactionIndex';
 import { Box, Header, ScrollableContainer, Text } from '@polymathnetwork/extension-ui/ui';
-import AccountsHeader from '../Accounts/AccountsHeader';
+import { AccountsHeader } from '../Accounts/AccountsHeader';
 import { getIdentifiedAccounts } from '@polymathnetwork/extension-core/store/getters';
 
 export default function Signing (): React.ReactElement {

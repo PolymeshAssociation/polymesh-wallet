@@ -1,18 +1,24 @@
-import React from 'react';
-import { Text, Box, TextEllipsis, Flex, Icon, Heading, LabelWithCopy } from '../../ui';
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
-import { SvgCheckboxMarkedCircle, SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+import React, { FC, useContext, useState } from 'react';
+import { Text, Box, TextEllipsis, TextInput, Flex, Icon, Heading, LabelWithCopy } from '../../ui';
+import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
+import { SvgCheckboxMarkedCircle, SvgAlertCircle, SvgPencilOutline, SvgCheck, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { formatters } from '../../util';
 import BigNumber from 'bignumber.js';
 import { useHistory } from 'react-router';
+import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
+import { ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 
-type Props = {
+export interface Props {
   account: IdentifiedAccount;
   details?: boolean;
 }
 
-export default function AccountsHeader ({ account, details = true }: Props): React.ReactElement<Props> {
+export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
   const history = useHistory();
+  const [editing, setEditing] = useState(false);
+  const [newAlias, setNewAlias] = useState('');
+  const { network } = useContext(PolymeshContext);
+  const onAction = useContext(ActionContext);
 
   const showAccountDetails = () => {
     history.push(`/account/details/${account?.address}`);
@@ -41,35 +47,85 @@ export default function AccountsHeader ({ account, details = true }: Props): Rea
     );
   };
 
+  const startEdit = () => {
+    setNewAlias(account.didAlias);
+    setEditing(true);
+  };
+
+  const stopEdit = () => {
+    setEditing(false);
+  };
+
+  const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewAlias(e.target.value);
+  };
+
+  const saveAlias = async () => {
+    account && account.did && network && await renameIdentity(network as NetworkName, account.did, newAlias);
+    stopEdit();
+    onAction();
+  };
+
   return (
     <>
       {
         account?.did &&
-        <Box bg='brandLightest'
-          borderRadius='2'>
-          {account && (
-            <Flex flexDirection='row'
-              justifyContent='space-between'
-              mx='1'>
-              <Flex flexDirection='row'>
-                {
-                  account.didAlias &&
-                  <Box mr='1'>
-                    <Text color='brandMain'
-                      variant='c2m'>
-                      Did Label
-                    </Text>
-                  </Box>
-                }
-                <Text color='gray.2'
-                  variant='c2'>
-                  <TextEllipsis size={29}>{account?.did}</TextEllipsis>
-                </Text>
+        <>
+          {!editing &&
+            <Flex alignItems='center'
+              mb='xs'>
+              <Text color='gray.0'
+                variant='b1m'>
+                {account.didAlias ? account.didAlias : '[No label]'}
+              </Text>
+              <Flex ml='xs'>
+                <Icon Asset={SvgPencilOutline}
+                  color='gray.0'
+                  height={16}
+                  onClick={startEdit}
+                  style={{ cursor: 'pointer' }}
+                  width={16} />
               </Flex>
-              {renderStatus(account.cdd !== undefined)}
             </Flex>
-          )}
-        </Box>
+          }
+          {editing &&
+            <Flex mb='xs'>
+              <TextInput defaultValue={name}
+                onChange={handleAliasChange}
+                value={newAlias} />
+              <Box onClick={saveAlias}
+                style={{ cursor: 'pointer' }}>
+                <Icon Asset={SvgCheck}
+                  color='gray.0'
+                  height={24}
+                  width={24} />
+              </Box>
+              <Box onClick={stopEdit}
+                style={{ cursor: 'pointer' }}>
+                <Icon Asset={SvgWindowClose}
+                  color='gray.0'
+                  height={24}
+                  width={24} />
+              </Box>
+            </Flex>
+          }
+          <Box bg='brandLightest'
+            borderRadius='2'>
+            {account && (
+              <Flex flexDirection='row'
+                justifyContent='space-between'
+                mx='1'>
+                <Box>
+                  <Text color='gray.2'
+                    variant='c2'>
+                    <TextEllipsis size={29}>{account?.did}</TextEllipsis>
+                  </Text>
+                </Box>
+                {renderStatus(account.cdd !== undefined)}
+              </Flex>
+            )}
+          </Box>
+        </>
       }
       {
         !account?.did &&
@@ -83,13 +139,13 @@ export default function AccountsHeader ({ account, details = true }: Props): Rea
           {account?.name}
         </Text>
       </Flex>
-      <Box>
+      <Flex>
         <LabelWithCopy color='gray.0'
           text={account?.address || ''}
           textSize={30}
           textVariant='b3'
         />
-      </Box>
+      </Flex>
       <Flex alignItems='flex-end'
         flexDirection='row'
         mt='1'>
@@ -123,4 +179,4 @@ export default function AccountsHeader ({ account, details = true }: Props): Rea
       </Box> }
     </>
   );
-}
+};
