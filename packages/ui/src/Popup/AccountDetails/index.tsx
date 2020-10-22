@@ -50,7 +50,7 @@ export const AccountDetails: FC = () => {
 
   const renderType = (keyType: string) => {
     const color = keyType === 'primary' ? 'green' : 'blue';
-    const text = keyType === 'primary' ? 'Master' : 'Secondary';
+    const text = keyType === 'primary' ? 'Primary' : 'Secondary';
 
     return (
       selectedAccount?.did && <StatusBadge variant={color}>{text}</StatusBadge>

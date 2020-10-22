@@ -73,7 +73,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
 
   const renderType = (keyType: string) => {
     const color = keyType === 'primary' ? 'green' : 'blue';
-    const text = keyType === 'primary' ? 'Master' : 'Secondary';
+    const text = keyType === 'primary' ? 'Primary' : 'Secondary';
 
     return (
       !isEditing && did && <StatusBadge variant={color}>{text}</StatusBadge>
