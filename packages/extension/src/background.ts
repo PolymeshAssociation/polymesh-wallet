@@ -11,6 +11,9 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import subscribePolymesh from '@polymathnetwork/extension-core';
 import { fatalErrorHandler, isPolyMessage } from '@polymathnetwork/extension-core/utils';
 import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
+
+window.addEventListener('offline', () => fatalErrorHandler(new Error('Internet connection lost')));
+
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
 
