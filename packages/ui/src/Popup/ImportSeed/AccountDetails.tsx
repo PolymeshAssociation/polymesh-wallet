@@ -80,59 +80,6 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
           </Box>
           <Password label={existingAccount !== '' ? 'Wallet password' : 'Password'}
             withConfirm={!existingAccount} />
-          {/* <Box mt='m'>
-            <Box>
-              <Text color='gray.1'
-                variant='b2m'>
-                {existingAccount !== '' ? 'Wallet password' : 'Password'}
-              </Text>
-            </Box>
-            <Box>
-              <TextInput inputRef={register({ required: true, minLength: 8 })}
-                name='password'
-                onChange={checkValues}
-                placeholder='Enter 8 characters or more'
-                type='password' />
-              {errors.password &&
-                <Box>
-                  <Text color='alert'
-                    variant='b3'>
-                    {(errors.password as FieldError).type === 'required' && 'Required field'}
-                    {(errors.password as FieldError).type === 'minLength' && 'Password should be 8 characters or more'}
-                    {(errors.password as FieldError).type === 'manual' && 'Invalid password'}
-                  </Text>
-                </Box>
-              }
-            </Box>
-          </Box> */}
-          {/* {existingAccount === '' &&
-            <Box mb='s'
-              mt='m'>
-              <Box>
-                <Text color='gray.1'
-                  variant='b2m'>
-                  Confirm password
-                </Text>
-              </Box>
-              <Box>
-                <TextInput inputRef={register({ required: true, minLength: 8 })}
-                  name='confirmPassword'
-                  onChange={checkValues}
-                  placeholder='Enter 8 characters or more'
-                  type='password' />
-                {errors.confirmPassword &&
-                  <Box>
-                    <Text color='alert'
-                      variant='b3'>
-                      {(errors.confirmPassword as FieldError).type === 'required' && 'Required field'}
-                      {(errors.confirmPassword as FieldError).type === 'minLength' && 'Invalid'}
-                      {(errors.confirmPassword as FieldError).type === 'manual' && 'Passwords do not match'}
-                    </Text>
-                  </Box>
-                }
-              </Box>
-            </Box>
-          } */}
         </form>
       </FormProvider>
 
