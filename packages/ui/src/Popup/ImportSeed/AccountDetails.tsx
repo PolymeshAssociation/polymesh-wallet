@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext } from 'react';
 import { FieldError, FormProvider, useForm } from 'react-hook-form';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
@@ -26,28 +26,22 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
     mode: 'onChange',
     reValidateMode: 'onChange'
   });
-  const { clearErrors, errors, getValues, handleSubmit, register, setError } = methods;
-  // const formValues: { [x: string]: string; } = watch();
+  const { errors, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
 
   const onSubmit = async (data: { [x: string]: string; }) => {
     if (existingAccount !== '') {
-      // Existing wallet
       const isValidPassword = await validateAccount(existingAccount, data.password);
 
       if (isValidPassword) {
-        // All good
         onContinue({ accountName: data.accountName, password: data.password });
       } else {
         setError('password', { type: 'manual', message: 'Invalid password' });
       }
     } else {
-      // New wallet
       onContinue({ accountName: data.accountName, password: data.password });
     }
   };
-  
-  console.log(errors);
 
   return (
     <>
