@@ -1,9 +1,9 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
-import { Controller, FieldError, useForm } from 'react-hook-form';
+import React, { FC, useContext } from 'react';
+import { Controller, FieldError, FormProvider, useForm } from 'react-hook-form';
 import { Box, Button, Checkbox, Flex, Header, Icon, Link, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
-import { ActivityContext } from '@polymathnetwork/extension-ui/components';
+import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
 
 export interface Props {
   existingAccount?: string;
@@ -13,40 +13,17 @@ export interface Props {
 }
 
 export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue, setAccountDetails }) => {
-  const [isValidForm, setValidForm] = useState(false);
-  const { clearErrors, control, errors, getValues, handleSubmit, register, setError, watch } = useForm();
-  const formValues: { [x: string]: any; } = watch();
+  const methods = useForm({
+    defaultValues: {
+      accountName: '',
+      password: '',
+      confirmPassword: ''
+    },
+    mode: 'onChange',
+    reValidateMode: 'onChange'
+  });
+  const { control, errors, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
-
-  useEffect(() => {
-    setValidForm(formValues.hasAcceptTerms && formValues.hasAcceptedPolicy);
-  }, [formValues, setValidForm]);
-
-  const checkValues = () => {
-    const { accountName, confirmPassword, password } = getValues(['accountName', 'password', 'confirmPassword']) as { [x: string]: string; };
-
-    if (existingAccount !== '') {
-      setValidForm(accountName.length >= 4 && password.length >= 8);
-    } else {
-      setValidForm(accountName.length >= 4 && password.length >= 8 && password === confirmPassword);
-    }
-
-    if (password.length > 0) {
-      if (password.length < 8) {
-        setError('password', { type: 'minLength' });
-      } else {
-        clearErrors('password');
-      }
-    }
-
-    if (confirmPassword.length > 0) {
-      if (password !== confirmPassword) {
-        setError('confirmPassword', { type: 'manual' });
-      } else {
-        clearErrors('confirmPassword');
-      }
-    }
-  };
 
   const onSubmit = async (data: { [x: string]: any; }) => {
     if (existingAccount) {
@@ -54,7 +31,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
 
       if (!isValidPassword) {
         setError('password', {
-          type: 'invalidPassword',
+          type: 'manual',
           message: 'Password is incorrect'
         });
 
@@ -80,122 +57,71 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
       <Header headerText='Create and confirm your account name and wallet password'
         iconAsset={SvgAccountCardDetailsOutline}>
       </Header>
-
-      <form id='accountForm'
-        onSubmit={handleSubmit(onSubmit)}>
-        <Box mt='m'>
-          <Box>
-            <Text color='gray.1'
-              variant='b2m'>
-              Account name
-            </Text>
-          </Box>
-          <Box>
-            <TextInput inputRef={register({ required: true })}
-              name='accountName'
-              onChange={checkValues}
-              placeholder='Enter account name' />
-            {errors.accountName &&
-              <Box>
-                <Text color='alert'
-                  variant='b3'>
-                  {(errors.accountName as FieldError).type === 'required' && 'Required field'}
-                  {(errors.accountName as FieldError).type === 'minLength' && 'Invalid'}
-                </Text>
-              </Box>
-            }
-          </Box>
-        </Box>
-        <Box mt='m'>
-          <Box>
-            <Text color='gray.1'
-              variant='b2m'>
-              {existingAccount ? 'Wallet password' : 'Password'}
-            </Text>
-          </Box>
-          <Box>
-            <TextInput inputRef={register({ required: true, minLength: 8 })}
-              name='password'
-              onChange={checkValues}
-              placeholder='Enter 8 characters or more'
-              type='password' />
-            {errors.password &&
-              <Box>
-                <Text color='alert'
-                  variant='b3'>
-                  {(errors.password as FieldError).type === 'required' && 'Required field'}
-                  {(errors.password as FieldError).type === 'minLength' && 'Password should be at least 8 characters'}
-                  {(errors.password as FieldError).type === 'invalidPassword' && 'Invalid password'}
-                </Text>
-              </Box>
-            }
-          </Box>
-        </Box>
-        {!existingAccount &&
-          <Box
-            mt='m'>
+      <FormProvider {...methods} >
+        <form id='accountForm'
+          onSubmit={handleSubmit(onSubmit)}>
+          <Box mt='m'>
             <Box>
               <Text color='gray.1'
                 variant='b2m'>
-                Confirm password
+                Account name
               </Text>
             </Box>
             <Box>
-              <TextInput inputRef={register({ required: true, minLength: 8 })}
-                name='confirmPassword'
-                onChange={checkValues}
-                placeholder='Enter 8 characters or more'
-                type='password' />
-              {errors.confirmPassword &&
+              <TextInput inputRef={register({ required: true })}
+                name='accountName'
+                placeholder='Enter account name' />
+              {errors?.accountName &&
                 <Box>
                   <Text color='alert'
                     variant='b3'>
-                    {(errors.confirmPassword as FieldError).type === 'required' && 'Required field'}
-                    {(errors.confirmPassword as FieldError).type === 'minLength' && 'Invalid'}
-                    {(errors.confirmPassword as FieldError).type === 'manual' && 'Passwords do not match'}
+                    {(errors.accountName as FieldError).type === 'required' && 'Required field'}
+                    {(errors.accountName as FieldError).type === 'minLength' && 'Invalid'}
                   </Text>
                 </Box>
               }
             </Box>
           </Box>
-        }
-        <Box mt='s'>
-          <Controller
-            as={<Checkbox />}
-            control={control}
-            defaultValue={false}
-            label={
-              <Text color='gray.3'
-                variant='b3'>
-                I have read and accept the Polymath{' '}
-                <Link href='#'
-                  id='sign-up-privacy-link'>
-                  Privacy Policy
-                </Link>
-                .
-              </Text>
-            }
-            name='hasAcceptedPolicy'
-          />
-          <Controller
-            as={<Checkbox />}
-            control={control}
-            defaultValue={false}
-            label={
-              <Text color='gray.3'
-                variant='b3'>
-                I have read and accept the Polymath{' '}
-                <Link href='#'
-                  id='sign-up-privacy-link'>
-                  Terms of Service
-                </Link>
-                .
-              </Text>
-            }
-            name='hasAcceptTerms'
-          />
-        </Box>
-      </form>
+          <Password label={existingAccount !== '' ? 'Wallet password' : 'Password'}
+            withConfirm={!existingAccount} />
+          <Box mt='s'>
+            <Controller
+              as={<Checkbox />}
+              control={control}
+              defaultValue={false}
+              label={
+                <Text color='gray.3'
+                  variant='b3'>
+                  I have read and accept the Polymath{' '}
+                  <Link href='#'
+                    id='sign-up-privacy-link'>
+                    Privacy Policy
+                  </Link>
+                  .
+                </Text>
+              }
+              name='hasAcceptedPolicy'
+            />
+            <Controller
+              as={<Checkbox />}
+              control={control}
+              defaultValue={false}
+              label={
+                <Text color='gray.3'
+                  variant='b3'>
+                  I have read and accept the Polymath{' '}
+                  <Link href='#'
+                    id='sign-up-privacy-link'>
+                    Terms of Service
+                  </Link>
+                  .
+                </Text>
+              }
+              name='hasAcceptTerms'
+            />
+          </Box>
+        </form>
+      </FormProvider>
 
       <Flex flex={1}
         flexDirection='column'
@@ -213,7 +139,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
           <Box ml='s'
             width={255}>
             <Button busy={isBusy}
-              disabled={!isValidForm}
+              disabled={Object.keys(errors).length !== 0}
               fluid
               form='accountForm'
               type='submit'>

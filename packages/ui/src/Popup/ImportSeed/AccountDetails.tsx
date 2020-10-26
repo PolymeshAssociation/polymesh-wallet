@@ -62,7 +62,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
               <TextInput inputRef={register({ required: true })}
                 name='accountName'
                 placeholder='Enter account name' />
-              {errors.accountName &&
+              {errors?.accountName &&
                 <Box>
                   <Text color='alert'
                     variant='b3'>
