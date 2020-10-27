@@ -1,11 +1,11 @@
 import React, { FC, useContext, useRef, useState } from 'react';
-import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
+import { ActionContext, ActivityContext, Password, PolymeshContext } from '../../components';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { Box, Button, ButtonSmall, Flex, Header, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { changePassword, jsonRestore, jsonVerifyFile, validateAccount } from '../../messaging';
 import { isHex, u8aToString, hexToU8a } from '@polkadot/util';
-import { FieldError, useForm } from 'react-hook-form';
+import { FieldError, FormProvider, useForm } from 'react-hook-form';
 
 interface FileState {
   address: string | null;
@@ -19,12 +19,13 @@ export const ImportJSon: FC = () => {
   const fileRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [accountName, setAccountName] = useState('');
   const [accountJson, setAccountJson] = useState<FileState | undefined>();
-  const { errors, handleSubmit, register, setError } = useForm({
+  const methods = useForm({
     defaultValues: {
       jsonPassword: '',
-      walletPassword: ''
+      password: ''
     }
   });
+  const { errors, handleSubmit, register, setError } = methods;
   const onAction = useContext(ActionContext);
   const isBusy = useContext(ActivityContext);
 
@@ -33,10 +34,10 @@ export const ImportJSon: FC = () => {
       try {
         // Check the wallet password
         if (selectedAccount && selectedAccount !== '') {
-          const isValidPassword = await validateAccount(selectedAccount, data.walletPassword);
+          const isValidPassword = await validateAccount(selectedAccount, data.password);
 
           if (!isValidPassword) {
-            setError('walletPassword', { type: 'manual' });
+            setError('password', { type: 'manual' });
 
             return;
           }
@@ -55,7 +56,7 @@ export const ImportJSon: FC = () => {
 
         if (selectedAccount && selectedAccount !== '') {
           // Adding  an account to existing accounts, change password to match
-          await changePassword(accountJson.address, data.jsonPassword, data.walletPassword);
+          await changePassword(accountJson.address, data.jsonPassword, data.password);
         }
 
         onAction('/');
@@ -240,57 +241,38 @@ export const ImportJSon: FC = () => {
               </Box>
             </Flex>
           </Box>
-          <form id='accountForm'
-            onSubmit={handleSubmit(onSubmit)}>
-            <Box mt='s'>
-              <Box>
-                <Text color='gray.1'
-                  variant='b2m'>
-                  JSON Password
-                </Text>
-              </Box>
-              <Box>
-                <TextInput inputRef={register({ required: true, minLength: 4 })}
-                  name='jsonPassword'
-                  placeholder='Enter JSON file password'
-                  type='password' />
-                {errors.jsonPassword &&
-                  <Box>
-                    <Text color='alert'
-                      variant='b3'>
-                      {(errors.jsonPassword as FieldError).type === 'required' && 'Required field'}
-                      {(errors.jsonPassword as FieldError).type === 'manual' && 'Invalid password'}
-                    </Text>
-                  </Box>
-                }
-              </Box>
-            </Box>
-            {selectedAccount && selectedAccount !== '' &&
+          <FormProvider {...methods} >
+            <form id='accountForm'
+              onSubmit={handleSubmit(onSubmit)}>
               <Box mt='s'>
                 <Box>
                   <Text color='gray.1'
                     variant='b2m'>
-                    Wallet Password
+                    JSON Password
                   </Text>
                 </Box>
                 <Box>
-                  <TextInput inputRef={register({ required: true, minLength: 4 })}
-                    name='walletPassword'
-                    placeholder='Enter 8 characters or more'
+                  <TextInput inputRef={register({ required: true })}
+                    name='jsonPassword'
+                    placeholder='Enter JSON file password'
                     type='password' />
-                  {errors.walletPassword &&
+                  {errors.jsonPassword &&
                     <Box>
                       <Text color='alert'
                         variant='b3'>
-                        {(errors.walletPassword as FieldError).type === 'required' && 'Required field'}
-                        {(errors.walletPassword as FieldError).type === 'manual' && 'Invalid password'}
+                        {(errors.jsonPassword as FieldError).type === 'required' && 'Required field'}
+                        {(errors.jsonPassword as FieldError).type === 'manual' && 'Invalid password'}
                       </Text>
                     </Box>
                   }
                 </Box>
               </Box>
-            }
-          </form>
+              {selectedAccount && selectedAccount !== '' &&
+                <Password label='Wallet password'
+                  withConfirm={false} />
+              }
+            </form>
+          </FormProvider>
         </>
       }
       <Flex flex={1}

@@ -8,10 +8,9 @@ import { TypeRegistry } from '@polkadot/types';
 import { ActionContext, ActivityContext } from '../../components';
 import { Button, Box, Flex } from '../../ui';
 
-import { approveSignPassword, approveSignSignature, cancelSignRequest, isSignLocked } from '../../messaging';
+import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
-import Qr from './Qr';
 import Unlock from './Unlock';
 
 interface Props {
@@ -94,33 +93,15 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
     [_onSign]
   );
 
-  const _onSignature = useCallback(
-    ({ signature }: { signature: string }): Promise<void> =>
-      approveSignSignature(signId, signature)
-        .then(() => onAction())
-        .catch((error: Error): void => {
-          setError(error.message);
-          console.error(error);
-        }),
-    [onAction, signId]
-  );
-
   const content = () => {
     if (payload !== null) {
       const json = request.payload as SignerPayloadJSON;
 
-      return isExternal
-        ? (
-          <Qr
-            onSignature={_onSignature}
-            payload={payload}
-            request={json}
-          />
-        ) : (
-          <Extrinsic
-            request={json}
-          />
-        );
+      return (
+        <Extrinsic
+          request={json}
+        />
+      );
     } else if (hexBytes !== null) {
       const raw = request.payload as SignerPayloadRaw;
 

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Button, Box, Flex, Header, Icon, Text } from '../../ui';
 import { ActionContext, PolymeshContext } from '../../components';
 import { approveAuthRequest, rejectAuthRequest } from '../../messaging';
-import AccountsHeader from '../Accounts/AccountsHeader';
+import { AccountsHeader } from '../Accounts/AccountsHeader';
 import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 
 interface Props {

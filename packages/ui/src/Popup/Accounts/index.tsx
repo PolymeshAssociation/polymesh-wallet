@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { AccountContext, PolymeshContext } from '../../components';
 import AddAccount from './AddAccount';
-import AccountsHeader from './AccountsHeader';
+import { AccountsHeader } from './AccountsHeader';
 import { Text, Box, Header, Flex, Icon, Menu, MenuItem, ContextMenuTrigger, StatusBadge } from '../../ui';
 import { SvgViewDashboard,
   SvgDotsVertical,
@@ -89,10 +89,10 @@ export default function Accounts (): React.ReactElement {
             onClick={handleAccountMenuClick}>Create new account</MenuItem>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'fromSeed' }}
-            onClick={handleAccountMenuClick}>Import from seed</MenuItem>
+            onClick={handleAccountMenuClick}>Restore with recovery phrase</MenuItem>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'fromJson' }}
-            onClick={handleAccountMenuClick}>Restore  from JSON</MenuItem>
+            onClick={handleAccountMenuClick}>Import account with JSON file</MenuItem>
         </Menu>
       </>
     );

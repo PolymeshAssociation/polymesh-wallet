@@ -44,7 +44,7 @@ function AddAccount (): React.ReactElement {
             mt='s'>
             <Text color='white'
               variant='b2'>
-              Manage your Polymesh digital assets by creating an account or signing in to an existing account below.
+              Manage your Polymesh digital assets by creating an account or using an existing account.
             </Text>
           </Box>
         </Box>
@@ -52,21 +52,21 @@ function AddAccount (): React.ReactElement {
       <Box mt='m'>
         <Button fluid
           onClick={onCreateAccount}>
-          Create account from new phrase
+          Create new account
         </Button>
       </Box>
       <Box mt='s'>
         <Button fluid
           onClick={onImportSeed}
           variant='secondary'>
-          Restore account from phrase
+          Restore account with seed phrase
         </Button>
       </Box>
       <Box mt='s'>
         <Button fluid
           onClick={onImportJson}
           variant='secondary'>
-          Import account from JSON file
+          Import account with JSON file
         </Button>
       </Box>
     </>

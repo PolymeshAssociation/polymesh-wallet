@@ -5,27 +5,23 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import uiSettings from '@polkadot/ui-settings';
 import { setSS58Format } from '@polkadot/util-crypto';
+import { useErrorHandler } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 import { Loading } from '../components';
 import { AccountContext, ActionContext, AuthorizeReqContext, MetadataReqContext, SettingsContext, SigningReqContext, PolymeshContext, ActivityContext } from '../components/contexts';
-import ToastProvider from '../components/Toast/ToastProvider';
-import { subscribeAccounts, subscribePolyIsReady, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeSigningRequests, subscribePolyAccounts, subscribePolyNetwork, subscribePolySelectedAccount, busySubscriber } from '../messaging';
+import { subscribeAccounts, subscribePolyStatus, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeSigningRequests, subscribePolyAccounts, subscribePolyNetwork, subscribePolySelectedAccount, busySubscriber } from '../messaging';
 import { buildHierarchy } from '../util/buildHierarchy';
 import Accounts from './Accounts';
 import Authorize from './Authorize';
-import Derive from './Derive';
 import { ExportAccount } from './ExportAccount';
-import ImportQr from './ImportQr';
 import { ImportSeed } from './ImportSeed';
-import Metadata from './Metadata';
 import Signing from './Signing';
-import Welcome from './Welcome';
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+import { ErrorCodes, IdentifiedAccount, StoreStatus } from '@polymathnetwork/extension-core/types';
 import { PolymeshContext as PolymeshContextType } from '../types';
 import { NewAccount } from './NewAccount';
 import { ImportJSon } from './ImportJson';
 import { ChangePassword } from './ChangePassword';
 import { ForgetAccount } from './ForgetAccount';
-import { useErrorHandler } from 'react-error-boundary';
 import { AccountDetails } from './AccountDetails';
 const startSettings = uiSettings.get();
 
@@ -56,18 +52,27 @@ export default function Popup (): React.ReactElement {
   const [authRequests, setAuthRequests] = useState<null | AuthorizeRequest[]>(null);
   const [metaRequests, setMetaRequests] = useState<null | MetadataRequest[]>(null);
   const [signRequests, setSignRequests] = useState<null | SigningRequest[]>(null);
-  const [isWelcomeDone, setWelcomeDone] = useState(false);
   const [settingsCtx, setSettingsCtx] = useState<SettingsStruct>(startSettings);
   const [network, setNetwork] = useState('');
   const [polymeshAccounts, setPolymeshAccounts] = useState<IdentifiedAccount[]>([]);
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
-  const [isPolyReady, setIsPolyReady] = useState<boolean>(false);
+  const [status, setStatus] = useState<undefined | StoreStatus>();
   const [isBusy, setIsBusy] = useState(false);
   const handleError = useErrorHandler();
 
-  const _onAction = (to?: string): void => {
-    setWelcomeDone(window.localStorage.getItem('welcome_read') === 'ok');
+  useEffect(() => {
+    if (status?.error) {
+      if (status.error.code === ErrorCodes.FatalError) {
+        // Fatal errors render the app useless. Display the error in an ErrorBoundaryFallback.
+        handleError(status.error as unknown as (prevState: Error) => Error);
+      } else {
+        // Otherwise, we just inform the user via a Toast component.
+        toast.error(status.error.msg);
+      }
+    }
+  }, [handleError, status?.error]);
 
+  const _onAction = (to?: string): void => {
     if (to) {
       window.location.hash = to;
     }
@@ -75,7 +80,7 @@ export default function Popup (): React.ReactElement {
 
   useEffect((): void => {
     Promise.all([
-      subscribePolyIsReady(setIsPolyReady),
+      subscribePolyStatus(setStatus),
       subscribePolyAccounts(setPolymeshAccounts),
       subscribePolyNetwork(setNetwork),
       subscribePolySelectedAccount(setSelectedAccountAddress),
@@ -105,18 +110,14 @@ export default function Popup (): React.ReactElement {
     setPolymeshCtx(initPolymeshContext(network, polymeshAccounts, selectedAccountAddress || '', currentAccount));
   }, [accounts, network, polymeshAccounts, selectedAccountAddress]);
 
-  const Root = isWelcomeDone
-    ? authRequests && authRequests.length
-      ? Authorize
-      : metaRequests && metaRequests.length
-        ? Metadata
-        : signRequests && signRequests.length
-          ? Signing
-          : Accounts
-    : Welcome;
+  const Root = authRequests && authRequests.length
+    ? Authorize
+    : signRequests && signRequests.length
+      ? Signing
+      : Accounts;
 
   return (
-    <Loading>{accounts && authRequests && metaRequests && signRequests && isPolyReady && (
+    <Loading>{accounts && authRequests && metaRequests && signRequests && status?.isReady && (
       <ActivityContext.Provider value={isBusy}>
         <ActionContext.Provider value={_onAction}>
           <SettingsContext.Provider value={settingsCtx}>
@@ -125,26 +126,21 @@ export default function Popup (): React.ReactElement {
                 <MetadataReqContext.Provider value={metaRequests}>
                   <SigningReqContext.Provider value={signRequests}>
                     <PolymeshContext.Provider value={polymeshCtx}>
-                      <ToastProvider>
-                        <Switch>
-                          <Route path='/account/create'><NewAccount /></Route>
-                          <Route path='/account/forget/:address'><ForgetAccount /></Route>
-                          <Route path='/account/export/:address'><ExportAccount /></Route>
-                          <Route path='/account/import-qr'><ImportQr /></Route>
-                          <Route path='/account/import-seed'><ImportSeed /></Route>
-                          <Route path='/account/restore-json'><ImportJSon /></Route>
-                          <Route path='/account/derive/:address/locked'><Derive isLocked /></Route>
-                          <Route path='/account/derive/:address'><Derive /></Route>
-                          <Route path='/account/change-password'><ChangePassword /></Route>
-                          <Route path='/account/details/:address'><AccountDetails /></Route>
-                          <Route
-                            exact
-                            path='/'
-                          >
-                            <Root />
-                          </Route>
-                        </Switch>
-                      </ToastProvider>
+                      <Switch>
+                        <Route path='/account/create'><NewAccount /></Route>
+                        <Route path='/account/forget/:address'><ForgetAccount /></Route>
+                        <Route path='/account/export/:address'><ExportAccount /></Route>
+                        <Route path='/account/import-seed'><ImportSeed /></Route>
+                        <Route path='/account/restore-json'><ImportJSon /></Route>
+                        <Route path='/account/change-password'><ChangePassword /></Route>
+                        <Route path='/account/details/:address'><AccountDetails /></Route>
+                        <Route
+                          exact
+                          path='/'
+                        >
+                          <Root />
+                        </Route>
+                      </Switch>
                     </PolymeshContext.Provider>
                   </SigningReqContext.Provider>
                 </MetadataReqContext.Provider>

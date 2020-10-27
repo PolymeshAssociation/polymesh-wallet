@@ -15,7 +15,7 @@ export const Menu: React.ReactElement<MenuProps> = styled(ScMenu)({
   borderRadius: '8px',
   listStyleType: 'none',
   paddingLeft: 0,
-  zIndex: 99,
+  zIndex: 999,
   margin: '2px 0 0 0',
   '&:before': {
     border: 'inset 6px',
@@ -23,7 +23,7 @@ export const Menu: React.ReactElement<MenuProps> = styled(ScMenu)({
     display: 'block',
     borderColor: 'rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #fff rgba(0, 0, 0, 0)',
     borderBottomStyle: 'solid',
-    zIndex: 89
+    zIndex: 889
   },
   '&:after': {
     border: 'inset 7px',
@@ -31,6 +31,6 @@ export const Menu: React.ReactElement<MenuProps> = styled(ScMenu)({
     display: 'block',
     borderColor: 'rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #ccc rgba(0, 0, 0, 0)',
     borderBottomStyle: 'solid',
-    zIndex: 88
+    zIndex: 888
   }
 });
