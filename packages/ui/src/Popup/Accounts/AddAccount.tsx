@@ -44,7 +44,7 @@ function AddAccount (): React.ReactElement {
             mt='s'>
             <Text color='white'
               variant='b2'>
-              Manage your Polymesh digital assets by creating an account or signing in to an existing account below.
+              Manage your Polymesh digital assets by creating an account or using an existing account.
             </Text>
           </Box>
         </Box>
