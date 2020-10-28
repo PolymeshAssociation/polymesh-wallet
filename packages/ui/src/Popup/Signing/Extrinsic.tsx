@@ -77,7 +77,7 @@ function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
         <Box>
           <Text color='gray.1'
             variant='b1'>
-            {formatBalance(new BN(protocolFee), { withUnit: false })} POLYX
+            {formatBalance(new BN(protocolFee), { withUnit: false, decimals: 6 })} POLYX
           </Text>
         </Box>
       </Box>
@@ -92,7 +92,7 @@ function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
         <Box>
           <Text color='gray.1'
             variant='b1'>
-            {formatBalance(totalFees, { withUnit: false })} POLYX
+            {formatBalance(totalFees, { withUnit: false, decimals: 6 })} POLYX
           </Text>
         </Box>
       </Box>
