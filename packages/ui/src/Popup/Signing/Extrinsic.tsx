@@ -19,7 +19,7 @@ function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
     : formatBalance(new BN(networkFee), { withUnit: false, decimals: 6 }) + ' POLYX';
 
   // @ts-ignore
-  const totalFees = !isNaN(networkFee) && (new BN(networkFee)).add(new BN(protocolFee));
+  const totalFees = isNaN(networkFee) ? new BN(protocolFee) : (new BN(networkFee)).add(new BN(protocolFee));
 
   return (
     <>
