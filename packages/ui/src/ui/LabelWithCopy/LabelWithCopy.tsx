@@ -25,7 +25,7 @@ export const LabelWithCopy: FC<Props> = ({ color, text, textSize, textVariant })
   };
 
   const onMouseOut = () => {
-    setHover(true);
+    setHover(false);
   };
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -61,21 +61,19 @@ export const LabelWithCopy: FC<Props> = ({ color, text, textSize, textVariant })
             </TextEllipsis>
           </Text>
         </Box>
-        {
-          hover &&
-            <CopyToClipboard onCopy={handleCopy}
-              text={text}>
-              <Box ml='xs'
-                onClick={handleClick}>
-                <Icon Asset={SvgContentCopy}
-                  color={color}
-                  height={16}
-                  style={{ cursor: 'pointer' }}
-                  width={16}
-                />
-              </Box>
-            </CopyToClipboard>
-        }
+        <CopyToClipboard onCopy={handleCopy}
+          text={text}>
+          <Box ml='xs'
+            onClick={handleClick}>
+            <Icon Asset={SvgContentCopy}
+              color={color}
+              height={16}
+              opacity={hover ? 1 : 0}
+              style={{ cursor: 'pointer' }}
+              width={16}
+            />
+          </Box>
+        </CopyToClipboard>
       </Flex>
     </sc.StatusText>
   );
