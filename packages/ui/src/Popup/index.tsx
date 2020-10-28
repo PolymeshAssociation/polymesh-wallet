@@ -25,6 +25,8 @@ import { ForgetAccount } from './ForgetAccount';
 import { AccountDetails } from './AccountDetails';
 import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
 import { Toast } from '../ui/Toast';
+import { Box, Flex, Icon } from '../ui';
+import { SvgCloseCircle } from '../assets/images/icons';
 const startSettings = uiSettings.get();
 
 function initAccountContext (accounts: AccountJson[]): AccountsContext {
@@ -69,7 +71,15 @@ export default function Popup (): React.ReactElement {
         handleError(status.error as unknown as (prevState: Error) => Error);
       } else {
         // Otherwise, we just inform the user via a Toast component.
-        toast.error(status.error.msg, { autoClose: false, toastId: 'error' });
+        toast.error(
+          <Flex>
+            <Icon Asset={SvgCloseCircle}
+              color='red.0'
+              height={20}
+              width={20} />
+            <Box ml='s'>{status.error.msg}</Box>
+          </Flex>
+          , { autoClose: false, toastId: 'error' });
       }
     } else {
       toast.dismiss('error');
@@ -83,7 +93,15 @@ export default function Popup (): React.ReactElement {
         toast.dismiss('offline');
       } else {
         // Show an un-closable alert about lack of connectivity.
-        toast.error('No internet!', { toastId: 'offline', autoClose: false, closeButton: false });
+        toast.error(
+          <Flex>
+            <Icon Asset={SvgCloseCircle}
+              color='red.0'
+              height={20}
+              width={20} />
+            <Box ml='s'>No internet!</Box>
+          </Flex>
+          , { toastId: 'offline', autoClose: false, closeButton: false });
       }
     });
   }, []);
