@@ -35,7 +35,6 @@ export const Password: FC<Props> = ({ confirmLabel, label, withConfirm }) => {
             <Box>
               <Text color='alert'
                 variant='b3'>
-                {console.log(errors.password)}
                 {errors.password?.type === 'minLength' && 'Password too short'}
                 {errors.password?.type === 'manual' && 'Invalid password'}
               </Text>

@@ -4,6 +4,7 @@ import { SvgAlertCircle, SvgFileLockOutline } from '@polymathnetwork/extension-u
 import { forgetAccount } from '../../messaging';
 import { ActionContext, ActivityContext } from '../../components';
 import { useParams } from 'react-router';
+import { useErrorHandler } from 'react-error-boundary';
 
 interface ParamTypes {
   address: string
@@ -13,6 +14,7 @@ export const ForgetAccount: FC = () => {
   const onAction = useContext(ActionContext);
   const { address } = useParams<ParamTypes>();
   const isBusy = useContext(ActivityContext);
+  const handleError = useErrorHandler();
 
   const onExport = async () => {
     try {
@@ -20,7 +22,7 @@ export const ForgetAccount: FC = () => {
 
       onAction('/');
     } catch (e) {
-      console.log(e);
+      handleError(e);
     }
   };
 

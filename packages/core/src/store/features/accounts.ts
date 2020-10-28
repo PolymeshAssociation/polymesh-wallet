@@ -32,6 +32,29 @@ const accountsSlice = createSlice({
     },
     selectAccount (state, action: PayloadAction<SelectAccountPayload>) {
       state.selected = action.payload;
+    },
+    setAccountGlobally (state, action: PayloadAction<AccountData>) {
+      const data = action.payload;
+
+      Object.keys(NetworkName).forEach((network: string) => {
+        const prev = state[network as NetworkName][data.address];
+        const next = merge(prev, data);
+
+        if (!isEqual(next, prev)) {
+          state[network as NetworkName][data.address] = next;
+        }
+      });
+    },
+    removeAccountGlobally (state, action: PayloadAction<string>) {
+      const address = action.payload;
+
+      Object.keys(NetworkName).forEach((network: string) => {
+        const prev = state[network as NetworkName][address];
+
+        if (prev) {
+          delete state[network as NetworkName][address];
+        }
+      });
     }
   }
 });

@@ -8,11 +8,9 @@ import chrome from '@polkadot/extension-inject/chrome';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import subscribePolymesh from '@polymathnetwork/extension-core';
-import { fatalErrorHandler, isPolyMessage } from '@polymathnetwork/extension-core/utils';
+import subscribePolymesh, { accountsSynchronizer } from '@polymathnetwork/extension-core';
+import { fatalErrorHandler, isPolyMessage, subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
 import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
-
-window.addEventListener('offline', () => fatalErrorHandler(new Error('Internet connection lost')));
 
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
@@ -28,10 +26,18 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onConnect.addListener((port): void => {
   // shouldn't happen, however... only listen to what we know about
   assert([PORT_CONTENT, PORT_EXTENSION].includes(port.name), `Unknown connection from ${port.name}`);
-  let unsub: () => void;
+  let polyUnsub: VoidCallback;
+  let accountsUnsub: VoidCallback;
 
   if (port.name === PORT_EXTENSION) {
-    unsub = subscribePolymesh();
+    accountsUnsub = accountsSynchronizer();
+    subscribeOnlineStatus((status: boolean) => {
+      if (status) {
+        polyUnsub = subscribePolymesh();
+      } else {
+        if (polyUnsub) polyUnsub();
+      }
+    });
   }
 
   // message and disconnect handlers
@@ -41,7 +47,8 @@ chrome.runtime.onConnect.addListener((port): void => {
   });
   port.onDisconnect.addListener((): void => {
     console.log(`Disconnected from ${port.name}`);
-    unsub && unsub();
+    if (polyUnsub) polyUnsub();
+    if (accountsUnsub) accountsUnsub();
   });
 });
 

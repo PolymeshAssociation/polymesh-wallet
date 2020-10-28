@@ -2,22 +2,25 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import schema from './schema';
 import { NetworkName } from '../../types';
 import { networkURLs } from '../../constants';
-import { fatalErrorHandler } from '@polymathnetwork/extension-core/utils';
 
-const apiPromise: Record<NetworkName, Promise<ApiPromise>> =
-  Object.keys(NetworkName).reduce((acc, network) => {
-    const n = network as NetworkName;
+const cache = {} as Record<NetworkName, Promise<ApiPromise>>;
+
+function apiPromise (n: NetworkName): Promise<ApiPromise> {
+  if (!(n in cache)) {
     const provider = new WsProvider(networkURLs[n]);
 
-    provider.on('error', fatalErrorHandler);
-
-    acc[n] = new ApiPromise({
+    cache[n] = new ApiPromise({
       provider,
       rpc: schema[n].rpc,
       types: schema[n].types
     }).isReadyOrError;
+  }
 
-    return acc;
-  }, {} as Record<NetworkName, Promise<ApiPromise>>);
+  return cache[n];
+}
+
+export function destroy (n: NetworkName): void {
+  if (n in cache) { delete cache[n]; }
+}
 
 export default apiPromise;

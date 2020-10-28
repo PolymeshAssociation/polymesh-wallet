@@ -75,7 +75,11 @@ export const ToastContainerStyle = createGlobalStyle`
   justify-content: space-between;
   max-height: 800px;
   overflow: hidden;
-  font-family: sans-serif;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 27px;
   cursor: pointer;
   direction: ltr;
 }
@@ -100,7 +104,8 @@ export const ToastContainerStyle = createGlobalStyle`
   background: #f1c40f;
 }
 .Toastify__toast--error {
-  background: #e74c3c;
+  background: #152935;
+  color: #ffffff
 }
 .Toastify__toast-body {
   margin: auto 0;
