@@ -92,6 +92,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
             <Flex mb='xs'>
               <TextInput defaultValue={name}
                 onChange={handleAliasChange}
+                tight
                 value={newAlias} />
               <Box onClick={saveAlias}
                 style={{ cursor: 'pointer' }}>

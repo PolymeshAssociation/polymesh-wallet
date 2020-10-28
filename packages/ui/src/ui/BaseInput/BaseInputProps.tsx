@@ -6,4 +6,5 @@ export interface BaseInputProps extends InputHTMLAttributes<HTMLInputElement> {
   invalid?: boolean;
   inputRef?: React.Ref<HTMLInputElement>;
   blurOnEnterKeyPress?: boolean;
+  tight?: boolean;
 }

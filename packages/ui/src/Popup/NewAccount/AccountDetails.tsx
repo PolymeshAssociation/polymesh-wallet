@@ -22,7 +22,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
     mode: 'onChange',
     reValidateMode: 'onChange'
   });
-  const { control, errors, handleSubmit, register, setError } = methods;
+  const { control, errors, getValues, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
 
   const onSubmit = async (data: { [x: string]: any; }) => {
@@ -51,6 +51,8 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
     setAccountDetails(data.accountName, data.password);
     onContinue();
   };
+
+  console.log(getValues('hasAcceptTerms'));
 
   return (
     <>
@@ -139,7 +141,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
           <Box ml='s'
             width={255}>
             <Button busy={isBusy}
-              disabled={Object.keys(errors).length !== 0}
+              disabled={(Object.keys(errors).length !== 0) || (!getValues('hasAcceptTerms')) || (!getValues('hasAcceptedPolicy'))}
               fluid
               form='accountForm'
               type='submit'>
