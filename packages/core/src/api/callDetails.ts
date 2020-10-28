@@ -25,7 +25,12 @@ async function callDetails (request: SignerPayloadJSON, network: NetworkName): P
   // Network fee
   try {
     const extrinsic = api.tx[method.sectionName][method.methodName](...method.args);
-    const { partialFee } = await extrinsic.paymentInfo(request.address);
+
+    const waitLimiter = () => new Promise((resolve) =>
+      setTimeout(() => resolve({ partialFee: 'Cannot retrieve network fees at the moment' }), 10000));
+
+    // @ts-ignore
+    const { partialFee } = await Promise.race([waitLimiter(), extrinsic.paymentInfo(request.address)]);
 
     networkFee = partialFee.toString();
   } catch (error) {
