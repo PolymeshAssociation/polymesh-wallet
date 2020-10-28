@@ -26,4 +26,13 @@ export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
 }
 
 export const fatalErrorHandler = (error: Error): void => error && setError({ code: ErrorCodes.FatalError, msg: error.message });
+
 export const nonFatalErrorHandler = (error: Error): void => error && setError({ code: ErrorCodes.NonFatalError, msg: error.message });
+
+export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
+  cb(navigator.onLine);
+  // eslint-disable-next-line standard/no-callback-literal
+  window.addEventListener('offline', () => cb(false));
+  // eslint-disable-next-line standard/no-callback-literal
+  window.addEventListener('online', () => cb(true));
+}
