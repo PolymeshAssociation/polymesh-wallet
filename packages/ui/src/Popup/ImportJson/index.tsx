@@ -6,6 +6,7 @@ import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension
 import { changePassword, jsonRestore, jsonVerifyFile, validateAccount } from '../../messaging';
 import { isHex, u8aToString, hexToU8a } from '@polkadot/util';
 import { FieldError, FormProvider, useForm } from 'react-hook-form';
+import { useErrorHandler } from 'react-error-boundary';
 
 interface FileState {
   address: string | null;
@@ -28,6 +29,7 @@ export const ImportJSon: FC = () => {
   const { errors, handleSubmit, register, setError } = methods;
   const onAction = useContext(ActionContext);
   const isBusy = useContext(ActivityContext);
+  const handleError = useErrorHandler();
 
   const onSubmit = async (data: { [x: string]: string; }) => {
     if (accountJson && accountJson?.json && accountJson.address) {
@@ -61,7 +63,7 @@ export const ImportJSon: FC = () => {
 
         onAction('/');
       } catch (e) {
-        console.log('ERROR', e);
+        handleError(e);
       }
     }
   };

@@ -22,7 +22,7 @@ const ErrorBoundaryFallback: FC<FallbackProps> = ({ error, resetErrorBoundary })
             <Text color='gray.1'
               fontSize='2'
               variant='b2'>
-              {error.toString()}
+              {JSON.stringify(error)}
             </Text>
           </Box>
           <Button onClick={resetErrorBoundary}>Go back</Button>

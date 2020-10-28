@@ -19,7 +19,7 @@ export type RequestPolyNetworkSubscribe = null;
 
 export type RequestPolySelectedAccountSubscribe = null;
 
-export type RequestPolyIsReadySubscribe = null;
+export type RequestPolyStatusSubscribe = null;
 
 export type RequestPolyNetworkGet = null;
 
@@ -47,7 +47,7 @@ export interface PolyRequestSignatures {
   'poly:pri(accounts.subscribe)': [RequestPolyAccountsSubscribe, boolean, IdentifiedAccount[]];
   'poly:pri(network.subscribe)': [RequestPolyNetworkSubscribe, boolean, NetworkName];
   'poly:pri(selectedAccount.subscribe)': [RequestPolySelectedAccountSubscribe, boolean, string | undefined];
-  'poly:pri(status.subscribe)': [RequestPolyIsReadySubscribe, boolean, StoreStatus]
+  'poly:pri(status.subscribe)': [RequestPolyStatusSubscribe, boolean, StoreStatus]
   'poly:pri(network.set)': [RequestPolyNetworkSet, boolean];
   'poly:pri(selectedAccount.set)': [RequestPolySelectedAccountSet, boolean];
   'poly:pri(callDetails.get)': [RequestPolyCallDetails, ResponsePolyCallDetails];
