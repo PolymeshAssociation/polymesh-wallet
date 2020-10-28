@@ -81,8 +81,6 @@ function subscribePolymesh (): () => void {
             // Clear errors
             store.dispatch(statusActions.isReady());
 
-            unsubCallbacks.api = () => api.isConnected && api.disconnect();
-
             let prevAccounts: string[] = [];
             let prevDids: string[] = [];
             let activeIssuers: string[] = [];
