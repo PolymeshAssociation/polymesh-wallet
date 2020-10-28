@@ -6,7 +6,7 @@ import { NetworkName } from '../types';
 import { Call } from '@polkadot/types/interfaces';
 
 async function callDetails (request: SignerPayloadJSON, network: NetworkName): Promise<ResponsePolyCallDetails> {
-  const api = await apiPromise[network];
+  const api = await apiPromise(network);
   let protocolFee = '0';
   let networkFee = '0';
 
@@ -25,7 +25,12 @@ async function callDetails (request: SignerPayloadJSON, network: NetworkName): P
   // Network fee
   try {
     const extrinsic = api.tx[method.sectionName][method.methodName](...method.args);
-    const { partialFee } = await extrinsic.paymentInfo(request.address);
+
+    const waitLimiter = () => new Promise((resolve) =>
+      setTimeout(() => resolve({ partialFee: 'Cannot retrieve network fees at the moment' }), 10000));
+
+    // @ts-ignore
+    const { partialFee } = await Promise.race([waitLimiter(), extrinsic.paymentInfo(request.address)]);
 
     networkFee = partialFee.toString();
   } catch (error) {

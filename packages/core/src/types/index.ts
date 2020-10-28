@@ -87,7 +87,7 @@ export type Error = {
 }
 
 export type StoreStatus = {
-  isReady: boolean,
   rehydrated: boolean,
-  error: Error | null
+  error: Error | null,
+  ready: boolean
 };

@@ -23,6 +23,10 @@ import { ImportJSon } from './ImportJson';
 import { ChangePassword } from './ChangePassword';
 import { ForgetAccount } from './ForgetAccount';
 import { AccountDetails } from './AccountDetails';
+import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
+import { Toast } from '../ui/Toast';
+import { Box, Flex, Icon } from '../ui';
+import { SvgCloseCircle } from '../assets/images/icons';
 const startSettings = uiSettings.get();
 
 function initAccountContext (accounts: AccountJson[]): AccountsContext {
@@ -67,10 +71,40 @@ export default function Popup (): React.ReactElement {
         handleError(status.error as unknown as (prevState: Error) => Error);
       } else {
         // Otherwise, we just inform the user via a Toast component.
-        toast.error(status.error.msg);
+        toast.error(
+          <Flex>
+            <Icon Asset={SvgCloseCircle}
+              color='red.0'
+              height={20}
+              width={20} />
+            <Box ml='s'>{status.error.msg}</Box>
+          </Flex>
+          , { autoClose: false, toastId: 'error' });
       }
+    } else {
+      toast.dismiss('error');
     }
   }, [handleError, status?.error]);
+
+  useEffect(() => {
+    subscribeOnlineStatus((status: boolean) => {
+      if (status) {
+        // Dismiss any toast that we might've displayed earlier.
+        toast.dismiss('offline');
+      } else {
+        // Show an un-closable alert about lack of connectivity.
+        toast.error(
+          <Flex>
+            <Icon Asset={SvgCloseCircle}
+              color='red.0'
+              height={20}
+              width={20} />
+            <Box ml='s'>No internet!</Box>
+          </Flex>
+          , { toastId: 'offline', autoClose: false, closeButton: false });
+      }
+    });
+  }, []);
 
   const _onAction = (to?: string): void => {
     if (to) {
@@ -117,7 +151,7 @@ export default function Popup (): React.ReactElement {
       : Accounts;
 
   return (
-    <Loading>{accounts && authRequests && metaRequests && signRequests && status?.isReady && (
+    <Loading>{accounts && authRequests && metaRequests && signRequests && status?.ready && (
       <ActivityContext.Provider value={isBusy}>
         <ActionContext.Provider value={_onAction}>
           <SettingsContext.Provider value={settingsCtx}>
@@ -141,6 +175,7 @@ export default function Popup (): React.ReactElement {
                           <Root />
                         </Route>
                       </Switch>
+                      <Toast />
                     </PolymeshContext.Provider>
                   </SigningReqContext.Provider>
                 </MetadataReqContext.Provider>

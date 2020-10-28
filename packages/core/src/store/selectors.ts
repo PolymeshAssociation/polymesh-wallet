@@ -83,5 +83,6 @@ export const selectIsRehydrated = createSelector(
 
 export const selectStatus = createSelector(
   (state: RootState) => state.status,
-  (status) => status
+  // Status will always be "ready" if we're offline
+  (status) => ({ ...status, ready: !navigator.onLine || status.ready })
 );
