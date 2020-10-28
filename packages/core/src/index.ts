@@ -2,7 +2,7 @@ import { Option } from '@polkadot/types/codec';
 import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
-import apiPromise from './api/apiPromise';
+import apiPromise, { destroy } from './api/apiPromise';
 import { DidRecord, LinkedKeyInfo, IdentityClaim } from './api/apiPromise/types';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
@@ -230,10 +230,10 @@ function subscribePolymesh (): () => void {
                   unsubCallbacks.newHeads = unsub;
                 }).catch(nonFatalErrorHandler);
               }
-            ).catch((err) => { console.log('not sure'); nonFatalErrorHandler(err); });
+            ).catch((err) => { nonFatalErrorHandler(err); destroy(network); });
           },
-          (err) => { console.log('rejection'); nonFatalErrorHandler(err); }
-          ).catch((err) => { console.log('catch'); nonFatalErrorHandler(err); });
+          (err) => { nonFatalErrorHandler(err); destroy(network); }
+          ).catch((err) => { nonFatalErrorHandler(err); destroy(network); });
       });
     }
   });
