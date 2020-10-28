@@ -58,13 +58,13 @@ export const Wrapper = styled.label<StyledProps<BaseInputProps>>((props) => ({
   ...getInputStyles(props)
 }));
 
-export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, unit }) => ({
+export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, tight, unit }) => ({
   display: 'block',
   width: '100%',
   flexGrow: 1,
   boxSizing: 'border-box',
   // height: '100%',
-  padding: '8px 8px 8px 8px',
+  padding: tight ? '1px 1px 1px 1px' : '8px 8px 8px 8px',
   marginLeft: '2px',
   marginRight: '2px',
   backgroundColor: 'transparent',

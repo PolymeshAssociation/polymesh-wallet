@@ -125,9 +125,11 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         >
           <Flex flexDirection='row'>
             {isEditing && (
-              <Flex flexDirection='row'>
+              <Flex alignItems='center'
+                flexDirection='row'>
                 <TextInput defaultValue={name}
                   onChange={handleNameChange}
+                  tight
                   value={newName} />
                 <Box ml='xs'>
                   <Icon Asset={SvgCheck}
@@ -146,7 +148,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               </Flex>
             )}
             {!isEditing && (
-              <Flex flexDirection='row'>
+              <Flex alignItems='center'
+                flexDirection='row'>
                 <Text color='gray.1'
                   variant='b2m'>
                   {name}
@@ -214,6 +217,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               <Flex flexDirection='row'>
                 <TextInput defaultValue={name}
                   onChange={handleNameChange}
+                  tight
                   value={newName} />
                 <Box ml='xs'>
                   <Icon Asset={SvgCheck}
