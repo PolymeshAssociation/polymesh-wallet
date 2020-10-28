@@ -4,7 +4,6 @@ import { ActionContext, ActivityContext, PolymeshContext } from '../../component
 import { exportAccount } from '../../messaging';
 import { SvgAlertCircle, SvgOpenInNew } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { FieldError, useForm } from 'react-hook-form';
-import { useErrorHandler } from 'react-error-boundary';
 
 export const ExportAccount: FC = () => {
   const onAction = useContext(ActionContext);

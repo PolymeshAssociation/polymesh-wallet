@@ -6,7 +6,7 @@ import { NetworkName } from '../types';
 import { Call } from '@polkadot/types/interfaces';
 
 async function callDetails (request: SignerPayloadJSON, network: NetworkName): Promise<ResponsePolyCallDetails> {
-  const api = await apiPromise[network];
+  const api = await apiPromise(network);
   let protocolFee = '0';
   let networkFee = '0';
 
