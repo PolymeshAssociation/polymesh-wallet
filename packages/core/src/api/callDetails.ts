@@ -19,22 +19,17 @@ async function callDetails (request: SignerPayloadJSON, network: NetworkName): P
 
     protocolFee = (await api.query.protocolFee.baseFees(opName)).toString();
   } catch (error) {
-    console.error(`Error: Protocol fee retrieval for method ${method.sectionName}:${method.methodName} has failed`, error);
+    console.log(`Error: Protocol fee retrieval for method ${method.sectionName}:${method.methodName} has failed`, error);
   }
 
   // Network fee
   try {
     const extrinsic = api.tx[method.sectionName][method.methodName](...method.args);
-
-    const waitLimiter = () => new Promise((resolve) =>
-      setTimeout(() => resolve({ partialFee: 'Cannot retrieve network fees at the moment' }), 10000));
-
-    // @ts-ignore
-    const { partialFee } = await Promise.race([waitLimiter(), extrinsic.paymentInfo(request.address)]);
+    const { partialFee } = await extrinsic.paymentInfo(request.address);
 
     networkFee = partialFee.toString();
   } catch (error) {
-    console.error(`Error: Network fee retrieval for method ${method.sectionName}:${method.methodName} has failed`, error);
+    console.log(`Error: Network fee retrieval for method ${method.sectionName}:${method.methodName} has failed`, error);
   }
 
   return {
