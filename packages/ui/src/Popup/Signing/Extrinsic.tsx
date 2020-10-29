@@ -12,14 +12,9 @@ interface Props {
 }
 
 function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
-  let { args, meta, method, networkFee, protocolFee, section } = call;
+  const { args, meta, method, networkFee, protocolFee, section } = call;
 
-  // @ts-ignore
-  networkFee = isNaN(networkFee) ? networkFee
-    : formatBalance(new BN(networkFee), { withUnit: false, decimals: 6 }) + ' POLYX';
-
-  // @ts-ignore
-  const totalFees = isNaN(networkFee) ? new BN(protocolFee) : (new BN(networkFee)).add(new BN(protocolFee));
+  const totalFees = (new BN(networkFee)).add(new BN(protocolFee));
 
   return (
     <>
@@ -67,7 +62,7 @@ function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
         <Box>
           <Text color='gray.1'
             variant='b1'>
-            {networkFee}
+            {formatBalance(new BN(networkFee), { withUnit: false, decimals: 6 })} POLYX
           </Text>
         </Box>
       </Box>
@@ -82,12 +77,12 @@ function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
         <Box>
           <Text color='gray.1'
             variant='b1'>
-            {formatBalance(new BN(protocolFee), { withUnit: false })} POLYX
+            {formatBalance(new BN(protocolFee), { withUnit: false, decimals: 6 })} POLYX
           </Text>
         </Box>
       </Box>
 
-      { totalFees && <Box>
+      <Box>
         <Box>
           <Text color='gray.2'
             variant='b2'>
@@ -97,10 +92,10 @@ function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
         <Box>
           <Text color='gray.1'
             variant='b1'>
-            {formatBalance(totalFees, { withUnit: false })} POLYX
+            {formatBalance(totalFees, { withUnit: false, decimals: 6 })} POLYX
           </Text>
         </Box>
-      </Box> }
+      </Box>
     </>
   );
 }
