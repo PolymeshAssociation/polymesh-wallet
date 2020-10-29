@@ -59,7 +59,7 @@ function AddAccount (): React.ReactElement {
         <Button fluid
           onClick={onImportSeed}
           variant='secondary'>
-          Restore account with seed phrase
+          Restore account with recovery phrase
         </Button>
       </Box>
       <Box mt='s'>
