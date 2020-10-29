@@ -55,19 +55,28 @@ export default class Tabs {
     return transformAccounts(accountsObservable.subject.getValue());
   }
 
-  // FIXME This looks very much like what we have in Extension
   private accountsSubscribe (url: string, id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
+    let calls = 0;
+
+    const innerCb = (accounts: InjectedAccount[]) => {
+      // Callback will be called twice initially, we need to skip those two calls.
+      if (calls < 2) {
+        calls++;
+      } else {
+        cb(accounts);
+      }
+    };
 
     // Call the callback every time the selected account changes, so that we return
     // that account first.
     const selectedAccUnsub = subscribeSelectedAccount(() => {
-      cb(transformAccounts(accountsObservable.subject.getValue()));
+      innerCb(transformAccounts(accountsObservable.subject.getValue()));
     });
 
-    const subscription = accountsObservable.subject.subscribe((accounts: SubjectInfo): void =>
-      cb(transformAccounts(accounts))
-    );
+    const subscription = accountsObservable.subject.subscribe((accounts: SubjectInfo): void => {
+      innerCb(transformAccounts(accounts));
+    });
 
     port.onDisconnect.addListener((): void => {
       unsubscribe(id);
