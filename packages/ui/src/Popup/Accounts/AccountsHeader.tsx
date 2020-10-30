@@ -76,7 +76,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
               mb='xs'>
               <Text color='gray.0'
                 variant='b1m'>
-                {account.didAlias ? account.didAlias : '[No label]'}
+                {account.didAlias ? account.didAlias : '[Your Polymesh ID]'}
               </Text>
               <Flex ml='xs'>
                 <Icon Asset={SvgPencilOutline}
