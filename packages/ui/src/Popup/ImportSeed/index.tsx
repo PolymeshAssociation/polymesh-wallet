@@ -1,6 +1,6 @@
+import { AccountDetails, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountDetails';
 import React, { FC, useContext, useState } from 'react';
 import { ActionContext, PolymeshContext } from '../../components';
-import { AccountDetails, AccountInfo } from './AccountDetails';
 import { createAccountSuri } from '../../messaging';
 import { EnterSeed } from './EnterSeed';
 
@@ -36,9 +36,11 @@ export const ImportSeed: FC = () => {
         );
       case 1:
         return (
-          <AccountDetails existingAccount={selectedAccount || ''}
+          <AccountDetails existingAccount={selectedAccount}
+            headerText='Restore your account with your recovery phrase'
             onBack={prevStep}
-            onContinue={importAccount} />
+            onContinue={importAccount}
+            submitText='Restore' />
         );
     }
   };
