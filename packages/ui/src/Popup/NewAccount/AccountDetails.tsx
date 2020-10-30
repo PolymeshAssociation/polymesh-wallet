@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
-import { Controller, FieldError, FormProvider, useForm } from 'react-hook-form';
-import { Box, Button, Checkbox, Flex, Header, Icon, Link, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
 import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
@@ -12,8 +12,14 @@ export interface Props {
   setAccountDetails: (name: string, password:string) => void;
 }
 
+type FormInputs = {
+  accountName: string,
+  password: string,
+  confirmPassword: string
+};
+
 export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue, setAccountDetails }) => {
-  const methods = useForm({
+  const methods = useForm<FormInputs>({
     defaultValues: {
       accountName: '',
       password: '',
@@ -22,10 +28,10 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
     mode: 'onChange',
     reValidateMode: 'onChange'
   });
-  const { control, errors, formState, getValues, handleSubmit, register, setError } = methods;
+  const { errors, formState, getValues, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
 
-  const onSubmit = async (data: { [x: string]: any; }) => {
+  const onSubmit = async (data: { [x: string]: string; }) => {
     if (existingAccount) {
       const isValidPassword = await validateAccount(existingAccount, data.password);
 
@@ -54,7 +60,7 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue,
 
   const submitIsDisabled = !formState.isValid ||
 Object.keys(errors).length > 0 ||
-Object.values(getValues()).filter((val) => val === '' || val === false).length > 0 ||
+Object.values(getValues()).filter((val) => val === '').length > 0 ||
 formState.isSubmitting;
 
   return (
@@ -80,8 +86,8 @@ formState.isSubmitting;
                 <Box>
                   <Text color='alert'
                     variant='b3'>
-                    {(errors.accountName as FieldError).type === 'required' && 'Required field'}
-                    {(errors.accountName as FieldError).type === 'minLength' && 'Invalid'}
+                    {(errors.accountName).type === 'required' && 'Required field'}
+                    {(errors.accountName).type === 'minLength' && 'Invalid'}
                   </Text>
                 </Box>
               }
@@ -89,42 +95,6 @@ formState.isSubmitting;
           </Box>
           <Password label={existingAccount !== '' ? 'Wallet password' : 'Password'}
             withConfirm={!existingAccount} />
-          <Box mt='s'>
-            <Controller
-              as={<Checkbox />}
-              control={control}
-              defaultValue={false}
-              label={
-                <Text color='gray.3'
-                  variant='b3'>
-                  I have read and accept the Polymath{' '}
-                  <Link href='#'
-                    id='sign-up-privacy-link'>
-                    Privacy Policy
-                  </Link>
-                  .
-                </Text>
-              }
-              name='hasAcceptedPolicy'
-            />
-            <Controller
-              as={<Checkbox />}
-              control={control}
-              defaultValue={false}
-              label={
-                <Text color='gray.3'
-                  variant='b3'>
-                  I have read and accept the Polymath{' '}
-                  <Link href='#'
-                    id='sign-up-privacy-link'>
-                    Terms of Service
-                  </Link>
-                  .
-                </Text>
-              }
-              name='hasAcceptTerms'
-            />
-          </Box>
         </form>
       </FormProvider>
 
