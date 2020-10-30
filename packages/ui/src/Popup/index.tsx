@@ -117,7 +117,10 @@ export default function Popup (): React.ReactElement {
       subscribePolyStatus(setStatus),
       subscribePolyAccounts(setPolymeshAccounts),
       subscribePolyNetwork(setNetwork),
-      subscribePolySelectedAccount(setSelectedAccountAddress),
+      subscribePolySelectedAccount((account) => {
+        console.log('subscribePolySelectedAccount', account);
+        setSelectedAccountAddress(account);
+      }),
       subscribeAccounts(setAccounts),
       subscribeAuthorizeRequests(setAuthRequests),
       subscribeMetadataRequests(setMetaRequests),
