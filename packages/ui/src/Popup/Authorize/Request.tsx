@@ -77,7 +77,7 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
           </Flex>
           <Text color='gray.1'
             variant='b2m'>
-            Only approve this request if you trust the application. Approving gives the application access to the addresses of your accounts.
+            Only approve this request if you trust the application. By approving this connection, you may give the application access to the key addresses of your accounts.
           </Text>
         </Box>
       </Box>
