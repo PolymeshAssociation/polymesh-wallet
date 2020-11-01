@@ -4,6 +4,7 @@ import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwo
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
 import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
+import { PolymeshContext } from './contexts';
 
 export interface AccountInfo {
   accountName: string;
@@ -13,7 +14,6 @@ export interface AccountInfo {
 export interface Props {
   submitText: string;
   headerText: string;
-  existingAccount?: string;
   onBack: () => void;
   onContinue: (accountInfo: AccountInfo) => void;
 }
@@ -24,7 +24,7 @@ type FormInputs = {
   confirmPassword: string
 };
 
-export const AccountDetails: FC<Props> = ({ existingAccount, headerText, onBack, onContinue, submitText }) => {
+export const AccountDetails: FC<Props> = ({ headerText, onBack, onContinue, submitText }) => {
   const methods = useForm<FormInputs>({
     defaultValues: {
       accountName: '',
@@ -36,12 +36,12 @@ export const AccountDetails: FC<Props> = ({ existingAccount, headerText, onBack,
   });
   const { errors, formState, getValues, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
-
-  console.log('AccountDetails', existingAccount);
+  const { polymeshAccounts } = useContext(PolymeshContext);
+  const oneAddress = polymeshAccounts && polymeshAccounts.length > 0 && polymeshAccounts[0].address;
 
   const onSubmit = async (data: { [x: string]: string; }) => {
-    if (existingAccount) {
-      const isValidPassword = await validateAccount(existingAccount, data.password);
+    if (oneAddress) {
+      const isValidPassword = await validateAccount(oneAddress, data.password);
 
       if (isValidPassword) {
         onContinue({ accountName: data.accountName, password: data.password });
@@ -91,8 +91,8 @@ export const AccountDetails: FC<Props> = ({ existingAccount, headerText, onBack,
               }
             </Box>
           </Box>
-          <Password label={existingAccount !== '' ? 'Wallet password' : 'Password'}
-            withConfirm={!existingAccount} />
+          <Password label={oneAddress ? 'Wallet password' : 'Password'}
+            withConfirm={!oneAddress} />
         </form>
       </FormProvider>
 

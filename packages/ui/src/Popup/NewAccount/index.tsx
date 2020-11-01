@@ -1,13 +1,12 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { createAccountSuri, createSeed } from '../../messaging';
-import { ActionContext, PolymeshContext } from '../../components';
+import { ActionContext } from '../../components';
 import { ConfirmSeed } from './ConfirmSeed';
 import { SeedView } from './SeedView';
 import { AccountDetails, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountDetails';
 
 export const NewAccount: FC = () => {
   const onAction = useContext(ActionContext);
-  const { selectedAccount } = useContext(PolymeshContext);
   const [account, setAccount] = useState<null | { address: string; seed: string }>(null);
   const [step, setStep] = useState(0);
 
@@ -31,8 +30,6 @@ export const NewAccount: FC = () => {
     step > 0 && setStep(step - 1);
   };
 
-  console.log('NewAccount', selectedAccount);
-
   const renderStep = (currentStep: number) => {
     switch (currentStep) {
       case 0:
@@ -48,7 +45,7 @@ export const NewAccount: FC = () => {
         );
       case 2:
         return (
-          <AccountDetails existingAccount={selectedAccount}
+          <AccountDetails
             headerText='Create and confirm your account name and wallet password'
             onBack={prevStep}
             onContinue={createAccount}
