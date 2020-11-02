@@ -19,7 +19,7 @@ import Signing from './Signing';
 import { ErrorCodes, IdentifiedAccount, StoreStatus } from '@polymathnetwork/extension-core/types';
 import { PolymeshContext as PolymeshContextType } from '../types';
 import { NewAccount } from './NewAccount';
-import { ImportJSon } from './ImportJson';
+import { ImportJson } from './ImportJson';
 import { ChangePassword } from './ChangePassword';
 import { ForgetAccount } from './ForgetAccount';
 import { AccountDetails } from './AccountDetails';
@@ -167,7 +167,7 @@ export default function Popup (): React.ReactElement {
                         <Route path='/account/forget/:address'><ForgetAccount /></Route>
                         <Route path='/account/export/:address'><ExportAccount /></Route>
                         <Route path='/account/import-seed'><ImportSeed /></Route>
-                        <Route path='/account/restore-json'><ImportJSon /></Route>
+                        <Route path='/account/restore-json'><ImportJson /></Route>
                         <Route path='/account/change-password'><ChangePassword /></Route>
                         <Route path='/account/details/:address'><AccountDetails /></Route>
                         <Route
