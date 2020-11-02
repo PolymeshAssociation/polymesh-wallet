@@ -7,6 +7,7 @@ export { default as View } from './View';
 export { default as Warning } from './Warning';
 export { default as ErrorFallback } from './ErrorFallback';
 export { Password } from './Password';
+export { AccountType } from './AccountType';
 
 export * from './contexts';
 export * from './themes';

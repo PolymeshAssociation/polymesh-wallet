@@ -5,7 +5,7 @@ import { formatters } from '../../util';
 import { Box, Text, Flex, Icon, StatusBadge, TextInput, ButtonSmall, LabelWithCopy, Menu, MenuItem, ContextMenuTrigger } from '../../ui';
 import { SvgPencilOutline, SvgWindowClose, SvgCheck, SvgDotsVertical } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
-import { ActionContext, PolymeshContext } from '../../components';
+import { AccountType, ActionContext, PolymeshContext } from '../../components';
 import { useHistory } from 'react-router-dom';
 import { networkLinks } from '@polymathnetwork/extension-core/constants';
 
@@ -68,15 +68,6 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             width={16} />
         </ContextMenuTrigger>
       </>
-    );
-  };
-
-  const renderType = (keyType: string) => {
-    const color = keyType === 'primary' ? 'green' : 'blue';
-    const text = keyType === 'primary' ? 'Primary' : 'Secondary';
-
-    return (
-      !isEditing && did && <StatusBadge variant={color}>{text}</StatusBadge>
     );
   };
 
@@ -164,7 +155,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               </Flex>
             )}
             <Box ml='s'>
-              {renderType(keyType || '')}
+              {!isEditing && did && <AccountType keyType={keyType} />}
             </Box>
           </Flex>
           {

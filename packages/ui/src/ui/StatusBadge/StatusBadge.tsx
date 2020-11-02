@@ -2,14 +2,15 @@ import styled from 'styled-components';
 import { Box } from '../Box';
 
 export interface StatusBadgeProps {
+  large?: boolean;
   variant?: 'green' | 'red' | 'yellow' | 'gray' | 'blue';
 }
 
 export const StatusBadge = styled(Box)<StatusBadgeProps>`
   display: inline-block;
   margin: 0 0 0 0px;
-  padding: 0 15px;
-  height: 16px;
+  padding: ${({ large }) => large ? '4px 15px' : '0 15px'};
+  height: ${({ large }) => large ? '24px' : '16px'};
   line-height: 16px;
   border-radius: 50px;
   font-size: 12px;
