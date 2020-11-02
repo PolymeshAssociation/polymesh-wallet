@@ -30,25 +30,29 @@ export const ImportJson: FC = () => {
 
   const restoreAccount = async (newAccountInfo: AccountInfo) => {
     if (fileState && fileState.address && fileState.json && jsonPassword) {
-      // Accounts should be visible by default.
-      fileState.json.meta.isHidden = undefined;
-      fileState.json.meta.name = newAccountInfo.accountName;
+      try {
+        // Accounts should be visible by default.
+        fileState.json.meta.isHidden = undefined;
+        fileState.json.meta.name = newAccountInfo.accountName;
 
-      const decodedAccount = await jsonRestore(fileState.json, jsonPassword);
+        const decodedAccount = await jsonRestore(fileState.json, jsonPassword);
 
-      if (decodedAccount.error) {
-        throw new Error('Cannot decode JSON file');
+        if (decodedAccount.error) {
+          throw new Error('Cannot decode JSON file. Please try again.');
+        }
+
+        // Change from the original JSON password, to the password user has just provided
+        // by AccountDetails form.
+        await changePassword(fileState.address, jsonPassword, newAccountInfo.password);
+
+        onAction('/');
+      } catch (error) {
+        // Theoretically speaking, no errors should be emitted here. If so,
+        // we'll display the ErrorBoundary fallback to let user start over.
+        errorHandler(error);
       }
-
-      // Change from the original JSON password, to the password user has just provided
-      // by AccountDetails form.
-      changePassword(fileState.address, jsonPassword, newAccountInfo.password)
-        .then(console.log, errorHandler)
-        .catch(errorHandler);
-
-      onAction('/');
     } else {
-      throw new Error('An unexpected error has occurred.');
+      errorHandler(new Error('An unexpected error has occurred. Please try again.'));
     }
   };
 
