@@ -158,13 +158,6 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               {!isEditing && did && <AccountType keyType={keyType} />}
             </Box>
           </Flex>
-          {
-            isSelected &&
-              <Icon Asset={SvgCheck}
-                color='brandMain'
-                height={24}
-                width={24} />
-          }
         </Flex>
         <Flex
           flexDirection='row'
@@ -181,7 +174,6 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               {formatters.formatAmount(new BigNumber(balance || 0), 2, true)} POLYX
             </Text>
           </Box>
-          {renderActionsMenuButton(address)}
         </Flex>
       </>
     );
@@ -251,9 +243,6 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             <ButtonSmall onClick={assign}
               variant='secondary'>Assign</ButtonSmall>
           </Box>
-          <Box>
-            {renderActionsMenuButton(address)}
-          </Box>
         </Flex>
       </>
     );
@@ -290,6 +279,22 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             {(!hover || did) && renderAccountInfo()}
             {(hover && !did) && renderHoverAccountInfo()}
           </Box>
+          <Flex alignItems='flex-end'
+            flexDirection='column'
+            justifyContent='flex-end'>
+            <Box width={24}>
+              {
+                isSelected &&
+                  <Icon Asset={SvgCheck}
+                    color='brandMain'
+                    height={24}
+                    width={24} />
+              }
+            </Box>
+            <Box>
+              {renderActionsMenuButton(address)}
+            </Box>
+          </Flex>
         </Flex>
       </Box>
     </>
