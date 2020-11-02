@@ -16,9 +16,6 @@ export const GrowingButton: FC<GrowingButtonProps> = ({ icon, onClick }) => {
           height={24}
           width={24} />
       </Box>
-      <sc.Content>
-        Go to dashboard
-      </sc.Content>
     </sc.Wrapper>
   );
 };
