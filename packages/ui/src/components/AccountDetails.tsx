@@ -16,6 +16,7 @@ export interface Props {
   headerText: string;
   onBack: () => void;
   onContinue: (accountInfo: AccountInfo) => void;
+  defaultName?: string;
 }
 
 type FormInputs = {
@@ -24,10 +25,10 @@ type FormInputs = {
   confirmPassword: string
 };
 
-export const AccountDetails: FC<Props> = ({ headerText, onBack, onContinue, submitText }) => {
+export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onContinue, submitText }) => {
   const methods = useForm<FormInputs>({
     defaultValues: {
-      accountName: '',
+      accountName: defaultName || '',
       password: '',
       confirmPassword: ''
     },
