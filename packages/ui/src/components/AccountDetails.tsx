@@ -1,9 +1,10 @@
 import React, { FC, useContext } from 'react';
-import { FieldError, FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
 import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
+import { PolymeshContext } from './contexts';
 
 export interface AccountInfo {
   accountName: string;
@@ -11,27 +12,37 @@ export interface AccountInfo {
 }
 
 export interface Props {
-  existingAccount: string;
+  submitText: string;
+  headerText: string;
   onBack: () => void;
   onContinue: (accountInfo: AccountInfo) => void;
+  defaultName?: string;
 }
 
-export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue }) => {
-  const methods = useForm({
+type FormInputs = {
+  accountName: string,
+  password: string,
+  confirmPassword: string
+};
+
+export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onContinue, submitText }) => {
+  const methods = useForm<FormInputs>({
     defaultValues: {
-      accountName: '',
+      accountName: defaultName || '',
       password: '',
       confirmPassword: ''
     },
     mode: 'onChange',
     reValidateMode: 'onChange'
   });
-  const { errors, handleSubmit, register, setError } = methods;
+  const { errors, formState, getValues, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
+  const { polymeshAccounts } = useContext(PolymeshContext);
+  const oneAddress = polymeshAccounts && polymeshAccounts.length > 0 && polymeshAccounts[0].address;
 
   const onSubmit = async (data: { [x: string]: string; }) => {
-    if (existingAccount !== '') {
-      const isValidPassword = await validateAccount(existingAccount, data.password);
+    if (oneAddress) {
+      const isValidPassword = await validateAccount(oneAddress, data.password);
 
       if (isValidPassword) {
         onContinue({ accountName: data.accountName, password: data.password });
@@ -39,13 +50,22 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
         setError('password', { type: 'manual', message: 'Invalid password' });
       }
     } else {
-      onContinue({ accountName: data.accountName, password: data.password });
+      if (data.password === data.confirmPassword) {
+        onContinue({ accountName: data.accountName, password: data.password });
+      } else {
+        setError('confirmPassword', { type: 'manual', message: 'Passwords do not match' });
+      }
     }
   };
 
+  const submitIsDisabled = !formState.isValid ||
+    Object.keys(errors).length > 0 ||
+    Object.values(getValues()).filter((val) => val === '').length > 0 ||
+    formState.isSubmitting;
+
   return (
     <>
-      <Header headerText='Restore your account with your recovery phrase'
+      <Header headerText={headerText}
         iconAsset={SvgAccountCardDetailsOutline}>
       </Header>
       <FormProvider {...methods} >
@@ -66,14 +86,14 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
                 <Box>
                   <Text color='alert'
                     variant='b3'>
-                    {(errors.accountName as FieldError).type === 'required' && 'Required field'}
+                    {(errors.accountName).type === 'required' && 'Required field'}
                   </Text>
                 </Box>
               }
             </Box>
           </Box>
-          <Password label={existingAccount !== '' ? 'Wallet password' : 'Password'}
-            withConfirm={!existingAccount} />
+          <Password label={oneAddress ? 'Wallet password' : 'Password'}
+            withConfirm={!oneAddress} />
         </form>
       </FormProvider>
 
@@ -93,11 +113,11 @@ export const AccountDetails: FC<Props> = ({ existingAccount, onBack, onContinue 
           <Box ml='s'
             width={255}>
             <Button busy={isBusy}
-              disabled={Object.keys(errors).length !== 0}
+              disabled={submitIsDisabled}
               fluid
               form='accountForm'
               type='submit'>
-              Restore
+              {submitText}
             </Button>
           </Box>
         </Flex>

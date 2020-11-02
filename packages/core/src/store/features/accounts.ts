@@ -29,6 +29,10 @@ const accountsSlice = createSlice({
       const { address, network } = action.payload;
 
       delete state[network][address];
+
+      if (state.selected === address) {
+        state.selected = undefined;
+      }
     },
     selectAccount (state, action: PayloadAction<SelectAccountPayload>) {
       state.selected = action.payload;
@@ -55,6 +59,10 @@ const accountsSlice = createSlice({
           delete state[network as NetworkName][address];
         }
       });
+
+      if (state.selected === address) {
+        state.selected = undefined;
+      }
     }
   }
 });
