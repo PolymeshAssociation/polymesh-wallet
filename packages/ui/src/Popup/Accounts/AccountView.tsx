@@ -2,7 +2,7 @@ import React, { FC, useState, useContext } from 'react';
 import BigNumber from 'bignumber.js';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { formatters } from '../../util';
-import { Box, Text, Flex, Icon, StatusBadge, TextInput, ButtonSmall, LabelWithCopy, Menu, MenuItem, ContextMenuTrigger } from '../../ui';
+import { Box, Text, Flex, Icon, TextInput, ButtonSmall, LabelWithCopy, Menu, MenuItem, ContextMenuTrigger } from '../../ui';
 import { SvgPencilOutline, SvgWindowClose, SvgCheck, SvgDotsVertical } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
 import { AccountType, ActionContext, PolymeshContext } from '../../components';
