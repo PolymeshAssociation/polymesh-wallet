@@ -31,10 +31,17 @@ const defaultNetwork: NetworkName = NetworkName.alcyone;
 
 const messagePrefix = 'poly:';
 
+const messages = [
+  'pub(accounts.list)',
+  'pub(accounts.subscribe)',
+  'pub(metadata.provide)'
+];
+
 export {
   networkURLs,
   networkLabels,
   networkLinks,
   defaultNetwork,
-  messagePrefix
+  messagePrefix,
+  messages
 };
