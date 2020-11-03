@@ -67,6 +67,7 @@ export const space = {
   7: '80px',
   8: '120px',
 
+  xxs: '2px',
   xs: '5px',
   s: '10px',
   m: '16px',

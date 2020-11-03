@@ -209,8 +209,8 @@ export default function Accounts (): React.ReactElement {
               Object.keys(groupedAccounts).sort((a) => (a === 'unassigned' ? 1 : -1)).map((did: string, index) => {
                 return <AccountsContainer
                   accounts={hasKey(groupedAccounts, did) ? groupedAccounts[did] : []}
+                  did={did}
                   headerColor={getHeaderColor(index)}
-                  headerText={did}
                   key={index}
                   selectedAccount={selectedAccount || ''}
                 />;

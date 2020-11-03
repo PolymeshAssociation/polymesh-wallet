@@ -1,17 +1,42 @@
-import React, { FC } from 'react';
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
-import { Box, Text, Flex, Icon, LabelWithCopy } from '../../ui';
-import { SvgAlertCircle, SvgCheckboxMarkedCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+import React, { FC, useContext, useState } from 'react';
+import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
+import { Box, Text, Flex, Icon, LabelWithCopy, TextInput } from '../../ui';
+import { SvgAlertCircle, SvgCheck, SvgCheckboxMarkedCircle, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountView } from './AccountView';
+import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
+import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 
 export interface Props {
-  headerText: string;
+  did: string;
   selectedAccount: string;
   accounts: IdentifiedAccount[];
   headerColor: string;
 }
 
-export const AccountsContainer: FC<Props> = ({ accounts, headerColor, headerText, selectedAccount }) => {
+export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selectedAccount }) => {
+  const currentAccount = accounts.find((acc) => acc.did === did);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [newAlias, setNewAlias] = useState(currentAccount?.didAlias ? currentAccount.didAlias : '');
+  const onAction = useContext(ActionContext);
+  const { network } = useContext(PolymeshContext);
+
+  const editAlias = () => setIsEditing(true);
+
+  const stopEditAlias = () => setIsEditing(false);
+
+  const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewAlias(e.target.value);
+  };
+
+  const saveAlias = async () => {
+    if (!currentAccount?.did || !network) { return; }
+
+    await renameIdentity(network as NetworkName, currentAccount?.did, newAlias);
+    stopEditAlias();
+    onAction();
+  };
+
   const renderContainerHeader = (isAssigned: boolean) => {
     if (isAssigned) {
       return (
@@ -20,36 +45,70 @@ export const AccountsContainer: FC<Props> = ({ accounts, headerColor, headerText
           mt='xs'
           mx='s'
           px='s'>
-          <Flex flexDirection='row'
-            justifyContent='space-between'>
-            <LabelWithCopy color='brandMain'
-              text={headerText}
-              textSize={30}
-              textVariant='c2'
-            />
-            <Box>
+          { isEditing &&
+            <Flex py='xxs'>
+              <TextInput defaultValue={currentAccount?.didAlias}
+                onChange={handleAliasChange}
+                placeholder='Your Polymesh ID'
+                tight
+                value={newAlias} />
+              <Icon Asset={SvgCheck}
+                color='brandMain'
+                height={20}
+                onClick={saveAlias}
+                style={{ cursor: 'pointer' }}
+                width={20} />
+              <Icon Asset={SvgWindowClose}
+                color='brandMain'
+                height={20}
+                onClick={stopEditAlias}
+                style={{ cursor: 'pointer' }}
+                width={20} />
+            </Flex>
+          }
+          { !isEditing &&
+            <Flex alignItems='center'
+              flexDirection='row'
+              justifyContent='space-between'>
+              <Flex alignItems='center'>
+                { currentAccount?.didAlias && currentAccount.didAlias !== '' &&
+                  <Text color='brandMain'
+                    variant='c2'>{currentAccount.didAlias}</Text>
+                }
+                <Box ml='xs'>
+                  <LabelWithCopy color='brandMain'
+                    text={did}
+                    textSize={currentAccount?.didAlias && currentAccount.didAlias !== '' ? 30 - currentAccount.didAlias.length : 30}
+                    textVariant='c2'
+                  />
+                </Box>
+              </Flex>
               <Flex>
+                <Flex mr='xs'>
+                  <Icon Asset={SvgPencilOutline}
+                    color='brandMain'
+                    height={16}
+                    onClick={editAlias}
+                    style={{ cursor: 'pointer' }}
+                    width={16} />
+                </Flex>
                 {
                   !accounts[0].cdd &&
-                    <Box>
-                      <Icon Asset={SvgAlertCircle}
-                        color='alert'
-                        height={14}
-                        width={14} />
-                    </Box>
+                  <Icon Asset={SvgAlertCircle}
+                    color='alert'
+                    height={14}
+                    width={14} />
                 }
                 {
                   accounts[0].cdd &&
-                    <Box>
-                      <Icon Asset={SvgCheckboxMarkedCircle}
-                        color='success'
-                        height={14}
-                        width={14} />
-                    </Box>
+                  <Icon Asset={SvgCheckboxMarkedCircle}
+                    color='success'
+                    height={14}
+                    width={14} />
                 }
               </Flex>
-            </Box>
-          </Flex>
+            </Flex>
+          }
         </Box>
       );
     } else {
