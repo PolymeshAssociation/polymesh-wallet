@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { AccountContext, PolymeshContext } from '../../components';
 import AddAccount from './AddAccount';
 import { AccountsHeader } from './AccountsHeader';
-import { Text, Box, Header, Flex, Icon, Menu, MenuItem, ContextMenuTrigger, StatusBadge } from '../../ui';
+import { Text, Box, Header, Flex, Icon, Menu, MenuItem, ContextMenuTrigger, StatusBadge, GrowingButton } from '../../ui';
 import { SvgViewDashboard,
   SvgDotsVertical,
   SvgPlus } from '@polymathnetwork/extension-ui/assets/images/icons';
@@ -171,11 +171,8 @@ export default function Accounts (): React.ReactElement {
               {renderNetworksSelector(network as NetworkName)}
               <Flex flexDirection='row'
                 justifyContent='center'>
-                <Icon Asset={SvgViewDashboard}
-                  color='gray.0'
-                  height={24}
-                  onClick={openDashboard}
-                  width={24} />
+                <GrowingButton icon={SvgViewDashboard}
+                  onClick={openDashboard} />
                 {renderTopMenuButton()}
               </Flex>
             </Flex>
@@ -212,8 +209,8 @@ export default function Accounts (): React.ReactElement {
               Object.keys(groupedAccounts).sort((a) => (a === 'unassigned' ? 1 : -1)).map((did: string, index) => {
                 return <AccountsContainer
                   accounts={hasKey(groupedAccounts, did) ? groupedAccounts[did] : []}
+                  did={did}
                   headerColor={getHeaderColor(index)}
-                  headerText={did}
                   key={index}
                   selectedAccount={selectedAccount || ''}
                 />;

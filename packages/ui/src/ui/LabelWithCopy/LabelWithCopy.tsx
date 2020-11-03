@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { SvgContentCopy } from '@polymathnetwork/extension-ui/assets/images/icons';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Box } from '../Box';
 import { Flex } from '../Flex';
 import { Icon } from '../Icon';
 import { Text } from '../Text';
@@ -49,21 +48,20 @@ export const LabelWithCopy: FC<Props> = ({ color, text, textSize, textVariant })
 
   return (
     <sc.StatusText copied={copied}>
-      <Flex
+      <Flex alignItems='center'
         onMouseOut={onMouseOut}
         onMouseOver={onMouseOver}
       >
-        <Box>
-          <Text color={color}
-            variant={textVariant}>
-            <TextEllipsis size={textSize}>
-              {text}
-            </TextEllipsis>
-          </Text>
-        </Box>
+        <Text color={color}
+          variant={textVariant}>
+          <TextEllipsis size={textSize}>
+            {text}
+          </TextEllipsis>
+        </Text>
         <CopyToClipboard onCopy={handleCopy}
           text={text}>
-          <Box ml='xs'
+          <Flex height={24}
+            ml='xs'
             onClick={handleClick}>
             <Icon Asset={SvgContentCopy}
               color={color}
@@ -72,7 +70,7 @@ export const LabelWithCopy: FC<Props> = ({ color, text, textSize, textVariant })
               style={{ cursor: 'pointer' }}
               width={16}
             />
-          </Box>
+          </Flex>
         </CopyToClipboard>
       </Flex>
     </sc.StatusText>
