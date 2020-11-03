@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
@@ -38,7 +38,9 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
   const { errors, formState, getValues, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
   const { polymeshAccounts } = useContext(PolymeshContext);
-  const oneAddress = polymeshAccounts && polymeshAccounts.length > 0 && polymeshAccounts[0].address;
+  // Get at least one address amongst user addresses. We will read that address
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const oneAddress = useMemo(() => polymeshAccounts && polymeshAccounts.length > 0 && polymeshAccounts[0].address, []);
 
   const onSubmit = async (data: { [x: string]: string; }) => {
     if (oneAddress) {
