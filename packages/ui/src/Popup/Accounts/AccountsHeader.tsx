@@ -6,7 +6,7 @@ import { formatters } from '../../util';
 import BigNumber from 'bignumber.js';
 import { useHistory } from 'react-router';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
-import { ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 
 export interface Props {
   account: IdentifiedAccount;
@@ -76,7 +76,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
               mb='xs'>
               <Text color='gray.0'
                 variant='b1m'>
-                {account.didAlias ? account.didAlias : '[No label]'}
+                {account.didAlias ? account.didAlias : '[Your Polymesh ID]'}
               </Text>
               <Flex ml='xs'>
                 <Icon Asset={SvgPencilOutline}
@@ -133,12 +133,19 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
     <Text color='brandLighter'
       variant='b2m'>Unassigned key</Text>
       }
-      <Flex flexDirection='row'
+      <Flex alignItems='center'
+        flexDirection='row'
         mt='s'>
-        <Text color='gray.0'
-          variant='b1m'>
-          {account?.name}
-        </Text>
+        <Box>
+          <Text color='gray.0'
+            variant='b1m'>
+            {account?.name}
+          </Text>
+        </Box>
+        <Box ml='s'>
+          {account?.did && <AccountType keyType={account?.keyType}
+            large={true} />}
+        </Box>
       </Flex>
       <Flex>
         <LabelWithCopy color='gray.0'

@@ -64,7 +64,7 @@ export const ExportAccount: FC = () => {
           </Flex>
           <Text color='gray.1'
             variant='b2m'>
-            You are exporting your account. Keep it safe and don&apos;t share it with anyone.
+            Please remember the password you enter below as you will need it to recover your account. You are exporting your account details as a JSON file. Keep this file safe and secured.
           </Text>
         </Box>
       </Box>
@@ -80,7 +80,7 @@ export const ExportAccount: FC = () => {
           <Box>
             <TextInput inputRef={register({ required: true, minLength: 8 })}
               name='currentPassword'
-              placeholder='Enter 8 characters or more'
+              placeholder='Enter your wallet password'
               type='password' />
             {errors.currentPassword &&
               <Box>
