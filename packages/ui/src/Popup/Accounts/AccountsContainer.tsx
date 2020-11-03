@@ -4,7 +4,7 @@ import { Box, Text, Flex, Icon, LabelWithCopy, TextInput } from '../../ui';
 import { SvgAlertCircle, SvgCheck, SvgCheckboxMarkedCircle, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountView } from './AccountView';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
-import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 
 export interface Props {
   did: string;
