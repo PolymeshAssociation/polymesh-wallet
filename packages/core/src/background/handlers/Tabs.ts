@@ -102,6 +102,20 @@ export default class Tabs {
       case 'pub(accounts.subscribe)':
         return this.accountsSubscribe(url, id, port);
 
+      case 'pub(metadata.list)': {
+        // Deny app's request to provide metadata because Polymesh wallet
+        // is fully aware of network metadata via ApiPromise objects.
+
+        return [];
+      }
+
+      case 'pub(metadata.provide)': {
+        // Deny app's request to provide metadata because Polymesh wallet
+        // is fully aware of network metadata via ApiPromise objects.
+
+        return false;
+      }
+
       default:
         throw new Error(`Unable to handle message of type ${type}`);
     }

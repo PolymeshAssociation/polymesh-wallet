@@ -2,8 +2,7 @@ import { IdentifiedAccount, NetworkMeta, NetworkName, StoreStatus } from '../typ
 import { SignerPayloadJSON, AnyJson } from '@polkadot/types/types';
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { RequestAccountList, RequestAccountSubscribe } from '@polkadot/extension-base/background/types';
-import { InjectedAccount } from '@polkadot/extension-inject/types';
-
+import { InjectedAccount, MetadataDef, InjectedMetadataKnown } from '@polkadot/extension-inject/types';
 export interface ResponsePolyCallDetails {
   networkFee: string,
   protocolFee: string,
@@ -54,10 +53,13 @@ export interface PolyRequestSignatures {
   'poly:pri(identity.rename)': [RequestPolyIdentityRename, boolean];
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
   'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
-  // @FIXME this is an inelegant way to take over these two requests from Polkadot, in order to get
+  // this is an inelegant way to take over these couple requests from Polkadot,
+  // in order to alter the behavior as needed for each request respectively.
   // to re-order accounts list based on account selection.
   'pub(accounts.list)': [RequestAccountList, InjectedAccount[]];
   'pub(accounts.subscribe)': [RequestAccountSubscribe, boolean, InjectedAccount[]];
+  'pub(metadata.list)': [null, InjectedMetadataKnown[]];
+  'pub(metadata.provide)': [MetadataDef, boolean];
 }
 
 declare type IsNull<T, K extends keyof T> = {
