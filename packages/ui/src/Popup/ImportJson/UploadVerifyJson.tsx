@@ -1,9 +1,9 @@
 import React, { FC, useContext, useRef, useState } from 'react';
-import { ActivityContext, PolymeshContext } from '../../components';
+import { ActivityContext } from '../../components';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { Box, Button, ButtonSmall, Flex, Header, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { jsonVerifyFile, validateAccount } from '../../messaging';
+import { jsonVerifyFile } from '../../messaging';
 import { isHex, u8aToString, hexToU8a } from '@polkadot/util';
 import { FieldError, FormProvider, useForm } from 'react-hook-form';
 import { useErrorHandler } from 'react-error-boundary';
@@ -20,7 +20,6 @@ type Props = {
 }
 
 export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
-  const { selectedAccount } = useContext(PolymeshContext);
   const [filename, setFilename] = useState('');
   const fileRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [accountName, setAccountName] = useState('');
@@ -34,25 +33,12 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
   const isBusy = useContext(ActivityContext);
   const handleError = useErrorHandler();
 
-  const onSubmit = async (data: { [x: string]: string; }) => {
+  const onSubmit = (data: { [x: string]: string; }) => {
     if (accountJson && accountJson?.json && accountJson.address) {
       try {
-        // Check the wallet password
-        if (selectedAccount && selectedAccount !== '') {
-          const isValidPassword = await validateAccount(selectedAccount, data.password);
-
-          if (!isValidPassword) {
-            setError('password', { type: 'manual' });
-
-            return;
-          }
-        }
-
         const json = accountJson.json;
         const password = data.jsonPassword;
         const jsonPassValid = verifyJsonPassword(json, password);
-
-        console.log('json password!', jsonPassValid);
 
         if (jsonPassValid) {
           onContinue(accountJson, password, accountName);

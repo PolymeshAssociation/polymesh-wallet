@@ -44,8 +44,8 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
         mx='s'>
         <Text color='gray.1'
           variant='b2'>
-          An application, self-identifying as {origin}
-          is requesting access from{' '}
+          An application, self-identifying as <strong>{origin}</strong>
+          {' '}is requesting access from{' '}
           <a
             href={url}
             rel='noopener noreferrer'
