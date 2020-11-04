@@ -1,6 +1,6 @@
 import accountsObservable from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
-import { messagePrefix } from './constants';
+import { messagePrefix, messages } from './constants';
 import { setError } from './store/setters';
 import { ErrorCodes, KeyringAccountData } from './types';
 
@@ -12,9 +12,9 @@ export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
 }
 
 export function isPolyMessage (message: string): boolean {
-  return message.indexOf(messagePrefix) === 0 ||
-  message === 'pub(accounts.list)' ||
-  message === 'pub(accounts.subscribe)';
+  const isPolyMessage = message.indexOf(messagePrefix) === 0 || messages.indexOf(message) > -1;
+
+  return isPolyMessage;
 }
 
 export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
