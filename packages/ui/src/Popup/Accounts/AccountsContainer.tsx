@@ -1,7 +1,7 @@
 import React, { FC, useContext, useState } from 'react';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { Box, Text, Flex, Icon, LabelWithCopy, TextInput } from '../../ui';
-import { SvgAlertCircle, SvgCheck, SvgCheckboxMarkedCircle, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountView } from './AccountView';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
 import { ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';

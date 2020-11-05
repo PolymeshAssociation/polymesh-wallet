@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { CDD } from '@polymathnetwork/extension-core/types';
 import { SvgCheckboxMarkedCircle, SvgAlertCircle, SvgProgressClock } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Text, Box, TextEllipsis, TextInput, Flex, Icon, Heading, LabelWithCopy } from '@polymathnetwork/extension-ui/ui';
+import { Text, Box, Flex, Icon } from '@polymathnetwork/extension-ui/ui';
 
 type Props = {
   cdd?: CDD,

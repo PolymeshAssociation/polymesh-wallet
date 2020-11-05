@@ -1,7 +1,7 @@
 import React, { FC, useContext, useState } from 'react';
 import { Text, Box, TextEllipsis, TextInput, Flex, Icon, Heading, LabelWithCopy } from '../../ui';
-import { CDD, IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
-import { SvgCheckboxMarkedCircle, SvgAlertCircle, SvgPencilOutline, SvgCheck, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
+import { SvgPencilOutline, SvgCheck, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { formatters } from '../../util';
 import BigNumber from 'bignumber.js';
 import { useHistory } from 'react-router';
