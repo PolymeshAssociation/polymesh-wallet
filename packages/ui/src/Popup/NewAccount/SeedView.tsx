@@ -28,7 +28,7 @@ export const SeedView: FC<Props> = ({ onContinue, seedPhrase }) => {
         mb='s'>
         <Checkbox
           checked={isCopied}
-          onClick={() => setCopied(true)}
+          onClick={() => setCopied(!isCopied)}
         />
         <Box ml='s'>
           <Text color='gray.3'
