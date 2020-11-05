@@ -36,7 +36,7 @@ export type IdentifiedAccount = {
 export type UnsubCallback = () => void;
 
 export type ReversedDidList =
-  Record<string, {did: string, keyType: DidType, cdd: CDD, didAlias: string}>;
+  Record<string, {did: string, keyType: DidType, cdd?: CDD, didAlias: string}>;
 
 export enum NetworkName {
   pmf = 'pmf',

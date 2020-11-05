@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { Box, Flex, Hr, Icon, LabelWithCopy, StatusBadge, Text, TextEllipsis } from '@polymathnetwork/extension-ui/ui';
-import { SvgAlertCircle, SvgCheckboxMarkedCircle, SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { useHistory, useParams } from 'react-router';
 import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import BigNumber from 'bignumber.js';
