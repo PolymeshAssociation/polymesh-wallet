@@ -1,6 +1,6 @@
 import { SignerPayloadJSON } from '@polkadot/types/types';
 
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { formatBalance } from '@polkadot/util';
 import BN from 'bn.js';
 import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
@@ -11,13 +11,25 @@ interface Props {
   request: SignerPayloadJSON;
 }
 
-function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
+const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
   const { args, meta, method, networkFee, protocolFee, section } = call;
 
-  const totalFees = (new BN(networkFee)).add(new BN(protocolFee));
+  const fees: [string, string][] = [];
+
+  if (networkFee && networkFee.length) {
+    fees.push(['Network fee', formatBalance(new BN(networkFee), { withUnit: false, decimals: 6 })]);
+  }
+
+  if (protocolFee && protocolFee !== '0') {
+    fees.push(['Protocol fee', formatBalance(new BN(protocolFee), { withUnit: false, decimals: 6 })]);
+    const totalFees = (new BN(networkFee)).add(new BN(protocolFee));
+
+    fees.push(['Total fees', formatBalance(new BN(totalFees), { withUnit: false, decimals: 6 })]);
+  }
 
   return (
     <>
+
       <Box mt='m'>
         <Box>
           <Text color='gray.2'
@@ -47,58 +59,44 @@ function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
         <Box>
           <Text color='gray.1'
             variant='code'>
-            {JSON.stringify(args, null, 2)}
+            {JSON.stringify(args, null, 2).slice(1, -1).trim()}
           </Text>
         </Box>
       </Box>
 
-      <Box>
-        <Box>
-          <Text color='gray.2'
-            variant='b2'>
-            Network fee
-          </Text>
-        </Box>
-        <Box>
-          <Text color='gray.1'
-            variant='b1'>
-            {formatBalance(new BN(networkFee), { withUnit: false, decimals: 6 })} POLYX
-          </Text>
-        </Box>
-      </Box>
+      <Box
+        borderTop='2px solid'
+        borderTopColor='gray.4'
+      >
+        {fees.map((tuple, index) =>
+          <Flex
+            justifyContent='space-between'
+            {...(index === fees.length - 1 ? {} : { bg: 'gray.2' })}
+            bg='gray.4'
 
-      <Box>
-        <Box>
-          <Text color='gray.2'
-            variant='b2'>
-            Protocol fee
-          </Text>
-        </Box>
-        <Box>
-          <Text color='gray.1'
-            variant='b1'>
-            {formatBalance(new BN(protocolFee), { withUnit: false, decimals: 6 })} POLYX
-          </Text>
-        </Box>
-      </Box>
+            key={index}
+          >
+            <Box >
+              <Text color='highlightText'
+                variant='b1m'>
+                {tuple[0]}
+              </Text>
+            </Box>
 
-      <Box>
-        <Box>
-          <Text color='gray.2'
-            variant='b2'>
-            Total fees
-          </Text>
-        </Box>
-        <Box>
-          <Text color='gray.1'
-            variant='b1'>
-            {formatBalance(totalFees, { withUnit: false, decimals: 6 })} POLYX
-          </Text>
-        </Box>
+            <Box>
+              <Text color='highlightText'
+                variant='b1m'>
+                {tuple[1]}
+              </Text>
+              <Text color='gray.2'
+                ml={1}>POLYX</Text>
+            </Box>
+          </Flex>
+        )}
       </Box>
     </>
   );
-}
+};
 
 function Extrinsic ({ request }: Props): React.ReactElement<Props> {
   const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
@@ -126,7 +124,7 @@ function Extrinsic ({ request }: Props): React.ReactElement<Props> {
           <Loading />
         </Flex>
       }
-      {callDetails && renderMethod(callDetails)}
+      {callDetails && <Method call={callDetails} />}
     </>
   );
 }

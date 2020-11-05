@@ -2,7 +2,7 @@ import { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
 import { ThemeProps } from '../../types';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
-import { Button, Box, Flex, Header, Icon, Text } from '../../ui';
+import { Button, Box, Flex, Header, Icon, Text, Heading } from '../../ui';
 import { ActionContext, PolymeshContext } from '../../components';
 import { approveAuthRequest, rejectAuthRequest } from '../../messaging';
 import { AccountsHeader } from '../Accounts/AccountsHeader';
@@ -42,7 +42,9 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
       </Header>
       <Box mt='m'
         mx='s'>
-        <Text color='gray.1'
+        <Heading mb={1}
+          variant='h5'>{`${origin} is requesting access`}</Heading>
+        <Text color='gray.2'
           variant='b2'>
           An application, self-identifying as <strong>{origin}</strong>
           {' '}is requesting access from{' '}
@@ -89,6 +91,14 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
         mx='xs'>
         <Box>
           <Flex>
+            <Box mx='xs'>
+              <Button
+                fluid
+                onClick={_onReject}
+                variant='secondary'>
+                Reject
+              </Button>
+            </Box>
             {isFirst && <Box mx='xs'>
               <Button
                 fluid
@@ -97,13 +107,6 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
                 Authorize
               </Button>
             </Box> }
-            <Box mx='xs'>
-              <Button
-                fluid
-                onClick={_onReject}>
-                Reject
-              </Button>
-            </Box>
           </Flex>
         </Box>
       </Flex>

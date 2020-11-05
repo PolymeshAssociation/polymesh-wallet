@@ -6,7 +6,7 @@ import React, { useCallback, useContext, useState, useEffect } from 'react';
 import { TypeRegistry } from '@polkadot/types';
 
 import { ActionContext, ActivityContext } from '../../components';
-import { Button, Box, Flex } from '../../ui';
+import { Button, Box, Flex, Heading } from '../../ui';
 
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
 import Bytes from './Bytes';
@@ -106,12 +106,10 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       const raw = request.payload as SignerPayloadRaw;
 
       return (
-        <>
-          <Bytes
-            bytes={raw.data}
-            url={url}
-          />
-        </>
+        <Bytes
+          bytes={raw.data}
+          url={url}
+        />
       );
     }
 
@@ -131,31 +129,40 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       />
     )
     : (
-      <Flex flex={2}
-        flexDirection='row'
+      <Flex flex={1}
+        flexDirection='column'
+        justifyContent='flex-end'
         mb='s'
+        mt='xxl'
         mx='xs'>
-        <Box mx='xs'>
-          <Button
-            fluid
-            onClick={_onCancel}
-            variant='secondary'>
-            Reject
-          </Button>
+        <Box>
+          <Flex>
+            <Box mx='xs'>
+              <Button
+                fluid
+                onClick={_onCancel}
+                variant='secondary'>
+                Reject
+              </Button>
+            </Box>
+            {isFirst && <Box mx='xs'>
+              <Button
+                busy={isBusy}
+                fluid
+                onClick={_onSignQuick}
+                type='submit'>
+                Authorize
+              </Button>
+            </Box> }
+          </Flex>
         </Box>
-        {isFirst && <Box mx='xs'>
-          <Button busy={isBusy}
-            disabled={isLocked === null}
-            fluid
-            onClick={_onSignQuick}>
-            Sign
-          </Button>
-        </Box> }
       </Flex>
     );
 
   return (
     <div style={{ display: isFirst ? 'block' : 'none' }}>
+      <Heading mt={1}
+        variant='h5'>Signing Request</Heading>
       {content()}
       {signArea}
     </div>
