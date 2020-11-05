@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Box } from '../Box';
+import { Flex } from '../Flex';
 import { Icon } from '../Icon';
 import * as sc from './styles';
 
@@ -11,11 +11,11 @@ export interface GrowingButtonProps {
 export const GrowingButton: FC<GrowingButtonProps> = ({ icon, onClick }) => {
   return (
     <sc.Wrapper onClick={onClick}>
-      <Box mr='xs'>
+      <Flex mr='xs'>
         <Icon Asset={icon}
           height={24}
           width={24} />
-      </Box>
+      </Flex>
     </sc.Wrapper>
   );
 };

@@ -31,18 +31,18 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
 
     return (
       <Flex flexDirection='row'>
-        <Box mr='1'>
+        <Flex mr='1'>
           <Icon Asset={iconAsset}
             color={color}
             height={14}
             width={14} />
-        </Box>
-        <Box>
+        </Flex>
+        <Flex>
           <Text color={color}
             variant='b3m'>
             {statusText}
           </Text>
-        </Box>
+        </Flex>
       </Flex>
     );
   };
@@ -116,12 +116,12 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
               <Flex flexDirection='row'
                 justifyContent='space-between'
                 mx='1'>
-                <Box>
+                <Flex>
                   <Text color='gray.2'
                     variant='c2'>
                     <TextEllipsis size={29}>{account?.did}</TextEllipsis>
                   </Text>
-                </Box>
+                </Flex>
                 {renderStatus(account.cdd !== undefined)}
               </Flex>
             )}
@@ -148,7 +148,8 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
         </Box>
       </Flex>
       <Flex>
-        <LabelWithCopy color='gray.0'
+        <LabelWithCopy color='brandLightest'
+          hoverColor='brandLighter'
           text={account?.address || ''}
           textSize={30}
           textVariant='b3'
