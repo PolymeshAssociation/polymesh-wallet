@@ -175,8 +175,7 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
             width={255}>
             <Button disabled={confirmationStatus !== status.valid}
               fluid
-              onClick={onContinue}
-              variant='secondary'>
+              onClick={onContinue}>
               Continue
             </Button>
           </Box>

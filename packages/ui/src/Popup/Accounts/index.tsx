@@ -127,6 +127,7 @@ export default function Accounts (): React.ReactElement {
           <Icon Asset={SvgDotsVertical}
             color='gray.0'
             height={24}
+            style={{ cursor: 'pointer' }}
             width={24} />
         </ContextMenuTrigger>
       </>
@@ -192,12 +193,12 @@ export default function Accounts (): React.ReactElement {
                 mouseButton={0}>
                 <Flex justifyContent='center'
                   style={{ cursor: 'pointer' }}>
-                  <Box mx='s'>
+                  <Flex mx='s'>
                     <Icon Asset={SvgPlus}
                       color='brandMain'
                       height={14}
                       width={14} />
-                  </Box>
+                  </Flex>
                   <Text color='brandMain'
                     variant='b2'>
                     Add a key

@@ -112,9 +112,11 @@ export const AccountDetails: FC = () => {
             <Text color='gray.1'
               variant='b2m'>
               {selectedAccount?.cdd?.issuer &&
-                <TextEllipsis size={18}>
-                  {selectedAccount?.cdd?.issuer}
-                </TextEllipsis>
+                <LabelWithCopy color='gray.1'
+                  text={selectedAccount?.cdd?.issuer}
+                  textSize={18}
+                  textVariant='b2m'
+                />
               }
               {!selectedAccount?.cdd?.issuer &&
                 'N/A'

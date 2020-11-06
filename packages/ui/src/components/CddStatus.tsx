@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { CDD } from '@polymathnetwork/extension-core/types';
 import { SvgCheckboxMarkedCircle, SvgAlertCircle, SvgProgressClock } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Text, Box, Flex, Icon } from '@polymathnetwork/extension-ui/ui';
+import { Text, Flex, Icon } from '@polymathnetwork/extension-ui/ui';
 
 type Props = {
   cdd?: CDD,
@@ -40,18 +40,18 @@ export const CddStatus: FC<Props> = ({ cdd, withText = false }) => {
 
   return (
     <Flex flexDirection='row'>
-      <Box mr='1'>
+      <Flex mr='1'>
         <Icon Asset={statusIcon[status]}
           color={statusColor[status]}
           height={14}
           width={14} />
-      </Box>
-      { withText && <Box>
+      </Flex>
+      { withText && <Flex>
         <Text color={statusColor[status]}
           variant='b3m'>
           {statusText[status]}
         </Text>
-      </Box> }
+      </Flex> }
     </Flex>
   );
 };
