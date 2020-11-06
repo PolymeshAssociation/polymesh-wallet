@@ -198,7 +198,7 @@ export const texts = {
     fontFamily: fontFamilies.baseText,
     color: colors.highlightText,
     fontSize: fontSizes[0],
-    fontWeight: fontWeights.normal,
+    fontWeight: fontWeights.semiBold,
     lineHeight: lineHeights.extraTight
   },
   b3m: {
@@ -253,21 +253,21 @@ export const headings = {
     color: colors.highlightText,
     fontSize: fontSizes[10],
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.tighter,
+    lineHeight: lineHeights.xlarge,
     letterSpacing: -1
   },
   h2: {
     color: colors.highlightText,
     fontSize: fontSizes[9],
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.tight,
+    lineHeight: lineHeights.large,
     letterSpacing: -0.5
   },
   h3: {
     color: colors.highlightText,
     fontSize: fontSizes[7],
     fontWeight: fontWeights.semiBold,
-    lineHeight: lineHeights.tight,
+    lineHeight: lineHeights.medium,
     letterSpacing: -0.25
   },
   h4: {
@@ -281,7 +281,7 @@ export const headings = {
     fontSize: fontSizes[4],
     fontWeight: fontWeights.semiBold,
     letterSpacing: 0.15,
-    lineHeight: lineHeights.lessTight
+    lineHeight: lineHeights.normal
   },
   h6: {
     color: colors.highlightText,

@@ -18,7 +18,7 @@ function AddAccount (): React.ReactElement {
   return (
     <>
       <Header>
-        <Box pb='s'
+        <Box height={308}
           pt='m'>
           <Box
             backgroundColor='brandLightest'
@@ -26,9 +26,9 @@ function AddAccount (): React.ReactElement {
             borderColor='white'
             borderRadius='50%'
             borderWidth={4}
-            height={80}
-            padding={23}
-            width={80}
+            height={72}
+            padding={18}
+            width={72}
           >
             <Icon Asset={SvgPolyNew}
               color='brandMain'
@@ -53,8 +53,7 @@ function AddAccount (): React.ReactElement {
       </Header>
       <Flex flex={1}
         flexDirection='column'
-        justifyContent='space-between'
-        mb='m'>
+        justifyContent='space-between'>
         <Box mt='m'>
           <Flex alignItems='flex-start'
             justifyContent='flex-start'
@@ -77,7 +76,8 @@ function AddAccount (): React.ReactElement {
           </Flex>
           <Flex alignItems='flex-start'
             justifyContent='flex-start'
-            mb='s'>
+            mb='s'
+            mt='xs'>
             <Checkbox
               checked={termsAccepted}
               onClick={() => setTermsAccepted(!termsAccepted)}
@@ -95,8 +95,8 @@ function AddAccount (): React.ReactElement {
             </Flex>
           </Flex>
         </Box>
-        <Box>
-          <Box mt='m'>
+        <Box mb='s'>
+          <Box px='xs'>
             <Button disabled={!(policyAccepted && termsAccepted)}
               fluid
               onClick={onCreateAccount}>
