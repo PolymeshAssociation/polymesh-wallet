@@ -18,6 +18,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
   const history = useHistory();
   const [editing, setEditing] = useState(false);
   const [newAlias, setNewAlias] = useState('');
+  const [hover, setHover] = useState(false);
   const { network } = useContext(PolymeshContext);
   const onAction = useContext(ActionContext);
 
@@ -26,6 +27,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
   };
 
   const startEdit = () => {
+    setHover(false);
     setNewAlias(account.didAlias);
     setEditing(true);
   };
@@ -33,6 +35,10 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
   const stopEdit = () => {
     setEditing(false);
   };
+
+  const mouseEnter = () => setHover(true);
+
+  const mouseLeave = () => setHover(false);
 
   const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewAlias(e.target.value);
@@ -51,19 +57,23 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
         <>
           {!editing &&
             <Flex alignItems='center'
-              mb='xs'>
+              mb='xs'
+              onMouseEnter={mouseEnter}
+              onMouseLeave={mouseLeave}>
               <Text color='gray.0'
                 variant='b1m'>
                 {account.didAlias ? account.didAlias : '[Your Polymesh ID]'}
               </Text>
-              <Flex ml='xs'>
-                <Icon Asset={SvgPencilOutline}
-                  color='gray.0'
-                  height={16}
-                  onClick={startEdit}
-                  style={{ cursor: 'pointer' }}
-                  width={16} />
-              </Flex>
+              {hover &&
+                <Flex ml='xs'>
+                  <Icon Asset={SvgPencilOutline}
+                    color='gray.0'
+                    height={16}
+                    onClick={startEdit}
+                    style={{ cursor: 'pointer' }}
+                    width={16} />
+                </Flex>
+              }
             </Flex>
           }
           {editing &&
