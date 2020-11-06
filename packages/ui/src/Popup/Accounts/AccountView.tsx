@@ -252,7 +252,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     <>
       {renderMenuItems(address)}
       <Box
-        bg={isSelected ? 'gray.5' : 'gray.0'}
+        bg={hover ? 'gray.4' : 'gray.0'}
         mt='s'
         onClick={selectAccount}
         onMouseEnter={mouseEnter}
