@@ -96,14 +96,15 @@ function AddAccount (): React.ReactElement {
           </Flex>
         </Box>
         <Box mb='s'>
-          <Box px='xs'>
+          <Box mx='xs'>
             <Button disabled={!(policyAccepted && termsAccepted)}
               fluid
               onClick={onCreateAccount}>
               Create new account
             </Button>
           </Box>
-          <Box mt='s'>
+          <Box mt='s'
+            mx='xs'>
             <Button disabled={!(policyAccepted && termsAccepted)}
               fluid
               onClick={onImportSeed}
@@ -111,7 +112,8 @@ function AddAccount (): React.ReactElement {
               Restore account with recovery phrase
             </Button>
           </Box>
-          <Box mt='s'>
+          <Box mt='s'
+            mx='xs'>
             <Button disabled={!(policyAccepted && termsAccepted)}
               fluid
               onClick={onImportJson}
