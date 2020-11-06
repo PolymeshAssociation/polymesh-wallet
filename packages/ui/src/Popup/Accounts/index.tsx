@@ -158,10 +158,16 @@ export default function Accounts (): React.ReactElement {
         <Menu id='top_menu'>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'changePassword' }}
-            onClick={handleTopMenuSelection}>Change password</MenuItem>
+            onClick={handleTopMenuSelection}>
+            <Text color='gray.2'
+              variant='b1'>Change password</Text>
+          </MenuItem>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'newWindow' }}
-            onClick={handleTopMenuSelection}>Open extension in a new window</MenuItem>
+            onClick={handleTopMenuSelection}>
+            <Text color='gray.2'
+              variant='b1'>Open extension in a new window</Text>
+          </MenuItem>
         </Menu>
       </>
     );
