@@ -66,6 +66,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           <Icon Asset={SvgDotsVertical}
             color='gray.1'
             height={16}
+            style={{ cursor: 'pointer' }}
             width={16} />
         </ContextMenuTrigger>
       </>
@@ -162,6 +163,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
                     color={nameHover ? 'gray.2' : 'gray.5'}
                     height={16}
                     onClick={editName}
+                    style={{ cursor: 'pointer' }}
                     width={16} />
                 </Flex>
               </Flex>
@@ -243,6 +245,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
                     color={nameHover ? 'gray.2' : 'gray.5'}
                     height={16}
                     onClick={editName}
+                    style={{ cursor: 'pointer' }}
                     width={16} />
                 </Flex>
               </Flex>

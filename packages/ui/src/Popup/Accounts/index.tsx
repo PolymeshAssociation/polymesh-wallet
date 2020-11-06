@@ -127,6 +127,7 @@ export default function Accounts (): React.ReactElement {
           <Icon Asset={SvgDotsVertical}
             color='gray.0'
             height={24}
+            style={{ cursor: 'pointer' }}
             width={24} />
         </ContextMenuTrigger>
       </>
