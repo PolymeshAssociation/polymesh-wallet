@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useState } from 'react';
 
 import { ActionContext } from '../../components';
-import { Flex, Header, Icon, Box, Heading, Text, Button, Checkbox } from '../../ui';
+import { Flex, Header, Icon, Box, Heading, Link, Text, Button, Checkbox } from '../../ui';
 import { SvgPolyNew } from '@polymathnetwork/extension-ui/assets/images/icons';
 
 function AddAccount (): React.ReactElement {
@@ -66,7 +66,12 @@ function AddAccount (): React.ReactElement {
             <Flex ml='s'>
               <Text color='gray.3'
                 variant='b3'>
-                I have read and accept the Polymath Privacy Policy.
+                I have read and accept the Polymath{' '}
+                <Link href='https://polymath.network/privacy-policy'
+                  id='sign-up-privacy-link'>
+                  Privacy Policy
+                </Link>
+                  .
               </Text>
             </Flex>
           </Flex>
@@ -80,7 +85,12 @@ function AddAccount (): React.ReactElement {
             <Flex ml='s'>
               <Text color='gray.3'
                 variant='b3'>
-                I have read and agree to the Polymath Terms of Service.
+                I have read and accept the Polymath{' '}
+                <Link href='https://polymath.network/terms-of-site-use'
+                  id='sign-up-privacy-link'>
+                  Terms of Service
+                </Link>
+                .
               </Text>
             </Flex>
           </Flex>
