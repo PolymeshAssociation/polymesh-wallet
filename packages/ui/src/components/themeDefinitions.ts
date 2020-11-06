@@ -198,7 +198,7 @@ export const texts = {
     fontFamily: fontFamilies.baseText,
     color: colors.highlightText,
     fontSize: fontSizes[0],
-    fontWeight: fontWeights.semiBold,
+    fontWeight: fontWeights.normal,
     lineHeight: lineHeights.extraTight
   },
   b3m: {
