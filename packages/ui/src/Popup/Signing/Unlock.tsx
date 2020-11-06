@@ -48,7 +48,7 @@ function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPas
         <>
           <form id='passwordForm'
             onSubmit={handleSubmit(onSubmit)}>
-            <Box mt='l'>
+            <Box>
               <Box>
                 <Text color='gray.1'
                   variant='b2m'>
@@ -87,27 +87,26 @@ function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPas
           </Box>
         </>
       ) }
-      <Flex flex={2}
+      <Flex
         flexDirection='row'
-        mb='s'
-        mx='xs'>
-
-        <Box mx='xs'>
+        mb='s'>
+        <Flex flex={1}>
           <Button
             fluid
             onClick={onCancel}
             variant='secondary'>
             Reject
           </Button>
-        </Box>
-        {isFirst && <Box mx='xs'>
+        </Flex>
+        {isFirst && <Flex flex={1}
+          ml='xs'>
           <Button busy={isBusy}
             fluid
             form='passwordForm'
             type='submit'>
             Sign
           </Button>
-        </Box> }
+        </Flex> }
       </Flex>
     </>
   );

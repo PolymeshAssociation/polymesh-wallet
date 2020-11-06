@@ -1,12 +1,12 @@
+import React, { useCallback, useContext, useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { ExtrinsicPayload } from '@polkadot/types/interfaces';
 import { AccountJson, RequestSign } from '@polkadot/extension-base/background/types';
 import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
-
-import React, { useCallback, useContext, useState, useEffect } from 'react';
 import { TypeRegistry } from '@polkadot/types';
 
 import { ActionContext, ActivityContext } from '../../components';
-import { Button, Box, Flex, Heading } from '../../ui';
+import { Button, Box, Flex, ExpandableDetails } from '../../ui';
 
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
 import Bytes from './Bytes';
@@ -129,15 +129,14 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       />
     )
     : (
-      <Flex flex={1}
+      <Flex
         flexDirection='column'
         justifyContent='flex-end'
         mb='s'
-        mt='xxl'
         mx='xs'>
         <Box>
           <Flex>
-            <Box mx='xs'>
+            <Box>
               <Button
                 fluid
                 onClick={_onCancel}
@@ -145,7 +144,7 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
                 Reject
               </Button>
             </Box>
-            {isFirst && <Box mx='xs'>
+            {isFirst && <Box ml='xs'>
               <Button
                 busy={isBusy}
                 fluid
@@ -160,11 +159,29 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
     );
 
   return (
-    <div style={{ display: isFirst ? 'block' : 'none' }}>
-      <Heading mt={1}
-        variant='h5'>Signing Request</Heading>
-      {content()}
+    <>
+      <div style={{ display: isFirst ? 'block' : 'none', overflowY: 'scroll', height: '100%' }}>
+        <Box mt='xs'>
+          <ExpandableDetails title='Signing Request'>
+            <ContentArea>
+              {content()}
+            </ContentArea>
+          </ExpandableDetails>
+        </Box>
+      </div>
       {signArea}
-    </div>
+    </>
   );
 }
+
+const ContentArea = styled.div`
+  overflow-y: scroll;
+  margin-top: -25px;
+  padding-top: 25px;
+  padding-right: 0px;
+  padding-left: 0px;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
