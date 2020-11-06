@@ -1,10 +1,11 @@
 import React, { FC, useContext } from 'react';
 import { Box, Flex, Hr, Icon, LabelWithCopy, StatusBadge, Text, TextEllipsis } from '@polymathnetwork/extension-ui/ui';
-import { SvgAlertCircle, SvgCheckboxMarkedCircle, SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { useHistory, useParams } from 'react-router';
 import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import BigNumber from 'bignumber.js';
 import { formatters } from '../../util';
+import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 
 interface AddressState {
   address: string;
@@ -20,29 +21,6 @@ export const AccountDetails: FC = () => {
   };
 
   const selectedAccount = polymeshAccounts?.find((account) => (account.address === address));
-
-  const renderCDDStatus = () => {
-    const color = selectedAccount?.cdd ? 'success' : 'alert';
-    const asset = selectedAccount?.cdd ? SvgCheckboxMarkedCircle : SvgAlertCircle;
-    const status = selectedAccount?.cdd ? 'Verified' : 'Not verified';
-
-    return (
-      <Flex>
-        <Box>
-          <Icon Asset={asset}
-            color={color}
-            height={14}
-            width={14} />
-        </Box>
-        <Box ml='xs'>
-          <Text color={color}
-            variant='b3m'>
-            {status}
-          </Text>
-        </Box>
-      </Flex>
-    );
-  };
 
   const formatExpiry = (expiryDate: Date) => {
     return `${expiryDate.getDate()} ${expiryDate.toLocaleString('default', { month: 'short' })} ${expiryDate.getFullYear()}`;
@@ -101,7 +79,10 @@ export const AccountDetails: FC = () => {
             </Text>
           </Box>
           <Box>
-            {renderCDDStatus()}
+            {selectedAccount?.did
+              ? <CddStatus cdd={selectedAccount?.cdd}
+                withText /> : 'N/A'
+            }
           </Box>
         </Flex>
         <Flex justifyContent='space-between'

@@ -1,10 +1,11 @@
 import React, { FC, useContext, useState } from 'react';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { Box, Text, Flex, Icon, LabelWithCopy, TextInput } from '../../ui';
-import { SvgAlertCircle, SvgCheck, SvgCheckboxMarkedCircle, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountView } from './AccountView';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
 import { ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 
 export interface Props {
   did: string;
@@ -92,20 +93,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
                     style={{ cursor: 'pointer' }}
                     width={16} />
                 </Flex>
-                {
-                  !accounts[0].cdd &&
-                  <Icon Asset={SvgAlertCircle}
-                    color='alert'
-                    height={14}
-                    width={14} />
-                }
-                {
-                  accounts[0].cdd &&
-                  <Icon Asset={SvgCheckboxMarkedCircle}
-                    color='success'
-                    height={14}
-                    width={14} />
-                }
+                <CddStatus cdd={accounts[0].cdd} />
               </Flex>
             </Flex>
           }

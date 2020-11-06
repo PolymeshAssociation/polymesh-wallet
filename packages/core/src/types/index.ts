@@ -49,7 +49,7 @@ export enum LinkName {
   explorer = 'explorer'
 }
 
-export type CDD = {
+export type CDD = null | {
   issuer: string,
   expiry?: number
 }
