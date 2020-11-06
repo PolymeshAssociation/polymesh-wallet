@@ -52,7 +52,6 @@ export const SeedView: FC<Props> = ({ onContinue, seedPhrase }) => {
             Continue
           </Button>
         </Box>
-        
       </Flex>
     </>
   );
