@@ -1,10 +1,11 @@
 import React, { FC, useContext, useState } from 'react';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { Box, Text, Flex, Icon, LabelWithCopy, TextInput } from '../../ui';
-import { SvgAlertCircle, SvgCheck, SvgCheckboxMarkedCircle, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountView } from './AccountView';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
 import { ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 
 export interface Props {
   did: string;
@@ -16,12 +17,16 @@ export interface Props {
 export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selectedAccount }) => {
   const currentAccount = accounts.find((acc) => acc.did === did);
 
+  const [hover, setHover] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [newAlias, setNewAlias] = useState(currentAccount?.didAlias ? currentAccount.didAlias : '');
   const onAction = useContext(ActionContext);
   const { network } = useContext(PolymeshContext);
 
-  const editAlias = () => setIsEditing(true);
+  const editAlias = () => {
+    setHover(false);
+    setIsEditing(true);
+  };
 
   const stopEditAlias = () => setIsEditing(false);
 
@@ -36,6 +41,10 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
     stopEditAlias();
     onAction();
   };
+
+  const mouseEnter = () => setHover(true);
+
+  const mouseLeave = () => setHover(false);
 
   const renderContainerHeader = (isAssigned: boolean) => {
     if (isAssigned) {
@@ -69,7 +78,9 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
           { !isEditing &&
             <Flex alignItems='center'
               flexDirection='row'
-              justifyContent='space-between'>
+              justifyContent='space-between'
+              onMouseEnter={mouseEnter}
+              onMouseLeave={mouseLeave}>
               <Flex alignItems='center'>
                 { currentAccount?.didAlias && currentAccount.didAlias !== '' &&
                   <Text color='brandMain'
@@ -86,26 +97,13 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
               <Flex>
                 <Flex mr='xs'>
                   <Icon Asset={SvgPencilOutline}
-                    color='brandMain'
+                    color={hover ? 'brandMain' : headerColor}
                     height={16}
                     onClick={editAlias}
                     style={{ cursor: 'pointer' }}
                     width={16} />
                 </Flex>
-                {
-                  !accounts[0].cdd &&
-                  <Icon Asset={SvgAlertCircle}
-                    color='alert'
-                    height={14}
-                    width={14} />
-                }
-                {
-                  accounts[0].cdd &&
-                  <Icon Asset={SvgCheckboxMarkedCircle}
-                    color='success'
-                    height={14}
-                    width={14} />
-                }
+                <CddStatus cdd={accounts[0].cdd} />
               </Flex>
             </Flex>
           }

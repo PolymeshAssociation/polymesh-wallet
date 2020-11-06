@@ -23,6 +23,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState(name);
   const [hover, setHover] = useState(false);
+  const [nameHover, setNameHover] = useState(false);
 
   const { network } = useContext(PolymeshContext);
 
@@ -65,6 +66,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           <Icon Asset={SvgDotsVertical}
             color='gray.1'
             height={16}
+            style={{ cursor: 'pointer' }}
             width={16} />
         </ContextMenuTrigger>
       </>
@@ -77,6 +79,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   const editName = (e: React.MouseEvent<HTMLElement>) => {
+    setNameHover(false);
     setEditing(true);
     if (e.stopPropagation) e.stopPropagation();
   };
@@ -98,6 +101,14 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
 
   const mouseLeave = () => {
     setHover(false);
+  };
+
+  const nameMouseEnter = () => {
+    setNameHover(true);
+  };
+
+  const nameMouseLeave = () => {
+    setNameHover(false);
   };
 
   const selectAccount = async () => {
@@ -140,18 +151,21 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             )}
             {!isEditing && (
               <Flex alignItems='center'
-                flexDirection='row'>
+                flexDirection='row'
+                onMouseEnter={nameMouseEnter}
+                onMouseLeave={nameMouseLeave}>
                 <Text color='gray.1'
                   variant='b2m'>
                   {name}
                 </Text>
-                <Box ml='xs'>
+                <Flex ml='xs'>
                   <Icon Asset={SvgPencilOutline}
-                    color='gray.2'
+                    color={nameHover ? 'gray.2' : 'gray.5'}
                     height={16}
                     onClick={editName}
+                    style={{ cursor: 'pointer' }}
                     width={16} />
-                </Box>
+                </Flex>
               </Flex>
             )}
             <Box ml='s'>
@@ -219,18 +233,21 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               </Flex>
             )}
             {!isEditing && (
-              <Flex flexDirection='row'>
+              <Flex flexDirection='row'
+                onMouseEnter={nameMouseEnter}
+                onMouseLeave={nameMouseLeave}>
                 <Text color='gray.1'
                   variant='b2m'>
                   {name}
                 </Text>
-                <Box ml='xs'>
+                <Flex ml='xs'>
                   <Icon Asset={SvgPencilOutline}
-                    color='gray.2'
+                    color={nameHover ? 'gray.2' : 'gray.5'}
                     height={16}
                     onClick={editName}
+                    style={{ cursor: 'pointer' }}
                     width={16} />
-                </Box>
+                </Flex>
               </Flex>
             )}
             <LabelWithCopy color='gray.3'
@@ -252,7 +269,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     <>
       {renderMenuItems(address)}
       <Box
-        bg={isSelected ? 'gray.5' : 'gray.0'}
+        bg={hover ? 'gray.5' : 'gray.0'}
         mt='s'
         onClick={selectAccount}
         onMouseEnter={mouseEnter}

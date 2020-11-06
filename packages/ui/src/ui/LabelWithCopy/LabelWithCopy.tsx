@@ -10,11 +10,12 @@ import * as sc from './styles';
 export interface Props {
   text: string;
   color: string;
+  hoverColor?: string;
   textSize: number;
   textVariant: 'b1m' | 'b1' | 'b2m' | 'b2' | 'b3m' | 'b3' | 'sh1' | 'c1' | 'c2' | 'c2m';
 }
 
-export const LabelWithCopy: FC<Props> = ({ color, text, textSize, textVariant }) => {
+export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, textVariant }) => {
   const [hover, setHover] = useState(false);
   const [copied, setCopied] = useState(false);
   const [timerRef, setTimerRef] = useState(0);
@@ -46,13 +47,15 @@ export const LabelWithCopy: FC<Props> = ({ color, text, textSize, textVariant })
     );
   };
 
+  const foreColor = hover ? hoverColor && hoverColor !== '' ? hoverColor : color : color;
+
   return (
     <sc.StatusText copied={copied}>
       <Flex alignItems='center'
         onMouseOut={onMouseOut}
         onMouseOver={onMouseOver}
       >
-        <Text color={color}
+        <Text color={foreColor}
           variant={textVariant}>
           <TextEllipsis size={textSize}>
             {text}
@@ -64,7 +67,7 @@ export const LabelWithCopy: FC<Props> = ({ color, text, textSize, textVariant })
             ml='xs'
             onClick={handleClick}>
             <Icon Asset={SvgContentCopy}
-              color={color}
+              color={foreColor}
               height={16}
               opacity={hover ? 1 : 0}
               style={{ cursor: 'pointer' }}

@@ -94,6 +94,12 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
               }
             </Box>
           </Box>
+          {!oneAddress &&
+            <Box mt='m'>
+              <Text color='gray.2'
+                variant='b2'>Please enter a new wallet password below to complete account creation.</Text>
+            </Box>
+          }
           <Password label={oneAddress ? 'Wallet password' : 'Password'}
             withConfirm={!oneAddress} />
         </form>

@@ -1,12 +1,13 @@
 import React, { FC, useContext, useState } from 'react';
 import { Text, Box, TextEllipsis, TextInput, Flex, Icon, Heading, LabelWithCopy } from '../../ui';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
-import { SvgCheckboxMarkedCircle, SvgAlertCircle, SvgPencilOutline, SvgCheck, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgPencilOutline, SvgCheck, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { formatters } from '../../util';
 import BigNumber from 'bignumber.js';
 import { useHistory } from 'react-router';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
 import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 
 export interface Props {
   account: IdentifiedAccount;
@@ -17,6 +18,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
   const history = useHistory();
   const [editing, setEditing] = useState(false);
   const [newAlias, setNewAlias] = useState('');
+  const [hover, setHover] = useState(false);
   const { network } = useContext(PolymeshContext);
   const onAction = useContext(ActionContext);
 
@@ -24,30 +26,8 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
     history.push(`/account/details/${account?.address}`);
   };
 
-  const renderStatus = (isVerified: boolean) => {
-    const color = isVerified ? 'success' : 'alert';
-    const statusText = isVerified ? 'Verified' : 'Not verified';
-    const iconAsset = isVerified ? SvgCheckboxMarkedCircle : SvgAlertCircle;
-
-    return (
-      <Flex flexDirection='row'>
-        <Box mr='1'>
-          <Icon Asset={iconAsset}
-            color={color}
-            height={14}
-            width={14} />
-        </Box>
-        <Box>
-          <Text color={color}
-            variant='b3m'>
-            {statusText}
-          </Text>
-        </Box>
-      </Flex>
-    );
-  };
-
   const startEdit = () => {
+    setHover(false);
     setNewAlias(account.didAlias);
     setEditing(true);
   };
@@ -55,6 +35,10 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
   const stopEdit = () => {
     setEditing(false);
   };
+
+  const mouseEnter = () => setHover(true);
+
+  const mouseLeave = () => setHover(false);
 
   const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewAlias(e.target.value);
@@ -73,19 +57,23 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
         <>
           {!editing &&
             <Flex alignItems='center'
-              mb='xs'>
+              mb='xs'
+              onMouseEnter={mouseEnter}
+              onMouseLeave={mouseLeave}>
               <Text color='gray.0'
                 variant='b1m'>
                 {account.didAlias ? account.didAlias : '[Your Polymesh ID]'}
               </Text>
-              <Flex ml='xs'>
-                <Icon Asset={SvgPencilOutline}
-                  color='gray.0'
-                  height={16}
-                  onClick={startEdit}
-                  style={{ cursor: 'pointer' }}
-                  width={16} />
-              </Flex>
+              {hover &&
+                <Flex ml='xs'>
+                  <Icon Asset={SvgPencilOutline}
+                    color='gray.0'
+                    height={16}
+                    onClick={startEdit}
+                    style={{ cursor: 'pointer' }}
+                    width={16} />
+                </Flex>
+              }
             </Flex>
           }
           {editing &&
@@ -116,13 +104,14 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
               <Flex flexDirection='row'
                 justifyContent='space-between'
                 mx='1'>
-                <Box>
+                <Flex>
                   <Text color='gray.2'
                     variant='c2'>
                     <TextEllipsis size={29}>{account?.did}</TextEllipsis>
                   </Text>
-                </Box>
-                {renderStatus(account.cdd !== undefined)}
+                </Flex>
+                <CddStatus cdd={account.cdd}
+                  withText />
               </Flex>
             )}
           </Box>
@@ -148,7 +137,8 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
         </Box>
       </Flex>
       <Flex>
-        <LabelWithCopy color='gray.0'
+        <LabelWithCopy color='brandLightest'
+          hoverColor='brandLighter'
           text={account?.address || ''}
           textSize={30}
           textVariant='b3'
