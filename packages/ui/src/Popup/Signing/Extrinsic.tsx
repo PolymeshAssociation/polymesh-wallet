@@ -5,7 +5,7 @@ import { formatBalance } from '@polkadot/util';
 import BN from 'bn.js';
 import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
-import { Box, Flex, Loading, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, ExpandableDetails, Flex, Hr, Loading, Text } from '@polymathnetwork/extension-ui/ui';
 
 interface Props {
   request: SignerPayloadJSON;
@@ -28,73 +28,70 @@ const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
   }
 
   return (
-    <>
-
+    <Flex alignItems='stretch'
+      flex={1}
+      flexDirection='column'
+      justifyContent='space-between'
+      style={{ height: '100%' }}>
       <Box mt='m'>
-        <Box>
-          <Text color='gray.2'
-            variant='b2'>
-            Method
-          </Text>
-        </Box>
-        <Box>
-          <Text color='gray.1'
-            variant='code'>
-            {section}.{method}{
-              meta
-                ? `(${meta.args.map(({ name }) => name).join(', ')})`
-                : ''
-            }
-          </Text>
-        </Box>
-      </Box>
-
-      <Box mt='m'>
-        <Box>
-          <Text color='gray.2'
-            variant='b2'>
-            Parameters
-          </Text>
-        </Box>
-        <Box>
-          <Text color='gray.1'
-            variant='code'>
-            {JSON.stringify(args, null, 2).slice(1, -1).trim()}
-          </Text>
-        </Box>
-      </Box>
-
-      <Box
-        borderTop='2px solid'
-        borderTopColor='gray.4'
-      >
-        {fees.map((tuple, index) =>
-          <Flex
-            justifyContent='space-between'
-            {...(index === fees.length - 1 ? {} : { bg: 'gray.2' })}
-            bg='gray.4'
-
-            key={index}
-          >
-            <Box >
-              <Text color='highlightText'
-                variant='b1m'>
-                {tuple[0]}
-              </Text>
-            </Box>
-
+        <ExpandableDetails title={`${section}.${method}${
+          meta
+            ? `(${meta.args.map(({ name }) => name).join(', ')})`
+            : ''
+        }`}>
+          <Box mt='m'
+            mx='s'>
             <Box>
-              <Text color='highlightText'
-                variant='b1m'>
-                {tuple[1]}
-              </Text>
               <Text color='gray.2'
-                ml={1}>POLYX</Text>
+                variant='b2'>
+                Parameters
+              </Text>
             </Box>
-          </Flex>
-        )}
+            <Box>
+              <Text color='gray.1'
+                variant='code'>
+                {JSON.stringify(args, null, 2).slice(1, -1).trim()}
+              </Text>
+            </Box>
+          </Box>
+        </ExpandableDetails>
       </Box>
-    </>
+
+      <Box mb='l'>
+        {fees.length > 1 && <Hr color='gray.4' />}
+        <Box>
+          {fees.map((tuple, index) => {
+            return (
+              <Box
+                {...(index === fees.length - 1 ? { bg: 'gray.4' } : {})}
+                key={index}
+              >
+                <Flex justifyContent='space-between'
+                  mx='s'>
+                  <Box>
+                    <Text color='gray.1'
+                      variant='b3m'>
+                      {tuple[0]}
+                    </Text>
+                  </Box>
+
+                  <Box>
+                    <Text color='gray.1'
+                      variant='b2m'>
+                      {tuple[1]}
+                    </Text>
+                    <Text color='gray.2'
+                      ml={1}
+                      variant='b2m'>POLYX</Text>
+                  </Box>
+                </Flex>
+              </Box>
+            );
+          }
+          )}
+        </Box>
+      </Box>
+    </Flex>
   );
 };
 

@@ -48,7 +48,7 @@ function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPas
         <>
           <form id='passwordForm'
             onSubmit={handleSubmit(onSubmit)}>
-            <Box>
+            <Box mx='s'>
               <Box>
                 <Text color='gray.1'
                   variant='b2m'>
@@ -73,7 +73,9 @@ function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPas
               </Box>
             </Box>
           </form>
-          <Box mt='s'>
+          <Box mb='s'
+            mt='s'
+            mx='s'>
             <Checkbox
               checked={isSavedPass}
               label={
@@ -89,7 +91,8 @@ function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPas
       ) }
       <Flex
         flexDirection='row'
-        mb='s'>
+        mb='s'
+        mx='s'>
         <Flex flex={1}>
           <Button
             fluid

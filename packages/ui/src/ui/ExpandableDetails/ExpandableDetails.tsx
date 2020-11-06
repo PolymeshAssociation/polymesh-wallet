@@ -2,7 +2,7 @@ import { SvgChevronDown, SvgChevronUp } from '@polymathnetwork/extension-ui/asse
 import React, { FC, useState } from 'react';
 import { Box } from '../Box';
 import { Flex } from '../Flex';
-import { Heading } from '../Heading';
+import { Text } from '../Text';
 import { Icon } from '../Icon';
 
 export interface Props {
@@ -16,9 +16,10 @@ export const ExpandableDetails: FC<Props> = ({ children, title }) => {
 
   return (
     <Box>
-      <Flex justifyContent='space-between'>
+      <Flex justifyContent='space-between'
+        mx='s'>
         <Box>
-          <Heading variant='h5'>{title}</Heading>
+          <Text variant='code'>{title}</Text>
         </Box>
         <Box>
           <Icon Asset={expanded ? SvgChevronUp : SvgChevronDown}

@@ -6,7 +6,7 @@ import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import { TypeRegistry } from '@polkadot/types';
 
 import { ActionContext, ActivityContext } from '../../components';
-import { Button, Box, Flex, ExpandableDetails } from '../../ui';
+import { Button, Box, Flex, ExpandableDetails, Heading } from '../../ui';
 
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
 import Bytes from './Bytes';
@@ -132,8 +132,7 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       <Flex
         flexDirection='column'
         justifyContent='flex-end'
-        mb='s'
-        mx='xs'>
+        mb='s'>
         <Box>
           <Flex>
             <Box>
@@ -160,21 +159,23 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
 
   return (
     <>
-      <div style={{ display: isFirst ? 'block' : 'none', overflowY: 'scroll', height: '100%' }}>
-        <Box mt='xs'>
-          <ExpandableDetails title='Signing Request'>
-            <ContentArea>
-              {content()}
-            </ContentArea>
-          </ExpandableDetails>
+      <Box style={{ display: isFirst ? 'block' : 'none', overflowY: 'scroll', height: '100%', minWidth: '100%' }}>
+        <Box mt='xs'
+          mx='s'>
+          <Heading variant='h5'>Signing Request</Heading>
         </Box>
-      </div>
+        <ContentArea>
+          {content()}
+        </ContentArea>
+      </Box>
+
       {signArea}
     </>
   );
 }
 
 const ContentArea = styled.div`
+  height: 100%;
   overflow-y: scroll;
   margin-top: -25px;
   padding-top: 25px;
