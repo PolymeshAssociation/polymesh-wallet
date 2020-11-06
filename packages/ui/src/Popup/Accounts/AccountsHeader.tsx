@@ -1,12 +1,13 @@
 import React, { FC, useContext, useState } from 'react';
 import { Text, Box, TextEllipsis, TextInput, Flex, Icon, Heading, LabelWithCopy } from '../../ui';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
-import { SvgCheckboxMarkedCircle, SvgAlertCircle, SvgPencilOutline, SvgCheck, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgPencilOutline, SvgCheck, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { formatters } from '../../util';
 import BigNumber from 'bignumber.js';
 import { useHistory } from 'react-router';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
 import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 
 export interface Props {
   account: IdentifiedAccount;
@@ -22,29 +23,6 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
 
   const showAccountDetails = () => {
     history.push(`/account/details/${account?.address}`);
-  };
-
-  const renderStatus = (isVerified: boolean) => {
-    const color = isVerified ? 'success' : 'alert';
-    const statusText = isVerified ? 'Verified' : 'Not verified';
-    const iconAsset = isVerified ? SvgCheckboxMarkedCircle : SvgAlertCircle;
-
-    return (
-      <Flex flexDirection='row'>
-        <Flex mr='1'>
-          <Icon Asset={iconAsset}
-            color={color}
-            height={14}
-            width={14} />
-        </Flex>
-        <Flex>
-          <Text color={color}
-            variant='b3m'>
-            {statusText}
-          </Text>
-        </Flex>
-      </Flex>
-    );
   };
 
   const startEdit = () => {
@@ -122,7 +100,8 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
                     <TextEllipsis size={29}>{account?.did}</TextEllipsis>
                   </Text>
                 </Flex>
-                {renderStatus(account.cdd !== undefined)}
+                <CddStatus cdd={account.cdd}
+                  withText />
               </Flex>
             )}
           </Box>
