@@ -34,16 +34,16 @@ export const fontFamilies = {
 };
 
 export const lineHeights = {
-  none: 1, // 16 px
-  extraTight: 1.15, // 18 px
-  tighter: 1.316,
-  tight: 1.392, // fS == 34px => 47px
-  lessTight: 1.452, // for fontSize 20px it is 29px
-  normal: 1.688, // 27 px
-  loose: 2.188, // 35 px
-  medium: 2.938, // 47 px
-  large: 4.188, // 67 px
-  xlarge: 4.938 // 79 px
+  none: '1rem', // 16 px
+  extraTight: '1.15rem', // 18 px
+  tighter: '1.4825rem', // 23.72px
+  tight: '1.392rem', // fS == 34px => 47px
+  lessTight: '1.452rem', // for fontSize 20px it is 29px
+  normal: '1.688rem', // 27 px
+  loose: '2.188rem', // 35 px
+  medium: '2.938rem', // 47 px
+  large: '4.188rem', // 67 px
+  xlarge: '4.938rem' // 79 px
 };
 
 export type TFontWeightCustom = 'light' | 'normal' | 'semiBold' | 'bold' | 'strong';
@@ -185,7 +185,7 @@ export const texts = {
     color: colors.gray[5],
     fontSize: fontSizes[1],
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal
+    lineHeight: lineHeights.tighter
   },
   b2m: {
     fontFamily: fontFamilies.baseText,
@@ -199,7 +199,7 @@ export const texts = {
     color: colors.highlightText,
     fontSize: fontSizes[0],
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.none
+    lineHeight: lineHeights.extraTight
   },
   b3m: {
     fontFamily: fontFamilies.baseText,
@@ -253,35 +253,35 @@ export const headings = {
     color: colors.highlightText,
     fontSize: fontSizes[10],
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.tighter,
+    lineHeight: lineHeights.xlarge,
     letterSpacing: -1
   },
   h2: {
     color: colors.highlightText,
     fontSize: fontSizes[9],
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.tight,
+    lineHeight: lineHeights.large,
     letterSpacing: -0.5
   },
   h3: {
     color: colors.highlightText,
     fontSize: fontSizes[7],
     fontWeight: fontWeights.semiBold,
-    lineHeight: lineHeights.tight,
+    lineHeight: lineHeights.medium,
     letterSpacing: -0.25
   },
   h4: {
     color: colors.highlightText,
     fontSize: fontSizes[5],
     fontWeight: fontWeights.semiBold,
-    lineHeight: lineHeights.lessTight
+    lineHeight: lineHeights.loose
   },
   h5: {
     color: colors.highlightText,
     fontSize: fontSizes[4],
     fontWeight: fontWeights.semiBold,
     letterSpacing: 0.15,
-    lineHeight: lineHeights.lessTight
+    lineHeight: lineHeights.normal
   },
   h6: {
     color: colors.highlightText,

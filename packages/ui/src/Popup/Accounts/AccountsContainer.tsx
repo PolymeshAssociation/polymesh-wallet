@@ -17,12 +17,16 @@ export interface Props {
 export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selectedAccount }) => {
   const currentAccount = accounts.find((acc) => acc.did === did);
 
+  const [hover, setHover] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [newAlias, setNewAlias] = useState(currentAccount?.didAlias ? currentAccount.didAlias : '');
   const onAction = useContext(ActionContext);
   const { network } = useContext(PolymeshContext);
 
-  const editAlias = () => setIsEditing(true);
+  const editAlias = () => {
+    setHover(false);
+    setIsEditing(true);
+  };
 
   const stopEditAlias = () => setIsEditing(false);
 
@@ -37,6 +41,10 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
     stopEditAlias();
     onAction();
   };
+
+  const mouseEnter = () => setHover(true);
+
+  const mouseLeave = () => setHover(false);
 
   const renderContainerHeader = (isAssigned: boolean) => {
     if (isAssigned) {
@@ -70,7 +78,9 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
           { !isEditing &&
             <Flex alignItems='center'
               flexDirection='row'
-              justifyContent='space-between'>
+              justifyContent='space-between'
+              onMouseEnter={mouseEnter}
+              onMouseLeave={mouseLeave}>
               <Flex alignItems='center'>
                 { currentAccount?.didAlias && currentAccount.didAlias !== '' &&
                   <Text color='brandMain'
@@ -87,7 +97,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
               <Flex>
                 <Flex mr='xs'>
                   <Icon Asset={SvgPencilOutline}
-                    color='brandMain'
+                    color={hover ? 'brandMain' : headerColor}
                     height={16}
                     onClick={editAlias}
                     style={{ cursor: 'pointer' }}

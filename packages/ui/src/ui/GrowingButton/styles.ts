@@ -4,7 +4,7 @@ import { Flex } from '../Flex';
 export const Wrapper = styled(Flex)`
   width: 24px;
   height: 24px;
-  padding: 2px;
+  padding: 0 30px 0  0;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
   color: #ffffff;
