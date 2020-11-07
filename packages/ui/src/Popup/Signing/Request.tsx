@@ -6,7 +6,7 @@ import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import { TypeRegistry } from '@polkadot/types';
 
 import { ActionContext, ActivityContext } from '../../components';
-import { Button, Box, Flex, ExpandableDetails, Heading } from '../../ui';
+import { Button, Box, Flex, Heading } from '../../ui';
 
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
 import Bytes from './Bytes';
