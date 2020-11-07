@@ -35,12 +35,14 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'export', address }}
             onClick={handleMenuClick}>
-            Export account
+            <Text color='gray.2'
+              variant='b1'>Export account</Text>
           </MenuItem>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'forget', address }}
             onClick={handleMenuClick}>
-            Forget account
+            <Text color='gray.2'
+              variant='b1'>Forget account</Text>
           </MenuItem>
         </Menu>
       </>
@@ -285,7 +287,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               width={32}
             >
               <Flex justifyContent='center'
-                pt='xs'>
+                pt='xxs'>
                 <Text color='brandMain'
                   variant='b2m'>{name?.substr(0, 1)}</Text>
               </Flex>

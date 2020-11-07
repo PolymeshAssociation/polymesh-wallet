@@ -10,8 +10,7 @@ export type HrProps = {
 export const Hr = styled.hr<HrProps>(colorProp, (props) => ({
   width: '100%',
   border: `${(props.height ? props.height : 2) / 2}px solid currentColor`,
-  borderRadius: `${(props.height ? props.height : 2) / 2}px`,
-  margin: `calc(${props.theme.space.gridGap} / 2) auto`
+  borderRadius: `${(props.height ? props.height : 2) / 2}px`
 }));
 
 Hr.defaultProps = {

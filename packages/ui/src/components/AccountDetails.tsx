@@ -70,40 +70,42 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
       <Header headerText={headerText}
         iconAsset={SvgAccountCardDetailsOutline}>
       </Header>
-      <FormProvider {...methods} >
-        <form id='accountForm'
-          onSubmit={handleSubmit(onSubmit)}>
-          <Box mt='m'>
-            <Box>
-              <Text color='gray.1'
-                variant='b2m'>
-                Account name
-              </Text>
-            </Box>
-            <Box>
-              <TextInput inputRef={register({ required: true })}
-                name='accountName'
-                placeholder='Enter account name' />
-              {errors?.accountName &&
-                <Box>
-                  <Text color='alert'
-                    variant='b3'>
-                    {(errors.accountName).type === 'required' && 'Required field'}
-                  </Text>
-                </Box>
-              }
-            </Box>
-          </Box>
-          {!oneAddress &&
+      <Box mx='s'>
+        <FormProvider {...methods} >
+          <form id='accountForm'
+            onSubmit={handleSubmit(onSubmit)}>
             <Box mt='m'>
-              <Text color='gray.2'
-                variant='b2'>Please enter a new wallet password below to complete account creation.</Text>
+              <Box>
+                <Text color='gray.1'
+                  variant='b2m'>
+                  Account name
+                </Text>
+              </Box>
+              <Box>
+                <TextInput inputRef={register({ required: true })}
+                  name='accountName'
+                  placeholder='Enter account name' />
+                {errors?.accountName &&
+                  <Box>
+                    <Text color='alert'
+                      variant='b3'>
+                      {(errors.accountName).type === 'required' && 'Required field'}
+                    </Text>
+                  </Box>
+                }
+              </Box>
             </Box>
-          }
-          <Password label={oneAddress ? 'Wallet password' : 'Password'}
-            withConfirm={!oneAddress} />
-        </form>
-      </FormProvider>
+            {!oneAddress &&
+              <Box mt='m'>
+                <Text color='gray.2'
+                  variant='b2'>Please enter a new wallet password below to complete account creation.</Text>
+              </Box>
+            }
+            <Password label={oneAddress ? 'Wallet password' : 'Password'}
+              withConfirm={!oneAddress} />
+          </form>
+        </FormProvider>
+      </Box>
 
       <Flex flex={1}
         flexDirection='column'

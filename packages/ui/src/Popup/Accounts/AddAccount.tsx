@@ -51,9 +51,11 @@ function AddAccount (): React.ReactElement {
           </Box>
         </Box>
       </Header>
-      <Flex flex={1}
+      <Flex alignItems='stretch'
+        flex={1}
         flexDirection='column'
-        justifyContent='space-between'>
+        justifyContent='space-between'
+        mx='s'>
         <Box mt='m'>
           <Flex alignItems='flex-start'
             justifyContent='flex-start'

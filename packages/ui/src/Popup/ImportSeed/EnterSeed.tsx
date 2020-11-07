@@ -39,23 +39,25 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
       <Header headerText='Restore your account with your recovery phrase'
         iconAsset={SvgClipboardListOutline}>
       </Header>
-      <Box pt='m'>
-        <Text color='gray.1'
-          variant='b2m'>
-          12–word recovery phrase
-        </Text>
-      </Box>
-      <Box>
-        <TextArea height={272}
-          invalid={!validSeed && seedPhrase.length > 0}
-          onChange={onChange}
-          placeholder='Enter your 12-word recovery phrase. Separate each word with a single space.' />
+      <Box mx='s'>
+        <Box pt='m'>
+          <Text color='gray.1'
+            variant='b2m'>
+            12–word recovery phrase
+          </Text>
+        </Box>
+        <Box>
+          <TextArea height={272}
+            invalid={!validSeed && seedPhrase.length > 0}
+            onChange={onChange}
+            placeholder='Enter your 12-word recovery phrase. Separate each word with a single space.' />
+        </Box>
       </Box>
       <Flex flex={1}
         flexDirection='column'
         justifyContent='flex-end'
         mb='s'
-        mx='xs'>
+        mx='s'>
         <Button disabled={!validSeed}
           fluid
           onClick={nextStep}>

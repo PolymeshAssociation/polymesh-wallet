@@ -9,7 +9,7 @@ export default function createView (Entry: React.ComponentType, rootId = 'root')
   // First thing, we set window size because the default window size is too wide.
   // There's hardly any clean way to accomplish this, since window size is set initially
   // via chrome.windows.create, which is invoked by Polkadot's singing request handling.
-  window.resizeTo(328, 600);
+  window.resizeTo(328, 621);
 
   const rootElement = document.getElementById(rootId);
 

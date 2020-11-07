@@ -2,7 +2,7 @@ import { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
 import { ThemeProps } from '../../types';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
-import { Button, Box, Flex, Header, Icon, Text } from '../../ui';
+import { Button, Box, Flex, Header, Icon, Text, Heading } from '../../ui';
 import { ActionContext, PolymeshContext } from '../../components';
 import { approveAuthRequest, rejectAuthRequest } from '../../messaging';
 import { AccountsHeader } from '../Accounts/AccountsHeader';
@@ -35,77 +35,84 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
   );
 
   return (
-    <div style={{ display: isFirst ? 'block' : 'none' }}>
+    <div style={{ display: isFirst ? 'block' : 'none', height: '100%', overflowY: 'scroll' }}>
       <Header>
         {currentAccount && <AccountsHeader account={currentAccount}
           details={false} />}
       </Header>
-      <Box mt='m'
-        mx='s'>
-        <Text color='gray.1'
-          variant='b2'>
-          An application, self-identifying as <strong>{origin}</strong>
-          {' '}is requesting access from{' '}
-          <a
-            href={url}
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            <span className='tab-url'>{url}</span>
-          </a>.
-        </Text>
-      </Box>
+      <Flex alignItems='stretch'
+        flex={1}
+        flexDirection='column'
+        justifyContent='space-between'
+        style={{ height: '80%' }}
+      >
+        <Box>
+          <Box mt='m'
+            mx='s'>
+            <Heading mb={1}
+              variant='h5'>{`${origin} is requesting access`}</Heading>
+            <Text color='gray.2'
+              variant='b2'>
+              An application, self-identifying as <strong>{origin}</strong>
+              {' '}is requesting access from{' '}
+              <a
+                href={url}
+                rel='noopener noreferrer'
+                target='_blank'
+              >
+                <span className='tab-url'>{url}</span>
+              </a>.
+            </Text>
+          </Box>
 
-      <Box pt='m'>
-        <Box borderColor='gray.4'
-          borderRadius={3}
-          borderStyle='solid'
-          borderWidth={2}
-          m='xs'
-          p='s'>
-          <Flex>
-            <Icon Asset={SvgAlertCircle}
-              color='warning'
-              height={20}
-              width={20} />
-            <Box ml='s'>
-              <Text color='warning'
-                variant='b3m'>
-                Attention
+          <Box pt='m'>
+            <Box borderColor='gray.4'
+              borderRadius={3}
+              borderStyle='solid'
+              borderWidth={2}
+              m='xs'
+              p='s'>
+              <Flex>
+                <Icon Asset={SvgAlertCircle}
+                  color='warning'
+                  height={20}
+                  width={20} />
+                <Box ml='s'>
+                  <Text color='warning'
+                    variant='b3m'>
+                    Attention
+                  </Text>
+                </Box>
+              </Flex>
+              <Text color='gray.1'
+                variant='b2m'>
+                Only approve this request if you trust the application. By approving this connection, you may give the application access to the key addresses of your accounts.
               </Text>
             </Box>
-          </Flex>
-          <Text color='gray.1'
-            variant='b2m'>
-            Only approve this request if you trust the application. By approving this connection, you may give the application access to the key addresses of your accounts.
-          </Text>
+          </Box>
         </Box>
-      </Box>
-      <Flex flex={1}
-        flexDirection='column'
-        justifyContent='flex-end'
-        mb='s'
-        mt='xxl'
-        mx='xs'>
-        <Box>
-          <Flex>
-            {isFirst && <Box mx='xs'>
-              <Button
-                fluid
-                onClick={_onApprove}
-                type='submit'>
-                Authorize
-              </Button>
-            </Box> }
-            <Box mx='xs'>
-              <Button
-                fluid
-                onClick={_onReject}>
-                Reject
-              </Button>
-            </Box>
+        <Flex
+          flexDirection='row'
+          mb='l'
+          mx='s'>
+          <Flex flex={1}>
+            <Button
+              fluid
+              onClick={_onReject}
+              variant='secondary'>
+              Reject
+            </Button>
           </Flex>
-        </Box>
+          {isFirst && <Flex flex={1}
+            ml='xs'>
+            <Button
+              fluid
+              onClick={_onApprove}
+              type='submit'>
+              Authorize
+            </Button>
+          </Flex> }
+        </Flex>
       </Flex>
     </div>
   );

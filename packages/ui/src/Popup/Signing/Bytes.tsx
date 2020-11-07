@@ -9,28 +9,29 @@ interface Props {
 
 function Bytes ({ bytes, url }: Props): React.ReactElement<Props> {
   return (
-    <Box mt='m'>
+    <Box mt='xs'
+      mx='s'>
       <Box>
         <Text color='gray.2'
           variant='b2'>
           From
         </Text>
       </Box>
-      <Box>
+      <Box mt='xs'>
         <Text color='gray.1'
-          variant='b1'>
+          variant='code'>
           {url}
         </Text>
       </Box>
-      <Box mt='s'>
+      <Box mt='xs'>
         <Text color='gray.2'
           variant='b2'>
           Bytes
         </Text>
       </Box>
-      <Box>
+      <Box mt='xs'>
         <Text color='gray.1'
-          variant='b1'>
+          variant='code'>
           {bytes}
         </Text>
       </Box>

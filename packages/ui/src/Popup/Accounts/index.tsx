@@ -42,7 +42,10 @@ export default function Accounts (): React.ReactElement {
                   {/* @ts-ignore */}
                   <MenuItem data={{ networkKey: _network }}
                     key={index}
-                    onClick={handleNetworkChange}>{networkLabels[_network as NetworkName]}</MenuItem>
+                    onClick={handleNetworkChange}>
+                    <Text color='gray.2'
+                      variant='b1'>{networkLabels[_network as NetworkName]}</Text>
+                  </MenuItem>
                 </>
               );
             })
@@ -86,13 +89,22 @@ export default function Accounts (): React.ReactElement {
         <Menu id='add_account_menu'>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'new' }}
-            onClick={handleAccountMenuClick}>Create new account</MenuItem>
+            onClick={handleAccountMenuClick}>
+            <Text color='gray.2'
+              variant='b1'>Create new account</Text>
+          </MenuItem>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'fromSeed' }}
-            onClick={handleAccountMenuClick}>Restore with recovery phrase</MenuItem>
+            onClick={handleAccountMenuClick}>
+            <Text color='gray.2'
+              variant='b1'>Restore with recovery phrase</Text>
+          </MenuItem>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'fromJson' }}
-            onClick={handleAccountMenuClick}>Import account with JSON file</MenuItem>
+            onClick={handleAccountMenuClick}>
+            <Text color='gray.2'
+              variant='b1'>Import account with JSON file</Text>
+          </MenuItem>
         </Menu>
       </>
     );
@@ -146,10 +158,16 @@ export default function Accounts (): React.ReactElement {
         <Menu id='top_menu'>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'changePassword' }}
-            onClick={handleTopMenuSelection}>Change password</MenuItem>
+            onClick={handleTopMenuSelection}>
+            <Text color='gray.2'
+              variant='b1'>Change password</Text>
+          </MenuItem>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'newWindow' }}
-            onClick={handleTopMenuSelection}>Open extension in a new window</MenuItem>
+            onClick={handleTopMenuSelection}>
+            <Text color='gray.2'
+              variant='b1'>Open extension in a new window</Text>
+          </MenuItem>
         </Menu>
       </>
     );

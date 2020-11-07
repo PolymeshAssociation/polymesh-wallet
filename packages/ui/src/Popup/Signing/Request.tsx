@@ -1,12 +1,12 @@
+import React, { useCallback, useContext, useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { ExtrinsicPayload } from '@polkadot/types/interfaces';
 import { AccountJson, RequestSign } from '@polkadot/extension-base/background/types';
 import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
-
-import React, { useCallback, useContext, useState, useEffect } from 'react';
 import { TypeRegistry } from '@polkadot/types';
 
 import { ActionContext, ActivityContext } from '../../components';
-import { Button, Box, Flex } from '../../ui';
+import { Button, Box, Flex, Heading } from '../../ui';
 
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
 import Bytes from './Bytes';
@@ -106,12 +106,10 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       const raw = request.payload as SignerPayloadRaw;
 
       return (
-        <>
-          <Bytes
-            bytes={raw.data}
-            url={url}
-          />
-        </>
+        <Bytes
+          bytes={raw.data}
+          url={url}
+        />
       );
     }
 
@@ -131,33 +129,60 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       />
     )
     : (
-      <Flex flex={2}
-        flexDirection='row'
-        mb='s'
-        mx='xs'>
-        <Box mx='xs'>
-          <Button
-            fluid
-            onClick={_onCancel}
-            variant='secondary'>
-            Reject
-          </Button>
+      <Flex
+        flexDirection='column'
+        justifyContent='flex-end'
+        mb='s'>
+        <Box>
+          <Flex>
+            <Box>
+              <Button
+                fluid
+                onClick={_onCancel}
+                variant='secondary'>
+                Reject
+              </Button>
+            </Box>
+            {isFirst && <Box ml='xs'>
+              <Button
+                busy={isBusy}
+                fluid
+                onClick={_onSignQuick}
+                type='submit'>
+                Authorize
+              </Button>
+            </Box> }
+          </Flex>
         </Box>
-        {isFirst && <Box mx='xs'>
-          <Button busy={isBusy}
-            disabled={isLocked === null}
-            fluid
-            onClick={_onSignQuick}>
-            Sign
-          </Button>
-        </Box> }
       </Flex>
     );
 
   return (
-    <div style={{ display: isFirst ? 'block' : 'none' }}>
-      {content()}
+    <>
+      <Box style={{ display: isFirst ? 'block' : 'none', overflowY: 'scroll', height: '100%', minWidth: '100%' }}>
+        <Box mt='xs'
+          mx='s'>
+          <Heading variant='h5'>Signing Request</Heading>
+        </Box>
+        <ContentArea>
+          {content()}
+        </ContentArea>
+      </Box>
+
       {signArea}
-    </div>
+    </>
   );
 }
+
+const ContentArea = styled.div`
+  height: 100%;
+  overflow-y: scroll;
+  margin-top: -25px;
+  padding-top: 25px;
+  padding-right: 0px;
+  padding-left: 0px;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
