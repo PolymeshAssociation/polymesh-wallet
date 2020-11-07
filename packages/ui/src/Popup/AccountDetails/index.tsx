@@ -38,7 +38,7 @@ export const AccountDetails: FC = () => {
   return (
     <>
       <Flex justifyContent='space-between'
-        mx='xs'
+        mx='s'
         my='s'>
         <Box>
           <Text color='gray.1'
@@ -69,7 +69,7 @@ export const AccountDetails: FC = () => {
       </Box>
 
       <Box mt='2'
-        mx='xs'>
+        mx='s'>
         <Flex justifyContent='space-between'
           mb='s'>
           <Box>
@@ -141,7 +141,7 @@ export const AccountDetails: FC = () => {
               width={40}
             >
               <Flex justifyContent='center'
-                pt='s'>
+                pt='xs'>
                 <Text color='brandMain'
                   variant='b2m'>{selectedAccount?.name?.substr(0, 1)}</Text>
               </Flex>

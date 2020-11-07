@@ -1,104 +1,99 @@
 import { SignerPayloadJSON } from '@polkadot/types/types';
 
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { formatBalance } from '@polkadot/util';
 import BN from 'bn.js';
 import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
-import { Box, Flex, Loading, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, ExpandableDetails, Flex, Hr, Loading, Text } from '@polymathnetwork/extension-ui/ui';
 
 interface Props {
   request: SignerPayloadJSON;
 }
 
-function renderMethod (call: ResponsePolyCallDetails): React.ReactNode {
+const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
   const { args, meta, method, networkFee, protocolFee, section } = call;
 
-  const totalFees = (new BN(networkFee)).add(new BN(protocolFee));
+  const fees: [string, string][] = [];
+
+  if (networkFee && networkFee.length) {
+    fees.push(['Network fee', formatBalance(new BN(networkFee), { withUnit: false, decimals: 6 })]);
+  }
+
+  if (protocolFee && protocolFee !== '0') {
+    fees.push(['Protocol fee', formatBalance(new BN(protocolFee), { withUnit: false, decimals: 6 })]);
+    const totalFees = (new BN(networkFee)).add(new BN(protocolFee));
+
+    fees.push(['Total fees', formatBalance(new BN(totalFees), { withUnit: false, decimals: 6 })]);
+  }
 
   return (
-    <>
+    <Flex alignItems='stretch'
+      flex={1}
+      flexDirection='column'
+      justifyContent='space-between'
+      style={{ height: '100%' }}>
       <Box mt='m'>
-        <Box>
-          <Text color='gray.2'
-            variant='b2'>
-            Method
-          </Text>
-        </Box>
-        <Box>
-          <Text color='gray.1'
-            variant='code'>
-            {section}.{method}{
-              meta
-                ? `(${meta.args.map(({ name }) => name).join(', ')})`
-                : ''
-            }
-          </Text>
-        </Box>
+        <ExpandableDetails title={`${section}.${method}${
+          meta
+            ? `(${meta.args.map(({ name }) => name).join(', ')})`
+            : ''
+        }`}>
+          <Box mt='m'
+            mx='s'>
+            <Box>
+              <Text color='gray.2'
+                variant='b2'>
+                Parameters
+              </Text>
+            </Box>
+            <Box>
+              <Text color='gray.1'
+                variant='code'>
+                {JSON.stringify(args, null, 2).slice(1, -1).trim()}
+              </Text>
+            </Box>
+          </Box>
+        </ExpandableDetails>
       </Box>
 
-      <Box mt='m'>
+      <Box mb='l'>
+        {fees.length > 1 && <Hr color='gray.4' />}
         <Box>
-          <Text color='gray.2'
-            variant='b2'>
-            Parameters
-          </Text>
-        </Box>
-        <Box>
-          <Text color='gray.1'
-            variant='code'>
-            {JSON.stringify(args, null, 2)}
-          </Text>
-        </Box>
-      </Box>
+          {fees.map((tuple, index) => {
+            return (
+              <Box
+                {...(index === fees.length - 1 ? { bg: 'gray.4' } : {})}
+                key={index}
+              >
+                <Flex justifyContent='space-between'
+                  mx='s'>
+                  <Box>
+                    <Text color='gray.1'
+                      variant='b3m'>
+                      {tuple[0]}
+                    </Text>
+                  </Box>
 
-      <Box>
-        <Box>
-          <Text color='gray.2'
-            variant='b2'>
-            Network fee
-          </Text>
-        </Box>
-        <Box>
-          <Text color='gray.1'
-            variant='b1'>
-            {formatBalance(new BN(networkFee), { withUnit: false, decimals: 6 })} POLYX
-          </Text>
-        </Box>
-      </Box>
-
-      <Box>
-        <Box>
-          <Text color='gray.2'
-            variant='b2'>
-            Protocol fee
-          </Text>
-        </Box>
-        <Box>
-          <Text color='gray.1'
-            variant='b1'>
-            {formatBalance(new BN(protocolFee), { withUnit: false, decimals: 6 })} POLYX
-          </Text>
+                  <Box>
+                    <Text color='gray.1'
+                      variant='b2m'>
+                      {tuple[1]}
+                    </Text>
+                    <Text color='gray.2'
+                      ml={1}
+                      variant='b2m'>POLYX</Text>
+                  </Box>
+                </Flex>
+              </Box>
+            );
+          }
+          )}
         </Box>
       </Box>
-
-      <Box>
-        <Box>
-          <Text color='gray.2'
-            variant='b2'>
-            Total fees
-          </Text>
-        </Box>
-        <Box>
-          <Text color='gray.1'
-            variant='b1'>
-            {formatBalance(totalFees, { withUnit: false, decimals: 6 })} POLYX
-          </Text>
-        </Box>
-      </Box>
-    </>
+    </Flex>
   );
-}
+};
 
 function Extrinsic ({ request }: Props): React.ReactElement<Props> {
   const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
@@ -126,7 +121,7 @@ function Extrinsic ({ request }: Props): React.ReactElement<Props> {
           <Loading />
         </Flex>
       }
-      {callDetails && renderMethod(callDetails)}
+      {callDetails && <Method call={callDetails} />}
     </>
   );
 }

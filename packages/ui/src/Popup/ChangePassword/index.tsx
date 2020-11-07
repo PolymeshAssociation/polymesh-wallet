@@ -55,86 +55,88 @@ export const ChangePassword: FC = () => {
       <Header headerText='Change password'
         iconAsset={SvgFileLockOutline}>
       </Header>
-      <form id='passwordForm'
-        onSubmit={handleSubmit(onSubmit)}>
-        <Box mt='m'>
-          <Box>
-            <Text color='gray.1'
-              variant='b2m'>
-              Current password
-            </Text>
+      <Box mx='s'>
+        <form id='passwordForm'
+          onSubmit={handleSubmit(onSubmit)}>
+          <Box mt='m'>
+            <Box>
+              <Text color='gray.1'
+                variant='b2m'>
+                Current password
+              </Text>
+            </Box>
+            <Box>
+              <TextInput inputRef={register({ required: true, minLength: 8 })}
+                name='currentPassword'
+                placeholder='Enter 8 characters or more'
+                type='password' />
+              {errors.currentPassword &&
+                <Box>
+                  <Text color='alert'
+                    variant='b3'>
+                    {(errors.currentPassword as FieldError).type === 'required' && 'Required field'}
+                    {(errors.currentPassword as FieldError).type === 'minLength' && 'Password too short'}
+                    {(errors.currentPassword as FieldError).type === 'manual' && 'Invalid password'}
+                  </Text>
+                </Box>
+              }
+            </Box>
           </Box>
-          <Box>
-            <TextInput inputRef={register({ required: true, minLength: 8 })}
-              name='currentPassword'
-              placeholder='Enter 8 characters or more'
-              type='password' />
-            {errors.currentPassword &&
-              <Box>
-                <Text color='alert'
-                  variant='b3'>
-                  {(errors.currentPassword as FieldError).type === 'required' && 'Required field'}
-                  {(errors.currentPassword as FieldError).type === 'minLength' && 'Password too short'}
-                  {(errors.currentPassword as FieldError).type === 'manual' && 'Invalid password'}
-                </Text>
-              </Box>
-            }
+          <Box mt='m'>
+            <Box>
+              <Text color='gray.1'
+                variant='b2m'>
+                New password
+              </Text>
+            </Box>
+            <Box>
+              <TextInput inputRef={register({ required: true, minLength: 8 })}
+                name='newPassword'
+                placeholder='Enter 8 characters or more'
+                type='password' />
+              {errors.newPassword &&
+                <Box>
+                  <Text color='alert'
+                    variant='b3'>
+                    {(errors.newPassword as FieldError).type === 'required' && 'Required field'}
+                    {(errors.newPassword as FieldError).type === 'minLength' && 'Password too short'}
+                    {(errors.newPassword as FieldError).type === 'manual' && 'Invalid password'}
+                  </Text>
+                </Box>
+              }
+            </Box>
           </Box>
-        </Box>
-        <Box mt='m'>
-          <Box>
-            <Text color='gray.1'
-              variant='b2m'>
-              New password
-            </Text>
+          <Box mt='m'>
+            <Box>
+              <Text color='gray.1'
+                variant='b2m'>
+                Confirm password
+              </Text>
+            </Box>
+            <Box>
+              <TextInput inputRef={register({ required: true, minLength: 8 })}
+                name='confirmPassword'
+                placeholder='Enter 8 characters or more'
+                type='password' />
+              {errors.confirmPassword &&
+                <Box>
+                  <Text color='alert'
+                    variant='b3'>
+                    {(errors.confirmPassword as FieldError).type === 'required' && 'Required field'}
+                    {(errors.confirmPassword as FieldError).type === 'minLength' && 'Password too short'}
+                    {(errors.confirmPassword as FieldError).type === 'manual' && 'Passwords do not match'}
+                  </Text>
+                </Box>
+              }
+            </Box>
           </Box>
-          <Box>
-            <TextInput inputRef={register({ required: true, minLength: 8 })}
-              name='newPassword'
-              placeholder='Enter 8 characters or more'
-              type='password' />
-            {errors.newPassword &&
-              <Box>
-                <Text color='alert'
-                  variant='b3'>
-                  {(errors.newPassword as FieldError).type === 'required' && 'Required field'}
-                  {(errors.newPassword as FieldError).type === 'minLength' && 'Password too short'}
-                  {(errors.newPassword as FieldError).type === 'manual' && 'Invalid password'}
-                </Text>
-              </Box>
-            }
-          </Box>
-        </Box>
-        <Box mt='m'>
-          <Box>
-            <Text color='gray.1'
-              variant='b2m'>
-              Confirm password
-            </Text>
-          </Box>
-          <Box>
-            <TextInput inputRef={register({ required: true, minLength: 8 })}
-              name='confirmPassword'
-              placeholder='Enter 8 characters or more'
-              type='password' />
-            {errors.confirmPassword &&
-              <Box>
-                <Text color='alert'
-                  variant='b3'>
-                  {(errors.confirmPassword as FieldError).type === 'required' && 'Required field'}
-                  {(errors.confirmPassword as FieldError).type === 'minLength' && 'Password too short'}
-                  {(errors.confirmPassword as FieldError).type === 'manual' && 'Passwords do not match'}
-                </Text>
-              </Box>
-            }
-          </Box>
-        </Box>
-      </form>
+        </form>
+      </Box>
       <Flex flex={1}
         flexDirection='column'
         justifyContent='flex-end'
         mb='s'
-        mx='xs'>
+        mx='s'>
         <Button busy={isBusy}
           fluid
           form='passwordForm'

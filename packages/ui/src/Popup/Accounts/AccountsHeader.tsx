@@ -99,7 +99,8 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
             </Flex>
           }
           <Box bg='brandLightest'
-            borderRadius='2'>
+            borderRadius='2'
+            py='xs'>
             {account && (
               <Flex flexDirection='row'
                 justifyContent='space-between'

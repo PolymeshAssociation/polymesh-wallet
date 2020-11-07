@@ -44,7 +44,7 @@ export const Header: FC<HeaderProps> = (props) => {
               borderRadius='50%'
               height={48}
               px={14}
-              py={9}
+              py={14}
               width={48}
             >
               <Icon Asset={iconAsset}

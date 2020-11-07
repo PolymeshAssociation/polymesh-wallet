@@ -34,7 +34,8 @@ const messagePrefix = 'poly:';
 const messages = [
   'pub(accounts.list)',
   'pub(accounts.subscribe)',
-  'pub(metadata.provide)'
+  'pub(metadata.provide)',
+  'pub(metadata.list)'
 ];
 
 export {

@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Loading, SigningReqContext } from '../../components';
 import Request from './Request';
 import TransactionIndex from './TransactionIndex';
-import { Box, Header, ScrollableContainer, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Header, Text } from '@polymathnetwork/extension-ui/ui';
 import { AccountsHeader } from '../Accounts/AccountsHeader';
 import { getIdentifiedAccounts } from '@polymathnetwork/extension-core/store/getters';
 
@@ -61,15 +61,13 @@ export default function Signing (): React.ReactElement {
             </Text>
           </Box>
         </Header>
-        <ScrollableContainer>
-          <Request
-            account={request.account}
-            isFirst={requestIndex === 0}
-            request={request.request}
-            signId={request.id}
-            url={request.url}
-          />
-        </ScrollableContainer>
+        <Request
+          account={request.account}
+          isFirst={requestIndex === 0}
+          request={request.request}
+          signId={request.id}
+          url={request.url}
+        />
       </>
     )
     : <Loading />;

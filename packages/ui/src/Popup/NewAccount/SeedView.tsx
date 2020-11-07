@@ -16,6 +16,7 @@ export const SeedView: FC<Props> = ({ onContinue, seedPhrase }) => {
       <Header headerText='Your recovery phrase'
         iconAsset={SvgClipboardListOutline}>
         <Box
+          mb='m'
           mt='s'>
           <Text color='brandLightest'
             variant='b3'>
@@ -23,12 +24,14 @@ export const SeedView: FC<Props> = ({ onContinue, seedPhrase }) => {
           </Text>
         </Box>
       </Header>
-      <SeedPhrase seedPhrase={seedPhrase} />
+      <Box mx='s'>
+        <SeedPhrase seedPhrase={seedPhrase} />
+      </Box>
       <Flex flex={1}
         flexDirection='column'
         justifyContent='flex-end'
         mb='s'
-        mx='xs'>
+        mx='s'>
         <Box>
           <Flex justifyContent='flex-start'
             mb='s'>

@@ -48,18 +48,7 @@ const Main = styled.main`
   display: flex;
   flex-direction: column;
   height: 100%;
-  color: ${({ theme }: ThemeProps): string => theme.textColor};
-  font-size: ${({ theme }: ThemeProps): string => theme.fontSize};
-  line-height: ${({ theme }: ThemeProps): string => theme.lineHeight};
-
-  * {
-    font-family: ${({ theme }: ThemeProps): string => theme.fontFamily};
-  }
-
-  > * {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
+  color: ${({ theme }: ThemeProps): string => theme.textColor};  
 `;
 
 export default View;
