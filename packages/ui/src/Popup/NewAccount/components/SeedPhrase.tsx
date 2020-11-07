@@ -33,7 +33,7 @@ export const SeedPhrase: FC<Props> = ({ seedPhrase }) => {
           text={seedPhrase || ''}>
           <Flex alignItems='center'
             justifyContent='center'
-            mt='m'
+            mt='xl'
             style={{ cursor: 'pointer' }}>
             <Box>
               <Flex>
@@ -54,7 +54,7 @@ export const SeedPhrase: FC<Props> = ({ seedPhrase }) => {
         isCopied &&
           <Flex alignItems='center'
             justifyContent='center'
-            mt='m'>
+            mt='xl'>
             <Box>
               <Flex>
                 <Icon Asset={SvgCheckboxMarkedCircle}

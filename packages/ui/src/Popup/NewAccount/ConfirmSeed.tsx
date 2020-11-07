@@ -76,8 +76,9 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
 
     return (
       <Flex alignItems='flex-start'
+        mt='s'
         mx='xs'>
-        <Box>
+        <Box mt='xs'>
           <Icon Asset={icon}
             color={color}
             height={15}
@@ -98,66 +99,67 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
       <Header headerText='Confirm your recovery phrase'
         iconAsset={SvgClipboardListOutline}>
       </Header>
-      <Box pt='m'>
-        <Text color='gray.1'
-          variant='b2m'>
-          Enter your 12–word recovery phrase
-        </Text>
-      </Box>
-      <Flex alignItems='flex-start'
-        backgroundColor={confirmationStatus === status.invalid ? 'red.1' : 'gray.0'}
-        borderColor={confirmationStatus === status.valid ? 'success' : confirmationStatus === status.invalid ? 'alert' : 'gray.3'}
-        borderRadius='1'
-        borderStyle='solid'
-        borderWidth={1}
-        height={190}
-        mx='s'
-        p='xs'>
-        {constructedPhrase.length === 0 &&
-          <Text color='gray.3'
-            variant='b2'>
-            Click on each word below in the correct order to confirm your recovery phrase.
+      <Box mx='s'>
+        <Box pt='m'>
+          <Text color='gray.1'
+            variant='b2m'>
+            Enter your 12–word recovery phrase
           </Text>
-        }
-        <Flex flexWrap='wrap'>
-          {constructedPhrase.map((word, index) => (
-            <Box key={index}
-              mr='xs'
-              onClick={removeSeedWord(index)}
+        </Box>
+        <Flex alignItems='flex-start'
+          backgroundColor={confirmationStatus === status.invalid ? 'red.1' : 'gray.0'}
+          borderColor={confirmationStatus === status.valid ? 'success' : confirmationStatus === status.invalid ? 'alert' : 'gray.3'}
+          borderRadius='1'
+          borderStyle='solid'
+          borderWidth={1}
+          height={190}
+          p='xs'>
+          {constructedPhrase.length === 0 &&
+            <Text color='gray.3'
+              variant='b2'>
+              Click on each word below in the correct order to confirm your recovery phrase.
+            </Text>
+          }
+          <Flex flexWrap='wrap'>
+            {constructedPhrase.map((word, index) => (
+              <Box key={index}
+                mr='xs'
+                onClick={removeSeedWord(index)}
+                style={{ cursor: 'pointer' }}>
+                <SeedWord seedWord={word}
+                  wordOrder={index} />
+              </Box>
+            ))}
+          </Flex>
+        </Flex>
+        <Flex
+          flexWrap='wrap'>
+          {shuffledPhrase.map((word, index) => (
+            <Box backgroundColor='gray.4'
+              borderRadius='1'
+              key={index}
+              mr='s'
+              mt='s'
+              onClick={addSeedWord(index)}
+              px='s'
               style={{ cursor: 'pointer' }}>
-              <SeedWord seedWord={word}
-                wordOrder={index} />
+              <Text color='gray.1'
+                variant='b2m'>{word}</Text>
             </Box>
           ))}
         </Flex>
-      </Flex>
-      <Flex
-        flexWrap='wrap'>
-        {shuffledPhrase.map((word, index) => (
-          <Box backgroundColor='gray.4'
-            borderRadius='1'
-            key={index}
-            mr='s'
-            mt='s'
-            onClick={addSeedWord(index)}
-            px='s'
-            style={{ cursor: 'pointer' }}>
-            <Text color='gray.1'
-              variant='b2m'>{word}</Text>
-          </Box>
-        ))}
-      </Flex>
-      {confirmationStatus !== status.pending &&
-        renderStatus()
-      }
-      {
-        confirmationStatus === status.invalid &&
-          <Box mt='s'>
-            <ButtonSmall fluid
-              onClick={resetPhrase}
-              variant='secondary'>Reset the phrase</ButtonSmall>
-          </Box>
-      }
+        {confirmationStatus !== status.pending &&
+          renderStatus()
+        }
+        {
+          confirmationStatus === status.invalid &&
+            <Box mt='s'>
+              <ButtonSmall fluid
+                onClick={resetPhrase}
+                variant='secondary'>Reset the phrase</ButtonSmall>
+            </Box>
+        }
+      </Box>
       <Flex flex={1}
         flexDirection='column'
         justifyContent='flex-end'

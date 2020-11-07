@@ -287,7 +287,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               width={32}
             >
               <Flex justifyContent='center'
-                pt='xs'>
+                pt='xxs'>
                 <Text color='brandMain'
                   variant='b2m'>{name?.substr(0, 1)}</Text>
               </Flex>

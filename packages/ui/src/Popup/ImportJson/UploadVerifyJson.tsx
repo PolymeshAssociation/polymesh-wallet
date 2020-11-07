@@ -132,135 +132,137 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
           </Text>
         </Box>
       </Header>
-      <Box pt='m'>
-        <Text color='gray.1'
-          variant='b2m'>
-          JSON file
-        </Text>
-      </Box>
-      {!accountJson?.isFileValid &&
-        <>
-          <input hidden={true}
-            name='jsonFile'
-            onChange={handleFileChange}
-            ref={fileRef}
-            type='file'
-          />
-          <Box mt='s'>
-            <ButtonSmall fluid
-              onClick={showUpload}
-              variant='secondary'>Choose file</ButtonSmall>
-          </Box>
-        </>
-      }
-      {accountJson?.isFileValid &&
-        <>
-          <Flex>
-            <Box>
-              <Box
-                backgroundColor='gray.4'
-                borderRadius='50%'
-                height={24}
-                px='1'
-                py='0'
-                width={24}
-              >
-                <Icon Asset={SvgFileLockOutline}
-                  color='gray.3'
-                  height={14}
-                  width={14} />
-              </Box>
+      <Box mx='s'>
+        <Box pt='m'>
+          <Text color='gray.1'
+            variant='b2m'>
+            JSON file
+          </Text>
+        </Box>
+        {!accountJson?.isFileValid &&
+          <>
+            <input hidden={true}
+              name='jsonFile'
+              onChange={handleFileChange}
+              ref={fileRef}
+              type='file'
+            />
+            <Box mt='s'>
+              <ButtonSmall fluid
+                onClick={showUpload}
+                variant='secondary'>Choose file</ButtonSmall>
             </Box>
-            <Flex justifyContent='space-between'
-              ml='s'>
-              <Text color='gray.1'
-                variant='b2'>
-                <TextEllipsis size={32}>
-                  {filename}
-                </TextEllipsis>
-              </Text>
-            </Flex>
-            <Box onClick={clearUploadedFile}
-              style={{ cursor: 'pointer' }}>
-              <Icon Asset={SvgDeleteOutline}
-                color='gray.3'
-                height={18}
-                width={18} />
-            </Box>
-          </Flex>
-          <Box mt='m'>
-            <Flex justifyContent='space-between'>
+          </>
+        }
+        {accountJson?.isFileValid &&
+          <>
+            <Flex>
               <Box>
                 <Box
-                  backgroundColor='brandLightest'
+                  backgroundColor='gray.4'
                   borderRadius='50%'
-                  height={40}
-                  px='2'
-                  width={40}
+                  height={24}
+                  px='1'
+                  py='0'
+                  width={24}
                 >
-                  <Flex justifyContent='center'
-                    pt='s'>
-                    <Text color='brandMain'
-                      variant='b2m'>{accountName?.substr(0, 1)}</Text>
-                  </Flex>
+                  <Icon Asset={SvgFileLockOutline}
+                    color='gray.3'
+                    height={14}
+                    width={14} />
                 </Box>
               </Box>
-              <Box ml='s'
-                width='100%'>
-                <Flex
-                  flexDirection='row'
-                  justifyContent='space-between'
-                >
-                  <Flex flexDirection='row'>
-                    <Text color='gray.1'
-                      variant='b2m'>
-                      {accountName}
-                    </Text>
-                  </Flex>
-                </Flex>
-                <LabelWithCopy color='gray.3'
-                  text={accountJson?.address || ''}
-                  textSize={30}
-                  textVariant='b3'
-                />
+              <Flex justifyContent='space-between'
+                ml='s'>
+                <Text color='gray.1'
+                  variant='b2'>
+                  <TextEllipsis size={32}>
+                    {filename}
+                  </TextEllipsis>
+                </Text>
+              </Flex>
+              <Box onClick={clearUploadedFile}
+                style={{ cursor: 'pointer' }}>
+                <Icon Asset={SvgDeleteOutline}
+                  color='gray.3'
+                  height={18}
+                  width={18} />
               </Box>
             </Flex>
-          </Box>
-          <FormProvider {...methods} >
-            <form id='accountForm'
-              onSubmit={handleSubmit(onSubmit)}>
-              <Box mt='s'>
+            <Box mt='m'>
+              <Flex justifyContent='space-between'>
                 <Box>
-                  <Text color='gray.1'
-                    variant='b2m'>
-                    JSON Password
-                  </Text>
+                  <Box
+                    backgroundColor='brandLightest'
+                    borderRadius='50%'
+                    height={40}
+                    px='2'
+                    width={40}
+                  >
+                    <Flex justifyContent='center'
+                      pt='xs'>
+                      <Text color='brandMain'
+                        variant='b2m'>{accountName?.substr(0, 1)}</Text>
+                    </Flex>
+                  </Box>
                 </Box>
-                <Box>
-                  <TextInput inputRef={register({ required: true })}
-                    name='jsonPassword'
-                    placeholder='Enter JSON file password'
-                    type='password' />
-                  {errors.jsonPassword &&
-                    <Box>
-                      <Text color='alert'
-                        variant='b3'>
-                        {(errors.jsonPassword as FieldError).type === 'required' && 'Required field'}
-                        {(errors.jsonPassword as FieldError).type === 'manual' && 'Invalid password'}
+                <Box ml='s'
+                  width='100%'>
+                  <Flex
+                    flexDirection='row'
+                    justifyContent='space-between'
+                  >
+                    <Flex flexDirection='row'>
+                      <Text color='gray.1'
+                        variant='b2m'>
+                        {accountName}
                       </Text>
-                    </Box>
-                  }
+                    </Flex>
+                  </Flex>
+                  <LabelWithCopy color='gray.3'
+                    text={accountJson?.address || ''}
+                    textSize={30}
+                    textVariant='b3'
+                  />
                 </Box>
-              </Box>
-            </form>
-          </FormProvider>
-        </>
-      }
+              </Flex>
+            </Box>
+            <FormProvider {...methods} >
+              <form id='accountForm'
+                onSubmit={handleSubmit(onSubmit)}>
+                <Box mt='s'>
+                  <Box>
+                    <Text color='gray.1'
+                      variant='b2m'>
+                      JSON Password
+                    </Text>
+                  </Box>
+                  <Box>
+                    <TextInput inputRef={register({ required: true })}
+                      name='jsonPassword'
+                      placeholder='Enter JSON file password'
+                      type='password' />
+                    {errors.jsonPassword &&
+                      <Box>
+                        <Text color='alert'
+                          variant='b3'>
+                          {(errors.jsonPassword as FieldError).type === 'required' && 'Required field'}
+                          {(errors.jsonPassword as FieldError).type === 'manual' && 'Invalid password'}
+                        </Text>
+                      </Box>
+                    }
+                  </Box>
+                </Box>
+              </form>
+            </FormProvider>
+          </>
+        }
+      </Box>
       <Flex flex={1}
         flexDirection='column'
         justifyContent='flex-end'
         mb='s'
-        mx='xs'>
+        mx='s'>
         <Button busy={isBusy}
           disabled={!accountJson?.isFileValid}
           fluid
