@@ -16,6 +16,7 @@ export const SeedView: FC<Props> = ({ onContinue, seedPhrase }) => {
       <Header headerText='Your recovery phrase'
         iconAsset={SvgClipboardListOutline}>
         <Box
+          mb='m'
           mt='s'>
           <Text color='brandLightest'
             variant='b3'>
