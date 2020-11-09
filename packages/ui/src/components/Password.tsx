@@ -59,8 +59,7 @@ export const Password: FC<Props> = ({ confirmLabel, label, withConfirm }) => {
               <Box>
                 <Text color='alert'
                   variant='b3'>
-                  {console.log(errors.confirmPassword)}
-                  Passwors do not match
+                  Passwords do not match
                 </Text>
               </Box>
             }
