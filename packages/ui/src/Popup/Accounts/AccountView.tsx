@@ -273,12 +273,12 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <Box
         bg={hover ? 'gray.5' : 'gray.0'}
         mt='s'
-        onClick={selectAccount}
         onMouseEnter={mouseEnter}
         onMouseLeave={mouseLeave}
         px='s'>
         <Flex justifyContent='space-between'>
-          <Box>
+          <Box onClick={selectAccount}
+            style={{ cursor: 'pointer' }}>
             <Box
               backgroundColor='brandLightest'
               borderRadius='50%'
