@@ -67,7 +67,7 @@ export const ImportJson: FC = () => {
         return (
           <AccountDetails
             defaultName={accountName}
-            headerText='Restore your account with your recovery phrase'
+            headerText='Import account using JSON file'
             onBack={prevStep}
             onContinue={restoreAccount}
             submitText='Import' />
