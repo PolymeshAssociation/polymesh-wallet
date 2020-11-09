@@ -52,7 +52,7 @@ export const ForgetAccount: FC = () => {
           </Flex>
           <Text color='gray.1'
             variant='b2m'>
-            You are about to remove the account. This means that you will not be able to access it via this extension anymore. If you wish to recover it, you would need to use the seed.
+            You are about to remove this account. Once removed, this account will not be accessible via this extension unless you re-add it via JSON file or seed phrase.
           </Text>
         </Box>
       </Box>
