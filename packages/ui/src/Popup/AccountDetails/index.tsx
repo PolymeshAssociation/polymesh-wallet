@@ -128,8 +128,16 @@ export const AccountDetails: FC = () => {
 
       <Hr />
 
+      <Box mx='s'
+        my='s'>
+        <Text color='gray.1'
+          variant='c2'>
+            KEYS
+        </Text>
+      </Box>
+
       <Box bg='gray.5'
-        mt='xl'>
+        mt='s'>
         <Flex justifyContent='space-between'
           mx='s'>
           <Box>
