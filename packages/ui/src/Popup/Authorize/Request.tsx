@@ -39,7 +39,7 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
       <Flex flex={1}
         flexDirection='column'
         justifyContent='space-between'
-        style={{ height: '100%' }}>
+        style={{ height: '100%', ...(isFirst ? {} : { display: 'none' }) }}>
         <Box>
           <Header>
             {currentAccount && <AccountsHeader account={currentAccount}
@@ -92,8 +92,10 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
             </Box>
           </Box>
         </Box>
-        <Flex mb='s'>
-          <Flex>
+        <Flex mb='s'
+          px='s'
+          style={{ width: '100%' }}>
+          <Flex flex={1}>
             <Button
               fluid
               onClick={_onReject}
@@ -101,7 +103,8 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
               Reject
             </Button>
           </Flex>
-          {isFirst && <Flex ml='xs'>
+          {isFirst && <Flex flex={1}
+            ml='xs'>
             <Button
               fluid
               onClick={_onApprove}
