@@ -88,9 +88,9 @@ function AddAccount (): React.ReactElement {
               <Text color='gray.3'
                 variant='b3'>
                 I have read and accept the Polymath{' '}
-                <Link href='https://polymath.network/terms-of-site-use'
+                <Link href='https://polymath.network/polymesh-testnet/wallet-terms'
                   id='sign-up-privacy-link'>
-                  Terms of Service
+                  Terms of Use
                 </Link>
                 .
               </Text>
