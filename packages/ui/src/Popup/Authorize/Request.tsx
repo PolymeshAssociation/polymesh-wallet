@@ -35,7 +35,7 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
   );
 
   return (
-    <div style={{ display: isFirst ? 'block' : 'none', height: '100%', overflowY: 'scroll' }}>
+    <div style={{ display: isFirst ? 'block' : 'none', height: '100%' }}>
       <Header>
         {currentAccount && <AccountsHeader account={currentAccount}
           details={false} />}
@@ -44,7 +44,7 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
         flex={1}
         flexDirection='column'
         justifyContent='space-between'
-        style={{ height: '80%' }}
+        style={{ height: '100%' }}
       >
         <Box>
           <Box mt='m'
