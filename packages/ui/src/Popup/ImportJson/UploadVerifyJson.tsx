@@ -128,7 +128,7 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
         <Box>
           <Text color='gray.0'
             variant='b2'>
-            Upload JSON file with account details below to access via Polymesh wallet.
+            Upload JSON file with account details below to access via Polymesh Wallet.
           </Text>
         </Box>
       </Header>
