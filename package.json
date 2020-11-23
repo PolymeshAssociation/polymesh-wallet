@@ -23,6 +23,7 @@
     "postinstall": "polkadot-dev-yarn-only",
     "start": "yarn watch",
     "test": "polkadot-dev-run-test",
+    "e2e": "jest --config jest.e2e.config.js",
     "watch": "cd packages/extension && yarn polkadot-exec-webpack --config webpack.config.js --watch"
   },
   "resolutions": {
@@ -39,11 +40,14 @@
     "@babel/core": "^7.11.6",
     "@polkadot/dev": "^0.55.49",
     "@polkadot/typegen": "^1.32.1",
-    "@types/jest": "^26.0.14",
+    "@types/jest": "^26.0.15",
+    "@types/puppeteer": "^5.4.0",
     "copy-webpack-plugin": "^6.1.0",
     "i18next-scanner": "^2.11.0",
+    "jest": "^26.6.3",
+    "puppeteer": "^5.5.0",
     "sinon-chrome": "^3.0.1",
-    "ts-jest": "^26.4.1"
+    "ts-jest": "^26.4.4"
   },
   "author": "Remon Nashid <remon.sherin@gmail.com>",
   "license": "ISC",
