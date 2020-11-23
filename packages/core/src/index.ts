@@ -136,9 +136,8 @@ function subscribePolymesh (): () => void {
                           },
                           network }));
                         }
-                      }
                       // Alcyone > 2.2
-                      else {
+                      } else {
                         store.dispatch(identityActions.setIdentity({ data: {
                           did: linkedKeyInfo.toString(),
                           priKey: account
