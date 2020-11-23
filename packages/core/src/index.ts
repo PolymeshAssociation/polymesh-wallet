@@ -127,9 +127,20 @@ function subscribePolymesh (): () => void {
 
                       store.dispatch(accountActions.setAccount({ data: accountData, network }));
 
-                      if (!linkedKeyInfo.unwrapOrDefault().isEmpty) {
+                      // Alcyone <= 2.2
+                      if (typeof linkedKeyInfo.unwrapOrDefault === 'function') {
+                        if (!linkedKeyInfo.unwrapOrDefault().isEmpty) {
+                          store.dispatch(identityActions.setIdentity({ data: {
+                            did: linkedKeyInfo.unwrapOrDefault().asUnique.toString(),
+                            priKey: account
+                          },
+                          network }));
+                        }
+                      }
+                      // Alcyone > 2.2
+                      else {
                         store.dispatch(identityActions.setIdentity({ data: {
-                          did: linkedKeyInfo.unwrapOrDefault().asUnique.toString(),
+                          did: linkedKeyInfo.toString(),
                           priKey: account
                         },
                         network }));
