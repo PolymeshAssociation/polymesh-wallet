@@ -153,7 +153,7 @@ export default function Popup (): React.ReactElement {
       : Accounts;
 
   return (
-    <Loading>{accounts && authRequests && metaRequests && signRequests && status?.ready && (
+    <Loading>{accounts && authRequests && metaRequests && signRequests && (status?.error || status?.ready) && (
       <ActivityContext.Provider value={isBusy}>
         <ActionContext.Provider value={_onAction}>
           <SettingsContext.Provider value={settingsCtx}>
