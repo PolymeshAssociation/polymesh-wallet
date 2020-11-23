@@ -137,7 +137,7 @@ function subscribePolymesh (): () => void {
                     }).then((unsub) => {
                       unsubCallbacks[account] && unsubCallbacks[account]();
                       unsubCallbacks[account] = unsub;
-                    }).catch(nonFatalErrorHandler);
+                    }, nonFatalErrorHandler).catch(nonFatalErrorHandler);
                   });
 
                   prevAccounts = accounts;
@@ -175,7 +175,7 @@ function subscribePolymesh (): () => void {
                       .then((unsub) => {
                         unsubCallbacks[did] && unsubCallbacks[did]();
                         unsubCallbacks[did] = unsub;
-                      })
+                      }, nonFatalErrorHandler)
                       .catch(nonFatalErrorHandler);
                   });
 
@@ -221,13 +221,14 @@ function subscribePolymesh (): () => void {
 
                         store.dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
                       });
-                    })
+                    }, nonFatalErrorHandler)
                     .catch(nonFatalErrorHandler);
                 }).then((unsub) => {
                   unsubCallbacks.newHeads && unsubCallbacks.newHeads();
                   unsubCallbacks.newHeads = unsub;
-                }).catch(nonFatalErrorHandler);
-              }
+                }, nonFatalErrorHandler).catch(nonFatalErrorHandler);
+              },
+              nonFatalErrorHandler
             ).catch((err) => { nonFatalErrorHandler(err); destroy(network); });
           },
           (err) => { nonFatalErrorHandler(err); destroy(network); }
