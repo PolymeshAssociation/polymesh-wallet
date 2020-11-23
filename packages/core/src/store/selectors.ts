@@ -86,3 +86,8 @@ export const selectStatus = createSelector(
   // Status will always be "ready" if we're offline
   (status) => ({ ...status, ready: !navigator.onLine || status.ready })
 );
+
+export const selectIsDev = createSelector(
+  (state: RootState) => state.network,
+  ({ isDeveloper }) => isDeveloper ? 'true' : 'false'
+);

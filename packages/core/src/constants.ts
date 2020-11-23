@@ -12,6 +12,12 @@ const networkLabels: Record<NetworkName, string> = {
   pme: 'PME'
 };
 
+const networkIsDev: Record<NetworkName, boolean> = {
+  alcyone: false,
+  pmf: true,
+  pme: true
+};
+
 const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   alcyone: {
     dashboard: 'http://dashboard.polymesh.live/',
@@ -44,5 +50,6 @@ export {
   networkLinks,
   defaultNetwork,
   messagePrefix,
+  networkIsDev,
   messages
 };
