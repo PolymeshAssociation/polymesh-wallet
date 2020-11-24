@@ -11,6 +11,7 @@ describe('Wallet', () => {
     const pathToExtension = path.join(__dirname, '../packages/extension/build');
 
     browser = await puppeteer.launch({ headless: false,
+      executablePath: process.env.PUPPETEER_EXEC_PATH,
       args: [
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`

@@ -15,6 +15,7 @@ jobs:
       - run: yarn install --immutable | grep -v 'YN0013'
       - run: yarn lint
       - run: yarn build
+      - uses: mujo-code/puppeteer-headful@master
       - run: yarn e2e
       - uses: actions/upload-artifact@v2
         with:
