@@ -1,15 +1,15 @@
 import puppeteer from 'puppeteer';
+import path from 'path';
+import { mnemonicGenerate } from '@polkadot/util-crypto';
 
-describe('Todo React', () => {
+describe('Wallet', () => {
   let browser: puppeteer.Browser;
   let page: puppeteer.Page;
-  let extensionPage: string;
+  let extensionUrl: string;
 
   beforeAll(async () => {
-    console.log(__dirname);
-    const pathToExtension = require('path').join(__dirname, '../packages/extension/build');
+    const pathToExtension = path.join(__dirname, '../packages/extension/build');
 
-    console.log(pathToExtension);
     browser = await puppeteer.launch({ headless: false,
       args: [
         `--disable-extensions-except=${pathToExtension}`,
@@ -17,46 +17,61 @@ describe('Todo React', () => {
       ] });
 
     const targets = await browser.targets();
-    const backgroundPageTarget = targets.find((target) => target.type() === 'background_page');
-    // @ts-ignore
-    const [,, extensionID] = backgroundPageTarget._targetInfo.url.split('/');
+    const backgroundPageTarget: any = targets.find((target) => target.type() === 'background_page');
 
-    extensionPage = `chrome-extension://${extensionID}/index.html`;
-    console.log('>>>> extensionPage', extensionPage);
-  });
+    if (backgroundPageTarget._targetInfo.url) {
+      const [,, extensionID] = backgroundPageTarget._targetInfo.url.split('/');
 
-  afterEach(async () => {
-    await page.close();
+      extensionUrl = `chrome-extension://${extensionID}/index.html`;
+      console.log('>>>> extensionUrl', extensionUrl);
+
+      page = await browser.newPage();
+      await page.goto(extensionUrl);
+    } else {
+      throw new Error('Unable to find extension URL');
+    }
   });
 
   afterAll(async () => {
-    // await browser.close();
+    await page.close();
+    await browser.close();
   });
 
-  describe('add task to the list', () => {
-    beforeEach(async () => {
-      page = await browser.newPage();
-      await page.goto(extensionPage);
-    });
+  describe('Account creation', () => {
+    describe('Import seed phrase', () => {
+      const accountName = 'Imported From Seed';
+      const accountPass = 'j457fkw72jfg89';
 
-    it('should be possible to add task to the list', async () => {
-    //   const taskInputField = await page.$x('//input[@placeholder="Enter task"]');
-    //   const taskToAdd = 'New Task';
+      it('Accept agreement checkboxes', async () => {
+        await page.waitForSelector('input[type=checkbox]');
 
-      //   await taskInputField[0].click();
-      //   await taskInputField[0].type(taskToAdd);
+        await page.evaluate(() => {
+          document.querySelectorAll('input[type=checkbox]').forEach((el) => {
+            if (el.parentElement) {
+              el.parentElement.click();
+            }
+          });
+        });
+      });
 
-      //   await page.keyboard.press('Enter');
+      it('Proceed with importing seed phrase', async () => {
+        await (await page.waitForXPath("//button[contains(., 'Restore account with recovery phrase')]")).click();
+      });
 
-      //   const lists = await page.$x("//div[@class='list']/p/input");
+      it('Fill import seed form', async () => {
+        const seed = mnemonicGenerate(12);
 
-      //   let toDo;
+        await (await page.waitForXPath('//textarea')).type(seed);
+        await (await page.waitForXPath("//button[contains(., 'Continue')]")).click();
+        await (await page.waitForXPath("//input[@placeholder='Enter account name']")).type(accountName);
+        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more']")).type(accountPass);
+        await (await page.waitForXPath("//input[@placeholder='Confirm your password']")).type(accountPass);
+        await (await page.waitForXPath("//button[contains(., 'Restore')]")).click();
+      });
 
-      //   for (const list of lists) {
-      //     toDo = await page.evaluate((el) => el.getAttribute('value'), list);
-      //   }
-
-    //   expect(toDo).toBe(taskToAdd);
+      it('Account is displayed in accounts list', async () => {
+        await page.waitForXPath(`//span[text()='${accountName}']`);
+      });
     });
   });
 });

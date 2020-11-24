@@ -14,3 +14,4 @@ jobs:
           name: build
           path: |
             master-build.zip
+      - run: yarn e2e
