@@ -48,7 +48,6 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
         </Box>
         <Box>
           <TextArea height={272}
-            id='seed-restore-textarea'
             invalid={!validSeed && seedPhrase.length > 0}
             onChange={onChange}
             placeholder='Enter your 12-word recovery phrase. Separate each word with a single space.' />
@@ -61,7 +60,6 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
         mx='s'>
         <Button disabled={!validSeed}
           fluid
-          id='enter-seed-btn'
           onClick={nextStep}>
           Continue
         </Button>

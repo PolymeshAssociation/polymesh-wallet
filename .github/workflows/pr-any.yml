@@ -9,9 +9,9 @@ jobs:
       - run: yarn install --immutable | grep -v 'YN0013'
       - run: yarn lint
       - run: yarn build
+      - run: yarn e2e
       - uses: actions/upload-artifact@v2
         with:
           name: build
           path: |
             master-build.zip
-      - run: yarn e2e
