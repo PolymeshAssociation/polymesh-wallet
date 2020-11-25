@@ -127,9 +127,19 @@ function subscribePolymesh (): () => void {
 
                       store.dispatch(accountActions.setAccount({ data: accountData, network }));
 
-                      if (!linkedKeyInfo.unwrapOrDefault().isEmpty) {
+                      // Alcyone <= 2.2
+                      if (typeof linkedKeyInfo.unwrapOrDefault === 'function') {
+                        if (!linkedKeyInfo.unwrapOrDefault().isEmpty) {
+                          store.dispatch(identityActions.setIdentity({ data: {
+                            did: linkedKeyInfo.unwrapOrDefault().asUnique.toString(),
+                            priKey: account
+                          },
+                          network }));
+                        }
+                      // Alcyone > 2.2
+                      } else {
                         store.dispatch(identityActions.setIdentity({ data: {
-                          did: linkedKeyInfo.unwrapOrDefault().asUnique.toString(),
+                          did: linkedKeyInfo.toString(),
                           priKey: account
                         },
                         network }));
@@ -137,7 +147,7 @@ function subscribePolymesh (): () => void {
                     }).then((unsub) => {
                       unsubCallbacks[account] && unsubCallbacks[account]();
                       unsubCallbacks[account] = unsub;
-                    }).catch(nonFatalErrorHandler);
+                    }, nonFatalErrorHandler).catch(nonFatalErrorHandler);
                   });
 
                   prevAccounts = accounts;
@@ -175,7 +185,7 @@ function subscribePolymesh (): () => void {
                       .then((unsub) => {
                         unsubCallbacks[did] && unsubCallbacks[did]();
                         unsubCallbacks[did] = unsub;
-                      })
+                      }, nonFatalErrorHandler)
                       .catch(nonFatalErrorHandler);
                   });
 
@@ -221,13 +231,14 @@ function subscribePolymesh (): () => void {
 
                         store.dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
                       });
-                    })
+                    }, nonFatalErrorHandler)
                     .catch(nonFatalErrorHandler);
                 }).then((unsub) => {
                   unsubCallbacks.newHeads && unsubCallbacks.newHeads();
                   unsubCallbacks.newHeads = unsub;
-                }).catch(nonFatalErrorHandler);
-              }
+                }, nonFatalErrorHandler).catch(nonFatalErrorHandler);
+              },
+              nonFatalErrorHandler
             ).catch((err) => { nonFatalErrorHandler(err); destroy(network); });
           },
           (err) => { nonFatalErrorHandler(err); destroy(network); }
