@@ -1,10 +1,10 @@
-import { Unsubcall } from "@polkadot/extension-inject/types";
-import { Call } from "@polkadot/types/interfaces";
-import { AnyJson } from "@polkadot/types/types";
+import { Unsubcall } from '@polkadot/extension-inject/types';
+import { Call } from '@polkadot/types/interfaces';
+import { AnyJson } from '@polkadot/types/types';
 
 export enum DidType {
-  primary = "primary",
-  secondary = "secondary",
+  primary = 'primary',
+  secondary = 'secondary',
 }
 
 export type AccountData = {
@@ -38,15 +38,15 @@ export type UnsubCallback = () => void;
 export type ReversedDidList = Record<string, { did: string; keyType: DidType; cdd?: CDD; didAlias: string }>;
 
 export enum NetworkName {
-  pmf = "pmf",
-  alcyone = "alcyone",
-  pme = "pme",
-  dev = "dev",
+  pmf = 'pmf',
+  alcyone = 'alcyone',
+  pme = 'pme',
+  dev = 'dev',
 }
 
 export enum LinkName {
-  dashboard = "dashboard",
-  explorer = "explorer",
+  dashboard = 'dashboard',
+  explorer = 'explorer',
 }
 
 export type CDD = null | {
@@ -76,9 +76,9 @@ export interface Decoded {
 }
 
 export enum ErrorCodes {
-  FatalError = "Fatal Error",
-  NonFatalError = "Non-fatal Error",
-  Offline = "Offline",
+  FatalError = 'Fatal Error',
+  NonFatalError = 'Non-fatal Error',
+  Offline = 'Offline',
 }
 
 export type Error = {
