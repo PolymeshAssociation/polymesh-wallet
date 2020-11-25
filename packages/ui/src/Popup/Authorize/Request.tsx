@@ -60,7 +60,7 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
                   rel='noopener noreferrer'
                   target='_blank'
                 >
-                  <span className='tab-url'>{url}</span>
+                  <span className='tab-url'>{(new URL(url)).hostname}</span>
                 </a>.
               </Text>
             </Box>
