@@ -13,6 +13,7 @@ describe('Wallet', () => {
     browser = await puppeteer.launch({ headless: false,
       executablePath: process.env.PUPPETEER_EXEC_PATH,
       args: [
+        '--no-sandbox', // to get around this issue https://github.com/puppeteer/puppeteer/issues/3698
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`
       ] });
