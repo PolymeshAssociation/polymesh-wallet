@@ -6,11 +6,15 @@ describe('Wallet', () => {
   let browser: puppeteer.Browser;
   let page: puppeteer.Page;
   let extensionUrl: string;
+  const accountPass = 'j457fkw72jfg89';
+  const jsonPass = 'JSONPASS0';
+  const jsonFilePath = path.join(__dirname, 'json_account.json');
 
   beforeAll(async () => {
     const pathToExtension = path.join(__dirname, '../packages/extension/build');
 
-    browser = await puppeteer.launch({ headless: false,
+    browser = await puppeteer.launch({ dumpio: true,
+      headless: false,
       executablePath: process.env.PUPPETEER_EXEC_PATH,
       args: [
         '--no-sandbox', // to get around this issue https://github.com/puppeteer/puppeteer/issues/3698
@@ -42,18 +46,17 @@ describe('Wallet', () => {
   describe('Account creation', () => {
     describe('Import seed phrase', () => {
       const accountName = 'Imported From Seed';
-      const accountPass = 'j457fkw72jfg89';
 
       it('Accept agreement checkboxes', async () => {
         await page.waitForSelector('input[type=checkbox]');
 
-        await page.evaluate(() => {
+        await page.evaluate(() =>
           document.querySelectorAll('input[type=checkbox]').forEach((el) => {
             if (el.parentElement) {
               el.parentElement.click();
             }
-          });
-        });
+          })
+        );
       });
 
       it('Proceed with importing seed phrase', async () => {
@@ -63,16 +66,79 @@ describe('Wallet', () => {
       it('Fill import seed form', async () => {
         const seed = mnemonicGenerate(12);
 
-        await (await page.waitForXPath('//textarea')).type(seed);
-        await (await page.waitForXPath("//button[contains(., 'Continue')]")).click();
-        await (await page.waitForXPath("//input[@placeholder='Enter account name']")).type(accountName);
-        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more']")).type(accountPass);
-        await (await page.waitForXPath("//input[@placeholder='Confirm your password']")).type(accountPass);
-        await (await page.waitForXPath("//button[contains(., 'Restore')]")).click();
+        await (await page.waitForXPath('//textarea'))
+          .type(seed);
+
+        await (await page.waitForXPath("//button[contains(., 'Continue')]"))
+          .click();
+
+        await (await page.waitForXPath("//input[@placeholder='Enter account name']"))
+          .type(accountName);
+
+        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more']"))
+          .type(accountPass);
+
+        await (await page.waitForXPath("//input[@placeholder='Confirm your password']"))
+          .type(accountPass);
+
+        await (await page.waitForXPath("//button[contains(., 'Restore')]"))
+          .click();
       });
 
       it('Account is displayed in accounts list', async () => {
         await page.waitForXPath(`//span[text()='${accountName}']`);
+      });
+    });
+
+    describe('Import from JSON', () => {
+      it('Can add additional keys', async () => {
+        await (await page.waitForXPath("//span[text()='Add a key']"))
+          .click();
+
+        await (await page.waitForXPath("//span[text()='Import account with JSON file']"))
+          .click();
+
+        await page.waitForXPath("//input[@type='file']", { hidden: true });
+      });
+
+      it('Can upload JSON file', async () => {
+        const uploadHandle = (await page.$x("//input[@type='file']"))[0];
+
+        await uploadHandle.uploadFile(jsonFilePath);
+
+        await uploadHandle.evaluate((upload) =>
+          upload.dispatchEvent(new Event('change', { bubbles: true })));
+
+        const passHandle = await page.waitForSelector('input#jsonPassword');
+
+        expect((await page.$x("//input[@type='password']")).length).toEqual(1);
+
+        const submitHandle = (await page.$x("//button[@type='submit']"))[0];
+
+        expect(submitHandle).toBeTruthy();
+
+        await passHandle.type(accountPass);
+        await submitHandle.click();
+        await page.waitForXPath('//span[text()="Invalid password"]');
+
+        await page.evaluate(() => {
+          // @ts-ignore
+          document.querySelector('input#jsonPassword').value = '';
+        });
+        await passHandle.type(jsonPass);
+        await submitHandle.click();
+      });
+
+      it('Prompt for wallet password', async () => {
+        await (await page.waitForXPath("//input[@placeholder='Enter wallet password']"))
+          .type(accountPass);
+
+        await (await page.waitForXPath("//button[@type='submit']"))
+          .click();
+      });
+
+      it('Account is displayed in accounts list', async () => {
+        await page.waitForXPath("//span[text()='Imported from JSON']");
       });
     });
   });

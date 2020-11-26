@@ -29,7 +29,7 @@ export const Password: FC<Props> = ({ confirmLabel, label, withConfirm }) => {
         <Box>
           <TextInput inputRef={register({ required: true, minLength: 8 })}
             name='password'
-            placeholder='Enter 8 characters or more'
+            placeholder={withConfirm ? 'Enter 8 characters or more' : 'Enter wallet password'}
             type='password' />
           {errors.password &&
             <Box>

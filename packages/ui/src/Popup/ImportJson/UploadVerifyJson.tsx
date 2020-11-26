@@ -100,13 +100,13 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
 
     reader.onload = async ({ target }: ProgressEvent<FileReader>) => {
       if (target && target.result) {
-        const name = file.name;
         const data = convertResult(target.result as ArrayBuffer, false);
-
-        setAccountName(name.split('_exported_account_')[0]);
-        setFilename(name);
-
         const fileContent = await parseFile(data);
+
+        const name: string = fileContent.json?.meta.name as string || file.name.split('_exported_account_')[0];
+
+        setAccountName(name);
+        setFilename(file.name);
 
         setAccountJson(fileContent);
       }
