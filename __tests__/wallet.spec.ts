@@ -2,6 +2,14 @@ import puppeteer from 'puppeteer';
 import path from 'path';
 import { mnemonicGenerate } from '@polkadot/util-crypto';
 
+async function clickOn (page: puppeteer.Page, menuItem: string) {
+  // @ts-ignore
+  await page.evaluate(() => document.querySelector('#add_account_menu').parentElement.click());
+
+  await (await page.waitForXPath(`//span[text()='${menuItem}']`))
+    .click();
+}
+
 describe('Wallet', () => {
   let browser: puppeteer.Browser;
   let page: puppeteer.Page;
@@ -9,6 +17,7 @@ describe('Wallet', () => {
   const accountPass = 'j457fkw72jfg89';
   const jsonPass = 'JSONPASS0';
   const jsonFilePath = path.join(__dirname, 'json_account.json');
+  const SEED_WORDS = 12;
 
   beforeAll(async () => {
     const pathToExtension = path.join(__dirname, '../packages/extension/build');
@@ -29,7 +38,10 @@ describe('Wallet', () => {
       const [,, extensionID] = backgroundPageTarget._targetInfo.url.split('/');
 
       extensionUrl = `chrome-extension://${extensionID}/index.html`;
-      console.log('>>>> extensionUrl', extensionUrl);
+
+      const context = browser.defaultBrowserContext();
+
+      await context.overridePermissions(extensionUrl, ['clipboard-read']);
 
       page = await browser.newPage();
       await page.goto(extensionUrl);
@@ -38,15 +50,13 @@ describe('Wallet', () => {
     }
   });
 
-  afterAll(async () => {
-    await page.close();
-    await browser.close();
-  });
+  // afterAll(async () => {
+  //   await page.close();
+  //   await browser.close();
+  // });
 
-  describe('Account creation', () => {
-    describe('Import seed phrase', () => {
-      const accountName = 'Imported From Seed';
-
+  describe('Accounts', () => {
+    describe('Agreements', () => {
       it('Accept agreement checkboxes', async () => {
         await page.waitForSelector('input[type=checkbox]');
 
@@ -58,20 +68,49 @@ describe('Wallet', () => {
           })
         );
       });
+    });
 
-      it('Proceed with importing seed phrase', async () => {
-        await (await page.waitForXPath("//button[contains(., 'Restore account with recovery phrase')]")).click();
+    describe('Create new account', () => {
+      const accountName = 'New Account';
+
+      it('Proceed with account creation', async () => {
+        await (await page.waitForXPath('//button[text()="Create new account"][not(@disabled)]')).click();
       });
 
-      it('Fill import seed form', async () => {
-        const seed = mnemonicGenerate(12);
+      it('Generate and confirm seed', async () => {
+        await (await page.waitForXPath("//span[text()='Copy your recovery phrase']")).click();
 
-        await (await page.waitForXPath('//textarea'))
-          .type(seed);
+        const copiedPhrase = await page.evaluate(() => navigator.clipboard.readText());
+        const words = copiedPhrase.split(' ');
 
-        await (await page.waitForXPath("//button[contains(., 'Continue')]"))
+        expect(words.length).toEqual(SEED_WORDS);
+
+        await page.evaluate(() =>
+          document.querySelectorAll('input[type=checkbox]').forEach((el) => {
+            if (el.parentElement) {
+              el.parentElement.click();
+            }
+          })
+        );
+
+        await (await page.waitForXPath("//button[text()='Continue'][not(@disabled)]"))
           .click();
 
+        const div = await page.waitForSelector('#shuffled-phrase');
+
+        for (const word of words) {
+          const el = (await div.$x(`//span[text()="${word}"]`))[0];
+
+          await el.click();
+        }
+
+        await page.waitForXPath('//span[text()="Your recovery phrase is correct. Thank you!"]');
+
+        await (await page.waitForXPath("//button[text()='Continue'][not(@disabled)]"))
+          .click();
+      });
+
+      it('Set account details', async () => {
         await (await page.waitForXPath("//input[@placeholder='Enter account name']"))
           .type(accountName);
 
@@ -81,7 +120,7 @@ describe('Wallet', () => {
         await (await page.waitForXPath("//input[@placeholder='Confirm your password']"))
           .type(accountPass);
 
-        await (await page.waitForXPath("//button[contains(., 'Restore')]"))
+        await (await page.waitForXPath("//button[text()='Create account'][not(@disabled)]"))
           .click();
       });
 
@@ -90,18 +129,50 @@ describe('Wallet', () => {
       });
     });
 
-    describe('Import from JSON', () => {
+    describe('Import seed phrase', () => {
+      const accountName = 'Imported From Seed';
+
       it('Can add additional keys', async () => {
-        await (await page.waitForXPath("//span[text()='Add a key']"))
-          .click();
+        await page.waitForSelector('#add_account_menu');
 
-        await (await page.waitForXPath("//span[text()='Import account with JSON file']"))
-          .click();
+        await clickOn(page, 'Restore with recovery phrase');
+      });
 
-        await page.waitForXPath("//input[@type='file']", { hidden: true });
+      it('Fill import seed form', async () => {
+        const seed = mnemonicGenerate(SEED_WORDS);
+
+        await (await page.waitForXPath('//textarea'))
+          .type(seed);
+
+        await (await page.waitForXPath("//button[text()='Continue'][not(@disabled)]"))
+          .click();
+      });
+
+      it('Fill account details', async () => {
+        await (await page.waitForXPath("//input[@placeholder='Enter account name']"))
+          .type(accountName);
+
+        await (await page.waitForXPath("//input[@placeholder='Enter wallet password']"))
+          .type(accountPass);
+
+        await (await page.waitForXPath("//button[text()='Restore'][not(@disabled)]")).click();
+      });
+
+      it('Account is displayed in accounts list', async () => {
+        await page.waitForXPath(`//span[text()='${accountName}']`);
+      });
+    });
+
+    describe('Import from JSON', () => {
+      const accountName = 'Imported from JSON';
+
+      it('Can add additional keys', async () => {
+        await clickOn(page, 'Import account with JSON file');
       });
 
       it('Can upload JSON file', async () => {
+        await page.waitForXPath("//input[@type='file']", { hidden: true });
+
         const uploadHandle = (await page.$x("//input[@type='file']"))[0];
 
         await uploadHandle.uploadFile(jsonFilePath);
@@ -138,7 +209,7 @@ describe('Wallet', () => {
       });
 
       it('Account is displayed in accounts list', async () => {
-        await page.waitForXPath("//span[text()='Imported from JSON']");
+        await page.waitForXPath(`//span[text()='${accountName}']`);
       });
     });
   });

@@ -133,7 +133,8 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
           </Flex>
         </Flex>
         <Flex
-          flexWrap='wrap'>
+          flexWrap='wrap'
+          id='shuffled-phrase'>
           {shuffledPhrase.map((word, index) => (
             <Box backgroundColor='gray.4'
               borderRadius='1'

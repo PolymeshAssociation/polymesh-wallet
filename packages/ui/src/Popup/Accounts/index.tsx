@@ -209,7 +209,8 @@ export default function Accounts (): React.ReactElement {
               {/* @ts-ignore */}
               <ContextMenuTrigger id='add_account_menu'
                 mouseButton={0}>
-                <Flex justifyContent='center'
+                <Flex id='add_account_menu'
+                  justifyContent='center'
                   style={{ cursor: 'pointer' }}>
                   <Flex mx='s'>
                     <Icon Asset={SvgPlus}
