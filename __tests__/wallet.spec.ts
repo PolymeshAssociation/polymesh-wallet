@@ -50,10 +50,10 @@ describe('Wallet', () => {
     }
   });
 
-  // afterAll(async () => {
-  //   await page.close();
-  //   await browser.close();
-  // });
+  afterAll(async () => {
+    await page.close();
+    await browser.close();
+  });
 
   describe('Accounts', () => {
     describe('Agreements', () => {
