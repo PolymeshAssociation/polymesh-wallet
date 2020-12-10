@@ -1302,6 +1302,7 @@ const pme = {
       "doc_type": "Option<DocumentType>",
       "filing_date": "Option<Moment>"
     },
+    "Version": "u8",
     "AssetType": {
       "_enum": {
         "EquityCommon": "",
@@ -1887,7 +1888,6 @@ const pme = {
     "ProposalState": {
       "_enum": [
         "Pending",
-        "Cancelled",
         "Rejected",
         "Scheduled",
         "Failed",
@@ -1895,40 +1895,17 @@ const pme = {
         "Expired"
       ]
     },
-    "ReferendumState": {
-      "_enum": [
-        "Pending",
-        "Scheduled",
-        "Rejected",
-        "Failed",
-        "Executed"
-      ]
-    },
-    "ReferendumType": {
-      "_enum": [
-        "FastTracked",
-        "Emergency",
-        "Community"
-      ]
-    },
     "Pip": {
       "id": "PipId",
       "proposal": "Call",
       "state": "ProposalState",
-      "proposer": "Proposer",
-      "cool_off_until": "u32"
+      "proposer": "Proposer"
     },
     "ProposalData": {
       "_enum": {
         "Hash": "Hash",
         "Proposal": "Vec<u8>"
       }
-    },
-    "Referendum": {
-      "id": "PipId",
-      "state": "ReferendumState",
-      "referendum_type": "ReferendumType",
-      "enactment_period": "u32"
     },
     "TickerTransferApproval": {
       "authorized_by": "IdentityId",
@@ -2083,8 +2060,8 @@ const pme = {
         "AssetRegisterTicker",
         "AssetIssue",
         "AssetAddDocument",
-        "AssetCheckpoint",
         "AssetCreateAsset",
+        "AssetCreateCheckpointSchedule",
         "DividendNew",
         "ComplianceManagerAddComplianceRequirement",
         "IdentityRegisterDid",
@@ -2093,7 +2070,10 @@ const pme = {
         "IdentitySetPrimaryKey",
         "IdentityAddSecondaryKeysWithAuthorization",
         "PipsPropose",
-        "VotingAddBallot"
+        "VotingAddBallot",
+        "ContractsPutCode",
+        "BallotAttachBallot",
+        "DistributionDistribute"
       ]
     },
     "CddStatus": {
@@ -2148,6 +2128,12 @@ const pme = {
         "Frozen": "",
         "Timelocked": "",
         "Handled": ""
+      }
+    },
+    "HandledTxStatus": {
+      "_enum": {
+        "Success": "",
+        "Error": "Text"
       }
     },
     "CappedFee": "u64",
@@ -2234,7 +2220,7 @@ const pme = {
     },
     "CalendarPeriod": {
       "unit": "CalendarUnit",
-      "amount": "Option<NonZeroU64>"
+      "amount": "u64"
     },
     "CheckpointSchedule": {
       "start": "Moment",
@@ -2358,7 +2344,7 @@ const pme = {
     },
     "Tax": "Permill",
     "TargetIdentities": {
-      "identities": "Vec<IdentitityId>",
+      "identities": "Vec<IdentityId>",
       "treatment": "TargetTreatment"
     },
     "TargetTreatment": {
@@ -2390,11 +2376,13 @@ const pme = {
     "RecordDateSpec": {
       "_enum": {
         "Scheduled": "Moment",
+        "ExistingSchedule": "ScheduleId",
         "Existing": "CheckpointId"
       }
     },
     "CorporateAction": {
       "kind": "CAKind",
+      "decl_date": "Moment",
       "record_date": "Option<RecordDate>",
       "details": "Text",
       "targets": "TargetIdentities",
@@ -2757,7 +2745,7 @@ const pme = {
   }
 };
 
-const pmf = alcyone;
+const pmf = pme;
 
 const schema: Record<NetworkName, { rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>,
   types: RegistryTypes }> = {
