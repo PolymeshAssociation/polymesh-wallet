@@ -1888,6 +1888,7 @@ const pme = {
     "ProposalState": {
       "_enum": [
         "Pending",
+        "Cancelled",
         "Rejected",
         "Scheduled",
         "Failed",
@@ -1895,17 +1896,40 @@ const pme = {
         "Expired"
       ]
     },
+    "ReferendumState": {
+      "_enum": [
+        "Pending",
+        "Scheduled",
+        "Rejected",
+        "Failed",
+        "Executed"
+      ]
+    },
+    "ReferendumType": {
+      "_enum": [
+        "FastTracked",
+        "Emergency",
+        "Community"
+      ]
+    },
     "Pip": {
       "id": "PipId",
       "proposal": "Call",
       "state": "ProposalState",
-      "proposer": "Proposer"
+      "proposer": "Proposer",
+      "cool_off_until": "u32"
     },
     "ProposalData": {
       "_enum": {
         "Hash": "Hash",
         "Proposal": "Vec<u8>"
       }
+    },
+    "Referendum": {
+      "id": "PipId",
+      "state": "ReferendumState",
+      "referendum_type": "ReferendumType",
+      "enactment_period": "u32"
     },
     "TickerTransferApproval": {
       "authorized_by": "IdentityId",
