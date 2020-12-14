@@ -226,16 +226,24 @@ export async function subscribePolySelectedAccount (cb: (selected: string | unde
   return polyMessage('poly:pri(selectedAccount.subscribe)', null, cb);
 }
 
-export async function subscribePolyStatus (cb: (status: StoreStatus) => void): Promise<boolean> {
-  return polyMessage('poly:pri(status.subscribe)', null, cb);
-}
-
 export async function setPolySelectedAccount (account: string): Promise<boolean> {
   return polyMessage('poly:pri(selectedAccount.set)', { account });
 }
 
 export async function setPolyNetwork (network: NetworkName): Promise<boolean> {
   return polyMessage('poly:pri(network.set)', { network });
+}
+
+export async function togglePolyIsDev (): Promise<boolean> {
+  return polyMessage('poly:pri(isDev.toggle)', null);
+}
+
+export async function subscribePolyStatus (cb: (status: StoreStatus) => void): Promise<boolean> {
+  return polyMessage('poly:pri(status.subscribe)', null, cb);
+}
+
+export async function subscribePolyIsDev (cb: (isDev: string) => void): Promise<boolean> {
+  return polyMessage('poly:pri(isDev.subscribe)', null, cb);
 }
 
 export async function renameIdentity (network: NetworkName, did: string, name: string): Promise<boolean> {

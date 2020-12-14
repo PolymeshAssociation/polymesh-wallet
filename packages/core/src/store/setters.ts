@@ -9,6 +9,10 @@ function setNetwork (network: NetworkName): void {
   store.dispatch(networkActions.setNetwork(network));
 }
 
+function toggleIsDeveloper () {
+  store.dispatch(networkActions.toggleIsDeveloper());
+}
+
 function setSelectedAccount (account: string): void {
   store.dispatch(accountActions.selectAccount(account));
 }
@@ -35,5 +39,6 @@ export {
   renameIdentity,
   setIsRehydrated,
   resetState,
+  toggleIsDeveloper,
   setError
 };
