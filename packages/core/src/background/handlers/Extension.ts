@@ -1,8 +1,8 @@
 import { PolyResponseType, RequestPolyNetworkSet, RequestPolySelectedAccountSet, RequestPolyCallDetails, ResponsePolyCallDetails, RequestPolyIdentityRename, PolyMessageTypes, PolyRequestTypes } from '../types';
 
 import { createSubscription, unsubscribe } from './subscriptions';
-import { subscribeIdentifiedAccounts, subscribeStatus, subscribeNetwork, subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
-import { setNetwork, setSelectedAccount, renameIdentity } from '@polymathnetwork/extension-core/store/setters';
+import { subscribeIdentifiedAccounts, subscribeStatus, subscribeNetwork, subscribeSelectedAccount, subscribeIsDev } from '@polymathnetwork/extension-core/store/subscribers';
+import { setNetwork, setSelectedAccount, renameIdentity, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { callDetails } from '@polymathnetwork/extension-core/api';
 import { getNetwork } from '@polymathnetwork/extension-core/store/getters';
 
@@ -59,6 +59,21 @@ export default class Extension {
     return true;
   }
 
+  private polyIsDevSubscribe (id: string, port: chrome.runtime.Port): boolean {
+    const cb = createSubscription<'poly:pri(isDev.subscribe)'>(id, port);
+
+    const reduxUnsub = subscribeIsDev((data) => {
+      cb(data);
+    });
+
+    port.onDisconnect.addListener((): void => {
+      reduxUnsub();
+      unsubscribe(id);
+    });
+
+    return true;
+  }
+
   private polyNetworkSet ({ network }: RequestPolyNetworkSet): boolean {
     setNetwork(network);
 
@@ -81,6 +96,12 @@ export default class Extension {
     const network = getNetwork();
 
     return callDetails(request, network);
+  }
+
+  private polyIsDevToggle (): boolean {
+    toggleIsDeveloper();
+
+    return true;
   }
 
   public async handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], port: chrome.runtime.Port): Promise<PolyResponseType<TMessageType>> {
@@ -108,6 +129,12 @@ export default class Extension {
 
       case 'poly:pri(identity.rename)':
         return this.polyIdentityRename(request as RequestPolyIdentityRename);
+
+      case 'poly:pri(isDev.toggle)':
+        return this.polyIsDevToggle();
+
+      case 'poly:pri(isDev.subscribe)':
+        return this.polyIsDevSubscribe(id, port);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

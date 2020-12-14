@@ -9,7 +9,7 @@ import { useErrorHandler } from 'react-error-boundary';
 import { toast } from 'react-toastify';
 import { Loading } from '../components';
 import { AccountContext, ActionContext, AuthorizeReqContext, MetadataReqContext, SettingsContext, SigningReqContext, PolymeshContext, ActivityContext } from '../components/contexts';
-import { subscribeAccounts, subscribePolyStatus, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeSigningRequests, subscribePolyAccounts, subscribePolyNetwork, subscribePolySelectedAccount, busySubscriber } from '../messaging';
+import { subscribeAccounts, subscribePolyStatus, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeSigningRequests, subscribePolyAccounts, subscribePolyNetwork, subscribePolySelectedAccount, busySubscriber, subscribePolyIsDev } from '../messaging';
 import { buildHierarchy } from '../util/buildHierarchy';
 import Accounts from './Accounts';
 import Authorize from './Authorize';
@@ -40,12 +40,13 @@ function initAccountContext (accounts: AccountJson[]): AccountsContext {
   };
 }
 
-function initPolymeshContext (network: string, polymeshAccounts:IdentifiedAccount[], selectedAccount: string, currentAccount?: IdentifiedAccount): PolymeshContextType {
+function initPolymeshContext (network: string, polymeshAccounts:IdentifiedAccount[], selectedAccount: string, isDeveloper: boolean, currentAccount?: IdentifiedAccount): PolymeshContextType {
   return {
     network,
     polymeshAccounts,
     selectedAccount,
-    currentAccount
+    currentAccount,
+    isDeveloper
   };
 }
 
@@ -62,6 +63,7 @@ export default function Popup (): React.ReactElement {
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
   const [status, setStatus] = useState<undefined | StoreStatus>();
   const [isBusy, setIsBusy] = useState(false);
+  const [isDeveloper, setIsDeveloper] = useState(false);
   const handleError = useErrorHandler();
 
   useEffect(() => {
@@ -117,8 +119,9 @@ export default function Popup (): React.ReactElement {
       subscribePolyStatus(setStatus),
       subscribePolyAccounts(setPolymeshAccounts),
       subscribePolyNetwork(setNetwork),
-      subscribePolySelectedAccount((account) => {
-        setSelectedAccountAddress(account);
+      subscribePolySelectedAccount(setSelectedAccountAddress),
+      subscribePolyIsDev((isDev) => {
+        setIsDeveloper(isDev === 'true');
       }),
       subscribeAccounts(setAccounts),
       subscribeAuthorizeRequests(setAuthRequests),
@@ -143,8 +146,8 @@ export default function Popup (): React.ReactElement {
       : undefined;
 
     setAccountCtx(initAccountContext(accounts || []));
-    setPolymeshCtx(initPolymeshContext(network, polymeshAccounts, selectedAccountAddress || '', currentAccount));
-  }, [accounts, network, polymeshAccounts, selectedAccountAddress]);
+    setPolymeshCtx(initPolymeshContext(network, polymeshAccounts, selectedAccountAddress || '', isDeveloper, currentAccount));
+  }, [accounts, network, polymeshAccounts, selectedAccountAddress, isDeveloper]);
 
   const Root = authRequests && authRequests.length
     ? Authorize
