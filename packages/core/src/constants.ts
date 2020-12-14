@@ -28,7 +28,7 @@ const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
     explorer: 'http://18.224.67.149/'
   },
   pme: {
-    dashboard: 'https://polymesh-dashboard-dev-v2.herokuapp.com/',
+    dashboard: 'https://polymesh-dashboard-dev.herokuapp.com/',
     explorer: 'http://ec2-3-15-5-195.us-east-2.compute.amazonaws.com'
   }
 };
