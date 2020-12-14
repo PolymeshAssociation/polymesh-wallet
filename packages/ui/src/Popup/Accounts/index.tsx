@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, Fragment } from 'react';
 import styled from 'styled-components';
 import { AccountContext, PolymeshContext } from '../../components';
 import AddAccount from './AddAccount';
@@ -40,7 +40,7 @@ export default function Accounts (): React.ReactElement {
               .filter((_network) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
               .map((_network, index) => {
                 return (
-                  <>
+                  <Fragment key={index}>
                     {/* @ts-ignore */}
                     <MenuItem data={{ networkKey: _network }}
                       key={index}
@@ -48,7 +48,7 @@ export default function Accounts (): React.ReactElement {
                       <Text color='gray.2'
                         variant='b1'>{networkLabels[_network as NetworkName]}</Text>
                     </MenuItem>
-                  </>
+                  </Fragment>
                 );
               })
           }
@@ -62,9 +62,9 @@ export default function Accounts (): React.ReactElement {
   };
 
   const handleNetworkChange = async (event: string, data: {networkKey: NetworkName}) => {
-    console.log(data);
-
-    await setPolyNetwork(data.networkKey);
+    if (!!data.networkKey && data.networkKey !== network) {
+      await setPolyNetwork(data.networkKey);
+    }
   };
 
   const groupAccounts = () => (array:IdentifiedAccount[]) =>
