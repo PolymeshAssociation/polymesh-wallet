@@ -34,7 +34,7 @@ const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
       justifyContent='space-between'
       style={{ height: '100%' }}>
       <Box mt='m'>
-        <ExpandableDetails title={`${section}.${method}${
+        <ExpandableDetails title={`${section}: ${method}${
           meta
             ? `(${meta.args.map(({ name }) => name).join(', ')})`
             : ''

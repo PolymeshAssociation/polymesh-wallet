@@ -81,8 +81,19 @@ export const selectIsRehydrated = createSelector(
   ({ rehydrated }) => rehydrated
 );
 
+export const selectIsHydratedAndNetwork = createSelector(
+  selectIsRehydrated,
+  network,
+  (isHydrated, network) => { return isHydrated ? network : undefined; }
+);
+
 export const selectStatus = createSelector(
   (state: RootState) => state.status,
   // Status will always be "ready" if we're offline
   (status) => ({ ...status, ready: !navigator.onLine || status.ready })
+);
+
+export const selectIsDev = createSelector(
+  (state: RootState) => state.network,
+  ({ isDeveloper }) => isDeveloper ? 'true' : 'false'
 );

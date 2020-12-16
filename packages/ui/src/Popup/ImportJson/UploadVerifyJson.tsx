@@ -29,7 +29,7 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
       jsonPassword: ''
     }
   });
-  const { errors, handleSubmit, register, setError } = methods;
+  const { clearErrors, errors, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
   const handleError = useErrorHandler();
 
@@ -79,17 +79,11 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
   };
 
   const parseFile = async (file: Uint8Array): Promise<FileState> => {
-    try {
-      const json = JSON.parse(u8aToString(file)) as KeyringPair$Json;
-      const isFileValid = await jsonVerifyFile(json);
-      const address = json.address;
+    const json = JSON.parse(u8aToString(file)) as KeyringPair$Json;
+    const isFileValid = await jsonVerifyFile(json);
+    const address = json.address;
 
-      return { address, isFileValid, json };
-    } catch (error) {
-      console.error(error);
-    }
-
-    return { address: null, isFileValid: false, json: null };
+    return { address, isFileValid, json };
   };
 
   const readFile = (file: File) => {
@@ -100,15 +94,22 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
 
     reader.onload = async ({ target }: ProgressEvent<FileReader>) => {
       if (target && target.result) {
-        const name = file.name;
-        const data = convertResult(target.result as ArrayBuffer, false);
+        try {
+          const name = file.name;
+          const data = convertResult(target.result as ArrayBuffer, false);
 
-        setAccountName(name.split('_exported_account_')[0]);
-        setFilename(name);
+          setAccountName(name.split('_exported_account_')[0]);
+          setFilename(name);
 
-        const fileContent = await parseFile(data);
+          const fileContent = await parseFile(data);
 
-        setAccountJson(fileContent);
+          setAccountJson(fileContent);
+
+          clearErrors('jsonFile');
+        } catch (error) {
+          console.log('Error', error);
+          setError('jsonFile', { type: 'invalid' });
+        }
       }
     };
 
@@ -141,7 +142,8 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
         </Box>
         {!accountJson?.isFileValid &&
           <>
-            <input hidden={true}
+            <input accept='.json'
+              hidden={true}
               name='jsonFile'
               onChange={handleFileChange}
               ref={fileRef}
@@ -151,7 +153,17 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
               <ButtonSmall fluid
                 onClick={showUpload}
                 variant='secondary'>Choose file</ButtonSmall>
+              {errors.jsonFile &&
+                      <Box mt='s'>
+                        <Text color='alert'
+                          variant='b3'>
+                          {(errors.jsonFile as FieldError).type === 'required' && 'Json file is require'}
+                          {(errors.jsonFile as FieldError).type === 'invalid' && 'Uploaded file is invalid'}
+                        </Text>
+                      </Box>
+              }
             </Box>
+
           </>
         }
         {accountJson?.isFileValid &&
