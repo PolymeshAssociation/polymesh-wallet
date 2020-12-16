@@ -176,6 +176,7 @@ export default function Accounts (): React.ReactElement {
           <MenuItem data={{ action: 'toggleIsDev' }}
             onClick={handleTopMenuSelection}>
             <Checkbox checked={isDeveloper}
+              disabled
               label={<Text color='gray.2'>Display development networks</Text>}
               onClick={(e) => e.preventDefault()}
               style={{ cursor: 'pointer' }}
