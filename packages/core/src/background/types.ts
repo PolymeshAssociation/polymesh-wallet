@@ -24,9 +24,13 @@ export type RequestPolyNetworkGet = null;
 
 export type RequestPolyNetworkMetaSubscribe = null;
 
+export type RequestPolyIsDevSubscribe = null;
+
 export interface RequestPolyNetworkSet {
   network: NetworkName
 }
+
+export type RequestPolyIsDevToggle = null;
 
 export interface RequestPolySelectedAccountSet {
   account: string
@@ -48,6 +52,8 @@ export interface PolyRequestSignatures {
   'poly:pri(selectedAccount.subscribe)': [RequestPolySelectedAccountSubscribe, boolean, string | undefined];
   'poly:pri(status.subscribe)': [RequestPolyStatusSubscribe, boolean, StoreStatus]
   'poly:pri(network.set)': [RequestPolyNetworkSet, boolean];
+  'poly:pri(isDev.toggle)': [RequestPolyIsDevToggle, boolean];
+  'poly:pri(isDev.subscribe)': [RequestPolyIsDevSubscribe, boolean, string];
   'poly:pri(selectedAccount.set)': [RequestPolySelectedAccountSet, boolean];
   'poly:pri(callDetails.get)': [RequestPolyCallDetails, ResponsePolyCallDetails];
   'poly:pri(identity.rename)': [RequestPolyIdentityRename, boolean];

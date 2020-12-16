@@ -1,22 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, Fragment } from 'react';
 import styled from 'styled-components';
 import { AccountContext, PolymeshContext } from '../../components';
 import AddAccount from './AddAccount';
 import { AccountsHeader } from './AccountsHeader';
-import { Text, Box, Header, Flex, Icon, Menu, MenuItem, ContextMenuTrigger, StatusBadge, GrowingButton } from '../../ui';
+import { Text, Box, Header, Flex, Icon, Menu, MenuItem, ContextMenuTrigger, StatusBadge, GrowingButton, Checkbox } from '../../ui';
 import { SvgViewDashboard,
   SvgDotsVertical,
   SvgPlus } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { AccountsContainer } from './AccountsContainer';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
-import { defaultNetwork, networkLabels, networkLinks } from '@polymathnetwork/extension-core/constants';
-import { setPolyNetwork, windowOpen } from '@polymathnetwork/extension-ui/messaging';
+import { defaultNetwork, networkLabels, networkLinks, networkIsDev } from '@polymathnetwork/extension-core/constants';
+import { togglePolyIsDev, setPolyNetwork, windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { useHistory } from 'react-router';
 
 export default function Accounts (): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
-  const { currentAccount, network, polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
+  const { currentAccount, isDeveloper, network, polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
   const history = useHistory();
 
   const renderNetworksSelector = (network: NetworkName = defaultNetwork) => {
@@ -36,19 +36,21 @@ export default function Accounts (): React.ReactElement {
         {/* @ts-ignore */}
         <Menu id='network_select'>
           {
-            Object.keys(networkLabels).map((_network, index) => {
-              return (
-                <>
-                  {/* @ts-ignore */}
-                  <MenuItem data={{ networkKey: _network }}
-                    key={index}
-                    onClick={handleNetworkChange}>
-                    <Text color='gray.2'
-                      variant='b1'>{networkLabels[_network as NetworkName]}</Text>
-                  </MenuItem>
-                </>
-              );
-            })
+            Object.keys(networkLabels)
+              .filter((_network) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
+              .map((_network, index) => {
+                return (
+                  <Fragment key={index}>
+                    {/* @ts-ignore */}
+                    <MenuItem data={{ networkKey: _network }}
+                      key={index}
+                      onClick={handleNetworkChange}>
+                      <Text color='gray.2'
+                        variant='b1'>{networkLabels[_network as NetworkName]}</Text>
+                    </MenuItem>
+                  </Fragment>
+                );
+              })
           }
         </Menu>
       </>
@@ -60,9 +62,9 @@ export default function Accounts (): React.ReactElement {
   };
 
   const handleNetworkChange = async (event: string, data: {networkKey: NetworkName}) => {
-    console.log(data);
-
-    await setPolyNetwork(data.networkKey);
+    if (!!data.networkKey && data.networkKey !== network) {
+      await setPolyNetwork(data.networkKey);
+    }
   };
 
   const groupAccounts = () => (array:IdentifiedAccount[]) =>
@@ -127,6 +129,8 @@ export default function Accounts (): React.ReactElement {
         return history.push('/account/change-password');
       case 'newWindow':
         return windowOpen();
+      case 'toggleIsDev':
+        return togglePolyIsDev();
     }
   };
 
@@ -167,6 +171,17 @@ export default function Accounts (): React.ReactElement {
             onClick={handleTopMenuSelection}>
             <Text color='gray.2'
               variant='b1'>Open extension in a new window</Text>
+          </MenuItem>
+          {/* @ts-ignore */}
+          <MenuItem data={{ action: 'toggleIsDev' }}
+            onClick={handleTopMenuSelection}>
+            <Checkbox checked={isDeveloper}
+              disabled
+              label={<Text color='gray.2'>Display development networks</Text>}
+              onClick={(e) => e.preventDefault()}
+              style={{ cursor: 'pointer' }}
+            />
+
           </MenuItem>
         </Menu>
       </>
