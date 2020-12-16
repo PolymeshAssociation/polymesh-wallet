@@ -102,23 +102,17 @@ function subscribePolymesh (): () => void {
                 }
 
                 const accounts = accountsData.map(({ address }) => address);
-                const newAccounts = difference(accounts, prevAccounts);
-                const removedAccounts = difference(prevAccounts, accounts);
 
-                // 0) Check for orphan accounts that don't have a corresponding key
-                const storeAccounts = getAccountsList();
-                const orphanAccounts = difference(storeAccounts, accounts);
-
-                // A) If account is removed, clean up any associated subscriptions
-                union(removedAccounts, orphanAccounts).forEach((account) => {
+                // A) Clean subscriptions of previous accounts list
+                prevAccounts.forEach((account) => {
                   if (unsubCallbacks[account]) {
                     unsubCallbacks[account]();
                     delete unsubCallbacks[account];
                   }
                 });
 
-                // B) Subscribe to new accounts
-                newAccounts.forEach((account) => {
+                // B) Create new subscriptions
+                accounts.forEach((account) => {
                   api.queryMulti([
                     [api.query.system.account, account],
                     [api.query.identity.keyToIdentityIds, account]
