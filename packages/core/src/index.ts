@@ -11,15 +11,13 @@ import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as statusActions } from './store/features/status';
 import store from './store';
-import { AccountData, IdentityData, KeyringAccountData, NetworkName, UnsubCallback } from './types';
+import { AccountData, IdentityData, KeyringAccountData, UnsubCallback } from './types';
 import { subscribeDidsList, subscribeIsHydratedAndNetwork } from './store/subscribers';
 import { getAccountsList, getDids } from './store/getters';
 import { nonFatalErrorHandler, observeAccounts } from './utils';
 import { union } from 'lodash-es';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
-
-let currentNetwork: NetworkName;
 
 /**
  * Synchronize accounts between keyring and redux store.
@@ -71,9 +69,7 @@ function subscribePolymesh (): () => void {
   }
 
   subscribeIsHydratedAndNetwork((network) => {
-    if (network && currentNetwork !== network) {
-      currentNetwork = network;
-
+    if (network) {
       // Unsubscribe from all subscriptions before preparing a new list of subscriptions
       // to the newly selected network.
       unsubAll();
@@ -133,7 +129,6 @@ function subscribePolymesh (): () => void {
                       network }));
                     }
                   }).then((unsub) => {
-                    unsubCallbacks[account] && unsubCallbacks[account]();
                     unsubCallbacks[account] = unsub;
                   }, nonFatalErrorHandler).catch(nonFatalErrorHandler);
                 });
