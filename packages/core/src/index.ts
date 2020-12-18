@@ -19,8 +19,6 @@ import { union } from 'lodash-es';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
-let currentNetwork: NetworkName;
-
 /**
  * Synchronize accounts between keyring and redux store.
  */
@@ -71,9 +69,7 @@ function subscribePolymesh (): () => void {
   }
 
   subscribeIsHydratedAndNetwork((network) => {
-    if (network && currentNetwork !== network) {
-      currentNetwork = network;
-
+    if (network) {
       // Unsubscribe from all subscriptions before preparing a new list of subscriptions
       // to the newly selected network.
       unsubAll();
@@ -133,7 +129,6 @@ function subscribePolymesh (): () => void {
                       network }));
                     }
                   }).then((unsub) => {
-                    unsubCallbacks[account] && unsubCallbacks[account]();
                     unsubCallbacks[account] = unsub;
                   }, nonFatalErrorHandler).catch(nonFatalErrorHandler);
                 });
