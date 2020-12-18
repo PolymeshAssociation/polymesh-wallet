@@ -11,7 +11,7 @@ import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as statusActions } from './store/features/status';
 import store from './store';
-import { AccountData, IdentityData, KeyringAccountData, NetworkName, UnsubCallback } from './types';
+import { AccountData, IdentityData, KeyringAccountData, UnsubCallback } from './types';
 import { subscribeDidsList, subscribeIsHydratedAndNetwork } from './store/subscribers';
 import { getAccountsList, getDids } from './store/getters';
 import { nonFatalErrorHandler, observeAccounts } from './utils';
