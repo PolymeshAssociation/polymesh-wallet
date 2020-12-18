@@ -9,11 +9,11 @@ function apiPromise (n: NetworkName): Promise<ApiPromise> {
   if (!(n in cache)) {
     const provider = new WsProvider(networkURLs[n]);
 
-    cache[n] = new ApiPromise({
+    cache[n] = (new ApiPromise({
       provider,
       rpc: schema[n].rpc,
       types: schema[n].types
-    }).isReadyOrError;
+    })).isReadyOrError;
   }
 
   return cache[n];
