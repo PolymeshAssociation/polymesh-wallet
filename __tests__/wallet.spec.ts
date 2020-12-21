@@ -8,6 +8,8 @@ describe('Wallet', () => {
   let extensionUrl: string;
 
   beforeAll(async () => {
+    jest.setTimeout(30000);
+
     const pathToExtension = path.join(__dirname, '../packages/extension/build');
 
     browser = await puppeteer.launch({ headless: false,
