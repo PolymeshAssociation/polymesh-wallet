@@ -23,7 +23,7 @@
     "postinstall": "polkadot-dev-yarn-only",
     "start": "yarn watch",
     "test": "polkadot-dev-run-test",
-    "e2e": "jest --config jest.e2e.config.js",
+    "e2e": "jest --runInBand --config jest.e2e.config.js",
     "watch": "cd packages/extension && yarn polkadot-exec-webpack --config webpack.config.js --watch"
   },
   "resolutions": {

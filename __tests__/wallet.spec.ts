@@ -8,6 +8,8 @@ describe('Wallet', () => {
   let extensionUrl: string;
 
   beforeAll(async () => {
+    jest.setTimeout(30000);
+
     const pathToExtension = path.join(__dirname, '../packages/extension/build');
 
     browser = await puppeteer.launch({ headless: false,
@@ -45,7 +47,7 @@ describe('Wallet', () => {
       const accountPass = 'j457fkw72jfg89';
 
       it('Accept agreement checkboxes', async () => {
-        await page.waitForSelector('input[type=checkbox]');
+        await page.waitForSelector('div#agreement-checkboxes', { visible: true });
 
         await page.evaluate(() => {
           document.querySelectorAll('input[type=checkbox]').forEach((el) => {
