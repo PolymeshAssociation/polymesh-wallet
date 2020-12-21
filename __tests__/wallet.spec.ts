@@ -45,7 +45,7 @@ describe('Wallet', () => {
       const accountPass = 'j457fkw72jfg89';
 
       it('Accept agreement checkboxes', async () => {
-        await page.waitForSelector('input[type=checkbox]');
+        await page.waitForSelector('div#agreement-checkboxes', { visible: true });
 
         await page.evaluate(() => {
           document.querySelectorAll('input[type=checkbox]').forEach((el) => {
