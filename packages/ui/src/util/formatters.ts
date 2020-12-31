@@ -4,10 +4,10 @@ import BigNumber from 'bignumber.js';
  * Shortens an address for display purposes
  */
 export const toShortAddress = (address: string, { size = 17 }: { size?: number } = {}) => {
-  const minSize = 5;
+  const minSize = 10;
 
-  if (size < minSize) {
-    throw new Error('Cannot shortify an address to less than 5 characters');
+  if (address.length <= minSize) {
+    return address;
   }
 
   const portionSize = Math.floor((size - 3) / 2);
