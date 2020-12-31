@@ -204,12 +204,24 @@ function subscribePolymesh (): () => void {
                       : undefined))
                   .then((results) => {
                     dids.forEach((did, index) => {
-                      const didClaims = results[index];
+                      const didClaims = results[index] || [];
+
+                      // Sort claims array by expiry (non-expiring first)
+                      const didClaimsSorted = didClaims.sort((a, b) => {
+                        if (a.expiry.isEmpty) {
+                          return -1;
+                        } else if (b.expiry.isEmpty) {
+                          return 1;
+                        } else {
+                          // The last CDD to expire should come first.
+                          return a.expiry.unwrapOrDefault() > b.expiry.unwrapOrDefault() ? -1 : 1;
+                        }
+                      });
 
                       // Save CDD data
-                      const cdd = didClaims && didClaims.length > 0 ? {
-                        issuer: didClaims[0].claim_issuer.toString(),
-                        expiry: !didClaims[0].expiry.isEmpty ? Number(didClaims[0].expiry.toString()) : undefined
+                      const cdd = didClaimsSorted && didClaimsSorted.length > 0 ? {
+                        issuer: didClaimsSorted[0].claim_issuer.toString(),
+                        expiry: !didClaimsSorted[0].expiry.isEmpty ? Number(didClaimsSorted[0].expiry.toString()) : undefined
                       } : undefined;
 
                       store.dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
