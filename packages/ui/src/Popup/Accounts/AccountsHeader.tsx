@@ -62,7 +62,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
               onMouseLeave={mouseLeave}>
               <Text color='gray.0'
                 variant='b1m'>
-                {account.didAlias ? account.didAlias : '[Your Polymesh ID]'}
+                {account.didAlias ? formatters.toShortAddress(account.didAlias, { size: 30 }) : '[Your Polymesh ID]'}
               </Text>
               {hover &&
                 <Flex ml='xs'>
@@ -78,7 +78,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
           }
           {editing &&
             <Flex mb='xs'>
-              <TextInput defaultValue={name}
+              <TextInput
                 onChange={handleAliasChange}
                 tight
                 value={newAlias} />

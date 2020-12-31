@@ -56,7 +56,8 @@ function AddAccount (): React.ReactElement {
         flexDirection='column'
         justifyContent='space-between'
         mx='s'>
-        <Box mt='m'>
+        <Box id='agreement-checkboxes'
+          mt='m'>
           <Flex alignItems='flex-start'
             justifyContent='flex-start'
             mb='xs'>
