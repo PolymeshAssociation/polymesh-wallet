@@ -1,6 +1,6 @@
 import React, { FC, useContext, useState } from 'react';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
-import { Box, Text, Flex, Icon, LabelWithCopy, TextInput } from '../../ui';
+import { Box, Text, Flex, Icon, LabelWithCopy, TextInput, TextEllipsis } from '../../ui';
 import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountView } from './AccountView';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
@@ -82,14 +82,15 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
               onMouseEnter={mouseEnter}
               onMouseLeave={mouseLeave}>
               <Flex alignItems='center'>
-                { currentAccount?.didAlias && currentAccount.didAlias !== '' &&
+                { !!currentAccount?.didAlias &&
                   <Text color='brandMain'
-                    variant='c2'>{currentAccount.didAlias}</Text>
+                    variant='c2'>
+                    <TextEllipsis size={10}>{currentAccount.didAlias}</TextEllipsis></Text>
                 }
                 <Box ml='xs'>
                   <LabelWithCopy color='brandMain'
                     text={did}
-                    textSize={currentAccount?.didAlias && currentAccount.didAlias !== '' ? 30 - currentAccount.didAlias.length : 30}
+                    textSize={currentAccount?.didAlias ? 20 : 30}
                     textVariant='c2'
                   />
                 </Box>
