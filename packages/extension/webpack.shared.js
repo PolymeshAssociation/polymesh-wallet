@@ -7,14 +7,6 @@ const ManifestPlugin = require('webpack-extension-manifest-plugin');
 const pkgJson = require('./package.json');
 const manifest = require('./manifest.json');
 
-const packages = [
-  'extension',
-  'extension-base',
-  'extension-chains',
-  'extension-inject',
-  'extension-ui'
-];
-
 module.exports = (entry, alias = {}) => ({
   context: __dirname,
   devtool: false,
@@ -88,17 +80,11 @@ module.exports = (entry, alias = {}) => ({
     })
   ],
   resolve: {
-    // alias: packages.reduce((alias, p) => ({
-    //   ...alias,
-    //   [`@polkadot/${p}`]: path.resolve(__dirname, `../${p}/src`)``
-    // }), {
-    //   ...alias,
-    //   'react/jsx-runtime': require.resolve('react/jsx-runtime')
-    // }),
     alias: {
       '@polymathnetwork/extension': path.resolve(__dirname, '../extension/src'),
       '@polymathnetwork/extension-ui': path.resolve(__dirname, '../ui/src'),
-      '@polymathnetwork/extension-core': path.resolve(__dirname, '../core/src')
+      '@polymathnetwork/extension-core': path.resolve(__dirname, '../core/src'),
+      'react/jsx-runtime': require.resolve('react/jsx-runtime')
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.wasm'],
     fallback: {

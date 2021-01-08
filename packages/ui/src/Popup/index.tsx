@@ -70,7 +70,7 @@ export default function Popup (): React.ReactElement {
     if (status?.error) {
       if (status.error.code === ErrorCodes.FatalError) {
         // Fatal errors render the app useless. Display the error in an ErrorBoundaryFallback.
-        handleError(status.error as unknown as (prevState: Error) => Error);
+        handleError(status.error as unknown as (prevState: Error | null) => Error);
       } else {
         // Otherwise, we just inform the user via a Toast component.
         toast.error(
@@ -148,14 +148,6 @@ export default function Popup (): React.ReactElement {
     setAccountCtx(initAccountContext(accounts || []));
     setPolymeshCtx(initPolymeshContext(network, polymeshAccounts, selectedAccountAddress || '', isDeveloper, currentAccount));
   }, [accounts, network, polymeshAccounts, selectedAccountAddress, isDeveloper]);
-
-  useEffect(() => {
-    importWasm()
-      .then((crypto) => {
-        console.log(crypto.process_create_mocked_investor_uid('0x33fbab5be59605250c719f34b815a77baf1a0928a87c2aa164fd8f6718d52f08'));
-      })
-      .catch(console.error);
-  }, []);
 
   const Root = authRequests && authRequests.length
     ? Authorize
