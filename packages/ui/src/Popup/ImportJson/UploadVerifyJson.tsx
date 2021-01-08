@@ -26,7 +26,8 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
   const [accountJson, setAccountJson] = useState<FileState | undefined>();
   const methods = useForm({
     defaultValues: {
-      jsonPassword: ''
+      jsonPassword: '',
+      jsonFile: null
     }
   });
   const { clearErrors, errors, handleSubmit, register, setError } = methods;

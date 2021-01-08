@@ -11,8 +11,7 @@
   },
   "scripts": {
     "build": "polkadot-dev-build-ts && yarn build:zip",
-    "build:extra": "yarn build:i18n && yarn build:ui",
-    "build:i18n": "i18next-scanner --config i18next-scanner.config.js",
+    "build:extra": "yarn build:ui",
     "build:release": "polkadot-ci-ghact-build",
     "build:ui": "cd packages/extension && NODE_ENV=production yarn webpack --config webpack.extension.js --mode production",
     "build:zip": "yarn build:zip:dst && yarn build:zip:src",
