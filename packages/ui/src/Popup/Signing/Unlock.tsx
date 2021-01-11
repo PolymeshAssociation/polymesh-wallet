@@ -1,6 +1,6 @@
 import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
 import React, { useContext, useEffect } from 'react';
-import { FieldError, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { ActivityContext, PolymeshContext } from '../../components';
 import { Box, Button, Checkbox, Flex, Text, TextInput } from '../../ui';

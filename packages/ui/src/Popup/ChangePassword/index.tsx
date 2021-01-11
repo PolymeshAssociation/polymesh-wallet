@@ -2,7 +2,7 @@ import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/
 import { changePassword, validateAccount } from '@polymathnetwork/extension-ui/messaging';
 import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useContext } from 'react';
-import { FieldError, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
 

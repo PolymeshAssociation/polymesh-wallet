@@ -82,7 +82,8 @@ export const AccountDetails: FC = () => {
           <Box>
             {selectedAccount?.did
               ? <CddStatus cdd={selectedAccount?.cdd}
-                withText /> : 'N/A'
+                withText />
+              : 'N/A'
             }
           </Box>
         </Flex>

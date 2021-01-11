@@ -5,7 +5,7 @@ import { Box, Button, ButtonSmall, Flex, Header, Icon, LabelWithCopy, Text, Text
 import verifyJsonPassword from '@polymathnetwork/extension-ui/util/verifyJsonPassword';
 import React, { FC, useContext, useRef, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
-import { FieldError, FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { ActivityContext } from '../../components';
 import { jsonVerifyFile } from '../../messaging';
