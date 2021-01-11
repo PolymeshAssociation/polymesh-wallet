@@ -1,8 +1,9 @@
+import { SvgCheckboxMarkedCircle, SvgContentCopy } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+
 import { SeedWord } from './SeedWord';
-import { SvgContentCopy, SvgCheckboxMarkedCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 
 export interface Props {
   seedPhrase?: string;

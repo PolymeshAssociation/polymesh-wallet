@@ -1,14 +1,13 @@
-import React, { useCallback, useContext, useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { ExtrinsicPayload } from '@polkadot/types/interfaces';
 import { AccountJson, RequestSign } from '@polkadot/extension-base/background/types';
-import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import { TypeRegistry } from '@polkadot/types';
+import { ExtrinsicPayload } from '@polkadot/types/interfaces';
+import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 import { ActionContext, ActivityContext } from '../../components';
-import { Button, Box, Flex, Heading } from '../../ui';
-
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
+import { Box, Button, Flex, Heading } from '../../ui';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
 import Unlock from './Unlock';

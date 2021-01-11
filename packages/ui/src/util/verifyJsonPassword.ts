@@ -1,7 +1,7 @@
 import createPair from '@polkadot/keyring/pair';
-import { base64Decode, decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { isHex, hexToU8a } from '@polkadot/util';
+import { hexToU8a, isHex } from '@polkadot/util';
+import { base64Decode, decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 
 function verifyJsonPassword (json: KeyringPair$Json, password: string): boolean {
   try {

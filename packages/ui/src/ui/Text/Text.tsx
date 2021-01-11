@@ -1,19 +1,20 @@
-import styled, { StyledComponentProps, DefaultTheme } from 'styled-components';
+import styled, { DefaultTheme, StyledComponentProps } from 'styled-components';
 import { color,
   ColorProps,
   fontFamily,
   FontFamilyProps,
-  fontWeight,
-  FontWeightProps,
-  lineHeight,
-  LineHeightProps,
   fontSize,
   FontSizeProps,
+  fontWeight,
+  FontWeightProps,
   letterSpacing,
   LetterSpacingProps,
+  lineHeight,
+  LineHeightProps,
   variant } from 'styled-system';
+
+import { TFontWeightCustom, TTextVariant } from '../../components/themeDefinitions';
 import { Box, BoxThemeProps } from '../Box';
-import { TTextVariant, TFontWeightCustom } from '../../components/themeDefinitions';
 
 const textStyle = variant({
   key: 'texts'

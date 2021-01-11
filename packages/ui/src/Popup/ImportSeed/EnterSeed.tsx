@@ -1,6 +1,7 @@
-import React, { ChangeEvent, FC, useState } from 'react';
-import { Box, Button, Flex, Header, Text, TextArea } from '@polymathnetwork/extension-ui/ui';
 import { SvgClipboardListOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Button, Flex, Header, Text, TextArea } from '@polymathnetwork/extension-ui/ui';
+import React, { ChangeEvent, FC, useState } from 'react';
+
 import { validateSeed } from '../../messaging';
 
 export interface Props {

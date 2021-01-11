@@ -1,7 +1,8 @@
 /* eslint-disable sort-keys */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import isEqual from 'lodash-es/isEqual';
 import merge from 'lodash/merge';
+import isEqual from 'lodash-es/isEqual';
+
 import { AccountData, NetworkName } from '../../types';
 import { initialFeatureState } from '../utils';
 

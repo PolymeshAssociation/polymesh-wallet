@@ -1,5 +1,6 @@
-import { SendRequest } from '@polymathnetwork/extension-core/page/types';
 import { Unsubcall } from '@polkadot/extension-inject/types';
+import { SendRequest } from '@polymathnetwork/extension-core/page/types';
+
 import { InjectedNetwork, NetworkMeta } from '../types';
 
 // External to class, this.# is not private enough (yet)

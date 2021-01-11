@@ -1,32 +1,33 @@
 import { AccountJson, AccountsContext, AuthorizeRequest, MetadataRequest, SigningRequest } from '@polkadot/extension-base/background/types';
-import { SettingsStruct } from '@polkadot/ui-settings/types';
-
-import React, { useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router';
 import uiSettings from '@polkadot/ui-settings';
+import { SettingsStruct } from '@polkadot/ui-settings/types';
 import { setSS58Format } from '@polkadot/util-crypto';
+import { ErrorCodes, IdentifiedAccount, StoreStatus } from '@polymathnetwork/extension-core/types';
+import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
+import React, { useEffect, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
+import { Route, Switch } from 'react-router';
 import { toast } from 'react-toastify';
+
+import { SvgCloseCircle } from '../assets/images/icons';
 import { Loading } from '../components';
-import { AccountContext, ActionContext, AuthorizeReqContext, MetadataReqContext, SettingsContext, SigningReqContext, PolymeshContext, ActivityContext } from '../components/contexts';
-import { subscribeAccounts, subscribePolyStatus, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeSigningRequests, subscribePolyAccounts, subscribePolyNetwork, subscribePolySelectedAccount, busySubscriber, subscribePolyIsDev } from '../messaging';
+import { AccountContext, ActionContext, ActivityContext, AuthorizeReqContext, MetadataReqContext, PolymeshContext, SettingsContext, SigningReqContext } from '../components/contexts';
+import { busySubscriber, subscribeAccounts, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribePolyAccounts, subscribePolyIsDev, subscribePolyNetwork, subscribePolySelectedAccount, subscribePolyStatus, subscribeSigningRequests } from '../messaging';
+import { PolymeshContext as PolymeshContextType } from '../types';
+import { Box, Flex, Icon } from '../ui';
+import { Toast } from '../ui/Toast';
 import { buildHierarchy } from '../util/buildHierarchy';
+import { AccountDetails } from './AccountDetails';
 import Accounts from './Accounts';
 import Authorize from './Authorize';
-import { ExportAccount } from './ExportAccount';
-import { ImportSeed } from './ImportSeed';
-import Signing from './Signing';
-import { ErrorCodes, IdentifiedAccount, StoreStatus } from '@polymathnetwork/extension-core/types';
-import { PolymeshContext as PolymeshContextType } from '../types';
-import { NewAccount } from './NewAccount';
-import { ImportJson } from './ImportJson';
 import { ChangePassword } from './ChangePassword';
+import { ExportAccount } from './ExportAccount';
 import { ForgetAccount } from './ForgetAccount';
-import { AccountDetails } from './AccountDetails';
-import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
-import { Toast } from '../ui/Toast';
-import { Box, Flex, Icon } from '../ui';
-import { SvgCloseCircle } from '../assets/images/icons';
+import { ImportJson } from './ImportJson';
+import { ImportSeed } from './ImportSeed';
+import { NewAccount } from './NewAccount';
+import Signing from './Signing';
+
 const startSettings = uiSettings.get();
 
 function initAccountContext (accounts: AccountJson[]): AccountsContext {

@@ -1,5 +1,5 @@
-import React from 'react';
 import { Box, Text } from '@polymathnetwork/extension-ui/ui';
+import React from 'react';
 
 interface Props {
   className?: string;

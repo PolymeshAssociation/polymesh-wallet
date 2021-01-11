@@ -2,16 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { alignItems,
   AlignItemsProps,
-  justifyContent,
-  JustifyContentProps,
-  flex,
+  alignSelf,
+  AlignSelfProps, flex,
+  flexDirection,
+  FlexDirectionProps,
   FlexProps as CSSFlexProps,
   flexWrap,
   FlexWrapProps,
-  flexDirection,
-  FlexDirectionProps,
-  alignSelf,
-  AlignSelfProps } from 'styled-system';
+  justifyContent,
+  JustifyContentProps } from 'styled-system';
+
 import { Box, BoxProps } from '../Box';
 
 export type FlexProps = BoxProps &

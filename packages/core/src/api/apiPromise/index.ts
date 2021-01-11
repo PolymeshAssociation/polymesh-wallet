@@ -1,7 +1,8 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import schema from './schema';
-import { NetworkName } from '../../types';
+
 import { networkURLs } from '../../constants';
+import { NetworkName } from '../../types';
+import schema from './schema';
 
 const cache = {} as Record<NetworkName, Promise<ApiPromise>>;
 
