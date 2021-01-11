@@ -1,6 +1,5 @@
-import { Message } from '@polkadot/extension-base/types';
-
 import { handleResponse } from '@polkadot/extension-base/page';
+import { Message } from '@polkadot/extension-base/types';
 import { injectExtension } from '@polkadot/extension-inject';
 import { enable } from '@polymathnetwork/extension-core/page';
 

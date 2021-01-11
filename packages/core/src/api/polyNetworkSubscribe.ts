@@ -1,5 +1,6 @@
 import { Unsubscribe } from '@reduxjs/toolkit';
-import { networkURLs, networkLabels } from '../constants';
+
+import { networkLabels, networkURLs } from '../constants';
 import reduxSubscribe from '../store/reduxSubscribe';
 import { network } from '../store/selectors';
 import { NetworkMeta, NetworkName } from '../types';

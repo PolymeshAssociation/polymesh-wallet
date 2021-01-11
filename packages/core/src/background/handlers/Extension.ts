@@ -1,10 +1,10 @@
-import { PolyResponseType, RequestPolyNetworkSet, RequestPolySelectedAccountSet, RequestPolyCallDetails, ResponsePolyCallDetails, RequestPolyIdentityRename, PolyMessageTypes, PolyRequestTypes } from '../types';
-
-import { createSubscription, unsubscribe } from './subscriptions';
-import { subscribeIdentifiedAccounts, subscribeStatus, subscribeNetwork, subscribeSelectedAccount, subscribeIsDev } from '@polymathnetwork/extension-core/store/subscribers';
-import { setNetwork, setSelectedAccount, renameIdentity, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { callDetails } from '@polymathnetwork/extension-core/api';
 import { getNetwork } from '@polymathnetwork/extension-core/store/getters';
+import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
+import { subscribeIdentifiedAccounts, subscribeIsDev, subscribeNetwork, subscribeSelectedAccount, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
+
+import { PolyMessageTypes, PolyRequestTypes, PolyResponseType, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
+import { createSubscription, unsubscribe } from './subscriptions';
 
 export default class Extension {
   private polyAccountsSubscribe (id: string, port: chrome.runtime.Port): boolean {

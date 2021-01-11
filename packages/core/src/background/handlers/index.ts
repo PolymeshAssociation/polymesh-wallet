@@ -1,11 +1,10 @@
-import { assert } from '@polkadot/util';
-
 import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
-
-import Tabs from './Tabs';
-import Extension from './Extension';
-import { PolyMessageTypes, PolyTransportRequestMessage } from '../types';
+import { assert } from '@polkadot/util';
 import { nonFatalErrorHandler } from '@polymathnetwork/extension-core/utils';
+
+import { PolyMessageTypes, PolyTransportRequestMessage } from '../types';
+import Extension from './Extension';
+import Tabs from './Tabs';
 
 const extension = new Extension();
 const tabs = new Tabs();

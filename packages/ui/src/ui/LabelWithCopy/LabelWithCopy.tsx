@@ -1,6 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
 import { SvgContentCopy } from '@polymathnetwork/extension-ui/assets/images/icons';
+import React, { FC, useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+
 import { Flex } from '../Flex';
 import { Icon } from '../Icon';
 import { Text } from '../Text';
@@ -34,7 +35,7 @@ export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, te
 
   useEffect(() => {
     return () => {
-      if (!!timerRef) clearTimeout(timerRef);
+      if (timerRef) clearTimeout(timerRef);
     };
   }, [timerRef]);
 

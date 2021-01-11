@@ -1,4 +1,4 @@
-import { PolySubscriptionMessageTypes, PolyMessageTypesWithSubscriptions } from '../types';
+import { PolyMessageTypesWithSubscriptions, PolySubscriptionMessageTypes } from '../types';
 
 type Subscriptions = Record<string, chrome.runtime.Port>;
 

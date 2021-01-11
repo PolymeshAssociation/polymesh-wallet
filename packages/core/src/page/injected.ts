@@ -1,5 +1,6 @@
 import Injected from '@polkadot/extension-base/page/Injected';
 import { SendRequest } from '@polymathnetwork/extension-core/page/types';
+
 import Network from './Network';
 
 class PolymeshInjected extends Injected {

@@ -1,9 +1,10 @@
 import { SvgChevronDown, SvgChevronUp } from '@polymathnetwork/extension-ui/assets/images/icons';
 import React, { FC, useState } from 'react';
+
 import { Box } from '../Box';
 import { Flex } from '../Flex';
-import { Text } from '../Text';
 import { Icon } from '../Icon';
+import { Text } from '../Text';
 
 export interface Props {
   title: string;

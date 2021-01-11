@@ -1,4 +1,4 @@
-import { networkURLs, networkLabels } from '../constants';
+import { networkLabels, networkURLs } from '../constants';
 import { getNetwork } from '../store/getters';
 import { NetworkMeta } from '../types';
 

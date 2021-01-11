@@ -1,7 +1,7 @@
-import { ThemeProps } from '../../types';
-
 import React from 'react';
 import styled from 'styled-components';
+
+import { ThemeProps } from '../../types';
 
 interface Props {
   content: React.ReactChild;

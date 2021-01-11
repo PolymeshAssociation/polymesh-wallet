@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 export const SvgBull = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     fill='none'

@@ -1,9 +1,9 @@
-import store from '.';
-import { NetworkName, Error } from '../types';
-import { actions as networkActions } from './features/network';
+import { Error, NetworkName } from '../types';
 import { actions as accountActions } from './features/accounts';
 import { actions as identityActions } from './features/identities';
+import { actions as networkActions } from './features/network';
 import { actions as statusActions } from './features/status';
+import store from '.';
 
 function setNetwork (network: NetworkName): void {
   store.dispatch(networkActions.setNetwork(network));

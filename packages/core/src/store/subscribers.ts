@@ -1,7 +1,8 @@
 import { Unsubscribe } from '@reduxjs/toolkit';
+
 import { IdentifiedAccount, NetworkName, StoreStatus } from '../types';
 import reduxSubscribe from './reduxSubscribe';
-import { accountsCount, didsList, identifiedAccounts, selectStatus, network, selectedAccount, selectIsRehydrated, selectIsDev, selectIsHydratedAndNetwork } from './selectors';
+import { accountsCount, didsList, identifiedAccounts, network, selectedAccount, selectIsDev, selectIsHydratedAndNetwork, selectIsRehydrated, selectStatus } from './selectors';
 
 export function subscribeDidsList (cb: (dids: string[]) => void): Unsubscribe {
   return reduxSubscribe(didsList, cb);

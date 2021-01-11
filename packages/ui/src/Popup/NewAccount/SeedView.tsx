@@ -1,6 +1,7 @@
-import React, { FC, useState } from 'react';
-import { Checkbox, Box, Button, Flex, Header, Text } from '@polymathnetwork/extension-ui/ui';
 import { SvgClipboardListOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Button, Checkbox, Flex, Header, Text } from '@polymathnetwork/extension-ui/ui';
+import React, { FC, useState } from 'react';
+
 import { SeedPhrase } from './components/SeedPhrase';
 
 export interface Props {

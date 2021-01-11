@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import styled from 'styled-components';
+
 import { Box, BoxProps } from '../Box';
 import { Flex } from '../Flex';
 import { Heading } from '../Heading';

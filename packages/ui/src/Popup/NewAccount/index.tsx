@@ -1,9 +1,10 @@
+import { AccountDetails, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountDetails';
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { createAccountSuri, createSeed } from '../../messaging';
+
 import { ActionContext } from '../../components';
+import { createAccountSuri, createSeed } from '../../messaging';
 import { ConfirmSeed } from './ConfirmSeed';
 import { SeedView } from './SeedView';
-import { AccountDetails, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountDetails';
 
 export const NewAccount: FC = () => {
   const onAction = useContext(ActionContext);

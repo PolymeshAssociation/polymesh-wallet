@@ -1,13 +1,14 @@
-import React, { FC, useState, useContext } from 'react';
-import BigNumber from 'bignumber.js';
-import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
-import { formatters } from '../../util';
-import { Box, Text, Flex, Icon, TextInput, ButtonSmall, LabelWithCopy, Menu, MenuItem, ContextMenuTrigger } from '../../ui';
-import { SvgPencilOutline, SvgWindowClose, SvgCheck, SvgDotsVertical } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { editAccount, setPolySelectedAccount } from '../../messaging';
-import { AccountType, ActionContext, PolymeshContext } from '../../components';
-import { useHistory } from 'react-router-dom';
 import { networkLinks } from '@polymathnetwork/extension-core/constants';
+import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
+import { SvgCheck, SvgDotsVertical, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import BigNumber from 'bignumber.js';
+import React, { FC, useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
+import { AccountType, ActionContext, PolymeshContext } from '../../components';
+import { editAccount, setPolySelectedAccount } from '../../messaging';
+import { Box, ButtonSmall, ContextMenuTrigger, Flex, Icon, LabelWithCopy, Menu, MenuItem, Text, TextInput } from '../../ui';
+import { formatters } from '../../util';
 
 export interface Props {
   account: IdentifiedAccount;

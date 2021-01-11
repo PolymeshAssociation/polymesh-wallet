@@ -1,17 +1,16 @@
-import { Message } from '@polkadot/extension-base/types';
-import { AccountJson, AuthorizeRequest, SigningRequest, RequestTypes, MessageTypes, ResponseTypes, SeedLengths, SubscriptionMessageTypes, MetadataRequest, MessageTypesWithNullRequest, MessageTypesWithNoSubscriptions, MessageTypesWithSubscriptions, ResponseDeriveValidate, ResponseJsonRestore } from '@polkadot/extension-base/background/types';
-import { Chain } from '@polkadot/extension-chains/types';
-import { MetadataDef } from '@polkadot/extension-inject/types';
-import { KeypairType } from '@polkadot/util-crypto/types';
-
+import { AccountJson, AuthorizeRequest, MessageTypes, MessageTypesWithNoSubscriptions, MessageTypesWithNullRequest, MessageTypesWithSubscriptions, MetadataRequest, RequestTypes, ResponseDeriveValidate, ResponseJsonRestore, ResponseTypes, SeedLengths, SigningRequest, SubscriptionMessageTypes } from '@polkadot/extension-base/background/types';
 import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
-import allChains from '@polkadot/extension-chains/chains';
+import { Message } from '@polkadot/extension-base/types';
 import { metadataExpand } from '@polkadot/extension-chains';
+import allChains from '@polkadot/extension-chains/chains';
+import { Chain } from '@polkadot/extension-chains/types';
 import chrome from '@polkadot/extension-inject/chrome';
+import { MetadataDef } from '@polkadot/extension-inject/types';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
-import { IdentifiedAccount, NetworkName, StoreStatus } from '@polymathnetwork/extension-core/types';
+import { KeypairType } from '@polkadot/util-crypto/types';
 import { PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { IdentifiedAccount, NetworkName, StoreStatus } from '@polymathnetwork/extension-core/types';
 
 interface Handler {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

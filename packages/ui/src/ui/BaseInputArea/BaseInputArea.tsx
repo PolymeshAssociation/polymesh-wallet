@@ -1,18 +1,17 @@
-import React, { FC, useState, useCallback, useRef } from 'react';
-import { Wrapper, Input } from './styles';
+import React, { FC, useCallback, useRef, useState } from 'react';
+
 import { BaseInputAreaProps } from './BaseInputAreaProps';
+import { Input, Wrapper } from './styles';
 
 export const BaseInputArea: FC<BaseInputAreaProps> = (props) => {
-  const {
-    className,
+  const { className,
     disabled,
     inputRef: inputRefFromProps,
     invalid,
     onBlur,
     onFocus,
     readOnly,
-    ...restProps
-  } = props;
+    ...restProps } = props;
 
   const inputRefInternal = useRef<HTMLTextAreaElement>(null);
   const inputRef = inputRefFromProps || inputRefInternal;

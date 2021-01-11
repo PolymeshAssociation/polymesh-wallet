@@ -1,7 +1,8 @@
+import { SvgCrossOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import React, { FC } from 'react';
 import { FallbackProps } from 'react-error-boundary';
-import { Box, IconCircled, Heading, Text, Button } from '../ui';
-import { SvgCrossOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+
+import { Box, Button, Heading, IconCircled, Text } from '../ui';
 
 const ErrorBoundaryFallback: FC<FallbackProps> = ({ error, resetErrorBoundary }) => {
   return (

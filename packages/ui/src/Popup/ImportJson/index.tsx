@@ -1,9 +1,10 @@
 import { AccountDetails, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountDetails';
 import React, { FC, useContext, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
+
 import { ActionContext } from '../../components';
 import { changePassword, jsonRestore } from '../../messaging';
-import { UploadVerifyJson, FileState } from './UploadVerifyJson';
+import { FileState, UploadVerifyJson } from './UploadVerifyJson';
 
 export const ImportJson: FC = () => {
   const [fileState, setFileState] = useState<FileState>();
@@ -59,10 +60,6 @@ export const ImportJson: FC = () => {
   const renderStep = () => {
     switch (step) {
       case 0:
-      default:
-        return (
-          <UploadVerifyJson onContinue={setJsonData} />
-        );
       case 1:
         return (
           <AccountDetails
@@ -71,6 +68,10 @@ export const ImportJson: FC = () => {
             onBack={prevStep}
             onContinue={restoreAccount}
             submitText='Import' />
+        );
+      default:
+        return (
+          <UploadVerifyJson onContinue={setJsonData} />
         );
     }
   };
