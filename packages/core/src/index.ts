@@ -218,10 +218,12 @@ function subscribePolymesh (): () => void {
                       });
 
                       // Save CDD data
-                      const cdd = didClaimsSorted && didClaimsSorted.length > 0 ? {
-                        issuer: didClaimsSorted[0].claim_issuer.toString(),
-                        expiry: !didClaimsSorted[0].expiry.isEmpty ? Number(didClaimsSorted[0].expiry.toString()) : undefined
-                      } : undefined;
+                      const cdd = didClaimsSorted && didClaimsSorted.length > 0
+                        ? {
+                          issuer: didClaimsSorted[0].claim_issuer.toString(),
+                          expiry: !didClaimsSorted[0].expiry.isEmpty ? Number(didClaimsSorted[0].expiry.toString()) : undefined
+                        }
+                        : undefined;
 
                       store.dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
                     });

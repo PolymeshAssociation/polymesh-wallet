@@ -32,9 +32,12 @@ const statusIcon: Record<Status, React.ComponentType<React.SVGAttributes<SVGElem
 };
 
 export const CddStatus: FC<Props> = ({ cdd, withText = false }) => {
-  const status: Status = cdd === undefined ? 'checking'
-    : cdd === null ? 'unverified'
-      : cdd.expiry && new Date(cdd.expiry) < new Date() ? 'expired'
+  const status: Status = cdd === undefined
+    ? 'checking'
+    : cdd === null
+      ? 'unverified'
+      : cdd.expiry && new Date(cdd.expiry) < new Date()
+        ? 'expired'
         : 'verified';
 
   return (
