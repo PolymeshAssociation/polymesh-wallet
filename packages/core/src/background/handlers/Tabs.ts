@@ -1,14 +1,19 @@
+import type { KeyringPair } from '@polkadot/keyring/types';
+
 import { InjectedAccount } from '@polkadot/extension-inject/types';
+import keyring from '@polkadot/ui-keyring';
 import accountsObservable from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
+import { assert } from '@polkadot/util';
 import { polyNetworkGet } from '@polymathnetwork/extension-core/api';
 import polyNetworkSubscribe from '@polymathnetwork/extension-core/api/polyNetworkSubscribe';
 import { getSelectedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
-import { NetworkMeta } from '@polymathnetwork/extension-core/types';
+import { NetworkMeta, ProofRequestPayload } from '@polymathnetwork/extension-core/types';
 import { prioritize } from '@polymathnetwork/extension-core/utils';
 
-import { PolyMessageTypes, PolyRequestTypes, PolyResponseTypes } from '../types';
+import { PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ResponseProofing } from '../types';
+import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 
 function transformAccounts (accounts: SubjectInfo): InjectedAccount[] {
@@ -24,6 +29,12 @@ function transformAccounts (accounts: SubjectInfo): InjectedAccount[] {
 }
 
 export default class Tabs {
+  readonly #state: State;
+
+  constructor (state: State) {
+    this.#state = state;
+  }
+
   private polyNetworkGet (): NetworkMeta {
     return polyNetworkGet();
   }
@@ -87,6 +98,22 @@ export default class Tabs {
     return true;
   }
 
+  private getSigningPair (address: string): KeyringPair {
+    const pair = keyring.getPair(address);
+
+    assert(pair, 'Unable to find keypair');
+
+    return pair;
+  }
+
+  private generateProof (url: string, request: ProofRequestPayload): Promise<ResponseProofing> {
+    console.log('>>>> Generate proof', url, request);
+    const address = request.address;
+    const pair = this.getSigningPair(address);
+
+    return this.#state.generateProof(url, { payload: request }, { address, ...pair.meta });
+  }
+
   // eslint-disable-next-line @typescript-eslint/require-await
   public async handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], url: string, port: chrome.runtime.Port): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
     switch (type) {
@@ -115,6 +142,9 @@ export default class Tabs {
 
         return false;
       }
+
+      case 'poly:pub(proofs.generateProof)':
+        return this.generateProof(url, request as ProofRequestPayload);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

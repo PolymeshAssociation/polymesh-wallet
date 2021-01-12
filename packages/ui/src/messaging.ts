@@ -9,7 +9,7 @@ import { MetadataDef } from '@polkadot/extension-inject/types';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
-import { PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, ProofingRequest, ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 import { IdentifiedAccount, NetworkName, StoreStatus } from '@polymathnetwork/extension-core/types';
 
 interface Handler {
@@ -156,6 +156,10 @@ export async function approveSignSignature (id: string, signature: string): Prom
   return sendMessage('pri(signing.approve.signature)', { id, signature });
 }
 
+export async function approveProofRequest (id: string): Promise<boolean> {
+  return sendMessage('poly:pri(proofs.approve)', { id });
+}
+
 export async function createAccountExternal (name: string, address: string, genesisHash: string): Promise<boolean> {
   return sendMessage('pri(accounts.create.external)', { address, genesisHash, name });
 }
@@ -245,6 +249,10 @@ export async function subscribePolyIsDev (cb: (isDev: string) => void): Promise<
   return polyMessage('poly:pri(isDev.subscribe)', null, cb);
 }
 
+export async function subscribeProofingRequests (cb: (requests: ProofingRequest[]) => void): Promise<boolean> {
+  return polyMessage('poly:pri(proofs.requests)', null, cb);
+}
+
 export async function renameIdentity (network: NetworkName, did: string, name: string): Promise<boolean> {
   return polyMessage('poly:pri(identity.rename)', { network, did, name });
 }
@@ -257,11 +265,11 @@ export async function subscribeAuthorizeRequests (cb: (accounts: AuthorizeReques
   return sendMessage('pri(authorize.requests)', null, cb);
 }
 
-export async function subscribeMetadataRequests (cb: (accounts: MetadataRequest[]) => void): Promise<boolean> {
+export async function subscribeMetadataRequests (cb: (requests: MetadataRequest[]) => void): Promise<boolean> {
   return sendMessage('pri(metadata.requests)', null, cb);
 }
 
-export async function subscribeSigningRequests (cb: (accounts: SigningRequest[]) => void): Promise<boolean> {
+export async function subscribeSigningRequests (cb: (requests: SigningRequest[]) => void): Promise<boolean> {
   return sendMessage('pri(signing.requests)', null, cb);
 }
 

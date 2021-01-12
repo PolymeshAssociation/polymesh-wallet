@@ -65,6 +65,32 @@ export interface InjectedNetwork {
   subscribe: (cb: (network: NetworkMeta) => void) => Unsubcall;
 }
 
+export interface ProofRequestPayload {
+  /**
+   * @description The ss-58 encoded address
+   */
+  address: string;
+  /**
+   * @description The ticker
+   */
+  ticker: string;
+}
+
+export interface ProofResult {
+  /**
+   * @description The id for this request
+   */
+  id: number;
+  /**
+   * @description The resulting proof string
+   */
+  proof: string;
+}
+
+export interface InjectedProofs {
+  generateProof: (raw: ProofRequestPayload) => Promise<ProofResult>;
+}
+
 export type KeyringAccountData = {
   address: string,
   name?: string,
