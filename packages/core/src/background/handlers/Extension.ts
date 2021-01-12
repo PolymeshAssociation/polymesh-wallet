@@ -1,12 +1,21 @@
+import { assert } from '@polkadot/util';
 import { callDetails } from '@polymathnetwork/extension-core/api';
 import { getNetwork } from '@polymathnetwork/extension-core/store/getters';
 import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { subscribeIdentifiedAccounts, subscribeIsDev, subscribeNetwork, subscribeSelectedAccount, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 
-import { PolyMessageTypes, PolyRequestTypes, PolyResponseType, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
+import { PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, RequestPolyApproveReq, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolySelectedAccountSet, RequestProof, ResponsePolyCallDetails } from '../types';
+import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
+import { getMockUId, getScopeAttestationProof } from './utils';
 
 export default class Extension {
+  readonly #state: State;
+
+  constructor (state: State) {
+    this.#state = state;
+  }
+
   private polyAccountsSubscribe (id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'poly:pri(accounts.subscribe)'>(id, port);
 
@@ -74,6 +83,20 @@ export default class Extension {
     return true;
   }
 
+  private proofsSubscribe (id: string, port: chrome.runtime.Port): boolean {
+    const cb = createSubscription<'poly:pri(proofs.requests)'>(id, port);
+    const subscription = this.#state.proofSubject.subscribe((requests: ProofingRequest[]): void =>
+      cb(requests)
+    );
+
+    port.onDisconnect.addListener((): void => {
+      unsubscribe(id);
+      subscription.unsubscribe();
+    });
+
+    return true;
+  }
+
   private polyNetworkSet ({ network }: RequestPolyNetworkSet): boolean {
     setNetwork(network);
 
@@ -100,6 +123,63 @@ export default class Extension {
 
   private polyIsDevToggle (): boolean {
     toggleIsDeveloper();
+
+    return true;
+  }
+
+  private async proofsApprove ({ id }: RequestPolyApproveReq): Promise<boolean> {
+    const queued = this.#state.getProofRequest(id);
+
+    assert(queued, 'Unable to find request');
+
+    const { reject, request, resolve } = queued;
+    const { address, ticker } = request.payload;
+
+    console.log('Address, Ticker', address, ticker);
+
+    // // unlike queued.account.address the following
+    // // address is encoded with the default prefix
+    // // which what is used for password caching mapping
+    // const { address } = pair;
+
+    // if (!pair) {
+    //   reject(new Error('Unable to find pair'));
+
+    //   return false;
+    // }
+
+    // this.refreshAccountPasswordCache(pair);
+
+    // // if the keyring pair is locked, the password is needed
+    // if (pair.isLocked && !password) {
+    //   reject(new Error('Password needed to unlock the account'));
+    // }
+
+    // if (pair.isLocked) {
+    //   pair.decodePkcs8(password);
+    // }
+
+    // const result = request.sign(registry, pair);
+
+    // if (savePass) {
+    //   this.#cachedUnlocks[address] = Date.now() + PASSWORD_EXPIRY_MS;
+    // } else {
+    //   pair.lock();
+    // }
+
+    const did = '0x4e7bf83016ac0a39d4266ae263d99a03350c66f53f92e4dbbf5f9baa11a2a36b';
+    const uid = await getMockUId(did);
+
+    console.log('>>>> UID', uid);
+
+    const proof = await getScopeAttestationProof(did, uid, ticker);
+
+    console.log('Proof', proof);
+
+    resolve({
+      id,
+      proof
+    });
 
     return true;
   }
@@ -135,6 +215,12 @@ export default class Extension {
 
       case 'poly:pri(isDev.subscribe)':
         return this.polyIsDevSubscribe(id, port);
+
+      case 'poly:pri(proofs.requests)':
+        return this.proofsSubscribe(id, port);
+
+      case 'poly:pri(proofs.approve)':
+        return this.proofsApprove(request as RequestPolyApproveReq);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

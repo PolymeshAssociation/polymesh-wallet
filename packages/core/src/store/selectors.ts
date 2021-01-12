@@ -77,6 +77,12 @@ export const selectedAccount = createSelector(
   }
 );
 
+export const selectedAccountIdentified = createSelector(
+  selectedAccount,
+  identifiedAccounts
+  (account, idAccounts) => account ? identifiedAccounts.filter(account => account.address == selectedAccount : undefined)
+)
+
 export const selectIsRehydrated = createSelector(
   (state: RootState) => state.status,
   ({ rehydrated }) => rehydrated
