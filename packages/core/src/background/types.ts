@@ -1,9 +1,9 @@
-import { RequestAccountList, RequestAccountSubscribe } from '@polkadot/extension-base/background/types';
+import { AccountJson, RequestAccountList, RequestAccountSubscribe } from '@polkadot/extension-base/background/types';
 import { InjectedAccount, InjectedMetadataKnown, MetadataDef } from '@polkadot/extension-inject/types';
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 
-import { IdentifiedAccount, NetworkMeta, NetworkName, StoreStatus } from '../types';
+import { IdentifiedAccount, NetworkMeta, NetworkName, ProofRequestPayload, StoreStatus } from '../types';
 
 export interface ResponsePolyCallDetails {
   networkFee: string,
@@ -28,6 +28,8 @@ export type RequestPolyNetworkMetaSubscribe = null;
 
 export type RequestPolyIsDevSubscribe = null;
 
+export type RequestProofingSubscribe = null;
+
 export interface RequestPolyNetworkSet {
   network: NetworkName
 }
@@ -48,6 +50,26 @@ export interface RequestPolyIdentityRename {
   name: string
 }
 
+export interface RequestProof {
+  readonly payload: ProofRequestPayload;
+}
+
+export interface ResponseProofing {
+  id: string;
+  proof: string;
+}
+
+export interface ProofingRequest {
+  account: AccountJson;
+  id: string;
+  request: RequestProof;
+  url: string;
+}
+
+export interface RequestPolyApproveReq {
+  id: string;
+}
+
 export interface PolyRequestSignatures {
   'poly:pri(accounts.subscribe)': [RequestPolyAccountsSubscribe, boolean, IdentifiedAccount[]];
   'poly:pri(network.subscribe)': [RequestPolyNetworkSubscribe, boolean, NetworkName];
@@ -61,6 +83,9 @@ export interface PolyRequestSignatures {
   'poly:pri(identity.rename)': [RequestPolyIdentityRename, boolean];
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
   'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
+  'poly:pub(proofs.generateProof)': [ProofRequestPayload, ResponseProofing];
+  'poly:pri(proofs.requests)': [RequestProofingSubscribe, boolean, ProofingRequest[]];
+  'poly:pri(proofs.approve)': [RequestPolyApproveReq, boolean]
   // this is an inelegant way to take over these couple requests from Polkadot,
   // in order to alter the behavior as needed for each request respectively.
   // to re-order accounts list based on account selection.
