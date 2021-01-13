@@ -28,7 +28,6 @@ export const ImportSeed: FC = () => {
 
   const renderStep = () => {
     switch (step) {
-      case 0:
       case 1:
         return (
           <AccountDetails
