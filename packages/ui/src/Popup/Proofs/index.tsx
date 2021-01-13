@@ -12,9 +12,9 @@ export default function Proofs (): React.ReactElement {
       <Scroll isLastRequest={requests.length === 1}>
         {requests.map(({ id, request, url }, index): React.ReactNode => (
           <Request
-            authId={id}
             isFirst={index === 0}
             key={id}
+            reqId={id}
             request={request}
             url={url}
           />
