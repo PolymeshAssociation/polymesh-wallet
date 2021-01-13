@@ -1,5 +1,5 @@
 import { IdentifiedAccount, NetworkName } from '../types';
-import { accountsAddresses, accountsCount, didsList, identifiedAccounts, network, networkUrl, selectedAccount } from './selectors';
+import { accountsAddresses, accountsCount, didsList, identifiedAccounts, network, networkUrl, selectedAccount, selectedAccountIdentified } from './selectors';
 import store from '.';
 
 function getNetwork (): NetworkName {
@@ -30,6 +30,10 @@ function getIdentifiedAccounts (): IdentifiedAccount[] {
   return identifiedAccounts(store.getState());
 }
 
+function getSelectedIdentifiedAccount (): IdentifiedAccount | undefined {
+  return selectedAccountIdentified(store.getState());
+}
+
 export {
   getNetwork,
   getNetworkUrl,
@@ -37,5 +41,6 @@ export {
   getAccountsCount,
   getDids,
   getAccountsList,
-  getIdentifiedAccounts
+  getIdentifiedAccounts,
+  getSelectedIdentifiedAccount
 };

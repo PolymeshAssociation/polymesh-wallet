@@ -66,9 +66,9 @@ export const identifiedAccounts = createSelector(
 export const selectedAccount = createSelector(
   (state: RootState) => state.accounts.selected,
   accounts,
-  (selectedAccount, accounts) => {
-    if (selectedAccount && accounts[selectedAccount]) {
-      return selectedAccount;
+  (account, accounts) => {
+    if (account && accounts[account]) {
+      return account;
     } else if (Object.keys(accounts).length) {
       return Object.values(accounts)[0].address;
     }
@@ -79,9 +79,15 @@ export const selectedAccount = createSelector(
 
 export const selectedAccountIdentified = createSelector(
   selectedAccount,
-  identifiedAccounts
-  (account, idAccounts) => account ? identifiedAccounts.filter(account => account.address == selectedAccount : undefined)
-)
+  identifiedAccounts,
+  (selectedAccount, identifiedAccounts) => {
+    if (selectedAccount) {
+      return identifiedAccounts.filter((account) => account.address === selectedAccount)[0];
+    }
+
+    return undefined;
+  }
+);
 
 export const selectIsRehydrated = createSelector(
   (state: RootState) => state.status,

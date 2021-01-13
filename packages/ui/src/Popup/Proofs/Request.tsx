@@ -1,4 +1,4 @@
-import { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
+import { RequestProof } from '@polymathnetwork/extension-core/background/types';
 import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
@@ -10,29 +10,29 @@ import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
 import { AccountsHeader } from '../Accounts/AccountsHeader';
 
 interface Props {
-  authId: string;
+  reqId: string;
   className?: string;
   isFirst: boolean;
-  request: RequestAuthorizeTab;
+  request: RequestProof;
   url: string;
 }
 
-function Request ({ authId, isFirst, request: { origin }, url }: Props): React.ReactElement<Props> {
+function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<Props> {
   const onAction = useContext(ActionContext);
   const { currentAccount } = useContext(PolymeshContext);
 
   const _onApprove = useCallback(
-    () => approveProofRequest(authId)
+    () => approveProofRequest(reqId)
       .then(() => onAction())
       .catch((error: Error) => console.error(error)),
-    [authId, onAction]
+    [reqId, onAction]
   );
 
   const _onReject = useCallback(
-    () => rejectAuthRequest(authId)
+    () => rejectAuthRequest(reqId)
       .then(() => onAction())
       .catch((error: Error) => console.error(error)),
-    [authId, onAction]
+    [reqId, onAction]
   );
 
   return (
