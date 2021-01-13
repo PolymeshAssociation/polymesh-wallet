@@ -60,7 +60,7 @@ export default function Popup (): React.ReactElement {
   const [authRequests, setAuthRequests] = useState<null | AuthorizeRequest[]>(null);
   const [metaRequests, setMetaRequests] = useState<null | MetadataRequest[]>(null);
   const [signRequests, setSignRequests] = useState<null | SigningRequest[]>(null);
-  const [proofingRequests, setProofingRequests] = useState<null | ProofingRequest[]>(null);
+  const [proofingRequests, setProofingRequests] = useState<ProofingRequest[]>([]);
   const [settingsCtx, setSettingsCtx] = useState<SettingsStruct>(startSettings);
   const [network, setNetwork] = useState('');
   const [polymeshAccounts, setPolymeshAccounts] = useState<IdentifiedAccount[]>([]);
@@ -131,10 +131,7 @@ export default function Popup (): React.ReactElement {
       subscribeAuthorizeRequests(setAuthRequests),
       subscribeMetadataRequests(setMetaRequests),
       subscribeSigningRequests(setSignRequests),
-      subscribeProofingRequests((requests) => {
-        console.log('>>>> Proofing requests', requests);
-        setProofingRequests(requests);
-      }),
+      subscribeProofingRequests(setProofingRequests),
       busySubscriber.addListener(setIsBusy)
     ])
       .then(() => undefined, handleError)
