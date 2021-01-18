@@ -1,9 +1,10 @@
 
 import { AccountJson } from '@polkadot/extension-base/background/types';
 import chrome from '@polkadot/extension-inject/chrome';
+import { ProofRequestPayload } from '@polymathnetwork/extension-core/types';
 import { BehaviorSubject } from 'rxjs';
 
-import { ProofingRequest, RequestProof, ResponseProofing } from '../types';
+import { ProofingRequest, ResponseProofing } from '../types';
 
 interface Resolver <T> {
   reject: (error: Error) => void;
@@ -15,7 +16,7 @@ let idCounter = 0;
 interface ProofRequest extends Resolver<ResponseProofing> {
   account: AccountJson;
   id: string;
-  request: RequestProof;
+  request: ProofRequestPayload;
   url: string;
 }
 
@@ -106,7 +107,7 @@ export default class State {
     return this.#proofRequests[id];
   }
 
-  public generateProof (url: string, request: RequestProof, account: AccountJson): Promise<ResponseProofing> {
+  public generateProof (url: string, request: ProofRequestPayload, account: AccountJson): Promise<ResponseProofing> {
     const id = getId();
 
     return new Promise((resolve, reject): void => {
