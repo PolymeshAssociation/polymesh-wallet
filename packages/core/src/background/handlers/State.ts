@@ -4,7 +4,7 @@ import chrome from '@polkadot/extension-inject/chrome';
 import { ProofRequestPayload } from '@polymathnetwork/extension-core/types';
 import { BehaviorSubject } from 'rxjs';
 
-import { ProofingRequest, ResponseProofing } from '../types';
+import { ProofingRequest, ProofingResponse } from '../types';
 
 interface Resolver <T> {
   reject: (error: Error) => void;
@@ -13,7 +13,7 @@ interface Resolver <T> {
 
 let idCounter = 0;
 
-interface ProofRequest extends Resolver<ResponseProofing> {
+interface ProofRequest extends Resolver<ProofingResponse> {
   account: AccountJson;
   id: string;
   request: ProofRequestPayload;
@@ -67,7 +67,7 @@ export default class State {
     });
   }
 
-  private requestComplete = (id: string, resolve: (result: ResponseProofing) => void, reject: (error: Error) => void): Resolver<ResponseProofing> => {
+  private requestComplete = (id: string, resolve: (result: ProofingResponse) => void, reject: (error: Error) => void): Resolver<ProofingResponse> => {
     const complete = (): void => {
       delete this.#proofRequests[id];
       this.updateIconSign(true);
@@ -78,7 +78,7 @@ export default class State {
         complete();
         reject(error);
       },
-      resolve: (result: ResponseProofing): void => {
+      resolve: (result: ProofingResponse): void => {
         complete();
         resolve(result);
       }
@@ -107,7 +107,7 @@ export default class State {
     return this.#proofRequests[id];
   }
 
-  public generateProof (url: string, request: ProofRequestPayload, account: AccountJson): Promise<ResponseProofing> {
+  public generateProof (url: string, request: ProofRequestPayload, account: AccountJson): Promise<ProofingResponse> {
     const id = getId();
 
     return new Promise((resolve, reject): void => {

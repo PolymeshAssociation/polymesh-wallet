@@ -11,9 +11,9 @@ export default class Uid implements InjectedUid {
     sendRequest = _sendRequest;
   }
 
-  public async generateProofRequest (payload: ProofRequestPayload): Promise<ProofResult> {
+  public async requestProof (payload: ProofRequestPayload): Promise<ProofResult> {
     const id = ++nextId;
-    const result = await sendRequest('poly:pub(uid.generateProofRequest)', payload);
+    const result = await sendRequest('poly:pub(uid.requestProof)', payload);
 
     return {
       ...result,

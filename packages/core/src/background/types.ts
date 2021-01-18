@@ -55,7 +55,7 @@ export interface RequestPolyIdentityRename {
   name: string
 }
 
-export interface ResponseProofing {
+export interface ProofingResponse {
   id: string;
   proof: string;
 }
@@ -84,14 +84,17 @@ export interface PolyRequestSignatures {
   'poly:pri(identity.rename)': [RequestPolyIdentityRename, boolean];
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
   'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
-  'poly:pub(uid.generateProofRequest)': [ProofRequestPayload, ResponseProofing];
+  'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];
   'poly:pri(uid.proofRequests)': [RequestProofingSubscribe, boolean, ProofingRequest[]];
   'poly:pri(uid.approveProofRequest)': [RequestPolyApproveProof, boolean]
-  // this is an inelegant way to take over these couple requests from Polkadot,
-  // in order to alter the behavior as needed for each request respectively.
-  // to re-order accounts list based on account selection.
+  /*
+  this is an inelegant way to take over these couple requests from Polkadot,
+  in order to alter the behavior as needed for each request respectively.
+  */
+  // Re-order accounts list to bring the selected account, first.
   'pub(accounts.list)': [RequestAccountList, InjectedAccount[]];
   'pub(accounts.subscribe)': [RequestAccountSubscribe, boolean, InjectedAccount[]];
+  // Disable metadata requests.
   'pub(metadata.list)': [null, InjectedMetadataKnown[]];
   'pub(metadata.provide)': [MetadataDef, boolean];
 }

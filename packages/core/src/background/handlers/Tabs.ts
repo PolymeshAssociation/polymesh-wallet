@@ -12,7 +12,7 @@ import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/
 import { NetworkMeta, ProofRequestPayload } from '@polymathnetwork/extension-core/types';
 import { prioritize } from '@polymathnetwork/extension-core/utils';
 
-import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ResponseProofing } from '../types';
+import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 
@@ -106,7 +106,7 @@ export default class Tabs {
     return pair;
   }
 
-  private generateProofRequest (url: string, request: ProofRequestPayload): Promise<ResponseProofing> {
+  private requestProof (url: string, request: ProofRequestPayload): Promise<ProofingResponse> {
     const account = getSelectedIdentifiedAccount();
 
     assert(account, Errors.NO_ACCOUNT);
@@ -145,8 +145,8 @@ export default class Tabs {
         return false;
       }
 
-      case 'poly:pub(uid.generateProofRequest)':
-        return this.generateProofRequest(url, request as ProofRequestPayload);
+      case 'poly:pub(uid.requestProof)':
+        return this.requestProof(url, request as ProofRequestPayload);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);
