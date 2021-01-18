@@ -88,7 +88,7 @@ export interface ProofResult {
 }
 
 export interface InjectedUid {
-  generateProofRequest: (raw: ProofRequestPayload) => Promise<ProofResult>;
+  requestProof: (raw: ProofRequestPayload) => Promise<ProofResult>;
 }
 
 export type KeyringAccountData = {
