@@ -5,6 +5,11 @@ import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 
 import { IdentifiedAccount, NetworkMeta, NetworkName, ProofRequestPayload, StoreStatus } from '../types';
 
+export enum Errors {
+  NO_ACCOUNT = 'Accounts not found',
+  NO_DID = 'Identity not found',
+  NO_UID = 'uID not found',
+}
 export interface ResponsePolyCallDetails {
   networkFee: string,
   protocolFee: string,
@@ -66,7 +71,7 @@ export interface ProofingRequest {
   url: string;
 }
 
-export interface RequestPolyApproveReq {
+export interface RequestPolyApproveProof {
   id: string;
 }
 
@@ -83,9 +88,9 @@ export interface PolyRequestSignatures {
   'poly:pri(identity.rename)': [RequestPolyIdentityRename, boolean];
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
   'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
-  'poly:pub(proofs.generateProof)': [ProofRequestPayload, ResponseProofing];
+  'poly:pub(proofs.generateProofRequest)': [ProofRequestPayload, ResponseProofing];
   'poly:pri(proofs.requests)': [RequestProofingSubscribe, boolean, ProofingRequest[]];
-  'poly:pri(proofs.approve)': [RequestPolyApproveReq, boolean]
+  'poly:pri(proofs.approveRequest)': [RequestPolyApproveProof, boolean]
   // this is an inelegant way to take over these couple requests from Polkadot,
   // in order to alter the behavior as needed for each request respectively.
   // to re-order accounts list based on account selection.
