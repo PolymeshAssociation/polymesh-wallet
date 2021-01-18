@@ -4,7 +4,7 @@ import { getNetwork } from '@polymathnetwork/extension-core/store/getters';
 import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { subscribeIdentifiedAccounts, subscribeIsDev, subscribeNetwork, subscribeSelectedAccount, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 
-import { PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, RequestPolyApproveReq, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
+import { PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 import { getMockUId, getScopeAttestationProof } from './utils';
@@ -127,15 +127,14 @@ export default class Extension {
     return true;
   }
 
-  private async proofsApprove ({ id }: RequestPolyApproveReq): Promise<boolean> {
+  private async proofsApproveRequest ({ id }: RequestPolyApproveProof): Promise<boolean> {
     const queued = this.#state.getProofRequest(id);
 
     assert(queued, 'Unable to find request');
-
     const { reject, request, resolve } = queued;
-    const { address, ticker } = request.payload;
+    const { ticker } = request.payload;
 
-    console.log('Address, Ticker', address, ticker);
+    // console.log('Address, Ticker', address, ticker);
 
     // // unlike queued.account.address the following
     // // address is encoded with the default prefix
@@ -219,8 +218,8 @@ export default class Extension {
       case 'poly:pri(proofs.requests)':
         return this.proofsSubscribe(id, port);
 
-      case 'poly:pri(proofs.approve)':
-        return this.proofsApprove(request as RequestPolyApproveReq);
+      case 'poly:pri(proofs.approveRequest)':
+        return this.proofsApproveRequest(request as RequestPolyApproveProof);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

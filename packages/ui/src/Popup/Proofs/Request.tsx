@@ -18,6 +18,7 @@ interface Props {
 }
 
 function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<Props> {
+  const { payload: { ticker } } = request;
   const onAction = useContext(ActionContext);
   const { currentAccount } = useContext(PolymeshContext);
 
@@ -51,11 +52,10 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
             <Box mt='m'
               mx='s'>
               <Heading mb={1}
-                variant='h5'>{`${origin} is requesting access`}</Heading>
+                variant='h5'>{'Proof request'}</Heading>
               <Text color='gray.2'
                 variant='b2'>
-                An application, self-identifying as <strong>{origin}</strong>
-                {' '}is requesting access from{' '}
+                An application is requesting an attestation proof for asset {ticker}
                 <a
                   href={url}
                   rel='noopener noreferrer'

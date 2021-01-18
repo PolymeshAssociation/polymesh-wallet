@@ -11,9 +11,9 @@ export default class Proofs implements InjectedProofs {
     sendRequest = _sendRequest;
   }
 
-  public async generateProof (payload: ProofRequestPayload): Promise<ProofResult> {
+  public async generateProofRequest (payload: ProofRequestPayload): Promise<ProofResult> {
     const id = ++nextId;
-    const result = await sendRequest('poly:pub(proofs.generateProof)', payload);
+    const result = await sendRequest('poly:pub(proofs.generateProofRequest)', payload);
 
     return {
       ...result,
