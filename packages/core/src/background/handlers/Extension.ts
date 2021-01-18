@@ -83,8 +83,8 @@ export default class Extension {
     return true;
   }
 
-  private proofsSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'poly:pri(proofs.requests)'>(id, port);
+  private proofRequestsSubscribe (id: string, port: chrome.runtime.Port): boolean {
+    const cb = createSubscription<'poly:pri(uid.proofRequests)'>(id, port);
     const subscription = this.#state.proofSubject.subscribe((requests: ProofingRequest[]): void =>
       cb(requests)
     );
@@ -215,10 +215,10 @@ export default class Extension {
       case 'poly:pri(isDev.subscribe)':
         return this.polyIsDevSubscribe(id, port);
 
-      case 'poly:pri(proofs.requests)':
-        return this.proofsSubscribe(id, port);
+      case 'poly:pri(uid.proofRequests)':
+        return this.proofRequestsSubscribe(id, port);
 
-      case 'poly:pri(proofs.approveRequest)':
+      case 'poly:pri(uid.approveProofRequest)':
         return this.proofsApproveRequest(request as RequestPolyApproveProof);
 
       default:

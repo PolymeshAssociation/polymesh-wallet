@@ -27,7 +27,7 @@ import { ForgetAccount } from './ForgetAccount';
 import { ImportJson } from './ImportJson';
 import { ImportSeed } from './ImportSeed';
 import { NewAccount } from './NewAccount';
-import Proofs from './Proofs';
+import ProofRequests from './ProofRequests';
 import Signing from './Signing';
 
 const startSettings = uiSettings.get();
@@ -158,7 +158,7 @@ export default function Popup (): React.ReactElement {
   const Root = authRequests && authRequests.length
     ? Authorize
     : proofingRequests && proofingRequests.length
-      ? Proofs
+      ? ProofRequests
       : signRequests && signRequests.length
         ? Signing
         : Accounts;
