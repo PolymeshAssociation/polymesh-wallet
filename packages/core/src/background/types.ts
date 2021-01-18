@@ -55,10 +55,6 @@ export interface RequestPolyIdentityRename {
   name: string
 }
 
-export interface RequestProof {
-  readonly payload: ProofRequestPayload;
-}
-
 export interface ResponseProofing {
   id: string;
   proof: string;
@@ -67,7 +63,7 @@ export interface ResponseProofing {
 export interface ProofingRequest {
   account: AccountJson;
   id: string;
-  request: RequestProof;
+  request: ProofRequestPayload;
   url: string;
 }
 
