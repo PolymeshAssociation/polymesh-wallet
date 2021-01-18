@@ -87,7 +87,7 @@ export interface ProofResult {
   proof: string;
 }
 
-export interface InjectedProofs {
+export interface InjectedUid {
   generateProofRequest: (raw: ProofRequestPayload) => Promise<ProofResult>;
 }
 

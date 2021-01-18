@@ -157,7 +157,7 @@ export async function approveSignSignature (id: string, signature: string): Prom
 }
 
 export async function approveProofRequest (id: string): Promise<boolean> {
-  return polyMessage('poly:pri(proofs.approveRequest)', { id });
+  return polyMessage('poly:pri(uid.approveProofRequest)', { id });
 }
 
 export async function createAccountExternal (name: string, address: string, genesisHash: string): Promise<boolean> {
@@ -250,7 +250,7 @@ export async function subscribePolyIsDev (cb: (isDev: string) => void): Promise<
 }
 
 export async function subscribeProofingRequests (cb: (requests: ProofingRequest[]) => void): Promise<boolean> {
-  return polyMessage('poly:pri(proofs.requests)', null, cb);
+  return polyMessage('poly:pri(uid.proofRequests)', null, cb);
 }
 
 export async function renameIdentity (network: NetworkName, did: string, name: string): Promise<boolean> {

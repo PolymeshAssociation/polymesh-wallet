@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { ProofReqContext } from '../../components';
 import Request from './Request';
 
-export default function Proofs (): React.ReactElement {
+export default function ProofRequests (): React.ReactElement {
   const requests = useContext(ProofReqContext);
 
   return (
