@@ -7,12 +7,12 @@ import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { assert } from '@polkadot/util';
 import { polyNetworkGet } from '@polymathnetwork/extension-core/api';
 import polyNetworkSubscribe from '@polymathnetwork/extension-core/api/polyNetworkSubscribe';
-import { getSelectedAccount } from '@polymathnetwork/extension-core/store/getters';
+import { getSelectedAccount, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
 import { NetworkMeta, ProofRequestPayload } from '@polymathnetwork/extension-core/types';
 import { prioritize } from '@polymathnetwork/extension-core/utils';
 
-import { PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ResponseProofing } from '../types';
+import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ResponseProofing } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 
@@ -106,12 +106,14 @@ export default class Tabs {
     return pair;
   }
 
-  private generateProof (url: string, request: ProofRequestPayload): Promise<ResponseProofing> {
-    console.log('>>>> Generate proof', url, request);
-    const address = request.address;
-    const pair = this.getSigningPair(address);
+  private generateProofRequest (url: string, request: ProofRequestPayload): Promise<ResponseProofing> {
+    const account = getSelectedIdentifiedAccount();
 
-    return this.#state.generateProof(url, { payload: request }, { address, ...pair.meta });
+    assert(account, Errors.NO_ACCOUNT);
+
+    assert(account.did, Errors.NO_DID);
+
+    return this.#state.generateProof(url, { payload: request }, { address: account.address });
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await
@@ -143,8 +145,8 @@ export default class Tabs {
         return false;
       }
 
-      case 'poly:pub(proofs.generateProof)':
-        return this.generateProof(url, request as ProofRequestPayload);
+      case 'poly:pub(proofs.generateProofRequest)':
+        return this.generateProofRequest(url, request as ProofRequestPayload);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

@@ -119,6 +119,7 @@ export default function Popup (): React.ReactElement {
   };
 
   useEffect((): void => {
+    // @ts-ignore
     Promise.all([
       subscribePolyStatus(setStatus),
       subscribePolyAccounts(setPolymeshAccounts),

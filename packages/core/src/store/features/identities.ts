@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import isEqual from 'lodash/isEqual';
 import merge from 'lodash/merge';
 
-import { CDD, IdentityData, NetworkName } from '../../types';
+import { CDD, IdentityData, NetworkName, UID } from '../../types';
 import { initialFeatureState } from '../utils';
 
 type State = Record<NetworkName, Record<string, IdentityData>>;
@@ -13,6 +13,7 @@ type SetIdentityPayload = { network: NetworkName, data: IdentityData };
 type RemoveIdentityPayload = { network: NetworkName, did: string };
 type RenameIdentityPayload = { network: NetworkName, did: string, name: string };
 type SetIdentityCddPayload = { network: NetworkName, did: string, cdd?: CDD };
+type SetIdentityUidPayload = { network: NetworkName, did: string, uid?: UID };
 
 const identitiesSlice = createSlice({
   name: 'identities',
@@ -38,6 +39,9 @@ const identitiesSlice = createSlice({
     },
     setIdentityCdd (state, { payload: { cdd, did, network } }: PayloadAction<SetIdentityCddPayload>) {
       state[network][did].cdd = cdd;
+    },
+    setIdentityUid (state, { payload: { did, network, uid } }: PayloadAction<SetIdentityUidPayload>) {
+      state[network][did].uid = uid;
     }
   }
 });

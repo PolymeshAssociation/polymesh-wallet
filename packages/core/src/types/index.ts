@@ -16,6 +16,7 @@ export type AccountData = {
 
 export type IdentityData = {
   cdd?: CDD;
+  uid?: UID;
   did: string;
   priKey: string;
   secKeys?: string[];
@@ -27,6 +28,7 @@ export type IdentifiedAccount = {
   did?: string;
   keyType?: DidType;
   cdd?: CDD;
+  uid?: UID;
   address: string;
   didType?: DidType;
   didAlias: string;
@@ -54,6 +56,8 @@ export type CDD = null | {
   expiry?: number
 }
 
+export type UID = Uint8Array;
+
 export type NetworkMeta = {
   name: NetworkName,
   label?: string,
@@ -66,10 +70,6 @@ export interface InjectedNetwork {
 }
 
 export interface ProofRequestPayload {
-  /**
-   * @description The ss-58 encoded address
-   */
-  address: string;
   /**
    * @description The ticker
    */
@@ -88,7 +88,7 @@ export interface ProofResult {
 }
 
 export interface InjectedProofs {
-  generateProof: (raw: ProofRequestPayload) => Promise<ProofResult>;
+  generateProofRequest: (raw: ProofRequestPayload) => Promise<ProofResult>;
 }
 
 export type KeyringAccountData = {
