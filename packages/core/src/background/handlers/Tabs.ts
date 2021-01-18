@@ -145,7 +145,7 @@ export default class Tabs {
         return false;
       }
 
-      case 'poly:pub(proofs.generateProofRequest)':
+      case 'poly:pub(uid.generateProofRequest)':
         return this.generateProofRequest(url, request as ProofRequestPayload);
 
       default:

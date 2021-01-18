@@ -2,16 +2,16 @@ import Injected from '@polkadot/extension-base/page/Injected';
 import { SendRequest } from '@polymathnetwork/extension-core/page/types';
 
 import Network from './Network';
-import Proofs from './Proofs';
+import Uid from './Uid';
 
 class PolymeshInjected extends Injected {
   public readonly network: Network;
-  public readonly proofs: Proofs;
+  public readonly uid: Uid;
 
   constructor (sendRequest: SendRequest) {
     super(sendRequest);
     this.network = new Network(sendRequest);
-    this.proofs = new Proofs(sendRequest);
+    this.uid = new Uid(sendRequest);
   }
 }
 
