@@ -113,7 +113,7 @@ export default class Tabs {
 
     assert(account.did, Errors.NO_DID);
 
-    return this.#state.generateProof(url, { payload: request }, { address: account.address });
+    return this.#state.generateProof(url, request, { address: account.address });
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await

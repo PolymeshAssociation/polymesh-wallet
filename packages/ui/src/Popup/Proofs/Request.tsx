@@ -1,4 +1,4 @@
-import { RequestProof } from '@polymathnetwork/extension-core/background/types';
+import { ProofRequestPayload } from '@polymathnetwork/extension-core/types';
 import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
@@ -13,12 +13,12 @@ interface Props {
   reqId: string;
   className?: string;
   isFirst: boolean;
-  request: RequestProof;
+  request: ProofRequestPayload;
   url: string;
 }
 
 function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<Props> {
-  const { payload: { ticker } } = request;
+  const { ticker } = request;
   const onAction = useContext(ActionContext);
   const { currentAccount } = useContext(PolymeshContext);
 

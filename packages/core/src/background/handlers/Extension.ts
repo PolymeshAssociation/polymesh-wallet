@@ -132,7 +132,7 @@ export default class Extension {
 
     assert(queued, 'Unable to find request');
     const { reject, request, resolve } = queued;
-    const { ticker } = request.payload;
+    const { ticker } = request;
 
     // console.log('Address, Ticker', address, ticker);
 
