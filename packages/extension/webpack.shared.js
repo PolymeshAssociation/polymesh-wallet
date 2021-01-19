@@ -7,7 +7,7 @@ const ManifestPlugin = require('webpack-extension-manifest-plugin');
 const pkgJson = require('./package.json');
 const manifest = require('./manifest.json');
 
-module.exports = (entry, alias = {}) => ({
+module.exports = (entry, isDev) => ({
   context: __dirname,
   devtool: false,
   entry,
@@ -64,7 +64,7 @@ module.exports = (entry, alias = {}) => ({
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production'),
+        NODE_ENV: JSON.stringify(isDev ? 'development' : 'production'),
         PKG_NAME: JSON.stringify(pkgJson.name),
         PKG_VERSION: JSON.stringify(pkgJson.version)
       }
@@ -93,8 +93,5 @@ module.exports = (entry, alias = {}) => ({
       stream: require.resolve('stream-browserify')
     }
   },
-  experiments: {
-    syncWebAssembly: true
-  },
-  watch: false
+  watch: isDev
 });
