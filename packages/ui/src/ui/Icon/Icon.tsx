@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-shadow */
-import React, { FC, CSSProperties } from 'react';
-import { color, width, height, TLengthStyledSystem } from 'styled-system';
-import { Box, BoxThemeProps } from '../Box';
+import React, { CSSProperties, FC } from 'react';
+import { color, height, TLengthStyledSystem, width } from 'styled-system';
+
 import { styled } from '../../styles';
+import { Box, BoxThemeProps } from '../Box';
 
 export interface IconProps extends BoxThemeProps {
   Asset: React.ComponentType<React.SVGAttributes<SVGElement>>;
@@ -19,8 +20,7 @@ export interface IconProps extends BoxThemeProps {
   id?: string;
 }
 
-const IconComponent: FC<IconProps> = ({
-  Asset,
+const IconComponent: FC<IconProps> = ({ Asset,
   ariaLabel,
   bg,
   className,
@@ -29,8 +29,7 @@ const IconComponent: FC<IconProps> = ({
   rotate, // Filter out prop coming from IconCircled component
   scale,
   width,
-  ...props
-}) => {
+  ...props }) => {
   return (
     <Box as='span'
       className={className}

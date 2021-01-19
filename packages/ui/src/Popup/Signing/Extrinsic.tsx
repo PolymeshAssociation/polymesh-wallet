@@ -1,11 +1,10 @@
 import { SignerPayloadJSON } from '@polkadot/types/types';
-
-import React, { FC, useEffect, useState } from 'react';
 import { formatBalance } from '@polkadot/util';
-import BN from 'bn.js';
-import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
 import { Box, ExpandableDetails, Flex, Hr, Loading, Text } from '@polymathnetwork/extension-ui/ui';
+import BN from 'bn.js';
+import React, { FC, useEffect, useState } from 'react';
 
 interface Props {
   request: SignerPayloadJSON;

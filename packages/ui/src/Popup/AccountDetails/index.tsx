@@ -1,11 +1,12 @@
-import React, { FC, useContext } from 'react';
-import { Box, Flex, Hr, Icon, LabelWithCopy, StatusBadge, Text, TextEllipsis } from '@polymathnetwork/extension-ui/ui';
 import { SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { useHistory, useParams } from 'react-router';
 import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
-import BigNumber from 'bignumber.js';
-import { formatters } from '../../util';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
+import { Box, Flex, Hr, Icon, LabelWithCopy, StatusBadge, Text, TextEllipsis } from '@polymathnetwork/extension-ui/ui';
+import BigNumber from 'bignumber.js';
+import React, { FC, useContext } from 'react';
+import { useHistory, useParams } from 'react-router';
+
+import { formatters } from '../../util';
 
 interface AddressState {
   address: string;
@@ -81,7 +82,8 @@ export const AccountDetails: FC = () => {
           <Box>
             {selectedAccount?.did
               ? <CddStatus cdd={selectedAccount?.cdd}
-                withText /> : 'N/A'
+                withText />
+              : 'N/A'
             }
           </Box>
         </Flex>

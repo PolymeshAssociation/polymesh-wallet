@@ -1,9 +1,10 @@
+import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
+import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useContext, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
-import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
-import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
+
 import { PolymeshContext } from './contexts';
 
 export interface AccountInfo {

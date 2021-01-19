@@ -1,13 +1,14 @@
-import React, { FC, useContext, useState } from 'react';
-import { Text, Box, TextEllipsis, TextInput, Flex, Icon, Heading, LabelWithCopy } from '../../ui';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
-import { SvgPencilOutline, SvgCheck, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { formatters } from '../../util';
-import BigNumber from 'bignumber.js';
-import { useHistory } from 'react-router';
-import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
+import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
+import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
+import BigNumber from 'bignumber.js';
+import React, { FC, useContext, useState } from 'react';
+import { useHistory } from 'react-router';
+
+import { Box, Flex, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '../../ui';
+import { formatters } from '../../util';
 
 export interface Props {
   account: IdentifiedAccount;

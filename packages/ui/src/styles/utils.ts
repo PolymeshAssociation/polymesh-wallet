@@ -1,5 +1,6 @@
-import { darken, lighten, getLuminance } from 'polished';
+import { darken, getLuminance, lighten } from 'polished';
 import { style } from 'styled-system';
+
 import { Styles } from './themeTypes';
 
 export const MaxWidthScale = style({

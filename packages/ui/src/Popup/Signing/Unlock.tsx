@@ -1,8 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import { Button, Box, Checkbox, Text, Flex, TextInput } from '../../ui';
-import { FieldError, useForm } from 'react-hook-form';
 import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import React, { useContext, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+
 import { ActivityContext, PolymeshContext } from '../../components';
+import { Box, Button, Checkbox, Flex, Text, TextInput } from '../../ui';
 
 interface Props {
   isFirst: boolean | undefined;
@@ -64,9 +65,9 @@ function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPas
             <Box>
               <Text color='alert'
                 variant='b3'>
-                {(errors.currentPassword as FieldError).type === 'required' && 'Required field'}
-                {(errors.currentPassword as FieldError).type === 'WrongPassword' && 'Invalid password'}
-                {(errors.currentPassword as FieldError).type === 'SigningError' && (errors.currentPassword as FieldError).message}
+                {(errors.currentPassword).type === 'required' && 'Required field'}
+                {(errors.currentPassword).type === 'WrongPassword' && 'Invalid password'}
+                {(errors.currentPassword).type === 'SigningError' && (errors.currentPassword).message}
               </Text>
             </Box>
                 }

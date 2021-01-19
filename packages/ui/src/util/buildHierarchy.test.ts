@@ -1,4 +1,5 @@
 import { AccountJson, AccountWithChildren } from '@polkadot/extension-base/background/types';
+
 import { buildHierarchy } from './buildHierarchy';
 
 const testHierarchy = (accounts: AccountJson[], expected: AccountWithChildren[]): void => {

@@ -1,11 +1,12 @@
-import React, { FC, useContext, useState } from 'react';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
-import { Box, Text, Flex, Icon, LabelWithCopy, TextInput, TextEllipsis } from '../../ui';
 import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { AccountView } from './AccountView';
-import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
 import { ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
+import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
+import React, { FC, useContext, useState } from 'react';
+
+import { Box, Flex, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '../../ui';
+import { AccountView } from './AccountView';
 
 export interface Props {
   did: string;

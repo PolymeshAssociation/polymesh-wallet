@@ -1,13 +1,14 @@
-import React, { FC, useContext, useRef, useState } from 'react';
-import { ActivityContext } from '../../components';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { Box, Button, ButtonSmall, Flex, Header, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { hexToU8a, isHex, u8aToString } from '@polkadot/util';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { jsonVerifyFile } from '../../messaging';
-import { isHex, u8aToString, hexToU8a } from '@polkadot/util';
-import { FieldError, FormProvider, useForm } from 'react-hook-form';
-import { useErrorHandler } from 'react-error-boundary';
+import { Box, Button, ButtonSmall, Flex, Header, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
 import verifyJsonPassword from '@polymathnetwork/extension-ui/util/verifyJsonPassword';
+import React, { FC, useContext, useRef, useState } from 'react';
+import { useErrorHandler } from 'react-error-boundary';
+import { FormProvider, useForm } from 'react-hook-form';
+
+import { ActivityContext } from '../../components';
+import { jsonVerifyFile } from '../../messaging';
 
 export interface FileState {
   address: string | null;
@@ -26,7 +27,8 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
   const [accountJson, setAccountJson] = useState<FileState | undefined>();
   const methods = useForm({
     defaultValues: {
-      jsonPassword: ''
+      jsonPassword: '',
+      jsonFile: null
     }
   });
   const { clearErrors, errors, handleSubmit, register, setError } = methods;
@@ -157,8 +159,8 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
                       <Box mt='s'>
                         <Text color='alert'
                           variant='b3'>
-                          {(errors.jsonFile as FieldError).type === 'required' && 'Json file is require'}
-                          {(errors.jsonFile as FieldError).type === 'invalid' && 'Uploaded file is invalid'}
+                          {(errors.jsonFile).type === 'required' && 'Json file is require'}
+                          {(errors.jsonFile).type === 'invalid' && 'Uploaded file is invalid'}
                         </Text>
                       </Box>
               }
@@ -258,8 +260,8 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
                       <Box>
                         <Text color='alert'
                           variant='b3'>
-                          {(errors.jsonPassword as FieldError).type === 'required' && 'Required field'}
-                          {(errors.jsonPassword as FieldError).type === 'manual' && 'Invalid password'}
+                          {(errors.jsonPassword).type === 'required' && 'Required field'}
+                          {(errors.jsonPassword).type === 'manual' && 'Invalid password'}
                         </Text>
                       </Box>
                     }

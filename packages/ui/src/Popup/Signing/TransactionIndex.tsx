@@ -1,10 +1,9 @@
-import { ThemeProps } from '../../types';
-
 import React from 'react';
 import styled from 'styled-components';
 
 import ArrowLeftImage from '../../assets/arrowLeft.svg';
 import { Svg } from '../../components';
+import { ThemeProps } from '../../types';
 
 interface Props {
   className?: string;

@@ -1,4 +1,5 @@
-import { ThemedStyledProps, CSSObject } from 'styled-components';
+import { CSSObject, ThemedStyledProps } from 'styled-components';
+
 import { Theme } from '../types';
 
 export { StyledProps } from 'styled-components';

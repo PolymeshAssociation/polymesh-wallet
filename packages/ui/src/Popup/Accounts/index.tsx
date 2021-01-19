@@ -1,18 +1,18 @@
-import React, { useContext, Fragment } from 'react';
-import styled from 'styled-components';
-import { AccountContext, PolymeshContext } from '../../components';
-import AddAccount from './AddAccount';
-import { AccountsHeader } from './AccountsHeader';
-import { Text, Box, Header, Flex, Icon, Menu, MenuItem, ContextMenuTrigger, StatusBadge, GrowingButton, Checkbox } from '../../ui';
-import { SvgViewDashboard,
-  SvgDotsVertical,
-  SvgPlus } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { defaultNetwork, networkIsDev, networkLabels, networkLinks } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
-import { AccountsContainer } from './AccountsContainer';
+import { SvgDotsVertical,
+  SvgPlus, SvgViewDashboard } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { setPolyNetwork, togglePolyIsDev, windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
-import { defaultNetwork, networkLabels, networkLinks, networkIsDev } from '@polymathnetwork/extension-core/constants';
-import { togglePolyIsDev, setPolyNetwork, windowOpen } from '@polymathnetwork/extension-ui/messaging';
+import React, { Fragment, useContext } from 'react';
 import { useHistory } from 'react-router';
+import styled from 'styled-components';
+
+import { AccountContext, PolymeshContext } from '../../components';
+import { Box, Checkbox, ContextMenuTrigger, Flex, GrowingButton, Header, Icon, Menu, MenuItem, StatusBadge, Text } from '../../ui';
+import { AccountsContainer } from './AccountsContainer';
+import { AccountsHeader } from './AccountsHeader';
+import AddAccount from './AddAccount';
 
 export default function Accounts (): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
