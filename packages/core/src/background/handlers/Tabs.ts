@@ -9,10 +9,10 @@ import { polyNetworkGet } from '@polymathnetwork/extension-core/api';
 import polyNetworkSubscribe from '@polymathnetwork/extension-core/api/polyNetworkSubscribe';
 import { getSelectedAccount, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
-import { NetworkMeta, ProofRequestPayload } from '@polymathnetwork/extension-core/types';
+import { NetworkMeta, ProofRequestPayload, ProvideUidRequestPayload } from '@polymathnetwork/extension-core/types';
 import { prioritize } from '@polymathnetwork/extension-core/utils';
 
-import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse } from '../types';
+import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse, ProvideUidResponse } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 
@@ -116,6 +116,10 @@ export default class Tabs {
     return this.#state.generateProof(url, request, { address: account.address });
   }
 
+  private provideUid (url: string, request: ProvideUidRequestPayload): Promise<ProvideUidResponse> {
+    // return this.#state.provideUid(url, request);
+  }
+
   // eslint-disable-next-line @typescript-eslint/require-await
   public async handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], url: string, port: chrome.runtime.Port): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
     switch (type) {
@@ -147,6 +151,9 @@ export default class Tabs {
 
       case 'poly:pub(uid.requestProof)':
         return this.requestProof(url, request as ProofRequestPayload);
+
+      case 'poly:pub(uid.provideUid)':
+        return this.provideUid(url, request as ProvideUidRequestPayload);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

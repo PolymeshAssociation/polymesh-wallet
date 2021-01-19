@@ -67,7 +67,7 @@ export default class State {
     });
   }
 
-  private requestComplete = (id: string, resolve: (result: ProofingResponse) => void, reject: (error: Error) => void): Resolver<ProofingResponse> => {
+  private proofRequestComplete = (id: string, resolve: (result: ProofingResponse) => void, reject: (error: Error) => void): Resolver<ProofingResponse> => {
     const complete = (): void => {
       delete this.#proofRequests[id];
       this.updateIconSign(true);
@@ -112,7 +112,7 @@ export default class State {
 
     return new Promise((resolve, reject): void => {
       this.#proofRequests[id] = {
-        ...this.requestComplete(id, resolve, reject),
+        ...this.proofRequestComplete(id, resolve, reject),
         account,
         id,
         request,
