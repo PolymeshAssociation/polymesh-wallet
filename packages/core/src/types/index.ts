@@ -76,6 +76,12 @@ export interface ProofRequestPayload {
   ticker: string;
 }
 
+export interface ProvideUidRequestPayload {
+  did: string;
+  uid: string;
+  network: NetworkName
+}
+
 export interface ProofResult {
   /**
    * @description The id for this request
