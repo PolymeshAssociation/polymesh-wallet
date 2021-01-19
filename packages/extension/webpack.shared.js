@@ -11,6 +11,9 @@ module.exports = (entry, isDev) => ({
   context: __dirname,
   devtool: false,
   entry,
+  experiments: {
+    syncWebAssembly: true
+  },
   module: {
     rules: [
       {
