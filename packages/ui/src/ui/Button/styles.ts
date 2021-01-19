@@ -1,6 +1,7 @@
-import { transparentize, darken } from 'polished';
+import { darken, transparentize } from 'polished';
+
 import { Styles } from '../../styles/types';
-import { ButtonProps, ButtonDefaultProps, ButtonIconPosition } from './definitions';
+import { ButtonDefaultProps, ButtonIconPosition, ButtonProps } from './definitions';
 
 export const getVariant: Styles<ButtonProps> = ({ theme, variant = ButtonDefaultProps.variant }) =>
   ({

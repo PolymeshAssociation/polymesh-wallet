@@ -1,15 +1,14 @@
 import styled, { StyledProps } from 'styled-components';
+
 import { Styles } from '../../styles/types';
 import { Flex } from '../Flex';
 import { BaseInputAreaProps } from './BaseInputAreaProps';
 
-const getInputStyles: Styles<BaseInputAreaProps & { focused?: boolean }> = ({
-  disabled,
+const getInputStyles: Styles<BaseInputAreaProps & { focused?: boolean }> = ({ disabled,
   focused,
   invalid,
   readOnly,
-  theme
-}) => {
+  theme }) => {
   if (disabled) {
     return {
       borderColor: theme.colors.disabled,

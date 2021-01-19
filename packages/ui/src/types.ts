@@ -1,5 +1,6 @@
-import { Theme } from './components/themes';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+
+import { Theme } from './components/themes';
 
 export { Theme };
 

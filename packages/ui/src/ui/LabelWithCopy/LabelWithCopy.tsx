@@ -1,6 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
 import { SvgContentCopy } from '@polymathnetwork/extension-ui/assets/images/icons';
+import React, { FC, useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+
 import { Flex } from '../Flex';
 import { Icon } from '../Icon';
 import { Text } from '../Text';
@@ -18,7 +19,7 @@ export interface Props {
 export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, textVariant }) => {
   const [hover, setHover] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [timerRef, setTimerRef] = useState(0);
+  const [timerRef, setTimerRef] = useState<ReturnType<typeof setTimeout>>();
 
   const onMouseOver = () => {
     setHover(true);
@@ -34,7 +35,7 @@ export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, te
 
   useEffect(() => {
     return () => {
-      if (timerRef !== 0) clearTimeout(timerRef);
+      if (timerRef) clearTimeout(timerRef);
     };
   }, [timerRef]);
 

@@ -1,9 +1,8 @@
-import { ThemeProps } from '../types';
-
 import React from 'react';
 import styled from 'styled-components';
 
 import warningImageSrc from '../assets/warning.svg';
+import { ThemeProps } from '../types';
 import Svg from './Svg';
 
 interface Props extends ThemeProps {

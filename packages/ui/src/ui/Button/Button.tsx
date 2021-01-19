@@ -1,9 +1,10 @@
 import React, { ForwardRefRenderFunction } from 'react';
+
 import { styled } from '../../styles';
 import { Icon } from '../Icon';
-import { getVariant, getIconStyle } from './styles';
-import { ButtonProps, ButtonDefaultProps } from './definitions';
 import { Loading } from '../Loading';
+import { ButtonDefaultProps, ButtonProps } from './definitions';
+import { getIconStyle, getVariant } from './styles';
 
 const ButtonComponent: ForwardRefRenderFunction<HTMLButtonElement, React.PropsWithChildren<ButtonProps>> = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

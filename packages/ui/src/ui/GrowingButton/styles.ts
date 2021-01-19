@@ -1,4 +1,5 @@
 import { styled } from '@polymathnetwork/extension-ui/styles';
+
 import { Flex } from '../Flex';
 
 export const Wrapper = styled(Flex)`

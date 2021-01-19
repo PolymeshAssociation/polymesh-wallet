@@ -1,7 +1,8 @@
+import { SvgCrossOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import React, { FC } from 'react';
 import { FallbackProps } from 'react-error-boundary';
-import { Box, IconCircled, Heading, Text, Button } from '../ui';
-import { SvgCrossOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+
+import { Box, Button, Heading, IconCircled, Text } from '../ui';
 
 const ErrorBoundaryFallback: FC<FallbackProps> = ({ error, resetErrorBoundary }) => {
   return (
@@ -20,12 +21,12 @@ const ErrorBoundaryFallback: FC<FallbackProps> = ({ error, resetErrorBoundary })
           <Box mb='xl'
             mt='m'>
             <Text color='gray.1'
-              fontSize='2'
-              variant='b2'>
-              {JSON.stringify(error)}
+              fontSize='1'
+              variant='code'>
+              { error.message ? error.message : JSON.stringify(error) }
             </Text>
           </Box>
-          <Button onClick={resetErrorBoundary}>Go back</Button>
+          <Button onClick={resetErrorBoundary}>Reload</Button>
         </Box>
       )}
     </>
