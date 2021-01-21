@@ -1,7 +1,7 @@
 {
   "name": "@polymathnetwork/extension-ui",
   "description": "A sample signer extension for the @polkadot/api",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "license": "Apache-2",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
