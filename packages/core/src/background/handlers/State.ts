@@ -1,10 +1,10 @@
 
 import { AccountJson } from '@polkadot/extension-base/background/types';
 import chrome from '@polkadot/extension-inject/chrome';
-import { ProofRequestPayload } from '@polymathnetwork/extension-core/types';
+import { ProofRequestPayload, RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
 import { BehaviorSubject } from 'rxjs';
 
-import { ProofingRequest, ProofingResponse } from '../types';
+import { ProofingRequest, ProofingResponse, ProvideUidRequest } from '../types';
 
 interface Resolver <T> {
   reject: (error: Error) => void;
@@ -13,10 +13,16 @@ interface Resolver <T> {
 
 let idCounter = 0;
 
-interface ProofRequest extends Resolver<ProofingResponse> {
+interface ProofRequestResolver extends Resolver<ProofingResponse> {
   account: AccountJson;
   id: string;
   request: ProofRequestPayload;
+  url: string;
+}
+
+interface ProvideUidRequestResolver extends Resolver<boolean> {
+  id: string;
+  request: RequestPolyProvideUid;
   url: string;
 }
 
@@ -36,20 +42,34 @@ function getId (): string {
 }
 
 export default class State {
-  readonly #proofRequests: Record<string, ProofRequest> = {};
+  readonly #proofRequests: Record<string, ProofRequestResolver> = {};
+
+  readonly #provideUidRequests: Record<string, ProvideUidRequestResolver> = {};
 
   #windows: number[] = [];
 
   public readonly proofSubject: BehaviorSubject<ProofingRequest[]> = new BehaviorSubject<ProofingRequest[]>([]);
 
+  public readonly provideUidRequestsSubject: BehaviorSubject<ProvideUidRequest[]> = new BehaviorSubject<ProvideUidRequest[]>([]);
+
   public get numProofRequests (): number {
     return Object.keys(this.#proofRequests).length;
+  }
+
+  public get numProvideUidRequests (): number {
+    return Object.keys(this.#provideUidRequests).length;
   }
 
   public get allProofRequests (): ProofingRequest[] {
     return Object
       .values(this.#proofRequests)
       .map(({ account, id, request, url }): ProofingRequest => ({ account, id, request, url }));
+  }
+
+  public get allProvideUidRequests (): ProvideUidRequest[] {
+    return Object
+      .values(this.#provideUidRequests)
+      .map(({ id, request, url }): ProvideUidRequest => ({ id, request, url }));
   }
 
   private popupClose (): void {
@@ -70,7 +90,7 @@ export default class State {
   private proofRequestComplete = (id: string, resolve: (result: ProofingResponse) => void, reject: (error: Error) => void): Resolver<ProofingResponse> => {
     const complete = (): void => {
       delete this.#proofRequests[id];
-      this.updateIconSign(true);
+      this.updateIconProof(true);
     };
 
     return {
@@ -85,10 +105,29 @@ export default class State {
     };
   }
 
-  private updateIcon (shouldClose?: boolean): void {
-    const signCount = this.numProofRequests;
+  private provideUidComplete = (id: string, resolve: (result: boolean) => void, reject: (error: Error) => void): Resolver<boolean> => {
+    const complete = (): void => {
+      delete this.#provideUidRequests[id];
+      this.updateIconProvideUid(true);
+    };
+
+    return {
+      reject: (error: Error): void => {
+        complete();
+        reject(error);
+      },
+      resolve: (result: boolean): void => {
+        complete();
+        resolve(result);
+      }
+    };
+  }
+
+  private updateIconProof (shouldClose?: boolean): void {
+    this.proofSubject.next(this.allProofRequests);
+    const count = this.numProofRequests;
     const text = (
-      signCount ? `${signCount}` : '')
+      count ? `${count}` : '')
     ;
 
     chrome.browserAction.setBadgeText({ text });
@@ -98,13 +137,26 @@ export default class State {
     }
   }
 
-  private updateIconSign (shouldClose?: boolean): void {
-    this.proofSubject.next(this.allProofRequests);
-    this.updateIcon(shouldClose);
+  private updateIconProvideUid (shouldClose?: boolean): void {
+    this.provideUidRequestsSubject.next(this.allProvideUidRequests);
+    const count = this.numProvideUidRequests;
+    const text = (
+      count ? `${count}` : '')
+    ;
+
+    chrome.browserAction.setBadgeText({ text });
+
+    if (shouldClose && text === '') {
+      this.popupClose();
+    }
   }
 
-  public getProofRequest (id: string): ProofRequest {
+  public getProofRequest (id: string): ProofRequestResolver {
     return this.#proofRequests[id];
+  }
+
+  public getProvideUidRequest (id: string): ProvideUidRequestResolver {
+    return this.#provideUidRequests[id];
   }
 
   public generateProof (url: string, request: ProofRequestPayload, account: AccountJson): Promise<ProofingResponse> {
@@ -119,7 +171,23 @@ export default class State {
         url
       };
 
-      this.updateIconSign();
+      this.updateIconProof();
+      this.popupOpen();
+    });
+  }
+
+  public provideUid (url: string, request: RequestPolyProvideUid): Promise<boolean> {
+    return new Promise((resolve, reject): void => {
+      const id = getId();
+
+      this.#provideUidRequests[id] = {
+        ...this.provideUidComplete(id, resolve, reject),
+        id,
+        request,
+        url
+      };
+
+      this.updateIconProvideUid();
       this.popupOpen();
     });
   }

@@ -9,6 +9,7 @@ import { FLUSH,
   REGISTER, REHYDRATE } from 'redux-persist';
 import { localStorage } from 'redux-persist-webextension-storage';
 
+import auxStore from './AuxStore';
 import rootReducer from './rootReducer';
 import { setIsRehydrated } from './setters';
 
@@ -51,5 +52,7 @@ export type Dispatch = typeof store.dispatch
 export const persister = persistStore(store, null, () => {
   setIsRehydrated();
 });
+
+export { auxStore };
 
 export default store;
