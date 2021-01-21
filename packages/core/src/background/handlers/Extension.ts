@@ -1,10 +1,11 @@
 import { assert } from '@polkadot/util';
 import { callDetails } from '@polymathnetwork/extension-core/api';
+import { auxStore } from '@polymathnetwork/extension-core/store';
 import { getNetwork } from '@polymathnetwork/extension-core/store/getters';
 import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { subscribeIdentifiedAccounts, subscribeIsDev, subscribeNetwork, subscribeSelectedAccount, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 
-import { PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
+import { PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, ProvideUidRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolyProvideUidApprove, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 import { getMockUId, getScopeAttestationProof } from './utils';
@@ -86,6 +87,20 @@ export default class Extension {
   private proofRequestsSubscribe (id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'poly:pri(uid.proofRequests)'>(id, port);
     const subscription = this.#state.proofSubject.subscribe((requests: ProofingRequest[]): void =>
+      cb(requests)
+    );
+
+    port.onDisconnect.addListener((): void => {
+      unsubscribe(id);
+      subscription.unsubscribe();
+    });
+
+    return true;
+  }
+
+  private uidProvideRequestsSubscribe (id: string, port: chrome.runtime.Port): boolean {
+    const cb = createSubscription<'poly:pri(uid.provideRequests.subscribe)'>(id, port);
+    const subscription = this.#state.provideUidRequestsSubject.subscribe((requests: ProvideUidRequest[]): void =>
       cb(requests)
     );
 
@@ -183,6 +198,20 @@ export default class Extension {
     return true;
   }
 
+  private uidProvideRequestsApprove ({ id }: RequestPolyProvideUidApprove): boolean {
+    const queued = this.#state.getProvideUidRequest(id);
+
+    assert(queued, 'Unable to find request');
+    const { reject, request, resolve } = queued;
+    const { address, did, network, uid } = request;
+
+    auxStore.set(did, uid);
+
+    resolve(true);
+
+    return true;
+  }
+
   public async handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], port: chrome.runtime.Port): Promise<PolyResponseType<TMessageType>> {
     switch (type) {
       case 'poly:pri(accounts.subscribe)':
@@ -218,8 +247,14 @@ export default class Extension {
       case 'poly:pri(uid.proofRequests)':
         return this.proofRequestsSubscribe(id, port);
 
+      case 'poly:pri(uid.provideRequests.subscribe)':
+        return this.uidProvideRequestsSubscribe(id, port);
+
       case 'poly:pri(uid.approveProofRequest)':
         return this.proofsApproveRequest(request as RequestPolyApproveProof);
+
+      case 'poly:pri(uid.provideRequests.approve)':
+        return this.uidProvideRequestsApprove(request as RequestPolyProvideUidApprove);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

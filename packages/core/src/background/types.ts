@@ -3,7 +3,7 @@ import { InjectedAccount, InjectedMetadataKnown, MetadataDef } from '@polkadot/e
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 
-import { IdentifiedAccount, NetworkMeta, NetworkName, ProofRequestPayload, ProvideUidRequestPayload, StoreStatus } from '../types';
+import { IdentifiedAccount, NetworkMeta, NetworkName, ProofRequestPayload, RequestPolyProvideUid, StoreStatus } from '../types';
 
 export enum Errors {
   NO_ACCOUNT = 'Accounts not found',
@@ -35,6 +35,8 @@ export type RequestPolyIsDevSubscribe = null;
 
 export type RequestProofingSubscribe = null;
 
+export type RequestPolyProvideUidSubscribe = null;
+
 export interface RequestPolyNetworkSet {
   network: NetworkName
 }
@@ -60,10 +62,6 @@ export interface ProofingResponse {
   proof: string;
 }
 
-export interface ProvideUidResponse {
-  id: string;
-}
-
 export interface ProofingRequest {
   account: AccountJson;
   id: string;
@@ -71,7 +69,17 @@ export interface ProofingRequest {
   url: string;
 }
 
+export interface ProvideUidRequest {
+  id: string;
+  request: RequestPolyProvideUid;
+  url: string;
+}
+
 export interface RequestPolyApproveProof {
+  id: string;
+}
+
+export interface RequestPolyProvideUidApprove {
   id: string;
 }
 
@@ -88,14 +96,17 @@ export interface PolyRequestSignatures {
   'poly:pri(identity.rename)': [RequestPolyIdentityRename, boolean];
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
   'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
+
   'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];
   'poly:pri(uid.proofRequests)': [RequestProofingSubscribe, boolean, ProofingRequest[]];
   'poly:pri(uid.approveProofRequest)': [RequestPolyApproveProof, boolean];
-  'poly:pub(uid.provideUid)': [ProvideUidRequestPayload, ProvideUidResponse];
 
+  'poly:pub(uid.provide)': [RequestPolyProvideUid, boolean];
+  'poly:pri(uid.provideRequests.subscribe)': [RequestPolyProvideUidSubscribe, boolean, ProvideUidRequest[]];
+  'poly:pri(uid.provideRequests.approve)': [RequestPolyProvideUidApprove, boolean]
   /*
-  this is an inelegant way to take over these couple requests from Polkadot,
-  in order to alter the behavior as needed for each request respectively.
+    this is an inelegant yet effective way to take over these couple requests from Polkadot handlers,
+    in order to alter their behavior as needed.
   */
   // Re-order accounts list to bring the selected account, first.
   'pub(accounts.list)': [RequestAccountList, InjectedAccount[]];

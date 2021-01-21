@@ -9,7 +9,7 @@ import { MetadataDef } from '@polkadot/extension-inject/types';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
-import { PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, ProofingRequest, ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, ProofingRequest, ProvideUidRequest, ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 import { IdentifiedAccount, NetworkName, StoreStatus } from '@polymathnetwork/extension-core/types';
 
 interface Handler {
@@ -251,6 +251,10 @@ export async function subscribePolyIsDev (cb: (isDev: string) => void): Promise<
 
 export async function subscribeProofingRequests (cb: (requests: ProofingRequest[]) => void): Promise<boolean> {
   return polyMessage('poly:pri(uid.proofRequests)', null, cb);
+}
+
+export async function subscribeProvideUidRequests (cb: (requests: ProvideUidRequest[]) => void): Promise<boolean> {
+  return polyMessage('poly:pri(uid.provideRequests.subscribe)', null, cb);
 }
 
 export async function renameIdentity (network: NetworkName, did: string, name: string): Promise<boolean> {
