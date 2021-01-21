@@ -1,7 +1,7 @@
 import { AccountsContext, AuthorizeRequest, MetadataRequest, SigningRequest } from '@polkadot/extension-base/background/types';
 import settings from '@polkadot/ui-settings';
 import { SettingsStruct } from '@polkadot/ui-settings/types';
-import { ProofingRequest } from '@polymathnetwork/extension-core/background/types';
+import { ProofingRequest, ProvideUidRequest } from '@polymathnetwork/extension-core/background/types';
 import React from 'react';
 
 import { PolymeshContext as PolymeshContextType } from '../types';
@@ -18,6 +18,7 @@ const MetadataReqContext = React.createContext<MetadataRequest[]>([]);
 const SettingsContext = React.createContext<SettingsStruct>(settings.get());
 const SigningReqContext = React.createContext<SigningRequest[]>([]);
 const ProofReqContext = React.createContext<ProofingRequest[]>([]);
+const ProvideUidReqContext = React.createContext<ProvideUidRequest[]>([]);
 const ThemeSwitchContext = React.createContext<(theme: AvailableThemes) => void>(noop);
 const ToastContext = React.createContext<({show: (message: string) => void})>({ show: noop });
 const PolymeshContext = React.createContext<PolymeshContextType>({ network: '', polymeshAccounts: [] });
@@ -35,5 +36,6 @@ export {
   ThemeSwitchContext,
   ToastContext,
   PolymeshContext,
-  ProofReqContext
+  ProofReqContext,
+  ProvideUidReqContext
 };

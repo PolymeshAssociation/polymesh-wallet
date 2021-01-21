@@ -76,7 +76,8 @@ export interface ProofRequestPayload {
   ticker: string;
 }
 
-export interface ProvideUidRequestPayload {
+export interface RequestPolyProvideUid {
+  address: string;
   did: string;
   uid: string;
   network: NetworkName
@@ -94,7 +95,8 @@ export interface ProofResult {
 }
 
 export interface InjectedUid {
-  requestProof: (raw: ProofRequestPayload) => Promise<ProofResult>;
+  requestProof: (req: ProofRequestPayload) => Promise<ProofResult>;
+  provide: (req: RequestPolyProvideUid) => Promise<boolean>;
 }
 
 export type KeyringAccountData = {
