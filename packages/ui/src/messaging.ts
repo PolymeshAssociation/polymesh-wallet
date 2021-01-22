@@ -157,7 +157,19 @@ export async function approveSignSignature (id: string, signature: string): Prom
 }
 
 export async function approveProofRequest (id: string): Promise<boolean> {
-  return polyMessage('poly:pri(uid.approveProofRequest)', { id });
+  return polyMessage('poly:pri(uid.proofRequests.approve)', { id });
+}
+
+export async function rejectProofRequest (id: string): Promise<boolean> {
+  return polyMessage('poly:pri(uid.proofRequests.reject)', { id });
+}
+
+export async function approveUidProvideRequest (id: string): Promise<boolean> {
+  return polyMessage('poly:pri(uid.provideRequests.approve)', { id });
+}
+
+export async function rejectUidProvideRequest (id: string): Promise<boolean> {
+  return polyMessage('poly:pri(uid.provideRequests.reject)', { id });
 }
 
 export async function createAccountExternal (name: string, address: string, genesisHash: string): Promise<boolean> {
@@ -250,7 +262,7 @@ export async function subscribePolyIsDev (cb: (isDev: string) => void): Promise<
 }
 
 export async function subscribeProofingRequests (cb: (requests: ProofingRequest[]) => void): Promise<boolean> {
-  return polyMessage('poly:pri(uid.proofRequests)', null, cb);
+  return polyMessage('poly:pri(uid.proofRequests.subscribe)', null, cb);
 }
 
 export async function subscribeProvideUidRequests (cb: (requests: ProvideUidRequest[]) => void): Promise<boolean> {

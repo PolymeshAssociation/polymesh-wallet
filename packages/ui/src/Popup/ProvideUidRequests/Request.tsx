@@ -4,7 +4,7 @@ import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
 import { ActionContext, PolymeshContext } from '../../components';
-import { approveProofRequest, rejectAuthRequest } from '../../messaging';
+import { approveUidProvideRequest, rejectUidProvideRequest } from '../../messaging';
 import { ThemeProps } from '../../types';
 import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
 import { AccountsHeader } from '../Accounts/AccountsHeader';
@@ -23,14 +23,14 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
   const { currentAccount } = useContext(PolymeshContext);
 
   const _onApprove = useCallback(
-    () => approveProofRequest(reqId)
+    () => approveUidProvideRequest(reqId)
       .then(() => onAction())
       .catch((error: Error) => console.error(error)),
     [reqId, onAction]
   );
 
   const _onReject = useCallback(
-    () => rejectAuthRequest(reqId)
+    () => rejectUidProvideRequest(reqId)
       .then(() => onAction())
       .catch((error: Error) => console.error(error)),
     [reqId, onAction]

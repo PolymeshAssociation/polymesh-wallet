@@ -5,7 +5,7 @@ import { getNetwork } from '@polymathnetwork/extension-core/store/getters';
 import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { subscribeIdentifiedAccounts, subscribeIsDev, subscribeNetwork, subscribeSelectedAccount, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 
-import { PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, ProvideUidRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolyProvideUidApprove, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
+import { PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, ProvideUidRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolyProvideUidApprove, RequestPolyProvideUidReject, RequestPolyRejectProof, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 import { getMockUId, getScopeAttestationProof } from './utils';
@@ -85,7 +85,7 @@ export default class Extension {
   }
 
   private proofRequestsSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'poly:pri(uid.proofRequests)'>(id, port);
+    const cb = createSubscription<'poly:pri(uid.proofRequests.subscribe)'>(id, port);
     const subscription = this.#state.proofSubject.subscribe((requests: ProofingRequest[]): void =>
       cb(requests)
     );
@@ -149,38 +149,6 @@ export default class Extension {
     const { reject, request, resolve } = queued;
     const { ticker } = request;
 
-    // console.log('Address, Ticker', address, ticker);
-
-    // // unlike queued.account.address the following
-    // // address is encoded with the default prefix
-    // // which what is used for password caching mapping
-    // const { address } = pair;
-
-    // if (!pair) {
-    //   reject(new Error('Unable to find pair'));
-
-    //   return false;
-    // }
-
-    // this.refreshAccountPasswordCache(pair);
-
-    // // if the keyring pair is locked, the password is needed
-    // if (pair.isLocked && !password) {
-    //   reject(new Error('Password needed to unlock the account'));
-    // }
-
-    // if (pair.isLocked) {
-    //   pair.decodePkcs8(password);
-    // }
-
-    // const result = request.sign(registry, pair);
-
-    // if (savePass) {
-    //   this.#cachedUnlocks[address] = Date.now() + PASSWORD_EXPIRY_MS;
-    // } else {
-    //   pair.lock();
-    // }
-
     const did = '0x4e7bf83016ac0a39d4266ae263d99a03350c66f53f92e4dbbf5f9baa11a2a36b';
     const uid = await getMockUId(did);
 
@@ -198,16 +166,38 @@ export default class Extension {
     return true;
   }
 
+  private proofsRejectRequest ({ id }: RequestPolyRejectProof): boolean {
+    const queued = this.#state.getProofRequest(id);
+
+    assert(queued, 'Unable to find request');
+    const { reject } = queued;
+
+    reject(new Error('Rejected'));
+
+    return true;
+  }
+
   private uidProvideRequestsApprove ({ id }: RequestPolyProvideUidApprove): boolean {
     const queued = this.#state.getProvideUidRequest(id);
 
     assert(queued, 'Unable to find request');
-    const { reject, request, resolve } = queued;
+    const { request, resolve } = queued;
     const { address, did, network, uid } = request;
 
     auxStore.set(did, uid);
 
     resolve(true);
+
+    return true;
+  }
+
+  private uidProvideRequestsReject ({ id }: RequestPolyProvideUidReject): boolean {
+    const queued = this.#state.getProvideUidRequest(id);
+
+    assert(queued, 'Unable to find request');
+    const { reject } = queued;
+
+    reject(new Error('Rejected'));
 
     return true;
   }
@@ -244,17 +234,23 @@ export default class Extension {
       case 'poly:pri(isDev.subscribe)':
         return this.polyIsDevSubscribe(id, port);
 
-      case 'poly:pri(uid.proofRequests)':
+      case 'poly:pri(uid.proofRequests.subscribe)':
         return this.proofRequestsSubscribe(id, port);
 
       case 'poly:pri(uid.provideRequests.subscribe)':
         return this.uidProvideRequestsSubscribe(id, port);
 
-      case 'poly:pri(uid.approveProofRequest)':
+      case 'poly:pri(uid.proofRequests.approve)':
         return this.proofsApproveRequest(request as RequestPolyApproveProof);
+
+      case 'poly:pri(uid.proofRequests.reject)':
+        return this.proofsRejectRequest(request as RequestPolyRejectProof);
 
       case 'poly:pri(uid.provideRequests.approve)':
         return this.uidProvideRequestsApprove(request as RequestPolyProvideUidApprove);
+
+      case 'poly:pri(uid.provideRequests.reject)':
+        return this.uidProvideRequestsReject(request as RequestPolyProvideUidReject);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);

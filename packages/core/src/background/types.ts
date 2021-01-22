@@ -79,7 +79,15 @@ export interface RequestPolyApproveProof {
   id: string;
 }
 
+export interface RequestPolyRejectProof {
+  id: string;
+}
+
 export interface RequestPolyProvideUidApprove {
+  id: string;
+}
+
+export interface RequestPolyProvideUidReject {
   id: string;
 }
 
@@ -98,12 +106,14 @@ export interface PolyRequestSignatures {
   'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
 
   'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];
-  'poly:pri(uid.proofRequests)': [RequestProofingSubscribe, boolean, ProofingRequest[]];
-  'poly:pri(uid.approveProofRequest)': [RequestPolyApproveProof, boolean];
+  'poly:pri(uid.proofRequests.subscribe)': [RequestProofingSubscribe, boolean, ProofingRequest[]];
+  'poly:pri(uid.proofRequests.approve)': [RequestPolyApproveProof, boolean];
+  'poly:pri(uid.proofRequests.reject)': [RequestPolyRejectProof, boolean];
 
   'poly:pub(uid.provide)': [RequestPolyProvideUid, boolean];
   'poly:pri(uid.provideRequests.subscribe)': [RequestPolyProvideUidSubscribe, boolean, ProvideUidRequest[]];
-  'poly:pri(uid.provideRequests.approve)': [RequestPolyProvideUidApprove, boolean]
+  'poly:pri(uid.provideRequests.approve)': [RequestPolyProvideUidApprove, boolean];
+  'poly:pri(uid.provideRequests.reject)': [RequestPolyProvideUidReject, boolean];
   /*
     this is an inelegant yet effective way to take over these couple requests from Polkadot handlers,
     in order to alter their behavior as needed.
