@@ -1,12 +1,13 @@
 import { ProofRequestPayload } from '@polymathnetwork/extension-core/types';
 import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import React, { useCallback, useContext } from 'react';
+import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
-import { ActionContext, PolymeshContext } from '../../components';
-import { approveProofRequest, rejectProofRequest } from '../../messaging';
+import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
+import { approveProofRequest, rejectProofRequest, validateAccount } from '../../messaging';
 import { ThemeProps } from '../../types';
-import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
+import { Box, Button, Flex, Header, Heading, Icon, Text, TextInput } from '../../ui';
 import { AccountsHeader } from '../Accounts/AccountsHeader';
 
 interface Props {
@@ -21,9 +22,16 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
   const { ticker } = request;
   const onAction = useContext(ActionContext);
   const { currentAccount } = useContext(PolymeshContext);
+  const isBusy = useContext(ActivityContext);
+
+  const { errors, handleSubmit, register, setError } = useForm({
+    defaultValues: {
+      currentPassword: ''
+    }
+  });
 
   const _onApprove = useCallback(
-    () => approveProofRequest(reqId)
+    (password: string) => approveProofRequest(reqId, password)
       .then(() => onAction())
       .catch((error: Error) => console.error(error)),
     [reqId, onAction]
@@ -35,6 +43,20 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
       .catch((error: Error) => console.error(error)),
     [reqId, onAction]
   );
+
+  const onSubmit = async (data: { [x: string]: string; }) => {
+    if (!currentAccount) {
+      throw new Error('No account is selected');
+    }
+
+    const valid = await validateAccount(currentAccount.address, data.currentPassword);
+
+    if (!valid) {
+      setError('currentPassword', { type: 'WrongPassword' });
+    } else {
+      await _onApprove(data.currentPassword);
+    }
+  };
 
   return (
     <>
@@ -93,6 +115,35 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
             </Box>
           </Box>
         </Box>
+
+        <form id='passwordForm'
+          onSubmit={handleSubmit(onSubmit)}>
+          <Box mx='s'>
+            <Box>
+              <Text color='gray.1'
+                variant='b2m'>
+                Wallet password
+              </Text>
+            </Box>
+            <Box>
+              <TextInput inputRef={register({ required: true })}
+                name='currentPassword'
+                placeholder='Enter wallet password'
+                type='password' />
+              {errors.currentPassword &&
+            <Box>
+              <Text color='alert'
+                variant='b3'>
+                {(errors.currentPassword).type === 'required' && 'Please enter wallet password'}
+                {(errors.currentPassword).type === 'WrongPassword' && 'Invalid password'}
+                {(errors.currentPassword).type === 'SigningError' && (errors.currentPassword).message}
+              </Text>
+            </Box>
+              }
+            </Box>
+          </Box>
+        </form>
+
         <Flex mb='s'
           px='s'
           style={{ width: '100%' }}>
@@ -106,12 +157,15 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
           </Flex>
           {isFirst && <Flex flex={1}
             ml='xs'>
-            <Button
-              fluid
-              onClick={_onApprove}
-              type='submit'>
-              Generate proof
-            </Button>
+            <Flex flex={1}
+              ml='xs'>
+              <Button busy={isBusy}
+                fluid
+                form='passwordForm'
+                type='submit'>
+            Generate proof
+              </Button>
+            </Flex>
           </Flex> }
         </Flex>
       </Flex>

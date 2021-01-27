@@ -156,16 +156,16 @@ export async function approveSignSignature (id: string, signature: string): Prom
   return sendMessage('pri(signing.approve.signature)', { id, signature });
 }
 
-export async function approveProofRequest (id: string): Promise<boolean> {
-  return polyMessage('poly:pri(uid.proofRequests.approve)', { id });
+export async function approveProofRequest (id: string, password: string): Promise<boolean> {
+  return polyMessage('poly:pri(uid.proofRequests.approve)', { id, password });
 }
 
 export async function rejectProofRequest (id: string): Promise<boolean> {
   return polyMessage('poly:pri(uid.proofRequests.reject)', { id });
 }
 
-export async function approveUidProvideRequest (id: string): Promise<boolean> {
-  return polyMessage('poly:pri(uid.provideRequests.approve)', { id });
+export async function approveUidProvideRequest (id: string, password: string): Promise<boolean> {
+  return polyMessage('poly:pri(uid.provideRequests.approve)', { id, password });
 }
 
 export async function rejectUidProvideRequest (id: string): Promise<boolean> {
