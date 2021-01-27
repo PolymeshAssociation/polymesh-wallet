@@ -34,7 +34,7 @@ export default function polyHandler<TMessageType extends PolyMessageTypes> ({ id
       assert(port, 'Port has been disconnected');
 
       port.postMessage({ id, response });
-    }, nonFatalErrorHandler)
+    })
     .catch((error: Error): void => {
       console.log(`[err] ${source}:: ${error.message}`);
 
