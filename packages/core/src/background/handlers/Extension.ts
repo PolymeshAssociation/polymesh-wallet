@@ -1,14 +1,14 @@
 import { assert } from '@polkadot/util';
 import { callDetails } from '@polymathnetwork/extension-core/api';
 import { auxStore } from '@polymathnetwork/extension-core/store';
-import { getNetwork } from '@polymathnetwork/extension-core/store/getters';
+import { getNetwork, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { subscribeIdentifiedAccounts, subscribeIsDev, subscribeNetwork, subscribeSelectedAccount, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 
-import { PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, ProvideUidRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolyProvideUidApprove, RequestPolyProvideUidReject, RequestPolyRejectProof, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
+import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, ProvideUidRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolyProvideUidApprove, RequestPolyProvideUidReject, RequestPolyRejectProof, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
-import { getMockUId, getScopeAttestationProof } from './utils';
+import { getScopeAttestationProof } from './utils';
 
 export default class Extension {
   readonly #state: State;
@@ -142,19 +142,49 @@ export default class Extension {
     return true;
   }
 
-  private async proofsApproveRequest ({ id }: RequestPolyApproveProof): Promise<boolean> {
+  private async proofsApproveRequest ({ id, password }: RequestPolyApproveProof): Promise<boolean> {
     const queued = this.#state.getProofRequest(id);
 
     assert(queued, 'Unable to find request');
+
     const { reject, request, resolve } = queued;
     const { ticker } = request;
 
-    const did = '0x4e7bf83016ac0a39d4266ae263d99a03350c66f53f92e4dbbf5f9baa11a2a36b';
-    const uid = await getMockUId(did);
+    const account = getSelectedIdentifiedAccount();
 
-    console.log('>>>> UID', uid);
+    const network = getNetwork();
 
-    const proof = await getScopeAttestationProof(did, uid, ticker);
+    if (account === undefined) {
+      reject(new Error(Errors.NO_ACCOUNT));
+
+      return false;
+    }
+
+    if (account.did === undefined) {
+      reject(new Error(Errors.NO_DID));
+
+      return false;
+    }
+
+    const accountDid = account.did;
+
+    let uid = null;
+
+    try {
+      uid = await auxStore.getN(account.did, network, password);
+    } catch (error) {
+      reject(error);
+
+      return false;
+    }
+
+    if (!uid) {
+      reject(new Error(Errors.NO_UID));
+
+      return false;
+    }
+
+    const proof = await getScopeAttestationProof(accountDid, uid, ticker);
 
     console.log('Proof', proof);
 
@@ -172,19 +202,19 @@ export default class Extension {
     assert(queued, 'Unable to find request');
     const { reject } = queued;
 
-    reject(new Error('Rejected'));
+    reject(new Error('Error: Rejected'));
 
     return true;
   }
 
-  private uidProvideRequestsApprove ({ id }: RequestPolyProvideUidApprove): boolean {
+  private uidProvideRequestsApprove ({ id, password }: RequestPolyProvideUidApprove): boolean {
     const queued = this.#state.getProvideUidRequest(id);
 
     assert(queued, 'Unable to find request');
     const { request, resolve } = queued;
     const { address, did, network, uid } = request;
 
-    auxStore.set(did, uid);
+    auxStore.setN(did, network, uid, password);
 
     resolve(true);
 
@@ -237,14 +267,14 @@ export default class Extension {
       case 'poly:pri(uid.proofRequests.subscribe)':
         return this.proofRequestsSubscribe(id, port);
 
-      case 'poly:pri(uid.provideRequests.subscribe)':
-        return this.uidProvideRequestsSubscribe(id, port);
-
       case 'poly:pri(uid.proofRequests.approve)':
         return this.proofsApproveRequest(request as RequestPolyApproveProof);
 
       case 'poly:pri(uid.proofRequests.reject)':
         return this.proofsRejectRequest(request as RequestPolyRejectProof);
+
+      case 'poly:pri(uid.provideRequests.subscribe)':
+        return this.uidProvideRequestsSubscribe(id, port);
 
       case 'poly:pri(uid.provideRequests.approve)':
         return this.uidProvideRequestsApprove(request as RequestPolyProvideUidApprove);

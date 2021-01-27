@@ -6,9 +6,9 @@ import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 import { IdentifiedAccount, NetworkMeta, NetworkName, ProofRequestPayload, RequestPolyProvideUid, StoreStatus } from '../types';
 
 export enum Errors {
-  NO_ACCOUNT = 'Accounts not found',
-  NO_DID = 'Identity not found',
-  NO_UID = 'uID not found',
+  NO_ACCOUNT = 'No accounts found.',
+  NO_DID = 'Selected user account is not verified.',
+  NO_UID = 'No uID associated with the selected account / chain',
 }
 export interface ResponsePolyCallDetails {
   networkFee: string,
@@ -77,6 +77,7 @@ export interface ProvideUidRequest {
 
 export interface RequestPolyApproveProof {
   id: string;
+  password: string;
 }
 
 export interface RequestPolyRejectProof {
@@ -85,6 +86,7 @@ export interface RequestPolyRejectProof {
 
 export interface RequestPolyProvideUidApprove {
   id: string;
+  password: string;
 }
 
 export interface RequestPolyProvideUidReject {
