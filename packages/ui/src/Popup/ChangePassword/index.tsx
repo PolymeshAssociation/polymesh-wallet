@@ -1,5 +1,5 @@
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { changePassword, globalChangePass, uidChangePass, validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import { globalChangePass, validateAccount } from '@polymathnetwork/extension-ui/messaging';
 import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';

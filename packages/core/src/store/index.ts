@@ -28,7 +28,7 @@ const middleware = [...getDefaultMiddleware({ serializableCheck: {
 } })];
 
 if (isDev) {
-  // middleware.push(logger);
+  middleware.push(logger);
 }
 
 const store: any = configureStore({
