@@ -1,7 +1,4 @@
-import type { KeyringPair } from '@polkadot/keyring/types';
-
 import { InjectedAccount } from '@polkadot/extension-inject/types';
-import keyring from '@polkadot/ui-keyring';
 import accountsObservable from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { assert } from '@polkadot/util';
@@ -96,14 +93,6 @@ export default class Tabs {
     });
 
     return true;
-  }
-
-  private getSigningPair (address: string): KeyringPair {
-    const pair = keyring.getPair(address);
-
-    assert(pair, 'Unable to find keypair');
-
-    return pair;
   }
 
   private requestProof (url: string, request: ProofRequestPayload): Promise<ProofingResponse> {
