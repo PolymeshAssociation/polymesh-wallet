@@ -1,5 +1,5 @@
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { changePassword, validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import { changePassword, globalChangePass, uidChangePass, validateAccount } from '@polymathnetwork/extension-ui/messaging';
 import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';
@@ -37,16 +37,7 @@ export const ChangePassword: FC = () => {
       return;
     }
 
-    const changeOps = await Promise.all(polymeshAccounts?.map(async (account) => {
-      return changePassword(account.address, data.currentPassword, data.newPassword);
-    }));
-
-    // If an account password was not changed, revert
-    if (changeOps.find((item) => !item)) {
-      await Promise.all(polymeshAccounts?.map(async (account) => {
-        return changePassword(account.address, data.newPassword, data.currentPassword);
-      }));
-    }
+    await globalChangePass(data.currentPassword, data.currentPassword);
 
     onAction('/');
   };

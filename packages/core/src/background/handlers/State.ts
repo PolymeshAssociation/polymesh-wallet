@@ -1,10 +1,11 @@
 
 import { AccountJson } from '@polkadot/extension-base/background/types';
 import chrome from '@polkadot/extension-inject/chrome';
-import { ProofRequestPayload, RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
 import { BehaviorSubject } from 'rxjs';
 
+import { NetworkName, ProofRequestPayload, RequestPolyProvideUid } from '../../types';
 import { ProofingRequest, ProofingResponse, ProvideUidRequest } from '../types';
+import AuxStore from './AuxStore';
 
 interface Resolver <T> {
   reject: (error: Error) => void;
@@ -27,14 +28,12 @@ interface ProvideUidRequestResolver extends Resolver<boolean> {
 }
 
 const WINDOW_OPTS = {
-  // This is not allowed on FF, only on Chrome - disable completely
-  // focused: true,
   height: 621,
   left: 150,
   top: 150,
   type: 'popup',
   url: chrome.extension.getURL('index.html'),
-  width: 560
+  width: 328
 };
 
 function getId (): string {
@@ -45,6 +44,8 @@ export default class State {
   readonly #proofRequests: Record<string, ProofRequestResolver> = {};
 
   readonly #provideUidRequests: Record<string, ProvideUidRequestResolver> = {};
+
+  readonly #auxStore = new AuxStore();
 
   #windows: number[] = [];
 
@@ -190,5 +191,36 @@ export default class State {
       this.updateIconProvideUid();
       this.popupOpen();
     });
+  }
+
+  public getUid (did: string, network: NetworkName, password: string): Promise<string | null> {
+    return this.#auxStore.getN(did, network, password);
+  }
+
+  public setUid (did: string, network: NetworkName, uid: string, password: string): void {
+    return this.#auxStore.setN(did, network, uid, password);
+  }
+
+  public async changeUidPassword (oldPass: string, newPass: string): Promise<void> {
+    const keys = await this.#auxStore.allKeys();
+
+    let i = 0;
+    const values = [];
+
+    try {
+      for (i; i < keys.length; i++) {
+        const value = await this.#auxStore.getNDecrypt(keys[i], oldPass);
+
+        values.push(value);
+        this.#auxStore.setNEncrypt(keys[i], value, newPass);
+      }
+    } catch (error) {
+      for (let j = 0; j < i; j++) {
+        this.#auxStore.setNEncrypt(keys[j], values[j], oldPass);
+      }
+
+      // Escalate error
+      throw new Error('oldPass: Some uIDs cannot be decrypted with the provided password.');
+    }
   }
 }

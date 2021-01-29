@@ -1,11 +1,12 @@
+import { KeyringPair } from '@polkadot/keyring/types';
+import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
-import { callDetails } from '@polymathnetwork/extension-core/api';
-import { auxStore } from '@polymathnetwork/extension-core/store';
-import { getNetwork, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { subscribeIdentifiedAccounts, subscribeIsDev, subscribeNetwork, subscribeSelectedAccount, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 
-import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, ProvideUidRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolyProvideUidApprove, RequestPolyProvideUidReject, RequestPolyRejectProof, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
+import { callDetails } from '../../api';
+import { getNetwork, getSelectedIdentifiedAccount } from '../../store/getters';
+import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, ProvideUidRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyChangePass, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolyProvideUidApprove, RequestPolyProvideUidReject, RequestPolyRejectProof, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 import { getScopeAttestationProof } from './utils';
@@ -171,7 +172,7 @@ export default class Extension {
     let uid = null;
 
     try {
-      uid = await auxStore.getN(account.did, network, password);
+      uid = await this.#state.getUid(account.did, network, password);
     } catch (error) {
       reject(error);
 
@@ -185,8 +186,6 @@ export default class Extension {
     }
 
     const proof = await getScopeAttestationProof(accountDid, uid, ticker);
-
-    console.log('Proof', proof);
 
     resolve({
       id,
@@ -214,7 +213,7 @@ export default class Extension {
     const { request, resolve } = queued;
     const { address, did, network, uid } = request;
 
-    auxStore.setN(did, network, uid, password);
+    this.#state.setUid(did, network, uid, password);
 
     resolve(true);
 
@@ -230,6 +229,54 @@ export default class Extension {
     reject(new Error('Rejected'));
 
     return true;
+  }
+
+  private async uidChangePass ({ newPass, oldPass }: RequestPolyChangePass): Promise<boolean> {
+    try {
+      await this.#state.changeUidPassword(oldPass, newPass);
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  private _changePassword (pair: KeyringPair, oldPass: string, newPass: string): boolean {
+    try {
+      if (!pair.isLocked) {
+        pair.lock();
+      }
+
+      pair.decodePkcs8(oldPass);
+    } catch (error) {
+      return false;
+    }
+
+    keyring.encryptAccount(pair, newPass);
+
+    return true;
+  }
+
+  private async globalChangePassword ({ newPass, oldPass }: RequestPolyGlobalChangePass): Promise<boolean> {
+    const pairs = keyring.getPairs();
+
+    let i = 0;
+
+    for (i; i < pairs.length; i++) {
+      const ret = this._changePassword(pairs[i], oldPass, newPass);
+
+      if (!ret) { break; }
+    }
+
+    if (i <= pairs.length - 1) {
+      for (let j = 0; j < i; j++) {
+        this._changePassword(pairs[j], newPass, oldPass);
+      }
+    }
+
+    const ret = await this.uidChangePass({ oldPass, newPass });
+
+    return ret;
   }
 
   public async handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], port: chrome.runtime.Port): Promise<PolyResponseType<TMessageType>> {
@@ -279,8 +326,14 @@ export default class Extension {
       case 'poly:pri(uid.provideRequests.approve)':
         return this.uidProvideRequestsApprove(request as RequestPolyProvideUidApprove);
 
+      case 'poly:pri(uid.changePass)':
+        return this.uidChangePass(request as RequestPolyChangePass);
+
       case 'poly:pri(uid.provideRequests.reject)':
         return this.uidProvideRequestsReject(request as RequestPolyProvideUidReject);
+
+      case 'poly:pri(global.changePass)':
+        return this.globalChangePassword(request as RequestPolyGlobalChangePass);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);
