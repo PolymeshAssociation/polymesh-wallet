@@ -1,5 +1,6 @@
 import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 import { assert } from '@polkadot/util';
+import { getNetwork } from '@polymathnetwork/extension-core/store/getters';
 import { nonFatalErrorHandler } from '@polymathnetwork/extension-core/utils';
 
 import { PolyMessageTypes, PolyTransportRequestMessage } from '../types';

@@ -277,6 +277,10 @@ export async function getPolyCallDetails (request: SignerPayloadJSON): Promise<R
   return polyMessage('poly:pri(callDetails.get)', { request });
 }
 
+export async function uidChangePass (oldPass: string, newPass: string): Promise<boolean> {
+  return polyMessage('poly:pri(uid.changePass)', { oldPass, newPass });
+}
+
 export async function subscribeAuthorizeRequests (cb: (accounts: AuthorizeRequest[]) => void): Promise<boolean> {
   return sendMessage('pri(authorize.requests)', null, cb);
 }
@@ -323,4 +327,8 @@ export async function jsonRestore (json: KeyringPair$Json, password: string): Pr
 
 export async function changePassword (address: string, oldPass: string, newPass: string): Promise<boolean> {
   return sendMessage('pri(accounts.changePassword)', { address, newPass, oldPass });
+}
+
+export async function globalChangePass (oldPass: string, newPass:string): Promise<boolean> {
+  return polyMessage('poly:pri(global.changePass)', { oldPass, newPass });
 }
