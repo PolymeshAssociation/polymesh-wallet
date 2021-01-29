@@ -211,7 +211,7 @@ export default class Extension {
 
     assert(queued, 'Unable to find request');
     const { request, resolve } = queued;
-    const { address, did, network, uid } = request;
+    const { did, network, uid } = request;
 
     this.#state.setUid(did, network, uid, password);
 

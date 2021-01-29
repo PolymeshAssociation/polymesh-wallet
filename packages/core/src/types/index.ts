@@ -77,7 +77,6 @@ export interface ProofRequestPayload {
 }
 
 export interface RequestPolyProvideUid {
-  address: string;
   did: string;
   uid: string;
   network: NetworkName

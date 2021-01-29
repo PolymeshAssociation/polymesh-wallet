@@ -8,7 +8,7 @@ import { IdentifiedAccount, NetworkMeta, NetworkName, ProofRequestPayload, Reque
 export enum Errors {
   NO_ACCOUNT = 'No accounts found.',
   NO_DID = 'Selected user account is not verified.',
-  NO_UID = 'No uID associated with the selected account / chain',
+  NO_UID = 'No uID associated with the selected account or chain',
 }
 export interface ResponsePolyCallDetails {
   networkFee: string,
