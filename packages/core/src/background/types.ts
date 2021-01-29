@@ -89,6 +89,16 @@ export interface RequestPolyProvideUidApprove {
   password: string;
 }
 
+export interface RequestPolyChangePass {
+  oldPass: string;
+  newPass: string;
+}
+
+export interface RequestPolyGlobalChangePass {
+  oldPass: string;
+  newPass: string;
+}
+
 export interface RequestPolyProvideUidReject {
   id: string;
 }
@@ -116,6 +126,8 @@ export interface PolyRequestSignatures {
   'poly:pri(uid.provideRequests.subscribe)': [RequestPolyProvideUidSubscribe, boolean, ProvideUidRequest[]];
   'poly:pri(uid.provideRequests.approve)': [RequestPolyProvideUidApprove, boolean];
   'poly:pri(uid.provideRequests.reject)': [RequestPolyProvideUidReject, boolean];
+  'poly:pri(uid.changePass)': [RequestPolyChangePass, boolean];
+  'poly:pri(global.changePass)': [RequestPolyGlobalChangePass, boolean];
   /*
     this is an inelegant yet effective way to take over these couple requests from Polkadot handlers,
     in order to alter their behavior as needed.
