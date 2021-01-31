@@ -1,7 +1,7 @@
 import BaseStore from '@polkadot/extension-base/stores/Base';
 import CryptoJS from 'crypto-js';
 
-import { NetworkName } from '../../types';
+import { NetworkName, UidRecord } from '../../types';
 
 const PREFIX = 'did';
 
@@ -63,5 +63,15 @@ export default class AuxStore extends BaseStore<string> {
         resolve(keys);
       });
     });
+  }
+
+  public allRecords (): Promise<UidRecord[]> {
+    return this.allKeys().then((keys) =>
+      keys.map((key) => {
+        const [network, did] = key.split(':');
+
+        return { network, did } as UidRecord;
+      })
+    );
   }
 }

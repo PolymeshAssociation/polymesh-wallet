@@ -124,3 +124,8 @@ export type StoreStatus = {
   error: Error | null,
   ready: boolean
 };
+
+export interface UidRecord {
+  network: NetworkName,
+  did: string
+}

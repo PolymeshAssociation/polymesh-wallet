@@ -3,12 +3,13 @@ import { InjectedAccount, InjectedMetadataKnown, MetadataDef } from '@polkadot/e
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 
-import { IdentifiedAccount, NetworkMeta, NetworkName, ProofRequestPayload, RequestPolyProvideUid, StoreStatus } from '../types';
+import { IdentifiedAccount, NetworkMeta, NetworkName, ProofRequestPayload, RequestPolyProvideUid, StoreStatus, UidRecord } from '../types';
 
 export enum Errors {
   NO_ACCOUNT = 'No accounts found.',
   NO_DID = 'Selected user account is not verified.',
-  NO_UID = 'No uID associated with the selected account or chain',
+  NO_UID = 'No uID associated with the selected account or chain.',
+  DID_NOT_MATCH = 'Request does not match any existing identity in the wallet.'
 }
 export interface ResponsePolyCallDetails {
   networkFee: string,
@@ -36,6 +37,8 @@ export type RequestPolyIsDevSubscribe = null;
 export type RequestProofingSubscribe = null;
 
 export type RequestPolyProvideUidSubscribe = null;
+
+export type RequestPolyUidRecordsSubscribe = null;
 
 export interface RequestPolyNetworkSet {
   network: NetworkName
@@ -127,12 +130,13 @@ export interface PolyRequestSignatures {
   'poly:pri(uid.provideRequests.approve)': [RequestPolyProvideUidApprove, boolean];
   'poly:pri(uid.provideRequests.reject)': [RequestPolyProvideUidReject, boolean];
   'poly:pri(uid.changePass)': [RequestPolyChangePass, boolean];
+  'poly:pri(uid.records.subscribe)': [RequestPolyUidRecordsSubscribe, boolean, UidRecord[]];
   'poly:pri(global.changePass)': [RequestPolyGlobalChangePass, boolean];
   /*
     this is an inelegant yet effective way to take over these couple requests from Polkadot handlers,
     in order to alter their behavior as needed.
   */
-  // Re-order accounts list to bring the selected account, first.
+  // Re-order accounts list to bring the "selected" account, first.
   'pub(accounts.list)': [RequestAccountList, InjectedAccount[]];
   'pub(accounts.subscribe)': [RequestAccountSubscribe, boolean, InjectedAccount[]];
   // Disable metadata requests.

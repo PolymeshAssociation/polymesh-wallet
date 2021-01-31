@@ -3,7 +3,7 @@ import { AccountJson } from '@polkadot/extension-base/background/types';
 import chrome from '@polkadot/extension-inject/chrome';
 import { BehaviorSubject } from 'rxjs';
 
-import { NetworkName, ProofRequestPayload, RequestPolyProvideUid } from '../../types';
+import { NetworkName, ProofRequestPayload, RequestPolyProvideUid, UidRecord } from '../../types';
 import { ProofingRequest, ProofingResponse, ProvideUidRequest } from '../types';
 import AuxStore from './AuxStore';
 
@@ -52,6 +52,14 @@ export default class State {
   public readonly proofSubject: BehaviorSubject<ProofingRequest[]> = new BehaviorSubject<ProofingRequest[]>([]);
 
   public readonly provideUidRequestsSubject: BehaviorSubject<ProvideUidRequest[]> = new BehaviorSubject<ProvideUidRequest[]>([]);
+
+  public uidsSubject: BehaviorSubject<UidRecord[]> = new BehaviorSubject<UidRecord[]>([]);
+
+  constructor () {
+    this.#auxStore.allRecords().then((keys) => {
+      this.uidsSubject.next(keys);
+    }).catch(console.error);
+  }
 
   public get numProofRequests (): number {
     return Object.keys(this.#proofRequests).length;
@@ -198,7 +206,8 @@ export default class State {
   }
 
   public setUid (did: string, network: NetworkName, uid: string, password: string): void {
-    return this.#auxStore.setN(did, network, uid, password);
+    this.#auxStore.setN(did, network, uid, password);
+    this.uidsSubject.next([...this.uidsSubject.getValue(), { did, network } as UidRecord]);
   }
 
   public async changeUidPassword (oldPass: string, newPass: string): Promise<void> {

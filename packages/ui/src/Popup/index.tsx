@@ -3,7 +3,7 @@ import uiSettings from '@polkadot/ui-settings';
 import { SettingsStruct } from '@polkadot/ui-settings/types';
 import { setSS58Format } from '@polkadot/util-crypto';
 import { ProofingRequest, ProvideUidRequest } from '@polymathnetwork/extension-core/background/types';
-import { ErrorCodes, IdentifiedAccount, StoreStatus } from '@polymathnetwork/extension-core/types';
+import { ErrorCodes, IdentifiedAccount, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
 import React, { useEffect, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import { SvgCloseCircle } from '../assets/images/icons';
 import { Loading } from '../components';
 import { AccountContext, ActionContext, ActivityContext, AuthorizeReqContext, MetadataReqContext, PolymeshContext, ProofReqContext, ProvideUidReqContext, SettingsContext, SigningReqContext } from '../components/contexts';
-import { busySubscriber, subscribeAccounts, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribePolyAccounts, subscribePolyIsDev, subscribePolyNetwork, subscribePolySelectedAccount, subscribePolyStatus, subscribeProofingRequests, subscribeProvideUidRequests, subscribeSigningRequests } from '../messaging';
+import { busySubscriber, subscribeAccounts, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribePolyAccounts, subscribePolyIsDev, subscribePolyNetwork, subscribePolySelectedAccount, subscribePolyStatus, subscribeProofingRequests, subscribeProvideUidRequests, subscribeSigningRequests, subscribeUidRecords } from '../messaging';
 import { PolymeshContext as PolymeshContextType } from '../types';
 import { Box, Flex, Icon } from '../ui';
 import { Toast } from '../ui/Toast';
@@ -67,6 +67,7 @@ export default function Popup (): React.ReactElement {
   const [network, setNetwork] = useState('');
   const [polymeshAccounts, setPolymeshAccounts] = useState<IdentifiedAccount[]>([]);
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
+  const [uidRecords, setUidRecords] = useState<null | UidRecord[]>(null);
   const [status, setStatus] = useState<undefined | StoreStatus>();
   const [isBusy, setIsBusy] = useState(false);
   const [isDeveloper, setIsDeveloper] = useState(false);
@@ -136,6 +137,7 @@ export default function Popup (): React.ReactElement {
       subscribeSigningRequests(setSignRequests),
       subscribeProofingRequests(setProofingRequests),
       subscribeProvideUidRequests(setProvideUidRequests),
+      subscribeUidRecords(setUidRecords),
       busySubscriber.addListener(setIsBusy)
     ])
       .then(() => undefined, handleError)
@@ -173,7 +175,7 @@ export default function Popup (): React.ReactElement {
   })();
 
   return (
-    <Loading>{accounts && authRequests && metaRequests && signRequests && proofingRequests && provideUidRequests && (status?.error || status?.ready) && (
+    <Loading>{accounts && authRequests && metaRequests && signRequests && proofingRequests && provideUidRequests && uidRecords && (status?.error || status?.ready) && (
       <ActivityContext.Provider value={isBusy}>
         <ActionContext.Provider value={_onAction}>
           <SettingsContext.Provider value={settingsCtx}>
