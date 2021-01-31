@@ -3,9 +3,10 @@ import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { subscribeIdentifiedAccounts, subscribeIsDev, subscribeNetwork, subscribeSelectedAccount, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
+import { UidRecord } from '@polymathnetwork/extension-core/types';
 
 import { callDetails } from '../../api';
-import { getNetwork, getSelectedIdentifiedAccount } from '../../store/getters';
+import { getDids, getNetwork, getSelectedIdentifiedAccount } from '../../store/getters';
 import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, ProvideUidRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyChangePass, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolyProvideUidApprove, RequestPolyProvideUidReject, RequestPolyRejectProof, RequestPolySelectedAccountSet, ResponsePolyCallDetails } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
@@ -113,6 +114,20 @@ export default class Extension {
     return true;
   }
 
+  private uidRecordsSubscribe (id: string, port: chrome.runtime.Port): boolean {
+    const cb = createSubscription<'poly:pri(uid.records.subscribe)'>(id, port);
+    const subscription = this.#state.uidsSubject.subscribe((records: UidRecord[]): void =>
+      cb(records)
+    );
+
+    port.onDisconnect.addListener((): void => {
+      unsubscribe(id);
+      subscription.unsubscribe();
+    });
+
+    return true;
+  }
+
   private polyNetworkSet ({ network }: RequestPolyNetworkSet): boolean {
     setNetwork(network);
 
@@ -201,7 +216,7 @@ export default class Extension {
     assert(queued, 'Unable to find request');
     const { reject } = queued;
 
-    reject(new Error('Error: Rejected'));
+    reject(new Error('Rejected'));
 
     return true;
   }
@@ -210,8 +225,16 @@ export default class Extension {
     const queued = this.#state.getProvideUidRequest(id);
 
     assert(queued, 'Unable to find request');
-    const { request, resolve } = queued;
+    const { reject, request, resolve } = queued;
     const { did, network, uid } = request;
+
+    const dids = getDids();
+
+    if (dids.indexOf(did) === -1) {
+      reject(new Error(Errors.DID_NOT_MATCH));
+
+      return false;
+    }
 
     this.#state.setUid(did, network, uid, password);
 
@@ -328,6 +351,9 @@ export default class Extension {
 
       case 'poly:pri(uid.changePass)':
         return this.uidChangePass(request as RequestPolyChangePass);
+
+      case 'poly:pri(uid.records.subscribe)':
+        return this.uidRecordsSubscribe(id, port);
 
       case 'poly:pri(uid.provideRequests.reject)':
         return this.uidProvideRequestsReject(request as RequestPolyProvideUidReject);
