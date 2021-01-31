@@ -10,7 +10,7 @@ import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
 import { PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, ProofingRequest, ProvideUidRequest, ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
-import { IdentifiedAccount, NetworkName, StoreStatus } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount, NetworkName, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 
 interface Handler {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -279,6 +279,10 @@ export async function getPolyCallDetails (request: SignerPayloadJSON): Promise<R
 
 export async function uidChangePass (oldPass: string, newPass: string): Promise<boolean> {
   return polyMessage('poly:pri(uid.changePass)', { oldPass, newPass });
+}
+
+export async function subscribeUidRecords (cb: (records: UidRecord[]) => void): Promise<boolean> {
+  return polyMessage('poly:pri(uid.records.subscribe)', null, cb);
 }
 
 export async function subscribeAuthorizeRequests (cb: (accounts: AuthorizeRequest[]) => void): Promise<boolean> {
