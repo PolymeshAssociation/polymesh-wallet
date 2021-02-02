@@ -1,4 +1,4 @@
-import createPair from '@polkadot/keyring/pair';
+import { createPair } from '@polkadot/keyring/pair';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { hexToU8a, isHex } from '@polkadot/util';
 import { base64Decode, decodeAddress, encodeAddress } from '@polkadot/util-crypto';

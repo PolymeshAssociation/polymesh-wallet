@@ -1,5 +1,5 @@
 import { InjectedAccount } from '@polkadot/extension-inject/types';
-import accountsObservable from '@polkadot/ui-keyring/observable/accounts';
+import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { polyNetworkGet } from '@polymathnetwork/extension-core/api';
 import polyNetworkSubscribe from '@polymathnetwork/extension-core/api/polyNetworkSubscribe';

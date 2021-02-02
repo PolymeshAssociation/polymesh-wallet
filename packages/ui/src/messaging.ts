@@ -1,9 +1,6 @@
 import { AccountJson, AuthorizeRequest, MessageTypes, MessageTypesWithNoSubscriptions, MessageTypesWithNullRequest, MessageTypesWithSubscriptions, MetadataRequest, RequestTypes, ResponseDeriveValidate, ResponseJsonRestore, ResponseTypes, SeedLengths, SigningRequest, SubscriptionMessageTypes } from '@polkadot/extension-base/background/types';
 import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 import { Message } from '@polkadot/extension-base/types';
-import { metadataExpand } from '@polkadot/extension-chains';
-import allChains from '@polkadot/extension-chains/chains';
-import { Chain } from '@polkadot/extension-chains/types';
 import chrome from '@polkadot/extension-inject/chrome';
 import { MetadataDef } from '@polkadot/extension-inject/types';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
@@ -174,39 +171,6 @@ export async function subscribePolyAccounts (cb: (accounts: IdentifiedAccount[])
 
 export async function subscribePolyNetwork (cb: (network: NetworkName) => void): Promise<boolean> {
   return polyMessage('poly:pri(network.subscribe)', null, cb);
-}
-
-export async function getMetadata (genesisHash?: string | null, isPartial = false): Promise<Chain | null> {
-  if (!genesisHash) {
-    return null;
-  }
-
-  let request = metadataGets.get(genesisHash);
-
-  if (!request) {
-    request = sendMessage('pri(metadata.get)', genesisHash || null);
-    metadataGets.set(genesisHash, request);
-  }
-
-  const def = await request;
-
-  if (def) {
-    return metadataExpand(def, isPartial);
-  } else if (isPartial) {
-    const chain = allChains.find((chain) => chain.genesisHash === genesisHash);
-
-    if (chain) {
-      return metadataExpand({
-        ...chain,
-        specVersion: 0,
-        tokenDecimals: 15,
-        tokenSymbol: 'Unit',
-        types: {}
-      }, isPartial);
-    }
-  }
-
-  return null;
 }
 
 export async function rejectAuthRequest (id: string): Promise<boolean> {
