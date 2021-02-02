@@ -6,9 +6,6 @@
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "@hookform/error-message": "^0.0.4",
-    "@polkadot/extension-base": "0.34.1",
-    "@polkadot/extension-chains": "0.34.1",
-    "@polkadot/extension-inject": "0.34.1",
     "@polkadot/react-identicon": "^0.59.0-beta.8",
     "@polkadot/react-qr": "^0.59.0-beta.8",
     "@types/styled-system": "^5.1.10",
@@ -43,6 +40,7 @@
     "@types/styled-components": "^5.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.3",
+    "raw-loader": "^4.0.2",
     "sinon-chrome": "^3.0.1"
   }
 }
