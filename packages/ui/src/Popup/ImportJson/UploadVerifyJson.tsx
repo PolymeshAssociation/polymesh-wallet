@@ -80,8 +80,6 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
     reader.onerror = NOOP;
 
     reader.onload = async ({ target }: ProgressEvent<FileReader>) => {
-      console.log('Target', target);
-
       if (target && target.result) {
         try {
           const name = file.name;
