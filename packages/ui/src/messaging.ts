@@ -1,8 +1,7 @@
-import { AccountJson, AuthorizeRequest, MessageTypes, MessageTypesWithNoSubscriptions, MessageTypesWithNullRequest, MessageTypesWithSubscriptions, MetadataRequest, RequestTypes, ResponseDeriveValidate, ResponseJsonRestore, ResponseTypes, SeedLengths, SigningRequest, SubscriptionMessageTypes } from '@polkadot/extension-base/background/types';
+import { AccountJson, AllowedPath, AuthorizeRequest, MessageTypes, MessageTypesWithNoSubscriptions, MessageTypesWithNullRequest, MessageTypesWithSubscriptions, MetadataRequest, RequestTypes, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSigningIsLocked, ResponseTypes, SeedLengths, SigningRequest, SubscriptionMessageTypes } from '@polkadot/extension-base/background/types';
 import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 import { Message } from '@polkadot/extension-base/types';
 import chrome from '@polkadot/extension-inject/chrome';
-import { MetadataDef } from '@polkadot/extension-inject/types';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
@@ -20,7 +19,6 @@ interface Handler {
 type Handlers = Record<string, Handler>;
 type CB = (isBusy: boolean) => void
 
-const metadataGets = new Map<string, Promise<MetadataDef | null>>();
 const port = chrome.runtime.connect({ name: PORT_EXTENSION });
 const handlers: Handlers = {};
 let idCounter = 0;
@@ -141,12 +139,12 @@ export async function cancelSignRequest (id: string): Promise<boolean> {
   return sendMessage('pri(signing.cancel)', { id });
 }
 
-export async function isSignLocked (id: string): Promise<boolean> {
+export async function isSignLocked (id: string): Promise<ResponseSigningIsLocked> {
   return sendMessage('pri(signing.isLocked)', { id });
 }
 
-export async function approveSignPassword (id: string, password: string, isSavedPass: boolean): Promise<boolean> {
-  return sendMessage('pri(signing.approve.password)', { id, isSavedPass, password });
+export async function approveSignPassword (id: string, savePass: boolean, password?: string): Promise<boolean> {
+  return sendMessage('pri(signing.approve.password)', { id, password, savePass });
 }
 
 export async function approveSignSignature (id: string, signature: string): Promise<boolean> {
@@ -233,8 +231,8 @@ export async function validateSeed (suri: string, type?: KeypairType): Promise<{
   return sendMessage('pri(seed.validate)', { suri, type });
 }
 
-export async function windowOpen (): Promise<boolean> {
-  return sendMessage('pri(window.open)', null);
+export async function windowOpen (path: AllowedPath): Promise<boolean> {
+  return sendMessage('pri(window.open)', path);
 }
 
 export async function validateDerivationPath (parentAddress: string, suri: string, parentPassword: string): Promise<ResponseDeriveValidate> {
@@ -245,20 +243,12 @@ export async function deriveAccount (parentAddress: string, suri: string, parent
   return sendMessage('pri(derivation.create)', { genesisHash, name, parentAddress, parentPassword, password, suri });
 }
 
-export async function jsonRestoreWindowOpen (): Promise<boolean> {
-  return sendMessage('pri(window.open.json)', null);
+export async function jsonGetAccountInfo (json: KeyringPair$Json): Promise<ResponseJsonGetAccountInfo> {
+  return sendMessage('pri(json.account.info)', json);
 }
 
-export async function jsonVerifyFile (json: KeyringPair$Json): Promise<boolean> {
-  return sendMessage('pri(json.verify.file)', { json, password: '' });
-}
-
-export async function jsonVerifyPassword (password: string): Promise<boolean> {
-  return sendMessage('pri(json.verify.password)', password);
-}
-
-export async function jsonRestore (json: KeyringPair$Json, password: string): Promise<ResponseJsonRestore> {
-  return sendMessage('pri(json.restore)', { json, password });
+export async function jsonRestore (file: KeyringPair$Json, password: string): Promise<void> {
+  return sendMessage('pri(json.restore)', { file, password });
 }
 
 export async function changePassword (address: string, oldPass: string, newPass: string): Promise<boolean> {

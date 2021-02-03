@@ -1,13 +1,14 @@
+import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { AccountDetails, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountDetails';
 import React, { FC, useContext, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 
 import { ActionContext } from '../../components';
 import { changePassword, jsonRestore } from '../../messaging';
-import { FileState, UploadVerifyJson } from './UploadVerifyJson';
+import { UploadVerifyJson } from './UploadVerifyJson';
 
 export const ImportJson: FC = () => {
-  const [fileState, setFileState] = useState<FileState>();
+  const [accountJson, setAccountJson] = useState<KeyringPair$Json>();
   const [jsonPassword, setJsonPassword] = useState<string>();
   const [accountName, setAccountName] = useState<string>();
   const [step, setStep] = useState(0);
@@ -22,34 +23,28 @@ export const ImportJson: FC = () => {
     step > 0 && setStep(step - 1);
   };
 
-  const setJsonData = (fileState: FileState, jsonPassword: string, accountName: string) => {
-    setFileState(fileState);
+  const setJsonData = (accountJson: KeyringPair$Json, jsonPassword: string, accountName: string) => {
+    setAccountJson(accountJson);
     setJsonPassword(jsonPassword);
     setAccountName(accountName);
     nextStep();
   };
 
   const restoreAccount = async (newAccountInfo: AccountInfo) => {
-    if (fileState && fileState.address && fileState.json && jsonPassword) {
+    if (accountJson && accountJson.address && jsonPassword) {
       try {
         // Accounts should be visible by default.
-        fileState.json.meta.isHidden = undefined;
-        fileState.json.meta.name = newAccountInfo.accountName;
+        accountJson.meta.isHidden = undefined;
+        accountJson.meta.name = newAccountInfo.accountName;
 
-        const decodedAccount = await jsonRestore(fileState.json, jsonPassword);
-
-        if (decodedAccount.error) {
-          throw new Error('Cannot decode JSON file. Please try again.');
-        }
+        await jsonRestore(accountJson, jsonPassword);
 
         // Change from the original JSON password, to the password user has just provided
         // by AccountDetails form.
-        await changePassword(fileState.address, jsonPassword, newAccountInfo.password);
+        await changePassword(accountJson.address, jsonPassword, newAccountInfo.password);
 
         onAction('/');
       } catch (error) {
-        // Theoretically speaking, no errors should be emitted here. If so,
-        // we'll display the ErrorBoundary fallback to let user start over.
         errorHandler(error);
       }
     } else {
