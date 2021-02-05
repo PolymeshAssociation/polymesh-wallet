@@ -8,14 +8,14 @@ import { Box, Button, Checkbox, Flex, Text, TextInput } from '../../ui';
 interface Props {
   isFirst: boolean | undefined;
   isLocked: boolean;
-  isSavedPass: boolean;
+  savePass: boolean;
   onCancel: () => Promise<void>;
   error?: string | null;
-  onIsSavedPassChange: React.Dispatch<React.SetStateAction<boolean>>;
+  onSavePassChange: React.Dispatch<React.SetStateAction<boolean>>;
   onSign: (password: string) => Promise<void>;
 }
 
-function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPassChange, onSign }: Props): React.ReactElement<Props> {
+function Unlock ({ error, isFirst, isLocked, onCancel, onSavePassChange, onSign, savePass }: Props): React.ReactElement<Props> {
   const isBusy = useContext(ActivityContext);
   const { selectedAccount } = useContext(PolymeshContext);
 
@@ -78,14 +78,14 @@ function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPas
             mt='s'
             mx='s'>
             <Checkbox
-              checked={isSavedPass}
+              checked={savePass}
               label={
                 <Text color='gray.1'
                   fontSize='1'>
                   Don&apos;t ask me again for the next 15 minutes
                 </Text>
               }
-              onChange={onIsSavedPassChange}
+              onChange={onSavePassChange}
             />
           </Box>
         </>

@@ -1,4 +1,4 @@
-import accountsObservable from '@polkadot/ui-keyring/observable/accounts';
+import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 
 import { setError } from './store/setters';
