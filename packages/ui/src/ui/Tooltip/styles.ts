@@ -8,7 +8,7 @@ const arrowSize = 8;
 
 export const TippyStyles = createGlobalStyle`
   .tippy-box {
-    z-index: ${({ theme }) => theme.zIndexes.tooltips};    
+    z-index: 9999;    
   }
   .tippy-box[data-placement^="top"] > .tippy-arrow {
       bottom: 0;
