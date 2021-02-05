@@ -3,20 +3,26 @@ import { InjectedAccount, InjectedMetadataKnown, MetadataDef } from '@polkadot/e
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 
-import { IdentifiedAccount, NetworkMeta, NetworkName, ProofRequestPayload, RequestPolyProvideUid, StoreStatus, UidRecord } from '../types';
+import { IdentifiedAccount,
+  NetworkMeta,
+  NetworkName,
+  ProofRequestPayload,
+  RequestPolyProvideUid,
+  StoreStatus,
+  UidRecord } from '../types';
 
 export enum Errors {
   NO_ACCOUNT = 'No accounts found.',
   NO_DID = 'Selected user account is not verified.',
   NO_UID = 'No uID associated with the selected account or chain.',
-  DID_NOT_MATCH = 'Request does not match any existing identity in the wallet.'
+  DID_NOT_MATCH = 'Request does not match any existing identity in the wallet.',
 }
 export interface ResponsePolyCallDetails {
-  networkFee: string,
-  protocolFee: string,
-  method: string,
-  section: string,
-  meta: FunctionMetadataLatest,
+  networkFee: string;
+  protocolFee: string;
+  method: string;
+  section: string;
+  meta: FunctionMetadataLatest;
   args: AnyJson;
 }
 
@@ -41,13 +47,13 @@ export type RequestPolyProvideUidSubscribe = null;
 export type RequestPolyUidRecordsSubscribe = null;
 
 export interface RequestPolyNetworkSet {
-  network: NetworkName
+  network: NetworkName;
 }
 
 export type RequestPolyIsDevToggle = null;
 
 export interface RequestPolySelectedAccountSet {
-  account: string
+  account: string;
 }
 
 export interface RequestPolyCallDetails {
@@ -55,9 +61,9 @@ export interface RequestPolyCallDetails {
 }
 
 export interface RequestPolyIdentityRename {
-  network: NetworkName,
-  did: string,
-  name: string
+  network: NetworkName;
+  did: string;
+  name: string;
 }
 
 export interface ProofingResponse {
@@ -106,11 +112,17 @@ export interface RequestPolyProvideUidReject {
   id: string;
 }
 
+export interface RequestPolyGetUid {
+  did: string;
+  password: string;
+  network: NetworkName;
+}
+
 export interface PolyRequestSignatures {
   'poly:pri(accounts.subscribe)': [RequestPolyAccountsSubscribe, boolean, IdentifiedAccount[]];
   'poly:pri(network.subscribe)': [RequestPolyNetworkSubscribe, boolean, NetworkName];
   'poly:pri(selectedAccount.subscribe)': [RequestPolySelectedAccountSubscribe, boolean, string | undefined];
-  'poly:pri(status.subscribe)': [RequestPolyStatusSubscribe, boolean, StoreStatus]
+  'poly:pri(status.subscribe)': [RequestPolyStatusSubscribe, boolean, StoreStatus];
   'poly:pri(network.set)': [RequestPolyNetworkSet, boolean];
   'poly:pri(isDev.toggle)': [RequestPolyIsDevToggle, boolean];
   'poly:pri(isDev.subscribe)': [RequestPolyIsDevSubscribe, boolean, string];
@@ -132,6 +144,7 @@ export interface PolyRequestSignatures {
   'poly:pri(uid.changePass)': [RequestPolyChangePass, boolean];
   'poly:pri(uid.records.subscribe)': [RequestPolyUidRecordsSubscribe, boolean, UidRecord[]];
   'poly:pri(global.changePass)': [RequestPolyGlobalChangePass, boolean];
+  'poly:pri(uid.getUid)': [RequestPolyGetUid, string];
   /*
     this is an inelegant yet effective way to take over these couple requests from Polkadot handlers,
     in order to alter their behavior as needed.
@@ -146,7 +159,10 @@ export interface PolyRequestSignatures {
 
 declare type IsNull<T, K extends keyof T> = {
   [K1 in Exclude<keyof T, K>]: T[K1];
-} & T[K] extends null ? K : never;
+} &
+T[K] extends null
+  ? K
+  : never;
 declare type NullKeys<T> = {
   [K in keyof T]: IsNull<T, K>;
 }[keyof T];
@@ -160,9 +176,11 @@ export declare type PolyMessageTypes = keyof PolyRequestSignatures;
 export declare type PolyRequestTypes = {
   [MessageType in keyof PolyRequestSignatures]: PolyRequestSignatures[MessageType][0];
 };
-export declare type PolySubscriptionMessageTypes = NoUndefinedValues<{
+export declare type PolySubscriptionMessageTypes = NoUndefinedValues<
+{
   [MessageType in keyof PolyRequestSignatures]: PolyRequestSignatures[MessageType][2];
-}>;
+}
+>;
 export declare type PolyMessageTypesWithNullRequest = NullKeys<PolyRequestTypes>;
 export declare type PolyMessageTypesWithSubscriptions = keyof PolySubscriptionMessageTypes;
 export declare type PolyMessageTypesWithNoSubscriptions = Exclude<PolyMessageTypes, keyof PolySubscriptionMessageTypes>;
