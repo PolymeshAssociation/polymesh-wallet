@@ -17,6 +17,7 @@ import { PolymeshContext as PolymeshContextType } from '../types';
 import { Box, Flex, Icon } from '../ui';
 import { Toast } from '../ui/Toast';
 import { buildHierarchy } from '../util/buildHierarchy';
+import ImportLedger from './ImportLedger/ImportLedger';
 import { AccountDetails } from './AccountDetails';
 import Accounts from './Accounts';
 import Authorize from './Authorize';
@@ -172,6 +173,7 @@ export default function Popup (): React.ReactElement {
                         <Route path='/account/export/:address'><ExportAccount /></Route>
                         <Route path='/account/import-seed'><ImportSeed /></Route>
                         <Route path='/account/restore-json'><ImportJson /></Route>
+                        <Route path='/account/import-ledger'><ImportLedger /></Route>
                         <Route path='/account/change-password'><ChangePassword /></Route>
                         <Route path='/account/details/:address'><AccountDetails /></Route>
                         <Route
