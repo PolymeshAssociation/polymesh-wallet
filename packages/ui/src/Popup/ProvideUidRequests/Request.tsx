@@ -102,9 +102,6 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
                 </a>
                 .
               </Text>
-              {/* <Heading my={2}
-                variant='h5'>uID:</Heading>
-              <Box>{uid}</Box> */}
               <details>
                 <summary>{request.uid}</summary>
                 <pre style={{ width: '300px' }}>{JSON.stringify(request, null, 1)}</pre>
@@ -113,7 +110,6 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
           </Box>
         </Box>
 
-        {/* Start */}
         {hasExistingUid && !overWriteUid && (
           <Box pt='m'>
             <Box borderColor='gray.4'
@@ -196,7 +192,6 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
 
               <Flex flexDirection='column'
                 mx='s'>
-                {/* <form id='passwordForm' onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}> */}
                 <Box mb='s'
                   style={{ width: '100%' }}>
                   <Box>
@@ -224,7 +219,6 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
                     )}
                   </Box>
                 </Box>
-                {/* </form> */}
               </Flex>
               <Flex mb='s'
                 px='s'
@@ -251,8 +245,6 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
             </form>
           </>
         )}
-
-        {/* End */}
       </Flex>
     </>
   );
