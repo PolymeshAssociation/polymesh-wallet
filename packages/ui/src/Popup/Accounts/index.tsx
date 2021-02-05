@@ -107,6 +107,12 @@ export default function Accounts (): React.ReactElement {
             <Text color='gray.2'
               variant='b1'>Import account with JSON file</Text>
           </MenuItem>
+          {/* @ts-ignore */}
+          <MenuItem data={{ action: 'fromLedger' }}
+            onClick={handleAccountMenuClick}>
+            <Text color='gray.2'
+              variant='b1'>Import account from Ledger device</Text>
+          </MenuItem>
         </Menu>
       </>
     );
@@ -120,6 +126,8 @@ export default function Accounts (): React.ReactElement {
         return history.push('/account/import-seed');
       case 'fromJson':
         return history.push('/account/restore-json');
+      case 'fromLedger':
+        return history.push('/account/import-ledger');
     }
   };
 
