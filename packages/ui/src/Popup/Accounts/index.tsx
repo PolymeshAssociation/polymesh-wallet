@@ -128,7 +128,7 @@ export default function Accounts (): React.ReactElement {
       case 'changePassword':
         return history.push('/account/change-password');
       case 'newWindow':
-        return windowOpen();
+        return windowOpen('/');
       case 'toggleIsDev':
         return togglePolyIsDev();
     }
