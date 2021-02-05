@@ -40,7 +40,7 @@ export const AccountDetails: FC = () => {
   };
 
   const decodeUid = async (password: string) => {
-    if (!currentAccount?.did || !network) return '';
+    if (!currentAccount?.did || !network) return false;
 
     const uid = await getUid(currentAccount?.did, network as NetworkName, password);
 
