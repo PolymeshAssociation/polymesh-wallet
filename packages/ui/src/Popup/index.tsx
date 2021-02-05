@@ -185,8 +185,6 @@ export default function Popup (): React.ReactElement {
     _onAction();
   }, [handleError]);
 
-  console.log('UID RECORDS', uidRecords);
-
   useEffect((): void => {
     const currentAccount =
       selectedAccountAddress && polymeshAccounts
