@@ -1,5 +1,5 @@
 import { SvgInfo, SvgLockOpenOutline, SvgLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Flex, Icon, Text, Tooltip } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Icon, LabelWithCopy, Text, Tooltip } from '@polymathnetwork/extension-ui/ui';
 import React, { FC } from 'react';
 
 export interface Props {
@@ -60,10 +60,16 @@ export const UidView: FC<Props> = ({ isHidden, showHideUid, uid }) => {
         </Box>
       </Flex>
       <Box mt='s'>
-        <Text color='gray.1'
-          variant='b1'>
-          {isHidden ? '0x****' : uid}
-        </Text>
+        {isHidden && (
+          <Text color='gray.1'
+            variant='b1'>
+            **********
+          </Text>
+        )}
+        {!isHidden && <LabelWithCopy color='brandMain'
+          text={uid}
+          textSize={39}
+          textVariant='b2' />}
       </Box>
     </Box>
   );

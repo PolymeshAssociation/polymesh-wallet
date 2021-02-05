@@ -1,11 +1,35 @@
-import { AccountJson, AllowedPath, AuthorizeRequest, MessageTypes, MessageTypesWithNoSubscriptions, MessageTypesWithNullRequest, MessageTypesWithSubscriptions, MetadataRequest, RequestTypes, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSigningIsLocked, ResponseTypes, SeedLengths, SigningRequest, SubscriptionMessageTypes } from '@polkadot/extension-base/background/types';
+import { AccountJson,
+  AllowedPath,
+  AuthorizeRequest,
+  MessageTypes,
+  MessageTypesWithNoSubscriptions,
+  MessageTypesWithNullRequest,
+  MessageTypesWithSubscriptions,
+  MetadataRequest,
+  RequestTypes,
+  ResponseDeriveValidate,
+  ResponseJsonGetAccountInfo,
+  ResponseSigningIsLocked,
+  ResponseTypes,
+  SeedLengths,
+  SigningRequest,
+  SubscriptionMessageTypes } from '@polkadot/extension-base/background/types';
 import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 import { Message } from '@polkadot/extension-base/types';
 import chrome from '@polkadot/extension-inject/chrome';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
-import { PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, ProofingRequest, ProvideUidRequest, ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { PolyMessageTypes,
+  PolyMessageTypesWithNoSubscriptions,
+  PolyMessageTypesWithNullRequest,
+  PolyMessageTypesWithSubscriptions,
+  PolyRequestTypes,
+  PolyResponseTypes,
+  PolySubscriptionMessageTypes,
+  ProofingRequest,
+  ProvideUidRequest,
+  ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 import { IdentifiedAccount, NetworkName, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 
 interface Handler {
@@ -17,7 +41,7 @@ interface Handler {
 }
 
 type Handlers = Record<string, Handler>;
-type CB = (isBusy: boolean) => void
+type CB = (isBusy: boolean) => void;
 
 const port = chrome.runtime.connect({ name: PORT_EXTENSION });
 const handlers: Handlers = {};
@@ -73,10 +97,23 @@ port.onMessage.addListener((data: Message['data']): void => {
   }
 });
 
-function sendMessage<TMessageType extends MessageTypesWithNullRequest>(message: TMessageType): Promise<ResponseTypes[TMessageType]>;
-function sendMessage<TMessageType extends MessageTypesWithNoSubscriptions>(message: TMessageType, request: RequestTypes[TMessageType]): Promise<ResponseTypes[TMessageType]>;
-function sendMessage<TMessageType extends MessageTypesWithSubscriptions>(message: TMessageType, request: RequestTypes[TMessageType], subscriber: (data: SubscriptionMessageTypes[TMessageType]) => void): Promise<ResponseTypes[TMessageType]>;
-function sendMessage<TMessageType extends MessageTypes> (message: TMessageType, request?: RequestTypes[TMessageType], subscriber?: (data: unknown) => void): Promise<ResponseTypes[TMessageType]> {
+function sendMessage<TMessageType extends MessageTypesWithNullRequest>(
+  message: TMessageType
+): Promise<ResponseTypes[TMessageType]>;
+function sendMessage<TMessageType extends MessageTypesWithNoSubscriptions>(
+  message: TMessageType,
+  request: RequestTypes[TMessageType]
+): Promise<ResponseTypes[TMessageType]>;
+function sendMessage<TMessageType extends MessageTypesWithSubscriptions>(
+  message: TMessageType,
+  request: RequestTypes[TMessageType],
+  subscriber: (data: SubscriptionMessageTypes[TMessageType]) => void
+): Promise<ResponseTypes[TMessageType]>;
+function sendMessage<TMessageType extends MessageTypes> (
+  message: TMessageType,
+  request?: RequestTypes[TMessageType],
+  subscriber?: (data: unknown) => void
+): Promise<ResponseTypes[TMessageType]> {
   return new Promise((resolve, reject): void => {
     const id = `${Date.now()}.${++idCounter}`;
 
@@ -88,10 +125,23 @@ function sendMessage<TMessageType extends MessageTypes> (message: TMessageType, 
   });
 }
 
-function polyMessage<TMessageType extends PolyMessageTypesWithNullRequest>(message: TMessageType): Promise<PolyRequestTypes[TMessageType]>;
-function polyMessage<TMessageType extends PolyMessageTypesWithNoSubscriptions>(message: TMessageType, request: PolyRequestTypes[TMessageType]): Promise<PolyResponseTypes[TMessageType]>;
-function polyMessage<TMessageType extends PolyMessageTypesWithSubscriptions>(message: TMessageType, request: PolyRequestTypes[TMessageType], subscriber: (data: PolySubscriptionMessageTypes[TMessageType]) => void): Promise<PolyResponseTypes[TMessageType]>;
-function polyMessage<TMessageType extends PolyMessageTypes> (message: TMessageType, request?: PolyRequestTypes[TMessageType], subscriber?: (data: unknown) => void): Promise<PolyResponseTypes[TMessageType]> {
+function polyMessage<TMessageType extends PolyMessageTypesWithNullRequest>(
+  message: TMessageType
+): Promise<PolyRequestTypes[TMessageType]>;
+function polyMessage<TMessageType extends PolyMessageTypesWithNoSubscriptions>(
+  message: TMessageType,
+  request: PolyRequestTypes[TMessageType]
+): Promise<PolyResponseTypes[TMessageType]>;
+function polyMessage<TMessageType extends PolyMessageTypesWithSubscriptions>(
+  message: TMessageType,
+  request: PolyRequestTypes[TMessageType],
+  subscriber: (data: PolySubscriptionMessageTypes[TMessageType]) => void
+): Promise<PolyResponseTypes[TMessageType]>;
+function polyMessage<TMessageType extends PolyMessageTypes> (
+  message: TMessageType,
+  request?: PolyRequestTypes[TMessageType],
+  subscriber?: (data: unknown) => void
+): Promise<PolyResponseTypes[TMessageType]> {
   return new Promise((resolve, reject): void => {
     const id = `${Date.now()}.${++idCounter}`;
 
@@ -171,12 +221,31 @@ export async function createAccountExternal (name: string, address: string, gene
   return sendMessage('pri(accounts.create.external)', { address, genesisHash, name });
 }
 
-export async function createAccountSuri (name: string, password: string, suri: string, type?: KeypairType): Promise<boolean> {
+export async function createAccountSuri (
+  name: string,
+  password: string,
+  suri: string,
+  type?: KeypairType
+): Promise<boolean> {
   return sendMessage('pri(accounts.create.suri)', { name, password, suri, type });
 }
 
-export async function createAccountHardware (address: string, hardwareType: string, accountIndex: number, addressOffset: number, name: string, genesisHash: string): Promise<boolean> {
-  return sendMessage('pri(accounts.create.hardware)', { accountIndex, address, addressOffset, genesisHash, hardwareType, name });
+export async function createAccountHardware (
+  address: string,
+  hardwareType: string,
+  accountIndex: number,
+  addressOffset: number,
+  name: string,
+  genesisHash: string
+): Promise<boolean> {
+  return sendMessage('pri(accounts.create.hardware)', {
+    accountIndex,
+    address,
+    addressOffset,
+    genesisHash,
+    hardwareType,
+    name
+  });
 }
 
 export async function createSeed (length?: SeedLengths, type?: KeypairType): Promise<{ address: string; seed: string }> {
@@ -271,11 +340,22 @@ export async function windowOpen (path: AllowedPath): Promise<boolean> {
   return sendMessage('pri(window.open)', path);
 }
 
-export async function validateDerivationPath (parentAddress: string, suri: string, parentPassword: string): Promise<ResponseDeriveValidate> {
+export async function validateDerivationPath (
+  parentAddress: string,
+  suri: string,
+  parentPassword: string
+): Promise<ResponseDeriveValidate> {
   return sendMessage('pri(derivation.validate)', { parentAddress, parentPassword, suri });
 }
 
-export async function deriveAccount (parentAddress: string, suri: string, parentPassword: string, name: string, password: string, genesisHash: string | null): Promise<boolean> {
+export async function deriveAccount (
+  parentAddress: string,
+  suri: string,
+  parentPassword: string,
+  name: string,
+  password: string,
+  genesisHash: string | null
+): Promise<boolean> {
   return sendMessage('pri(derivation.create)', { genesisHash, name, parentAddress, parentPassword, password, suri });
 }
 
@@ -291,6 +371,10 @@ export async function changePassword (address: string, oldPass: string, newPass:
   return sendMessage('pri(accounts.changePassword)', { address, newPass, oldPass });
 }
 
-export async function globalChangePass (oldPass: string, newPass:string): Promise<boolean> {
+export async function globalChangePass (oldPass: string, newPass: string): Promise<boolean> {
   return polyMessage('poly:pri(global.changePass)', { oldPass, newPass });
+}
+
+export async function getUid (did: string, network: NetworkName, password: string): Promise<string> {
+  return polyMessage('poly:pri(uid.getUid)', { did, network, password });
 }
