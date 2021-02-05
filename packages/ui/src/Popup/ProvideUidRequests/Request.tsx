@@ -21,15 +21,15 @@ interface Props {
 function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<Props> {
   const onAction = useContext(ActionContext);
   const uidRecords = useContext(UidContext);
-  const { currentAccount } = useContext(PolymeshContext);
+  const { currentAccount, network } = useContext(PolymeshContext);
   const [overWriteUid, setOverWriteUid] = useState(false);
   const [hasExistingUid, setHasExistingUid] = useState(false);
 
   useEffect(() => {
-    const uid = uidRecords?.find((item) => item.did === currentAccount?.did);
+    const uid = uidRecords?.find((item) => item.did === currentAccount?.did && network === item.network);
 
     setHasExistingUid(uid !== undefined);
-  }, [uidRecords, currentAccount]);
+  }, [uidRecords, currentAccount, network]);
 
   const isBusy = useContext(ActivityContext);
 
