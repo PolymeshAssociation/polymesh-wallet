@@ -56,6 +56,10 @@ export default class State {
   public uidsSubject: BehaviorSubject<UidRecord[]> = new BehaviorSubject<UidRecord[]>([]);
 
   constructor () {
+    this.updateUidSubject();
+  }
+
+  private updateUidSubject (): void {
     this.#auxStore.allRecords().then((keys) => {
       this.uidsSubject.next(keys);
     }).catch(console.error);
@@ -207,7 +211,7 @@ export default class State {
 
   public setUid (did: string, network: NetworkName, uid: string, password: string): void {
     this.#auxStore.setN(did, network, uid, password);
-    this.uidsSubject.next([...this.uidsSubject.getValue(), { did, network } as UidRecord]);
+    this.updateUidSubject();
   }
 
   public async changeUidPassword (oldPass: string, newPass: string): Promise<void> {
