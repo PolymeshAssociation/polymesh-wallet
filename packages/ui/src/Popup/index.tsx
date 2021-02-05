@@ -1,10 +1,8 @@
-import {
-  AccountJson,
+import { AccountJson,
   AccountsContext,
   AuthorizeRequest,
   MetadataRequest,
-  SigningRequest,
-} from '@polkadot/extension-base/background/types';
+  SigningRequest } from '@polkadot/extension-base/background/types';
 import uiSettings from '@polkadot/ui-settings';
 import { SettingsStruct } from '@polkadot/ui-settings/types';
 import { setSS58Format } from '@polkadot/util-crypto';
@@ -18,8 +16,7 @@ import { toast } from 'react-toastify';
 
 import { SvgCloseCircle } from '../assets/images/icons';
 import { Loading } from '../components';
-import {
-  AccountContext,
+import { AccountContext,
   ActionContext,
   ActivityContext,
   AuthorizeReqContext,
@@ -29,10 +26,8 @@ import {
   ProvideUidReqContext,
   SettingsContext,
   SigningReqContext,
-  UidContext,
-} from '../components/contexts';
-import {
-  busySubscriber,
+  UidContext } from '../components/contexts';
+import { busySubscriber,
   subscribeAccounts,
   subscribeAuthorizeRequests,
   subscribeMetadataRequests,
@@ -44,8 +39,7 @@ import {
   subscribeProofingRequests,
   subscribeProvideUidRequests,
   subscribeSigningRequests,
-  subscribeUidRecords,
-} from '../messaging';
+  subscribeUidRecords } from '../messaging';
 import { PolymeshContext as PolymeshContextType } from '../types';
 import { Box, Flex, Icon } from '../ui';
 import { Toast } from '../ui/Toast';
@@ -65,18 +59,18 @@ import Signing from './Signing';
 
 const startSettings = uiSettings.get();
 
-function initAccountContext(accounts: AccountJson[]): AccountsContext {
+function initAccountContext (accounts: AccountJson[]): AccountsContext {
   const hierarchy = buildHierarchy(accounts);
   const master = hierarchy.find((account) => !account.isExternal);
 
   return {
     accounts,
     hierarchy,
-    master,
+    master
   };
 }
 
-function initPolymeshContext(
+function initPolymeshContext (
   network: string,
   polymeshAccounts: IdentifiedAccount[],
   selectedAccount: string,
@@ -88,11 +82,11 @@ function initPolymeshContext(
     polymeshAccounts,
     selectedAccount,
     currentAccount,
-    isDeveloper,
+    isDeveloper
   };
 }
 
-export default function Popup(): React.ReactElement {
+export default function Popup (): React.ReactElement {
   const [accounts, setAccounts] = useState<null | AccountJson[]>(null);
   const [accountCtx, setAccountCtx] = useState<AccountsContext>({ accounts: [], hierarchy: [] });
   const [polymeshCtx, setPolymeshCtx] = useState<PolymeshContextType>({ network: '', polymeshAccounts: [] });
@@ -120,7 +114,10 @@ export default function Popup(): React.ReactElement {
         // Otherwise, we just inform the user via a Toast component.
         toast.error(
           <Flex>
-            <Icon Asset={SvgCloseCircle} color='red.0' height={20} width={20} />
+            <Icon Asset={SvgCloseCircle}
+              color='red.0'
+              height={20}
+              width={20} />
             <Box ml='s'>{status.error.msg}</Box>
           </Flex>,
           { autoClose: false, toastId: 'error' }
@@ -140,7 +137,10 @@ export default function Popup(): React.ReactElement {
         // Show an un-closable alert about lack of connectivity.
         toast.error(
           <Flex>
-            <Icon Asset={SvgCloseCircle} color='red.0' height={20} width={20} />
+            <Icon Asset={SvgCloseCircle}
+              color='red.0'
+              height={20}
+              width={20} />
             <Box ml='s'>No internet!</Box>
           </Flex>,
           { toastId: 'offline', autoClose: false, closeButton: false }
@@ -172,7 +172,7 @@ export default function Popup(): React.ReactElement {
       subscribeProofingRequests(setProofingRequests),
       subscribeProvideUidRequests(setProvideUidRequests),
       subscribeUidRecords(setUidRecords),
-      busySubscriber.addListener(setIsBusy),
+      busySubscriber.addListener(setIsBusy)
     ])
       .then(() => undefined, handleError)
       .catch(handleError);
@@ -223,56 +223,57 @@ export default function Popup(): React.ReactElement {
         provideUidRequests &&
         uidRecords &&
         (status?.error || status?.ready) && (
-          <ActivityContext.Provider value={isBusy}>
-            <ActionContext.Provider value={_onAction}>
-              <SettingsContext.Provider value={settingsCtx}>
-                <AccountContext.Provider value={accountCtx}>
-                  <UidContext.Provider value={uidRecords}>
-                    <AuthorizeReqContext.Provider value={authRequests}>
-                      <MetadataReqContext.Provider value={metaRequests}>
-                        <SigningReqContext.Provider value={signRequests}>
-                          <ProofReqContext.Provider value={proofingRequests}>
-                            <ProvideUidReqContext.Provider value={provideUidRequests}>
-                              <PolymeshContext.Provider value={polymeshCtx}>
-                                <Switch>
-                                  <Route path='/account/create'>
-                                    <NewAccount />
-                                  </Route>
-                                  <Route path='/account/forget/:address'>
-                                    <ForgetAccount />
-                                  </Route>
-                                  <Route path='/account/export/:address'>
-                                    <ExportAccount />
-                                  </Route>
-                                  <Route path='/account/import-seed'>
-                                    <ImportSeed />
-                                  </Route>
-                                  <Route path='/account/restore-json'>
-                                    <ImportJson />
-                                  </Route>
-                                  <Route path='/account/change-password'>
-                                    <ChangePassword />
-                                  </Route>
-                                  <Route path='/account/details/:address'>
-                                    <AccountDetails />
-                                  </Route>
-                                  <Route exact path='/'>
-                                    <Root />
-                                  </Route>
-                                </Switch>
-                                <Toast />
-                              </PolymeshContext.Provider>
-                            </ProvideUidReqContext.Provider>
-                          </ProofReqContext.Provider>
-                        </SigningReqContext.Provider>
-                      </MetadataReqContext.Provider>
-                    </AuthorizeReqContext.Provider>
-                  </UidContext.Provider>
-                </AccountContext.Provider>
-              </SettingsContext.Provider>
-            </ActionContext.Provider>
-          </ActivityContext.Provider>
-        )}
+        <ActivityContext.Provider value={isBusy}>
+          <ActionContext.Provider value={_onAction}>
+            <SettingsContext.Provider value={settingsCtx}>
+              <AccountContext.Provider value={accountCtx}>
+                <UidContext.Provider value={uidRecords}>
+                  <AuthorizeReqContext.Provider value={authRequests}>
+                    <MetadataReqContext.Provider value={metaRequests}>
+                      <SigningReqContext.Provider value={signRequests}>
+                        <ProofReqContext.Provider value={proofingRequests}>
+                          <ProvideUidReqContext.Provider value={provideUidRequests}>
+                            <PolymeshContext.Provider value={polymeshCtx}>
+                              <Switch>
+                                <Route path='/account/create'>
+                                  <NewAccount />
+                                </Route>
+                                <Route path='/account/forget/:address'>
+                                  <ForgetAccount />
+                                </Route>
+                                <Route path='/account/export/:address'>
+                                  <ExportAccount />
+                                </Route>
+                                <Route path='/account/import-seed'>
+                                  <ImportSeed />
+                                </Route>
+                                <Route path='/account/restore-json'>
+                                  <ImportJson />
+                                </Route>
+                                <Route path='/account/change-password'>
+                                  <ChangePassword />
+                                </Route>
+                                <Route path='/account/details/:address'>
+                                  <AccountDetails />
+                                </Route>
+                                <Route exact
+                                  path='/'>
+                                  <Root />
+                                </Route>
+                              </Switch>
+                              <Toast />
+                            </PolymeshContext.Provider>
+                          </ProvideUidReqContext.Provider>
+                        </ProofReqContext.Provider>
+                      </SigningReqContext.Provider>
+                    </MetadataReqContext.Provider>
+                  </AuthorizeReqContext.Provider>
+                </UidContext.Provider>
+              </AccountContext.Provider>
+            </SettingsContext.Provider>
+          </ActionContext.Provider>
+        </ActivityContext.Provider>
+      )}
     </Loading>
   );
 }
