@@ -1,24 +1,24 @@
 import { LinkName, NetworkName } from './types';
 
-const networkURLs: Record<NetworkName, string> = {
+export const networkURLs: Record<NetworkName, string> = {
   alcyone: 'wss://alcyone-rpc.polymesh.live',
   pmf: 'wss://pmf.polymath.network',
   pme: 'wss://pme.polymath.network'
 };
 
-const networkLabels: Record<NetworkName, string> = {
+export const networkLabels: Record<NetworkName, string> = {
   alcyone: 'Alcyone Testnet',
   pmf: 'PMF',
   pme: 'PME'
 };
 
-const networkIsDev: Record<NetworkName, boolean> = {
+export const networkIsDev: Record<NetworkName, boolean> = {
   alcyone: false,
   pmf: true,
   pme: true
 };
 
-const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
+export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   alcyone: {
     dashboard: 'http://dashboard.polymesh.live/',
     explorer: 'http://18.223.97.65/'
@@ -33,23 +33,15 @@ const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   }
 };
 
-const defaultNetwork: NetworkName = NetworkName.alcyone;
+export const defaultNetwork: NetworkName = NetworkName.alcyone;
 
-const messagePrefix = 'poly:';
+export const messagePrefix = 'poly:';
 
-const messages = [
+export const genesisHash = '0x12fddc9e2128b3fe571e4e5427addcb87fcaf08493867a68dd6ae44b406b39c7';
+
+export const messages = [
   'pub(accounts.list)',
   'pub(accounts.subscribe)',
   'pub(metadata.provide)',
   'pub(metadata.list)'
 ];
-
-export {
-  networkURLs,
-  networkLabels,
-  networkLinks,
-  defaultNetwork,
-  messagePrefix,
-  networkIsDev,
-  messages
-};

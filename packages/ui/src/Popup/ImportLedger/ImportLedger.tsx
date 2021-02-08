@@ -1,4 +1,5 @@
 import settings from '@polkadot/ui-settings';
+import { genesisHash } from '@polymathnetwork/extension-core/constants';
 import { ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import Name from '@polymathnetwork/extension-ui/components/Name';
@@ -23,10 +24,11 @@ interface NetworkOption {
 const AVAIL: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
 
 function ImportLedger (): React.ReactElement {
+  const genesis = genesisHash;
+
   const [accountIndex, setAccountIndex] = useState<number>(0);
   const [addressOffset, setAddressOffset] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
-  const [genesis, setGenesis] = useState<string | null>(null);
   const onAction = useContext(ActionContext);
   const [name, setName] = useState<string | null>(null);
   const { address, error: ledgerError, isLoading: ledgerLoading, isLocked: ledgerLocked, refresh, warning: ledgerWarning } = useLedger(genesis, accountIndex, addressOffset);
@@ -50,17 +52,6 @@ function ImportLedger (): React.ReactElement {
     value
   })));
 
-  const networkOps = useRef(
-    [{
-      text: 'Select network',
-      value: ''
-    },
-    ...ledgerChains.map(({ displayName, genesisHash }): NetworkOption => ({
-      text: displayName,
-      value: genesisHash[0]
-    }))]
-  );
-
   const _onSave = useCallback(
     () => {
       if (address && genesis && name) {
@@ -80,21 +71,11 @@ function ImportLedger (): React.ReactElement {
   const _onSetAccountIndex = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => setAccountIndex(Number(event.target.value)), []);
   const _onSetAddressOffset = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => setAddressOffset(Number(event.target.value)), []);
 
-  console.log('NNNAME', name);
-  console.log('ERROR', error);
-
   return (
     <>
       <div>Import Ledger Account</div>
       <div>
         <div>{address}</div>
-        <Dropdown
-          className='network'
-          label={'Network'}
-          onChange={setGenesis}
-          options={networkOps.current}
-          value={genesis}
-        />
         <div>{name}</div>
         {
           !!genesis &&
