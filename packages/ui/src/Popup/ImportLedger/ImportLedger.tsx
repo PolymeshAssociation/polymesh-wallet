@@ -9,16 +9,9 @@ import { Button } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import ledgerChains from '../../util/legerChains';
-
 interface AccOption {
   text: string;
   value: number;
-}
-
-interface NetworkOption {
-  text: string;
-  value: string | null;
 }
 
 const AVAIL: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
