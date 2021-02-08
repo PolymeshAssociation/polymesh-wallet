@@ -1714,6 +1714,11 @@
     "@types/websocket" "^1.0.1"
     websocket "^1.0.33"
 
+"@polymathnetwork/confidential-identity@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@polymathnetwork/confidential-identity/-/confidential-identity-1.0.1.tgz#00ebd7895d1bcda946414239c2275adf56eb9ffd"
+  integrity sha512-XOsKwalb8eWgNI63/KOl5ge/VXX42FrOG0Ary2Fw8/C7XMqIdGsI23Gq0Q6Pt8OBwxibSY0ao+hg7SrBanR1/A==
+
 "@popperjs/core@^2.4.4":
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.6.0.tgz#f022195afdfc942e088ee2101285a1d31c7d727f"
