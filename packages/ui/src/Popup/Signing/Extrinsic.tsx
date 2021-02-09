@@ -1,6 +1,7 @@
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { formatBalance } from '@polkadot/util';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { nonFatalErrorHandler } from '@polymathnetwork/extension-core/utils';
 import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
 import { Box, ExpandableDetails, Flex, Hr, Loading, Text } from '@polymathnetwork/extension-ui/ui';
 import BN from 'bn.js';

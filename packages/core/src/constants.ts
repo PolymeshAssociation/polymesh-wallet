@@ -37,6 +37,8 @@ export const defaultNetwork: NetworkName = NetworkName.alcyone;
 
 export const messagePrefix = 'poly:';
 
+// @TODO switch to mainnet hash when launched.
+// Alcyone genesis hash.
 export const genesisHash = '0x12fddc9e2128b3fe571e4e5427addcb87fcaf08493867a68dd6ae44b406b39c7';
 
 export const messages = [
