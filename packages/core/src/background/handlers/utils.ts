@@ -13,7 +13,7 @@ export async function getScopeAttestationProof (
   uid: string,
   ticker: string
 ) {
-  const crypto = await import('../../../../uidCrypto');
+  const crypto = await import('@polymathnetwork/confidential-identity');
   const u8ScopeDid = stringToU8a(stringToPadded(ticker));
   const u8did = hexToU8a(did);
   const u8uid = uuidParse(uid);
