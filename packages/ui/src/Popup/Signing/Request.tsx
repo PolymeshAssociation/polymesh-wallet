@@ -6,10 +6,11 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { ActionContext, ActivityContext } from '../../components';
-import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
+import { approveSignPassword, approveSignSignature, cancelSignRequest, isSignLocked } from '../../messaging';
 import { Box, Button, Flex, Heading } from '../../ui';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
+import LedgerSign from './LedgerSign';
 import Unlock from './Unlock';
 
 interface Props {
@@ -32,7 +33,9 @@ function isRawPayload (payload: SignerPayloadJSON | SignerPayloadRaw): payload i
   return !!(payload as SignerPayloadRaw).data;
 }
 
-export default function Request ({ account: { isExternal }, isFirst, request, signId, url }: Props): React.ReactElement<Props> | null {
+export default function Request ({ account: { accountIndex, addressOffset, isExternal, isHardware },
+  // buttonText,
+  isFirst, request, signId, url }: Props): React.ReactElement<Props> | null {
   const onAction = useContext(ActionContext);
   const [{ hexBytes, payload }, setData] = useState<Data>({ hexBytes: null, payload: null });
   const [error, setError] = useState<string | null>(null);
@@ -87,6 +90,17 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
     [onAction, savePass, signId]
   );
 
+  const _onSignature = useCallback(
+    ({ signature }: { signature: string }): Promise<void> =>
+      approveSignSignature(signId, signature)
+        .then(() => onAction())
+        .catch((error: Error): void => {
+          setError(error.message);
+          console.error(error);
+        }),
+    [onAction, signId]
+  );
+
   const _onSignQuick = useCallback(
     () => _onSign(''),
     [_onSign]
@@ -97,9 +111,22 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       const json = request.payload as SignerPayloadJSON;
 
       return (
-        <Extrinsic
-          request={json}
-        />
+        <>
+          <Extrinsic
+            request={json}
+          />
+          {isHardware && (
+            <LedgerSign
+              accountIndex={accountIndex as number || 0}
+              addressOffset={addressOffset as number || 0}
+              error={error}
+              genesisHash={json.genesisHash}
+              onSignature={_onSignature}
+              payload={payload}
+              setError={setError}
+            />
+          )}
+        </>
       );
     } else if (hexBytes !== null) {
       const raw = request.payload as SignerPayloadRaw;
@@ -164,6 +191,7 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
           <Heading variant='h5'>Signing Request</Heading>
         </Box>
         <ContentArea>
+
           {content()}
         </ContentArea>
       </Box>

@@ -34,11 +34,11 @@ function retrieveLedger (genesis: string): Ledger {
 
   assert(isLedgerCapable, 'Incompatible browser, only Chrome is supported');
 
-  const def = getNetwork(genesis);
+  // const def = getNetwork(genesis);
 
-  assert(def, `Unable to find supported chain for ${genesis}`);
+  // assert(def, `Unable to find supported chain for ${genesis}`);
 
-  ledger = new Ledger('webusb', def.network);
+  ledger = new Ledger('webusb', 'polymesh');
 
   return ledger;
 }
