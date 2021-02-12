@@ -115,17 +115,6 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
           <Extrinsic
             request={json}
           />
-          {isHardware && (
-            <LedgerSign
-              accountIndex={accountIndex as number || 0}
-              addressOffset={addressOffset as number || 0}
-              error={error}
-              genesisHash={json.genesisHash}
-              onSignature={_onSignature}
-              payload={payload}
-              setError={setError}
-            />
-          )}
         </>
       );
     } else if (hexBytes !== null) {
@@ -142,7 +131,7 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
     return null;
   };
 
-  const signArea = isLocked
+  const signArea = isLocked && !isHardware
     ? (
       <Unlock
         error={error}
@@ -170,13 +159,24 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
               </Button>
             </Box>
             {isFirst && <Box ml='xs'>
-              <Button
-                busy={isBusy}
-                fluid
-                onClick={_onSignQuick}
-                type='submit'>
+              { isHardware && payload
+                ? <LedgerSign
+                  accountIndex={accountIndex as number || 0}
+                  addressOffset={addressOffset as number || 0}
+                  error={error}
+                  genesisHash={(request.payload as SignerPayloadJSON).genesisHash}
+                  onSignature={_onSignature}
+                  payload={payload}
+                  setError={setError}
+                />
+                : <Button
+                  busy={isBusy}
+                  fluid
+                  onClick={_onSignQuick}
+                  type='submit'>
                 Authorize
-              </Button>
+                </Button>
+              }
             </Box> }
           </Flex>
         </Box>
