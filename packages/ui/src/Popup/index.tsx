@@ -90,8 +90,8 @@ export default function Popup (): React.ReactElement {
   }, [handleError, status?.error]);
 
   useEffect(() => {
-    subscribeOnlineStatus((status: boolean) => {
-      if (status) {
+    subscribeOnlineStatus((isOnline: boolean) => {
+      if (isOnline) {
         // Dismiss any toast that we might've displayed earlier.
         toast.dismiss('offline');
       } else {

@@ -1,7 +1,6 @@
 /* eslint-disable sort-keys */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import isEqual from 'lodash/isEqual';
-import merge from 'lodash/merge';
 
 import { CDD, IdentityData, NetworkName } from '../../types';
 import { initialFeatureState } from '../utils';
@@ -23,7 +22,7 @@ const identitiesSlice = createSlice({
       const prev = state[network][data.did];
 
       if (!isEqual(prev, data)) {
-        state[network][data.did] = merge(prev, data);
+        state[network][data.did] = data;
       }
     },
     removeIdentity (state, action: PayloadAction<RemoveIdentityPayload>) {
