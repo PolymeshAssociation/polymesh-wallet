@@ -10,7 +10,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import subscribePolymesh, { accountsSynchronizer } from '@polymathnetwork/extension-core';
 import polyHandlers from '@polymathnetwork/extension-core/background/handlers';
 import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
-import { fatalErrorHandler, isPolyMessage, subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
+import { fatalErrorHandler, isPolyMessage } from '@polymathnetwork/extension-core/utils';
 
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
@@ -31,13 +31,7 @@ chrome.runtime.onConnect.addListener((port): void => {
 
   if (port.name === PORT_EXTENSION) {
     accountsUnsub = accountsSynchronizer();
-    subscribeOnlineStatus((status: boolean) => {
-      if (status) {
-        polyUnsub = subscribePolymesh();
-      } else {
-        if (polyUnsub) polyUnsub();
-      }
-    });
+    polyUnsub = subscribePolymesh();
   }
 
   // message and disconnect handlers

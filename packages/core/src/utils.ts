@@ -37,3 +37,6 @@ export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
   // eslint-disable-next-line node/no-callback-literal
   window.addEventListener('online', () => cb(true));
 }
+
+export const sleep = (ms: number):Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
