@@ -1,4 +1,3 @@
-import { ApiPromise } from '@polkadot/api';
 import { Option } from '@polkadot/types/codec';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
