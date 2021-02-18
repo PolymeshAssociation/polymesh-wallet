@@ -1,0 +1,1 @@
+export { TextOverflowEllipsis } from './TextOverflowEllipsis';

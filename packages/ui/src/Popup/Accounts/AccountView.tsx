@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 
 import { AccountType, ActionContext, PolymeshContext } from '../../components';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
-import { Box, ButtonSmall, ContextMenuTrigger, Flex, Icon, LabelWithCopy, Menu, MenuItem, Text, TextInput } from '../../ui';
+import { Box, ButtonSmall, ContextMenuTrigger, Flex, Icon, LabelWithCopy, Menu, MenuItem, Text, TextInput, TextOverflowEllipsis } from '../../ui';
 import { formatters } from '../../util';
 
 export interface Props {
@@ -157,10 +157,9 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
                 flexDirection='row'
                 onMouseEnter={nameMouseEnter}
                 onMouseLeave={nameMouseLeave}>
-                <Text color='gray.1'
-                  variant='b2m'>
+                <TextOverflowEllipsis color='gray.1' width="100px">
                   {name}
-                </Text>
+                </TextOverflowEllipsis>
                 <Flex ml='xs'>
                   <Icon Asset={SvgPencilOutline}
                     color={nameHover ? 'gray.2' : 'gray.5'}
