@@ -13,13 +13,12 @@ import { actions as statusActions } from './store/features/status';
 import { getAccountsList, getNetwork } from './store/getters';
 import { subscribeDidsList, subscribeIsHydratedAndNetwork } from './store/subscribers';
 import store from './store';
-import { AccountData, IdentityData, KeyringAccountData, UnsubCallback } from './types';
+import { AccountData, KeyringAccountData, UnsubCallback } from './types';
 import { nonFatalErrorHandler, observeAccounts } from './utils';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
 let didCount = 0;
-let didTwoCount = 0;
 
 /**
  * Synchronize accounts between keyring and redux store.
@@ -74,7 +73,7 @@ const _didRecord = (did: string, didRecords: DidRecord) => {
       : keys;
   }, [] as string[]);
 
-  const identityData: IdentityData = {
+  const identityData = {
     did,
     priKey: encodeAddress(didRecords.primary_key),
     secKeys
@@ -126,7 +125,6 @@ function subscribePolymesh (): () => Promise<void> {
       apiPromise(network)
         .then((api) => {
           didCount = 0;
-          didTwoCount = 0;
 
           // Clear errors
           store.dispatch(statusActions.isReady());
@@ -178,15 +176,17 @@ function subscribePolymesh (): () => Promise<void> {
 
                     if (linkedKeyInfo.isEmpty) { return; }
 
-                    // Store identities where current account is the Primary key.
-                    const params = { data: {
-                      did: linkedKeyInfo.toString(),
-                      priKey: account
-                    },
-                    network };
+                    const did = linkedKeyInfo.toString();
 
-                    console.log(`Poly: Setting **identity** number ${didCount++} for "${accountName(account) || 'unknown'}"`, params);
-                    store.dispatch(identityActions.setIdentity(params));
+                    api.query.identity.didRecords<DidRecord>(did).then((didRecords) => {
+                      const data = _didRecord(did, didRecords);
+                      const params = { did, network, data };
+
+                      console.log(`Poly: Setting **identity** ${didCount++}`, data);
+                      // store.dispatch(identityActions.setIdentitySecKeys(params));
+                      store.dispatch(identityActions.setIdentity(params));
+                    }, nonFatalErrorHandler)
+                      .catch(nonFatalErrorHandler);
                   }).then((unsub) => {
                     unsubCallbacks[account] = unsub;
                   }, nonFatalErrorHandler).catch(nonFatalErrorHandler);
@@ -209,24 +209,7 @@ function subscribePolymesh (): () => Promise<void> {
 
                 console.log('Poly: subscribeDidsList', network, getNetwork(), dids);
 
-                const newDids = difference(dids, prevDids);
                 const removedDids = difference(prevDids, dids);
-
-                newDids.forEach((did) => {
-                  // Get the keys associated with this DID.
-                  api.query.identity.didRecords<DidRecord>(did, (didRecords) => {
-                    const data = _didRecord(did, didRecords);
-                    const params = { data, network };
-
-                    console.log(`Poly: Setting **Secondary identity keys** ${didTwoCount++}`, params);
-                    store.dispatch(identityActions.setIdentity(params));
-                  })
-                    .then((unsub) => {
-                      unsubCallbacks[did] && unsubCallbacks[did]();
-                      unsubCallbacks[did] = unsub;
-                    }, nonFatalErrorHandler)
-                    .catch(nonFatalErrorHandler);
-                });
 
                 removedDids.forEach((did) => {
                   store.dispatch(identityActions.removeIdentity({ network, did }));
