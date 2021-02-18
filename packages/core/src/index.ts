@@ -1,3 +1,4 @@
+import { ApiPromise } from '@polkadot/api';
 import { Option } from '@polkadot/types/codec';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
@@ -5,7 +6,7 @@ import { union } from 'lodash-es';
 import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
-import apiPromise from './api/apiPromise';
+import apiPromise, { disconnect } from './api/apiPromise';
 import { DidRecord, IdentityClaim, LinkedKeyInfo } from './api/apiPromise/types';
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
@@ -98,19 +99,21 @@ const claims2Record = (didClaims: IdentityClaim[]) => {
   return cdd;
 };
 
-function subscribePolymesh (): () => void {
-  function unsubAll (): void {
-    Object.keys(unsubCallbacks).forEach((key) => {
+function subscribePolymesh (): () => Promise<void> {
+  function unsubAll (): Promise<void> {
+    for (const key in unsubCallbacks) {
       if (unsubCallbacks[key]) {
         try {
+          console.log('Poly: Unsubscribing from:', key);
           unsubCallbacks[key]();
-          console.log('Poly: Unsubscribed from', key);
           delete unsubCallbacks[key];
         } catch (error) {
           console.error(error);
         }
       }
-    });
+    }
+
+    return disconnect();
   }
 
   console.log('Poly: subscribePolymesh');
