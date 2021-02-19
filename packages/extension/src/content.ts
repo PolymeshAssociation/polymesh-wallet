@@ -1,6 +1,5 @@
-import { Message } from '@polkadot/extension-base/types';
-
 import { PORT_CONTENT } from '@polkadot/extension-base/defaults';
+import { Message } from '@polkadot/extension-base/types';
 import chrome from '@polkadot/extension-inject/chrome';
 
 // connect to the extension

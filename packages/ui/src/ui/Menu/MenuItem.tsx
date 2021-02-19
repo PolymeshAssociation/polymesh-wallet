@@ -1,5 +1,6 @@
 import React from 'react';
 import { MenuItem as ScMenuItem } from 'react-contextmenu';
+
 import { styled } from '../../styles';
 
 type Props = React.ComponentProps<typeof ScMenuItem>;

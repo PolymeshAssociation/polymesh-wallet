@@ -1,4 +1,5 @@
 import React from 'react';
+
 import * as sc from './styles';
 import { LoadingProps } from './types';
 

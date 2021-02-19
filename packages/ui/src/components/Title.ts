@@ -1,6 +1,6 @@
-import { ThemeProps } from '../types';
-
 import styled from 'styled-components';
+
+import { ThemeProps } from '../types';
 
 export default styled.div(({ theme }: ThemeProps) => `
   width: 100%;

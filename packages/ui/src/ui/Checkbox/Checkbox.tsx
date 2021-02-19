@@ -1,9 +1,10 @@
 import React, { FC, InputHTMLAttributes } from 'react';
-import { InlineFlex } from '../InlineFlex';
+
 import { SvgCheckmark, SvgMinusBox } from '../../assets/images/icons';
 import * as typeHelpers from '../../typings/helpers';
-import * as sc from './styles';
+import { InlineFlex } from '../InlineFlex';
 import { Label } from './Label';
+import * as sc from './styles';
 
 export interface Props
   extends typeHelpers.Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
@@ -21,15 +22,13 @@ export interface Props
   indeterminate?: boolean;
 }
 
-export const Checkbox: FC<Props> = ({
-  checked,
+export const Checkbox: FC<Props> = ({ checked,
   defaultChecked,
   indeterminate,
   label,
   name,
   onChange,
-  ...other
-}) => {
+  ...other }) => {
   let checkedProps;
 
   if (typeof checked !== 'undefined') {

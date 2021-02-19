@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import { defaultNetwork } from '../../constants';
 import { NetworkName } from '../../types';
 

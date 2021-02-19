@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+
 import { formatters } from '../../util';
 
 export interface TextEllipsisProps {

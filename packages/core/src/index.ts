@@ -1,21 +1,20 @@
 import { Option } from '@polkadot/types/codec';
+import { AccountInfo } from '@polkadot/types/interfaces/system';
+import { encodeAddress } from '@polkadot/util-crypto';
+import { union } from 'lodash-es';
 import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
 import apiPromise, { destroy } from './api/apiPromise';
-import { DidRecord, LinkedKeyInfo, IdentityClaim } from './api/apiPromise/types';
-import { AccountInfo } from '@polkadot/types/interfaces/system';
-import { encodeAddress } from '@polkadot/util-crypto';
-
+import { DidRecord, IdentityClaim, LinkedKeyInfo } from './api/apiPromise/types';
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as statusActions } from './store/features/status';
+import { getAccountsList, getDids } from './store/getters';
+import { subscribeDidsList, subscribeIsHydratedAndNetwork } from './store/subscribers';
 import store from './store';
 import { AccountData, IdentityData, KeyringAccountData, UnsubCallback } from './types';
-import { subscribeDidsList, subscribeIsHydratedAndNetwork } from './store/subscribers';
-import { getAccountsList, getDids } from './store/getters';
 import { nonFatalErrorHandler, observeAccounts } from './utils';
-import { union } from 'lodash-es';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
@@ -219,10 +218,12 @@ function subscribePolymesh (): () => void {
                       });
 
                       // Save CDD data
-                      const cdd = didClaimsSorted && didClaimsSorted.length > 0 ? {
-                        issuer: didClaimsSorted[0].claim_issuer.toString(),
-                        expiry: !didClaimsSorted[0].expiry.isEmpty ? Number(didClaimsSorted[0].expiry.toString()) : undefined
-                      } : undefined;
+                      const cdd = didClaimsSorted && didClaimsSorted.length > 0
+                        ? {
+                          issuer: didClaimsSorted[0].claim_issuer.toString(),
+                          expiry: !didClaimsSorted[0].expiry.isEmpty ? Number(didClaimsSorted[0].expiry.toString()) : undefined
+                        }
+                        : undefined;
 
                       store.dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
                     });

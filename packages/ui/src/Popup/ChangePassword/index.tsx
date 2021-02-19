@@ -1,9 +1,10 @@
-import React, { FC, useContext } from 'react';
-import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { FieldError, useForm } from 'react-hook-form';
-import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
 import { changePassword, validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import React, { FC, useContext } from 'react';
+import { useForm } from 'react-hook-form';
+
+import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
 
 export const ChangePassword: FC = () => {
   const { polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
@@ -74,9 +75,9 @@ export const ChangePassword: FC = () => {
                 <Box>
                   <Text color='alert'
                     variant='b3'>
-                    {(errors.currentPassword as FieldError).type === 'required' && 'Required field'}
-                    {(errors.currentPassword as FieldError).type === 'minLength' && 'Password too short'}
-                    {(errors.currentPassword as FieldError).type === 'manual' && 'Invalid password'}
+                    {(errors.currentPassword).type === 'required' && 'Required field'}
+                    {(errors.currentPassword).type === 'minLength' && 'Password too short'}
+                    {(errors.currentPassword).type === 'manual' && 'Invalid password'}
                   </Text>
                 </Box>
               }
@@ -98,9 +99,9 @@ export const ChangePassword: FC = () => {
                 <Box>
                   <Text color='alert'
                     variant='b3'>
-                    {(errors.newPassword as FieldError).type === 'required' && 'Required field'}
-                    {(errors.newPassword as FieldError).type === 'minLength' && 'Password too short'}
-                    {(errors.newPassword as FieldError).type === 'manual' && 'Invalid password'}
+                    {(errors.newPassword).type === 'required' && 'Required field'}
+                    {(errors.newPassword).type === 'minLength' && 'Password too short'}
+                    {(errors.newPassword).type === 'manual' && 'Invalid password'}
                   </Text>
                 </Box>
               }
@@ -122,9 +123,9 @@ export const ChangePassword: FC = () => {
                 <Box>
                   <Text color='alert'
                     variant='b3'>
-                    {(errors.confirmPassword as FieldError).type === 'required' && 'Required field'}
-                    {(errors.confirmPassword as FieldError).type === 'minLength' && 'Password too short'}
-                    {(errors.confirmPassword as FieldError).type === 'manual' && 'Passwords do not match'}
+                    {(errors.confirmPassword).type === 'required' && 'Required field'}
+                    {(errors.confirmPassword).type === 'minLength' && 'Password too short'}
+                    {(errors.confirmPassword).type === 'manual' && 'Passwords do not match'}
                   </Text>
                 </Box>
               }

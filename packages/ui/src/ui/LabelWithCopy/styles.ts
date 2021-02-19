@@ -1,4 +1,5 @@
 import { styled } from '@polymathnetwork/extension-ui/styles';
+
 import { Box } from '../Box';
 
 export const StatusText = styled(Box)<{

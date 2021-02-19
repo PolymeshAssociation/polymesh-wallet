@@ -1,10 +1,10 @@
 import { AccountsContext, AuthorizeRequest, MetadataRequest, SigningRequest } from '@polkadot/extension-base/background/types';
-import { SettingsStruct } from '@polkadot/ui-settings/types';
-import { AvailableThemes } from './themes';
-
-import React from 'react';
 import settings from '@polkadot/ui-settings';
+import { SettingsStruct } from '@polkadot/ui-settings/types';
+import React from 'react';
+
 import { PolymeshContext as PolymeshContextType } from '../types';
+import { AvailableThemes } from './themes';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const noop = (): void => undefined;

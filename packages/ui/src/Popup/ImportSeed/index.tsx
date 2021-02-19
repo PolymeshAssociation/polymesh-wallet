@@ -1,5 +1,6 @@
 import { AccountDetails, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountDetails';
 import React, { FC, useContext, useState } from 'react';
+
 import { ActionContext } from '../../components';
 import { createAccountSuri } from '../../messaging';
 import { EnterSeed } from './EnterSeed';
@@ -27,12 +28,6 @@ export const ImportSeed: FC = () => {
 
   const renderStep = () => {
     switch (step) {
-      case 0:
-      default:
-        return (
-          <EnterSeed onContinue={nextStep}
-            setPhrase={setSeedPhrase} />
-        );
       case 1:
         return (
           <AccountDetails
@@ -40,6 +35,11 @@ export const ImportSeed: FC = () => {
             onBack={prevStep}
             onContinue={importAccount}
             submitText='Restore' />
+        );
+      default:
+        return (
+          <EnterSeed onContinue={nextStep}
+            setPhrase={setSeedPhrase} />
         );
     }
   };

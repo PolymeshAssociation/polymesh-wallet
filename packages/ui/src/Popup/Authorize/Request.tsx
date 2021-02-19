@@ -1,12 +1,13 @@
 import { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
-import { ThemeProps } from '../../types';
+import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
-import { Button, Box, Flex, Header, Icon, Text, Heading } from '../../ui';
+
 import { ActionContext, PolymeshContext } from '../../components';
 import { approveAuthRequest, rejectAuthRequest } from '../../messaging';
+import { ThemeProps } from '../../types';
+import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
 import { AccountsHeader } from '../Accounts/AccountsHeader';
-import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 
 interface Props {
   authId: string;

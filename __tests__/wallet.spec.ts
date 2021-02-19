@@ -1,6 +1,6 @@
-import puppeteer from 'puppeteer';
-import path from 'path';
 import { mnemonicGenerate } from '@polkadot/util-crypto';
+import path from 'path';
+import puppeteer from 'puppeteer';
 
 describe('Wallet', () => {
   let browser: puppeteer.Browser;

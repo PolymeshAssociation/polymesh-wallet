@@ -1,9 +1,10 @@
-import React, { FC, useContext } from 'react';
+import { SvgAlertCircle, SvgOpenInNew } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import React, { FC, useContext } from 'react';
+import { useForm } from 'react-hook-form';
+
 import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
 import { exportAccount } from '../../messaging';
-import { SvgAlertCircle, SvgOpenInNew } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { FieldError, useForm } from 'react-hook-form';
 
 export const ExportAccount: FC = () => {
   const onAction = useContext(ActionContext);
@@ -86,9 +87,9 @@ export const ExportAccount: FC = () => {
               <Box>
                 <Text color='alert'
                   variant='b3'>
-                  {(errors.currentPassword as FieldError).type === 'required' && 'Required field'}
-                  {(errors.currentPassword as FieldError).type === 'minLength' && 'Password too short'}
-                  {(errors.currentPassword as FieldError).type === 'WrongPassword' && 'Invalid password'}
+                  {(errors.currentPassword).type === 'required' && 'Required field'}
+                  {(errors.currentPassword).type === 'minLength' && 'Password too short'}
+                  {(errors.currentPassword).type === 'WrongPassword' && 'Invalid password'}
                 </Text>
               </Box>
             }

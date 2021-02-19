@@ -1,8 +1,9 @@
 /* eslint-disable sort-keys */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CDD, IdentityData, NetworkName } from '../../types';
 import isEqual from 'lodash/isEqual';
 import merge from 'lodash/merge';
+
+import { CDD, IdentityData, NetworkName } from '../../types';
 import { initialFeatureState } from '../utils';
 
 type State = Record<NetworkName, Record<string, IdentityData>>;

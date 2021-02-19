@@ -1,10 +1,10 @@
-import React, { FC, useState, useCallback, useRef } from 'react';
-import { Wrapper, Icon, Unit, Input } from './styles';
+import React, { FC, useCallback, useRef, useState } from 'react';
+
 import { BaseInputProps } from './BaseInputProps';
+import { Icon, Input, Unit, Wrapper } from './styles';
 
 export const BaseInput: FC<BaseInputProps> = (props) => {
-  const {
-    blurOnEnterKeyPress,
+  const { blurOnEnterKeyPress,
     className,
     disabled,
     icon,
@@ -14,8 +14,7 @@ export const BaseInput: FC<BaseInputProps> = (props) => {
     onFocus,
     readOnly,
     unit,
-    ...restProps
-  } = props;
+    ...restProps } = props;
 
   const inputRefInternal = useRef<HTMLInputElement>(null);
   const inputRef = inputRefFromProps || inputRefInternal;

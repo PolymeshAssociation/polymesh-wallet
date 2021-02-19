@@ -1,20 +1,21 @@
-import React, { useContext, useEffect } from 'react';
-import { Button, Box, Checkbox, Text, Flex, TextInput } from '../../ui';
-import { FieldError, useForm } from 'react-hook-form';
 import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import React, { useContext, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+
 import { ActivityContext, PolymeshContext } from '../../components';
+import { Box, Button, Checkbox, Flex, Text, TextInput } from '../../ui';
 
 interface Props {
   isFirst: boolean | undefined;
   isLocked: boolean;
-  isSavedPass: boolean;
+  savePass: boolean;
   onCancel: () => Promise<void>;
   error?: string | null;
-  onIsSavedPassChange: React.Dispatch<React.SetStateAction<boolean>>;
+  onSavePassChange: React.Dispatch<React.SetStateAction<boolean>>;
   onSign: (password: string) => Promise<void>;
 }
 
-function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPassChange, onSign }: Props): React.ReactElement<Props> {
+function Unlock ({ error, isFirst, isLocked, onCancel, onSavePassChange, onSign, savePass }: Props): React.ReactElement<Props> {
   const isBusy = useContext(ActivityContext);
   const { selectedAccount } = useContext(PolymeshContext);
 
@@ -64,9 +65,9 @@ function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPas
             <Box>
               <Text color='alert'
                 variant='b3'>
-                {(errors.currentPassword as FieldError).type === 'required' && 'Required field'}
-                {(errors.currentPassword as FieldError).type === 'WrongPassword' && 'Invalid password'}
-                {(errors.currentPassword as FieldError).type === 'SigningError' && (errors.currentPassword as FieldError).message}
+                {(errors.currentPassword).type === 'required' && 'Required field'}
+                {(errors.currentPassword).type === 'WrongPassword' && 'Invalid password'}
+                {(errors.currentPassword).type === 'SigningError' && (errors.currentPassword).message}
               </Text>
             </Box>
                 }
@@ -77,14 +78,14 @@ function Unlock ({ error, isFirst, isLocked, isSavedPass, onCancel, onIsSavedPas
             mt='s'
             mx='s'>
             <Checkbox
-              checked={isSavedPass}
+              checked={savePass}
               label={
                 <Text color='gray.1'
                   fontSize='1'>
                   Don&apos;t ask me again for the next 15 minutes
                 </Text>
               }
-              onChange={onIsSavedPassChange}
+              onChange={onSavePassChange}
             />
           </Box>
         </>

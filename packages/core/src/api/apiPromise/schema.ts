@@ -6,6 +6,12 @@ import { NetworkName } from '@polymathnetwork/extension-core/types';
 
 const alcyone = {
   "types": {
+    "AccountInfo": "AccountInfoWithRefCount",
+    "Address": "IndicesLookupSource",
+    "LookupSource": "IndicesLookupSource",
+    "ValidatorPrefsBlocked": {
+      "commission": "Compact<Perbill>"
+    },
     "IdentityId": "[u8; 32]",
     "EventDid": "IdentityId",
     "InvestorUid": "[u8; 16]",
@@ -397,7 +403,7 @@ const alcyone = {
         "Custom": "Vec<u8>"
       }
     },
-    "InvestorZKProofData": "[u8;64]",
+    "InvestorZKProofData": "Signature",
     "Claim": {
       "_enum": {
         "Accredited": "Scope",
@@ -938,11 +944,13 @@ const alcyone = {
     "StoredSchedule": {
       "schedule": "CheckpointSchedule",
       "id": "ScheduleId",
-      "at": "Moment"
+      "at": "Moment",
+      "remaining": "u32"
     },
     "ScheduleSpec": {
       "start": "Option<Moment>",
-      "period": "CalendarPeriod"
+      "period": "CalendarPeriod",
+      "remaining": "u32"
     },
     "InstructionStatus": {
       "_enum": {
@@ -1093,7 +1101,7 @@ const alcyone = {
     "CADetails": "Text",
     "CACheckpoint": {
       "_enum": {
-        "Scheduled": "ScheduleId",
+        "Scheduled": "(ScheduleId, u64)",
         "Existing": "CheckpointId"
       }
     },
@@ -1363,7 +1371,7 @@ const alcyone = {
             "isOptional": true
           }
         ],
-        "type": "HistoricalVoting"
+        "type": "HistoricalVotingByAddress"
       },
       "votingHistoryById": {
         "description": "Retrieve historical voting of `id` identity",
@@ -1379,7 +1387,7 @@ const alcyone = {
             "isOptional": true
           }
         ],
-        "type": "HistoricalVotingByAddress"
+        "type": "HistoricalVotingById"
       }
     },
     "protocolFee": {
@@ -1459,30 +1467,6 @@ const alcyone = {
           }
         ],
         "type": "CanTransferResult"
-      }
-    },
-    "portfolio": {
-      "getPortfolios": {
-        "description": "Gets all user-defined portfolio names of an identity",
-        "params": [
-          {
-            "name": "did",
-            "type": "IdentityId",
-            "isOptional": false
-          }
-        ],
-        "type": "GetPortfoliosResult"
-      },
-      "getPortfolioAssets": {
-        "description": "Gets the balances of all assets in a given portfolio",
-        "params": [
-          {
-            "name": "portfolio_id",
-            "type": "PortfolioId",
-            "isOptional": false
-          }
-        ],
-        "type": "GetPortfolioAssetsResult"
       }
     }
   }
