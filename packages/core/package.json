@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/runtime": "^7.11.2",
+    "@babel/runtime": "^7.12.13",
     "@reduxjs/toolkit": "^1.4.0",
     "@types/lodash-es": "^4.17.3",
     "@types/redux-logger": "^3.0.8",
