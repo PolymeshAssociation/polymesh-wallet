@@ -66,6 +66,7 @@ export default function Popup (): React.ReactElement {
   const [status, setStatus] = useState<undefined | StoreStatus>();
   const [isBusy, setIsBusy] = useState(false);
   const [isDeveloper, setIsDeveloper] = useState(false);
+  const [isPopulated, setIsPopulated] = useState(false);
   const handleError = useErrorHandler();
 
   useEffect(() => {
@@ -91,8 +92,8 @@ export default function Popup (): React.ReactElement {
   }, [handleError, status?.error]);
 
   useEffect(() => {
-    subscribeOnlineStatus((status: boolean) => {
-      if (status) {
+    subscribeOnlineStatus((isOnline: boolean) => {
+      if (isOnline) {
         // Dismiss any toast that we might've displayed earlier.
         toast.dismiss('offline');
       } else {
@@ -120,7 +121,10 @@ export default function Popup (): React.ReactElement {
     Promise.all([
       subscribePolyStatus(setStatus),
       subscribePolyAccounts(setPolymeshAccounts),
-      subscribePolyNetwork(setNetwork),
+      subscribePolyNetwork((n) => {
+        setNetwork(n);
+        setIsPopulated(false);
+      }),
       subscribePolySelectedAccount(setSelectedAccountAddress),
       subscribePolyIsDev((isDev) => {
         setIsDeveloper(isDev === 'true');
@@ -142,6 +146,18 @@ export default function Popup (): React.ReactElement {
     _onAction();
   }, [handleError]);
 
+  useEffect(() => {
+    if (polymeshAccounts.length === accounts?.length) {
+      // We're delaying the populated flag (and consequently accounts display), to
+      // give ApiPromise a chance to initialize in the background, because it blocks DOM interaction.
+      setTimeout(() =>
+        setIsPopulated(true)
+      , 1000);
+    } else {
+      setIsPopulated(false);
+    }
+  }, [accounts, polymeshAccounts]);
+
   useEffect((): void => {
     const currentAccount = selectedAccountAddress && polymeshAccounts
       ? polymeshAccounts.find((account) => (account.address === selectedAccountAddress))
@@ -158,7 +174,7 @@ export default function Popup (): React.ReactElement {
       : Accounts;
 
   return (
-    <Loading>{accounts && authRequests && metaRequests && signRequests && (status?.error || status?.ready) && (
+    <Loading>{accounts && authRequests && metaRequests && signRequests && (isPopulated || status?.ready) && (
       <ActivityContext.Provider value={isBusy}>
         <ActionContext.Provider value={_onAction}>
           <SettingsContext.Provider value={settingsCtx}>

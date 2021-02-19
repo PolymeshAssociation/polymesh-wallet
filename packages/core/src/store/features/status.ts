@@ -18,7 +18,7 @@ const statusSlice = createSlice({
       state.rehydrated = true;
     },
     error (state, action: PayloadAction<Error | null>) {
-      state.error = action.payload;
+      state.error = action.payload ? action.payload : null;
     }
   }
 });
