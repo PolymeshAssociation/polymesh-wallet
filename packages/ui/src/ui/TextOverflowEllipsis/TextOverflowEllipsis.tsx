@@ -13,9 +13,5 @@ type Props = PropsWithChildren<{ width: number | string }> & ComponentProps<type
 export function TextOverflowEllipsis(props: Props) {
   const { children, ...textProps } = props;
 
-  return (
-    <EllipsiedText {...textProps}>
-      {children}
-    </EllipsiedText>
-  );
+  return <EllipsiedText {...textProps}>{children}</EllipsiedText>;
 }
