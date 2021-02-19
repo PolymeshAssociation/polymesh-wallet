@@ -8,7 +8,8 @@ export const EllipsiedText = styled(Text)`
   text-overflow: ellipsis;
 `;
 
-type Props = PropsWithChildren<{ width: number | string }> & ComponentProps<typeof Text>;
+type Props = PropsWithChildren<{ width: number | string }> &
+  ComponentProps<typeof Text>;
 
 export function TextOverflowEllipsis(props: Props) {
   const { children, ...textProps } = props;
