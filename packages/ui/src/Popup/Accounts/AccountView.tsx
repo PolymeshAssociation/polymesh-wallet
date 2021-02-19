@@ -159,7 +159,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         {!isEditing && (
           <GridItem area='name'>
             <Flex
-              width='100px'
+              minWidth='100px'
               flexDirection='row'
               onMouseEnter={nameMouseEnter}
               onMouseLeave={nameMouseLeave}
