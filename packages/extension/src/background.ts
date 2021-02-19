@@ -8,9 +8,16 @@ import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import subscribePolymesh, { accountsSynchronizer } from '@polymathnetwork/extension-core';
+import SchemaService from '@polymathnetwork/extension-core/api/apiPromise/schema';
 import polyHandlers from '@polymathnetwork/extension-core/background/handlers';
 import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
 import { fatalErrorHandler, isPolyMessage, subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
+
+const loadSchema = () => {
+  SchemaService.load().then(console.log).catch(console.error);
+};
+
+loadSchema();
 
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
@@ -20,6 +27,7 @@ chrome.runtime.onInstalled.addListener(() => {
   // Reset stored state to avoid integrity issues. Store will be repopulated next time the wallet is opened.
   resetState();
   setIsRehydrated();
+  loadSchema();
 });
 
 // listen to all messages and handle appropriately
