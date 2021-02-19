@@ -7,7 +7,7 @@ import BigNumber from 'bignumber.js';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 
-import { Box, Flex, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '../../ui';
+import { Box, Flex, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput, TextOverflowEllipsis } from '../../ui';
 import { formatters } from '../../util';
 
 export interface Props {
@@ -46,17 +46,16 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
   };
 
   const saveAlias = async () => {
-    account && account.did && network && await renameIdentity(network as NetworkName, account.did, newAlias);
+    account && account.did && network && (await renameIdentity(network as NetworkName, account.did, newAlias));
     stopEdit();
     onAction();
   };
 
   return (
     <>
-      {
-        account?.did &&
+      {account?.did && (
         <>
-          {!editing &&
+          {!editing && (
             <Flex alignItems='center'
               mb='xs'
               onMouseEnter={mouseEnter}
@@ -65,22 +64,23 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
                 variant='b1m'>
                 {account.didAlias ? formatters.toShortAddress(account.didAlias, { size: 30 }) : '[Your Polymesh ID]'}
               </Text>
-              {hover &&
+              {hover && (
                 <Flex ml='xs'>
-                  <Icon Asset={SvgPencilOutline}
+                  <Icon
+                    Asset={SvgPencilOutline}
                     color='gray.0'
                     height={16}
                     onClick={startEdit}
                     style={{ cursor: 'pointer' }}
-                    width={16} />
+                    width={16}
+                  />
                 </Flex>
-              }
+              )}
             </Flex>
-          }
-          {editing &&
+          )}
+          {editing && (
             <Flex mb='xs'>
-              <TextInput
-                onChange={handleAliasChange}
+              <TextInput onChange={handleAliasChange}
                 tight
                 value={newAlias} />
               <Box onClick={saveAlias}
@@ -98,7 +98,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
                   width={24} />
               </Box>
             </Flex>
-          }
+          )}
           <Box bg='brandLightest'
             borderRadius='2'
             py='xs'>
@@ -118,20 +118,22 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
             )}
           </Box>
         </>
-      }
-      {
-        !account?.did &&
-    <Text color='brandLighter'
-      variant='b2m'>Unassigned key</Text>
-      }
+      )}
+      {!account?.did && (
+        <Text color='brandLighter'
+          variant='b2m'>
+          Unassigned key
+        </Text>
+      )}
       <Flex alignItems='center'
         flexDirection='row'
         mt='s'>
         <Box>
-          <Text color='gray.0'
+          <TextOverflowEllipsis color='gray.0'
+            maxWidth='206px'
             variant='b1m'>
             {account?.name}
-          </Text>
+          </TextOverflowEllipsis>
         </Box>
         <Box ml='s'>
           {account?.did && <AccountType keyType={account?.keyType}
@@ -139,7 +141,8 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
         </Box>
       </Flex>
       <Flex>
-        <LabelWithCopy color='brandLightest'
+        <LabelWithCopy
+          color='brandLightest'
           hoverColor='brandLighter'
           text={account?.address || ''}
           textSize={30}
@@ -160,23 +163,27 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
           </Text>
         </Box>
       </Flex>
-      {details && <Box mt='m'>
-        <Box borderColor='gray.0'
-          borderRadius='3'
-          borderStyle='solid'
-          borderWidth={2}
-          onClick={showAccountDetails}
-          style={{ cursor: 'pointer' }}>
-          <Flex alignItems='center'
-            height={32}
-            justifyContent='center'>
-            <Text color='gray.0'
-              variant='b2m'>
-              View details
-            </Text>
-          </Flex>
+      {details && (
+        <Box mt='m'>
+          <Box
+            borderColor='gray.0'
+            borderRadius='3'
+            borderStyle='solid'
+            borderWidth={2}
+            onClick={showAccountDetails}
+            style={{ cursor: 'pointer' }}
+          >
+            <Flex alignItems='center'
+              height={32}
+              justifyContent='center'>
+              <Text color='gray.0'
+                variant='b2m'>
+                View details
+              </Text>
+            </Flex>
+          </Box>
         </Box>
-      </Box> }
+      )}
     </>
   );
 };
