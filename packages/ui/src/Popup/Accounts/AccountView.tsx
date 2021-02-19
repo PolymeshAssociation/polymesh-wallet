@@ -4,7 +4,7 @@ import { SvgCheck, SvgDotsVertical, SvgPencilOutline, SvgWindowClose } from '@po
 import BigNumber from 'bignumber.js';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 import { AccountType, ActionContext, PolymeshContext } from '../../components';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
@@ -158,13 +158,12 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         {!isEditing && (
           <GridItem area='name'>
             <Flex
-              alignItems=''
               flexDirection='row'
               onMouseEnter={nameMouseEnter}
               onMouseLeave={nameMouseLeave}
             >
               <TextOverflowEllipsis
-                width='100px'
+                maxWidth='100px'
                 color='gray.1'
                 variant='b2m'
               >
@@ -200,11 +199,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         </GridItem>
         <GridItem area='balance'>
           <Flex height='100%' justifyContent='flex-end'>
-            <Text
-              color='gray.1'
-              variant='b3'
-              style={{ whiteSpace: 'nowrap' }}
-            >
+            <Text color='gray.1' variant='b3' style={{ whiteSpace: 'nowrap' }}>
               {formatters.formatAmount(new BigNumber(balance || 0), 2, true)}{' '}
               POLYX
             </Text>
@@ -225,64 +220,80 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
 
   const renderHoverAccountInfo = () => {
     return (
-      <>
-        <Flex
-          flexDirection='row'
-          justifyContent='space-between'
-        >
-          <Box>
-            {isEditing && (
-              <Flex flexDirection='row'>
-                <TextInput defaultValue={name}
-                  onChange={handleNameChange}
-                  tight
-                  value={newName} />
-                <Box ml='xs'>
-                  <Icon Asset={SvgCheck}
-                    color='gray.2'
-                    height={16}
-                    onClick={save}
-                    width={16} />
-                </Box>
-                <Box ml='xs'>
-                  <Icon Asset={SvgWindowClose}
-                    color='gray.2'
-                    height={16}
-                    onClick={cancelEditing}
-                    width={16} />
-                </Box>
+      <UnassignedAccountHoverGrid>
+        {isEditing && (
+          <GridItem area='name-edit'>
+            <Flex flexDirection='row'>
+              <TextInput
+                defaultValue={name}
+                onChange={handleNameChange}
+                tight
+                value={newName}
+              />
+              <Box ml='xs'>
+                <Icon
+                  Asset={SvgCheck}
+                  color='gray.2'
+                  height={16}
+                  onClick={save}
+                  width={16}
+                />
+              </Box>
+              <Box ml='xs'>
+                <Icon
+                  Asset={SvgWindowClose}
+                  color='gray.2'
+                  height={16}
+                  onClick={cancelEditing}
+                  width={16}
+                />
+              </Box>
+            </Flex>
+          </GridItem>
+        )}
+        {!isEditing && (
+          <GridItem area='name'>
+            <Flex
+              flexDirection='row'
+              onMouseEnter={nameMouseEnter}
+              onMouseLeave={nameMouseLeave}
+            >
+              <TextOverflowEllipsis
+                maxWidth='100px'
+                color='gray.1'
+                variant='b2m'
+              >
+                {name}
+              </TextOverflowEllipsis>
+              <Flex ml='xs'>
+                <Icon
+                  Asset={SvgPencilOutline}
+                  color={nameHover ? 'gray.2' : 'gray.5'}
+                  height={16}
+                  onClick={editName}
+                  style={{ cursor: 'pointer' }}
+                  width={16}
+                />
               </Flex>
-            )}
-            {!isEditing && (
-              <Flex flexDirection='row'
-                onMouseEnter={nameMouseEnter}
-                onMouseLeave={nameMouseLeave}>
-                <Text color='gray.1'
-                  variant='b2m'>
-                  {name}
-                </Text>
-                <Flex ml='xs'>
-                  <Icon Asset={SvgPencilOutline}
-                    color={nameHover ? 'gray.2' : 'gray.5'}
-                    height={16}
-                    onClick={editName}
-                    style={{ cursor: 'pointer' }}
-                    width={16} />
-                </Flex>
-              </Flex>
-            )}
-            <LabelWithCopy color='gray.3'
-              text={address}
-              textSize={13}
-              textVariant='b3'
-            />
-          </Box>
-          <Box>
-            <ButtonSmall onClick={assign}
-              variant='secondary'>Assign</ButtonSmall>
-          </Box>
-        </Flex>
-      </>
+            </Flex>
+          </GridItem>
+        )}
+        <GridItem area='assign'>
+          <Flex height='100%' alignItems='center' justifyContent='flex-end'>
+            <ButtonSmall onClick={assign} variant='secondary'>
+              Assign
+            </ButtonSmall>
+          </Flex>
+        </GridItem>
+        <GridItem area='address'>
+          <LabelWithCopy
+            color='gray.3'
+            text={address}
+            textSize={13}
+            textVariant='b3'
+          />
+        </GridItem>
+      </UnassignedAccountHoverGrid>
     );
   };
 
@@ -294,7 +305,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         mt='s'
         onMouseEnter={mouseEnter}
         onMouseLeave={mouseLeave}
-        px='s'>
+        px='s'
+      >
         <AccountViewGrid>
           <Box onClick={selectAccount} style={{ cursor: 'pointer' }}>
             <Flex height='100%'>
@@ -342,16 +354,25 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
 
 const AccountViewGrid = styled.div`
   display: grid;
-  grid-template-areas: "avatar account-details options";
+  grid-template-areas: 'avatar account-details options';
   gap: 10px;
+  grid-template-columns: 35px 200px 35px;
 `;
 
 const AccountDetailsGrid = styled.div`
   display: grid;
   grid-template-areas:
-    "name-edit name-edit name-edit name-edit"
-    "name      name      name      type"
-    "address   address   balance   balance";
+    'name-edit name-edit name-edit name-edit'
+    'name      name      name      type'
+    'address   address   balance   balance';
+`;
+
+const UnassignedAccountHoverGrid = styled.div`
+  display: grid;
+  grid-template-areas:
+    'name-edit name-edit name-edit name-edit'
+    'name      name      name      assign'
+    'address   address   address   assign';
 `;
 
 const GridItem = styled.div<{ area: string }>`
