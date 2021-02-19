@@ -9,12 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/runtime": "^7.11.2",
-    "@polkadot/api": "2.0.*",
-    "@polkadot/keyring": "4.0.*",
-    "@polkadot/types": "2.0.*",
-    "@polkadot/util": "4.0.*",
-    "@polkadot/util-crypto": "4.0.*",
+    "@babel/runtime": "^7.12.13",
     "@polymathnetwork/confidential-identity": "^1.0.1",
     "@reduxjs/toolkit": "^1.4.0",
     "@types/crypto-js": "^4.0.1",

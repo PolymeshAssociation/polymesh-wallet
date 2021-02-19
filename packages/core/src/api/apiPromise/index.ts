@@ -4,24 +4,46 @@ import { networkURLs } from '../../constants';
 import { NetworkName } from '../../types';
 import schema from './schema';
 
-const cache = {} as Record<NetworkName, Promise<ApiPromise>>;
+let api: ApiPromise | null = null;
 
-function apiPromise (n: NetworkName): Promise<ApiPromise> {
-  if (!(n in cache)) {
-    const provider = new WsProvider(networkURLs[n]);
+async function apiPromise (n: NetworkName): Promise<ApiPromise> {
+  console.time('isReady');
 
-    cache[n] = (new ApiPromise({
-      provider,
-      rpc: schema[n].rpc,
-      types: schema[n].types
-    })).isReadyOrError;
+  if (api) {
+    try {
+      await api.disconnect();
+    } catch (error) {
+      console.error(error);
+    }
+
+    api = null;
   }
 
-  return cache[n];
+  const provider = new WsProvider(networkURLs[n]);
+
+  api = await ApiPromise.create({
+    provider,
+    rpc: schema[n].rpc,
+    types: schema[n].types
+  });
+
+  await api.isReadyOrError;
+
+  console.timeEnd('isReady');
+
+  return api;
 }
 
-export function destroy (n: NetworkName): void {
-  if (n in cache) { delete cache[n]; }
+export async function disconnect (): Promise<void> {
+  if (api) {
+    try {
+      await api.disconnect();
+    } catch (error) {
+      console.error(`Failed to close websocket connection: ${JSON.stringify(error)}`);
+    }
+
+    api = null;
+  }
 }
 
 export default apiPromise;
