@@ -127,45 +127,58 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <AccountDetailsGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <Flex alignItems='end'
-              flexDirection='row'>
-              <TextInput defaultValue={name}
+            <Flex alignItems='end' flexDirection='row'>
+              <TextInput
+                defaultValue={name}
                 onChange={handleNameChange}
                 tight
-                value={newName} />
+                value={newName}
+              />
               <Box ml='xs'>
-                <Icon Asset={SvgCheck}
+                <Icon
+                  Asset={SvgCheck}
                   color='gray.2'
                   height={16}
                   onClick={save}
-                  width={16} />
+                  width={16}
+                />
               </Box>
               <Box ml='xs'>
-                <Icon Asset={SvgWindowClose}
+                <Icon
+                  Asset={SvgWindowClose}
                   color='gray.2'
                   height={16}
                   onClick={cancelEditing}
-                  width={16} />
+                  width={16}
+                />
               </Box>
             </Flex>
           </GridItem>
         )}
         {!isEditing && (
           <GridItem area='name'>
-            <Flex alignItems=''
+            <Flex
+              alignItems=''
               flexDirection='row'
               onMouseEnter={nameMouseEnter}
-              onMouseLeave={nameMouseLeave}>
-              <TextOverflowEllipsis width="100px" color='gray.1' variant='b2m'>
+              onMouseLeave={nameMouseLeave}
+            >
+              <TextOverflowEllipsis
+                width='100px'
+                color='gray.1'
+                variant='b2m'
+              >
                 {name}
               </TextOverflowEllipsis>
               <Flex ml='xs'>
-                <Icon Asset={SvgPencilOutline}
+                <Icon
+                  Asset={SvgPencilOutline}
                   color={nameHover ? 'gray.2' : 'gray.5'}
                   height={16}
                   onClick={editName}
                   style={{ cursor: 'pointer' }}
-                  width={16} />
+                  width={16}
+                />
               </Flex>
             </Flex>
           </GridItem>
@@ -177,7 +190,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         </GridItem>
         <GridItem area='address'>
           <Flex height='100%' alignItems='flex-end'>
-            <LabelWithCopy color='gray.3'
+            <LabelWithCopy
+              color='gray.3'
               text={address}
               textSize={13}
               textVariant='b3'
@@ -186,8 +200,13 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         </GridItem>
         <GridItem area='balance'>
           <Flex height='100%' justifyContent='flex-end'>
-            <Text color='gray.1' variant='b3' style={{ whiteSpace: 'nowrap' }}>
-              {formatters.formatAmount(new BigNumber(balance || 0), 2, true)} POLYX
+            <Text
+              color='gray.1'
+              variant='b3'
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              {formatters.formatAmount(new BigNumber(balance || 0), 2, true)}{' '}
+              POLYX
             </Text>
           </Flex>
         </GridItem>
@@ -277,9 +296,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         onMouseLeave={mouseLeave}
         px='s'>
         <AccountViewGrid>
-          <Box onClick={selectAccount}
-            style={{ cursor: 'pointer' }}>
-            <Flex height="100%">
+          <Box onClick={selectAccount} style={{ cursor: 'pointer' }}>
+            <Flex height='100%'>
               <Box
                 backgroundColor='brandLightest'
                 borderRadius='50%'
@@ -287,33 +305,34 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
                 px='2'
                 width={32}
               >
-                <Flex justifyContent='center'
-                  pt='xxs'>
-                  <Text color='brandMain'
-                    variant='b2m'>{name?.substr(0, 1)}</Text>
+                <Flex justifyContent='center' pt='xxs'>
+                  <Text color='brandMain' variant='b2m'>
+                    {name?.substr(0, 1)}
+                  </Text>
                 </Flex>
               </Box>
             </Flex>
           </Box>
           <Box>
             {(!hover || did) && renderAccountInfo()}
-            {(hover && !did) && renderHoverAccountInfo()}
+            {hover && !did && renderHoverAccountInfo()}
           </Box>
-          <Flex alignItems='flex-end'
+          <Flex
+            alignItems='flex-end'
             flexDirection='column'
-            justifyContent='space-around'>
+            justifyContent='space-around'
+          >
             <Box width={24}>
-              {
-                isSelected &&
-                  <Icon Asset={SvgCheck}
-                    color='brandMain'
-                    height={24}
-                    width={24} />
-              }
+              {isSelected && (
+                <Icon
+                  Asset={SvgCheck}
+                  color='brandMain'
+                  height={24}
+                  width={24}
+                />
+              )}
             </Box>
-            <Box>
-              {renderActionsMenuButton(address)}
-            </Box>
+            <Box>{renderActionsMenuButton(address)}</Box>
           </Flex>
         </AccountViewGrid>
       </Box>
