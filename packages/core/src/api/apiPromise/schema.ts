@@ -2,6 +2,7 @@
 /* eslint-disable quotes */
 
 import { DefinitionRpc, DefinitionRpcSub, RegistryTypes } from '@polkadot/types/types';
+import { polySchemaUrl } from '@polymathnetwork/extension-core/constants';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
 
 const alcyone = {
@@ -1476,11 +1477,58 @@ const pme = alcyone;
 
 const pmf = alcyone;
 
-const schema: Record<NetworkName, { rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>,
-  types: RegistryTypes }> = {
+export type Schema = { rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>,
+  types: RegistryTypes };
+
+const schemas: Record<NetworkName, Schema> = {
   pme,
   pmf,
   alcyone
 };
 
-export default schema;
+let loadedSchemas: Record<NetworkName, Schema>;
+
+// @TODO handle 404
+
+const request = async (n: NetworkName): Promise<undefined | Schema> => {
+  return fetch(`${polySchemaUrl}${n}`).then((response: Response) => {
+    // if (response.type === '200') {
+    // @ts-ignore
+    const data: Schema = response.json();
+
+    return data;
+    // } else {
+    //   return Promise.resolve(undefined);
+    // }
+  });
+};
+
+const load = async (): Promise<void> => {
+  const networks = Object.keys(NetworkName);
+  const promises = networks.map((n) => request(n as NetworkName));
+
+  try {
+    const responses = await Promise.all(promises);
+
+    for (let i = 0; i < Object.keys(NetworkName).length; i++) {
+      console.log(responses[i]);
+      // @ts-ignore
+      loadedSchemas[networks[i]] = responses[i];
+    }
+
+    console.log('/////////////////////////////////////////////////////////// responses', schemas);
+  } catch (error) {
+    console.error(`Failed to load schemas from ${polySchemaUrl}`, error);
+  }
+};
+
+const get = (n: NetworkName): Schema => {
+  if (loadedSchemas[n]) { return loadedSchemas[n]; }
+
+  return schemas[n];
+};
+
+export default {
+  load,
+  get
+};

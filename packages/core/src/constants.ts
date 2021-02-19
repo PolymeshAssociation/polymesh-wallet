@@ -44,6 +44,8 @@ const messages = [
   'pub(metadata.list)'
 ];
 
+export const polySchemaUrl = 'https://schema.polymesh.live/';
+
 export {
   networkURLs,
   networkLabels,
