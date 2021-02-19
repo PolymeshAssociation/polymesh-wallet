@@ -25,3 +25,4 @@ export { Hr } from './Hr';
 export { GrowingButton } from './GrowingButton';
 export { ExpandableDetails } from './ExpandableDetails';
 export { Tooltip } from './Tooltip';
+export { TextOverflowEllipsis } from './TextOverflowEllipsis';

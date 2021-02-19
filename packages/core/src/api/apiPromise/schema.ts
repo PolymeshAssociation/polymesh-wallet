@@ -6,12 +6,6 @@ import { NetworkName } from '@polymathnetwork/extension-core/types';
 
 const alcyone = {
   "types": {
-    "AccountInfo": "AccountInfoWithRefCount",
-    "Address": "IndicesLookupSource",
-    "LookupSource": "IndicesLookupSource",
-    "ValidatorPrefsBlocked": {
-      "commission": "Compact<Perbill>"
-    },
     "IdentityId": "[u8; 32]",
     "EventDid": "IdentityId",
     "InvestorUid": "[u8; 16]",
@@ -403,7 +397,7 @@ const alcyone = {
         "Custom": "Vec<u8>"
       }
     },
-    "InvestorZKProofData": "Signature",
+    "InvestorZKProofData": "[u8;64]",
     "Claim": {
       "_enum": {
         "Accredited": "Scope",
@@ -944,13 +938,11 @@ const alcyone = {
     "StoredSchedule": {
       "schedule": "CheckpointSchedule",
       "id": "ScheduleId",
-      "at": "Moment",
-      "remaining": "u32"
+      "at": "Moment"
     },
     "ScheduleSpec": {
       "start": "Option<Moment>",
-      "period": "CalendarPeriod",
-      "remaining": "u32"
+      "period": "CalendarPeriod"
     },
     "InstructionStatus": {
       "_enum": {
@@ -1101,7 +1093,7 @@ const alcyone = {
     "CADetails": "Text",
     "CACheckpoint": {
       "_enum": {
-        "Scheduled": "(ScheduleId, u64)",
+        "Scheduled": "ScheduleId",
         "Existing": "CheckpointId"
       }
     },
@@ -1371,7 +1363,7 @@ const alcyone = {
             "isOptional": true
           }
         ],
-        "type": "HistoricalVotingByAddress"
+        "type": "HistoricalVoting"
       },
       "votingHistoryById": {
         "description": "Retrieve historical voting of `id` identity",
@@ -1387,7 +1379,7 @@ const alcyone = {
             "isOptional": true
           }
         ],
-        "type": "HistoricalVotingById"
+        "type": "HistoricalVotingByAddress"
       }
     },
     "protocolFee": {
@@ -1468,6 +1460,30 @@ const alcyone = {
         ],
         "type": "CanTransferResult"
       }
+    },
+    "portfolio": {
+      "getPortfolios": {
+        "description": "Gets all user-defined portfolio names of an identity",
+        "params": [
+          {
+            "name": "did",
+            "type": "IdentityId",
+            "isOptional": false
+          }
+        ],
+        "type": "GetPortfoliosResult"
+      },
+      "getPortfolioAssets": {
+        "description": "Gets the balances of all assets in a given portfolio",
+        "params": [
+          {
+            "name": "portfolio_id",
+            "type": "PortfolioId",
+            "isOptional": false
+          }
+        ],
+        "type": "GetPortfolioAssetsResult"
+      }
     }
   }
 };
@@ -1476,10 +1492,8 @@ const pme = alcyone;
 
 const pmf = alcyone;
 
-const schema: Record<NetworkName, {
-  rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>,
-  types: RegistryTypes
-}> = {
+const schema: Record<NetworkName, { rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>,
+  types: RegistryTypes }> = {
   pme,
   pmf,
   alcyone

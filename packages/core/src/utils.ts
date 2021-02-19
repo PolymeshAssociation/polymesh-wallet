@@ -28,12 +28,8 @@ export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
 
 export const fatalErrorHandler = (error: Error): void => error && setError({ code: ErrorCodes.FatalError, msg: error.message });
 
-export const nonFatalErrorHandler = (error: Error): void => {
-  if (error) {
-    setError({ code: ErrorCodes.NonFatalError, msg: error.message });
-    console.error('BG ERROR', error);
-  }
-};
+export const nonFatalErrorHandler = (error: Error): void =>
+  error && !!error.message && error.message.length ? setError({ code: ErrorCodes.NonFatalError, msg: error.message }) : undefined;
 
 export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
   cb(navigator.onLine);
@@ -42,3 +38,6 @@ export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
   // eslint-disable-next-line node/no-callback-literal
   window.addEventListener('online', () => cb(true));
 }
+
+export const sleep = (ms: number):Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
