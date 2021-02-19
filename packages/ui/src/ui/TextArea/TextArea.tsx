@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+
 import { BaseInputArea } from '../BaseInputArea';
 
 type BaseInputProps = React.ComponentProps<typeof BaseInputArea>;

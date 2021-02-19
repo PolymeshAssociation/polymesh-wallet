@@ -1,15 +1,14 @@
 import styled from 'styled-components';
-import { variant,
-  color,
+import { color,
   ColorProps,
-  fontWeight,
-  FontWeightProps,
-  lineHeight,
-  LineHeightProps,
   fontSize,
   FontSizeProps,
-  LetterSpacingProps,
-  letterSpacing } from 'styled-system';
+  fontWeight,
+  FontWeightProps,
+  letterSpacing, LetterSpacingProps,
+  lineHeight,
+  LineHeightProps,
+  variant } from 'styled-system';
 
 import { Box } from '../Box';
 

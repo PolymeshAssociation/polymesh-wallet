@@ -1,16 +1,15 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
-
-import rootReducer from './rootReducer';
-import { localStorage } from 'redux-persist-webextension-storage';
-import { persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
+import { FLUSH,
   PAUSE,
   PERSIST,
+  persistReducer,
+  persistStore,
   PURGE,
-  REGISTER } from 'redux-persist';
+  REGISTER, REHYDRATE } from 'redux-persist';
+import { localStorage } from 'redux-persist-webextension-storage';
+
+import rootReducer from './rootReducer';
 import { setIsRehydrated } from './setters';
 
 const persistConfig = {

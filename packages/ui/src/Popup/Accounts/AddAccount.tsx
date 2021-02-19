@@ -1,8 +1,8 @@
+import { SvgPolyNew } from '@polymathnetwork/extension-ui/assets/images/icons';
 import React, { useCallback, useContext, useState } from 'react';
 
 import { ActionContext } from '../../components';
-import { Flex, Header, Icon, Box, Heading, Link, Text, Button, Checkbox } from '../../ui';
-import { SvgPolyNew } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Button, Checkbox, Flex, Header, Heading, Icon, Link, Text } from '../../ui';
 
 function AddAccount (): React.ReactElement {
   const onAction = useContext(ActionContext);

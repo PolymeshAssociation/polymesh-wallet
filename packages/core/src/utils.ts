@@ -1,7 +1,8 @@
-import accountsObservable from '@polkadot/ui-keyring/observable/accounts';
+import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
-import { messagePrefix, messages } from './constants';
+
 import { setError } from './store/setters';
+import { messagePrefix, messages } from './constants';
 import { ErrorCodes, KeyringAccountData } from './types';
 
 // Sort an array by prioritizing a certain element
@@ -31,8 +32,8 @@ export const nonFatalErrorHandler = (error: Error): void => error && setError({ 
 
 export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
   cb(navigator.onLine);
-  // eslint-disable-next-line standard/no-callback-literal
+  // eslint-disable-next-line node/no-callback-literal
   window.addEventListener('offline', () => cb(false));
-  // eslint-disable-next-line standard/no-callback-literal
+  // eslint-disable-next-line node/no-callback-literal
   window.addEventListener('online', () => cb(true));
 }

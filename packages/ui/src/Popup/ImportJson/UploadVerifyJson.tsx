@@ -1,32 +1,28 @@
-import React, { FC, useContext, useRef, useState } from 'react';
-import { ActivityContext } from '../../components';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { Box, Button, ButtonSmall, Flex, Header, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { hexToU8a, isHex, u8aToString } from '@polkadot/util';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { jsonVerifyFile } from '../../messaging';
-import { isHex, u8aToString, hexToU8a } from '@polkadot/util';
-import { FieldError, FormProvider, useForm } from 'react-hook-form';
-import { useErrorHandler } from 'react-error-boundary';
+import { Box, Button, ButtonSmall, Flex, Header, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
 import verifyJsonPassword from '@polymathnetwork/extension-ui/util/verifyJsonPassword';
+import React, { FC, useContext, useRef, useState } from 'react';
+import { useErrorHandler } from 'react-error-boundary';
+import { FormProvider, useForm } from 'react-hook-form';
 
-export interface FileState {
-  address: string | null;
-  isFileValid: boolean;
-  json: KeyringPair$Json | null;
-}
+import { ActivityContext } from '../../components';
+import { jsonGetAccountInfo } from '../../messaging';
 
 type Props = {
-  onContinue: (fileState: FileState, jsonPassword: string, accountName: string) => void
+  onContinue: (accountJson: KeyringPair$Json, jsonPassword: string, accountName: string) => void
 }
 
 export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
   const [filename, setFilename] = useState('');
   const fileRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [accountName, setAccountName] = useState('');
-  const [accountJson, setAccountJson] = useState<FileState | undefined>();
+  const [accountJson, setAccountJson] = useState<KeyringPair$Json | undefined>();
   const methods = useForm({
     defaultValues: {
-      jsonPassword: ''
+      jsonPassword: '',
+      jsonFile: null
     }
   });
   const { clearErrors, errors, handleSubmit, register, setError } = methods;
@@ -34,11 +30,10 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
   const handleError = useErrorHandler();
 
   const onSubmit = (data: { [x: string]: string; }) => {
-    if (accountJson && accountJson?.json && accountJson.address) {
+    if (accountJson) {
       try {
-        const json = accountJson.json;
         const password = data.jsonPassword;
-        const jsonPassValid = verifyJsonPassword(json, password);
+        const jsonPassValid = verifyJsonPassword(accountJson, password);
 
         if (jsonPassValid) {
           onContinue(accountJson, password, accountName);
@@ -78,14 +73,6 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
     fileRef.current.click();
   };
 
-  const parseFile = async (file: Uint8Array): Promise<FileState> => {
-    const json = JSON.parse(u8aToString(file)) as KeyringPair$Json;
-    const isFileValid = await jsonVerifyFile(json);
-    const address = json.address;
-
-    return { address, isFileValid, json };
-  };
-
   const readFile = (file: File) => {
     const reader = new FileReader();
 
@@ -98,16 +85,16 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
           const name = file.name;
           const data = convertResult(target.result as ArrayBuffer, false);
 
-          setAccountName(name.split('_exported_account_')[0]);
           setFilename(name);
 
-          const fileContent = await parseFile(data);
+          const json = JSON.parse(u8aToString(data)) as KeyringPair$Json;
+          const accountInfo = await jsonGetAccountInfo(json);
 
-          setAccountJson(fileContent);
+          setAccountName(accountInfo.name);
+          setAccountJson(json);
 
           clearErrors('jsonFile');
         } catch (error) {
-          console.log('Error', error);
           setError('jsonFile', { type: 'invalid' });
         }
       }
@@ -140,36 +127,33 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
             JSON file
           </Text>
         </Box>
-        {!accountJson?.isFileValid &&
-          <>
-            <input accept='.json'
-              hidden={true}
-              name='jsonFile'
-              onChange={handleFileChange}
-              ref={fileRef}
-              type='file'
-            />
-            <Box mt='s'>
-              <ButtonSmall fluid
-                onClick={showUpload}
-                variant='secondary'>Choose file</ButtonSmall>
-              {errors.jsonFile &&
+        <>
+          <input accept='.json'
+            hidden={true}
+            name='jsonFile'
+            onChange={handleFileChange}
+            ref={fileRef}
+            type='file'
+          />
+          <Box mt='s'>
+            <ButtonSmall fluid
+              onClick={showUpload}
+              variant='secondary'>Choose file</ButtonSmall>
+            {errors.jsonFile &&
                       <Box mt='s'>
                         <Text color='alert'
                           variant='b3'>
-                          {(errors.jsonFile as FieldError).type === 'required' && 'Json file is require'}
-                          {(errors.jsonFile as FieldError).type === 'invalid' && 'Uploaded file is invalid'}
+                          {(errors.jsonFile).type === 'required' && 'Json file is require'}
+                          {(errors.jsonFile).type === 'invalid' && 'Uploaded file is invalid'}
                         </Text>
                       </Box>
-              }
-            </Box>
-
-          </>
-        }
-        {accountJson?.isFileValid &&
+            }
+          </Box>
+        </>
+        {accountJson &&
           <>
             <Flex>
-              <Box>
+              <Box mt='m'>
                 <Box
                   backgroundColor='gray.4'
                   borderRadius='50%'
@@ -258,8 +242,8 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
                       <Box>
                         <Text color='alert'
                           variant='b3'>
-                          {(errors.jsonPassword as FieldError).type === 'required' && 'Required field'}
-                          {(errors.jsonPassword as FieldError).type === 'manual' && 'Invalid password'}
+                          {(errors.jsonPassword).type === 'required' && 'Required field'}
+                          {(errors.jsonPassword).type === 'manual' && 'Invalid password'}
                         </Text>
                       </Box>
                     }
@@ -276,7 +260,7 @@ export const UploadVerifyJson: FC<Props> = ({ onContinue }) => {
         mb='s'
         mx='s'>
         <Button busy={isBusy}
-          disabled={!accountJson?.isFileValid}
+          disabled={!accountJson}
           fluid
           form='accountForm'
           type='submit'>

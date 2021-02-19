@@ -1,14 +1,14 @@
 import { InjectedAccount } from '@polkadot/extension-inject/types';
+import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
-import { PolyRequestTypes, PolyResponseTypes, PolyMessageTypes } from '../types';
-
-import accountsObservable from '@polkadot/ui-keyring/observable/accounts';
-import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
-import { prioritize } from '@polymathnetwork/extension-core/utils';
-import { getSelectedAccount } from '@polymathnetwork/extension-core/store/getters';
-import { NetworkMeta } from '@polymathnetwork/extension-core/types';
 import { polyNetworkGet } from '@polymathnetwork/extension-core/api';
 import polyNetworkSubscribe from '@polymathnetwork/extension-core/api/polyNetworkSubscribe';
+import { getSelectedAccount } from '@polymathnetwork/extension-core/store/getters';
+import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
+import { NetworkMeta } from '@polymathnetwork/extension-core/types';
+import { prioritize } from '@polymathnetwork/extension-core/utils';
+
+import { PolyMessageTypes, PolyRequestTypes, PolyResponseTypes } from '../types';
 import { createSubscription, unsubscribe } from './subscriptions';
 
 function transformAccounts (accounts: SubjectInfo): InjectedAccount[] {

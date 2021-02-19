@@ -1,14 +1,13 @@
-import React, { useCallback, useContext, useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { ExtrinsicPayload } from '@polkadot/types/interfaces';
 import { AccountJson, RequestSign } from '@polkadot/extension-base/background/types';
-import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import { TypeRegistry } from '@polkadot/types';
+import { ExtrinsicPayload } from '@polkadot/types/interfaces';
+import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 import { ActionContext, ActivityContext } from '../../components';
-import { Button, Box, Flex, Heading } from '../../ui';
-
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
+import { Box, Button, Flex, Heading } from '../../ui';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
 import Unlock from './Unlock';
@@ -38,14 +37,14 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
   const [{ hexBytes, payload }, setData] = useState<Data>({ hexBytes: null, payload: null });
   const [error, setError] = useState<string | null>(null);
   const [isLocked, setIsLocked] = useState<boolean | null>(null);
-  const [isSavedPass, setIsSavedPass] = useState(false);
+  const [savePass, setSavePass] = useState(false);
   const isBusy = useContext(ActivityContext);
 
   useEffect((): void => {
     setIsLocked(null);
 
     !isExternal && isSignLocked(signId)
-      .then((isLocked) => setIsLocked(isLocked))
+      .then(({ isLocked }) => setIsLocked(isLocked))
       .catch((error: Error) => console.error(error));
   }, [isExternal, signId]);
 
@@ -76,7 +75,7 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
 
   const _onSign = useCallback(
     (password: string): Promise<void> => {
-      return approveSignPassword(signId, password, !!(password && isSavedPass))
+      return approveSignPassword(signId, savePass, password)
         .then((): void => {
           onAction();
         })
@@ -85,7 +84,7 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
           console.error(error);
         });
     },
-    [onAction, isSavedPass, signId]
+    [onAction, savePass, signId]
   );
 
   const _onSignQuick = useCallback(
@@ -122,10 +121,10 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
         error={error}
         isFirst={isFirst}
         isLocked={isLocked}
-        isSavedPass={!!isSavedPass}
         onCancel={_onCancel}
-        onIsSavedPassChange={setIsSavedPass}
+        onSavePassChange={setSavePass}
         onSign={_onSign}
+        savePass={!!savePass}
       />
     )
     : (

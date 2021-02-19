@@ -1,7 +1,8 @@
 import { Unsubscribe } from '@reduxjs/toolkit';
 import { isEqual } from 'lodash-es';
-import store from '.';
+
 import { RootState } from './rootReducer';
+import store from '.';
 
 /**
  * A generic redux store subscription function.

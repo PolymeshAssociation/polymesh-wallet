@@ -1,10 +1,11 @@
-import React, { FC, useContext } from 'react';
-import { Box, Button, Flex, Header, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import { SvgAlertCircle, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { forgetAccount } from '../../messaging';
-import { ActionContext, ActivityContext } from '../../components';
-import { useParams } from 'react-router';
+import { Box, Button, Flex, Header, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import React, { FC, useContext } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
+import { useParams } from 'react-router';
+
+import { ActionContext, ActivityContext } from '../../components';
+import { forgetAccount } from '../../messaging';
 
 interface ParamTypes {
   address: string

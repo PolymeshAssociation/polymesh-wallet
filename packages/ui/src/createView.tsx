@@ -1,8 +1,9 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Fonts, View, ErrorFallback } from './components';
+import { HashRouter } from 'react-router-dom';
+
+import { ErrorFallback, Fonts, View } from './components';
 
 export default function createView (Entry: React.ComponentType, rootId = 'root'): void {
   // @FIXME dirty hack

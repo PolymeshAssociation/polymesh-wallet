@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js';
 export const toShortAddress = (address: string, { size = 17 }: { size?: number } = {}) => {
   const minSize = 10;
 
-  if (address.length <= minSize) {
+  if (address.length <= minSize || address.length <= size) {
     return address;
   }
 

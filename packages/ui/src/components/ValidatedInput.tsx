@@ -1,8 +1,7 @@
-import { ThemeProps } from '../types';
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { ThemeProps } from '../types';
 import { Result, Validator } from '../util/validators';
 
 interface BasicProps {
