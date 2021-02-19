@@ -1,6 +1,6 @@
+import { Text } from '@polymathnetwork/extension-ui/ui';
 import React, { ComponentProps, PropsWithChildren } from 'react';
 import styled from 'styled-components';
-import { Text } from '@polymathnetwork/extension-ui/ui';
 
 export const EllipsiedText = styled(Text)`
   white-space: nowrap;
@@ -9,9 +9,9 @@ export const EllipsiedText = styled(Text)`
 `;
 
 type Props = PropsWithChildren<{ maxWidth: number | string }> &
-  ComponentProps<typeof Text>;
+ComponentProps<typeof Text>;
 
-export function TextOverflowEllipsis(props: Props) {
+export function TextOverflowEllipsis (props: Props) {
   const { children, ...textProps } = props;
 
   return <EllipsiedText {...textProps}>{children}</EllipsiedText>;

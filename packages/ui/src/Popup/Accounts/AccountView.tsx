@@ -127,7 +127,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <AccountDetailsGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <Flex alignItems='end' flexDirection='row'>
+            <Flex alignItems='end'
+              flexDirection='row'>
               <TextInput
                 defaultValue={name}
                 onChange={handleNameChange}
@@ -163,8 +164,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               onMouseLeave={nameMouseLeave}
             >
               <TextOverflowEllipsis
-                maxWidth='100px'
                 color='gray.1'
+                maxWidth='100px'
                 variant='b2m'
               >
                 {name}
@@ -183,12 +184,14 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           </GridItem>
         )}
         <GridItem area='type'>
-          <Flex height='100%' justifyContent='flex-end'>
+          <Flex height='100%'
+            justifyContent='flex-end'>
             {!isEditing && did && <AccountType keyType={keyType} />}
           </Flex>
         </GridItem>
         <GridItem area='address'>
-          <Flex height='100%' alignItems='flex-end'>
+          <Flex alignItems='flex-end'
+            height='100%'>
             <LabelWithCopy
               color='gray.3'
               text={address}
@@ -198,8 +201,11 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           </Flex>
         </GridItem>
         <GridItem area='balance'>
-          <Flex height='100%' justifyContent='flex-end'>
-            <Text color='gray.1' variant='b3' style={{ whiteSpace: 'nowrap' }}>
+          <Flex height='100%'
+            justifyContent='flex-end'>
+            <Text color='gray.1'
+              style={{ whiteSpace: 'nowrap' }}
+              variant='b3'>
               {formatters.formatAmount(new BigNumber(balance || 0), 2, true)}{' '}
               POLYX
             </Text>
@@ -259,8 +265,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               onMouseLeave={nameMouseLeave}
             >
               <TextOverflowEllipsis
-                maxWidth='100px'
                 color='gray.1'
+                maxWidth='100px'
                 variant='b2m'
               >
                 {name}
@@ -279,8 +285,11 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           </GridItem>
         )}
         <GridItem area='assign'>
-          <Flex height='100%' alignItems='center' justifyContent='flex-end'>
-            <ButtonSmall onClick={assign} variant='secondary'>
+          <Flex alignItems='center'
+            height='100%'
+            justifyContent='flex-end'>
+            <ButtonSmall onClick={assign}
+              variant='secondary'>
               Assign
             </ButtonSmall>
           </Flex>
@@ -308,7 +317,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         px='s'
       >
         <AccountViewGrid>
-          <Box onClick={selectAccount} style={{ cursor: 'pointer' }}>
+          <Box onClick={selectAccount}
+            style={{ cursor: 'pointer' }}>
             <Flex height='100%'>
               <Box
                 backgroundColor='brandLightest'
@@ -317,8 +327,10 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
                 px='2'
                 width={32}
               >
-                <Flex justifyContent='center' pt='xxs'>
-                  <Text color='brandMain' variant='b2m'>
+                <Flex justifyContent='center'
+                  pt='xxs'>
+                  <Text color='brandMain'
+                    variant='b2m'>
                     {name?.substr(0, 1)}
                   </Text>
                 </Flex>
