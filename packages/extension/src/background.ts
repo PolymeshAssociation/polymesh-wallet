@@ -32,7 +32,6 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // listen to all messages and handle appropriately
 chrome.runtime.onConnect.addListener((port): void => {
-  // shouldn't happen, however... only listen to what we know about
   assert([PORT_CONTENT, PORT_EXTENSION].includes(port.name), `Unknown connection from ${port.name}`);
   let polyUnsub: () => Promise<void>;
   let accountsUnsub: VoidCallback;
@@ -40,6 +39,7 @@ chrome.runtime.onConnect.addListener((port): void => {
   if (port.name === PORT_EXTENSION) {
     accountsUnsub = accountsSynchronizer();
     polyUnsub = subscribePolymesh();
+    loadSchema();
   }
 
   // message and disconnect handlers

@@ -3,21 +3,31 @@ import { NetworkName, Schema } from '@polymathnetwork/extension-core/types';
 
 import fallback from './fallback';
 
-const loadedSchemas: Record<NetworkName, Schema> = {};
-
-// @TODO handle 404
+let loadedSchemas: Record<NetworkName, undefined | Schema>;
 
 const request = async (n: NetworkName): Promise<undefined | Schema> => {
   return fetch(`${polySchemaUrl}${n}`).then((response: Response) => {
-    // if (response.type === '200') {
-    // @ts-ignore
-    const data: Schema = response.json();
+    if (response.ok) {
+      const data = response.json() as unknown as Promise<Schema>;
 
-    return data;
-    // } else {
-    //   return Promise.resolve(undefined);
-    // }
-  });
+      return data;
+    }
+
+    return undefined;
+  })
+    .then((value: Schema | undefined) => {
+      // Do some pseudo-validation to make sure we're no being fed garbage data.
+      if (value && !!value.rpc && !!value.types) {
+        return value;
+      }
+
+      return undefined;
+    })
+    .catch((error) => {
+      console.error(`Failed to fetch "${n}" schema.`, error);
+
+      return Promise.resolve(undefined);
+    });
 };
 
 const load = async (): Promise<void> => {
@@ -27,30 +37,24 @@ const load = async (): Promise<void> => {
   try {
     const responses = await Promise.all(promises);
 
-    for (let i = 0; i < Object.keys(NetworkName).length; i++) {
-      const network = networks[i];
+    // Don't override loadedSchemas if all requests failed.
+    if (responses.filter((res) => res === undefined).length === responses.length) { return; }
 
-      if (responses[i]) {
-        loadedSchemas[network as NetworkName] = responses[i] as unknown as Schema;
-      }
-    }
+    loadedSchemas = responses.reduce((schemas, schema, i) => {
+      schemas[networks[i] as NetworkName] = schema;
 
-    console.log('/////////////////////////////////////////////////////////// responses', responses);
+      return schemas;
+    }, {} as Record<NetworkName, Schema | undefined>);
   } catch (error) {
     console.error(`Failed to load schemas from ${polySchemaUrl}`, error);
   }
 };
 
 const get = (n: NetworkName): Schema => {
-  if (loadedSchemas[n]) {
-    console.log('Returning loaded schema of:', n);
-
-    return loadedSchemas[n];
-  }
-
-  console.log('Returning stored schema of:', n);
-
-  return fallback[n];
+  // @ts-ignore
+  return (loadedSchemas && !!loadedSchemas[n])
+    ? loadedSchemas[n]
+    : fallback[n];
 };
 
 export default {
