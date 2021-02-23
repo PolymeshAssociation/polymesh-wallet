@@ -1,6 +1,6 @@
 import { Unsubcall } from '@polkadot/extension-inject/types';
 import { Call } from '@polkadot/types/interfaces';
-import { AnyJson } from '@polkadot/types/types';
+import { AnyJson, DefinitionRpc, DefinitionRpcSub, RegistryTypes } from '@polkadot/types/types';
 
 export enum DidType {
   primary = 'primary',
@@ -91,3 +91,6 @@ export type StoreStatus = {
   error: Error | null,
   ready: boolean
 };
+
+export type Schema = { rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>,
+  types: RegistryTypes };
