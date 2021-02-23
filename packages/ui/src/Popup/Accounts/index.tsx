@@ -170,7 +170,7 @@ export default function Accounts (): React.ReactElement {
           <MenuItem data={{ action: 'newWindow' }}
             onClick={handleTopMenuSelection}>
             <Text color='gray.2'
-              variant='b1'>Open extension in a new window</Text>
+              variant='b1'>Open extension in a new tab</Text>
           </MenuItem>
           {/* @ts-ignore */}
           <MenuItem data={{ action: 'toggleIsDev' }}

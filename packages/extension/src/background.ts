@@ -8,9 +8,16 @@ import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import subscribePolymesh, { accountsSynchronizer } from '@polymathnetwork/extension-core';
+import SchemaService from '@polymathnetwork/extension-core/api/schema';
 import polyHandlers from '@polymathnetwork/extension-core/background/handlers';
 import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
-import { fatalErrorHandler, isPolyMessage, subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
+import { fatalErrorHandler, isPolyMessage } from '@polymathnetwork/extension-core/utils';
+
+const loadSchema = () => {
+  SchemaService.load().then(console.log).catch(console.error);
+};
+
+loadSchema();
 
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
@@ -20,24 +27,19 @@ chrome.runtime.onInstalled.addListener(() => {
   // Reset stored state to avoid integrity issues. Store will be repopulated next time the wallet is opened.
   resetState();
   setIsRehydrated();
+  loadSchema();
 });
 
 // listen to all messages and handle appropriately
 chrome.runtime.onConnect.addListener((port): void => {
-  // shouldn't happen, however... only listen to what we know about
   assert([PORT_CONTENT, PORT_EXTENSION].includes(port.name), `Unknown connection from ${port.name}`);
-  let polyUnsub: VoidCallback;
+  let polyUnsub: () => Promise<void>;
   let accountsUnsub: VoidCallback;
 
   if (port.name === PORT_EXTENSION) {
     accountsUnsub = accountsSynchronizer();
-    subscribeOnlineStatus((status: boolean) => {
-      if (status) {
-        polyUnsub = subscribePolymesh();
-      } else {
-        if (polyUnsub) polyUnsub();
-      }
-    });
+    polyUnsub = subscribePolymesh();
+    loadSchema();
   }
 
   // message and disconnect handlers
@@ -47,7 +49,12 @@ chrome.runtime.onConnect.addListener((port): void => {
   });
   port.onDisconnect.addListener((): void => {
     console.log(`Disconnected from ${port.name}`);
-    if (polyUnsub) polyUnsub();
+
+    if (polyUnsub) {
+      polyUnsub()
+        .then(() => console.log('ApiPromise: disconnected')).catch(console.error);
+    }
+
     if (accountsUnsub) accountsUnsub();
   });
 });
