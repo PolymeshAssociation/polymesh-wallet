@@ -2,7 +2,7 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 
 import { networkURLs } from '../../constants';
 import { NetworkName } from '../../types';
-import schema from './schema';
+import SchemaService from '../schema';
 
 let api: ApiPromise | null = null;
 
@@ -21,10 +21,12 @@ async function apiPromise (n: NetworkName): Promise<ApiPromise> {
 
   const provider = new WsProvider(networkURLs[n]);
 
+  const schema = SchemaService.get(n);
+
   api = await ApiPromise.create({
     provider,
-    rpc: schema[n].rpc,
-    types: schema[n].types
+    rpc: schema.rpc,
+    types: schema.types
   });
 
   await api.isReadyOrError;

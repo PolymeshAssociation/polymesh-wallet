@@ -7,6 +7,7 @@ import uiSettings from '@polkadot/ui-settings';
 import { SettingsStruct } from '@polkadot/ui-settings/types';
 import { setSS58Format } from '@polkadot/util-crypto';
 import { ProofingRequest, ProvideUidRequest } from '@polymathnetwork/extension-core/background/types';
+import { populatedDelay } from '@polymathnetwork/extension-core/constants';
 import { ErrorCodes, IdentifiedAccount, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
 import React, { useEffect, useState } from 'react';
@@ -195,7 +196,7 @@ export default function Popup (): React.ReactElement {
       // give ApiPromise a chance to initialize in the background, because it blocks DOM interaction.
       setTimeout(() =>
         setIsPopulated(true)
-      , 1000);
+      , populatedDelay);
     } else {
       setIsPopulated(false);
     }
