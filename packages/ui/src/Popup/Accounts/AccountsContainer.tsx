@@ -137,7 +137,8 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
   };
 
   return (
-    <Box borderRadius='2'
+    <Box bg='white'
+      borderRadius='2'
       boxShadow='3'
       m='s'
       pb='xs'
