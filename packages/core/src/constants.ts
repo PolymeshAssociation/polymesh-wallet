@@ -47,3 +47,7 @@ export const messages = [
   'pub(metadata.provide)',
   'pub(metadata.list)'
 ];
+
+export const polySchemaUrl = 'https://schema.polymesh.live/';
+
+export const populatedDelay = 1250;
