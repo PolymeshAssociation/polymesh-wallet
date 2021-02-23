@@ -1,7 +1,7 @@
 import { SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
-import { Box, Flex, Hr, Icon, LabelWithCopy, StatusBadge, Text, TextEllipsis } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Hr, Icon, LabelWithCopy, StatusBadge, Text, TextEllipsis, TextOverflowEllipsis } from '@polymathnetwork/extension-ui/ui';
 import BigNumber from 'bignumber.js';
 import React, { FC, useContext } from 'react';
 import { useHistory, useParams } from 'react-router';
@@ -160,10 +160,11 @@ export const AccountDetails: FC = () => {
           <Box ml='s'
             width='100%'>
             <Flex flexDirection='row'>
-              <Text color='gray.1'
+              <TextOverflowEllipsis color='gray.1'
+                maxWidth='157px'
                 variant='b2m'>
                 {selectedAccount?.name}
-              </Text>
+              </TextOverflowEllipsis>
               <Box ml='s'>
                 {renderType(selectedAccount?.keyType || '')}
               </Box>
