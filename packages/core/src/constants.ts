@@ -44,6 +44,10 @@ const messages = [
   'pub(metadata.list)'
 ];
 
+export const polySchemaUrl = 'https://schema.polymesh.live/';
+
+export const populatedDelay = 1250;
+
 export {
   networkURLs,
   networkLabels,
