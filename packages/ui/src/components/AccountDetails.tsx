@@ -114,7 +114,8 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
         </Text>
       </Box>
       <Box>
-        <Password label='Password' />
+        <Password label='Password'
+          placeholder='Enter your current wallet password' />
       </Box>
       <Box my='m'>
         <Hr />
