@@ -1,10 +1,11 @@
 import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
 import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Header, Hr, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useContext, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { toShortAddress } from '../util/formatters';
 import { PolymeshContext } from './contexts';
 
 export interface AccountInfo {
@@ -38,7 +39,7 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
   });
   const { errors, formState, getValues, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
-  const { polymeshAccounts } = useContext(PolymeshContext);
+  const { polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
   // Get at least one address amongst user addresses. We will read that address
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const oneAddress = useMemo(() => polymeshAccounts && polymeshAccounts.length > 0 && polymeshAccounts[0].address, []);
@@ -66,6 +67,86 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
     Object.values(getValues()).filter((val) => val === '').length > 0 ||
     formState.isSubmitting;
 
+  const renderNewAccountForm = () => (
+    <>
+      <Box mt='m'>
+        <Box>
+          <Text color='gray.1'
+            variant='b2m'>
+            Account name
+          </Text>
+        </Box>
+        <Box>
+          <TextInput inputRef={register({ required: true })}
+            name='accountName'
+            placeholder='Enter account name' />
+          {errors?.accountName &&
+            <Box>
+              <Text color='alert'
+                variant='b3'>
+                {(errors.accountName).type === 'required' && 'Required field'}
+              </Text>
+            </Box>
+          }
+        </Box>
+      </Box>
+      <Box mt='m'>
+        <Text color='gray.2'
+          variant='b2'>Please enter a new wallet password below to complete account creation.</Text>
+      </Box>
+      <Password label={oneAddress ? 'Wallet password' : 'Password'}
+        withConfirm={!oneAddress} />
+    </>
+  );
+
+  const renderAccountForm = () => (
+    <>
+      <Box mt='m'>
+        <Text color='gray.2'
+          variant='b2m'>
+          Current wallet account
+        </Text>
+      </Box>
+      <Box>
+        <Text color='gray.1'
+          variant='b1'>
+          {selectedAccount && toShortAddress(selectedAccount, { size: 33 })}
+        </Text>
+      </Box>
+      <Box>
+        <Password label='Password' />
+      </Box>
+      <Box my='m'>
+        <Hr />
+      </Box>
+      <Box>
+        <Text color='gray.2'
+          variant='b2'>
+          Please enter a new account name to complete restore with your recovery phrase.
+        </Text>
+      </Box>
+      <Box mt='m'>
+        <Text color='gray.1'
+          variant='b2m'>
+          Account name
+        </Text>
+      </Box>
+      <Box>
+        <TextInput inputRef={register({ required: true })}
+          name='accountName'
+          placeholder='Enter account name' />
+        {errors?.accountName &&
+          <Box>
+            <Text color='alert'
+              variant='b3'>
+              {(errors.accountName).type === 'required' && 'Required field'}
+            </Text>
+          </Box>
+        }
+      </Box>
+    </>
+  );
+
   return (
     <>
       <Header headerText={headerText}
@@ -75,7 +156,8 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
         <FormProvider {...methods} >
           <form id='accountForm'
             onSubmit={handleSubmit(onSubmit)}>
-            <Box mt='m'>
+            {oneAddress ? renderAccountForm() : renderNewAccountForm()}
+            {/* <Box mt='m'>
               <Box>
                 <Text color='gray.1'
                   variant='b2m'>
@@ -103,7 +185,7 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
               </Box>
             }
             <Password label={oneAddress ? 'Wallet password' : 'Password'}
-              withConfirm={!oneAddress} />
+              withConfirm={!oneAddress} /> */}
           </form>
         </FormProvider>
       </Box>
