@@ -50,6 +50,8 @@ export default function Signing (): React.ReactElement {
 
       return polymeshAccount;
     }
+
+    return undefined;
   }, [request]);
 
   return request
