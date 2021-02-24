@@ -10,7 +10,7 @@ export interface Props {
   placeholder?: string;
 }
 
-export const Password: FC<Props> = ({ confirmLabel, label, withConfirm, placeholder }) => {
+export const Password: FC<Props> = ({ confirmLabel, label, placeholder, withConfirm }) => {
   const { errors, getValues, register } = useFormContext();
 
   const validatePassword = (value: string) => {

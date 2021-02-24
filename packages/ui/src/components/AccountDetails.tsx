@@ -70,26 +70,22 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
   const renderNewAccountForm = () => (
     <>
       <Box mt='m'>
+        <Text color='gray.1'
+          variant='b2m'>
+          Account name
+        </Text>
+      </Box>
+      <TextInput inputRef={register({ required: true })}
+        name='accountName'
+        placeholder='Enter account name' />
+      {errors?.accountName &&
         <Box>
-          <Text color='gray.1'
-            variant='b2m'>
-            Account name
+          <Text color='alert'
+            variant='b3'>
+            {(errors.accountName).type === 'required' && 'Required field'}
           </Text>
         </Box>
-        <Box>
-          <TextInput inputRef={register({ required: true })}
-            name='accountName'
-            placeholder='Enter account name' />
-          {errors?.accountName &&
-            <Box>
-              <Text color='alert'
-                variant='b3'>
-                {(errors.accountName).type === 'required' && 'Required field'}
-              </Text>
-            </Box>
-          }
-        </Box>
-      </Box>
+      }
       <Box mt='m'>
         <Text color='gray.2'
           variant='b2'>Please enter a new wallet password below to complete account creation.</Text>
@@ -107,44 +103,36 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
           Current wallet account
         </Text>
       </Box>
-      <Box>
-        <Text color='gray.1'
-          variant='b1'>
-          {selectedAccount && toShortAddress(selectedAccount, { size: 33 })}
-        </Text>
-      </Box>
-      <Box>
-        <Password label='Password'
-          placeholder='Enter your current wallet password' />
-      </Box>
+      <Text color='gray.1'
+        variant='b1'>
+        {selectedAccount && toShortAddress(selectedAccount, { size: 33 })}
+      </Text>
+      <Password label='Password'
+        placeholder='Enter your current wallet password' />
       <Box my='m'>
         <Hr />
       </Box>
-      <Box>
-        <Text color='gray.2'
-          variant='b2'>
-          Please enter a new account name to complete restore with your recovery phrase.
-        </Text>
-      </Box>
+      <Text color='gray.2'
+        variant='b2'>
+        Please enter a new account name to complete restore with your recovery phrase.
+      </Text>
       <Box mt='m'>
         <Text color='gray.1'
           variant='b2m'>
           Account name
         </Text>
       </Box>
-      <Box>
-        <TextInput inputRef={register({ required: true })}
-          name='accountName'
-          placeholder='Enter account name' />
-        {errors?.accountName &&
-          <Box>
-            <Text color='alert'
-              variant='b3'>
-              {(errors.accountName).type === 'required' && 'Required field'}
-            </Text>
-          </Box>
-        }
-      </Box>
+      <TextInput inputRef={register({ required: true })}
+        name='accountName'
+        placeholder='Enter account name' />
+      {errors?.accountName &&
+        <Box>
+          <Text color='alert'
+            variant='b3'>
+            {(errors.accountName).type === 'required' && 'Required field'}
+          </Text>
+        </Box>
+      }
     </>
   );
 
@@ -158,35 +146,6 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
           <form id='accountForm'
             onSubmit={handleSubmit(onSubmit)}>
             {oneAddress ? renderAccountForm() : renderNewAccountForm()}
-            {/* <Box mt='m'>
-              <Box>
-                <Text color='gray.1'
-                  variant='b2m'>
-                  Account name
-                </Text>
-              </Box>
-              <Box>
-                <TextInput inputRef={register({ required: true })}
-                  name='accountName'
-                  placeholder='Enter account name' />
-                {errors?.accountName &&
-                  <Box>
-                    <Text color='alert'
-                      variant='b3'>
-                      {(errors.accountName).type === 'required' && 'Required field'}
-                    </Text>
-                  </Box>
-                }
-              </Box>
-            </Box>
-            {!oneAddress &&
-              <Box mt='m'>
-                <Text color='gray.2'
-                  variant='b2'>Please enter a new wallet password below to complete account creation.</Text>
-              </Box>
-            }
-            <Password label={oneAddress ? 'Wallet password' : 'Password'}
-              withConfirm={!oneAddress} /> */}
           </form>
         </FormProvider>
       </Box>
