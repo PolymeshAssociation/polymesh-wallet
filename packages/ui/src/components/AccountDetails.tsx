@@ -90,8 +90,8 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
         <Text color='gray.2'
           variant='b2'>Please enter a new wallet password below to complete account creation.</Text>
       </Box>
-      <Password label={oneAddress ? 'Wallet password' : 'Password'}
-        withConfirm={!oneAddress} />
+      <Password label='Password'
+        withConfirm />
     </>
   );
 
@@ -107,7 +107,7 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
         variant='b1'>
         {selectedAccount && toShortAddress(selectedAccount, { size: 33 })}
       </Text>
-      <Password label='Password'
+      <Password label='Wallet password'
         placeholder='Enter your current wallet password' />
       <Box my='m'>
         <Hr />
