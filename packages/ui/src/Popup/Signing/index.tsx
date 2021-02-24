@@ -1,6 +1,7 @@
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { getIdentifiedAccounts } from '@polymathnetwork/extension-core/store/getters';
 import { Box, Header, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { Loading, SigningReqContext } from '../../components';
 import { AccountsHeader } from '../Accounts/AccountsHeader';
@@ -39,8 +40,17 @@ export default function Signing (): React.ReactElement {
     : null;
 
   // The singing account, whose details will be displayed in the header.
-  const signingAccount = request &&
-  getIdentifiedAccounts().find((account) => account.address === request?.account.address);
+  const signingAccount = useMemo(() => {
+    if (request && request?.account.address) {
+      // Polkadot App actually respects chain ss58format and will encode polymesh public
+      // keys into an address that starts with '2'. However, our stored addresses start with '5'.
+      // Hence, we'll re-encode request address to make sure it could be found in our store.
+      const address = encodeAddress(decodeAddress(request?.account.address));
+      const polymeshAccount = getIdentifiedAccounts().find((account) => account.address === address);
+
+      return polymeshAccount;
+    }
+  }, [request]);
 
   return request
     ? (
