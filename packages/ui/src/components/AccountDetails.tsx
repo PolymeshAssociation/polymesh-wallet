@@ -114,7 +114,7 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
       </Box>
       <Text color='gray.2'
         variant='b2'>
-        Please enter a new account name to complete restore with your recovery phrase.
+        Please enter a new account name to complete account restoration with your recovery phrase.
       </Text>
       <Box mt='m'>
         <Text color='gray.1'
