@@ -126,6 +126,7 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
               </Box>
             }
             <Password label={oneAddress ? 'Wallet password' : 'Password'}
+              placeholder='Enter your current wallet password'
               withConfirm={!oneAddress} />
           </form>
         </FormProvider>
