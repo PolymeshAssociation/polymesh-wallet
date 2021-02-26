@@ -89,7 +89,8 @@ export type Error = {
 export type StoreStatus = {
   rehydrated: boolean,
   error: Error | null,
-  ready: boolean
+  ready: boolean,
+  populated: boolean,
 };
 
 export type Schema = { rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>,

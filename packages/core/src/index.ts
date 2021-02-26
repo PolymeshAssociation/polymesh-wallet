@@ -5,8 +5,8 @@ import { union } from 'lodash-es';
 import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
-import apiPromise, { disconnect } from './api/apiPromise';
-import { DidRecord, IdentityClaim, LinkedKeyInfo } from './api/apiPromise/types';
+import apiPromise, { disconnect } from './external/apiPromise';
+import { DidRecord, IdentityClaim, LinkedKeyInfo } from './external/apiPromise/types';
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as statusActions } from './store/features/status';
@@ -127,7 +127,7 @@ function subscribePolymesh (): () => Promise<void> {
           didCount = 0;
 
           // Clear errors
-          store.dispatch(statusActions.isReady());
+          store.dispatch(statusActions.apiReady());
 
           let prevAccounts: string[] = [];
           let prevDids: string[] = [];
@@ -185,6 +185,8 @@ function subscribePolymesh (): () => Promise<void> {
                       console.log(`Poly: Setting **identity** ${didCount++}`, data);
                       // store.dispatch(identityActions.setIdentitySecKeys(params));
                       store.dispatch(identityActions.setIdentity(params));
+
+                      store.dispatch(statusActions.populated(network));
                     }, nonFatalErrorHandler)
                       .catch(nonFatalErrorHandler);
                   }).then((unsub) => {

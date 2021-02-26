@@ -24,9 +24,15 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
   };
 
   const onChange = async (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setSeedPhrase(e.target.value);
+    let value = e.target.value;
 
-    setValidSeed(await checkSeed(e.target.value));
+    console.log(`>${value}<`);
+    value = value.trim();
+    console.log(`>${value}<`);
+
+    setSeedPhrase(value);
+
+    setValidSeed(await checkSeed(value));
   };
 
   const nextStep = () => {
@@ -34,6 +40,8 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
 
     onContinue();
   };
+
+  console.log('comp seedphrase', seedPhrase);
 
   return (
     <>

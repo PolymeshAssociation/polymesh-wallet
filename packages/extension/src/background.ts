@@ -8,8 +8,8 @@ import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import subscribePolymesh, { accountsSynchronizer } from '@polymathnetwork/extension-core';
-import SchemaService from '@polymathnetwork/extension-core/api/schema';
 import polyHandlers from '@polymathnetwork/extension-core/background/handlers';
+import SchemaService from '@polymathnetwork/extension-core/external/schema';
 import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
 import { fatalErrorHandler, isPolyMessage } from '@polymathnetwork/extension-core/utils';
 

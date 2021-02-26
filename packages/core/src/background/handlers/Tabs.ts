@@ -1,8 +1,8 @@
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
-import { polyNetworkGet } from '@polymathnetwork/extension-core/api';
-import polyNetworkSubscribe from '@polymathnetwork/extension-core/api/polyNetworkSubscribe';
+import { polyNetworkGet } from '@polymathnetwork/extension-core/external';
+import polyNetworkSubscribe from '@polymathnetwork/extension-core/external/polyNetworkSubscribe';
 import { getSelectedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
 import { NetworkMeta } from '@polymathnetwork/extension-core/types';

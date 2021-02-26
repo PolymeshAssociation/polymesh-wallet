@@ -104,7 +104,7 @@ export default function Popup (): React.ReactElement {
               color='red.0'
               height={20}
               width={20} />
-            <Box ml='s'>No internet!</Box>
+            <Box ml='s'>No internet connection</Box>
           </Flex>
           , { toastId: 'offline', autoClose: false, closeButton: false });
       }
@@ -123,7 +123,7 @@ export default function Popup (): React.ReactElement {
       subscribePolyAccounts(setPolymeshAccounts),
       subscribePolyNetwork((n) => {
         setNetwork(n);
-        setIsPopulated(false);
+        // setIsPopulated(false);
       }),
       subscribePolySelectedAccount(setSelectedAccountAddress),
       subscribePolyIsDev((isDev) => {
@@ -174,7 +174,7 @@ export default function Popup (): React.ReactElement {
       : Accounts;
 
   return (
-    <Loading>{accounts && authRequests && metaRequests && signRequests && (isPopulated || status?.ready) && (
+    <Loading>{accounts && authRequests && metaRequests && signRequests && ((status?.populated && status?.ready) || status?.error) && (
       <ActivityContext.Provider value={isBusy}>
         <ActionContext.Provider value={_onAction}>
           <SettingsContext.Provider value={settingsCtx}>
