@@ -24,11 +24,7 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
   };
 
   const onChange = async (e: ChangeEvent<HTMLTextAreaElement>) => {
-    let value = e.target.value;
-
-    console.log(`>${value}<`);
-    value = value.trim();
-    console.log(`>${value}<`);
+    const value = e.target.value.trim();
 
     setSeedPhrase(value);
 
@@ -40,8 +36,6 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
 
     onContinue();
   };
-
-  console.log('comp seedphrase', seedPhrase);
 
   return (
     <>
