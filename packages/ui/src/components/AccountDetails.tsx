@@ -1,4 +1,4 @@
-import { SvgAccountCardDetailsOutline, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgAccountCardDetailsOutline, SvgAlertCircle, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
 import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
@@ -72,6 +72,29 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
         iconAsset={SvgAccountCardDetailsOutline}>
       </Header>
       <Box mx='s'>
+        <Box borderColor='gray.4'
+          borderRadius={3}
+          borderStyle='solid'
+          borderWidth={2}
+          mt='s'
+          p='s'>
+          <Flex mb='xs'>
+            <Icon Asset={SvgAlertCircle}
+              color='warning'
+              height={20}
+              width={20} />
+            <Box ml='s'>
+              <Text color='warning'
+                variant='b2m'>
+                Attention
+              </Text>
+            </Box>
+          </Flex>
+          <Text color='gray.1'
+            variant='b2m'>
+            Use your current wallet password to be able to add this account.
+          </Text>
+        </Box>
         <FormProvider {...methods} >
           <form id='accountForm'
             onSubmit={handleSubmit(onSubmit)}>
