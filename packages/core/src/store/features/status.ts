@@ -1,7 +1,7 @@
 import { Error, NetworkName, StoreStatus } from '@polymathnetwork/extension-core/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState: StoreStatus = { rehydrated: false, error: null, ready: false, populated: false };
+const initialState: StoreStatus = { rehydrated: false, error: null, ready: false, populated: {} };
 
 const statusSlice = createSlice({
   name: 'status',
@@ -18,7 +18,7 @@ const statusSlice = createSlice({
       state.rehydrated = true;
     },
     populated (state, action: PayloadAction<NetworkName>) {
-      state.populated = true;
+      state.populated[action.payload] = true;
     },
     error (state, action: PayloadAction<Error | null>) {
       state.error = action.payload ? action.payload : null;

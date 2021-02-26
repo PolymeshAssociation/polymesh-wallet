@@ -2,7 +2,6 @@ import { AccountJson, AccountsContext, AuthorizeRequest, MetadataRequest, Signin
 import uiSettings from '@polkadot/ui-settings';
 import { SettingsStruct } from '@polkadot/ui-settings/types';
 import { setSS58Format } from '@polkadot/util-crypto';
-import { populatedDelay } from '@polymathnetwork/extension-core/constants';
 import { ErrorCodes, IdentifiedAccount, StoreStatus } from '@polymathnetwork/extension-core/types';
 import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
 import React, { useEffect, useState } from 'react';
@@ -66,7 +65,6 @@ export default function Popup (): React.ReactElement {
   const [status, setStatus] = useState<undefined | StoreStatus>();
   const [isBusy, setIsBusy] = useState(false);
   const [isDeveloper, setIsDeveloper] = useState(false);
-  const [isPopulated, setIsPopulated] = useState(false);
   const handleError = useErrorHandler();
 
   useEffect(() => {
@@ -121,10 +119,7 @@ export default function Popup (): React.ReactElement {
     Promise.all([
       subscribePolyStatus(setStatus),
       subscribePolyAccounts(setPolymeshAccounts),
-      subscribePolyNetwork((n) => {
-        setNetwork(n);
-        // setIsPopulated(false);
-      }),
+      subscribePolyNetwork(setNetwork),
       subscribePolySelectedAccount(setSelectedAccountAddress),
       subscribePolyIsDev((isDev) => {
         setIsDeveloper(isDev === 'true');
@@ -146,18 +141,6 @@ export default function Popup (): React.ReactElement {
     _onAction();
   }, [handleError]);
 
-  useEffect(() => {
-    if (polymeshAccounts.length === accounts?.length) {
-      // We're delaying the populated flag (and consequently accounts display), to
-      // give ApiPromise a chance to initialize in the background, because it blocks DOM interaction.
-      setTimeout(() =>
-        setIsPopulated(true)
-      , populatedDelay);
-    } else {
-      setIsPopulated(false);
-    }
-  }, [accounts, polymeshAccounts]);
-
   useEffect((): void => {
     const currentAccount = selectedAccountAddress && polymeshAccounts
       ? polymeshAccounts.find((account) => (account.address === selectedAccountAddress))
@@ -174,7 +157,7 @@ export default function Popup (): React.ReactElement {
       : Accounts;
 
   return (
-    <Loading>{accounts && authRequests && metaRequests && signRequests && ((status?.populated && status?.ready) || status?.error) && (
+    <Loading>{accounts && authRequests && metaRequests && signRequests && ((status?.populated[network] && status?.ready) || status?.error) && (
       <ActivityContext.Provider value={isBusy}>
         <ActionContext.Provider value={_onAction}>
           <SettingsContext.Provider value={settingsCtx}>
