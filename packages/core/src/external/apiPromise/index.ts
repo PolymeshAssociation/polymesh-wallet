@@ -6,8 +6,10 @@ import SchemaService from '../schema';
 
 let api: ApiPromise | null = null;
 
+const metadata: Record<string, string> = {};
+
 async function apiPromise (n: NetworkName): Promise<ApiPromise> {
-  console.time('isReady');
+  console.time('ApiReady');
 
   if (api) {
     try {
@@ -21,17 +23,23 @@ async function apiPromise (n: NetworkName): Promise<ApiPromise> {
 
   const provider = new WsProvider(networkURLs[n]);
 
-  const schema = SchemaService.get(n);
+  const { rpc, types } = SchemaService.get(n);
 
   api = await ApiPromise.create({
     provider,
-    rpc: schema.rpc,
-    types: schema.types
+    rpc,
+    types,
+    metadata
   });
 
   await api.isReadyOrError;
 
-  console.timeEnd('isReady');
+  const key = `${api.genesisHash.toHex()}-${api.runtimeVersion.specVersion.toString()}`;
+
+  // Cache metadata to speed up following Api creations.
+  metadata[key] = api.runtimeMetadata.toHex();
+
+  console.timeEnd('ApiReady');
 
   return api;
 }

@@ -1,4 +1,4 @@
-import { callDetails } from '@polymathnetwork/extension-core/api';
+import { callDetails } from '@polymathnetwork/extension-core/external';
 import { getNetwork } from '@polymathnetwork/extension-core/store/getters';
 import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { subscribeIdentifiedAccounts, subscribeIsDev, subscribeNetwork, subscribeSelectedAccount, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';

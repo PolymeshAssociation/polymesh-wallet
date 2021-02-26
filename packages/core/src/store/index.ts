@@ -26,7 +26,7 @@ const middleware = [...getDefaultMiddleware({ serializableCheck: {
 } })];
 
 if (process.env.NODE_ENV === 'development') {
-  middleware.push(logger);
+  // middleware.push(logger);
 }
 
 const store: any = configureStore({
