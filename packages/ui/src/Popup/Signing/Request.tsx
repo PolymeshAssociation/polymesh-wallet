@@ -148,7 +148,7 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
                 fluid
                 onClick={_onSignQuick}
                 type='submit'>
-                Authorize
+                Sign
               </Button>
             </Box> }
           </Flex>
