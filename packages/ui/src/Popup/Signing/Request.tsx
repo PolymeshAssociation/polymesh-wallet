@@ -128,31 +128,26 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       />
     )
     : (
-      <Flex
-        flexDirection='column'
-        justifyContent='flex-end'
-        mb='s'>
-        <Box>
-          <Flex>
-            <Box>
-              <Button
-                fluid
-                onClick={_onCancel}
-                variant='secondary'>
-                Reject
-              </Button>
-            </Box>
-            {isFirst && <Box ml='xs'>
-              <Button
-                busy={isBusy}
-                fluid
-                onClick={_onSignQuick}
-                type='submit'>
-                Sign
-              </Button>
-            </Box> }
-          </Flex>
-        </Box>
+      <Flex mb='s'
+        mx='s'>
+        <Flex flex={1}>
+          <Button
+            fluid
+            onClick={_onCancel}
+            variant='secondary'>
+            Reject
+          </Button>
+        </Flex>
+        {isFirst && <Flex flex={1}
+          ml='xs'>
+          <Button
+            busy={isBusy}
+            fluid
+            onClick={_onSignQuick}
+            type='submit'>
+            Sign
+          </Button>
+        </Flex> }
       </Flex>
     );
 
