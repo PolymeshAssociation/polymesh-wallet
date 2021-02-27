@@ -92,7 +92,7 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
           </Flex>
           <Text color='gray.1'
             variant='b2m'>
-            Use your current wallet password to be able to add this account.
+            Enter your current wallet password in order to add this account.
           </Text>
         </Box>
         <FormProvider {...methods} >
