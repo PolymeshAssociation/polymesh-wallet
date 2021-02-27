@@ -68,7 +68,7 @@ describe('Wallet', () => {
         await (await page.waitForXPath('//textarea')).type(seed);
         await (await page.waitForXPath("//button[contains(., 'Continue')]")).click();
         await (await page.waitForXPath("//input[@placeholder='Enter account name']")).type(accountName);
-        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more']")).type(accountPass);
+        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more' or @placeholder='Enter your current wallet password']")).type(accountPass);
         await (await page.waitForXPath("//input[@placeholder='Confirm your password']")).type(accountPass);
         await (await page.waitForXPath("//button[contains(., 'Restore')]")).click();
       });
