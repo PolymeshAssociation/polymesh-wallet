@@ -14,7 +14,7 @@ import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/sto
 import { fatalErrorHandler, isPolyMessage } from '@polymathnetwork/extension-core/utils';
 
 const loadSchema = () => {
-  SchemaService.load().then(console.log).catch(console.error);
+  SchemaService.load().catch(console.error);
 };
 
 loadSchema();
