@@ -12,6 +12,7 @@ import { actions as identityActions } from './store/features/identities';
 import { actions as statusActions } from './store/features/status';
 import { getAccountsList, getNetwork } from './store/getters';
 import { subscribeDidsList, subscribeIsHydratedAndNetwork } from './store/subscribers';
+import { populatedDelay } from './constants';
 import store from './store';
 import { AccountData, KeyringAccountData, UnsubCallback } from './types';
 import { nonFatalErrorHandler, observeAccounts } from './utils';
@@ -129,6 +130,10 @@ function subscribePolymesh (): () => Promise<void> {
           // Clear errors
           store.dispatch(statusActions.apiReady());
 
+          setTimeout(() => {
+            store.dispatch(statusActions.populated(network));
+          }, populatedDelay);
+
           let prevAccounts: string[] = [];
           let prevDids: string[] = [];
           let activeIssuers: string[] = [];
@@ -185,8 +190,6 @@ function subscribePolymesh (): () => Promise<void> {
                       console.log(`Poly: Setting **identity** ${didCount++}`, data);
                       // store.dispatch(identityActions.setIdentitySecKeys(params));
                       store.dispatch(identityActions.setIdentity(params));
-
-                      store.dispatch(statusActions.populated(network));
                     }, nonFatalErrorHandler)
                       .catch(nonFatalErrorHandler);
                   }).then((unsub) => {

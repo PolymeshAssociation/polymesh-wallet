@@ -156,8 +156,15 @@ export default function Popup (): React.ReactElement {
       ? Signing
       : Accounts;
 
+  // We show a spinner until
+  // A) there's an error that we need to display, or
+  // B) API is ready, and
+  //   B1) Accounts list is empty. ie this an empty wallet, or
+  //   B2) Redux store is populated.
+  const isReady = status?.error || ((status?.populated[network] || accounts?.length === 0) && status?.ready);
+
   return (
-    <Loading>{accounts && authRequests && metaRequests && signRequests && ((status?.populated[network] && status?.ready) || status?.error) && (
+    <Loading>{accounts && authRequests && metaRequests && signRequests && isReady && (
       <ActivityContext.Provider value={isBusy}>
         <ActionContext.Provider value={_onAction}>
           <SettingsContext.Provider value={settingsCtx}>
