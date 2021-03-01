@@ -1,6 +1,8 @@
 import { KeyringPair } from '@polkadot/keyring/types';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
+import { callDetails } from '@polymathnetwork/extension-core/external';
+import { getDids, getNetwork, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { renameIdentity,
   setNetwork,
   setSelectedAccount,
@@ -12,8 +14,6 @@ import { subscribeIdentifiedAccounts,
   subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 import { UidRecord } from '@polymathnetwork/extension-core/types';
 
-import { callDetails } from '../../api';
-import { getDids, getNetwork, getSelectedIdentifiedAccount } from '../../store/getters';
 import { Errors,
   PolyMessageTypes,
   PolyRequestTypes,

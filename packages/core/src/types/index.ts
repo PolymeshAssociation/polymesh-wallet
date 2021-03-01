@@ -122,7 +122,8 @@ export type Error = {
 export type StoreStatus = {
   rehydrated: boolean,
   error: Error | null,
-  ready: boolean
+  ready: boolean,
+  populated: Record<string, boolean>,
 };
 
 export interface UidRecord {

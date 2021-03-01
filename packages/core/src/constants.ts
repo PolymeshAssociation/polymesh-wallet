@@ -46,7 +46,7 @@ const messages = [
 
 export const polySchemaUrl = 'https://schema.polymesh.live/';
 
-export const populatedDelay = 1250;
+export const populatedDelay = 500;
 
 export {
   networkURLs,
