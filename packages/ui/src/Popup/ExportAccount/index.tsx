@@ -2,13 +2,19 @@ import { SvgAlertCircle, SvgOpenInNew } from '@polymathnetwork/extension-ui/asse
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router';
 
-import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
+import { ActionContext, ActivityContext } from '../../components';
 import { exportAccount } from '../../messaging';
+
+interface AddressState {
+  address: string;
+}
 
 export const ExportAccount: FC = () => {
   const onAction = useContext(ActionContext);
-  const { selectedAccount } = useContext(PolymeshContext);
+  const { address } = useParams<AddressState>();
+
   const { errors, handleSubmit, register, setError } = useForm({
     defaultValues: {
       currentPassword: '',
@@ -19,12 +25,12 @@ export const ExportAccount: FC = () => {
   const isBusy = useContext(ActivityContext);
 
   const onSubmit = async (data: { [x: string]: string; }) => {
-    if (!selectedAccount) {
+    if (!address) {
       return;
     }
 
     try {
-      const { exportedJson } = await exportAccount(selectedAccount, data.currentPassword);
+      const { exportedJson } = await exportAccount(address, data.currentPassword);
 
       const element = document.createElement('a');
       const { meta } = JSON.parse(exportedJson) as { meta: { name: string } };
