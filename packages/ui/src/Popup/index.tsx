@@ -7,7 +7,6 @@ import uiSettings from '@polkadot/ui-settings';
 import { SettingsStruct } from '@polkadot/ui-settings/types';
 import { setSS58Format } from '@polkadot/util-crypto';
 import { ProofingRequest, ProvideUidRequest } from '@polymathnetwork/extension-core/background/types';
-import { populatedDelay } from '@polymathnetwork/extension-core/constants';
 import { ErrorCodes, IdentifiedAccount, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
 import React, { useEffect, useState } from 'react';
@@ -104,7 +103,6 @@ export default function Popup (): React.ReactElement {
   const [status, setStatus] = useState<undefined | StoreStatus>();
   const [isBusy, setIsBusy] = useState(false);
   const [isDeveloper, setIsDeveloper] = useState(false);
-  const [isPopulated, setIsPopulated] = useState(false);
   const handleError = useErrorHandler();
 
   useEffect(() => {
@@ -143,10 +141,9 @@ export default function Popup (): React.ReactElement {
               color='red.0'
               height={20}
               width={20} />
-            <Box ml='s'>No internet!</Box>
-          </Flex>,
-          { toastId: 'offline', autoClose: false, closeButton: false }
-        );
+            <Box ml='s'>No internet connection</Box>
+          </Flex>
+          , { toastId: 'offline', autoClose: false, closeButton: false });
       }
     });
   }, []);
@@ -162,10 +159,7 @@ export default function Popup (): React.ReactElement {
     Promise.all([
       subscribePolyStatus(setStatus),
       subscribePolyAccounts(setPolymeshAccounts),
-      subscribePolyNetwork((n) => {
-        setNetwork(n);
-        setIsPopulated(false);
-      }),
+      subscribePolyNetwork(setNetwork),
       subscribePolySelectedAccount(setSelectedAccountAddress),
       subscribePolyIsDev((isDev) => {
         setIsDeveloper(isDev === 'true');
@@ -189,18 +183,6 @@ export default function Popup (): React.ReactElement {
 
     _onAction();
   }, [handleError]);
-
-  useEffect(() => {
-    if (polymeshAccounts.length === accounts?.length) {
-      // We're delaying the populated flag (and consequently accounts display), to
-      // give ApiPromise a chance to initialize in the background, because it blocks DOM interaction.
-      setTimeout(() =>
-        setIsPopulated(true)
-      , populatedDelay);
-    } else {
-      setIsPopulated(false);
-    }
-  }, [accounts, polymeshAccounts]);
 
   useEffect((): void => {
     const currentAccount =
@@ -228,6 +210,13 @@ export default function Popup (): React.ReactElement {
     return Accounts;
   })();
 
+  // We show a spinner until
+  // A) there's an error that we need to display, or
+  // B) API is ready, and
+  //   B1) Accounts list is empty. ie this an empty wallet, or
+  //   B2) Redux store is populated.
+  const isReady = status?.error || ((status?.populated[network] || accounts?.length === 0) && status?.ready);
+
   return (
     <Loading>
       {accounts &&
@@ -237,7 +226,7 @@ export default function Popup (): React.ReactElement {
         proofingRequests &&
         provideUidRequests &&
         uidRecords &&
-        (isPopulated || status?.ready) && (
+        isReady && (
         <ActivityContext.Provider value={isBusy}>
           <ActionContext.Provider value={_onAction}>
             <SettingsContext.Provider value={settingsCtx}>
