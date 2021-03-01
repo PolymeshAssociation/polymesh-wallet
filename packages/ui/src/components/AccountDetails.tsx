@@ -72,7 +72,7 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
         iconAsset={SvgAccountCardDetailsOutline}>
       </Header>
       <Box mx='s'>
-        <Box borderColor='gray.4'
+        {oneAddress && <Box borderColor='gray.4'
           borderRadius={3}
           borderStyle='solid'
           borderWidth={2}
@@ -94,7 +94,7 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, onBack, onC
             variant='b2m'>
             Enter your current wallet password in order to add this account.
           </Text>
-        </Box>
+        </Box> }
         <FormProvider {...methods} >
           <form id='accountForm'
             onSubmit={handleSubmit(onSubmit)}>
