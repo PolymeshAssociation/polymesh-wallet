@@ -27,12 +27,17 @@ const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
   }
 
   return (
+    // <Flex alignItems='stretch'
+    //   flex={1}
+    //   flexDirection='column'
+    //   justifyContent='space-between'>
     <Flex alignItems='stretch'
-      flex={1}
       flexDirection='column'
-      justifyContent='space-between'
-      style={{ height: '100%' }}>
-      <Box mt='m'>
+      height='100%'>
+      {/* style={{ height: '100%' }}> */}
+      <Box height='100%'
+        mt='m'
+        style={{ overflowY: 'scroll' }}>
         <ExpandableDetails title={`${section}: ${method}${
           meta
             ? `(${meta.args.map(({ name }) => name).join(', ')})`
@@ -56,7 +61,8 @@ const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
         </ExpandableDetails>
       </Box>
 
-      <Box mb='l'>
+      {/* <Box mb='l'> */}
+      <Box mt='auto'>
         {fees.length > 1 && <Hr color='gray.4' />}
         <Box>
           {fees.map((tuple, index) => {
