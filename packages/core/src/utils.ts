@@ -2,7 +2,7 @@ import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 
 import { setError } from './store/setters';
-import { messagePrefix, messages } from './constants';
+import { messagePrefix, messages, uidProvidersWhitelist } from './constants';
 import { ErrorCodes, KeyringAccountData } from './types';
 
 // Sort an array by prioritizing a certain element
@@ -41,3 +41,19 @@ export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
 
 export const sleep = (ms: number):Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
+
+export const allowedUidProvider = (url: string): boolean => {
+  try {
+    const parsed = new URL(url);
+
+    // Remove params and trailing slash
+    parsed.search = '';
+    const cleanUrl = parsed.toString().replace(/\/$/, '');
+
+    return uidProvidersWhitelist.includes(cleanUrl);
+  } catch (error) {
+    console.error('Error parsing app url', url, error);
+  }
+
+  return false;
+};
