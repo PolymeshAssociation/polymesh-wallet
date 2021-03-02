@@ -153,23 +153,29 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
 
   return (
     <>
-      <Box style={{ display: isFirst ? 'block' : 'none', overflowY: 'scroll', height: '100%', minWidth: '100%' }}>
+      <ContentArea isFirst={isFirst}>
         <Box mt='xs'
           mx='s'>
           <Heading variant='h5'>Signing Request</Heading>
         </Box>
-        <ContentArea>
-          {content()}
-        </ContentArea>
-      </Box>
+        {/* <ContentArea> */}
+        {content()}
+        {/* </ContentArea> */}
+      </ContentArea>
 
       {signArea}
     </>
   );
 }
 
-const ContentArea = styled.div`
+const ContentArea = styled.div<{ isFirst: boolean | undefined }>`
+  display: ${({ isFirst }) => isFirst ? 'flex' : 'none'};
+  flex-direction: column;
+  /* justify-content: space-between; */
+  overflow-y: scroll;
   height: 100%;
+  min-width: 100%;
+  /* height: 100%;
   overflow-y: scroll;
   margin-top: -25px;
   padding-top: 25px;
@@ -178,5 +184,5 @@ const ContentArea = styled.div`
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
-  }
+  } */
 `;
