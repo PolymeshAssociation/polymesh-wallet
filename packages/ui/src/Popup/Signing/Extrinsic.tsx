@@ -27,14 +27,9 @@ const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
   }
 
   return (
-    // <Flex alignItems='stretch'
-    //   flex={1}
-    //   flexDirection='column'
-    //   justifyContent='space-between'>
     <Flex alignItems='stretch'
       flexDirection='column'
       height='100%'>
-      {/* style={{ height: '100%' }}> */}
       <Box height='100%'
         mt='m'
         style={{ overflowY: 'scroll' }}>
