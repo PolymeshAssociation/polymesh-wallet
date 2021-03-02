@@ -12,6 +12,8 @@ import { localStorage } from 'redux-persist-webextension-storage';
 import rootReducer from './rootReducer';
 import { setIsRehydrated } from './setters';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const persistConfig = {
   key: 'root',
   storage: localStorage,
@@ -25,18 +27,18 @@ const middleware = [...getDefaultMiddleware({ serializableCheck: {
   ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
 } })];
 
-if (process.env.NODE_ENV === 'development') {
+if (isDev) {
   middleware.push(logger);
 }
 
 const store: any = configureStore({
   middleware,
   reducer: persistedReducer,
-  devTools: process.env.NODE_ENV === 'development'
+  devTools: isDev
 });
 
 // Reducer hot module reloading
-if (process.env.NODE_ENV === 'development' && (module as any).hot) {
+if (isDev && (module as any).hot) {
   (module as any).accept('./rootReducer', () => {
     const newRootReducer = require('./rootReducer').default;
 

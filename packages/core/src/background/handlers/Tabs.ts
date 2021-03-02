@@ -1,14 +1,16 @@
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
+import { assert } from '@polkadot/util';
 import { polyNetworkGet } from '@polymathnetwork/extension-core/external';
 import polyNetworkSubscribe from '@polymathnetwork/extension-core/external/polyNetworkSubscribe';
-import { getSelectedAccount } from '@polymathnetwork/extension-core/store/getters';
+import { getSelectedAccount, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
-import { NetworkMeta } from '@polymathnetwork/extension-core/types';
+import { NetworkMeta, ProofRequestPayload, RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
 import { prioritize } from '@polymathnetwork/extension-core/utils';
 
-import { PolyMessageTypes, PolyRequestTypes, PolyResponseTypes } from '../types';
+import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse } from '../types';
+import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 
 function transformAccounts (accounts: SubjectInfo): InjectedAccount[] {
@@ -24,6 +26,12 @@ function transformAccounts (accounts: SubjectInfo): InjectedAccount[] {
 }
 
 export default class Tabs {
+  readonly #state: State;
+
+  constructor (state: State) {
+    this.#state = state;
+  }
+
   private polyNetworkGet (): NetworkMeta {
     return polyNetworkGet();
   }
@@ -87,6 +95,20 @@ export default class Tabs {
     return true;
   }
 
+  private requestProof (url: string, request: ProofRequestPayload): Promise<ProofingResponse> {
+    const account = getSelectedIdentifiedAccount();
+
+    assert(account, Errors.NO_ACCOUNT);
+
+    assert(account.did, Errors.NO_DID);
+
+    return this.#state.generateProof(url, request, { address: account.address });
+  }
+
+  private provideUid (url: string, request: RequestPolyProvideUid): Promise<boolean> {
+    return this.#state.provideUid(url, request);
+  }
+
   // eslint-disable-next-line @typescript-eslint/require-await
   public async handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], url: string, port: chrome.runtime.Port): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
     switch (type) {
@@ -115,6 +137,12 @@ export default class Tabs {
 
         return false;
       }
+
+      case 'poly:pub(uid.requestProof)':
+        return this.requestProof(url, request as ProofRequestPayload);
+
+      case 'poly:pub(uid.provide)':
+        return this.provideUid(url, request as RequestPolyProvideUid);
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);
