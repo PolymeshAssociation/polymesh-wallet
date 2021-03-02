@@ -50,4 +50,8 @@ export const messages = [
 
 export const polySchemaUrl = 'https://schema.polymesh.live/';
 
-export const populatedDelay = 500;
+export const populatedDelay = 1000;
+
+export const uidProvidersWhitelist = [
+  'https://polymathnetwork.github.io/mock-uid-provider'
+];
