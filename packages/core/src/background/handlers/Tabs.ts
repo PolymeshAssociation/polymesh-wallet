@@ -7,7 +7,7 @@ import polyNetworkSubscribe from '@polymathnetwork/extension-core/external/polyN
 import { getSelectedAccount, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
 import { NetworkMeta, ProofRequestPayload, RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
-import { prioritize } from '@polymathnetwork/extension-core/utils';
+import { allowedUidProvider, prioritize } from '@polymathnetwork/extension-core/utils';
 
 import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse } from '../types';
 import State from './State';
@@ -106,6 +106,8 @@ export default class Tabs {
   }
 
   private provideUid (url: string, request: RequestPolyProvideUid): Promise<boolean> {
+    assert(allowedUidProvider(url), `App ${url} is not allowed to provide uid`);
+
     return this.#state.provideUid(url, request);
   }
 
