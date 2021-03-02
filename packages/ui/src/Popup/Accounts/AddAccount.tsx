@@ -1,4 +1,4 @@
-import { SvgPolyNew } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgLedger, SvgPolyNew } from '@polymathnetwork/extension-ui/assets/images/icons';
 import React, { useCallback, useContext, useState } from 'react';
 
 import { ActionContext } from '../../components';
@@ -11,9 +11,9 @@ function AddAccount (): React.ReactElement {
 
   const onCreateAccount = useCallback((): void => onAction('/account/create'), [onAction]);
 
-  const onImportSeed = useCallback((): void => onAction('/account/import-seed'), [onAction]);
+  const onImportAccount = useCallback((): void => onAction('/account/restore'), [onAction]);
 
-  const onImportJson = useCallback((): void => onAction('/account/restore-json'), [onAction]);
+  const onConnectLedger = useCallback((): void => onAction('/account/import-ledger'), [onAction]);
 
   return (
     <>
@@ -42,8 +42,7 @@ function AddAccount (): React.ReactElement {
               Welcome to the Polymesh Wallet!
             </Heading>
           </Box>
-          <Box
-            mt='s'>
+          <Box mt='s'>
             <Text color='brandLightest'
               variant='b2'>
               Manage your Polymesh digital assets by creating an account or using an existing account.
@@ -61,10 +60,8 @@ function AddAccount (): React.ReactElement {
           <Flex alignItems='flex-start'
             justifyContent='flex-start'
             mb='xs'>
-            <Checkbox
-              checked={policyAccepted}
-              onClick={() => setPolicyAccepted(!policyAccepted)}
-            />
+            <Checkbox checked={policyAccepted}
+              onClick={() => setPolicyAccepted(!policyAccepted)} />
             <Flex ml='s'>
               <Text color='gray.3'
                 variant='b3'>
@@ -73,7 +70,7 @@ function AddAccount (): React.ReactElement {
                   id='sign-up-privacy-link'>
                   Privacy Policy
                 </Link>
-                  .
+                .
               </Text>
             </Flex>
           </Flex>
@@ -81,10 +78,8 @@ function AddAccount (): React.ReactElement {
             justifyContent='flex-start'
             mb='s'
             mt='xs'>
-            <Checkbox
-              checked={termsAccepted}
-              onClick={() => setTermsAccepted(!termsAccepted)}
-            />
+            <Checkbox checked={termsAccepted}
+              onClick={() => setTermsAccepted(!termsAccepted)} />
             <Flex ml='s'>
               <Text color='gray.3'
                 variant='b3'>
@@ -110,18 +105,23 @@ function AddAccount (): React.ReactElement {
             mx='xs'>
             <Button disabled={!(policyAccepted && termsAccepted)}
               fluid
-              onClick={onImportSeed}
+              onClick={onImportAccount}
               variant='secondary'>
-              Restore account with recovery phrase
+              Restore account
             </Button>
           </Box>
           <Box mt='s'
             mx='xs'>
             <Button disabled={!(policyAccepted && termsAccepted)}
               fluid
-              onClick={onImportJson}
+              onClick={onConnectLedger}
               variant='secondary'>
-              Import account with JSON file
+              <Box mr='s'>
+                <Icon Asset={SvgLedger}
+                  height={24}
+                  width={24} />
+              </Box>
+              Connect your Ledger
             </Button>
           </Box>
         </Box>
