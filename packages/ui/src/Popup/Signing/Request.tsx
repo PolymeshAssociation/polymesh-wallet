@@ -128,8 +128,7 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       />
     )
     : (
-      <Flex mb='s'
-        mx='s'>
+      <Flex m='s'>
         <Flex flex={1}>
           <Button
             fluid
@@ -153,36 +152,23 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
 
   return (
     <>
-      <ContentArea isFirst={isFirst}>
+      <RequestContent isFirst={isFirst}>
         <Box mt='xs'
           mx='s'>
           <Heading variant='h5'>Signing Request</Heading>
         </Box>
-        {/* <ContentArea> */}
         {content()}
-        {/* </ContentArea> */}
-      </ContentArea>
+      </RequestContent>
 
       {signArea}
     </>
   );
 }
 
-const ContentArea = styled.div<{ isFirst: boolean | undefined }>`
+const RequestContent = styled.div<{ isFirst: boolean | undefined }>`
   display: ${({ isFirst }) => isFirst ? 'flex' : 'none'};
   flex-direction: column;
-  /* justify-content: space-between; */
   overflow-y: scroll;
   height: 100%;
   min-width: 100%;
-  /* height: 100%;
-  overflow-y: scroll;
-  margin-top: -25px;
-  padding-top: 25px;
-  padding-right: 0px;
-  padding-left: 0px;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  } */
 `;
