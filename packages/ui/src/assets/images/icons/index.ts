@@ -179,6 +179,7 @@ export { SvgLightningBolt } from './generated/LightningBolt';
 export { SvgLinkVariant } from './generated/LinkVariant';
 export { SvgLinkedin } from './generated/Linkedin';
 export { SvgLockOutline } from './generated/LockOutline';
+export { SvgLockOpenOutline } from './generated/LockOpenOutline';
 export { SvgLockReset } from './generated/LockReset';
 export { SvgLoginVariant } from './generated/LoginVariant';
 export { SvgLogoutVariant } from './generated/LogoutVariant';

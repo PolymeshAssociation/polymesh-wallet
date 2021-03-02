@@ -24,9 +24,11 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
   };
 
   const onChange = async (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setSeedPhrase(e.target.value);
+    const value = e.target.value.trim();
 
-    setValidSeed(await checkSeed(e.target.value));
+    setSeedPhrase(value);
+
+    setValidSeed(await checkSeed(value));
   };
 
   const nextStep = () => {
@@ -52,6 +54,12 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
             invalid={!validSeed && seedPhrase.length > 0}
             onChange={onChange}
             placeholder='Enter your 12-word recovery phrase. Separate each word with a single space.' />
+          <Box mt='s'>
+            <Text color='alert'
+              variant='b3'>
+              {!validSeed && seedPhrase.length > 0 && 'Recovery phrase is invalid.'}
+            </Text>
+          </Box>
         </Box>
       </Box>
       <Flex flex={1}

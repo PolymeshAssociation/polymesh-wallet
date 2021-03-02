@@ -16,6 +16,7 @@ export type AccountData = {
 
 export type IdentityData = {
   cdd?: CDD;
+  uid?: UID;
   did: string;
   priKey: string;
   secKeys?: string[];
@@ -27,6 +28,7 @@ export type IdentifiedAccount = {
   did?: string;
   keyType?: DidType;
   cdd?: CDD;
+  uid?: UID;
   address: string;
   didType?: DidType;
   didAlias: string;
@@ -54,6 +56,8 @@ export type CDD = null | {
   expiry?: number
 }
 
+export type UID = Uint8Array;
+
 export type NetworkMeta = {
   name: NetworkName,
   label?: string,
@@ -63,6 +67,35 @@ export type NetworkMeta = {
 export interface InjectedNetwork {
   get: () => Promise<NetworkMeta>;
   subscribe: (cb: (network: NetworkMeta) => void) => Unsubcall;
+}
+
+export interface ProofRequestPayload {
+  /**
+   * @description The ticker
+   */
+  ticker: string;
+}
+
+export interface RequestPolyProvideUid {
+  did: string;
+  uid: string;
+  network: NetworkName
+}
+
+export interface ProofResult {
+  /**
+   * @description The id for this request
+   */
+  id: number;
+  /**
+   * @description The resulting proof string
+   */
+  proof: string;
+}
+
+export interface InjectedUid {
+  requestProof: (req: ProofRequestPayload) => Promise<ProofResult>;
+  provide: (req: RequestPolyProvideUid) => Promise<boolean>;
 }
 
 export type KeyringAccountData = {
@@ -89,8 +122,14 @@ export type Error = {
 export type StoreStatus = {
   rehydrated: boolean,
   error: Error | null,
-  ready: boolean
+  ready: boolean,
+  populated: Record<string, boolean>,
 };
+
+export interface UidRecord {
+  network: NetworkName,
+  did: string
+}
 
 export type Schema = { rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>,
   types: RegistryTypes };
