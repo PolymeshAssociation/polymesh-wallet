@@ -111,11 +111,9 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
       const json = request.payload as SignerPayloadJSON;
 
       return (
-        <>
-          <Extrinsic
-            request={json}
-          />
-        </>
+        <Extrinsic
+          request={json}
+        />
       );
     } else if (hexBytes !== null) {
       const raw = request.payload as SignerPayloadRaw;
@@ -169,7 +167,7 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
               fluid
               onClick={_onSignQuick}
               type='submit'>
-                Authorize
+                Sign
             </Button>
           }
         </Box> }
