@@ -8,8 +8,10 @@ let api: ApiPromise | null = null;
 
 const metadata: Record<string, string> = {};
 
-async function apiPromise (n: NetworkName): Promise<ApiPromise> {
+async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiPromise> {
   console.time('ApiReady');
+
+  if (!reinitialize && api) { return api; }
 
   if (api) {
     try {
@@ -21,7 +23,28 @@ async function apiPromise (n: NetworkName): Promise<ApiPromise> {
     api = null;
   }
 
-  const provider = new WsProvider(networkURLs[n]);
+  // 'false' means to not retry connection if it fails. We need to report
+  // connection issues to the user instead of retrying connection for minutes.
+  const provider = new WsProvider(networkURLs[n], false);
+
+  await provider.connect();
+
+  let unsubscribe: () => void = () => {};
+
+  // Unfortunately, provider.connect() does NOT throw an error when connection fails,
+  // so we have to handle that in the following awkward way.
+  //
+  // A) Wait until WS connection is successful.
+  // B) A second later, if connection is not up, we throw an error.
+  await new Promise<void>((resolve, reject) => {
+    const handle = setTimeout(() => reject(new Error(`Failed failed to connect to ${networkURLs[n]}`)), 1000);
+
+    unsubscribe = provider.on('connected', () => {
+      clearTimeout(handle);
+      resolve();
+    });
+  });
+  unsubscribe();
 
   const { rpc, types } = SchemaService.get(n);
 
