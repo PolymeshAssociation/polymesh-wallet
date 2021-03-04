@@ -9,6 +9,8 @@ import { Button } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+import { TroubleshootInfo } from './TroubleshootInfo';
+
 interface AccOption {
   text: string;
   value: number;
@@ -64,9 +66,12 @@ function ImportLedger (): React.ReactElement {
   const _onSetAccountIndex = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => setAccountIndex(Number(event.target.value)), []);
   const _onSetAddressOffset = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => setAddressOffset(Number(event.target.value)), []);
 
+  // console.log({ error, ledgerError });
+
   return (
     <>
       <div>Import Ledger Account</div>
+      <TroubleshootInfo error={error || ledgerError} />
       <div>
         <div>{address}</div>
         <div>{name}</div>
@@ -99,11 +104,11 @@ function ImportLedger (): React.ReactElement {
         {!!ledgerWarning && (
           { ledgerWarning }
         )}
-        {(!!error || !!ledgerError) && (
+        {/* {(!!error || !!ledgerError) && (
           <div>
             {error || ledgerError}
           </div>
-        )}
+        )} */}
       </div>
       {ledgerLocked
         ? (
