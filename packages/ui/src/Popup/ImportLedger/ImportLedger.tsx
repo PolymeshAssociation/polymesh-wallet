@@ -5,7 +5,7 @@ import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import Name from '@polymathnetwork/extension-ui/components/Name';
 import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
-import { Button } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -69,9 +69,9 @@ function ImportLedger (): React.ReactElement {
   // console.log({ error, ledgerError });
 
   return (
-    <>
-      <div>Import Ledger Account</div>
-      <TroubleshootInfo error={error || ledgerError} />
+    <Box p='xs'>
+      <TroubleshootInfo error={error || ledgerError}
+        refresh={refresh} />
       <div>
         <div>{address}</div>
         <div>{name}</div>
@@ -112,12 +112,13 @@ function ImportLedger (): React.ReactElement {
       </div>
       {ledgerLocked
         ? (
-          <Button
-            disabled={ledgerLoading || isBusy}
-            onClick={refresh}
-          >
-              Refresh
-          </Button>
+          'ledger locked'
+          // <Button
+          //   disabled={ledgerLoading || isBusy}
+          //   onClick={refresh}
+          // >
+          //     Refresh
+          // </Button>
         )
         : (
           <Button
@@ -128,7 +129,7 @@ function ImportLedger (): React.ReactElement {
           </Button>
         )
       }
-    </>
+    </Box>
   );
 }
 
