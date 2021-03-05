@@ -35,7 +35,21 @@ export function TroubleshootInfo ({ error, refresh }: Props): React.ReactElement
           </Box>
         );
       case isAppClosed:
-        return <Box>Please install and open the Polymesh app on the Ledger device.</Box>;
+        return (
+          <Box>
+            <Text variant='b1m'>
+              Please install and open the Polymesh app on the Ledger device:
+            </Text>
+            <Text color='gray.2'
+              variant='b2'>
+              <ul>
+                <li>open Polymesh app on the Ledger</li>
+                <li>select &quot;Open application&quot;</li>
+                <li>confirm &quot;Polymesh Ready&quot; message</li>
+              </ul>
+            </Text>
+          </Box>
+        );
       default:
         return null;
     }
@@ -54,7 +68,7 @@ export function TroubleshootInfo ({ error, refresh }: Props): React.ReactElement
           height={20}
           width={20} />
       </Flex>
-      <Heading variant='h5'>Your Ledger is not connected</Heading>
+      <Heading variant='h5'>Polymesh app is not open</Heading>
       <Box my='m'>
         {renderInstructions()}
       </Box>
