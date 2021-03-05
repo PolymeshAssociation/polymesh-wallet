@@ -1,5 +1,5 @@
 import { SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Button, Flex, Heading, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Heading, Icon, Link, Text } from '@polymathnetwork/extension-ui/ui';
 import React from 'react';
 
 type Props = {
@@ -38,13 +38,18 @@ export function TroubleshootInfo ({ error, refresh }: Props): React.ReactElement
         return (
           <Box>
             <Text variant='b1m'>
-              Please install and open the Polymesh app on the Ledger device:
+              To install and open the Polymesh app on the ledger:
             </Text>
             <Text color='gray.2'
               variant='b2'>
               <ul>
+                <li>
+                  <Link href='https://github.com/Zondax/ledger-polymesh'
+                    target='_blank'>
+                    install the Polymesh app on the Ledger
+                  </Link>
+                </li>
                 <li>open Polymesh app on the Ledger</li>
-                <li>select &quot;Open application&quot;</li>
                 <li>confirm &quot;Polymesh Ready&quot; message</li>
               </ul>
             </Text>
