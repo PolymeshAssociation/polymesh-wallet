@@ -5,11 +5,11 @@ import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import Name from '@polymathnetwork/extension-ui/components/Name';
 import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
-import { Button } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { TroubleshootInfo } from './TroubleshootInfo';
+import { TroubleshootGuide } from './TroubleshootGuide';
 
 interface AccOption {
   text: string;
@@ -67,67 +67,71 @@ function ImportLedger (): React.ReactElement {
   const _onSetAddressOffset = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => setAddressOffset(Number(event.target.value)), []);
 
   return (
-    <>
-      <TroubleshootInfo error={error || ledgerError}
-        refresh={refresh}/>
-      <div>Import Ledger Account</div>
-      <div>
-        <div>{address}</div>
-        <div>{name}</div>
-        {
-          !!genesis &&
-          !!address && !ledgerError && (
-            <Name
-              onChange={setName}
-              value={name || ''}
-            />
-          )}
-        { !!name && (
-          <>
-            <Dropdown
-              className='accountType'
-              disabled={ledgerLoading}
-              onChange={_onSetAccountIndex}
-              options={accOps.current}
-              value={accountIndex}
-            />
-            <Dropdown
-              className='accountIndex'
-              disabled={ledgerLoading}
-              onChange={_onSetAddressOffset}
-              options={addOps.current}
-              value={addressOffset}
-            />
-          </>
-        )}
-        {!!ledgerWarning && (
-          { ledgerWarning }
-        )}
-        {(!!error || !!ledgerError) && (
+    <Box p='s'>
+      {ledgerError
+        ? <TroubleshootGuide ledgerError={ledgerError}
+          refresh={refresh}/>
+        : <>
+          <div>Import Ledger Account</div>
           <div>
-            {error || ledgerError}
+            <div>{address}</div>
+            <div>{name}</div>
+            {
+              !!genesis &&
+          !!address && !ledgerError && (
+                <Name
+                  onChange={setName}
+                  value={name || ''}
+                />
+              )}
+            { !!name && (
+              <>
+                <Dropdown
+                  className='accountType'
+                  disabled={ledgerLoading}
+                  onChange={_onSetAccountIndex}
+                  options={accOps.current}
+                  value={accountIndex}
+                />
+                <Dropdown
+                  className='accountIndex'
+                  disabled={ledgerLoading}
+                  onChange={_onSetAddressOffset}
+                  options={addOps.current}
+                  value={addressOffset}
+                />
+              </>
+            )}
+            {!!ledgerWarning && (
+              { ledgerWarning }
+            )}
+            {(!!error || !!ledgerError) && (
+              <div>
+                {error || ledgerError}
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      {ledgerLocked
-        ? (
-          <Button
-            disabled={ledgerLoading || isBusy}
-            onClick={refresh}
-          >
+          {ledgerLocked
+            ? (
+              <Button
+                disabled={ledgerLoading || isBusy}
+                onClick={refresh}
+              >
               Refresh
-          </Button>
-        )
-        : (
-          <Button
-            disabled={!!error || !!ledgerError || !address || !genesis}
-            onClick={_onSave}
-          >
+              </Button>
+            )
+            : (
+              <Button
+                disabled={!!error || !!ledgerError || !address || !genesis}
+                onClick={_onSave}
+              >
             Import Account
-          </Button>
-        )
+              </Button>
+            )
+          }
+        </>
       }
-    </>
+    </Box>
   );
 }
 

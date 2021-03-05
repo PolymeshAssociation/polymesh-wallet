@@ -2,24 +2,18 @@ import SvgConnectLedger from '@polymathnetwork/extension-ui/assets/images/connec
 import { SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
 import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/install-ledger-app.svg';
 import { Box, Button, Flex, Heading, Icon, Link, Text } from '@polymathnetwork/extension-ui/ui';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 type Props = {
-  error?: string | null;
+  ledgerError: string;
   refresh: () => void;
 };
 
-export function TroubleshootInfo ({ error, refresh }: Props): React.ReactElement | null {
-  if (!error) return null;
-
-  console.log({ error });
-
-  const renderInstructions = () => {
-    const isNoDeviceSelected = /no.*selected/gi.test(error);
-    const hasRequestDeviceFailed = /failed.*requestDevice/gi.test(error);
-    const isAppClosed = /not.*open/gi.test(error);
-
-    console.log({ isNoDeviceSelected, isAppClosed, hasRequestDeviceFailed });
+export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.ReactElement | null {
+  const renderInstructions = useCallback(() => {
+    const isNoDeviceSelected = /no.*selected/gi.test(ledgerError);
+    const hasRequestDeviceFailed = /failed.*requestDevice/gi.test(ledgerError);
+    const isAppClosed = /not.*open/gi.test(ledgerError);
 
     switch (true) {
       case isNoDeviceSelected || hasRequestDeviceFailed:
@@ -72,7 +66,7 @@ export function TroubleshootInfo ({ error, refresh }: Props): React.ReactElement
       default:
         return null;
     }
-  };
+  }, [ledgerError]);
 
   return (
     <Box>
