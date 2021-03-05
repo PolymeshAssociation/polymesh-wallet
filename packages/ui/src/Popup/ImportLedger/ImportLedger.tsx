@@ -5,7 +5,7 @@ import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import Name from '@polymathnetwork/extension-ui/components/Name';
 import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Button } from '@polymathnetwork/extension-ui/ui';
+import { Button } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -26,14 +26,8 @@ function ImportLedger (): React.ReactElement {
   const [error, setError] = useState<string | null>(null);
   const onAction = useContext(ActionContext);
   const [name, setName] = useState<string | null>(null);
-  const { address,
-    error: ledgerError,
-    isLoading: ledgerLoading,
-    isLocked: ledgerLocked,
-    refresh,
-    warning: ledgerWarning } = useLedger(genesis, accountIndex, addressOffset);
+  const { address, error: ledgerError, isLoading: ledgerLoading, isLocked: ledgerLocked, refresh, warning: ledgerWarning } = useLedger(genesis, accountIndex, addressOffset);
   const isBusy = useContext(ActivityContext);
-  const connectionError = error || ledgerError;
 
   console.log('address', address);
 
@@ -43,98 +37,97 @@ function ImportLedger (): React.ReactElement {
     }
   }, [address]);
 
-  const accOps = useRef(
-    AVAIL.map(
-      (value): AccOption => ({
-        text: `Account type ${value}`,
-        value
-      })
-    )
+  const accOps = useRef(AVAIL.map((value): AccOption => ({
+    text: `Account type ${value}`,
+    value
+  })));
+
+  const addOps = useRef(AVAIL.map((value): AccOption => ({
+    text: `Address index ${value}`,
+    value
+  })));
+
+  const _onSave = useCallback(
+    () => {
+      if (address && genesis && name) {
+        createAccountHardware(address, 'ledger', accountIndex, addressOffset, name, genesis)
+          .then(() => onAction('/'))
+          .catch((error: Error) => {
+            console.error(error);
+
+            setError(error.message);
+          });
+      }
+    },
+    [accountIndex, address, addressOffset, genesis, name, onAction]
   );
-
-  const addOps = useRef(
-    AVAIL.map(
-      (value): AccOption => ({
-        text: `Address index ${value}`,
-        value
-      })
-    )
-  );
-
-  const _onSave = useCallback(() => {
-    if (address && genesis && name) {
-      createAccountHardware(address, 'ledger', accountIndex, addressOffset, name, genesis)
-        .then(() => onAction('/'))
-        .catch((error: Error) => {
-          console.error(error);
-
-          setError(error.message);
-        });
-    }
-  }, [accountIndex, address, addressOffset, genesis, name, onAction]);
 
   // select element is returning a string
-  const _onSetAccountIndex = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => setAccountIndex(Number(event.target.value)),
-    []
-  );
-  const _onSetAddressOffset = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => setAddressOffset(Number(event.target.value)),
-    []
-  );
-
-  // console.log({ error, ledgerError });
+  const _onSetAccountIndex = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => setAccountIndex(Number(event.target.value)), []);
+  const _onSetAddressOffset = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => setAddressOffset(Number(event.target.value)), []);
 
   return (
-    <Box p='xs'>
-      {connectionError
-        ? (
-          <TroubleshootInfo error={connectionError}
-            refresh={refresh} />
-        )
-        : (
+    <>
+      <TroubleshootInfo error={error || ledgerError}
+        refresh={refresh}/>
+      <div>Import Ledger Account</div>
+      <div>
+        <div>{address}</div>
+        <div>{name}</div>
+        {
+          !!genesis &&
+          !!address && !ledgerError && (
+            <Name
+              onChange={setName}
+              value={name || ''}
+            />
+          )}
+        { !!name && (
           <>
-            <div>
-              <div>{address}</div>
-              <div>{name}</div>
-              {!!genesis && !!address && !ledgerError && <Name onChange={setName}
-                value={name || ''} />}
-              {!!name && (
-                <>
-                  <Dropdown
-                    className='accountType'
-                    disabled={ledgerLoading}
-                    onChange={_onSetAccountIndex}
-                    options={accOps.current}
-                    value={accountIndex}
-                  />
-                  <Dropdown
-                    className='accountIndex'
-                    disabled={ledgerLoading}
-                    onChange={_onSetAddressOffset}
-                    options={addOps.current}
-                    value={addressOffset}
-                  />
-                </>
-              )}
-              {!!ledgerWarning && { ledgerWarning }}
-            </div>
-            {ledgerLocked
-              ? (
-                <Button disabled={ledgerLoading || isBusy}
-                  onClick={refresh}>
-              Refresh
-                </Button>
-              )
-              : (
-                <Button disabled={!!error || !!ledgerError || !address || !genesis}
-                  onClick={_onSave}>
-              Import Account
-                </Button>
-              )}
+            <Dropdown
+              className='accountType'
+              disabled={ledgerLoading}
+              onChange={_onSetAccountIndex}
+              options={accOps.current}
+              value={accountIndex}
+            />
+            <Dropdown
+              className='accountIndex'
+              disabled={ledgerLoading}
+              onChange={_onSetAddressOffset}
+              options={addOps.current}
+              value={addressOffset}
+            />
           </>
         )}
-    </Box>
+        {!!ledgerWarning && (
+          { ledgerWarning }
+        )}
+        {(!!error || !!ledgerError) && (
+          <div>
+            {error || ledgerError}
+          </div>
+        )}
+      </div>
+      {ledgerLocked
+        ? (
+          <Button
+            disabled={ledgerLoading || isBusy}
+            onClick={refresh}
+          >
+              Refresh
+          </Button>
+        )
+        : (
+          <Button
+            disabled={!!error || !!ledgerError || !address || !genesis}
+            onClick={_onSave}
+          >
+            Import Account
+          </Button>
+        )
+      }
+    </>
   );
 }
 
