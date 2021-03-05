@@ -21,13 +21,14 @@ export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.React
           <>
             <Heading variant='h5'>Your Ledger is not connected</Heading>
             <Box my='m'>
-              <Box mb='s'>
+              <Box mb='s'
+                textAlign='center'>
                 <img src={SvgConnectLedger} />
               </Box>
               <Text variant='b1m'>Please ensure that:</Text>
               <Text color='gray.2'
                 variant='b2'>
-                <ul>
+                <ul style={{ margin: 0 }}>
                   <li>the device is connected</li>
                   <li>the device is unlocked</li>
                   <li>USB permission is granted in the browser</li>
@@ -81,18 +82,18 @@ export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.React
           height={20}
           width={20} />
       </Flex>
-      {renderInstructions()}
-      <Box my={16}>
-        <Button fluid
-          onClick={refresh}
-          variant='secondary'>
-          <Icon Asset={SvgLedgerLogo}
-            height={24}
-            mr='s'
-            width={24}/>
-          Refresh
-        </Button>
+      <Box mb='m'>
+        {renderInstructions()}
       </Box>
+      <Button fluid
+        onClick={refresh}
+        variant='secondary'>
+        <Icon Asset={SvgLedgerLogo}
+          height={24}
+          mr='s'
+          width={24}/>
+        Refresh
+      </Button>
     </Box>
   );
 }
