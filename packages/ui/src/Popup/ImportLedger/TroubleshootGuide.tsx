@@ -42,7 +42,8 @@ export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.React
           <>
             <Heading variant='h5'>Polymesh app is not open</Heading>
             <Box my='m'>
-              <Box mb='s'>
+              <Box mb='s'
+                textAlign='center'>
                 <img src={SvgInstallLedgerApp} />
               </Box>
               <Text variant='b1m'>
