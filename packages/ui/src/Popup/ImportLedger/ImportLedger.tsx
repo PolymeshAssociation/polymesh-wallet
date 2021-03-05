@@ -26,8 +26,14 @@ function ImportLedger (): React.ReactElement {
   const [error, setError] = useState<string | null>(null);
   const onAction = useContext(ActionContext);
   const [name, setName] = useState<string | null>(null);
-  const { address, error: ledgerError, isLoading: ledgerLoading, isLocked: ledgerLocked, refresh, warning: ledgerWarning } = useLedger(genesis, accountIndex, addressOffset);
+  const { address,
+    error: ledgerError,
+    isLoading: ledgerLoading,
+    isLocked: ledgerLocked,
+    refresh,
+    warning: ledgerWarning } = useLedger(genesis, accountIndex, addressOffset);
   const isBusy = useContext(ActivityContext);
+  const connectionError = error || ledgerError;
 
   console.log('address', address);
 
@@ -37,98 +43,97 @@ function ImportLedger (): React.ReactElement {
     }
   }, [address]);
 
-  const accOps = useRef(AVAIL.map((value): AccOption => ({
-    text: `Account type ${value}`,
-    value
-  })));
-
-  const addOps = useRef(AVAIL.map((value): AccOption => ({
-    text: `Address index ${value}`,
-    value
-  })));
-
-  const _onSave = useCallback(
-    () => {
-      if (address && genesis && name) {
-        createAccountHardware(address, 'ledger', accountIndex, addressOffset, name, genesis)
-          .then(() => onAction('/'))
-          .catch((error: Error) => {
-            console.error(error);
-
-            setError(error.message);
-          });
-      }
-    },
-    [accountIndex, address, addressOffset, genesis, name, onAction]
+  const accOps = useRef(
+    AVAIL.map(
+      (value): AccOption => ({
+        text: `Account type ${value}`,
+        value
+      })
+    )
   );
 
+  const addOps = useRef(
+    AVAIL.map(
+      (value): AccOption => ({
+        text: `Address index ${value}`,
+        value
+      })
+    )
+  );
+
+  const _onSave = useCallback(() => {
+    if (address && genesis && name) {
+      createAccountHardware(address, 'ledger', accountIndex, addressOffset, name, genesis)
+        .then(() => onAction('/'))
+        .catch((error: Error) => {
+          console.error(error);
+
+          setError(error.message);
+        });
+    }
+  }, [accountIndex, address, addressOffset, genesis, name, onAction]);
+
   // select element is returning a string
-  const _onSetAccountIndex = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => setAccountIndex(Number(event.target.value)), []);
-  const _onSetAddressOffset = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => setAddressOffset(Number(event.target.value)), []);
+  const _onSetAccountIndex = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => setAccountIndex(Number(event.target.value)),
+    []
+  );
+  const _onSetAddressOffset = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => setAddressOffset(Number(event.target.value)),
+    []
+  );
 
   // console.log({ error, ledgerError });
 
   return (
     <Box p='xs'>
-      <TroubleshootInfo error={error || ledgerError}
-        refresh={refresh} />
-      <div>
-        <div>{address}</div>
-        <div>{name}</div>
-        {
-          !!genesis &&
-          !!address && !ledgerError && (
-            <Name
-              onChange={setName}
-              value={name || ''}
-            />
-          )}
-        { !!name && (
-          <>
-            <Dropdown
-              className='accountType'
-              disabled={ledgerLoading}
-              onChange={_onSetAccountIndex}
-              options={accOps.current}
-              value={accountIndex}
-            />
-            <Dropdown
-              className='accountIndex'
-              disabled={ledgerLoading}
-              onChange={_onSetAddressOffset}
-              options={addOps.current}
-              value={addressOffset}
-            />
-          </>
-        )}
-        {!!ledgerWarning && (
-          { ledgerWarning }
-        )}
-        {/* {(!!error || !!ledgerError) && (
-          <div>
-            {error || ledgerError}
-          </div>
-        )} */}
-      </div>
-      {ledgerLocked
+      {connectionError
         ? (
-          'ledger locked'
-          // <Button
-          //   disabled={ledgerLoading || isBusy}
-          //   onClick={refresh}
-          // >
-          //     Refresh
-          // </Button>
+          <TroubleshootInfo error={connectionError}
+            refresh={refresh} />
         )
         : (
-          <Button
-            disabled={!!error || !!ledgerError || !address || !genesis}
-            onClick={_onSave}
-          >
-            Import Account
-          </Button>
-        )
-      }
+          <>
+            <div>
+              <div>{address}</div>
+              <div>{name}</div>
+              {!!genesis && !!address && !ledgerError && <Name onChange={setName}
+                value={name || ''} />}
+              {!!name && (
+                <>
+                  <Dropdown
+                    className='accountType'
+                    disabled={ledgerLoading}
+                    onChange={_onSetAccountIndex}
+                    options={accOps.current}
+                    value={accountIndex}
+                  />
+                  <Dropdown
+                    className='accountIndex'
+                    disabled={ledgerLoading}
+                    onChange={_onSetAddressOffset}
+                    options={addOps.current}
+                    value={addressOffset}
+                  />
+                </>
+              )}
+              {!!ledgerWarning && { ledgerWarning }}
+            </div>
+            {ledgerLocked
+              ? (
+                <Button disabled={ledgerLoading || isBusy}
+                  onClick={refresh}>
+              Refresh
+                </Button>
+              )
+              : (
+                <Button disabled={!!error || !!ledgerError || !address || !genesis}
+                  onClick={_onSave}>
+              Import Account
+                </Button>
+              )}
+          </>
+        )}
     </Box>
   );
 }
