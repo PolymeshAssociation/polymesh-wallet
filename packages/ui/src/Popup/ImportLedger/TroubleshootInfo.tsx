@@ -1,4 +1,6 @@
+import SvgConnectLedger from '@polymathnetwork/extension-ui/assets/images/connect-ledger.svg';
 import { SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
+import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/install-ledger-app.svg';
 import { Box, Button, Flex, Heading, Icon, Link, Text } from '@polymathnetwork/extension-ui/ui';
 import React from 'react';
 
@@ -22,38 +24,50 @@ export function TroubleshootInfo ({ error, refresh }: Props): React.ReactElement
     switch (true) {
       case isNoDeviceSelected || hasRequestDeviceFailed:
         return (
-          <Box>
-            <Text variant='b1m'>Please ensure that:</Text>
-            <Text color='gray.2'
-              variant='b2'>
-              <ul>
-                <li>the device is connected</li>
-                <li>the device is unlocked</li>
-                <li>USB permission is granted in the browser</li>
-              </ul>
-            </Text>
-          </Box>
+          <>
+            <Heading variant='h5'>Your Ledger is not connected</Heading>
+            <Box my='m'>
+              <Box mb='s'>
+                <img src={SvgConnectLedger} />
+              </Box>
+              <Text variant='b1m'>Please ensure that:</Text>
+              <Text color='gray.2'
+                variant='b2'>
+                <ul>
+                  <li>the device is connected</li>
+                  <li>the device is unlocked</li>
+                  <li>USB permission is granted in the browser</li>
+                </ul>
+              </Text>
+            </Box>
+          </>
         );
       case isAppClosed:
         return (
-          <Box>
-            <Text variant='b1m'>
-              To install and open the Polymesh app on the ledger:
-            </Text>
-            <Text color='gray.2'
-              variant='b2'>
-              <ul>
-                <li>
-                  <Link href='https://github.com/Zondax/ledger-polymesh'
-                    target='_blank'>
-                    install the Polymesh app on the Ledger
-                  </Link>
-                </li>
-                <li>open Polymesh app on the Ledger</li>
-                <li>confirm &quot;Polymesh Ready&quot; message</li>
-              </ul>
-            </Text>
-          </Box>
+          <>
+            <Heading variant='h5'>Polymesh app is not open</Heading>
+            <Box my='m'>
+              <Box mb='s'>
+                <img src={SvgInstallLedgerApp} />
+              </Box>
+              <Text variant='b1m'>
+                To install and open the Polymesh app:
+              </Text>
+              <Text color='gray.2'
+                variant='b2'>
+                <ul>
+                  <li>
+                    <Link href='https://github.com/Zondax/ledger-polymesh'
+                      target='_blank'>
+                      install the Polymesh app on the Ledger
+                    </Link>
+                  </li>
+                  <li>open Polymesh app on the Ledger</li>
+                  <li>confirm &quot;Polymesh Ready&quot; message</li>
+                </ul>
+              </Text>
+            </Box>
+          </>
         );
       default:
         return null;
@@ -73,10 +87,7 @@ export function TroubleshootInfo ({ error, refresh }: Props): React.ReactElement
           height={20}
           width={20} />
       </Flex>
-      <Heading variant='h5'>Polymesh app is not open</Heading>
-      <Box my='m'>
-        {renderInstructions()}
-      </Box>
+      {renderInstructions()}
       <Box my={16}>
         <Button fluid
           onClick={refresh}
