@@ -60,8 +60,8 @@ function ImportLedger (): React.ReactElement {
   );
 
   // select element is returning a string
-  const _onSetAccountIndex = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => setAccountIndex(Number(event.target.value)), []);
-  const _onSetAddressOffset = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => setAddressOffset(Number(event.target.value)), []);
+  const _onSetAccountIndex = useCallback((value: string) => setAccountIndex(Number(value)), []);
+  const _onSetAddressOffset = useCallback((value: string) => setAddressOffset(Number(value)), []);
 
   return (
     <>
