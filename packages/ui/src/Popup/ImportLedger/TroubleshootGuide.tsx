@@ -3,7 +3,7 @@ import { SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/ima
 import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/install-ledger-app.svg';
 import { colors, texts } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { Box, Button, Flex, Heading, Icon, Link, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 type Props = {
@@ -12,65 +12,9 @@ type Props = {
 };
 
 export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.ReactElement | null {
-  const renderInstructions = useCallback(() => {
-    const isNoDeviceSelected = /no.*selected/gi.test(ledgerError);
-    const hasRequestDeviceFailed = /failed.*requestDevice/gi.test(ledgerError);
-    const isAppClosed = /not.*open/gi.test(ledgerError);
-
-    switch (true) {
-      case isNoDeviceSelected || hasRequestDeviceFailed:
-        return (
-          <>
-            <Heading variant='h5'>Your Ledger is not connected</Heading>
-            <Box my='m'>
-              <Box mb='s'
-                textAlign='center'>
-                <img src={SvgConnectLedger} />
-              </Box>
-              <Text variant='b1m'>Please ensure that:</Text>
-              <Text color='gray.2'
-                variant='b2'>
-                <ul style={{ margin: 0 }}>
-                  <li>the device is connected</li>
-                  <li>the device is unlocked</li>
-                  <li>USB permission is granted in the browser</li>
-                </ul>
-              </Text>
-            </Box>
-          </>
-        );
-      case isAppClosed:
-        return (
-          <>
-            <Heading variant='h5'>Polymesh app is not open</Heading>
-            <Box my='m'>
-              <Box mb='s'
-                textAlign='center'>
-                <img src={SvgInstallLedgerApp} />
-              </Box>
-              <Text variant='b1m'>
-                To install and open the Polymesh app:
-              </Text>
-              <Text color='gray.2'
-                variant='b2'>
-                <ul>
-                  <li>
-                    <Link href='https://github.com/Zondax/ledger-polymesh'
-                      target='_blank'>
-                      install the Polymesh app on the Ledger
-                    </Link>
-                  </li>
-                  <li>open Polymesh app on the Ledger</li>
-                  <li>confirm &quot;Polymesh Ready&quot; message</li>
-                </ul>
-              </Text>
-            </Box>
-          </>
-        );
-      default:
-        return null;
-    }
-  }, [ledgerError]);
+  const isNoDeviceSelected = /no.*selected/gi.test(ledgerError);
+  const hasRequestDeviceFailed = /failed.*requestDevice/gi.test(ledgerError);
+  const isAppClosed = /not.*open/gi.test(ledgerError);
 
   return (
     <Box>
@@ -89,9 +33,8 @@ export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.React
       <Heading variant='h5'>Your Ledger is not connected</Heading>
 
       <Box mb='m'>
-        {/* {renderInstructions()} */}
         <StepList>
-          <Step>
+          <Step className={(isNoDeviceSelected || hasRequestDeviceFailed) ? 'active' : ''}>
             <Box my='m'>
               <Box mb='s'>
                 <img src={SvgConnectLedger} />
@@ -99,7 +42,7 @@ export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.React
               <Text variant='b1m'>Please ensure that:</Text>
               <Text color='gray.2'
                 variant='b2'>
-                <ul style={{ margin: 0 }}>
+                <ul style={{ margin: 0, paddingLeft: 16 }}>
                   <li>the device is connected</li>
                   <li>the device is unlocked</li>
                   <li>USB permission is granted in the browser</li>
@@ -107,7 +50,7 @@ export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.React
               </Text>
             </Box>
           </Step>
-          <Step>
+          <Step className={isAppClosed ? 'active' : ''}>
             <Box my='m'>
               <Box mb='s'>
                 <img src={SvgInstallLedgerApp} />
@@ -117,7 +60,7 @@ export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.React
               </Text>
               <Text color='gray.2'
                 variant='b2'>
-                <ul>
+                <ul style={{ margin: 0, paddingLeft: 16 }}>
                   <li>
                     <Link href='https://github.com/Zondax/ledger-polymesh'
                       target='_blank'>
@@ -125,7 +68,6 @@ export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.React
                     </Link>
                   </li>
                   <li>open Polymesh app on the Ledger</li>
-                  <li>confirm &quot;Polymesh Ready&quot; message</li>
                 </ul>
               </Text>
             </Box>
@@ -180,5 +122,9 @@ const Step = styled.li`
     width: 2px;
     height: calc(100% - 32px);
     background: ${colors.brandLightest};
+  }
+
+  :not(.active) {
+    opacity: 25%;
   }
 `;
