@@ -172,7 +172,7 @@ const Step = styled.li`
     ${texts.b1m}; 
   }
 
-  ::after {
+  :not(:last-child)::after {
     content: '';
     position: absolute;
     left: 16px;
