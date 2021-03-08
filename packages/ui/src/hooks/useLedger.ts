@@ -76,7 +76,7 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
     error?.includes("Failed to execute 'requestDevice' on 'USB': Must be handling a user gesture to show a permission request") ||
     // Strangely enough this error is thrown even while importing an account.
     // @FIXME distinguish it from actual tx rejection, once we're able to sign with ledger.
-    error?.includes('Error: Transaction rejected') ||
+    error?.includes('Ledger error: Transaction rejected') ||
     // NB: if Ledger is neither returning and address nor an error, then it is stuck.
     (error === null && address === null)) {
       setStatus(Status.Device);
