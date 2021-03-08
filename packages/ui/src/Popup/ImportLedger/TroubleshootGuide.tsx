@@ -22,7 +22,7 @@ export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.React
         borderRadius='50%'
         height={48}
         justifyContent='center'
-        mb={16}
+        mb={12}
         width={48}>
         <Icon Asset={SvgInfo}
           color='yellow.0'
@@ -101,6 +101,7 @@ const Step = styled.li`
 
   ::before {
     content: counter(step);
+    ${texts.b1m}; 
     position: absolute;
     left: 0;
     top: 16px;
@@ -111,7 +112,7 @@ const Step = styled.li`
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    ${texts.b1m}; 
+    color: ${colors.brandMain};
   }
 
   :not(:last-child)::after {
@@ -125,6 +126,6 @@ const Step = styled.li`
   }
 
   :not(.active) {
-    opacity: 25%;
+    opacity: 50%;
   }
 `;
