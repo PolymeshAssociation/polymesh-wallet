@@ -3,7 +3,7 @@ import { genesisHash } from '@polymathnetwork/extension-core/constants';
 import { ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import Name from '@polymathnetwork/extension-ui/components/Name';
-import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
+import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
 import { Button } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
@@ -24,10 +24,9 @@ function ImportLedger (): React.ReactElement {
   const [error, setError] = useState<string | null>(null);
   const onAction = useContext(ActionContext);
   const [name, setName] = useState<string | null>(null);
-  const { address, error: ledgerError, isLoading: ledgerLoading, isLocked: ledgerLocked, refresh, warning: ledgerWarning } = useLedger(genesis, accountIndex, addressOffset);
+  const ledgerData = useLedger(genesis, accountIndex, addressOffset);
+  const { address, error: ledgerError, isLoading: ledgerLoading, isLocked: ledgerLocked, refresh, status, warning: ledgerWarning } = ledgerData;
   const isBusy = useContext(ActivityContext);
-
-  console.log('address', address);
 
   useEffect(() => {
     if (address) {
@@ -105,10 +104,10 @@ function ImportLedger (): React.ReactElement {
           </div>
         )}
       </div>
-      {ledgerLocked
+      {ledgerLocked || status !== Status.Ok
         ? (
           <Button
-            disabled={ledgerLoading || isBusy}
+            disabled={isBusy}
             onClick={refresh}
           >
               Refresh

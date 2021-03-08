@@ -27,7 +27,6 @@ export default function Name ({ address, className, isFocused, label, onBlur, on
       onChange={(event) => {
         const value = event.target.value;
 
-        console.log('Value', value);
         onChange(value);
       }}
       type='text'
