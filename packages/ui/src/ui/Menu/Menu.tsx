@@ -8,8 +8,7 @@ export interface MenuProps extends Props {
   onSelection: () => void;
 }
 
-// @ts-ignore
-export const Menu: React.ReactElement<MenuProps> = styled(ScMenu)({
+export const Menu = styled(ScMenu)({
   background: '#fff',
   border: '1px solid #EBF0F7',
   boxShadow: '0px 1px 2px rgba(21, 41, 53, 0.24), 0px 1px 3px rgba(21, 41, 53, 0.12);',
