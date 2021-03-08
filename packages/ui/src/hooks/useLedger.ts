@@ -11,6 +11,12 @@ interface StateBase {
   isLedgerEnabled: boolean;
 }
 
+export enum Status {
+  Device = 'Device',
+  App = 'App',
+  Error = 'Error',
+  Ok = 'Ok'
+}
 interface State extends StateBase {
   address: string | null;
   error: string | null;
@@ -53,12 +59,6 @@ function getState (): StateBase {
   };
 }
 
-export enum Status {
-  Device = 'Device',
-  App = 'App',
-  Ok = 'Ok'
-}
-
 export function useLedger (genesis?: string | null, accountIndex = 0, addressOffset = 0): State {
   const [isLoading, setIsLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
@@ -80,6 +80,8 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
     // NB: if Ledger is neither returning and address nor an error, then it is stuck.
     (error === null && address === null)) {
       setStatus(Status.Device);
+    } else if (error) {
+      setStatus(Status.Error);
     } else {
       setStatus(Status.Ok);
     }
