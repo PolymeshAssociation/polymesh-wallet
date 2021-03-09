@@ -2,7 +2,7 @@ import { KeyringPair } from '@polkadot/keyring/types';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { callDetails } from '@polymathnetwork/extension-core/external';
-import { getDids, getNetwork, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
+import { getNetwork, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { renameIdentity,
   setNetwork,
   setSelectedAccount,
@@ -245,16 +245,8 @@ export default class Extension {
     const queued = this.#state.getProvideUidRequest(id);
 
     assert(queued, 'Unable to find request');
-    const { reject, request, resolve } = queued;
+    const { request, resolve } = queued;
     const { did, network, uid } = request;
-
-    const dids = getDids();
-
-    if (dids.indexOf(did) === -1) {
-      reject(new Error(Errors.DID_NOT_MATCH));
-
-      return false;
-    }
 
     this.#state.setUid(did, network, uid, password);
 
