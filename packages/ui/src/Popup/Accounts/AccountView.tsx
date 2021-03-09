@@ -31,23 +31,18 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
 
   const renderMenuItems = (address: string) => {
     return (
-      <>
-        {/* @ts-ignore */}
-        <Menu id={`account_menu_${address}`}>
-          {/* @ts-ignore */}
-          <MenuItem data={{ action: 'export', address }}
-            onClick={handleMenuClick}>
-            <Text color='gray.2'
-              variant='b1'>Export account</Text>
-          </MenuItem>
-          {/* @ts-ignore */}
-          <MenuItem data={{ action: 'forget', address }}
-            onClick={handleMenuClick}>
-            <Text color='gray.2'
-              variant='b1'>Forget account</Text>
-          </MenuItem>
-        </Menu>
-      </>
+      <Menu id={`account_menu_${address}`}>
+        <MenuItem data={{ action: 'export', address }}
+          onClick={handleMenuClick}>
+          <Text color='gray.2'
+            variant='b1'>Export account</Text>
+        </MenuItem>
+        <MenuItem data={{ action: 'forget', address }}
+          onClick={handleMenuClick}>
+          <Text color='gray.2'
+            variant='b1'>Forget account</Text>
+        </MenuItem>
+      </Menu>
     );
   };
 
