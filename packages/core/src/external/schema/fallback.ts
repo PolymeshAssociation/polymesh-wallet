@@ -1129,6 +1129,7 @@ const alcyone = {
     "Distribution": {
       "from": "PortfolioId",
       "currency": "Ticker",
+      "per_share": "Balance",
       "amount": "Balance",
       "remaining": "Balance",
       "reclaimed": "bool",
@@ -2594,6 +2595,7 @@ const pme = {
     "Distribution": {
       "from": "PortfolioId",
       "currency": "Ticker",
+      "per_share": "Balance",
       "amount": "Balance",
       "remaining": "Balance",
       "reclaimed": "bool",
@@ -4059,6 +4061,7 @@ const pmf = {
     "Distribution": {
       "from": "PortfolioId",
       "currency": "Ticker",
+      "per_share": "Balance",
       "amount": "Balance",
       "remaining": "Balance",
       "reclaimed": "bool",
