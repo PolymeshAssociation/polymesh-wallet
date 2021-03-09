@@ -130,10 +130,9 @@ export default function Accounts (): React.ReactElement {
                   () => history.push('/account/import-ledger')
                 }>
                 <Text color='gray.2'
-                  variant='b1'>{
-                    // !isLedgerCapable && 'Ledger devices can only be connected with Chrome browser' || 'Attach ledger account'
-                    isLedgerCapable ? 'Attach ledger account' : 'Ledger devices can only be connected with Chrome browser'
-                  }</Text>
+                  variant='b1'>
+                  {isLedgerCapable ? 'Attach ledger account' : 'Ledger devices can only be connected with Chrome browser'}
+                </Text>
               </MenuItem>
 
               : <MenuItem
