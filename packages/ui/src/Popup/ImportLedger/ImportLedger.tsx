@@ -67,8 +67,8 @@ function ImportLedger (): React.ReactElement {
 
   return (
     <Box p='s'>
-      {ledgerError
-        ? <TroubleshootGuide ledgerError={ledgerError}
+      {status !== Status.Ok
+        ? <TroubleshootGuide ledgerStatus={status}
           refresh={refresh}/>
         : <>
           <div>Import Ledger Account</div>

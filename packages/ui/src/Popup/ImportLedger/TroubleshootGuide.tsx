@@ -2,88 +2,107 @@ import SvgConnectLedger from '@polymathnetwork/extension-ui/assets/images/connec
 import { SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
 import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/install-ledger-app.svg';
 import { colors, texts } from '@polymathnetwork/extension-ui/components/themeDefinitions';
-import { Box, Button, Flex, Heading, Icon, Link, Text } from '@polymathnetwork/extension-ui/ui';
-import React from 'react';
+import { Status } from '@polymathnetwork/extension-ui/hooks/useLedger';
+import { Box, Button, Flex, Heading, Icon, Link, Loading, Text } from '@polymathnetwork/extension-ui/ui';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 type Props = {
-  ledgerError: string;
+  ledgerStatus: Status | null;
   refresh: () => void;
 };
 
-export function TroubleshootGuide ({ ledgerError, refresh }: Props): React.ReactElement | null {
-  const isNoDeviceSelected = /no.*selected/gi.test(ledgerError);
-  const hasRequestDeviceFailed = /failed.*requestDevice/gi.test(ledgerError);
-  const isAppClosed = /not.*open/gi.test(ledgerError);
+export function TroubleshootGuide ({ ledgerStatus, refresh }: Props): React.ReactElement | null {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const isDeviceIssue = ledgerStatus === Status.Device || ledgerStatus === Status.Error;
+  const isAppIssue = ledgerStatus === Status.App;
+
+  // Show a loading spinner for 1.5s by default, because `ledgerStatus` may become 'Ok' by itself
+  useEffect(() => {
+    const loadingTimeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => {
+      clearTimeout(loadingTimeout);
+    };
+  }, [isDeviceIssue, ledgerStatus]);
 
   return (
-    <Box>
-      <Flex bg='yellow.1'
-        borderRadius='50%'
-        height={48}
+    isLoading
+      ? <Flex height='578px'
         justifyContent='center'
-        mb={12}
-        width={48}>
-        <Icon Asset={SvgInfo}
-          color='yellow.0'
-          height={20}
-          width={20} />
+        width='100%'>
+        <Loading />
       </Flex>
+      : <Box>
+        <Flex bg='yellow.1'
+          borderRadius='50%'
+          height={48}
+          justifyContent='center'
+          mb={12}
+          width={48}>
+          <Icon Asset={SvgInfo}
+            color='yellow.0'
+            height={20}
+            width={20} />
+        </Flex>
 
-      <Heading variant='h5'>Your Ledger is not connected</Heading>
+        <Heading variant='h5'>Your Ledger is not connected</Heading>
 
-      <Box mb='m'>
-        <StepList>
-          <Step className={(isNoDeviceSelected || hasRequestDeviceFailed) ? 'active' : ''}>
-            <Box my='m'>
-              <Box mb='s'>
-                <img src={SvgConnectLedger} />
+        <Box mb='m'>
+          <StepList>
+            <Step className={isDeviceIssue ? 'active' : ''}>
+              <Box my='m'>
+                <Box mb='s'>
+                  <img src={SvgConnectLedger} />
+                </Box>
+                <Text variant='b1m'>Please ensure that:</Text>
+                <Text color='gray.2'
+                  variant='b2'>
+                  <ul style={{ margin: 0, paddingLeft: 16 }}>
+                    <li>the device is connected</li>
+                    <li>the device is unlocked</li>
+                    <li>USB permission is granted in the browser</li>
+                  </ul>
+                </Text>
               </Box>
-              <Text variant='b1m'>Please ensure that:</Text>
-              <Text color='gray.2'
-                variant='b2'>
-                <ul style={{ margin: 0, paddingLeft: 16 }}>
-                  <li>the device is connected</li>
-                  <li>the device is unlocked</li>
-                  <li>USB permission is granted in the browser</li>
-                </ul>
-              </Text>
-            </Box>
-          </Step>
-          <Step className={isAppClosed ? 'active' : ''}>
-            <Box my='m'>
-              <Box mb='s'>
-                <img src={SvgInstallLedgerApp} />
-              </Box>
-              <Text variant='b1m'>
+            </Step>
+            <Step className={isAppIssue ? 'active' : ''}>
+              <Box my='m'>
+                <Box mb='s'>
+                  <img src={SvgInstallLedgerApp} />
+                </Box>
+                <Text variant='b1m'>
                 To install and open the Polymesh app:
-              </Text>
-              <Text color='gray.2'
-                variant='b2'>
-                <ul style={{ margin: 0, paddingLeft: 16 }}>
-                  <li>
-                    <Link href='https://github.com/Zondax/ledger-polymesh'
-                      target='_blank'>
+                </Text>
+                <Text color='gray.2'
+                  variant='b2'>
+                  <ul style={{ margin: 0, paddingLeft: 16 }}>
+                    <li>
+                      <Link href='https://github.com/Zondax/ledger-polymesh'
+                        target='_blank'>
                       install the Polymesh app on the Ledger
-                    </Link>
-                  </li>
-                  <li>open Polymesh app on the Ledger</li>
-                </ul>
-              </Text>
-            </Box>
-          </Step>
-        </StepList>
-      </Box>
-      <Button fluid
-        onClick={refresh}
-        variant='secondary'>
-        <Icon Asset={SvgLedgerLogo}
-          height={24}
-          mr='s'
-          width={24}/>
+                      </Link>
+                    </li>
+                    <li>open Polymesh app on the Ledger</li>
+                  </ul>
+                </Text>
+              </Box>
+            </Step>
+          </StepList>
+        </Box>
+        <Button fluid
+          onClick={refresh}
+          variant='secondary'>
+          <Icon Asset={SvgLedgerLogo}
+            height={24}
+            mr='s'
+            width={24}/>
         Refresh
-      </Button>
-    </Box>
+        </Button>
+      </Box>
   );
 }
 
