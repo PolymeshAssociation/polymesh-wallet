@@ -16,6 +16,8 @@ export enum Errors {
   NO_DID = 'Selected user account is not verified.',
   NO_UID = 'No uID associated with the selected account or chain.',
   DID_NOT_MATCH = 'Request does not match any existing identity in the wallet.',
+  INVALID_TICKER = 'Invalid ticker.',
+  INVALID_UID = 'Provided uID string is not a valid v4 uuid.'
 }
 export interface ResponsePolyCallDetails {
   networkFee: string;
