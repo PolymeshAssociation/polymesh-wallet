@@ -11,6 +11,12 @@ interface StateBase {
   isLedgerEnabled: boolean;
 }
 
+export enum Status {
+  Device = 'Device',
+  App = 'App',
+  Error = 'Error',
+  Ok = 'Ok'
+}
 interface State extends StateBase {
   address: string | null;
   error: string | null;
@@ -21,6 +27,7 @@ interface State extends StateBase {
   ledger: Ledger | null;
   refresh: () => void;
   warning: string | null;
+  status: Status | null;
 }
 
 function getNetwork (genesis: string): Network | undefined {
@@ -59,6 +66,27 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
   const [warning, setWarning] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [address, setAddress] = useState<string | null>(null);
+  const [status, setStatus] = useState<Status | null>(null);
+
+  useEffect(() => {
+    if (error?.includes('does not seem to be open')) {
+      setStatus(Status.App);
+    } else if (error?.includes('AbortError: The transfer was cancelled') ||
+    error?.includes('No device selected') ||
+    error?.includes("Failed to execute 'requestDevice' on 'USB': Must be handling a user gesture to show a permission request") ||
+    // Strangely enough this error is thrown even while importing an account.
+    // @FIXME distinguish it from actual tx rejection, once we're able to sign with ledger.
+    error?.includes('Ledger error: Transaction rejected') ||
+    // NB: if Ledger is neither returning and address nor an error, then it is stuck.
+    (error === null && address === null)) {
+      setStatus(Status.Device);
+    } else if (error) {
+      setStatus(Status.Error);
+    } else {
+      setStatus(Status.Ok);
+    }
+  }, [error, address]);
+
   const ledger = useMemo(() => {
     setIsLocked(false);
     setRefreshLock(false);
@@ -88,6 +116,7 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
     setError(null);
     setWarning(null);
 
+    // @FIXME sometimes ledger.getAddress neither resolves nor rejects.
     ledger.getAddress(false, accountIndex, addressOffset)
       .then((res) => {
         setIsLoading(false);
@@ -119,5 +148,5 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
     setWarning(null);
   }, []);
 
-  return ({ ...getState(), address, error, isLoading, isLocked, ledger, refresh, warning });
+  return ({ ...getState(), address, error, isLoading, isLocked, ledger, refresh, warning, status });
 }
