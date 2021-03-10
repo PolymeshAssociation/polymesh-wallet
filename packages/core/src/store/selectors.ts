@@ -102,7 +102,6 @@ export const selectIsHydratedAndNetwork = createSelector(
 
 export const selectStatus = createSelector(
   (state: RootState) => state.status,
-  // Status will always be "ready" if we're offline
   (status) => status
 );
 
