@@ -1,11 +1,12 @@
 import settings from '@polkadot/ui-settings';
 import { genesisHash } from '@polymathnetwork/extension-core/constants';
+import { SvgFileLockOutline, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import Name from '@polymathnetwork/extension-ui/components/Name';
 import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Button } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Header, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -71,7 +72,16 @@ function ImportLedger (): React.ReactElement {
         ? <TroubleshootGuide ledgerStatus={status}
           refresh={refresh}/>
         : <>
-          <div>Import Ledger Account</div>
+          <Header headerText='Connect your ledger'
+            iconAsset={SvgLedgerLogo}>
+            <Box>
+              <Text color='gray.0'
+                variant='b2'>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </Text>
+            </Box>
+          </Header>
+
           <div>
             <div>{address}</div>
             <div>{name}</div>
