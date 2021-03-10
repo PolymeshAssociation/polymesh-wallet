@@ -1,9 +1,11 @@
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
+import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
+import { getDids } from './store/getters';
 import { setError } from './store/setters';
 import { messagePrefix, messages, uidProvidersWhitelist } from './constants';
-import { ErrorCodes, KeyringAccountData } from './types';
+import { ErrorCodes, KeyringAccountData, NetworkName } from './types';
 
 // Sort an array by prioritizing a certain element
 export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
@@ -56,4 +58,31 @@ export const allowedUidProvider = (url: string): boolean => {
   }
 
   return false;
+};
+
+export const validateTicker = (ticker: string): boolean => {
+  return !!ticker &&
+    typeof ticker === 'string' &&
+    ticker.length > 0 &&
+    ticker.length <= 12 &&
+    !!(/^[a-zA-Z0-9\-:]*$/.exec(ticker));
+};
+
+export const validateNetwork = (network: string): boolean => {
+  return !!network &&
+    Object.keys(NetworkName).indexOf(network) > -1;
+};
+
+export const validateDid = (did: string): boolean => {
+  const dids = getDids();
+
+  if (dids.indexOf(did) === -1) {
+    return false;
+  }
+
+  return true;
+};
+
+export const validateUid = (uid: string): boolean => {
+  return uuidValidate(uid) && uuidVersion(uid) === 4;
 };
