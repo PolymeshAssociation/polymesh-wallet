@@ -1,6 +1,6 @@
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
-import { parse as uuidParse } from 'uuid';
+import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
 import { getDids } from './store/getters';
 import { setError } from './store/setters';
@@ -84,12 +84,5 @@ export const validateDid = (did: string): boolean => {
 };
 
 export const validateUid = (uid: string): boolean => {
-  // Uid should be a valid UUID string.
-  try {
-    uuidParse(uid);
-  } catch (error) {
-    return false;
-  }
-
-  return true;
+  return uuidValidate(uid) && uuidVersion(uid) === 4;
 };
