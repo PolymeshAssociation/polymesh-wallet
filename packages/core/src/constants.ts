@@ -4,7 +4,7 @@ const networkURLs: Record<NetworkName, string> = {
   alcyone: 'wss://alcyone-rpc.polymesh.live',
   pmf: 'wss://pmf.polymath.network',
   pme: 'wss://pme.polymath.network',
-  local: 'ws://lolhost:9944'
+  local: 'ws://localhost:9944'
 };
 
 const networkLabels: Record<NetworkName, string> = {
