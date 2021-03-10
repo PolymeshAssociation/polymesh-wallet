@@ -1,7 +1,7 @@
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 
-import { setError } from './store/setters';
+import { apiError, setError } from './store/setters';
 import { messagePrefix, messages, uidProvidersWhitelist } from './constants';
 import { ErrorCodes, KeyringAccountData } from './types';
 
@@ -28,8 +28,12 @@ export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
 
 export const fatalErrorHandler = (error: Error): void => error && setError({ code: ErrorCodes.FatalError, msg: error.message });
 
-export const nonFatalErrorHandler = (error: Error): void =>
-  error && !!error.message && error.message.length ? setError({ code: ErrorCodes.NonFatalError, msg: error.message }) : undefined;
+export const apiErrorHandler = (error: Error): void => {
+  if (error && !!error.message && error.message.length) {
+    setError({ code: ErrorCodes.NonFatalError, msg: error.message });
+    apiError();
+  }
+};
 
 export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
   cb(navigator.onLine);

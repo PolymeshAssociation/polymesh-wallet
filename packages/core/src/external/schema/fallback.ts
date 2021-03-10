@@ -4401,10 +4401,13 @@ const pmf = {
   }
 };
 
+const local = alcyone;
+
 const schemas: Record<NetworkName, Schema> = {
   pme,
   pmf,
-  alcyone
+  alcyone,
+  local
 };
 
 export default schemas;
