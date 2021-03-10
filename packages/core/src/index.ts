@@ -15,7 +15,7 @@ import { subscribeDidsList, subscribeIsHydratedAndNetwork } from './store/subscr
 import { populatedDelay } from './constants';
 import store from './store';
 import { AccountData, KeyringAccountData, UnsubCallback } from './types';
-import { nonFatalErrorHandler, observeAccounts } from './utils';
+import { apiErrorHandler, observeAccounts } from './utils';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
@@ -190,11 +190,11 @@ function subscribePolymesh (): () => Promise<void> {
                       console.log(`Poly: Setting **identity** ${didCount++}`, data);
                       // store.dispatch(identityActions.setIdentitySecKeys(params));
                       store.dispatch(identityActions.setIdentity(params));
-                    }, nonFatalErrorHandler)
-                      .catch(nonFatalErrorHandler);
+                    }, apiErrorHandler)
+                      .catch(apiErrorHandler);
                   }).then((unsub) => {
                     unsubCallbacks[account] = unsub;
-                  }, nonFatalErrorHandler).catch(nonFatalErrorHandler);
+                  }, apiErrorHandler).catch(apiErrorHandler);
                 });
 
                 prevAccounts = accounts;
@@ -249,18 +249,18 @@ function subscribePolymesh (): () => Promise<void> {
                         store.dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
                       }
                     });
-                  }, nonFatalErrorHandler)
-                  .catch(nonFatalErrorHandler);
+                  }, apiErrorHandler)
+                  .catch(apiErrorHandler);
 
                 prevDids = dids;
               });
             },
-            nonFatalErrorHandler
+            apiErrorHandler
           ).catch((err) => {
-            nonFatalErrorHandler(err);
+            apiErrorHandler(err);
           });
-        }, nonFatalErrorHandler
-        ).catch(nonFatalErrorHandler);
+        }, apiErrorHandler
+        ).catch(apiErrorHandler);
     }
   });
 
