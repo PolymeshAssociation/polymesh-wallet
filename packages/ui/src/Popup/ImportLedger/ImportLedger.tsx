@@ -1,12 +1,13 @@
 import settings from '@polkadot/ui-settings';
 import { genesisHash } from '@polymathnetwork/extension-core/constants';
-import { SvgFileLockOutline, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import Name from '@polymathnetwork/extension-ui/components/Name';
 import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Button, Header, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Header, Text } from '@polymathnetwork/extension-ui/ui';
+import { formatters } from '@polymathnetwork/extension-ui/util';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -82,8 +83,28 @@ function ImportLedger (): React.ReactElement {
             </Box>
           </Header>
 
-          <div>
-            <div>{address}</div>
+          <>
+            <Flex p='8px'>
+              <Flex bg='brandLightest'
+                borderRadius='50%'
+                flex='0 0 40px'
+                height={40}
+                justifyContent='center'>
+                <Text color='brandMain'>
+                  ??
+                </Text>
+              </Flex>
+              <Flex alignItems='flex-start'
+                flexDirection='column'
+                ml='8px'>
+                <Text color='gray.1'
+                  variant='b2m'>??? ???</Text>
+                <Text color='gray.2'
+                  variant='b3'>
+                  {address && formatters.toShortAddress(address, { size: 33 })}
+                </Text>
+              </Flex>
+            </Flex>
             <div>{name}</div>
             {
               !!genesis &&
@@ -119,7 +140,7 @@ function ImportLedger (): React.ReactElement {
                 {error || ledgerError}
               </div>
             )}
-          </div>
+          </>
           {ledgerLocked
             ? (
               <Button
@@ -132,9 +153,10 @@ function ImportLedger (): React.ReactElement {
             : (
               <Button
                 disabled={!!error || !!ledgerError || !address || !genesis}
+                fluid
                 onClick={_onSave}
               >
-            Import Account
+                Continue
               </Button>
             )
           }
