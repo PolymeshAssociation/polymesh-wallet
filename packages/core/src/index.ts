@@ -256,9 +256,7 @@ function subscribePolymesh (): () => Promise<void> {
               });
             },
             apiErrorHandler
-          ).catch((err) => {
-            apiErrorHandler(err);
-          });
+          ).catch(apiErrorHandler);
         }, apiErrorHandler
         ).catch(apiErrorHandler);
     }
