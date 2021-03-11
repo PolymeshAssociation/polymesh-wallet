@@ -45,11 +45,13 @@ export default function Request ({ account: { accountIndex, address, addressOffs
   const [isLocked, setIsLocked] = useState<boolean | null>(null);
   const [savePass, setSavePass] = useState(false);
   const isBusy = useContext(ActivityContext);
-  const { error: ledgerError, isLoading: ledgerLoading, isLocked: ledgerLocked, ledger, refresh, status: ledgerStatus, warning: ledgerWarning } = useLedger(
+  const { ledger, refresh, status: ledgerStatus } = useLedger(
     (request.payload as SignerPayloadJSON).genesisHash,
     accountIndex as number || 0,
     addressOffset as number || 0
   );
+
+  console.log('Request :: Status', status);
 
   useEffect((): void => {
     setIsLocked(null);
