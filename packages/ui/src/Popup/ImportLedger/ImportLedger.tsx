@@ -38,7 +38,7 @@ function ImportLedger (): React.ReactElement {
   const [addressOffset, setAddressOffset] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const onAction = useContext(ActionContext);
-  const [name, setName] = useState<string | null>(null);
+  const [name, setName] = useState<string>('');
   const ledgerData = useLedger(genesis, accountIndex, addressOffset);
   const { address, error: ledgerError, isLoading: ledgerLoading, isLocked: ledgerLocked, refresh, status, warning: ledgerWarning } = ledgerData;
   const isBusy = useContext(ActivityContext);
@@ -91,9 +91,17 @@ function ImportLedger (): React.ReactElement {
     console.log({ oneAddress, isValidPassword });
   };
 
+  const getInitials = (fullName: string) => {
+    if (!fullName) return '';
+
+    const [name1, name2] = fullName.split(' ');
+
+    return `${name1[0]}${name2 ? name2[0] : ''}`;
+  };
+
   return (
     <>
-      {false && status !== Status.Ok
+      {status !== Status.Ok
         ? <Box p='s'>
           <TroubleshootGuide ledgerStatus={status}
             refresh={refresh}/>
@@ -110,22 +118,26 @@ function ImportLedger (): React.ReactElement {
           </Header>
 
           <>
-            <Box p='8px'>
-              <Flex>
+            <Flex alignItems='flex-start'
+              flexDirection='column'
+              height='100%'
+              p='8px'>
+              <Flex width='100%'>
                 <Flex bg='brandLightest'
                   borderRadius='50%'
                   flex='0 0 40px'
                   height={40}
                   justifyContent='center'>
-                  <Text color='brandMain'>
-                  ??
+                  <Text color='brandMain'
+                    fontSize={1}>
+                    {getInitials(name)}
                   </Text>
                 </Flex>
                 <Flex alignItems='flex-start'
                   flexDirection='column'
                   ml='8px'>
                   <Text color='gray.1'
-                    variant='b2m'>??? ???</Text>
+                    variant='b2m'>{name}</Text>
                   <Text color='gray.2'
                     variant='b3'>
                     {address && formatters.toShortAddress(address, { size: 33 })}
@@ -133,46 +145,50 @@ function ImportLedger (): React.ReactElement {
                 </Flex>
               </Flex>
 
-              <FormProvider {...methods}>
-                <form
-                  id='ledgerImport'
-                  onSubmit={handleSubmit(onContinue)}
-                >
-                  <Box mt='m'>
-                    <Box>
-                      <Text color='gray.1'
-                        variant='b2m' >
-                      Account name
-                      </Text>
-                    </Box>
-                    <Box>
-                      <TextInput inputRef={register({ required: 'Account name is required' })}
-                        name='accountName'
-                        placeholder='Enter account name' />
+              <Box width='100%'>
+                <FormProvider {...methods}>
+                  <form id='ledgerImport'
+                    onSubmit={handleSubmit(onContinue)}>
+                    <Box mt='m'>
                       <Box>
-                        <Text color='alert'
-                          variant='b3'>
-                          <ErrorMessage errors={errors}
-                            name='accountName' />
+                        <Text color='gray.1'
+                          variant='b2m' >
+                          Account name
                         </Text>
                       </Box>
+                      <Box>
+                        <TextInput inputRef={register({ required: 'Account name is required' })}
+                          name='accountName'
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder='Enter account name' />
+                        <Box>
+                          <Text color='alert'
+                            variant='b3'>
+                            <ErrorMessage errors={errors}
+                              name='accountName' />
+                          </Text>
+                        </Box>
+                      </Box>
                     </Box>
-                  </Box>
 
-                  <Password label='Wallet password'
-                    placeholder='Enter your current wallet password'
-                  />
+                    <Password label='Wallet password'
+                      placeholder='Enter your current wallet password'/>
+                  </form>
+                </FormProvider>
+              </Box>
 
-                  <Button disabled={isBusy}
-                    fluid
-                    type='submit' >
-                    Continue
-                  </Button>
-                </form>
-              </FormProvider>
-            </Box>
+              <Box mt='auto'
+                width='100%'>
+                <Button disabled={isBusy}
+                  fluid
+                  form='ledgerImport'
+                  type='submit'>
+                  Continue
+                </Button>
+              </Box>
+            </Flex>
 
-            <div>{name}</div>
+            {/* <div>{name}</div>
             {
               !!genesis &&
           !!address && !ledgerError && (
@@ -206,9 +222,9 @@ function ImportLedger (): React.ReactElement {
               <div>
                 {error || ledgerError}
               </div>
-            )}
+            )} */}
           </>
-          {ledgerLocked
+          {/* {ledgerLocked
             ? (
               <Button
                 disabled={ledgerLoading || isBusy}
@@ -226,7 +242,7 @@ function ImportLedger (): React.ReactElement {
                 Continue
               </Button>
             )
-          }
+          } */}
         </>
       }
     </>
