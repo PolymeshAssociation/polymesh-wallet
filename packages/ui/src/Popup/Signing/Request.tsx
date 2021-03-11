@@ -15,7 +15,6 @@ import { AccountsHeader } from '../Accounts/AccountsHeader';
 import { TroubleshootGuide } from '../ImportLedger/TroubleshootGuide';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
-import LedgerSign from './LedgerSign';
 import Unlock from './Unlock';
 
 interface Props {
@@ -206,15 +205,6 @@ export default function Request ({ account: { accountIndex, address, addressOffs
         </Flex>
         {isFirst && <Box ml='xs'>
           { isHardware && payload
-            // <LedgerSign
-            //   accountIndex={accountIndex as number || 0}
-            //   addressOffset={addressOffset as number || 0}
-            //   error={error}
-            //   genesisHash={(request.payload as SignerPayloadJSON).genesisHash}
-            //   onSignature={_onSignLedger}
-            //   payload={payload}
-            //   setError={setError}
-            // />
             ? <Button
               busy={isBusy}
               fluid
