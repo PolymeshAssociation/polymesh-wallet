@@ -1,14 +1,14 @@
 import { ErrorMessage } from '@hookform/error-message';
 import settings from '@polkadot/ui-settings';
 import { genesisHash } from '@polymathnetwork/extension-core/constants';
-import { SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgArrowDown, SvgChevronDown, SvgLedgerLogo, SvgSettingsOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Password } from '@polymathnetwork/extension-ui/components';
 import { ActionContext, ActivityContext, PolymeshContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import Name from '@polymathnetwork/extension-ui/components/Name';
 import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware, validateAccount } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { formatters } from '@polymathnetwork/extension-ui/util';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -39,6 +39,7 @@ function ImportLedger (): React.ReactElement {
   const [error, setError] = useState<string | null>(null);
   const onAction = useContext(ActionContext);
   const [name, setName] = useState<string>('');
+  const [isShowingSettings, setIsShowingSettings] = useState(false);
   const ledgerData = useLedger(genesis, accountIndex, addressOffset);
   const { address, error: ledgerError, isLoading: ledgerLoading, isLocked: ledgerLocked, refresh, status, warning: ledgerWarning } = ledgerData;
   const isBusy = useContext(ActivityContext);
@@ -81,7 +82,7 @@ function ImportLedger (): React.ReactElement {
   const _onSetAccountIndex = useCallback((value: string) => setAccountIndex(Number(value)), []);
   const _onSetAddressOffset = useCallback((value: string) => setAddressOffset(Number(value)), []);
 
-  const onContinue = async ({ accountName, password }: FormInputs) => {
+  const onContinue = async ({ password }: FormInputs) => {
     if (!oneAddress) return;
 
     const isValidPassword = await validateAccount(oneAddress, password);
@@ -99,6 +100,10 @@ function ImportLedger (): React.ReactElement {
     const [name1, name2] = fullName.split(' ');
 
     return `${name1[0]}${name2 ? name2[0] : ''}`.toUpperCase();
+  };
+
+  const toggleShowingSettings = () => {
+    setIsShowingSettings(!isShowingSettings);
   };
 
   return (
@@ -123,7 +128,8 @@ function ImportLedger (): React.ReactElement {
             <Flex alignItems='flex-start'
               flexDirection='column'
               height='100%'
-              p='8px'>
+              p='8px'
+              style={{ overflowY: 'scroll ' }}>
               <Flex width='100%'>
                 <Flex bg='brandLightest'
                   borderRadius='50%'
@@ -173,10 +179,65 @@ function ImportLedger (): React.ReactElement {
                       </Box>
                     </Box>
 
-                    <Password label='Wallet password'
-                      placeholder='Enter your current wallet password'/>
+                    <Password label={oneAddress ? 'Wallet password' : 'Password'}
+                      placeholder='Enter your current wallet password'
+                      withConfirm={!oneAddress}/>
                   </form>
                 </FormProvider>
+              </Box>
+
+              <Box my='l'
+                width='100%'>
+                <SettingsButton mb='m'
+                  onClick={toggleShowingSettings}
+                  width='100%'>
+                  <Icon Asset={SvgSettingsOutline}
+                    color='brandMain'
+                    height='20px'
+                    width='20px' />
+                  <Box ml='s'>
+                    <Text color='brandMain'>
+                      Advanced settings
+                    </Text>
+                  </Box>
+                  <Box ml='auto'>
+                    <Icon Asset={SvgChevronDown}
+                      color='brandMain'
+                      height='20px'
+                      width='20px' />
+                  </Box>
+                </SettingsButton>
+
+                {isShowingSettings &&
+                <>
+                  <Box mb='m'>
+                    <Text color='gray.1'
+                      variant='b2m' >
+                    Account type
+                    </Text>
+                    <Dropdown
+                      className='accountType'
+                      disabled={ledgerLoading}
+                      onChange={_onSetAccountIndex}
+                      options={accOps.current}
+                      value={accountIndex}
+                    />
+                  </Box>
+                  <Box mb='m'>
+                    <Text color='gray.1'
+                      variant='b2m' >
+                      Account index
+                    </Text>
+                    <Dropdown
+                      className='accountIndex'
+                      disabled={ledgerLoading}
+                      onChange={_onSetAddressOffset}
+                      options={addOps.current}
+                      value={addressOffset}
+                    />
+                  </Box>
+                </>
+                }
               </Box>
 
               <Box mt='auto'
@@ -189,62 +250,7 @@ function ImportLedger (): React.ReactElement {
                 </Button>
               </Box>
             </Flex>
-
-            {/* <div>{name}</div>
-            {
-              !!genesis &&
-          !!address && !ledgerError && (
-                <Name
-                  onChange={setName}
-                  value={name || ''}
-                />
-              )}
-            { !!name && (
-              <>
-                <Dropdown
-                  className='accountType'
-                  disabled={ledgerLoading}
-                  onChange={_onSetAccountIndex}
-                  options={accOps.current}
-                  value={accountIndex}
-                />
-                <Dropdown
-                  className='accountIndex'
-                  disabled={ledgerLoading}
-                  onChange={_onSetAddressOffset}
-                  options={addOps.current}
-                  value={addressOffset}
-                />
-              </>
-            )}
-            {!!ledgerWarning && (
-              { ledgerWarning }
-            )}
-            {(!!error || !!ledgerError) && (
-              <div>
-                {error || ledgerError}
-              </div>
-            )} */}
           </>
-          {/* {ledgerLocked
-            ? (
-              <Button
-                disabled={ledgerLoading || isBusy}
-                onClick={refresh}
-              >
-              Refresh
-              </Button>
-            )
-            : (
-              <Button
-                disabled={!!error || !!ledgerError || !address || !genesis}
-                fluid
-                onClick={_onSave}
-              >
-                Continue
-              </Button>
-            )
-          } */}
         </>
       }
     </>
@@ -254,5 +260,11 @@ function ImportLedger (): React.ReactElement {
 export default styled(ImportLedger)`
   .refreshIcon {
     margin-right: 0.3rem;
+  }
+`;
+
+const SettingsButton = styled(Flex)`
+  :hover {
+    cursor: pointer;
   }
 `;
