@@ -43,7 +43,8 @@ export type ReversedDidList =
 export enum NetworkName {
   pmf = 'pmf',
   alcyone = 'alcyone',
-  pme = 'pme'
+  pme = 'pme',
+  local = 'local'
 }
 
 export enum LinkName {
@@ -122,7 +123,7 @@ export type Error = {
 export type StoreStatus = {
   rehydrated: boolean,
   error: Error | null,
-  ready: boolean,
+  apiStatus: 'ready' | 'connecting' | 'error',
   populated: Record<string, boolean>,
 };
 

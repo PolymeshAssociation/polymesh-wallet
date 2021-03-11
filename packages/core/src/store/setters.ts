@@ -33,6 +33,10 @@ function setError (error: Error) {
   store.dispatch(statusActions.error(error));
 }
 
+export function apiError () {
+  store.dispatch(statusActions.apiError());
+}
+
 export {
   setNetwork,
   setSelectedAccount,

@@ -215,7 +215,8 @@ export default function Popup (): React.ReactElement {
   // B) API is ready, and
   //   B1) Accounts list is empty. ie this an empty wallet, or
   //   B2) Redux store is populated.
-  const isReady = status?.error || ((status?.populated[network] || accounts?.length === 0) && status?.ready);
+  const isReady = status?.apiStatus !== 'connecting' &&
+  (status?.populated[network] || accounts?.length === 0 || status?.apiStatus === 'error');
 
   return (
     <Loading>
