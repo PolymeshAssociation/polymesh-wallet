@@ -1,11 +1,10 @@
 import { ErrorMessage } from '@hookform/error-message';
 import settings from '@polkadot/ui-settings';
 import { genesisHash } from '@polymathnetwork/extension-core/constants';
-import { SvgArrowDown, SvgChevronDown, SvgLedgerLogo, SvgSettingsOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgChevronDown, SvgLedgerLogo, SvgSettingsOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Password } from '@polymathnetwork/extension-ui/components';
 import { ActionContext, ActivityContext, PolymeshContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
-import Name from '@polymathnetwork/extension-ui/components/Name';
 import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware, validateAccount } from '@polymathnetwork/extension-ui/messaging';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
@@ -41,7 +40,7 @@ function ImportLedger (): React.ReactElement {
   const [name, setName] = useState<string>('');
   const [isShowingSettings, setIsShowingSettings] = useState(false);
   const ledgerData = useLedger(genesis, accountIndex, addressOffset);
-  const { address, error: ledgerError, isLoading: ledgerLoading, isLocked: ledgerLocked, refresh, status, warning: ledgerWarning } = ledgerData;
+  const { address, isLoading: ledgerLoading, refresh, status } = ledgerData;
   const isBusy = useContext(ActivityContext);
 
   const { polymeshAccounts } = useContext(PolymeshContext);
@@ -63,7 +62,7 @@ function ImportLedger (): React.ReactElement {
     value
   })));
 
-  const _onSave = useCallback(
+  const saveAccount = useCallback(
     () => {
       if (address && genesis && name) {
         createAccountHardware(address, 'ledger', accountIndex, addressOffset, name, genesis)
@@ -78,17 +77,13 @@ function ImportLedger (): React.ReactElement {
     [accountIndex, address, addressOffset, genesis, name, onAction]
   );
 
-  // select element is returning a string
-  const _onSetAccountIndex = useCallback((value: string) => setAccountIndex(Number(value)), []);
-  const _onSetAddressOffset = useCallback((value: string) => setAddressOffset(Number(value)), []);
-
   const onContinue = async ({ password }: FormInputs) => {
     if (!oneAddress) return;
 
     const isValidPassword = await validateAccount(oneAddress, password);
 
     if (isValidPassword) {
-      _onSave();
+      saveAccount();
     } else {
       setFormError('password', { type: 'manual', message: 'Invalid password' });
     }
@@ -105,6 +100,10 @@ function ImportLedger (): React.ReactElement {
   const toggleShowingSettings = () => {
     setIsShowingSettings(!isShowingSettings);
   };
+
+  // select element is returning a string
+  const _onSetAccountIndex = useCallback((value: string) => setAccountIndex(Number(value)), []);
+  const _onSetAddressOffset = useCallback((value: string) => setAddressOffset(Number(value)), []);
 
   return (
     <>
