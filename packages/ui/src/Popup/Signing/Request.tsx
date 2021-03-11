@@ -2,12 +2,17 @@ import { AccountJson, RequestSign } from '@polkadot/extension-base/background/ty
 import { TypeRegistry } from '@polkadot/types';
 import { ExtrinsicPayload } from '@polkadot/types/interfaces';
 import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
+import { getIdentifiedAccounts } from '@polymathnetwork/extension-core/store/getters';
+import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
+import { Box, Button, Flex, Header, Heading } from '@polymathnetwork/extension-ui/ui';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { ActionContext, ActivityContext } from '../../components';
+import { ActionContext, ActivityContext, Warning } from '../../components';
 import { approveSignPassword, approveSignSignature, cancelSignRequest, isSignLocked } from '../../messaging';
-import { Box, Button, Flex, Heading } from '../../ui';
+import { AccountsHeader } from '../Accounts/AccountsHeader';
+import { TroubleshootGuide } from '../ImportLedger/TroubleshootGuide';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
 import LedgerSign from './LedgerSign';
@@ -33,8 +38,7 @@ function isRawPayload (payload: SignerPayloadJSON | SignerPayloadRaw): payload i
   return !!(payload as SignerPayloadRaw).data;
 }
 
-export default function Request ({ account: { accountIndex, addressOffset, isExternal, isHardware },
-  // buttonText,
+export default function Request ({ account: { accountIndex, address, addressOffset, isExternal, isHardware },
   isFirst, request, signId, url }: Props): React.ReactElement<Props> | null {
   const onAction = useContext(ActionContext);
   const [{ hexBytes, payload }, setData] = useState<Data>({ hexBytes: null, payload: null });
@@ -42,6 +46,11 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
   const [isLocked, setIsLocked] = useState<boolean | null>(null);
   const [savePass, setSavePass] = useState(false);
   const isBusy = useContext(ActivityContext);
+  const { error: ledgerError, isLoading: ledgerLoading, isLocked: ledgerLocked, ledger, refresh, status: ledgerStatus, warning: ledgerWarning } = useLedger(
+    (request.payload as SignerPayloadJSON).genesisHash,
+    accountIndex as number || 0,
+    addressOffset as number || 0
+  );
 
   useEffect((): void => {
     setIsLocked(null);
@@ -91,14 +100,38 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
   );
 
   const _onSignature = useCallback(
-    ({ signature }: { signature: string }): Promise<void> =>
-      approveSignSignature(signId, signature)
+    ({ signature }: { signature: string }): Promise<void> => {
+      return approveSignSignature(signId, signature)
         .then(() => onAction())
         .catch((error: Error): void => {
           setError(error.message);
           console.error(error);
-        }),
+        });
+    }
+    ,
     [onAction, signId]
+  );
+
+  const _onSignLedger = useCallback(
+    (): void => {
+      if (!ledger || !payload) {
+        return;
+      }
+
+      setError(null);
+      const load = payload.toU8a(true);
+      const index = accountIndex as number || 0;
+      const offset = addressOffset as number || 0;
+
+      console.log('_onSignLedger :: load, index, offset', load, index, offset);
+
+      ledger.sign(load, index, offset)
+        .then(_onSignature).catch((e: Error) => {
+          console.error('ledger.sign', e);
+          setError(e.message);
+        });
+    },
+    [_onSignature, accountIndex, addressOffset, ledger, payload]
   );
 
   const _onSignQuick = useCallback(
@@ -129,6 +162,21 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
     return null;
   };
 
+  // The singing account, whose details will be displayed in the header.
+  const signingAccount = useMemo(() => {
+    if (address) {
+      // Polkadot App actually respects chain ss58format and will encode polymesh public
+      // keys into an address that starts with '2'. However, our stored addresses start with '5'.
+      // Hence, we'll re-encode request address to make sure it could be found in our store.
+      const _address = encodeAddress(decodeAddress(address));
+      const polymeshAccount = getIdentifiedAccounts().find((account) => account.address === _address);
+
+      return polymeshAccount;
+    }
+
+    return undefined;
+  }, [address]);
+
   const signArea = isLocked && !isHardware
     ? (
       <Unlock
@@ -143,6 +191,11 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
     )
     : (
       <Flex m='s'>
+        {error && (
+          <Warning isDanger>
+            {error}
+          </Warning>
+        )}
         <Flex flex={1}>
           <Button
             fluid
@@ -153,15 +206,22 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
         </Flex>
         {isFirst && <Box ml='xs'>
           { isHardware && payload
-            ? <LedgerSign
-              accountIndex={accountIndex as number || 0}
-              addressOffset={addressOffset as number || 0}
-              error={error}
-              genesisHash={(request.payload as SignerPayloadJSON).genesisHash}
-              onSignature={_onSignature}
-              payload={payload}
-              setError={setError}
-            />
+            // <LedgerSign
+            //   accountIndex={accountIndex as number || 0}
+            //   addressOffset={addressOffset as number || 0}
+            //   error={error}
+            //   genesisHash={(request.payload as SignerPayloadJSON).genesisHash}
+            //   onSignature={_onSignLedger}
+            //   payload={payload}
+            //   setError={setError}
+            // />
+            ? <Button
+              busy={isBusy}
+              fluid
+              onClick={_onSignLedger}
+              type='submit'>
+                Sign on Ledger
+            </Button>
             : <Button
               busy={isBusy}
               fluid
@@ -174,8 +234,24 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
       </Flex>
     );
 
+  if (isHardware && ledgerStatus !== Status.Ok) {
+    return (
+      <Box p='s'>
+        <TroubleshootGuide
+          ledgerStatus={ledgerStatus}
+          refresh={refresh} />
+      </Box>
+    );
+  }
+
   return (
     <>
+      {signingAccount &&
+        <Header>
+          <AccountsHeader account={signingAccount}
+            details={false} />
+        </Header>
+      }
       <RequestContent isFirst={isFirst}>
         <Box mt='xs'
           mx='s'>

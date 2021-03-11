@@ -4,7 +4,7 @@ import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/ins
 import { colors, texts } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { Status } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { Box, Button, Flex, Heading, Icon, Link, Loading, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 type Props = {
@@ -13,21 +13,9 @@ type Props = {
 };
 
 export function TroubleshootGuide ({ ledgerStatus, refresh }: Props): React.ReactElement | null {
-  const [isLoading, setIsLoading] = useState(true);
-
   const isDeviceIssue = ledgerStatus === Status.Device || ledgerStatus === Status.Error;
   const isAppIssue = ledgerStatus === Status.App;
-
-  // Show a loading spinner for 1.5s by default, because `ledgerStatus` may become 'Ok' by itself
-  useEffect(() => {
-    const loadingTimeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-
-    return () => {
-      clearTimeout(loadingTimeout);
-    };
-  }, [isDeviceIssue, ledgerStatus]);
+  const isLoading = ledgerStatus === Status.Loading;
 
   return (
     isLoading
