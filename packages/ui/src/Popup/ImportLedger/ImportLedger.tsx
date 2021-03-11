@@ -32,7 +32,7 @@ function ImportLedger (): React.ReactElement {
   const genesis = genesisHash;
 
   const methods = useForm<FormInputs>();
-  const { errors, handleSubmit, register } = methods;
+  const { errors, handleSubmit, register, setError: setFormError } = methods;
 
   const [accountIndex, setAccountIndex] = useState<number>(0);
   const [addressOffset, setAddressOffset] = useState<number>(0);
@@ -84,11 +84,13 @@ function ImportLedger (): React.ReactElement {
   const onContinue = async ({ accountName, password }: FormInputs) => {
     if (!oneAddress) return;
 
-    console.log({ accountName, password });
-
     const isValidPassword = await validateAccount(oneAddress, password);
 
-    console.log({ oneAddress, isValidPassword });
+    if (isValidPassword) {
+      _onSave();
+    } else {
+      setFormError('password', { type: 'manual', message: 'Invalid password' });
+    }
   };
 
   const getInitials = (fullName: string) => {
@@ -96,7 +98,7 @@ function ImportLedger (): React.ReactElement {
 
     const [name1, name2] = fullName.split(' ');
 
-    return `${name1[0]}${name2 ? name2[0] : ''}`;
+    return `${name1[0]}${name2 ? name2[0] : ''}`.toUpperCase();
   };
 
   return (
