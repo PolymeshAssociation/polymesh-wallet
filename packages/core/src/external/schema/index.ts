@@ -1,4 +1,4 @@
-import { polySchemaUrl } from '@polymathnetwork/extension-core/constants';
+import { dynamicSchemaEnabled, polySchemaUrl } from '@polymathnetwork/extension-core/constants';
 import { NetworkName, Schema } from '@polymathnetwork/extension-core/types';
 
 import fallback from './fallback';
@@ -31,7 +31,7 @@ const request = async (n: NetworkName): Promise<undefined | Schema> => {
 };
 
 const load = async (): Promise<void> => {
-  const networks = Object.keys(NetworkName);
+  const networks = Object.keys(NetworkName).filter((n) => dynamicSchemaEnabled[n as NetworkName]);
   const promises = networks.map((n) => request(n as NetworkName));
 
   try {
