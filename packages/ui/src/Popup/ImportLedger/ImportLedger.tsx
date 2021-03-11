@@ -9,7 +9,7 @@ import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger
 import { createAccountHardware, validateAccount } from '@polymathnetwork/extension-ui/messaging';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { formatters } from '@polymathnetwork/extension-ui/util';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
@@ -35,7 +35,7 @@ function ImportLedger (): React.ReactElement {
 
   const [accountIndex, setAccountIndex] = useState<number>(0);
   const [addressOffset, setAddressOffset] = useState<number>(0);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const onAction = useContext(ActionContext);
   const [name, setName] = useState<string>('');
   const [isShowingSettings, setIsShowingSettings] = useState(false);
@@ -62,7 +62,15 @@ function ImportLedger (): React.ReactElement {
     value
   })));
 
-  const saveAccount = useCallback(
+  const updateAccountIndex = (value: string) => {
+    setAccountIndex(Number(value));
+  };
+
+  const updateAddressOffset = (value: string) => {
+    setAddressOffset(Number(value));
+  };
+
+  const saveAccount =
     () => {
       if (address && genesis && name) {
         createAccountHardware(address, 'ledger', accountIndex, addressOffset, name, genesis)
@@ -73,9 +81,7 @@ function ImportLedger (): React.ReactElement {
             setError(error.message);
           });
       }
-    },
-    [accountIndex, address, addressOffset, genesis, name, onAction]
-  );
+    };
 
   const onContinue = async ({ password }: FormInputs) => {
     if (!oneAddress) return;
@@ -100,10 +106,6 @@ function ImportLedger (): React.ReactElement {
   const toggleShowingSettings = () => {
     setIsShowingSettings(!isShowingSettings);
   };
-
-  // select element is returning a string
-  const _onSetAccountIndex = useCallback((value: string) => setAccountIndex(Number(value)), []);
-  const _onSetAddressOffset = useCallback((value: string) => setAddressOffset(Number(value)), []);
 
   return (
     <>
@@ -217,7 +219,7 @@ function ImportLedger (): React.ReactElement {
                     <Dropdown
                       className='accountType'
                       disabled={ledgerLoading}
-                      onChange={_onSetAccountIndex}
+                      onChange={updateAccountIndex}
                       options={accOps.current}
                       value={accountIndex}
                     />
@@ -230,7 +232,7 @@ function ImportLedger (): React.ReactElement {
                     <Dropdown
                       className='accountIndex'
                       disabled={ledgerLoading}
-                      onChange={_onSetAddressOffset}
+                      onChange={updateAddressOffset}
                       options={addOps.current}
                       value={addressOffset}
                     />
