@@ -37,7 +37,7 @@ async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiProm
   // A) Wait until WS connection is successful.
   // B) A second later, if connection is not up, we throw an error.
   await new Promise<void>((resolve, reject) => {
-    const handle = setTimeout(() => reject(new Error(`Failed to connect to ${networkURLs[n]}`)), 1500);
+    const handle = setTimeout(() => reject(new Error(`Failed to connect to ${networkURLs[n]}`)), 2000);
 
     unsubscribe = provider.on('connected', () => {
       clearTimeout(handle);

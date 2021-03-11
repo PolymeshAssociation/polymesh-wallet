@@ -12,6 +12,7 @@ interface StateBase {
 }
 
 export enum Status {
+  Loading = 'Loading',
   Device = 'Device',
   App = 'App',
   Error = 'Error',
@@ -66,26 +67,32 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
   const [warning, setWarning] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [address, setAddress] = useState<string | null>(null);
-  const [status, setStatus] = useState<Status | null>(null);
+  const [status, setStatus] = useState<Status | null>(Status.Loading);
+
+  console.log('useLedger :: Status', status);
 
   useEffect(() => {
-    if (error?.includes('does not seem to be open')) {
+    if (isLoading) {
+      setStatus(Status.Loading);
+    } else if (error?.includes('does not seem to be open')) {
       setStatus(Status.App);
     } else if (error?.includes('AbortError: The transfer was cancelled') ||
     error?.includes('No device selected') ||
     error?.includes("Failed to execute 'requestDevice' on 'USB': Must be handling a user gesture to show a permission request") ||
     // Strangely enough this error is thrown even while importing an account.
     // @FIXME distinguish it from actual tx rejection, once we're able to sign with ledger.
-    error?.includes('Ledger error: Transaction rejected') ||
-    // NB: if Ledger is neither returning and address nor an error, then it is stuck.
-    (error === null && address === null)) {
+    error?.includes('Ledger error: Transaction rejected')) {
       setStatus(Status.Device);
     } else if (error) {
       setStatus(Status.Error);
+    } else if (error === null && address === null) {
+      // NB: if Ledger is neither returning and address nor an error, then it is stuck.
+      console.log('Ugly case', isLocked, isLoading, error, warning);
+      setStatus(Status.Loading);
     } else {
       setStatus(Status.Ok);
     }
-  }, [error, address]);
+  }, [error, address, isLoading, isLocked, warning]);
 
   const ledger = useMemo(() => {
     setIsLocked(false);
