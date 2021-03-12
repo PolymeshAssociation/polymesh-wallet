@@ -90,3 +90,14 @@ export const validateDid = (did: string): boolean => {
 export const validateUid = (uid: string): boolean => {
   return uuidValidate(uid) && uuidVersion(uid) === 4;
 };
+
+export const firstNonLedgerAccounts = (): string | null => {
+  const accounts = Object.values(accountsObservable.subject.getValue())
+    .filter((account) => !account.json.meta.isHardware);
+
+  if (accounts.length) {
+    return accounts[0].json.address;
+  }
+
+  return null;
+};

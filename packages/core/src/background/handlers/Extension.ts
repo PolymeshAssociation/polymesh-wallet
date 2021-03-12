@@ -13,6 +13,7 @@ import { subscribeIdentifiedAccounts,
   subscribeSelectedAccount,
   subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 import { UidRecord } from '@polymathnetwork/extension-core/types';
+import { firstNonLedgerAccounts } from '@polymathnetwork/extension-core/utils';
 
 import { Errors,
   PolyMessageTypes,
@@ -54,6 +55,10 @@ export default class Extension {
     });
 
     return true;
+  }
+
+  private polyFirstNonLedgerAccount () {
+    return firstNonLedgerAccounts();
   }
 
   private polyNetworkSubscribe (id: string, port: chrome.runtime.Port): boolean {
@@ -341,6 +346,9 @@ export default class Extension {
     switch (type) {
       case 'poly:pri(accounts.subscribe)':
         return this.polyAccountsSubscribe(id, port);
+
+      case 'poly:pri(accounts.firstNonLedgerAccount)':
+        return this.polyFirstNonLedgerAccount();
 
       case 'poly:pri(network.subscribe)':
         return this.polyNetworkSubscribe(id, port);
