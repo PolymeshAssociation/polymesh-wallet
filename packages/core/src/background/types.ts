@@ -38,6 +38,8 @@ export type RequestPolyStatusSubscribe = null;
 
 export type RequestPolyNetworkGet = null;
 
+export type RequestPolyNonLedgerAccount = null;
+
 export type RequestPolyNetworkMetaSubscribe = null;
 
 export type RequestPolyIsDevSubscribe = null;
@@ -132,6 +134,7 @@ export interface PolyRequestSignatures {
   'poly:pri(callDetails.get)': [RequestPolyCallDetails, ResponsePolyCallDetails];
   'poly:pri(identity.rename)': [RequestPolyIdentityRename, boolean];
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
+  'poly:pri(accounts.firstNonLedgerAccount)': [RequestPolyNonLedgerAccount, string | null]
   'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
 
   'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];

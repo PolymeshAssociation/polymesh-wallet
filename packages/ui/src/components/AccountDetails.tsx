@@ -1,11 +1,9 @@
 import { SvgAccountCardDetailsOutline, SvgAlertCircle, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
-import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import { getNonLedgerAccount, validateAccount } from '@polymathnetwork/extension-ui/messaging';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
-import React, { FC, useContext, useMemo } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-
-import { PolymeshContext } from './contexts';
 
 export interface AccountInfo {
   accountName: string;
@@ -39,10 +37,11 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, noHeader, o
   });
   const { errors, formState, getValues, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
-  const { polymeshAccounts } = useContext(PolymeshContext);
-  // Get at least one address amongst user addresses. We will read that address
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const oneAddress = useMemo(() => polymeshAccounts && polymeshAccounts.length > 0 && polymeshAccounts[0].address, []);
+  const [oneAddress, setOneAddress] = useState<string | null>(null);
+
+  useEffect(() => {
+    getNonLedgerAccount().then(setOneAddress).catch(console.error);
+  }, []);
 
   const onSubmit = async (data: { [x: string]: string }) => {
     if (oneAddress) {
