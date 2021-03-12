@@ -3,7 +3,7 @@ import { SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/ima
 import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/install-ledger-app.svg';
 import { colors, texts } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { Status } from '@polymathnetwork/extension-ui/hooks/useLedger';
-import { Box, Button, Flex, Heading, Icon, Link, Loading, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Heading, Icon, Loading, Text } from '@polymathnetwork/extension-ui/ui';
 import React from 'react';
 import styled from 'styled-components';
 
