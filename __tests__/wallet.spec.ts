@@ -58,7 +58,7 @@ describe('Wallet', () => {
       });
 
       it('Proceed with importing seed phrase', async () => {
-        await (await page.waitForXPath("//button[contains(., 'Restore account with recovery phrase')]")).click();
+        await (await page.waitForXPath("//button[contains(., 'Restore account')]")).click();
       });
 
       it('Fill import seed form', async () => {
