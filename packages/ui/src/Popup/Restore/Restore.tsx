@@ -17,7 +17,7 @@ export const Restore: FC = () => {
         <Box pt='m'>
           <Text color='brandLightest'
             variant='b2'>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id risus mauris.
+            Import an account using one of the following methods.
           </Text>
         </Box>
         <Flex mt='m'>
