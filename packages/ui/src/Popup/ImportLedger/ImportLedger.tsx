@@ -28,6 +28,7 @@ type FormInputs = {
 const AVAIL: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
 
 function ImportLedger (): React.ReactElement {
+  // @TODO hard-coding the latest test chain genesisHash. Currently Alcyone's.
   const genesis = genesisHash;
 
   const methods = useForm<FormInputs>();
@@ -111,16 +112,18 @@ function ImportLedger (): React.ReactElement {
     <>
       {status !== Status.Ok
         ? <Box p='s'>
-          <TroubleshootGuide ledgerStatus={status}
+          <TroubleshootGuide
+            headerText='Please follow the instructions in order to import Ledger account'
+            ledgerStatus={status}
             refresh={refresh}/>
         </Box>
         : <>
-          <Header headerText='Connect your ledger'
+          <Header headerText='Import Ledger account'
             iconAsset={SvgLedgerLogo}>
             <Box>
               <Text color='gray.0'
                 variant='b2'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Please enter a new account name and your existing wallet password in order to import account.
               </Text>
             </Box>
           </Header>

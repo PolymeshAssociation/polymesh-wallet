@@ -3,31 +3,20 @@ import { SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/ima
 import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/install-ledger-app.svg';
 import { colors, texts } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { Status } from '@polymathnetwork/extension-ui/hooks/useLedger';
-import { Box, Button, Flex, Heading, Icon, Link, Loading, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { useEffect, useState } from 'react';
+import { Box, Button, Flex, Heading, Icon, Loading, Text } from '@polymathnetwork/extension-ui/ui';
+import React from 'react';
 import styled from 'styled-components';
 
 type Props = {
   ledgerStatus: Status | null;
   refresh: () => void;
+  headerText?: string
 };
 
-export function TroubleshootGuide ({ ledgerStatus, refresh }: Props): React.ReactElement | null {
-  const [isLoading, setIsLoading] = useState(true);
-
+export function TroubleshootGuide ({ headerText, ledgerStatus, refresh }: Props): React.ReactElement | null {
   const isDeviceIssue = ledgerStatus === Status.Device || ledgerStatus === Status.Error;
   const isAppIssue = ledgerStatus === Status.App;
-
-  // Show a loading spinner for 1.5s by default, because `ledgerStatus` may become 'Ok' by itself
-  useEffect(() => {
-    const loadingTimeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-
-    return () => {
-      clearTimeout(loadingTimeout);
-    };
-  }, [isDeviceIssue, ledgerStatus]);
+  const isLoading = ledgerStatus === Status.Loading;
 
   return (
     isLoading
@@ -49,7 +38,7 @@ export function TroubleshootGuide ({ ledgerStatus, refresh }: Props): React.Reac
             width={20} />
         </Flex>
 
-        <Heading variant='h5'>Your Ledger is not connected</Heading>
+        <Heading variant='h5'>{headerText || 'Your Ledger is not connected'}</Heading>
 
         <Box mb='m'>
           <StepList>
@@ -58,13 +47,12 @@ export function TroubleshootGuide ({ ledgerStatus, refresh }: Props): React.Reac
                 <Box mb='s'>
                   <img src={SvgConnectLedger} />
                 </Box>
-                <Text variant='b1m'>Please ensure that:</Text>
+                <Text variant='b1m'>Ledger device</Text>
                 <Text color='gray.2'
                   variant='b2'>
                   <ul style={{ margin: 0, paddingLeft: 16 }}>
-                    <li>the device is connected</li>
-                    <li>the device is unlocked</li>
-                    <li>USB permission is granted in the browser</li>
+                    <li>Make sure Ledger is plugged and unlocked.</li>
+                    <li>Accept the device pairing prompt.</li>
                   </ul>
                 </Text>
               </Box>
@@ -75,18 +63,13 @@ export function TroubleshootGuide ({ ledgerStatus, refresh }: Props): React.Reac
                   <img src={SvgInstallLedgerApp} />
                 </Box>
                 <Text variant='b1m'>
-                To install and open the Polymesh app:
+                Polymesh Ledger application
                 </Text>
                 <Text color='gray.2'
                   variant='b2'>
                   <ul style={{ margin: 0, paddingLeft: 16 }}>
-                    <li>
-                      <Link href='https://github.com/Zondax/ledger-polymesh'
-                        target='_blank'>
-                      install the Polymesh app on the Ledger
-                      </Link>
-                    </li>
-                    <li>open Polymesh app on the Ledger</li>
+                    <li>Install the Polymesh app on Ledger device.</li>
+                    <li>Open Polymesh app on Ledger device.</li>
                   </ul>
                 </Text>
               </Box>

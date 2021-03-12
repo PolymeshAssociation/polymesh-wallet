@@ -83,7 +83,7 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
                 </Heading>
                 <Text color='gray.2'
                   variant='b2'>
-                  An application is requesting an attestation proof for asset {`${ticker} `}
+                  An application is requesting an attestation proof for asset &quot;{`${ticker}`}&quot; from{' '}
                   <a href={url}
                     rel='noopener noreferrer'
                     target='_blank'>
