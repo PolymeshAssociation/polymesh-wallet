@@ -258,6 +258,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
     return (
       <Box p='s'>
         <TroubleshootGuide
+          headerText='Please follow the instructions in order to sign on Ledger'
           ledgerStatus={ledgerStatus}
           refresh={refresh} />
       </Box>
