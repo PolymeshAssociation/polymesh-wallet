@@ -31,7 +31,7 @@ function ImportLedger (): React.ReactElement {
   const genesis = genesisHash;
 
   const methods = useForm<FormInputs>();
-  const { errors, handleSubmit, register, setError: setFormError } = methods;
+  const { errors, handleSubmit, register } = methods;
 
   const [accountIndex, setAccountIndex] = useState<number>(0);
   const [addressOffset, setAddressOffset] = useState<number>(0);
@@ -49,9 +49,6 @@ function ImportLedger (): React.ReactElement {
       return null;
     }
   }, [address]);
-
-  const { polymeshAccounts } = useContext(PolymeshContext);
-  const oneAddress = useMemo(() => polymeshAccounts && polymeshAccounts.length > 0 && polymeshAccounts[0].address, [polymeshAccounts]);
 
   useEffect(() => {
     if (address) {
