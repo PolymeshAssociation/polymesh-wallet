@@ -23,9 +23,11 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
   };
 
   const onChange = async (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setSeedPhrase(e.target.value);
+    const value = e.target.value.trim();
 
-    setValidSeed(await checkSeed(e.target.value));
+    setSeedPhrase(value);
+
+    setValidSeed(await checkSeed(value));
   };
 
   const nextStep = () => {
