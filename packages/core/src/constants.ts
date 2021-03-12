@@ -3,19 +3,29 @@ import { LinkName, NetworkName } from './types';
 export const networkURLs: Record<NetworkName, string> = {
   alcyone: 'wss://alcyone-rpc.polymesh.live',
   pmf: 'wss://pmf.polymath.network',
-  pme: 'wss://pme.polymath.network'
+  pme: 'wss://pme.polymath.network',
+  local: 'ws://localhost:9944'
 };
 
 export const networkLabels: Record<NetworkName, string> = {
   alcyone: 'Alcyone Testnet',
   pmf: 'PMF',
-  pme: 'PME'
+  pme: 'PME',
+  local: 'Local node'
 };
 
 export const networkIsDev: Record<NetworkName, boolean> = {
   alcyone: false,
   pmf: true,
-  pme: true
+  pme: true,
+  local: true
+};
+
+export const dynamicSchemaEnabled: Record <NetworkName, boolean> = {
+  alcyone: true,
+  pmf: true,
+  pme: true,
+  local: false
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
@@ -30,6 +40,10 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   pme: {
     dashboard: 'https://polymesh-dashboard-dev.herokuapp.com/',
     explorer: 'http://ec2-3-15-5-195.us-east-2.compute.amazonaws.com'
+  },
+  local: {
+    dashboard: 'unknown',
+    explorer: 'unknown'
   }
 };
 
@@ -51,6 +65,8 @@ export const messages = [
 export const polySchemaUrl = 'https://schema.polymesh.live/';
 
 export const populatedDelay = 1000;
+
+export const apiConnTimeout = 3500;
 
 export const uidProvidersWhitelist = [
   'https://polymathnetwork.github.io/mock-uid-provider'
