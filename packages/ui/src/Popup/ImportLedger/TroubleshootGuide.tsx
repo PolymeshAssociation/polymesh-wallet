@@ -63,7 +63,7 @@ export function TroubleshootGuide ({ headerText, ledgerStatus, refresh }: Props)
                   <img src={SvgInstallLedgerApp} />
                 </Box>
                 <Text variant='b1m'>
-                Polymesh Ledger application:
+                Polymesh Ledger application
                 </Text>
                 <Text color='gray.2'
                   variant='b2'>
