@@ -42,16 +42,16 @@ export default function Request ({ account: { accountIndex, address, addressOffs
   const onAction = useContext(ActionContext);
   const [{ hexBytes, payload }, setData] = useState<Data>({ hexBytes: null, payload: null });
   const [error, setError] = useState<string | null>(null);
+  const [warning, setWarning] = useState<string | null>(null);
   const [isLocked, setIsLocked] = useState<boolean | null>(null);
   const [savePass, setSavePass] = useState(false);
+  const [isSigningLedger, setIsSigningLedger] = useState(false);
   const isBusy = useContext(ActivityContext);
   const { ledger, refresh, status: ledgerStatus } = useLedger(
     (request.payload as SignerPayloadJSON).genesisHash,
     accountIndex as number || 0,
     addressOffset as number || 0
   );
-
-  console.log('Request :: Status', status);
 
   useEffect((): void => {
     setIsLocked(null);
@@ -79,6 +79,14 @@ export default function Request ({ account: { accountIndex, address, addressOffs
     }
   }, [request]);
 
+  useEffect(() => {
+    if (isHardware && ledgerStatus === Status.Pending) {
+      setWarning('An action is pending on your Ledger device.');
+    } else {
+      setWarning(null);
+    }
+  }, [isHardware, ledgerStatus]);
+
   const _onCancel = useCallback(
     (): Promise<void> => cancelSignRequest(signId)
       .then(() => onAction())
@@ -102,11 +110,15 @@ export default function Request ({ account: { accountIndex, address, addressOffs
 
   const _onSignature = useCallback(
     ({ signature }: { signature: string }): Promise<void> => {
+      setIsSigningLedger(false);
+
       return approveSignSignature(signId, signature)
-        .then(() => onAction())
+        .then(() => {
+          onAction();
+        })
         .catch((error: Error): void => {
-          setError(error.message);
           console.error(error);
+          setError(error.message);
         });
     }
     ,
@@ -120,16 +132,24 @@ export default function Request ({ account: { accountIndex, address, addressOffs
       }
 
       setError(null);
+      setIsSigningLedger(true);
+
       const load = payload.toU8a(true);
       const index = accountIndex as number || 0;
       const offset = addressOffset as number || 0;
 
-      console.log('_onSignLedger :: load, index, offset', load, index, offset);
-
       ledger.sign(load, index, offset)
-        .then(_onSignature).catch((e: Error) => {
-          console.error('ledger.sign', e);
-          setError(e.message);
+        .then(_onSignature)
+        .catch((error: Error) => {
+          console.error('ledger.sign error', error);
+          setIsSigningLedger(false);
+
+          if (error.message.includes('An action was already pending on the Ledger device')) {
+            // Display the message without the verbose parts.
+            setWarning('An action is pending on your Ledger device.');
+          } else {
+            setError(error.message);
+          }
         });
     },
     [_onSignature, accountIndex, addressOffset, ledger, payload]
@@ -191,42 +211,50 @@ export default function Request ({ account: { accountIndex, address, addressOffs
       />
     )
     : (
-      <Flex m='s'>
+      <Flex flexDirection='column'
+        m='s'>
         {error && (
           <Warning isDanger>
             {error}
           </Warning>
         )}
-        <Flex flex={1}>
-          <Button
-            fluid
-            onClick={_onCancel}
-            variant='secondary'>
+        {warning && (
+          <Warning>
+            {warning}
+          </Warning>
+        )}
+        <Flex flexDirection='row'>
+          <Flex flex={1}>
+            <Button
+              fluid
+              onClick={_onCancel}
+              variant='secondary'>
             Reject
-          </Button>
-        </Flex>
-        {isFirst && <Box ml='xs'>
-          { isHardware && payload
-            ? <Button
-              busy={isBusy}
-              fluid
-              onClick={_onSignLedger}
-              type='submit'>
+            </Button>
+          </Flex >
+          {isFirst && <Box ml='xs'>
+            { isHardware && payload
+              ? <Button
+                busy={isBusy || isSigningLedger}
+                fluid
+                onClick={_onSignLedger}
+                type='submit'>
                 Sign on Ledger
-            </Button>
-            : <Button
-              busy={isBusy}
-              fluid
-              onClick={_onSignQuick}
-              type='submit'>
+              </Button>
+              : <Button
+                busy={isBusy}
+                fluid
+                onClick={_onSignQuick}
+                type='submit'>
                 Sign
-            </Button>
-          }
-        </Box> }
+              </Button>
+            }
+          </Box> }
+        </Flex>
       </Flex>
     );
 
-  if (isHardware && ledgerStatus !== Status.Ok) {
+  if (isHardware && ledgerStatus !== Status.Ok && ledgerStatus !== Status.Pending) {
     return (
       <Box p='s'>
         <TroubleshootGuide
