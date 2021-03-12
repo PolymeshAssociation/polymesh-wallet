@@ -1,12 +1,12 @@
 import { ErrorMessage } from '@hookform/error-message';
 import settings from '@polkadot/ui-settings';
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { genesisHash } from '@polymathnetwork/extension-core/constants';
 import { SvgChevronDown, SvgLedgerLogo, SvgSettingsOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Password } from '@polymathnetwork/extension-ui/components';
 import { ActionContext, ActivityContext, PolymeshContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
-import { createAccountHardware, validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import { formatters } from '@polymathnetwork/extension-ui/util';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -22,7 +22,6 @@ interface AccOption {
 
 type FormInputs = {
   accountName: string;
-  password: string;
 }
 
 const AVAIL: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
@@ -43,6 +42,13 @@ function ImportLedger (): React.ReactElement {
   const ledgerData = useLedger(genesis, accountIndex, addressOffset);
   const { address, isLoading: ledgerLoading, refresh, status } = ledgerData;
   const isBusy = useContext(ActivityContext);
+  const formattedAddress = useMemo(() => {
+    if (address) {
+      return encodeAddress(decodeAddress(address));
+    } else {
+      return null;
+    }
+  }, [address]);
 
   const { polymeshAccounts } = useContext(PolymeshContext);
   const oneAddress = useMemo(() => polymeshAccounts && polymeshAccounts.length > 0 && polymeshAccounts[0].address, [polymeshAccounts]);
@@ -73,8 +79,8 @@ function ImportLedger (): React.ReactElement {
 
   const saveAccount =
     () => {
-      if (address && genesis && name) {
-        createAccountHardware(address, 'ledger', accountIndex, addressOffset, name, genesis)
+      if (formattedAddress && genesis && name) {
+        createAccountHardware(formattedAddress, 'ledger', accountIndex, addressOffset, name, genesis)
           .then(() => onAction('/'))
           .catch((error: Error) => {
             console.error(error);
@@ -84,16 +90,8 @@ function ImportLedger (): React.ReactElement {
       }
     };
 
-  const onContinue = async ({ password }: FormInputs) => {
-    if (!oneAddress) return;
-
-    const isValidPassword = await validateAccount(oneAddress, password);
-
-    if (isValidPassword) {
-      saveAccount();
-    } else {
-      setFormError('password', { type: 'manual', message: 'Invalid password' });
-    }
+  const onContinue = () => {
+    saveAccount();
   };
 
   const getInitials = (fullName: string) => {
@@ -123,7 +121,7 @@ function ImportLedger (): React.ReactElement {
             <Box>
               <Text color='gray.0'
                 variant='b2'>
-                Please enter a new account name and your existing wallet password in order to import account.
+                Please enter a name to import account.
               </Text>
             </Box>
           </Header>
@@ -152,7 +150,7 @@ function ImportLedger (): React.ReactElement {
                     variant='b2m'>{name}</Text>
                   <Text color='gray.2'
                     variant='b3'>
-                    {address && formatters.toShortAddress(address, { size: 33 })}
+                    {formattedAddress && formatters.toShortAddress(formattedAddress, { size: 33 })}
                   </Text>
                 </Flex>
               </Flex>
@@ -182,10 +180,6 @@ function ImportLedger (): React.ReactElement {
                         </Box>
                       </Box>
                     </Box>
-
-                    <Password label={oneAddress ? 'Wallet password' : 'Password'}
-                      placeholder='Enter your current wallet password'
-                      withConfirm={!oneAddress}/>
                   </form>
                 </FormProvider>
               </Box>
