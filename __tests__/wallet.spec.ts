@@ -1,4 +1,3 @@
-import { mnemonicGenerate } from '@polkadot/util-crypto';
 import path from 'path';
 import puppeteer from 'puppeteer';
 
@@ -63,12 +62,12 @@ describe('Wallet', () => {
       });
 
       it('Fill import seed form', async () => {
-        const seed = mnemonicGenerate(12);
+        const seed = 'wash mosquito come blur bonus guard scissors anchor valid gadget deposit file';
 
         await (await page.waitForXPath('//textarea')).type(seed);
         await (await page.waitForXPath("//button[contains(., 'Continue')]")).click();
         await (await page.waitForXPath("//input[@placeholder='Enter account name']")).type(accountName);
-        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more']")).type(accountPass);
+        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more' or @placeholder='Enter your current wallet password']")).type(accountPass);
         await (await page.waitForXPath("//input[@placeholder='Confirm your password']")).type(accountPass);
         await (await page.waitForXPath("//button[contains(., 'Restore')]")).click();
       });

@@ -1,9 +1,7 @@
-import { getIdentifiedAccounts } from '@polymathnetwork/extension-core/store/getters';
 import { Box, Header, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { Loading, SigningReqContext } from '../../components';
-import { AccountsHeader } from '../Accounts/AccountsHeader';
 import Request from './Request';
 import TransactionIndex from './TransactionIndex';
 
@@ -38,30 +36,25 @@ export default function Signing (): React.ReactElement {
       : requests[0]
     : null;
 
-  // The singing account, whose details will be displayed in the header.
-  const signingAccount = request &&
-  getIdentifiedAccounts().find((account) => account.address === request?.account.address);
-
   return request
     ? (
       <>
-        <Header>
-          {signingAccount && <AccountsHeader account={signingAccount}
-            details={false} />}
-          <Box>
-            <Text color='gray.0'
-              variant='b2'>
-              {requests.length > 1 && (
+        {requests.length > 1 && (
+          <Header>
+            <Box>
+              <Text color='gray.0'
+                variant='b2'>
+
                 <TransactionIndex
                   index={requestIndex}
                   onNextClick={_onNextClick}
                   onPreviousClick={_onPreviousClick}
                   totalItems={requests.length}
                 />
-              )}
-            </Text>
-          </Box>
-        </Header>
+              </Text>
+            </Box>
+          </Header>
+        )}
         <Request
           account={request.account}
           isFirst={requestIndex === 0}
