@@ -5,16 +5,17 @@ import { union } from 'lodash-es';
 import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
-import apiPromise, { disconnect } from './api/apiPromise';
-import { DidRecord, IdentityClaim, LinkedKeyInfo } from './api/apiPromise/types';
+import apiPromise, { disconnect } from './external/apiPromise';
+import { DidRecord, IdentityClaim, LinkedKeyInfo } from './external/apiPromise/types';
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as statusActions } from './store/features/status';
 import { getAccountsList, getNetwork } from './store/getters';
 import { subscribeDidsList, subscribeIsHydratedAndNetwork } from './store/subscribers';
+import { populatedDelay } from './constants';
 import store from './store';
 import { AccountData, KeyringAccountData, UnsubCallback } from './types';
-import { nonFatalErrorHandler, observeAccounts } from './utils';
+import { apiErrorHandler, observeAccounts } from './utils';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
@@ -127,7 +128,11 @@ function subscribePolymesh (): () => Promise<void> {
           didCount = 0;
 
           // Clear errors
-          store.dispatch(statusActions.isReady());
+          store.dispatch(statusActions.apiReady());
+
+          setTimeout(() => {
+            store.dispatch(statusActions.populated(network));
+          }, populatedDelay);
 
           let prevAccounts: string[] = [];
           let prevDids: string[] = [];
@@ -185,11 +190,11 @@ function subscribePolymesh (): () => Promise<void> {
                       console.log(`Poly: Setting **identity** ${didCount++}`, data);
                       // store.dispatch(identityActions.setIdentitySecKeys(params));
                       store.dispatch(identityActions.setIdentity(params));
-                    }, nonFatalErrorHandler)
-                      .catch(nonFatalErrorHandler);
+                    }, apiErrorHandler)
+                      .catch(apiErrorHandler);
                   }).then((unsub) => {
                     unsubCallbacks[account] = unsub;
-                  }, nonFatalErrorHandler).catch(nonFatalErrorHandler);
+                  }, apiErrorHandler).catch(apiErrorHandler);
                 });
 
                 prevAccounts = accounts;
@@ -244,18 +249,16 @@ function subscribePolymesh (): () => Promise<void> {
                         store.dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
                       }
                     });
-                  }, nonFatalErrorHandler)
-                  .catch(nonFatalErrorHandler);
+                  }, apiErrorHandler)
+                  .catch(apiErrorHandler);
 
                 prevDids = dids;
               });
             },
-            nonFatalErrorHandler
-          ).catch((err) => {
-            nonFatalErrorHandler(err);
-          });
-        }, nonFatalErrorHandler
-        ).catch(nonFatalErrorHandler);
+            apiErrorHandler
+          ).catch(apiErrorHandler);
+        }, apiErrorHandler
+        ).catch(apiErrorHandler);
     }
   });
 
