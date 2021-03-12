@@ -3,8 +3,9 @@ import { SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/ima
 import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/install-ledger-app.svg';
 import { colors, texts } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { Status } from '@polymathnetwork/extension-ui/hooks/useLedger';
-import { Box, Button, Flex, Heading, Icon, Loading, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Heading, Icon, Link, Loading, Text } from '@polymathnetwork/extension-ui/ui';
 import React from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 type Props = {
@@ -18,6 +19,12 @@ export function TroubleshootGuide ({ headerText, ledgerStatus, refresh }: Props)
   const isAppIssue = ledgerStatus === Status.App;
   const isLoading = ledgerStatus === Status.Loading;
 
+  const history = useHistory();
+
+  const onCancel = () => {
+    history.push('/');
+  };
+
   return (
     isLoading
       ? <Flex height='578px'
@@ -26,16 +33,25 @@ export function TroubleshootGuide ({ headerText, ledgerStatus, refresh }: Props)
         <Loading />
       </Flex>
       : <Box>
-        <Flex bg='yellow.1'
-          borderRadius='50%'
-          height={48}
-          justifyContent='center'
-          mb={12}
-          width={48}>
-          <Icon Asset={SvgInfo}
-            color='yellow.0'
-            height={20}
-            width={20} />
+        <Flex alignItems='flex-start'
+          justifyContent='space-between'>
+          <Flex bg='yellow.1'
+            borderRadius='50%'
+            height={48}
+            justifyContent='center'
+            mb={12}
+            width={48}>
+            <Icon Asset={SvgInfo}
+              color='yellow.0'
+              height={20}
+              width={20} />
+          </Flex>
+          <Box style={{ cursor: 'pointer' }}>
+            <Link onClick={onCancel}>
+              <Text color='brandLighter'
+                variant='b1'>Cancel</Text>
+            </Link>
+          </Box>
         </Flex>
 
         <Heading variant='h5'>{headerText || 'Your Ledger is not connected'}</Heading>
