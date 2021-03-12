@@ -66,6 +66,8 @@ export const polySchemaUrl = 'https://schema.polymesh.live/';
 
 export const populatedDelay = 1000;
 
+export const apiConnTimeout = 3500;
+
 export const uidProvidersWhitelist = [
   'https://polymathnetwork.github.io/mock-uid-provider'
 ];

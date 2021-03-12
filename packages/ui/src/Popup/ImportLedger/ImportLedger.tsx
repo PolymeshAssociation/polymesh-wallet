@@ -19,6 +19,7 @@ interface AccOption {
 const AVAIL: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
 
 function ImportLedger (): React.ReactElement {
+  // @TODO hard-coding the latest test chain genesisHash. Currently Alcyone's.
   const genesis = genesisHash;
 
   const [accountIndex, setAccountIndex] = useState<number>(0);
@@ -68,7 +69,9 @@ function ImportLedger (): React.ReactElement {
   return (
     <Box p='s'>
       {status !== Status.Ok
-        ? <TroubleshootGuide ledgerStatus={status}
+        ? <TroubleshootGuide
+          headerText='Please follow the instructions in order to import Ledger account'
+          ledgerStatus={status}
           refresh={refresh}/>
         : <>
           <div>Import Ledger Account</div>
