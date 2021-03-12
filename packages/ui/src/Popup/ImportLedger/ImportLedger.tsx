@@ -3,7 +3,7 @@ import settings from '@polkadot/ui-settings';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { genesisHash } from '@polymathnetwork/extension-core/constants';
 import { SvgChevronDown, SvgLedgerLogo, SvgSettingsOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { ActionContext, ActivityContext, PolymeshContext } from '@polymathnetwork/extension-ui/components/contexts';
+import { ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
