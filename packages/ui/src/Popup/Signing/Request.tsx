@@ -47,7 +47,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
   const [savePass, setSavePass] = useState(false);
   const [isSigningLedger, setIsSigningLedger] = useState(false);
   const isBusy = useContext(ActivityContext);
-  const { ledger, refresh, status: ledgerStatus } = useLedger(
+  const { error: ledgerError, ledger, refresh, status: ledgerStatus } = useLedger(
     (request.payload as SignerPayloadJSON).genesisHash,
     accountIndex as number || 0,
     addressOffset as number || 0
@@ -82,10 +82,14 @@ export default function Request ({ account: { accountIndex, address, addressOffs
   useEffect(() => {
     if (isHardware && ledgerStatus === Status.Pending) {
       setWarning('An action is pending on your Ledger device.');
+    } else if (isHardware && ledgerStatus === Status.Busy) {
+      setWarning('Signing is pending on another extension popup.');
+    } else if (ledgerError && ledgerStatus === Status.Error) {
+      setWarning(ledgerError);
     } else {
       setWarning(null);
     }
-  }, [isHardware, ledgerStatus]);
+  }, [isHardware, ledgerStatus, ledgerError]);
 
   const _onCancel = useCallback(
     (): Promise<void> => cancelSignRequest(signId)
@@ -198,6 +202,8 @@ export default function Request ({ account: { accountIndex, address, addressOffs
     return undefined;
   }, [address]);
 
+  console.log('Status', ledgerStatus);
+
   const signArea = isLocked && !isHardware
     ? (
       <Unlock
@@ -236,6 +242,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
             { isHardware && payload
               ? <Button
                 busy={isBusy || isSigningLedger}
+                disabled={ledgerStatus !== Status.Ok}
                 fluid
                 onClick={_onSignLedger}
                 type='submit'>
@@ -254,7 +261,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
       </Flex>
     );
 
-  if (isHardware && ledgerStatus !== Status.Ok && ledgerStatus !== Status.Pending) {
+  if (isHardware && (ledgerStatus === Status.App || ledgerStatus === Status.Device)) {
     return (
       <Box p='s'>
         <TroubleshootGuide

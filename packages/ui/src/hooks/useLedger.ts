@@ -17,6 +17,7 @@ export enum Status {
   App = 'App',
   Error = 'Error',
   Pending = 'Pending',
+  Busy = 'Busy',
   Ok = 'Ok'
 }
 interface State extends StateBase {
@@ -72,6 +73,8 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
   const status: Status = useMemo((): Status => {
     if (error?.includes('does not seem to be open')) {
       return Status.App;
+    } else if (error?.includes('Unable to claim interface')) {
+      return Status.Busy;
     } else if (error?.includes('AbortError: The transfer was cancelled')) {
       return Status.Error;
     } else if (error?.includes('No device selected') ||
