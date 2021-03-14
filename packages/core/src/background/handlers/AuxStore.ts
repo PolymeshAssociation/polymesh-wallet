@@ -10,7 +10,26 @@ export default class AuxStore extends BaseStore<string> {
     super(PREFIX);
   }
 
-  public getNDecrypt (key: string, password: string) : Promise<string> {
+  private _allKeys (): Promise<string[]> {
+    return new Promise((resolve) => {
+      chrome.storage.local.get(null, (result: Record<string, unknown>): void => {
+        const keys = Object
+          .entries(result)
+          .filter(([key]) => key.startsWith(`${PREFIX}:`))
+          .map(([key]) => key.replace(`${PREFIX}:`, ''));
+
+        resolve(keys);
+      });
+    });
+  }
+
+  private _setn (key: string, value: string, password: string, update?: () => void): void {
+    const cipherText = CryptoJS.AES.encrypt(value, password).toString();
+
+    super.set(key, cipherText, update);
+  }
+
+  private _getn (key: string, password: string) : Promise<string> {
     return new Promise((resolve, reject) => {
       super.get(key, (ciphertext) => {
         if (ciphertext && ciphertext.length) {
@@ -28,50 +47,44 @@ export default class AuxStore extends BaseStore<string> {
     });
   }
 
-  public getN (did: string, network: NetworkName, password: string): Promise<string> {
-    return this.getNDecrypt(`${network.toLowerCase()}:${did}`, password);
+  public getn (did: string, network: NetworkName, password: string): Promise<string> {
+    return this._getn(`${network.toLowerCase()}:${did}`, password);
   }
 
-  public remove (): void {
-    // Noop
-    throw new Error('Cannot remove a key from auxStore');
+  public setn (did: string, network: NetworkName, value: string, password: string, update?: () => void): void {
+    return this._setn(`${network.toLowerCase()}:${did}`, value, password, update);
   }
 
-  public set (_key: string, value: string, update?: () => void): void {
-    // Noop
-    throw new Error('Cannot remove a key from auxStore');
-  }
+  public async allRecords (): Promise<UidRecord[]> {
+    const keys = await this._allKeys();
 
-  public setNEncrypt (key: string, value: string, password: string, update?: () => void): void {
-    const cipherText = CryptoJS.AES.encrypt(value, password).toString();
+    return keys.map((key) => {
+      const [network, did] = key.split(':');
 
-    super.set(key, cipherText, update);
-  }
-
-  public setN (did: string, network: NetworkName, value: string, password: string, update?: () => void): void {
-    return this.setNEncrypt(`${network.toLowerCase()}:${did}`, value, password, update);
-  }
-
-  public allKeys (): Promise<string[]> {
-    return new Promise((resolve) => {
-      chrome.storage.local.get(null, (result: Record<string, unknown>): void => {
-        const keys = Object
-          .entries(result)
-          .filter(([key]) => key.startsWith(`${PREFIX}:`))
-          .map(([key]) => key.replace(`${PREFIX}:`, ''));
-
-        resolve(keys);
-      });
+      return { network, did } as UidRecord;
     });
   }
 
-  public allRecords (): Promise<UidRecord[]> {
-    return this.allKeys().then((keys) =>
-      keys.map((key) => {
-        const [network, did] = key.split(':');
+  public async changePassword (oldPass: string, newPass: string): Promise<void> {
+    const keys = await this._allKeys();
 
-        return { network, did } as UidRecord;
-      })
-    );
+    let i = 0;
+    const values = [];
+
+    try {
+      for (i; i < keys.length; i++) {
+        const value = await this._getn(keys[i], oldPass);
+
+        values.push(value);
+        this._setn(keys[i], value, newPass);
+      }
+    } catch (error) {
+      for (let j = 0; j < i; j++) {
+        this._setn(keys[j], values[j], oldPass);
+      }
+
+      // Escalate error
+      throw new Error('Password change failed: Some or all items cannot be decrypted with the provided password.');
+    }
   }
 }
