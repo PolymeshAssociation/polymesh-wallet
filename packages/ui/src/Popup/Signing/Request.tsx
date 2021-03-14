@@ -83,7 +83,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
     if (isHardware && ledgerStatus === Status.Pending) {
       setWarning('An action is pending on your Ledger device.');
     } else if (isHardware && ledgerStatus === Status.Busy) {
-      setWarning('Signing is pending on another extension popup.');
+      setWarning('Unable to connect to Ledger device. Please see if another Polymesh extension popup is open.');
     } else if (ledgerError && ledgerStatus === Status.Error) {
       setWarning(ledgerError);
     } else {
@@ -235,14 +235,14 @@ export default function Request ({ account: { accountIndex, address, addressOffs
               fluid
               onClick={_onCancel}
               variant='secondary'>
-            Reject
+              Reject
             </Button>
           </Flex >
           {isFirst && <Box ml='xs'>
             { isHardware && payload
               ? <Button
                 busy={isBusy || isSigningLedger}
-                disabled={ledgerStatus !== Status.Ok}
+                disabled={ledgerStatus !== Status.Ok || hexBytes !== null}
                 fluid
                 onClick={_onSignLedger}
                 type='submit'>
