@@ -206,34 +206,15 @@ export default class State {
   }
 
   public getUid (did: string, network: NetworkName, password: string): Promise<string | null> {
-    return this.#auxStore.getN(did, network, password);
+    return this.#auxStore.getn(did, network, password);
   }
 
   public setUid (did: string, network: NetworkName, uid: string, password: string): void {
-    this.#auxStore.setN(did, network, uid, password);
+    this.#auxStore.setn(did, network, uid, password);
     this.updateUidSubject();
   }
 
   public async changeUidPassword (oldPass: string, newPass: string): Promise<void> {
-    const keys = await this.#auxStore.allKeys();
-
-    let i = 0;
-    const values = [];
-
-    try {
-      for (i; i < keys.length; i++) {
-        const value = await this.#auxStore.getNDecrypt(keys[i], oldPass);
-
-        values.push(value);
-        this.#auxStore.setNEncrypt(keys[i], value, newPass);
-      }
-    } catch (error) {
-      for (let j = 0; j < i; j++) {
-        this.#auxStore.setNEncrypt(keys[j], values[j], oldPass);
-      }
-
-      // Escalate error
-      throw new Error('oldPass: Some uIDs cannot be decrypted with the provided password.');
-    }
+    return this.#auxStore.changePassword(oldPass, newPass);
   }
 }
