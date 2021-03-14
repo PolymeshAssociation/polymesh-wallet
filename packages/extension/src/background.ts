@@ -17,8 +17,6 @@ const loadSchema = () => {
   SchemaService.load().catch(console.error);
 };
 
-loadSchema();
-
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
 
@@ -40,22 +38,23 @@ chrome.runtime.onConnect.addListener((port): void => {
     accountsUnsub = accountsSynchronizer();
     polyUnsub = subscribePolymesh();
     loadSchema();
+
+    port.onDisconnect.addListener((): void => {
+      console.log(`Disconnected from ${port.name}`);
+
+      if (polyUnsub) {
+        polyUnsub()
+          .then(() => console.log('ApiPromise: disconnected')).catch(console.error);
+      }
+
+      if (accountsUnsub) accountsUnsub();
+    });
   }
 
-  // message and disconnect handlers
+  // message handlers
   port.onMessage.addListener((data): void => {
     if (isPolyMessage(data.message)) return polyHandlers(data, port);
     else return handlers(data, port);
-  });
-  port.onDisconnect.addListener((): void => {
-    console.log(`Disconnected from ${port.name}`);
-
-    if (polyUnsub) {
-      polyUnsub()
-        .then(() => console.log('ApiPromise: disconnected')).catch(console.error);
-    }
-
-    if (accountsUnsub) accountsUnsub();
   });
 });
 
