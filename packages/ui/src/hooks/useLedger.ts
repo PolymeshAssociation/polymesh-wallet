@@ -62,7 +62,7 @@ function getState (): StateBase {
   };
 }
 
-export function useLedger (genesis?: string | null, accountIndex = 0, addressOffset = 0): State {
+export function useLedger (genesis?: string | null, accountIndex = 0, addressOffset = 0, noAddress = false): State {
   const [isLoading, setIsLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [refreshLock, setRefreshLock] = useState(false);
@@ -99,6 +99,8 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
     setIsLocked(false);
     setRefreshLock(false);
 
+    if (noAddress) { return null; }
+
     // this trick allows to refresh the ledger on demand
     // when it is shown as locked and the user has actually
     // unlocked it, which we can't know.
@@ -111,7 +113,7 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
     }
 
     return null;
-  }, [genesis, refreshLock]);
+  }, [genesis, refreshLock, noAddress]);
 
   useEffect(() => {
     if (!ledger || !genesis) {
