@@ -7,9 +7,10 @@ export interface Props {
   label: string;
   confirmLabel?: string;
   withConfirm?: boolean;
+  placeholder?: string;
 }
 
-export const Password: FC<Props> = ({ confirmLabel, label, withConfirm }) => {
+export const Password: FC<Props> = ({ confirmLabel, label, placeholder, withConfirm }) => {
   const { errors, getValues, register } = useFormContext();
 
   const validatePassword = (value: string) => {
@@ -30,7 +31,7 @@ export const Password: FC<Props> = ({ confirmLabel, label, withConfirm }) => {
         <Box>
           <TextInput inputRef={register({ required: true, minLength: 8 })}
             name='password'
-            placeholder='Enter 8 characters or more'
+            placeholder={placeholder || 'Enter 8 characters or more'}
             type='password' />
           {errors.password &&
             <Box>

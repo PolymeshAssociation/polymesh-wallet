@@ -1,6 +1,6 @@
 {
   "name": "polymesh-wallet",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "A Wallet extension for Polymesh blockchain",
   "private": true,
   "workspaces": [
@@ -20,7 +20,7 @@
     "postinstall": "polkadot-dev-yarn-only",
     "start": "yarn watch",
     "test": "polkadot-dev-run-test",
-    "watch": "cd packages/extension && yarn polkadot-exec-webpack --config webpack.watch.js --mode development --watch",
+    "watch": "cd packages/extension && NODE_ENV=development yarn polkadot-exec-webpack --config webpack.watch.js --mode development --watch",
     "e2e": "jest --runInBand --config jest.e2e.config.js"
   
   },

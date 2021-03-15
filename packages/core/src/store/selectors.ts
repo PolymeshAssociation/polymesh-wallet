@@ -66,11 +66,23 @@ export const identifiedAccounts = createSelector(
 export const selectedAccount = createSelector(
   (state: RootState) => state.accounts.selected,
   accounts,
-  (selectedAccount, accounts) => {
-    if (selectedAccount && accounts[selectedAccount]) {
-      return selectedAccount;
+  (account, accounts) => {
+    if (account && accounts[account]) {
+      return account;
     } else if (Object.keys(accounts).length) {
       return Object.values(accounts)[0].address;
+    }
+
+    return undefined;
+  }
+);
+
+export const selectedAccountIdentified = createSelector(
+  selectedAccount,
+  identifiedAccounts,
+  (selectedAccount, identifiedAccounts) => {
+    if (selectedAccount) {
+      return identifiedAccounts.filter((account) => account.address === selectedAccount)[0];
     }
 
     return undefined;
@@ -90,8 +102,7 @@ export const selectIsHydratedAndNetwork = createSelector(
 
 export const selectStatus = createSelector(
   (state: RootState) => state.status,
-  // Status will always be "ready" if we're offline
-  (status) => ({ ...status, ready: !navigator.onLine || status.ready })
+  (status) => status
 );
 
 export const selectIsDev = createSelector(

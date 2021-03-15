@@ -8,16 +8,14 @@ import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import subscribePolymesh, { accountsSynchronizer } from '@polymathnetwork/extension-core';
-import SchemaService from '@polymathnetwork/extension-core/api/schema';
 import polyHandlers from '@polymathnetwork/extension-core/background/handlers';
+import SchemaService from '@polymathnetwork/extension-core/external/schema';
 import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
 import { fatalErrorHandler, isPolyMessage } from '@polymathnetwork/extension-core/utils';
 
 const loadSchema = () => {
-  SchemaService.load().then(console.log).catch(console.error);
+  SchemaService.load().catch(console.error);
 };
-
-loadSchema();
 
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
@@ -40,22 +38,23 @@ chrome.runtime.onConnect.addListener((port): void => {
     accountsUnsub = accountsSynchronizer();
     polyUnsub = subscribePolymesh();
     loadSchema();
+
+    port.onDisconnect.addListener((): void => {
+      console.log(`Disconnected from ${port.name}`);
+
+      if (polyUnsub) {
+        polyUnsub()
+          .then(() => console.log('ApiPromise: disconnected')).catch(console.error);
+      }
+
+      if (accountsUnsub) accountsUnsub();
+    });
   }
 
-  // message and disconnect handlers
+  // message handlers
   port.onMessage.addListener((data): void => {
     if (isPolyMessage(data.message)) return polyHandlers(data, port);
     else return handlers(data, port);
-  });
-  port.onDisconnect.addListener((): void => {
-    console.log(`Disconnected from ${port.name}`);
-
-    if (polyUnsub) {
-      polyUnsub()
-        .then(() => console.log('ApiPromise: disconnected')).catch(console.error);
-    }
-
-    if (accountsUnsub) accountsUnsub();
   });
 });
 
