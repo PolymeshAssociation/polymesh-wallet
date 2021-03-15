@@ -50,7 +50,8 @@ export default function Request ({ account: { accountIndex, address, addressOffs
   const { error: ledgerError, ledger, refresh, status: ledgerStatus } = useLedger(
     (request.payload as SignerPayloadJSON).genesisHash,
     accountIndex as number || 0,
-    addressOffset as number || 0
+    addressOffset as number || 0,
+    !isHardware
   );
 
   useEffect((): void => {
