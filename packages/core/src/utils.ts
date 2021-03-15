@@ -1,9 +1,11 @@
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
+import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
-import { setError } from './store/setters';
-import { messagePrefix, messages } from './constants';
-import { ErrorCodes, KeyringAccountData } from './types';
+import { getDids } from './store/getters';
+import { apiError, setError } from './store/setters';
+import { messagePrefix, messages, uidProvidersWhitelist } from './constants';
+import { ErrorCodes, KeyringAccountData, NetworkName } from './types';
 
 // Sort an array by prioritizing a certain element
 export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
@@ -28,8 +30,12 @@ export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
 
 export const fatalErrorHandler = (error: Error): void => error && setError({ code: ErrorCodes.FatalError, msg: error.message });
 
-export const nonFatalErrorHandler = (error: Error): void =>
-  error && !!error.message && error.message.length ? setError({ code: ErrorCodes.NonFatalError, msg: error.message }) : undefined;
+export const apiErrorHandler = (error: Error): void => {
+  if (error && !!error.message && error.message.length) {
+    setError({ code: ErrorCodes.NonFatalError, msg: error.message });
+    apiError();
+  }
+};
 
 export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
   cb(navigator.onLine);
@@ -41,3 +47,46 @@ export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
 
 export const sleep = (ms: number):Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
+
+export const allowedUidProvider = (url: string): boolean => {
+  try {
+    const parsed = new URL(url);
+
+    // Remove params and trailing slash
+    parsed.search = '';
+    const cleanUrl = parsed.toString().replace(/\/$/, '');
+
+    return uidProvidersWhitelist.includes(cleanUrl);
+  } catch (error) {
+    console.error('Error parsing app url', url, error);
+  }
+
+  return false;
+};
+
+export const validateTicker = (ticker: string): boolean => {
+  return !!ticker &&
+    typeof ticker === 'string' &&
+    ticker.length > 0 &&
+    ticker.length <= 12 &&
+    !!(/^[a-zA-Z0-9\-:]*$/.exec(ticker));
+};
+
+export const validateNetwork = (network: string): boolean => {
+  return !!network &&
+    Object.keys(NetworkName).indexOf(network) > -1;
+};
+
+export const validateDid = (did: string): boolean => {
+  const dids = getDids();
+
+  if (dids.indexOf(did) === -1) {
+    return false;
+  }
+
+  return true;
+};
+
+export const validateUid = (uid: string): boolean => {
+  return uuidValidate(uid) && uuidVersion(uid) === 4;
+};

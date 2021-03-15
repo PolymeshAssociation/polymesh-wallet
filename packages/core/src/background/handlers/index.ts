@@ -1,13 +1,14 @@
 import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 import { assert } from '@polkadot/util';
-import { nonFatalErrorHandler } from '@polymathnetwork/extension-core/utils';
 
 import { PolyMessageTypes, PolyTransportRequestMessage } from '../types';
 import Extension from './Extension';
+import State from './State';
 import Tabs from './Tabs';
 
-const extension = new Extension();
-const tabs = new Tabs();
+const state = new State();
+const extension = new Extension(state);
+const tabs = new Tabs(state);
 
 export default function polyHandler<TMessageType extends PolyMessageTypes> ({ id, message, request }: PolyTransportRequestMessage<TMessageType>, port: chrome.runtime.Port): void {
   const isExtension = port.name === PORT_EXTENSION;
@@ -32,7 +33,7 @@ export default function polyHandler<TMessageType extends PolyMessageTypes> ({ id
       assert(port, 'Port has been disconnected');
 
       port.postMessage({ id, response });
-    }, nonFatalErrorHandler)
+    })
     .catch((error: Error): void => {
       console.log(`[err] ${source}:: ${error.message}`);
 

@@ -128,60 +128,47 @@ export default function Request ({ account: { isExternal }, isFirst, request, si
       />
     )
     : (
-      <Flex
-        flexDirection='column'
-        justifyContent='flex-end'
-        mb='s'>
-        <Box>
-          <Flex>
-            <Box>
-              <Button
-                fluid
-                onClick={_onCancel}
-                variant='secondary'>
-                Reject
-              </Button>
-            </Box>
-            {isFirst && <Box ml='xs'>
-              <Button
-                busy={isBusy}
-                fluid
-                onClick={_onSignQuick}
-                type='submit'>
-                Authorize
-              </Button>
-            </Box> }
-          </Flex>
-        </Box>
+      <Flex m='s'>
+        <Flex flex={1}>
+          <Button
+            fluid
+            onClick={_onCancel}
+            variant='secondary'>
+            Reject
+          </Button>
+        </Flex>
+        {isFirst && <Flex flex={1}
+          ml='xs'>
+          <Button
+            busy={isBusy}
+            fluid
+            onClick={_onSignQuick}
+            type='submit'>
+            Sign
+          </Button>
+        </Flex> }
       </Flex>
     );
 
   return (
     <>
-      <Box style={{ display: isFirst ? 'block' : 'none', overflowY: 'scroll', height: '100%', minWidth: '100%' }}>
+      <RequestContent isFirst={isFirst}>
         <Box mt='xs'
           mx='s'>
           <Heading variant='h5'>Signing Request</Heading>
         </Box>
-        <ContentArea>
-          {content()}
-        </ContentArea>
-      </Box>
+        {content()}
+      </RequestContent>
 
       {signArea}
     </>
   );
 }
 
-const ContentArea = styled.div`
-  height: 100%;
+const RequestContent = styled.div<{ isFirst: boolean | undefined }>`
+  display: ${({ isFirst }) => isFirst ? 'flex' : 'none'};
+  flex-direction: column;
   overflow-y: scroll;
-  margin-top: -25px;
-  padding-top: 25px;
-  padding-right: 0px;
-  padding-left: 0px;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  height: 100%;
+  min-width: 100%;
 `;

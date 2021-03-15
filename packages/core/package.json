@@ -1,6 +1,6 @@
 {
   "name": "@polymathnetwork/extension-core",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,16 +10,21 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.12.13",
+    "@polymathnetwork/confidential-identity": "^1.0.1",
     "@reduxjs/toolkit": "^1.4.0",
+    "@types/crypto-js": "^4.0.1",
     "@types/lodash-es": "^4.17.3",
     "@types/redux-logger": "^3.0.8",
     "@types/redux-persist": "^4.3.1",
+    "@types/uuid": "^8.3.0",
+    "crypto-js": "^4.0.0",
     "lodash-es": "^4.17.15",
     "redux-persist": "^6.0.0",
-    "redux-persist-webextension-storage": "^1.0.2"
+    "redux-persist-webextension-storage": "^1.0.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "redux-logger": "^3.0.6",
-    "babel-loader": "^8.1.0"
+    "babel-loader": "^8.1.0",
+    "redux-logger": "^3.0.6"
   }
 }
