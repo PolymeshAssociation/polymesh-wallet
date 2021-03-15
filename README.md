@@ -109,7 +109,7 @@ wallet.network.subscribe((network) => {
 });
 ```
 
-Provide a confidential ID or request uniqueness proof
+Provide a confidential ID or request uniqueness proof. Check out this [demo app](https://polymathnetwork.github.io/mock-uid-provider/) to learn more about utilizing uId features [code]( https://github.com/PolymathNetwork/mock-uid-provider/blob/master/src/App.tsx#L134).
 
 ```js
 wallet.uid.provide({
