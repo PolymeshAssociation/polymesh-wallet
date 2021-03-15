@@ -11,10 +11,11 @@ import styled from 'styled-components';
 type Props = {
   ledgerStatus: Status | null;
   refresh: () => void;
-  headerText?: string
+  headerText?: string;
+  cancel?: () => void;
 };
 
-export function TroubleshootGuide ({ headerText, ledgerStatus, refresh }: Props): React.ReactElement | null {
+export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }: Props): React.ReactElement | null {
   const isDeviceIssue = ledgerStatus === Status.Device || ledgerStatus === Status.Error;
   const isAppIssue = ledgerStatus === Status.App;
   const isLoading = ledgerStatus === Status.Loading;
@@ -22,6 +23,10 @@ export function TroubleshootGuide ({ headerText, ledgerStatus, refresh }: Props)
   const history = useHistory();
 
   const onCancel = () => {
+    if (cancel) {
+      cancel();
+    }
+
     history.push('/');
   };
 

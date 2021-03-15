@@ -265,9 +265,10 @@ export default function Request ({ account: { accountIndex, address, addressOffs
     return (
       <Box p='s'>
         <TroubleshootGuide
+          cancel={_onCancel}
           headerText='Please follow the instructions in order to sign on Ledger'
           ledgerStatus={ledgerStatus}
-          refresh={refresh} />
+          refresh={refresh}/>
       </Box>
     );
   }
