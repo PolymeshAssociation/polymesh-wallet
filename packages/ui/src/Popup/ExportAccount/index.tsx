@@ -50,7 +50,10 @@ export const ExportAccount: FC = () => {
       <Header headerText='Export account'
         iconAsset={SvgOpenInNew}>
       </Header>
-      <Box p='s'>
+      <Flex alignItems='stretch'
+        flexDirection='column'
+        height='100%'
+        p='s'>
         <Box borderColor='gray.4'
           borderRadius={3}
           borderStyle='solid'
@@ -100,18 +103,15 @@ export const ExportAccount: FC = () => {
             </Box>
           </Box>
         </form>
-        <Flex flex={1}
-          flexDirection='column'
-          justifyContent='flex-end'
-          my='s'>
+        <Box mt='auto'>
           <Button busy={isBusy}
             fluid
             form='passwordForm'
             type='submit'>
-          Export account
+            Export account
           </Button>
-        </Flex>
-      </Box>
+        </Box>
+      </Flex>
     </>
   );
 };
