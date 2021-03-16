@@ -32,41 +32,41 @@ export const ForgetAccount: FC = () => {
       <Header headerText='Forget account'
         iconAsset={SvgFileLockOutline}>
       </Header>
-      <Box pt='m'>
-        <Box borderColor='gray.4'
-          borderRadius={3}
-          borderStyle='solid'
-          borderWidth={2}
-          m='xs'
-          p='s'>
-          <Flex>
-            <Icon Asset={SvgAlertCircle}
-              color='alert'
-              height={20}
-              width={20} />
-            <Box ml='s'>
-              <Text color='alert'
-                variant='b3m'>
+      <Flex flexDirection='column'
+        height='100%'
+        p='s'>
+        <Box pt='s'>
+          <Box borderColor='gray.4'
+            borderRadius={3}
+            borderStyle='solid'
+            borderWidth={2}
+            p='s'>
+            <Flex>
+              <Icon Asset={SvgAlertCircle}
+                color='alert'
+                height={20}
+                width={20} />
+              <Box ml='s'>
+                <Text color='alert'
+                  variant='b3m'>
                 Attention
-              </Text>
-            </Box>
-          </Flex>
-          <Text color='gray.1'
-            variant='b2m'>
+                </Text>
+              </Box>
+            </Flex>
+            <Text color='gray.1'
+              variant='b2m'>
             You are about to remove this account. Once removed, this account will not be accessible via this extension unless you re-add it via JSON file or seed phrase.
-          </Text>
+            </Text>
+          </Box>
         </Box>
-      </Box>
-      <Flex flex={1}
-        flexDirection='column'
-        justifyContent='flex-end'
-        mb='s'
-        mx='xs'>
-        <Button busy={isBusy}
-          fluid
-          onClick={onExport}>
+        <Box mt='auto'
+          width='100%'>
+          <Button busy={isBusy}
+            fluid
+            onClick={onExport}>
           Forget account
-        </Button>
+          </Button>
+        </Box>
       </Flex>
     </>
   );
