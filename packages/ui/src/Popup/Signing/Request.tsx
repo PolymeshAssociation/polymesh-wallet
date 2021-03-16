@@ -219,7 +219,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
     )
     : (
       <Flex flexDirection='column'
-        m='s'>
+        p='s'>
         {error && (
           <Warning isDanger>
             {error}
@@ -230,7 +230,8 @@ export default function Request ({ account: { accountIndex, address, addressOffs
             {warning}
           </Warning>
         )}
-        <Flex flexDirection='row'>
+        <Flex flexDirection='row'
+          width='100%'>
           <Flex flex={1}>
             <Button
               fluid
