@@ -7,8 +7,8 @@ import State from './State';
 import Tabs from './Tabs';
 
 const state = new State();
-const extension = new Extension(state);
-const tabs = new Tabs(state);
+const extension = new Extension(state); // handles messages coming from the extension popup
+const tabs = new Tabs(state); // handles messages coming from the app running in the currently open tab
 
 export default function polyHandler<TMessageType extends PolyMessageTypes> ({ id, message, request }: PolyTransportRequestMessage<TMessageType>, port: chrome.runtime.Port): void {
   const isExtension = port.name === PORT_EXTENSION;
