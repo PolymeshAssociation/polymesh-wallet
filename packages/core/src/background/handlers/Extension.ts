@@ -354,8 +354,6 @@ export default class Extension {
 
     // Try to validate against an existing pair.
     if (nonLedgerPair) {
-      nonLedgerPair.decodePkcs8(password);
-
       try {
         if (!nonLedgerPair.isLocked) {
           nonLedgerPair.lock();
