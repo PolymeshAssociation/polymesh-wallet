@@ -8,25 +8,24 @@ export default function ProvideUidRequests (): React.ReactElement {
   const requests = useContext(ProvideUidReqContext);
 
   return (
-    <>
-      <Scroll isLastRequest={requests.length === 1}>
-        {requests.map(({ id, request, url }, index): React.ReactNode => (
-          <Request
-            isFirst={index === 0}
-            key={id}
-            reqId={id}
-            request={request}
-            url={url}
-          />
-        ))}
-      </Scroll>
-    </>
+    <Container>
+      {requests.map(({ id, request, url }, index): React.ReactNode => (
+        <Request
+          isFirst={index === 0}
+          key={id}
+          reqId={id}
+          request={request}
+          url={url}
+        />
+      ))}
+    </Container>
   );
 }
 
-const Scroll = styled.div<{isLastRequest: boolean}>`
-  overflow-y: ${({ isLastRequest }): string => isLastRequest ? 'hidden' : 'auto'};
+const Container = styled.div`
+  overflow-y: auto;
   height: 600px;
+
   && {
     padding: 0;
   }
