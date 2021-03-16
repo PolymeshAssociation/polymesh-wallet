@@ -37,6 +37,9 @@ import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 import { getScopeAttestationProof } from './utils';
 
+/**
+ * Extension handles messages coming from the extension popup UI (i.e packages/ui)
+ */
 export default class Extension {
   readonly #state: State;
 

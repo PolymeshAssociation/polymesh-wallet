@@ -97,6 +97,10 @@ port.onMessage.addListener((data: Message['data']): void => {
   }
 });
 
+/**
+ * - Handles sending messages to be handled by polkadot extension.
+ * - Refer to packages/extension/src/background.ts for routing logic.
+ */
 function sendMessage<TMessageType extends MessageTypesWithNullRequest>(
   message: TMessageType
 ): Promise<ResponseTypes[TMessageType]>;
@@ -125,6 +129,11 @@ function sendMessage<TMessageType extends MessageTypes> (
   });
 }
 
+/**
+ * - Handles sending messages to be handled by our own core package at packages/core/src/background/handlers
+ * - Refer to packages/extension/src/background.ts for routing logic.
+ * - Handlers for these messages are defined in packages/core/src/background/handlers/Extension
+ */
 function polyMessage<TMessageType extends PolyMessageTypesWithNullRequest>(
   message: TMessageType
 ): Promise<PolyRequestTypes[TMessageType]>;
