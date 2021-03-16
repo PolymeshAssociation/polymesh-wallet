@@ -241,7 +241,8 @@ export default function Request ({ account: { accountIndex, address, addressOffs
               Reject
             </Button>
           </Flex >
-          {isFirst && <Box ml='xs'>
+          {isFirst && <Flex flex={1}
+            ml='xs'>
             { isHardware && payload
               ? <Button
                 busy={isBusy || isSigningLedger}
@@ -259,7 +260,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
                 Sign
               </Button>
             }
-          </Box> }
+          </Flex> }
         </Flex>
       </Flex>
     );
