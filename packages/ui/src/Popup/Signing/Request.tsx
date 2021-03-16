@@ -221,7 +221,8 @@ export default function Request ({ account: { accountIndex, address, addressOffs
       <Flex flexDirection='column'
         p='s'>
         {error && (
-          <Warning isDanger>
+          <Warning isDanger
+            style={{ alignItems: 'center', alignSelf: 'flex-start', marginBottom: '10px' }}>
             {error}
           </Warning>
         )}
