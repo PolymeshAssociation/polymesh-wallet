@@ -219,9 +219,10 @@ export default function Request ({ account: { accountIndex, address, addressOffs
     )
     : (
       <Flex flexDirection='column'
-        m='s'>
+        p='s'>
         {error && (
-          <Warning isDanger>
+          <Warning isDanger
+            style={{ alignItems: 'center', alignSelf: 'flex-start', marginBottom: '10px' }}>
             {error}
           </Warning>
         )}
@@ -230,7 +231,8 @@ export default function Request ({ account: { accountIndex, address, addressOffs
             {warning}
           </Warning>
         )}
-        <Flex flexDirection='row'>
+        <Flex flexDirection='row'
+          width='100%'>
           <Flex flex={1}>
             <Button
               fluid
@@ -239,7 +241,8 @@ export default function Request ({ account: { accountIndex, address, addressOffs
               Reject
             </Button>
           </Flex >
-          {isFirst && <Box ml='xs'>
+          {isFirst && <Flex flex={1}
+            ml='xs'>
             { isHardware && payload
               ? <Button
                 busy={isBusy || isSigningLedger}
@@ -257,7 +260,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
                 Sign
               </Button>
             }
-          </Box> }
+          </Flex> }
         </Flex>
       </Flex>
     );
