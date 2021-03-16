@@ -1,13 +1,12 @@
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { globalChangePass, validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import { globalChangePass, validatePassword } from '@polymathnetwork/extension-ui/messaging';
 import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
+import { ActionContext, ActivityContext } from '../../components';
 
 export const ChangePassword: FC = () => {
-  const { polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
   const onAction = useContext(ActionContext);
   const { errors, handleSubmit, register, setError } = useForm({
     defaultValues: {
@@ -19,11 +18,7 @@ export const ChangePassword: FC = () => {
   const isBusy = useContext(ActivityContext);
 
   const onSubmit = async (data: { [x: string]: string; }) => {
-    if (!selectedAccount) { return; }
-
-    if (!polymeshAccounts) { return; }
-
-    const isValidPassword = await validateAccount(selectedAccount, data.currentPassword);
+    const isValidPassword = await validatePassword(data.currentPassword);
 
     if (!isValidPassword) {
       setError('currentPassword', { type: 'manual' });

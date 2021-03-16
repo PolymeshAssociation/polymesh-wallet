@@ -1,8 +1,8 @@
-import { validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import { validatePassword } from '@polymathnetwork/extension-ui/messaging';
 import React, { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { ActivityContext, PolymeshContext } from '../../components';
+import { ActivityContext } from '../../components';
 import { Box, Button, Checkbox, Flex, Text, TextInput } from '../../ui';
 
 interface Props {
@@ -17,7 +17,6 @@ interface Props {
 
 function Unlock ({ error, isFirst, isLocked, onCancel, onSavePassChange, onSign, savePass }: Props): React.ReactElement<Props> {
   const isBusy = useContext(ActivityContext);
-  const { selectedAccount } = useContext(PolymeshContext);
 
   const { errors, handleSubmit, register, setError } = useForm({
     defaultValues: {
@@ -30,11 +29,7 @@ function Unlock ({ error, isFirst, isLocked, onCancel, onSavePassChange, onSign,
   }, [error, setError]);
 
   const onSubmit = async (data: { [x: string]: string; }) => {
-    if (!selectedAccount) {
-      throw new Error('No account is selected');
-    }
-
-    const valid = await validateAccount(selectedAccount, data.currentPassword);
+    const valid = await validatePassword(data.currentPassword);
 
     if (!valid) {
       setError('currentPassword', { type: 'WrongPassword' });

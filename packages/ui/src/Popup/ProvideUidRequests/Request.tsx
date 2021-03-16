@@ -1,13 +1,13 @@
 import { RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
 import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
-import { ActionContext, ActivityContext, PolymeshContext, UidContext } from '../../components';
-import { approveUidProvideRequest, rejectUidProvideRequest, validateAccount } from '../../messaging';
+import { ActionContext, ActivityContext, Password, PolymeshContext, UidContext } from '../../components';
+import { approveUidProvideRequest, isPasswordSet, rejectUidProvideRequest, validatePassword } from '../../messaging';
 import { ThemeProps } from '../../types';
-import { Box, Button, Flex, Header, Heading, Icon, Text, TextInput } from '../../ui';
+import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
 import { AccountsHeader } from '../Accounts/AccountsHeader';
 
 interface Props {
@@ -18,12 +18,22 @@ interface Props {
   url: string;
 }
 
+type FormInputs = {
+  password: string;
+  confirmPassword: string;
+};
+
 function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<Props> {
   const onAction = useContext(ActionContext);
   const uidRecords = useContext(UidContext);
   const { currentAccount, network } = useContext(PolymeshContext);
   const [overWriteUid, setOverWriteUid] = useState(false);
   const [hasExistingUid, setHasExistingUid] = useState(false);
+  const [passIsSet, setPassIsSet] = useState<boolean>(false);
+
+  useEffect(() => {
+    isPasswordSet().then(setPassIsSet).catch(console.error);
+  }, []);
 
   useEffect(() => {
     const uid = uidRecords?.find((item) => item.did === currentAccount?.did && network === item.network);
@@ -33,11 +43,15 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
 
   const isBusy = useContext(ActivityContext);
 
-  const { errors, handleSubmit, register, setError } = useForm({
+  const methods = useForm<FormInputs>({
     defaultValues: {
-      currentPassword: ''
-    }
+      password: '',
+      confirmPassword: ''
+    },
+    mode: 'onChange',
+    reValidateMode: 'onChange'
   });
+  const { handleSubmit, setError } = methods;
 
   const _onApprove = useCallback(
     (password: string) =>
@@ -56,16 +70,20 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
   );
 
   const onSubmit = async (data: { [x: string]: string }) => {
-    if (!currentAccount) {
-      throw new Error('No account is selected');
-    }
+    if (passIsSet) {
+      const isValidPassword = await validatePassword(data.password);
 
-    const valid = await validateAccount(currentAccount.address, data.currentPassword);
-
-    if (!valid) {
-      setError('currentPassword', { type: 'WrongPassword' });
+      if (isValidPassword) {
+        await _onApprove(data.password);
+      } else {
+        setError('password', { type: 'manual', message: 'Invalid password' });
+      }
     } else {
-      await _onApprove(data.currentPassword);
+      if (data.password === data.confirmPassword) {
+        await _onApprove(data.password);
+      } else {
+        setError('confirmPassword', { type: 'manual', message: 'Passwords do not match' });
+      }
     }
   };
 
@@ -160,7 +178,8 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
           </Box>
         )}
         {(!hasExistingUid || overWriteUid) && (
-          <>
+          <FormProvider {...methods} >
+
             <form id='passwordForm'
               onSubmit={handleSubmit(onSubmit)}>
               <Box pt='m'>
@@ -194,30 +213,17 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
                 mx='s'>
                 <Box mb='s'
                   style={{ width: '100%' }}>
-                  <Box>
-                    <Text color='gray.1'
-                      variant='b2m'>
-                      Wallet password
-                    </Text>
-                  </Box>
-                  <Box style={{ width: '100%' }}>
-                    <TextInput
-                      inputRef={register({ required: true })}
-                      name='currentPassword'
-                      placeholder='Enter wallet password'
-                      type='password'
-                    />
-                    {errors.currentPassword && (
-                      <Box>
-                        <Text color='alert'
-                          variant='b3'>
-                          {errors.currentPassword.type === 'required' && 'Required field'}
-                          {errors.currentPassword.type === 'WrongPassword' && 'Invalid password'}
-                          {errors.currentPassword.type === 'SigningError' && errors.currentPassword.message}
-                        </Text>
-                      </Box>
-                    )}
-                  </Box>
+                  {!passIsSet && (
+                    <Box mt='m'>
+                      <Text color='gray.2'
+                        variant='b2'>
+                        Please enter a new wallet password below to complete account creation.
+                      </Text>
+                    </Box>
+                  )}
+                  <Password label={passIsSet ? 'Wallet password' : 'Password'}
+                    placeholder='Enter your current wallet password'
+                    withConfirm={!passIsSet} />
                 </Box>
               </Flex>
               <Flex mb='s'
@@ -243,7 +249,7 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
                 )}
               </Flex>
             </form>
-          </>
+          </FormProvider>
         )}
       </Flex>
     </>
