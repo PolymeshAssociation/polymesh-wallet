@@ -108,7 +108,7 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
               mx='s'>
               <Heading mb={1}
                 variant='h5'>
-                {'UID Provision Requests'}
+                UID Provision Requests
               </Heading>
               <Text color='gray.2'
                 variant='b2'>
