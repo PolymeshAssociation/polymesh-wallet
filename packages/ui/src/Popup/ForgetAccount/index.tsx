@@ -35,29 +35,27 @@ export const ForgetAccount: FC = () => {
       <Flex flexDirection='column'
         height='100%'
         p='s'>
-        <Box pt='s'>
-          <Box borderColor='gray.4'
-            borderRadius={3}
-            borderStyle='solid'
-            borderWidth={2}
-            p='s'>
-            <Flex>
-              <Icon Asset={SvgAlertCircle}
-                color='alert'
-                height={20}
-                width={20} />
-              <Box ml='s'>
-                <Text color='alert'
-                  variant='b3m'>
+        <Box borderColor='gray.4'
+          borderRadius={3}
+          borderStyle='solid'
+          borderWidth={2}
+          p='s'>
+          <Flex>
+            <Icon Asset={SvgAlertCircle}
+              color='alert'
+              height={20}
+              width={20} />
+            <Box ml='s'>
+              <Text color='alert'
+                variant='b3m'>
                 Attention
-                </Text>
-              </Box>
-            </Flex>
-            <Text color='gray.1'
-              variant='b2m'>
+              </Text>
+            </Box>
+          </Flex>
+          <Text color='gray.1'
+            variant='b2m'>
             You are about to remove this account. Once removed, this account will not be accessible via this extension unless you re-add it via JSON file or seed phrase.
-            </Text>
-          </Box>
+          </Text>
         </Box>
         <Box mt='auto'
           width='100%'>
