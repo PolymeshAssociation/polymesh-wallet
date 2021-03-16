@@ -217,4 +217,8 @@ export default class State {
   public async changeUidPassword (oldPass: string, newPass: string): Promise<void> {
     return this.#auxStore.changePassword(oldPass, newPass);
   }
+
+  public async allUidRecords (): Promise<UidRecord[]> {
+    return this.#auxStore.allRecords();
+  }
 }
