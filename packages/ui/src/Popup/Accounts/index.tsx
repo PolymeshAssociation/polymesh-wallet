@@ -2,9 +2,11 @@ import { defaultNetwork, networkIsDev, networkLabels, networkLinks } from '@poly
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgDotsVertical,
   SvgPlus, SvgViewDashboard } from '@polymathnetwork/extension-ui/assets/images/icons';
+import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
+import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { setPolyNetwork, togglePolyIsDev, windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
@@ -14,10 +16,25 @@ import { AccountsContainer } from './AccountsContainer';
 import { AccountsHeader } from './AccountsHeader';
 import AddAccount from './AddAccount';
 
+const jsonPath = '/account/restore-json';
+const ledgerPath = '/account/import-ledger';
+
 export default function Accounts (): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
   const { currentAccount, isDeveloper, network, polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
   const history = useHistory();
+  const { isLedgerCapable, isLedgerEnabled } = useLedger();
+
+  const isPopup = useIsPopup();
+
+  const _openJson = useCallback(
+    () => windowOpen(jsonPath)
+    , []);
+
+  const _onOpenLedgerConnect = useCallback(
+    () => windowOpen(ledgerPath),
+    []
+  );
 
   const renderNetworksSelector = (network: NetworkName = defaultNetwork) => {
     return (
@@ -33,7 +50,6 @@ export default function Accounts (): React.ReactElement {
   const renderNetworkDropdown = () => {
     return (
       <>
-        {/* @ts-ignore */}
         <Menu id='network_select'>
           {
             Object.keys(networkLabels)
@@ -41,7 +57,6 @@ export default function Accounts (): React.ReactElement {
               .map((_network, index) => {
                 return (
                   <Fragment key={index}>
-                    {/* @ts-ignore */}
                     <MenuItem data={{ networkKey: _network }}
                       key={index}
                       onClick={handleNetworkChange}>
@@ -87,26 +102,43 @@ export default function Accounts (): React.ReactElement {
   const renderAccountMenuItems = () => {
     return (
       <>
-        {/* @ts-ignore */}
         <Menu id='add_account_menu'>
-          {/* @ts-ignore */}
           <MenuItem data={{ action: 'new' }}
             onClick={handleAccountMenuClick}>
             <Text color='gray.2'
               variant='b1'>Create new account</Text>
           </MenuItem>
-          {/* @ts-ignore */}
           <MenuItem data={{ action: 'fromSeed' }}
             onClick={handleAccountMenuClick}>
             <Text color='gray.2'
               variant='b1'>Restore with recovery phrase</Text>
           </MenuItem>
-          {/* @ts-ignore */}
           <MenuItem data={{ action: 'fromJson' }}
             onClick={handleAccountMenuClick}>
             <Text color='gray.2'
               variant='b1'>Import account with JSON file</Text>
           </MenuItem>
+
+          {
+            isLedgerEnabled
+              ? <MenuItem
+                disabled={!isLedgerCapable}
+                onClick={
+                  () => history.push('/account/import-ledger')
+                }>
+                <Text color='gray.2'
+                  variant='b1'>{
+                    !isLedgerCapable ? 'Ledger devices can only be connected with Chrome browser' : 'Attach ledger account'
+                  }</Text>
+              </MenuItem>
+
+              : <MenuItem
+                onClick={_onOpenLedgerConnect}>
+                <Text color='gray.2'
+                  variant='b1'>{'Connect Ledger device'}</Text>
+              </MenuItem>
+          }
+
         </Menu>
       </>
     );
@@ -119,7 +151,7 @@ export default function Accounts (): React.ReactElement {
       case 'fromSeed':
         return history.push('/account/import-seed');
       case 'fromJson':
-        return history.push('/account/restore-json');
+        return isPopup ? _openJson() : history.push(jsonPath);
     }
   };
 
@@ -158,21 +190,17 @@ export default function Accounts (): React.ReactElement {
   const renderTopMenu = () => {
     return (
       <>
-        {/* @ts-ignore */}
         <Menu id='top_menu'>
-          {/* @ts-ignore */}
           <MenuItem data={{ action: 'changePassword' }}
             onClick={handleTopMenuSelection}>
             <Text color='gray.2'
               variant='b1'>Change password</Text>
           </MenuItem>
-          {/* @ts-ignore */}
           <MenuItem data={{ action: 'newWindow' }}
             onClick={handleTopMenuSelection}>
             <Text color='gray.2'
               variant='b1'>Open extension in a new tab</Text>
           </MenuItem>
-          {/* @ts-ignore */}
           <MenuItem data={{ action: 'toggleIsDev' }}
             onClick={handleTopMenuSelection}>
             <Checkbox checked={isDeveloper}
@@ -193,66 +221,67 @@ export default function Accounts (): React.ReactElement {
       {renderTopMenu()}
       {renderAccountMenuItems()}
       {renderNetworkDropdown()}
-      {hierarchy.length === 0 ? (
-        <AddAccount />
-      ) : (
-        <>
-          <Header>
-            <Flex alignItems='center'
-              flexDirection='row'
-              justifyContent='space-between'
-              mb='m'>
-              {renderNetworksSelector(network as NetworkName)}
-              <Flex flexDirection='row'
-                justifyContent='center'>
-                <GrowingButton icon={SvgViewDashboard}
-                  onClick={openDashboard} />
-                {renderTopMenuButton()}
-              </Flex>
-            </Flex>
-            {currentAccount && <AccountsHeader account={currentAccount}
-              details={true} />}
-          </Header>
-          <AccountsArea>
-            <Flex justifyContent='space-between'
-              pt='m'
-              px='s'>
-              <Text color='gray.1'
-                variant='c2'>
-                ACCOUNTS
-              </Text>
-              {/* @ts-ignore */}
-              <ContextMenuTrigger id='add_account_menu'
-                mouseButton={0}>
-                <Flex justifyContent='center'
-                  style={{ cursor: 'pointer' }}>
-                  <Flex mx='s'>
-                    <Icon Asset={SvgPlus}
-                      color='brandMain'
-                      height={14}
-                      width={14} />
-                  </Flex>
-                  <Text color='brandMain'
-                    variant='b2'>
-                    Add a key
-                  </Text>
+      {hierarchy.length === 0
+        ? (
+          <AddAccount />
+        )
+        : (
+          <>
+            <Header>
+              <Flex alignItems='center'
+                flexDirection='row'
+                justifyContent='space-between'
+                mb='m'>
+                {renderNetworksSelector(network as NetworkName)}
+                <Flex flexDirection='row'
+                  justifyContent='center'>
+                  <GrowingButton icon={SvgViewDashboard}
+                    onClick={openDashboard} />
+                  {renderTopMenuButton()}
                 </Flex>
-              </ContextMenuTrigger>
-            </Flex>
-            {
-              Object.keys(groupedAccounts).sort((a) => (a === 'unassigned' ? 1 : -1)).map((did: string, index) => {
-                return <AccountsContainer
-                  accounts={hasKey(groupedAccounts, did) ? groupedAccounts[did] : []}
-                  did={did}
-                  headerColor={getHeaderColor(index)}
-                  key={index}
-                  selectedAccount={selectedAccount || ''}
-                />;
-              })
-            }
-          </AccountsArea>
-        </>
-      )}
+              </Flex>
+              {currentAccount && <AccountsHeader account={currentAccount}
+                details={true} />}
+            </Header>
+            <AccountsArea>
+              <Flex justifyContent='space-between'
+                pt='m'
+                px='s'>
+                <Text color='gray.1'
+                  variant='c2'>
+                ACCOUNTS
+                </Text>
+                <ContextMenuTrigger id='add_account_menu'
+                  mouseButton={0}>
+                  <Flex justifyContent='center'
+                    style={{ cursor: 'pointer' }}>
+                    <Flex mx='s'>
+                      <Icon Asset={SvgPlus}
+                        color='brandMain'
+                        height={14}
+                        width={14} />
+                    </Flex>
+                    <Text color='brandMain'
+                      variant='b2'>
+                    Add a key
+                    </Text>
+                  </Flex>
+                </ContextMenuTrigger>
+              </Flex>
+              {
+                Object.keys(groupedAccounts).sort((a) => (a === 'unassigned' ? 1 : -1)).map((did: string, index) => {
+                  return <AccountsContainer
+                    accounts={hasKey(groupedAccounts, did) ? groupedAccounts[did] : []}
+                    did={did}
+                    headerColor={getHeaderColor(index)}
+                    key={index}
+                    selectedAccount={selectedAccount || ''}
+                  />;
+                })
+              }
+            </AccountsArea>
+          </>
+        )}
     </>
   );
 }

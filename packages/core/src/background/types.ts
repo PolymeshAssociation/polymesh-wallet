@@ -48,8 +48,13 @@ export type RequestPolyProvideUidSubscribe = null;
 
 export type RequestPolyUidRecordsSubscribe = null;
 
+export type RequestPolyIsPasswordSet = null;
 export interface RequestPolyNetworkSet {
   network: NetworkName;
+}
+
+export interface RequestPolyValidatePassword {
+  password: string;
 }
 
 export type RequestPolyIsDevToggle = null;
@@ -138,15 +143,17 @@ export interface PolyRequestSignatures {
   'poly:pri(uid.proofRequests.subscribe)': [RequestProofingSubscribe, boolean, ProofingRequest[]];
   'poly:pri(uid.proofRequests.approve)': [RequestPolyApproveProof, boolean];
   'poly:pri(uid.proofRequests.reject)': [RequestPolyRejectProof, boolean];
-
   'poly:pub(uid.provide)': [RequestPolyProvideUid, boolean];
   'poly:pri(uid.provideRequests.subscribe)': [RequestPolyProvideUidSubscribe, boolean, ProvideUidRequest[]];
   'poly:pri(uid.provideRequests.approve)': [RequestPolyProvideUidApprove, boolean];
   'poly:pri(uid.provideRequests.reject)': [RequestPolyProvideUidReject, boolean];
   'poly:pri(uid.changePass)': [RequestPolyChangePass, boolean];
   'poly:pri(uid.records.subscribe)': [RequestPolyUidRecordsSubscribe, boolean, UidRecord[]];
-  'poly:pri(global.changePass)': [RequestPolyGlobalChangePass, boolean];
   'poly:pri(uid.getUid)': [RequestPolyGetUid, string];
+
+  'poly:pri(global.changePass)': [RequestPolyGlobalChangePass, boolean];
+  'poly:pri(password.isSet)': [RequestPolyIsPasswordSet, boolean];
+  'poly:pri(password.validate)': [RequestPolyValidatePassword, boolean];
   /*
     this is an inelegant yet effective way to take over these couple requests from Polkadot handlers,
     in order to alter their behavior as needed.

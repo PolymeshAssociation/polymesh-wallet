@@ -44,6 +44,7 @@ import { PolymeshContext as PolymeshContextType } from '../types';
 import { Box, Flex, Icon } from '../ui';
 import { Toast } from '../ui/Toast';
 import { buildHierarchy } from '../util/buildHierarchy';
+import ImportLedger from './ImportLedger/ImportLedger';
 import { AccountDetails } from './AccountDetails';
 import Accounts from './Accounts';
 import Authorize from './Authorize';
@@ -55,6 +56,7 @@ import { ImportSeed } from './ImportSeed';
 import { NewAccount } from './NewAccount';
 import ProofRequests from './ProofRequests';
 import ProvideUidRequests from './ProvideUidRequests';
+import { Restore } from './Restore';
 import Signing from './Signing';
 
 const startSettings = uiSettings.get();
@@ -220,7 +222,7 @@ export default function Popup (): React.ReactElement {
 
   return (
     <Loading>
-      {accounts &&
+      { accounts &&
         authRequests &&
         metaRequests &&
         signRequests &&
@@ -254,6 +256,12 @@ export default function Popup (): React.ReactElement {
                                 </Route>
                                 <Route path='/account/restore-json'>
                                   <ImportJson />
+                                </Route>
+                                <Route path='/account/restore'>
+                                  <Restore />
+                                </Route>
+                                <Route path='/account/import-ledger'>
+                                  <ImportLedger />
                                 </Route>
                                 <Route path='/account/change-password'>
                                   <ChangePassword />

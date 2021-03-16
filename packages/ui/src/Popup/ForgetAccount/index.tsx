@@ -32,12 +32,14 @@ export const ForgetAccount: FC = () => {
       <Header headerText='Forget account'
         iconAsset={SvgFileLockOutline}>
       </Header>
-      <Box pt='m'>
+      <Flex alignItems='stretch'
+        flexDirection='column'
+        height='100%'
+        p='s'>
         <Box borderColor='gray.4'
           borderRadius={3}
           borderStyle='solid'
           borderWidth={2}
-          m='xs'
           p='s'>
           <Flex>
             <Icon Asset={SvgAlertCircle}
@@ -56,17 +58,13 @@ export const ForgetAccount: FC = () => {
             You are about to remove this account. Once removed, this account will not be accessible via this extension unless you re-add it via JSON file or seed phrase.
           </Text>
         </Box>
-      </Box>
-      <Flex flex={1}
-        flexDirection='column'
-        justifyContent='flex-end'
-        mb='s'
-        mx='xs'>
-        <Button busy={isBusy}
-          fluid
-          onClick={onExport}>
-          Forget account
-        </Button>
+        <Box mt='auto'>
+          <Button busy={isBusy}
+            fluid
+            onClick={onExport}>
+            Forget account
+          </Button>
+        </Box>
       </Flex>
     </>
   );

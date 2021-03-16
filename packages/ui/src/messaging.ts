@@ -293,6 +293,14 @@ export async function setPolyNetwork (network: NetworkName): Promise<boolean> {
   return polyMessage('poly:pri(network.set)', { network });
 }
 
+export async function isPasswordSet (): Promise<boolean> {
+  return polyMessage('poly:pri(password.isSet)', null);
+}
+
+export async function validatePassword (password: string): Promise<boolean> {
+  return polyMessage('poly:pri(password.validate)', { password });
+}
+
 export async function togglePolyIsDev (): Promise<boolean> {
   return polyMessage('poly:pri(isDev.toggle)', null);
 }
