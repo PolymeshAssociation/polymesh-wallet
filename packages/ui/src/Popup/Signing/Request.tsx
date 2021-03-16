@@ -231,7 +231,8 @@ export default function Request ({ account: { accountIndex, address, addressOffs
             {warning}
           </Warning>
         )}
-        <Flex flexDirection='row'
+        <Flex alignItems='stretch'
+          flexDirection='row'
           width='100%'>
           <Flex flex={1}>
             <Button
@@ -249,6 +250,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
                 disabled={ledgerStatus !== Status.Ok || hexBytes !== null}
                 fluid
                 onClick={_onSignLedger}
+                style={{ alignSelf: 'stretch' }}
                 type='submit'>
                 Sign on Ledger
               </Button>
