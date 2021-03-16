@@ -25,6 +25,9 @@ function transformAccounts (accounts: SubjectInfo): InjectedAccount[] {
     .sort(prioritize(getSelectedAccount(), (a) => a.address));
 }
 
+/**
+ * Tabs handles messages coming from the web app running in the currently open browser tabs
+ */
 export default class Tabs {
   readonly #state: State;
 
