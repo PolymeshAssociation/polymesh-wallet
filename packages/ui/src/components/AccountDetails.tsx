@@ -1,6 +1,6 @@
 import { SvgAccountCardDetailsOutline, SvgAlertCircle, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
-import { getNonLedgerAccount, validateAccount } from '@polymathnetwork/extension-ui/messaging';
+import { isPasswordSet, validatePassword } from '@polymathnetwork/extension-ui/messaging';
 import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -37,15 +37,15 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, noHeader, o
   });
   const { errors, formState, getValues, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
-  const [oneAddress, setOneAddress] = useState<string | null>(null);
+  const [passIsSet, setPassIsSet] = useState<boolean>(false);
 
   useEffect(() => {
-    getNonLedgerAccount().then(setOneAddress).catch(console.error);
+    isPasswordSet().then(setPassIsSet).catch(console.error);
   }, []);
 
   const onSubmit = async (data: { [x: string]: string }) => {
-    if (oneAddress) {
-      const isValidPassword = await validateAccount(oneAddress, data.password);
+    if (passIsSet) {
+      const isValidPassword = await validatePassword(data.password);
 
       if (isValidPassword) {
         onContinue({ accountName: data.accountName, password: data.password });
@@ -72,7 +72,7 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, noHeader, o
       {!noHeader && <Header headerText={headerText}
         iconAsset={SvgAccountCardDetailsOutline}></Header>}
       <Box mx='s'>
-        {oneAddress && <Box borderColor='gray.4'
+        {passIsSet && <Box borderColor='gray.4'
           borderRadius={3}
           borderStyle='solid'
           borderWidth={2}
@@ -121,7 +121,7 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, noHeader, o
                 )}
               </Box>
             </Box>
-            {!oneAddress && (
+            {!passIsSet && (
               <Box mt='m'>
                 <Text color='gray.2'
                   variant='b2'>
@@ -129,9 +129,9 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, noHeader, o
                 </Text>
               </Box>
             )}
-            <Password label={oneAddress ? 'Wallet password' : 'Password'}
+            <Password label={passIsSet ? 'Wallet password' : 'Password'}
               placeholder='Enter your current wallet password'
-              withConfirm={!oneAddress} />
+              withConfirm={!passIsSet} />
           </form>
         </FormProvider>
       </Box>

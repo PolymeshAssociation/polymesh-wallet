@@ -13,7 +13,6 @@ import { subscribeIdentifiedAccounts,
   subscribeSelectedAccount,
   subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 import { UidRecord } from '@polymathnetwork/extension-core/types';
-import { firstNonLedgerAccounts } from '@polymathnetwork/extension-core/utils';
 
 import { Errors,
   PolyMessageTypes,
@@ -32,6 +31,7 @@ import { Errors,
   RequestPolyProvideUidReject,
   RequestPolyRejectProof,
   RequestPolySelectedAccountSet,
+  RequestPolyValidatePassword,
   ResponsePolyCallDetails } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
@@ -55,10 +55,6 @@ export default class Extension {
     });
 
     return true;
-  }
-
-  private polyFirstNonLedgerAccount () {
-    return firstNonLedgerAccounts();
   }
 
   private polyNetworkSubscribe (id: string, port: chrome.runtime.Port): boolean {
@@ -213,14 +209,14 @@ export default class Extension {
 
     try {
       uid = await this.#state.getUid(account.did, network, password);
+
+      if (!uid) {
+        reject(new Error(Errors.NO_UID));
+
+        return false;
+      }
     } catch (error) {
       reject(error);
-
-      return false;
-    }
-
-    if (!uid) {
-      reject(new Error(Errors.NO_UID));
 
       return false;
     }
@@ -337,6 +333,60 @@ export default class Extension {
     return ret;
   }
 
+  private async isPasswordSet (): Promise<boolean> {
+    // If there's at least one, non-ledger account, or
+    // If there's at least one uid stored
+    // Then, user has set password before
+
+    const nonLedgerPairs = keyring.getPairs().filter((pair) => !pair.meta.isHardware).length > 0;
+
+    if (nonLedgerPairs) return true;
+
+    const uidRecords = await this.#state.allUidRecords();
+
+    if (uidRecords.length) return true;
+
+    return false;
+  }
+
+  private async validatePassword ({ password }: RequestPolyValidatePassword): Promise<boolean> {
+    const nonLedgerPair = keyring.getPairs().filter((pair) => !pair.meta.isHardware)[0];
+
+    // Try to validate against an existing pair.
+    if (nonLedgerPair) {
+      nonLedgerPair.decodePkcs8(password);
+
+      try {
+        if (!nonLedgerPair.isLocked) {
+          nonLedgerPair.lock();
+        }
+
+        nonLedgerPair.decodePkcs8(password);
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    // If no pairs found, try to validate an existing uID.
+    const uidRecords = await this.#state.allUidRecords();
+
+    if (uidRecords.length) {
+      const { did, network } = uidRecords[0];
+
+      try {
+        await this.#state.getUid(did, network, password);
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    return false;
+  }
+
   public async handle<TMessageType extends PolyMessageTypes> (
     id: string,
     type: TMessageType,
@@ -347,8 +397,11 @@ export default class Extension {
       case 'poly:pri(accounts.subscribe)':
         return this.polyAccountsSubscribe(id, port);
 
-      case 'poly:pri(accounts.firstNonLedgerAccount)':
-        return this.polyFirstNonLedgerAccount();
+      case 'poly:pri(password.isSet)':
+        return this.isPasswordSet();
+
+      case 'poly:pri(password.validate)':
+        return this.validatePassword(request as RequestPolyValidatePassword);
 
       case 'poly:pri(network.subscribe)':
         return this.polyNetworkSubscribe(id, port);

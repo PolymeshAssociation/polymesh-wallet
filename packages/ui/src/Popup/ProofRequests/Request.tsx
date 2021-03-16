@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
 import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
-import { approveProofRequest, rejectProofRequest, validateAccount } from '../../messaging';
+import { approveProofRequest, rejectProofRequest, validatePassword } from '../../messaging';
 import { ThemeProps } from '../../types';
 import { Box, Button, Flex, Header, Heading, Icon, Text, TextInput } from '../../ui';
 import { AccountsHeader } from '../Accounts/AccountsHeader';
@@ -47,11 +47,7 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
   );
 
   const onSubmit = async (data: { [x: string]: string }) => {
-    if (!currentAccount) {
-      throw new Error('No account is selected');
-    }
-
-    const valid = await validateAccount(currentAccount.address, data.currentPassword);
+    const valid = await validatePassword(data.currentPassword);
 
     if (!valid) {
       setError('currentPassword', { type: 'WrongPassword' });
