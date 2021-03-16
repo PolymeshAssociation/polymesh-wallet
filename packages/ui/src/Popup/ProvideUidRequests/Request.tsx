@@ -217,7 +217,7 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
                     <Box mt='m'>
                       <Text color='gray.2'
                         variant='b2'>
-                        Please enter a new wallet password below to complete account creation.
+                        Please enter a new wallet password below to complete uId provision.
                       </Text>
                     </Box>
                   )}
