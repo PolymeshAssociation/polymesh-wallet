@@ -11,9 +11,10 @@ interface Props extends ThemeProps {
   isDanger?: boolean;
 }
 
-function Warning ({ children, className }: Props): React.ReactElement<Props> {
+function Warning ({ children, className, ...props }: Props): React.ReactElement<Props> {
   return (
-    <div className={className}>
+    <div className={className}
+      {...props}>
       <div>
         <Svg
           className='warningImage'

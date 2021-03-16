@@ -1,20 +1,20 @@
 import { LinkName, NetworkName } from './types';
 
-const networkURLs: Record<NetworkName, string> = {
+export const networkURLs: Record<NetworkName, string> = {
   alcyone: 'wss://alcyone-rpc.polymesh.live',
   pmf: 'wss://pmf.polymath.network',
   pme: 'wss://pme.polymath.network',
   local: 'ws://localhost:9944'
 };
 
-const networkLabels: Record<NetworkName, string> = {
+export const networkLabels: Record<NetworkName, string> = {
   alcyone: 'Alcyone Testnet',
   pmf: 'PMF',
   pme: 'PME',
   local: 'Local node'
 };
 
-const networkIsDev: Record<NetworkName, boolean> = {
+export const networkIsDev: Record<NetworkName, boolean> = {
   alcyone: false,
   pmf: true,
   pme: true,
@@ -28,7 +28,7 @@ export const dynamicSchemaEnabled: Record <NetworkName, boolean> = {
   local: false
 };
 
-const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
+export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   alcyone: {
     dashboard: 'http://dashboard.polymesh.live/',
     explorer: 'http://18.223.97.65/'
@@ -47,11 +47,15 @@ const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   }
 };
 
-const defaultNetwork: NetworkName = NetworkName.alcyone;
+export const defaultNetwork: NetworkName = NetworkName.alcyone;
 
-const messagePrefix = 'poly:';
+export const messagePrefix = 'poly:';
 
-const messages = [
+// @TODO switch to mainnet hash when launched.
+// Alcyone genesis hash.
+export const genesisHash = '0x12fddc9e2128b3fe571e4e5427addcb87fcaf08493867a68dd6ae44b406b39c7';
+
+export const messages = [
   'pub(accounts.list)',
   'pub(accounts.subscribe)',
   'pub(metadata.provide)',
@@ -62,17 +66,9 @@ export const polySchemaUrl = 'https://schema.polymesh.live/';
 
 export const populatedDelay = 1000;
 
+export const apiConnTimeout = 3500;
+
 export const uidProvidersWhitelist = [
   'https://polymathnetwork.github.io/mock-uid-provider',
   'https://itn-polymesh.fractal.id/'
 ];
-
-export {
-  networkURLs,
-  networkLabels,
-  networkLinks,
-  defaultNetwork,
-  messagePrefix,
-  networkIsDev,
-  messages
-};

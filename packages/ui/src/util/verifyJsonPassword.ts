@@ -1,3 +1,5 @@
+import type { KeypairType } from '@polkadot/util-crypto/types';
+
 import { createPair } from '@polkadot/keyring/pair';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { hexToU8a, isHex } from '@polkadot/util';
@@ -8,7 +10,7 @@ function verifyJsonPassword (json: KeyringPair$Json, password: string): boolean 
     const cryptoType = Array.isArray(json.encoding.content) ? json.encoding.content[1] : 'ed25519';
     const encType = Array.isArray(json.encoding.type) ? json.encoding.type : [json.encoding.type];
     const pair = createPair(
-      { toSS58: encodeAddress, type: cryptoType },
+      { toSS58: encodeAddress, type: cryptoType as KeypairType },
       { publicKey: decodeAddress(json.address, true) },
       json.meta,
       isHex(json.encoded) ? hexToU8a(json.encoded) : base64Decode(json.encoded),
