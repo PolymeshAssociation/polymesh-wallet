@@ -9,9 +9,8 @@ With the Polymesh Wallet, you can:
 - Select a chain to connect to such as Polymesh development networks, incentivized testnet, or the eventual mainnet.
 - Connect to the Polymesh Dashboard and other Polymesh distributed apps (dApps) for enhanced benefits
 
-## Architecture
-
-For the time being, the extension wraps and extends [Polkadot{.js} extension](https://github.com/polkadot-js/extension). For instance, the extension would retrieves data from Polymesh chain in order enrich account metadata with user's balance, identity and KYC status.
+The extension wraps [Polkadot{.js} extension](https://github.com/polkadot-js/extension) and tweaks it 
+to provide better experience for Polymesh dapps users.
 
 Most notably, the extension establishes a connection to a chain via Polkadot.js [ApiPromise](https://github.com/polkadot-js/api). The connection is used to retrieve user accounts PolyX balance, Polymesh ID and CDD status. Fetched data stored in Redux and then serialized and stored in browser's localStorage.
 
@@ -21,7 +20,7 @@ Additionally, the wallet enables importing user's confidential identity from KYC
 
 - On Chrome, install via [Chrome web store](https://chrome.google.com/webstore/detail/polymesh-wallet/jojhfeoedkpkglbfimdfabpdfjaoolaf).
 
-## From source
+## Development environment
 
 Steps to build the extension and view your changes in a browser:
 
@@ -33,6 +32,10 @@ Steps to build the extension and view your changes in a browser:
     - ensure you have the Development flag set
     - "Load unpacked" and point to `packages/extension/build`
     - if developing, after making changes - refresh the extension
+
+_Optionally_, you can connect to a local node running on `ws://localhost:9944`, by selecting "Local node" from networks menu, after you enable dev network display.
+
+![Dev network](docs/dev-network.png)
 
 ## Development
 
@@ -121,3 +124,4 @@ wallet.uid.provide({
 wallet.uid.requestProof({ ticker: 'AMZN' })
   .then(console.log).catch(console.error)
 ```
+
