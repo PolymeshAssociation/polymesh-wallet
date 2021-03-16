@@ -18,6 +18,8 @@ entry points for each [chrome extension script](https://developer.chrome.com/doc
 
 ## core
 
+Polymesh models and business logic.
+
 ```
 ├── background
 │   ├── handlers:
