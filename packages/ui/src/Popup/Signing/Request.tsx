@@ -227,7 +227,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
           </Warning>
         )}
         {warning && (
-          <Warning>
+          <Warning style={{ alignItems: 'center', alignSelf: 'flex-start', margin: '0 0 10px 0' }}>
             {warning}
           </Warning>
         )}
