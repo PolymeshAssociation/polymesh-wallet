@@ -309,10 +309,6 @@ export async function subscribePolyStatus (cb: (status: StoreStatus) => void): P
   return polyMessage('poly:pri(status.subscribe)', null, cb);
 }
 
-// export async function subscribePolyIsDev (cb: (isDev: string) => void): Promise<boolean> {
-//   return polyMessage('poly:pri(isDev.subscribe)', null, cb);
-// }
-
 export async function subscribeProofingRequests (cb: (requests: ProofingRequest[]) => void): Promise<boolean> {
   return polyMessage('poly:pri(uid.proofRequests.subscribe)', null, cb);
 }
