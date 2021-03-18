@@ -203,8 +203,6 @@ export default function Request ({ account: { accountIndex, address, addressOffs
     return undefined;
   }, [address]);
 
-  console.log('Status', ledgerStatus);
-
   const signArea = isLocked && !isHardware
     ? (
       <Unlock

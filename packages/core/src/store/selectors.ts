@@ -6,11 +6,7 @@ import { RootState } from './rootReducer';
 
 export const network = createSelector(
   (state: RootState) => state.network,
-  (network) => {
-    console.log('Selector :: networkState', network);
-
-    return network;
-  }
+  (network) => network
 );
 
 export const selectedNetwork = createSelector(
