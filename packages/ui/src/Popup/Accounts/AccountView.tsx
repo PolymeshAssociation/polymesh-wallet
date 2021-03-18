@@ -295,7 +295,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         <GridItem area='address'>
           <LabelWithCopy
             color='gray.3'
-            text={address}
+            text={recodeAddress(address, ss58Format)}
             textSize={13}
             textVariant='b3'
           />
