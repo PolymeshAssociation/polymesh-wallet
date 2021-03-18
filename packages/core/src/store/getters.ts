@@ -1,9 +1,9 @@
 import { IdentifiedAccount, NetworkName } from '../types';
-import { accountsAddresses, accountsCount, didsList, identifiedAccounts, network, networkUrl, selectedAccount, selectedAccountIdentified } from './selectors';
+import { accountsAddresses, accountsCount, didsList, identifiedAccounts, networkUrl, selectedAccount, selectedAccountIdentified, selectedNetwork } from './selectors';
 import store from '.';
 
 function getNetwork (): NetworkName {
-  return network(store.getState());
+  return selectedNetwork(store.getState());
 }
 
 function getNetworkUrl (): string {

@@ -2,8 +2,8 @@ import { AccountJson, RequestSign } from '@polkadot/extension-base/background/ty
 import { TypeRegistry } from '@polkadot/types';
 import { ExtrinsicPayload } from '@polkadot/types/interfaces';
 import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
-import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { getIdentifiedAccounts } from '@polymathnetwork/extension-core/store/getters';
+import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { Box, Button, Flex, Header, Heading } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -194,7 +194,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
       // Polkadot App actually respects chain ss58format and will encode polymesh public
       // keys into an address that starts with '2'. However, our stored addresses start with '5'.
       // Hence, we'll re-encode request address to make sure it could be found in our store.
-      const _address = encodeAddress(decodeAddress(address));
+      const _address = recodeAddress(address);
       const polymeshAccount = getIdentifiedAccounts().find((account) => account.address === _address);
 
       return polymeshAccount;

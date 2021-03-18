@@ -6,23 +6,32 @@ import { RootState } from './rootReducer';
 
 export const network = createSelector(
   (state: RootState) => state.network,
+  (network) => {
+    console.log('Selector :: networkState', network);
+
+    return network;
+  }
+);
+
+export const selectedNetwork = createSelector(
+  network,
   (network) => network.selected
 );
 
 export const networkUrl = createSelector(
-  network,
+  selectedNetwork,
   (network) => networkURLs[network]
 );
 
 export const didsList = createSelector(
   (state: RootState) => state.identities,
-  network,
+  selectedNetwork,
   (identities, network) => Object.keys(identities[network])
 );
 
 export const reversedDidList = createSelector(
   (state: RootState) => state.identities,
-  network,
+  selectedNetwork,
   (identities, network): ReversedDidList => {
     return Object.keys(identities[network]).reduce((reversedList: ReversedDidList, did) => {
       const identity = identities[network][did];
@@ -40,7 +49,7 @@ export const reversedDidList = createSelector(
 );
 
 export const accounts = createSelector(
-  network,
+  selectedNetwork,
   (state: RootState) => state.accounts,
   (network, accounts) => accounts[network]
 );
@@ -96,16 +105,11 @@ export const selectIsRehydrated = createSelector(
 
 export const selectIsHydratedAndNetwork = createSelector(
   selectIsRehydrated,
-  network,
+  selectedNetwork,
   (isHydrated, network) => { return isHydrated ? network : undefined; }
 );
 
 export const selectStatus = createSelector(
   (state: RootState) => state.status,
   (status) => status
-);
-
-export const selectIsDev = createSelector(
-  (state: RootState) => state.network,
-  ({ isDeveloper }) => isDeveloper ? 'true' : 'false'
 );
