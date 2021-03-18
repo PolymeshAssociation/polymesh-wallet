@@ -1,4 +1,4 @@
-import { LinkName, NetworkName } from './types';
+import { LinkName, NetworkName, NetworkState } from './types';
 
 export const networkURLs: Record<NetworkName, string> = {
   alcyone: 'wss://alcyone-rpc.polymesh.live',
@@ -67,6 +67,14 @@ export const polySchemaUrl = 'https://schema.polymesh.live/';
 export const populatedDelay = 1000;
 
 export const apiConnTimeout = 3500;
+
+export const defaultSs58Format = 42;
+
+export const defaultNetworkState: NetworkState = {
+  selected: defaultNetwork,
+  ss58Format: defaultSs58Format,
+  isDeveloper: false
+};
 
 export const uidProvidersWhitelist = [
   'https://polymathnetwork.github.io/mock-uid-provider',

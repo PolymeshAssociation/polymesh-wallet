@@ -2,7 +2,7 @@ import { Unsubscribe } from '@reduxjs/toolkit';
 
 import { networkLabels, networkURLs } from '../constants';
 import reduxSubscribe from '../store/reduxSubscribe';
-import { network } from '../store/selectors';
+import { selectedNetwork } from '../store/selectors';
 import { NetworkMeta, NetworkName } from '../types';
 
 export default function (cb: (networkMeta: NetworkMeta) => void): Unsubscribe {
@@ -16,5 +16,5 @@ export default function (cb: (networkMeta: NetworkMeta) => void): Unsubscribe {
     cb(networkMeta);
   };
 
-  return reduxSubscribe(network, innerCb);
+  return reduxSubscribe(selectedNetwork, innerCb);
 }

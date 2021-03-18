@@ -1,9 +1,11 @@
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 import { Box, Flex, Hr, Icon, LabelWithCopy, StatusBadge, Text, TextEllipsis, TextOverflowEllipsis } from '@polymathnetwork/extension-ui/ui';
 import BigNumber from 'bignumber.js';
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 
 import { formatters } from '../../util';
 import { UidView } from './UidView';
@@ -25,6 +27,8 @@ export const AccountView: FC<Props> = ({ address,
   selectedAccount,
   showHideUid,
   uid }) => {
+  const { networkState: { ss58Format } } = useContext(PolymeshContext);
+
   const formatExpiry = (expiryDate: Date) => {
     return `${expiryDate.getDate()} ${expiryDate.toLocaleString('default', {
       month: 'short'
@@ -172,7 +176,7 @@ export const AccountView: FC<Props> = ({ address,
             <Flex flexDirection='row'
               justifyContent='space-between'>
               <LabelWithCopy color='gray.3'
-                text={address}
+                text={recodeAddress(address, ss58Format)}
                 textSize={13}
                 textVariant='b3' />
               <Box>

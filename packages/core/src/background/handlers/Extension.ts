@@ -8,9 +8,9 @@ import { renameIdentity,
   setSelectedAccount,
   toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { subscribeIdentifiedAccounts,
-  subscribeIsDev,
-  subscribeNetwork,
+  subscribeNetworkState,
   subscribeSelectedAccount,
+  subscribeSelectedNetwork,
   subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 import { UidRecord } from '@polymathnetwork/extension-core/types';
 
@@ -63,7 +63,20 @@ export default class Extension {
   private polyNetworkSubscribe (id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'poly:pri(network.subscribe)'>(id, port);
 
-    const reduxUnsub = subscribeNetwork(cb);
+    const reduxUnsub = subscribeSelectedNetwork(cb);
+
+    port.onDisconnect.addListener((): void => {
+      reduxUnsub();
+      unsubscribe(id);
+    });
+
+    return true;
+  }
+
+  private subscribeNetworkState (id: string, port: chrome.runtime.Port): boolean {
+    const cb = createSubscription<'poly:pri(networkState.subscribe)'>(id, port);
+
+    const reduxUnsub = subscribeNetworkState(cb);
 
     port.onDisconnect.addListener((): void => {
       reduxUnsub();
@@ -90,21 +103,6 @@ export default class Extension {
     const cb = createSubscription<'poly:pri(status.subscribe)'>(id, port);
 
     const reduxUnsub = subscribeStatus(cb);
-
-    port.onDisconnect.addListener((): void => {
-      reduxUnsub();
-      unsubscribe(id);
-    });
-
-    return true;
-  }
-
-  private polyIsDevSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'poly:pri(isDev.subscribe)'>(id, port);
-
-    const reduxUnsub = subscribeIsDev((data) => {
-      cb(data);
-    });
 
     port.onDisconnect.addListener((): void => {
       reduxUnsub();
@@ -407,6 +405,9 @@ export default class Extension {
       case 'poly:pri(network.subscribe)':
         return this.polyNetworkSubscribe(id, port);
 
+      case 'poly:pri(networkState.subscribe)':
+        return this.subscribeNetworkState(id, port);
+
       case 'poly:pri(network.set)':
         return this.polyNetworkSet(request as RequestPolyNetworkSet);
 
@@ -427,9 +428,6 @@ export default class Extension {
 
       case 'poly:pri(isDev.toggle)':
         return this.polyIsDevToggle();
-
-      case 'poly:pri(isDev.subscribe)':
-        return this.polyIsDevSubscribe(id, port);
 
       case 'poly:pri(uid.proofRequests.subscribe)':
         return this.proofRequestsSubscribe(id, port);
