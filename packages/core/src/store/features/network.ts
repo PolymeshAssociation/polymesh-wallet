@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { defaultNetwork } from '../../constants';
-import { NetworkName } from '../../types';
+import { defaultNetwork, defaultSs58Format } from '../../constants';
+import { NetworkName, NetworkState } from '../../types';
 
-type State = { selected: NetworkName, isDeveloper: boolean };
-const initialState: State = { selected: defaultNetwork, isDeveloper: false };
+const initialState: NetworkState = { selected: defaultNetwork, ss58Format: defaultSs58Format, isDeveloper: false };
 
 const networkSlice = createSlice({
   name: 'network',
@@ -12,6 +11,9 @@ const networkSlice = createSlice({
   reducers: {
     setNetwork (state, action: PayloadAction<NetworkName>) {
       state.selected = action.payload;
+    },
+    setFormat (state, action: PayloadAction<number | undefined>) {
+      state.ss58Format = action.payload || defaultSs58Format;
     },
     toggleIsDeveloper (state) {
       state.isDeveloper = !state.isDeveloper;
