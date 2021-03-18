@@ -76,7 +76,6 @@ function initPolymeshContext (
   networkState: NetworkState,
   polymeshAccounts: IdentifiedAccount[],
   selectedAccount: string,
-  // isDeveloper: boolean,
   currentAccount?: IdentifiedAccount
 
 ): PolymeshContextType {
@@ -160,7 +159,6 @@ export default function Popup (): React.ReactElement {
     Promise.all([
       subscribePolyStatus(setStatus),
       subscribePolyAccounts(setPolymeshAccounts),
-      // subscribePolyNetwork(setNetwork),
       subscribePolySelectedAccount(setSelectedAccountAddress),
       subscribeNetworkState(setNetworkState),
       subscribeAccounts(setAccounts),
