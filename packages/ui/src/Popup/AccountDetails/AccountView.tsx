@@ -121,13 +121,14 @@ export const AccountView: FC<Props> = ({ address,
           <Box>
             <Text color='gray.1'
               variant='b2m'>
-              {selectedAccount?.cdd?.issuer && (
-                <LabelWithCopy color='gray.1'
-                  text={selectedAccount?.cdd?.issuer}
-                  textSize={18}
-                  textVariant='b2m' />
-              )}
-              {!selectedAccount?.cdd?.issuer && 'N/A'}
+              {selectedAccount?.cdd?.issuer
+                ? (
+                  <LabelWithCopy color='gray.1'
+                    text={recodeAddress(selectedAccount.cdd.issuer, ss58Format)}
+                    textSize={18}
+                    textVariant='b2m' />
+                )
+                : 'N/A'}
             </Text>
           </Box>
         </Flex>
