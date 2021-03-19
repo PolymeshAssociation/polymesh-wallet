@@ -20,7 +20,7 @@ const jsonPath = '/account/restore-json';
 const ledgerPath = '/account/import-ledger';
 
 export default function Accounts (): React.ReactElement {
-  const { hierarchy } = useContext(AccountContext);
+  const { accounts, hierarchy } = useContext(AccountContext);
   const { currentAccount, isDeveloper, network, polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
   const history = useHistory();
   const { isLedgerCapable, isLedgerEnabled } = useLedger();
@@ -188,14 +188,18 @@ export default function Accounts (): React.ReactElement {
   };
 
   const renderTopMenu = () => {
+    const hasNonHardwareAccount = accounts.some((account) => !account.isHardware);
+
     return (
       <>
         <Menu id='top_menu'>
-          <MenuItem data={{ action: 'changePassword' }}
-            onClick={handleTopMenuSelection}>
-            <Text color='gray.2'
-              variant='b1'>Change password</Text>
-          </MenuItem>
+          {hasNonHardwareAccount &&
+            <MenuItem data={{ action: 'changePassword' }}
+              onClick={handleTopMenuSelection}>
+              <Text color='gray.2'
+                variant='b1'>Change password</Text>
+            </MenuItem>
+          }
           <MenuItem data={{ action: 'newWindow' }}
             onClick={handleTopMenuSelection}>
             <Text color='gray.2'
@@ -209,7 +213,6 @@ export default function Accounts (): React.ReactElement {
               onClick={(e) => e.preventDefault()}
               style={{ cursor: 'pointer' }}
             />
-
           </MenuItem>
         </Menu>
       </>
