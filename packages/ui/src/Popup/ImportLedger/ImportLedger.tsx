@@ -63,22 +63,24 @@ function ImportLedger (): React.ReactElement {
   // Set accountIndex and addressOffset to next available pair
   useEffect(() => {
     const ledgerAccounts = accounts.filter((account) => account.isHardware && account.hardwareType === 'ledger');
-    const existingPairsMap = ledgerAccounts.reduce((pairsMap: number[][], account) => {
+    const existingIndexOffsetMap = ledgerAccounts.reduce((indexOffsetMap: number[][], account) => {
       const index = account.accountIndex as number;
       const offset = account.addressOffset as number;
 
-      if (pairsMap[index]) {
-        pairsMap[index].push(offset);
+      if (indexOffsetMap[index]) {
+        indexOffsetMap[index].push(offset);
       } else {
-        pairsMap[index] = [offset];
+        indexOffsetMap[index] = [offset];
       }
 
-      return pairsMap;
+      return indexOffsetMap;
     }, []);
 
     for (let index = 0, shouldContinue = true; index < 20 && shouldContinue; index++) {
       for (let offset = 0; offset < 20 && shouldContinue; offset++) {
-        if (!existingPairsMap[index]?.includes(offset)) {
+        const isExistingIndexOffsetPair = existingIndexOffsetMap[index]?.includes(offset);
+
+        if (!isExistingIndexOffsetPair) {
           setAccountIndex(index);
           setAddressOffset(offset);
 
