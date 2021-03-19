@@ -3,7 +3,7 @@ import settings from '@polkadot/ui-settings';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { genesisHash } from '@polymathnetwork/extension-core/constants';
 import { SvgChevronDown, SvgLedgerLogo, SvgSettingsOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
+import { AccountContext, ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
@@ -36,12 +36,16 @@ function ImportLedger (): React.ReactElement {
   const [accountIndex, setAccountIndex] = useState<number>(0);
   const [addressOffset, setAddressOffset] = useState<number>(0);
   const [, setError] = useState<string | null>(null);
-  const onAction = useContext(ActionContext);
   const [name, setName] = useState<string>('');
   const [isShowingSettings, setIsShowingSettings] = useState(false);
+
+  const { accounts } = useContext(AccountContext);
+  const onAction = useContext(ActionContext);
+  const isBusy = useContext(ActivityContext);
+
   const ledgerData = useLedger(genesis, accountIndex, addressOffset);
   const { address, isLoading: ledgerLoading, refresh, status } = ledgerData;
-  const isBusy = useContext(ActivityContext);
+
   const formattedAddress = useMemo(() => {
     if (address) {
       return encodeAddress(decodeAddress(address));
@@ -55,6 +59,34 @@ function ImportLedger (): React.ReactElement {
       settings.set({ ledgerConn: 'webusb' });
     }
   }, [address]);
+
+  // Set accountIndex and addressOffset to next available pair
+  useEffect(() => {
+    const ledgerAccounts = accounts.filter((account) => account.isHardware && account.hardwareType === 'ledger');
+    const existingPairsMap = ledgerAccounts.reduce((pairsMap: number[][], account) => {
+      const index = account.accountIndex as number;
+      const offset = account.addressOffset as number;
+
+      if (pairsMap[index]) {
+        pairsMap[index].push(offset);
+      } else {
+        pairsMap[index] = [offset];
+      }
+
+      return pairsMap;
+    }, []);
+
+    for (let index = 0, shouldContinue = true; index < 20 && shouldContinue; index++) {
+      for (let offset = 0; offset < 20 && shouldContinue; offset++) {
+        if (!existingPairsMap[index]?.includes(offset)) {
+          setAccountIndex(index);
+          setAddressOffset(offset);
+
+          shouldContinue = false;
+        }
+      }
+    }
+  }, [accounts]);
 
   const accOps = useRef(AVAIL.map((value): AccOption => ({
     text: `Account type ${value}`,
@@ -208,7 +240,7 @@ function ImportLedger (): React.ReactElement {
                   <Box mb='m'>
                     <Text color='gray.1'
                       variant='b2m' >
-                    Account type
+                      Account index
                     </Text>
                     <Dropdown
                       className='accountType'
@@ -221,7 +253,7 @@ function ImportLedger (): React.ReactElement {
                   <Box mb='m'>
                     <Text color='gray.1'
                       variant='b2m' >
-                      Account index
+                      Address offset
                     </Text>
                     <Dropdown
                       className='accountIndex'
