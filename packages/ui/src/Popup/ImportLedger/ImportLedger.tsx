@@ -76,8 +76,8 @@ function ImportLedger (): React.ReactElement {
       return indexOffsetMap;
     }, []);
 
-    for (let index = 0, shouldContinue = true; index < 20 && shouldContinue; index++) {
-      for (let offset = 0; offset < 20 && shouldContinue; offset++) {
+    for (let offset = 0, shouldContinue = true; offset < 20 && shouldContinue; offset++) {
+      for (let index = 0; index < 20 && shouldContinue; index++) {
         const isExistingIndexOffsetPair = existingIndexOffsetMap[index]?.includes(offset);
 
         if (!isExistingIndexOffsetPair) {
