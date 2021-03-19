@@ -366,7 +366,7 @@ const AccountViewGrid = styled.div`
   display: grid;
   grid-template-areas: 'avatar account-details options';
   gap: 10px;
-  grid-template-columns: 35px 200px 35px;
+  grid-template-columns: 35px auto 35px;
 `;
 
 const AccountDetailsGrid = styled.div`
