@@ -9,8 +9,6 @@ let api: ApiPromise | null = null;
 const metadata: Record<string, string> = {};
 
 async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiPromise> {
-  console.time('ApiReady');
-
   if (!reinitialize && api) { return api; }
 
   if (api) {
@@ -63,8 +61,6 @@ async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiProm
 
   // Cache metadata to speed up following Api creations.
   metadata[key] = api.runtimeMetadata.toHex();
-
-  console.timeEnd('ApiReady');
 
   return api;
 }

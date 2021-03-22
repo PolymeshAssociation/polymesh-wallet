@@ -9,6 +9,7 @@ import apiPromise, { disconnect } from './external/apiPromise';
 import { DidRecord, IdentityClaim, LinkedKeyInfo } from './external/apiPromise/types';
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
+import { actions as networkActions } from './store/features/network';
 import { actions as statusActions } from './store/features/status';
 import { getAccountsList, getNetwork } from './store/getters';
 import { subscribeDidsList, subscribeIsHydratedAndNetwork } from './store/subscribers';
@@ -129,6 +130,9 @@ function subscribePolymesh (): () => Promise<void> {
 
           // Clear errors
           store.dispatch(statusActions.apiReady());
+
+          // Set the ss58Format that'll be used for address rendering.
+          store.dispatch(networkActions.setFormat(api.registry.chainSS58));
 
           setTimeout(() => {
             store.dispatch(statusActions.populated(network));

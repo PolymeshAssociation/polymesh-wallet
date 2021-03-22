@@ -1,4 +1,4 @@
-import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
@@ -22,7 +22,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
   const [isEditing, setIsEditing] = useState(false);
   const [newAlias, setNewAlias] = useState(currentAccount?.didAlias ? currentAccount.didAlias : '');
   const onAction = useContext(ActionContext);
-  const { network } = useContext(PolymeshContext);
+  const { networkState: { selected: network } } = useContext(PolymeshContext);
 
   const editAlias = () => {
     setHover(false);
@@ -38,7 +38,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
   const saveAlias = async () => {
     if (!currentAccount?.did || !network) { return; }
 
-    await renameIdentity(network as NetworkName, currentAccount?.did, newAlias);
+    await renameIdentity(network, currentAccount?.did, newAlias);
     stopEditAlias();
     onAction();
   };

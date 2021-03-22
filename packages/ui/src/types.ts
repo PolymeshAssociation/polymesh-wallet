@@ -1,4 +1,4 @@
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount, NetworkState } from '@polymathnetwork/extension-core/types';
 
 import { Theme } from './components/themes';
 
@@ -11,7 +11,6 @@ export interface ThemeProps {
 export type PolymeshContext = {
   selectedAccount?: string;
   polymeshAccounts?: IdentifiedAccount[];
-  network?: string;
+  networkState: NetworkState;
   currentAccount?: IdentifiedAccount;
-  isDeveloper?: boolean;
 }

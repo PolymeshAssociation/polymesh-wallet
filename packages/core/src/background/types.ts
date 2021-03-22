@@ -6,6 +6,7 @@ import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 import { IdentifiedAccount,
   NetworkMeta,
   NetworkName,
+  NetworkState,
   ProofRequestPayload,
   RequestPolyProvideUid,
   StoreStatus,
@@ -39,6 +40,8 @@ export type RequestPolyStatusSubscribe = null;
 export type RequestPolyNetworkGet = null;
 
 export type RequestPolyNetworkMetaSubscribe = null;
+
+export type RequestSubscribeNetworkState = null;
 
 export type RequestPolyIsDevSubscribe = null;
 
@@ -132,12 +135,12 @@ export interface PolyRequestSignatures {
   'poly:pri(status.subscribe)': [RequestPolyStatusSubscribe, boolean, StoreStatus];
   'poly:pri(network.set)': [RequestPolyNetworkSet, boolean];
   'poly:pri(isDev.toggle)': [RequestPolyIsDevToggle, boolean];
-  'poly:pri(isDev.subscribe)': [RequestPolyIsDevSubscribe, boolean, string];
   'poly:pri(selectedAccount.set)': [RequestPolySelectedAccountSet, boolean];
   'poly:pri(callDetails.get)': [RequestPolyCallDetails, ResponsePolyCallDetails];
   'poly:pri(identity.rename)': [RequestPolyIdentityRename, boolean];
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
   'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
+  'poly:pri(networkState.subscribe)': [RequestSubscribeNetworkState, boolean, NetworkState];
 
   'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];
   'poly:pri(uid.proofRequests.subscribe)': [RequestProofingSubscribe, boolean, ProofingRequest[]];

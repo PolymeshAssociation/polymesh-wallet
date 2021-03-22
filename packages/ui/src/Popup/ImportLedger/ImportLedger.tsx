@@ -1,7 +1,7 @@
 import { ErrorMessage } from '@hookform/error-message';
 import settings from '@polkadot/ui-settings';
-import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { genesisHash } from '@polymathnetwork/extension-core/constants';
+import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgChevronDown, SvgLedgerLogo, SvgSettingsOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountContext, ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
@@ -44,21 +44,17 @@ function ImportLedger (): React.ReactElement {
   const isBusy = useContext(ActivityContext);
 
   const ledgerData = useLedger(genesis, accountIndex, addressOffset);
-  const { address, isLoading: ledgerLoading, refresh, status } = ledgerData;
 
-  const formattedAddress = useMemo(() => {
-    if (address) {
-      return encodeAddress(decodeAddress(address));
+  const { address: ledgerAddress, isLoading: ledgerLoading, refresh, status } = ledgerData;
+  const address: string | null = useMemo(() => {
+    if (ledgerAddress) {
+      settings.set({ ledgerConn: 'webusb' });
+
+      return recodeAddress(ledgerAddress);
     } else {
       return null;
     }
-  }, [address]);
-
-  useEffect(() => {
-    if (address) {
-      settings.set({ ledgerConn: 'webusb' });
-    }
-  }, [address]);
+  }, [ledgerAddress]);
 
   // Set accountIndex and addressOffset to next available pair
   useEffect(() => {
@@ -110,8 +106,8 @@ function ImportLedger (): React.ReactElement {
 
   const saveAccount =
     () => {
-      if (formattedAddress && genesis && name) {
-        createAccountHardware(formattedAddress, 'ledger', accountIndex, addressOffset, name, genesis)
+      if (address && genesis && name) {
+        createAccountHardware(address, 'ledger', accountIndex, addressOffset, name, genesis)
           .then(() => onAction('/'))
           .catch((error: Error) => {
             console.error(error);
@@ -181,7 +177,7 @@ function ImportLedger (): React.ReactElement {
                     variant='b2m'>{name}</Text>
                   <Text color='gray.2'
                     variant='b3'>
-                    {formattedAddress && formatters.toShortAddress(formattedAddress, { size: 33 })}
+                    {address && formatters.toShortAddress(address, { size: 33 })}
                   </Text>
                 </Flex>
               </Flex>

@@ -59,6 +59,12 @@ export type CDD = null | {
 
 export type UID = Uint8Array;
 
+export type NetworkState = {
+  selected: NetworkName,
+  ss58Format: number,
+  isDeveloper: boolean
+}
+
 export type NetworkMeta = {
   name: NetworkName,
   label?: string,
