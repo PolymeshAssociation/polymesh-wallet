@@ -33,7 +33,7 @@ const WINDOW_OPTS = {
   top: 150,
   type: 'popup',
   url: chrome.extension.getURL('index.html'),
-  width: 328
+  width: 400
 };
 
 function getId (): string {
