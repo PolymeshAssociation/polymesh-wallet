@@ -21,7 +21,7 @@ const ledgerPath = '/account/import-ledger';
 
 export default function Accounts (): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
-  const { currentAccount, isDeveloper, network, polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
+  const { currentAccount, networkState: { isDeveloper, selected: network }, polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
   const history = useHistory();
   const { isLedgerCapable, isLedgerEnabled } = useLedger();
 
@@ -73,7 +73,7 @@ export default function Accounts (): React.ReactElement {
   };
 
   const getNetworkDashboardLink = () => {
-    return networkLinks[network as NetworkName].dashboard;
+    return networkLinks[network].dashboard;
   };
 
   const handleNetworkChange = async (event: string, data: {networkKey: NetworkName}) => {
@@ -232,7 +232,7 @@ export default function Accounts (): React.ReactElement {
                 flexDirection='row'
                 justifyContent='space-between'
                 mb='m'>
-                {renderNetworksSelector(network as NetworkName)}
+                {renderNetworksSelector(network)}
                 <Flex flexDirection='row'
                   justifyContent='center'>
                   <GrowingButton icon={SvgViewDashboard}

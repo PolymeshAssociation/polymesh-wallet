@@ -1,5 +1,6 @@
 import { networkLinks } from '@polymathnetwork/extension-core/constants';
-import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgCheck, SvgDotsVertical, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import BigNumber from 'bignumber.js';
 import React, { FC, useContext, useState } from 'react';
@@ -27,7 +28,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   const [hover, setHover] = useState(false);
   const [nameHover, setNameHover] = useState(false);
 
-  const { network } = useContext(PolymeshContext);
+  const { networkState: { selected: network, ss58Format } } = useContext(PolymeshContext);
 
   const renderMenuItems = (address: string) => {
     return (
@@ -185,12 +186,13 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             {!isEditing && did && <AccountType keyType={keyType} />}
           </Flex>
         </GridItem>
+        {/* @ADDRESS should be formatted */}
         <GridItem area='address'>
           <Flex alignItems='flex-end'
             height='100%'>
             <LabelWithCopy
               color='gray.3'
-              text={address}
+              text={recodeAddress(address, ss58Format)}
               textSize={13}
               textVariant='b3'
             />
@@ -212,7 +214,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   const getNetworkDashboardLink = () => {
-    return networkLinks[network as NetworkName].dashboard;
+    return networkLinks[network].dashboard;
   };
 
   const assign = (e: React.MouseEvent<HTMLElement>) => {
@@ -293,7 +295,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         <GridItem area='address'>
           <LabelWithCopy
             color='gray.3'
-            text={address}
+            text={recodeAddress(address, ss58Format)}
             textSize={13}
             textVariant='b3'
           />

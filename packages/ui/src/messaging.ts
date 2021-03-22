@@ -30,7 +30,7 @@ import { PolyMessageTypes,
   ProofingRequest,
   ProvideUidRequest,
   ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
-import { IdentifiedAccount, NetworkName, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount, NetworkName, NetworkState, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 
 interface Handler {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -265,8 +265,8 @@ export async function subscribePolyAccounts (cb: (accounts: IdentifiedAccount[])
   return polyMessage('poly:pri(accounts.subscribe)', null, cb);
 }
 
-export async function subscribePolyNetwork (cb: (network: NetworkName) => void): Promise<boolean> {
-  return polyMessage('poly:pri(network.subscribe)', null, cb);
+export async function subscribeNetworkState (cb: (networkState: NetworkState) => void): Promise<boolean> {
+  return polyMessage('poly:pri(networkState.subscribe)', null, cb);
 }
 
 export async function rejectAuthRequest (id: string): Promise<boolean> {
@@ -307,10 +307,6 @@ export async function togglePolyIsDev (): Promise<boolean> {
 
 export async function subscribePolyStatus (cb: (status: StoreStatus) => void): Promise<boolean> {
   return polyMessage('poly:pri(status.subscribe)', null, cb);
-}
-
-export async function subscribePolyIsDev (cb: (isDev: string) => void): Promise<boolean> {
-  return polyMessage('poly:pri(isDev.subscribe)', null, cb);
 }
 
 export async function subscribeProofingRequests (cb: (requests: ProofingRequest[]) => void): Promise<boolean> {

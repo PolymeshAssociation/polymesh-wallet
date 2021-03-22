@@ -1,4 +1,3 @@
-import { NetworkName } from '@polymathnetwork/extension-core/types';
 import { PolymeshContext, UidContext } from '@polymathnetwork/extension-ui/components';
 import { getUid } from '@polymathnetwork/extension-ui/messaging';
 import React, { FC, useContext, useEffect, useState } from 'react';
@@ -14,7 +13,7 @@ interface AddressState {
 export const AccountDetails: FC = () => {
   const history = useHistory();
   const { address } = useParams<AddressState>();
-  const { currentAccount, network, polymeshAccounts } = useContext(PolymeshContext);
+  const { currentAccount, networkState: { selected: network }, polymeshAccounts } = useContext(PolymeshContext);
   const uidRecords = useContext(UidContext);
   const [hasUid, setHasUid] = useState(false);
   const [uidHidden, setUidHidden] = useState(true);
@@ -42,7 +41,7 @@ export const AccountDetails: FC = () => {
   const decodeUid = async (password: string) => {
     if (!currentAccount?.did || !network) return false;
 
-    const uid = await getUid(currentAccount?.did, network as NetworkName, password);
+    const uid = await getUid(currentAccount?.did, network, password);
 
     if (!uid) {
       return false;
