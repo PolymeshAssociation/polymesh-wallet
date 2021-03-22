@@ -197,7 +197,8 @@ function ImportLedger (): React.ReactElement {
                         <TextInput inputRef={register({ required: 'Account name is required' })}
                           name='accountName'
                           onChange={(e) => setName(e.target.value)}
-                          placeholder='Enter account name' />
+                          placeholder='Enter account name'
+                          value={name} />
                         <Box>
                           <Text color='alert'
                             variant='b3'>
