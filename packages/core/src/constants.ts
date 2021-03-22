@@ -77,6 +77,6 @@ export const defaultNetworkState: NetworkState = {
 };
 
 export const uidProvidersWhitelist = [
-  'https://polymathnetwork.github.io/mock-uid-provider',
-  'https://itn-polymesh.fractal.id/'
+  'https://polymathnetwork.github.io',
+  'https://itn-polymesh.fractal.id'
 ];
