@@ -53,8 +53,9 @@ export const allowedUidProvider = (url: string): boolean => {
   try {
     const parsed = new URL(url);
 
-    // Remove params and trailing slash
+    // Remove params, path and trailing slash
     parsed.search = '';
+    parsed.pathname = '';
     const cleanUrl = parsed.toString().replace(/\/$/, '');
 
     return uidProvidersWhitelist.includes(cleanUrl);
