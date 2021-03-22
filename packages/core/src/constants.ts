@@ -69,6 +69,6 @@ export const populatedDelay = 1000;
 export const apiConnTimeout = 3500;
 
 export const uidProvidersWhitelist = [
-  'https://polymathnetwork.github.io/mock-uid-provider',
-  'https://itn-polymesh.fractal.id/'
+  'https://polymathnetwork.github.io',
+  'https://itn-polymesh.fractal.id'
 ];
