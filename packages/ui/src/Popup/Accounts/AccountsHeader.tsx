@@ -1,4 +1,5 @@
-import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
@@ -20,7 +21,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
   const [editing, setEditing] = useState(false);
   const [newAlias, setNewAlias] = useState('');
   const [hover, setHover] = useState(false);
-  const { network } = useContext(PolymeshContext);
+  const { networkState: { selected: network, ss58Format } } = useContext(PolymeshContext);
   const onAction = useContext(ActionContext);
 
   const showAccountDetails = () => {
@@ -46,7 +47,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
   };
 
   const saveAlias = async () => {
-    account && account.did && network && (await renameIdentity(network as NetworkName, account.did, newAlias));
+    account && account.did && network && (await renameIdentity(network, account.did, newAlias));
     stopEdit();
     onAction();
   };
@@ -144,7 +145,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
         <LabelWithCopy
           color='brandLightest'
           hoverColor='brandLighter'
-          text={account?.address || ''}
+          text={account?.address ? recodeAddress(account.address, ss58Format) : ''}
           textSize={30}
           textVariant='b3'
         />

@@ -1,10 +1,11 @@
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
 import { getDids } from './store/getters';
 import { apiError, setError } from './store/setters';
-import { messagePrefix, messages, uidProvidersWhitelist } from './constants';
+import { defaultSs58Format, messagePrefix, messages, uidProvidersWhitelist } from './constants';
 import { ErrorCodes, KeyringAccountData, NetworkName } from './types';
 
 // Sort an array by prioritizing a certain element
@@ -52,8 +53,9 @@ export const allowedUidProvider = (url: string): boolean => {
   try {
     const parsed = new URL(url);
 
-    // Remove params and trailing slash
+    // Remove params, path and trailing slash
     parsed.search = '';
+    parsed.pathname = '';
     const cleanUrl = parsed.toString().replace(/\/$/, '');
 
     return uidProvidersWhitelist.includes(cleanUrl);
@@ -91,13 +93,6 @@ export const validateUid = (uid: string): boolean => {
   return uuidValidate(uid) && uuidVersion(uid) === 4;
 };
 
-export const firstNonLedgerAccounts = (): string | null => {
-  const accounts = Object.values(accountsObservable.subject.getValue())
-    .filter((account) => !account.json.meta.isHardware);
-
-  if (accounts.length) {
-    return accounts[0].json.address;
-  }
-
-  return null;
+export const recodeAddress = (address: string, ss58Format = defaultSs58Format): string => {
+  return encodeAddress(decodeAddress(address), ss58Format);
 };
