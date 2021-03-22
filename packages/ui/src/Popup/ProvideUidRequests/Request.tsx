@@ -26,7 +26,7 @@ type FormInputs = {
 function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<Props> {
   const onAction = useContext(ActionContext);
   const uidRecords = useContext(UidContext);
-  const { currentAccount, network } = useContext(PolymeshContext);
+  const { currentAccount, networkState: { selected: network } } = useContext(PolymeshContext);
   const [overWriteUid, setOverWriteUid] = useState(false);
   const [hasExistingUid, setHasExistingUid] = useState(false);
   const [passIsSet, setPassIsSet] = useState<boolean>(false);

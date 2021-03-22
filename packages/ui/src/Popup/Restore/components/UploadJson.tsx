@@ -1,5 +1,6 @@
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { hexToU8a, isHex, u8aToString } from '@polkadot/util';
+import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Box,
   Button,
@@ -15,7 +16,7 @@ import React, { FC, useContext, useRef, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { ActivityContext } from '../../../components';
+import { ActivityContext, PolymeshContext } from '../../../components';
 import { jsonGetAccountInfo } from '../../../messaging';
 
 interface Props {
@@ -37,6 +38,7 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
   const { clearErrors, errors, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
   const handleError = useErrorHandler();
+  const { networkState: { ss58Format } } = useContext(PolymeshContext);
 
   const onSubmit = (data: { [x: string]: string }) => {
     if (accountJson) {
@@ -212,7 +214,7 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
                     </Flex>
                   </Flex>
                   <LabelWithCopy color='gray.3'
-                    text={accountJson?.address || ''}
+                    text={accountJson?.address ? recodeAddress(accountJson.address, ss58Format) : ''}
                     textSize={30}
                     textVariant='b3' />
                 </Box>
