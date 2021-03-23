@@ -7,7 +7,7 @@ let sendRequest: SendRequest;
 let nextId = 0;
 
 export default class Uid implements InjectedUid {
-  constructor(_sendRequest: SendRequest) {
+  constructor (_sendRequest: SendRequest) {
     sendRequest = _sendRequest;
   }
 
