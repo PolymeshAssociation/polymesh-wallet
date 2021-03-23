@@ -3,8 +3,9 @@ import { Message } from '@polkadot/extension-base/types';
 import chrome from '@polkadot/extension-inject/chrome';
 
 // connect to the extension
-const port = chrome.runtime.connect({ name: PORT_CONTENT });
+const port = chrome.runtime.connect({ name: `polywallet_${PORT_CONTENT}` });
 
+console.log("port: ", port)
 // send any messages from the extension back to the page
 port.onMessage.addListener((data): void => {
   window.postMessage({ ...data, origin: 'content' }, '*');

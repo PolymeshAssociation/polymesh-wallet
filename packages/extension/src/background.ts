@@ -30,11 +30,15 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // listen to all messages and handle appropriately
 chrome.runtime.onConnect.addListener((port): void => {
-  assert([PORT_CONTENT, PORT_EXTENSION].includes(port.name), `Unknown connection from ${port.name}`);
+  console.log('port.name: ', port.name);
+  assert(
+    [`polywallet_${PORT_CONTENT}`, `polywallet_${PORT_EXTENSION}`].includes(port.name),
+    `Unknown connection from ${port.name}`
+  );
   let polyUnsub: () => Promise<void>;
   let accountsUnsub: VoidCallback;
 
-  if (port.name === PORT_EXTENSION) {
+  if (port.name === `polywallet_${PORT_EXTENSION}`) {
     accountsUnsub = accountsSynchronizer();
     polyUnsub = subscribePolymesh();
     loadSchema();
@@ -51,8 +55,14 @@ chrome.runtime.onConnect.addListener((port): void => {
     });
   }
 
+  const defaultPostMessage = port.postMessage.bind(port)
+  port.postMessage = (message) => {
+    defaultPostMessage({...message, from: 'polywallet'});
+  }
+
   // message handlers
   port.onMessage.addListener((data): void => {
+    console.log('isPolyMessage: ', isPolyMessage(data.message));
     if (isPolyMessage(data.message)) return polyHandlers(data, port);
     else return handlers(data, port);
   });
