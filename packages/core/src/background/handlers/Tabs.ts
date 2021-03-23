@@ -66,7 +66,7 @@ export default class Tabs {
     return transformAccounts(accountsObservable.subject.getValue());
   }
 
-  private accountsSubscribe(url: string, id: string, port: chrome.runtime.Port): boolean {
+  private accountsSubscribe (url: string, id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
     let calls = 0;
 
@@ -129,8 +129,8 @@ export default class Tabs {
   private async checkExistence (request: UidCheckExistencePayload): Promise<boolean> {
     const uidRecords = await this.#state.allUidRecords();
 
-    return uidRecords.some(({ did}) => did === request.did)
-  };
+    return uidRecords.some(({ did }) => did === request.did);
+  }
 
   // eslint-disable-next-line @typescript-eslint/require-await
   public async handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], url: string, port: chrome.runtime.Port): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
