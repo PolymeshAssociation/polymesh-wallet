@@ -31,15 +31,15 @@ function transformAccounts (accounts: SubjectInfo): InjectedAccount[] {
 export default class Tabs {
   readonly #state: State;
 
-  constructor(state: State) {
+  constructor (state: State) {
     this.#state = state;
   }
 
-  private polyNetworkGet(): NetworkMeta {
+  private polyNetworkGet (): NetworkMeta {
     return polyNetworkGet();
   }
 
-  private polyNetworkSubscribe(id: string, port: chrome.runtime.Port): boolean {
+  private polyNetworkSubscribe (id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'poly:pub(network.subscribe)'>(id, port);
     let initialCall = true;
 
@@ -62,7 +62,7 @@ export default class Tabs {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private accountsList(url: string): InjectedAccount[] {
+  private accountsList (url: string): InjectedAccount[] {
     return transformAccounts(accountsObservable.subject.getValue());
   }
 
@@ -98,7 +98,7 @@ export default class Tabs {
     return true;
   }
 
-  private requestProof(url: string, request: ProofRequestPayload): Promise<ProofingResponse> {
+  private requestProof (url: string, request: ProofRequestPayload): Promise<ProofingResponse> {
     const account = getSelectedIdentifiedAccount();
 
     assert(validateTicker(request.ticker), Errors.INVALID_TICKER);
@@ -112,7 +112,7 @@ export default class Tabs {
     return this.#state.generateProof(url, request, { address });
   }
 
-  private provideUid(url: string, request: RequestPolyProvideUid): Promise<boolean> {
+  private provideUid (url: string, request: RequestPolyProvideUid): Promise<boolean> {
     assert(allowedUidProvider(url), `App ${url} is not allowed to provide uid`);
 
     const { did, network, uid } = request;
@@ -126,19 +126,14 @@ export default class Tabs {
     return this.#state.provideUid(url, request);
   }
 
-  private async checkExistence(request: UidCheckExistencePayload): Promise<boolean> {
+  private async checkExistence (request: UidCheckExistencePayload): Promise<boolean> {
     const uidRecords = await this.#state.allUidRecords();
+
     return uidRecords.some(({ did}) => did === request.did)
   };
 
   // eslint-disable-next-line @typescript-eslint/require-await
-  public async handle<TMessageType extends PolyMessageTypes>(
-    id: string,
-    type: TMessageType,
-    request: PolyRequestTypes[TMessageType],
-    url: string,
-    port: chrome.runtime.Port
-  ): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
+  public async handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], url: string, port: chrome.runtime.Port): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
     switch (type) {
       case 'poly:pub(network.get)':
         return this.polyNetworkGet();
