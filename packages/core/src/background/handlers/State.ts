@@ -219,8 +219,6 @@ export default class State {
   }
 
   public async allUidRecords (): Promise<UidRecord[]> {
-    const stuff = await this.#auxStore.allRecords();
-    console.log('stuff: ', stuff)
-    return stuff;
+    return this.#auxStore.allRecords();
   }
 }
