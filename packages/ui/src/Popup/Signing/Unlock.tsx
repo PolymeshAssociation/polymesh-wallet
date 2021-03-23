@@ -1,6 +1,7 @@
 import { validatePassword } from '@polymathnetwork/extension-ui/messaging';
 import React, { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { PASSWORD_EXPIRY_MIN } from '@polkadot/extension-base/defaults';
 
 import { ActivityContext } from '../../components';
 import { Box, Button, Checkbox, Flex, Text, TextInput } from '../../ui';
@@ -77,7 +78,7 @@ function Unlock ({ error, isFirst, isLocked, onCancel, onSavePassChange, onSign,
               label={
                 <Text color='gray.1'
                   fontSize='1'>
-                  Don&apos;t ask me again for the next 15 minutes
+                  Don&apos;t ask me again for the next {PASSWORD_EXPIRY_MIN} minutes
                 </Text>
               }
               onChange={onSavePassChange}
