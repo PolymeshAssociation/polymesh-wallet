@@ -83,6 +83,10 @@ export interface ProofRequestPayload {
   ticker: string;
 }
 
+export interface UidCheckExistencePayload {
+  did: string
+}
+
 export interface RequestPolyProvideUid {
   did: string;
   uid: string;
