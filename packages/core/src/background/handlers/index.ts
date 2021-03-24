@@ -1,5 +1,5 @@
-import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 import { assert } from '@polkadot/util';
+import { PORTS } from '@polymathnetwork/extension-core/constants';
 
 import { PolyMessageTypes, PolyTransportRequestMessage } from '../types';
 import Extension from './Extension';
@@ -11,7 +11,7 @@ const extension = new Extension(state); // handles messages coming from the exte
 const tabs = new Tabs(state); // handles messages coming from the app running in the currently open tab
 
 export default function polyHandler<TMessageType extends PolyMessageTypes> ({ id, message, request }: PolyTransportRequestMessage<TMessageType>, port: chrome.runtime.Port): void {
-  const isExtension = port.name === `polywallet_${PORT_EXTENSION}`;
+  const isExtension = port.name === PORTS.EXTENSION;
   const sender = port.sender as chrome.runtime.MessageSender;
   const from = isExtension
     ? 'extension'
