@@ -7,7 +7,7 @@ import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { AccountType, ActionContext, PolymeshContext } from '../../components';
+import { AccountContext, AccountType, ActionContext, PolymeshContext } from '../../components';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
 import { Box, ButtonSmall, ContextMenuTrigger, Flex, Icon, LabelWithCopy, Menu, MenuItem, Text, TextInput, TextOverflowEllipsis } from '../../ui';
 import { formatters } from '../../util';
@@ -20,24 +20,30 @@ export interface Props {
 export const AccountView: FC<Props> = ({ account, isSelected }) => {
   const { address, balance, did, keyType, name } = account;
 
+  const { accounts } = useContext(AccountContext);
   const onAction = useContext(ActionContext);
+
   const history = useHistory();
 
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState(name);
   const [hover, setHover] = useState(false);
   const [nameHover, setNameHover] = useState(false);
-
   const { networkState: { selected: network, ss58Format } } = useContext(PolymeshContext);
 
   const renderMenuItems = (address: string) => {
+    const account = accounts.find((_account) => _account.address === address);
+    const isLedgerAccount = account?.isHardware && account.hardwareType === 'ledger';
+
     return (
       <Menu id={`account_menu_${address}`}>
-        <MenuItem data={{ action: 'export', address }}
-          onClick={handleMenuClick}>
-          <Text color='gray.2'
-            variant='b1'>Export account</Text>
-        </MenuItem>
+        {!isLedgerAccount &&
+          <MenuItem data={{ action: 'export', address }}
+            onClick={handleMenuClick}>
+            <Text color='gray.2'
+              variant='b1'>Export account</Text>
+          </MenuItem>
+        }
         <MenuItem data={{ action: 'forget', address }}
           onClick={handleMenuClick}>
           <Text color='gray.2'
