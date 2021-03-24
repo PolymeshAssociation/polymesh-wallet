@@ -239,7 +239,7 @@ function ImportLedger (): React.ReactElement {
                   <Box mb='m'>
                     <Text color='gray.1'
                       variant='b2m' >
-                      Account index
+                      Account type
                     </Text>
                     <Dropdown
                       className='accountType'
@@ -252,7 +252,7 @@ function ImportLedger (): React.ReactElement {
                   <Box mb='m'>
                     <Text color='gray.1'
                       variant='b2m' >
-                      Address offset
+                      Address index
                     </Text>
                     <Dropdown
                       className='accountIndex'
