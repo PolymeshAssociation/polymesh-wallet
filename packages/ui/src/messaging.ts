@@ -91,7 +91,6 @@ port.onMessage.addListener((data: Message['data']): void => {
     // eslint-disable-next-line @typescript-eslint/ban-types
     (handler.subscriber as Function)(data.subscription);
   } else if (data.error) {
-    console.log('err: ', data.error);
     handler.reject(new Error(data.error));
   } else {
     handler.resolve(data.response);

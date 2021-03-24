@@ -35,7 +35,6 @@ export default function polyHandler<TMessageType extends PolyMessageTypes> ({ id
       port.postMessage({ id, response });
     })
     .catch((error: Error): void => {
-      console.log('failing with port.name: ', port.name);
       console.log(`[err] ${source}:: ${error.message}`);
 
       // only send message back to port if it's still connected
