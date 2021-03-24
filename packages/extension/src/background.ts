@@ -57,7 +57,7 @@ chrome.runtime.onConnect.addListener((port): void => {
   // message handlers
   port.onMessage.addListener((data): void => {
     if (isPolyMessage(data.message)) return polyHandlers(data, port);
-    else return handlers(data, port);
+    else return handlers(data, port, PORTS.EXTENSION);
   });
 });
 
