@@ -93,5 +93,5 @@ export const uidProvidersWhitelist = [
 
 export const PORTS = {
   EXTENSION: 'polywallet_extension',
-  CONTENT: 'polywallet_content',
+  CONTENT: 'polywallet_content'
 };
