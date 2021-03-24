@@ -90,3 +90,8 @@ export const uidProvidersWhitelist = [
   'https://polymathnetwork.github.io',
   'https://itn-polymesh.fractal.id'
 ];
+
+export const PORTS = {
+  EXTENSION: 'polywallet_extension' as 'polywallet_extension',
+  CONTENT: 'polywallet_content' as 'polywallet_content',
+};
