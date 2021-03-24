@@ -16,6 +16,7 @@ window.addEventListener('message', ({ data, source }: Message): void => {
   if (source !== window || data.origin !== 'page') {
     return;
   }
+  
   port.postMessage(data);
 });
 

@@ -1,7 +1,7 @@
 import { validatePassword } from '@polymathnetwork/extension-ui/messaging';
+import { PASSWORD_EXPIRY_MIN } from '@polkadot/extension-base/defaults';
 import React, { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { PASSWORD_EXPIRY_MIN } from '@polkadot/extension-base/defaults';
 
 import { ActivityContext } from '../../components';
 import { Box, Button, Checkbox, Flex, Text, TextInput } from '../../ui';
