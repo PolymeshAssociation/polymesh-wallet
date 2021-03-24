@@ -10,7 +10,7 @@ export function createSubscription<TMessageType extends PolyMessageTypesWithSubs
 
   return (subscription: unknown): void => {
     if (subscriptions[id]) {
-      port.postMessage({ id, subscription, from: 'polywallet' });
+      port.postMessage({ id, subscription });
     }
   };
 }

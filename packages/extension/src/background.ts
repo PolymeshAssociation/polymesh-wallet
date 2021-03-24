@@ -37,11 +37,6 @@ chrome.runtime.onConnect.addListener((port): void => {
   let polyUnsub: () => Promise<void>;
   let accountsUnsub: VoidCallback;
 
-  const defaultPostMessage = port.postMessage.bind(port);
-  port.postMessage = (message) => {
-    defaultPostMessage({ ...message, from: 'polywallet' });
-  };
-
   if (port.name === PORTS.EXTENSION) {
     accountsUnsub = accountsSynchronizer();
     polyUnsub = subscribePolymesh();
@@ -61,7 +56,6 @@ chrome.runtime.onConnect.addListener((port): void => {
 
   // message handlers
   port.onMessage.addListener((data): void => {
-    console.log(port.name, data);
     if (isPolyMessage(data.message)) return polyHandlers(data, port);
     else return handlers(data, port);
   });

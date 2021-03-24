@@ -87,8 +87,6 @@ port.onMessage.addListener((data: Message['data']): void => {
     delete handlers[data.id];
   }
 
-  console.log("data: ", data)
-
   if (data.subscription) {
     // eslint-disable-next-line @typescript-eslint/ban-types
     (handler.subscriber as Function)(data.subscription);
