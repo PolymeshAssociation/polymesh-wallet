@@ -1,6 +1,7 @@
 import { LinkName, NetworkName, NetworkState } from './types';
 
 export const networkURLs: Record<NetworkName, string> = {
+  itn: 'wss://itn-rpc.polymesh.live',
   alcyone: 'wss://alcyone-rpc.polymesh.live',
   pmf: 'wss://pmf.polymath.network',
   pme: 'wss://pme.polymath.network',
@@ -8,6 +9,7 @@ export const networkURLs: Record<NetworkName, string> = {
 };
 
 export const networkLabels: Record<NetworkName, string> = {
+  itn: 'ITN',
   alcyone: 'Alcyone Testnet',
   pmf: 'PMF',
   pme: 'PME',
@@ -18,14 +20,16 @@ export const networkIsDev: Record<NetworkName, boolean> = {
   alcyone: false,
   pmf: true,
   pme: true,
-  local: true
+  local: true,
+  itn: true
 };
 
 export const dynamicSchemaEnabled: Record <NetworkName, boolean> = {
   alcyone: true,
   pmf: true,
   pme: true,
-  local: false
+  local: false,
+  itn: false
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
@@ -44,6 +48,10 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   local: {
     dashboard: 'unknown',
     explorer: 'unknown'
+  },
+  itn: {
+    dashboard: 'unknown',
+    explorer: 'https://itn-app.polymesh.live/#/explorer'
   }
 };
 
@@ -51,7 +59,9 @@ export const defaultNetwork: NetworkName = NetworkName.alcyone;
 
 export const messagePrefix = 'poly:';
 
-// @TODO switch to mainnet hash when launched.
+// @TODO switch to ITN hash when launched
+// 0x9deeb940c92ae02111c3bd5baca89970384f4c9849f02a1b2e53e66414d30f9f
+
 // Alcyone genesis hash.
 export const genesisHash = '0x12fddc9e2128b3fe571e4e5427addcb87fcaf08493867a68dd6ae44b406b39c7';
 
