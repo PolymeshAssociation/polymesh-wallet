@@ -58,6 +58,7 @@ enum NetworkName {
   alcyone = 'alcyone',
   pme = 'pme',
   local = 'local'
+  itn = 'itn'
 }
 
 type NetworkMeta = {
