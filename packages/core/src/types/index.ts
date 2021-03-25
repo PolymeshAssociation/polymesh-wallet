@@ -44,7 +44,8 @@ export enum NetworkName {
   pmf = 'pmf',
   alcyone = 'alcyone',
   pme = 'pme',
-  local = 'local'
+  local = 'local',
+  itn = 'itn',
 }
 
 export enum LinkName {
