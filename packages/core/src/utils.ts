@@ -1,5 +1,6 @@
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
+import { Subscription } from '@polkadot/ui-keyring/node_modules/rxjs'; // this is a hack, but polkadot doesn't export this, and ts doesn't like the import from rxjs for some reason...
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
@@ -21,7 +22,7 @@ export function isPolyMessage (message: string): boolean {
   return isPolyMessage;
 }
 
-export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
+export function observeAccounts(cb: (accounts: KeyringAccountData[]) => void): Subscription {
   return accountsObservable.subject.subscribe((accountsSubject: SubjectInfo) => {
     const accounts = Object.values(accountsSubject).map(({ json: { address, meta: { name } } }) => ({ address, name }));
 
