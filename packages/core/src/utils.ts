@@ -15,12 +15,6 @@ export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
   };
 }
 
-// export function isPolyMessage (message: string): boolean {
-//   const isPolyMessage = message.indexOf(messagePrefix) === 0 || messages.indexOf(message) > -1;
-
-//   return isPolyMessage;
-// }
-
 export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
   return accountsObservable.subject.subscribe((accountsSubject: SubjectInfo) => {
     const accounts = Object.values(accountsSubject).map(({ json: { address, meta: { name } } }) => ({ address, name }));
