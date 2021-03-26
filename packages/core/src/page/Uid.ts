@@ -24,4 +24,8 @@ export default class Uid implements InjectedUid {
   public async provide (payload: RequestPolyProvideUid): Promise<boolean> {
     return sendRequest('poly:pub(uid.provide)', payload);
   }
+
+  public async isSet (): Promise<boolean> {
+    return sendRequest('poly:pub(uid.isSet)');
+  }
 }

@@ -50,7 +50,10 @@ export type RequestPolyProvideUidSubscribe = null;
 
 export type RequestPolyUidRecordsSubscribe = null;
 
+export type RequestPolyIsUidSet = null;
+
 export type RequestPolyIsPasswordSet = null;
+
 export interface RequestPolyNetworkSet {
   network: NetworkName;
 }
@@ -156,6 +159,7 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
   'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
   'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];
   'poly:pub(uid.provide)': [RequestPolyProvideUid, boolean];
+  'poly:pub(uid.isSet)': [RequestPolyIsUidSet, boolean];
 }
 
 declare type IsNull<T, K extends keyof T> = {

@@ -130,6 +130,16 @@ export default class Tabs extends DotTabs {
     return this.#state.provideUid(url, request);
   }
 
+  private async isSet (): Promise<boolean> {
+    const uidRecords = await this.#state.allUidRecords();
+
+    const account = getSelectedIdentifiedAccount();
+
+    assert(account, 'No account is present or no account selected');
+
+    return uidRecords.some(({ did }) => did === account.did);
+  }
+
   // eslint-disable-next-line @typescript-eslint/require-await
   public async _handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], url: string, port: chrome.runtime.Port): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
     this.#state.ensureUrlAuthorized(url);
@@ -170,6 +180,9 @@ export default class Tabs extends DotTabs {
 
       case 'poly:pub(uid.provide)':
         return this.provideUid(url, request as RequestPolyProvideUid);
+
+      case 'poly:pub(uid.isSet)':
+        return this.isSet();
 
       default:
         return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, url, port);
