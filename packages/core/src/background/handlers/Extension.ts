@@ -1,4 +1,5 @@
 import DotExtension from '@polkadot/extension-base/background/handlers/Extension';
+import { MessageTypes, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
 import { KeyringPair } from '@polkadot/keyring/types';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
@@ -463,7 +464,7 @@ export default class Extension extends DotExtension {
         return this.getUid(request as RequestPolyGetUid);
 
       default:
-        return super.handle(id, type, request, port);
+        return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, port);
     }
   }
 }
