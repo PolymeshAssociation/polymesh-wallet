@@ -22,7 +22,7 @@ export function isPolyMessage (message: string): boolean {
   return isPolyMessage;
 }
 
-export function observeAccounts(cb: (accounts: KeyringAccountData[]) => void): Subscription {
+export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void): Subscription {
   return accountsObservable.subject.subscribe((accountsSubject: SubjectInfo) => {
     const accounts = Object.values(accountsSubject).map(({ json: { address, meta: { name } } }) => ({ address, name }));
 
