@@ -131,7 +131,9 @@ export default class Tabs {
 
     const account = getSelectedIdentifiedAccount();
 
-    return uidRecords.some(({ did }) => did === account?.did);
+    assert(account, 'No account is present or no account selected');
+
+    return uidRecords.some(({ did }) => did === account.did);
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await
