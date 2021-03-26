@@ -21,8 +21,8 @@ export default function handler<TMessageType extends PolyMessageTypes> ({ id, me
   console.log(` [in] ${source}`); // :: ${JSON.stringify(request)}`);
 
   const promise = isExtension
-    ? extension.handle(id, message, request, port)
-    : tabs.handle(id, message, request, from, port);
+    ? extension._handle(id, message, request, port)
+    : tabs._handle(id, message, request, from, port);
 
   promise
     .then((response): void => {

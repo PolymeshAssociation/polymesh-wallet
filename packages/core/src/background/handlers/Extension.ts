@@ -389,7 +389,7 @@ export default class Extension extends DotExtension {
     return false;
   }
 
-  public async handle<TMessageType extends PolyMessageTypes> (
+  public async _handle<TMessageType extends PolyMessageTypes> (
     id: string,
     type: TMessageType,
     request: PolyRequestTypes[TMessageType],
