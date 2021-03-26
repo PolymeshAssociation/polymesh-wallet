@@ -10,7 +10,6 @@ import { IdentifiedAccount,
   ProofRequestPayload,
   RequestPolyProvideUid,
   StoreStatus,
-  UidCheckExistencePayload,
   UidRecord } from '../types';
 
 export enum Errors {
@@ -52,7 +51,10 @@ export type RequestPolyProvideUidSubscribe = null;
 
 export type RequestPolyUidRecordsSubscribe = null;
 
+export type RequestPolyIsUidSet = null;
+
 export type RequestPolyIsPasswordSet = null;
+
 export interface RequestPolyNetworkSet {
   network: NetworkName;
 }
@@ -143,7 +145,7 @@ export interface PolyRequestSignatures {
   'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
   'poly:pri(networkState.subscribe)': [RequestSubscribeNetworkState, boolean, NetworkState];
 
-  'poly:pub(uid.checkExistence)': [UidCheckExistencePayload, boolean];
+  'poly:pub(uid.isSet)': [RequestPolyIsUidSet, boolean];
   'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];
   'poly:pri(uid.proofRequests.subscribe)': [RequestProofingSubscribe, boolean, ProofingRequest[]];
   'poly:pri(uid.proofRequests.approve)': [RequestPolyApproveProof, boolean];
