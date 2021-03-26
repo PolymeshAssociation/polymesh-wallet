@@ -1,5 +1,4 @@
-import { AccountJson, RequestAccountList, RequestAccountSubscribe, RequestSignatures as DotRequestSignatures } from '@polkadot/extension-base/background/types';
-import { InjectedAccount, InjectedMetadataKnown, MetadataDef } from '@polkadot/extension-inject/types';
+import { AccountJson, RequestSignatures as DotRequestSignatures } from '@polkadot/extension-base/background/types';
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 

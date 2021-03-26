@@ -1,5 +1,5 @@
 import DotTabs from '@polkadot/extension-base/background/handlers/Tabs';
-import { MessageTypes, RequestSignatures } from '@polkadot/extension-base/background/types';
+import { MessageTypes, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
@@ -172,7 +172,7 @@ export default class Tabs extends DotTabs {
         return this.provideUid(url, request as RequestPolyProvideUid);
 
       default:
-        return super.handle(id, type, request, url, port);
+        return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, url, port);
     }
   }
 }
