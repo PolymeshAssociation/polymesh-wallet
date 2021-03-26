@@ -6,7 +6,7 @@ import { polyNetworkGet } from '@polymathnetwork/extension-core/external';
 import polyNetworkSubscribe from '@polymathnetwork/extension-core/external/polyNetworkSubscribe';
 import { getSelectedAccount, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
-import { NetworkMeta, ProofRequestPayload, RequestPolyProvideUid, UidCheckExistencePayload } from '@polymathnetwork/extension-core/types';
+import { NetworkMeta, ProofRequestPayload, RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
 import { allowedUidProvider, prioritize, recodeAddress, validateDid, validateNetwork, validateTicker, validateUid } from '@polymathnetwork/extension-core/utils';
 
 import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse } from '../types';
@@ -126,10 +126,12 @@ export default class Tabs {
     return this.#state.provideUid(url, request);
   }
 
-  private async checkExistence (request: UidCheckExistencePayload): Promise<boolean> {
+  private async isSet (): Promise<boolean> {
     const uidRecords = await this.#state.allUidRecords();
 
-    return uidRecords.some(({ did }) => did === request.did);
+    const account = getSelectedIdentifiedAccount();
+
+    return uidRecords.some(({ did }) => did === account?.did);
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await
@@ -167,8 +169,8 @@ export default class Tabs {
       case 'poly:pub(uid.provide)':
         return this.provideUid(url, request as RequestPolyProvideUid);
 
-      case 'poly:pub(uid.checkExistence)':
-        return this.checkExistence(request as UidCheckExistencePayload);
+      case 'poly:pub(uid.isSet)':
+        return this.isSet();
 
       default:
         throw new Error(`Unable to handle message of type ${type}`);
