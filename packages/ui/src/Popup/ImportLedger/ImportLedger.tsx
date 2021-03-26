@@ -3,7 +3,7 @@ import settings from '@polkadot/ui-settings';
 import { genesisHash } from '@polymathnetwork/extension-core/constants';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgChevronDown, SvgLedgerLogo, SvgSettingsOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
+import { AccountContext, ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
@@ -36,25 +36,55 @@ function ImportLedger (): React.ReactElement {
   const [accountIndex, setAccountIndex] = useState<number>(0);
   const [addressOffset, setAddressOffset] = useState<number>(0);
   const [, setError] = useState<string | null>(null);
-  const onAction = useContext(ActionContext);
   const [name, setName] = useState<string>('');
   const [isShowingSettings, setIsShowingSettings] = useState(false);
-  const ledgerData = useLedger(genesis, accountIndex, addressOffset);
-  const { address: ledgerAddress, isLoading: ledgerLoading, refresh, status } = ledgerData;
+
+  const { accounts } = useContext(AccountContext);
+  const onAction = useContext(ActionContext);
   const isBusy = useContext(ActivityContext);
-  const address = useMemo(() => {
+
+  const ledgerData = useLedger(genesis, accountIndex, addressOffset);
+
+  const { address: ledgerAddress, isLoading: ledgerLoading, refresh, status } = ledgerData;
+  const address: string | null = useMemo(() => {
     if (ledgerAddress) {
+      settings.set({ ledgerConn: 'webusb' });
+
       return recodeAddress(ledgerAddress);
     } else {
       return null;
     }
   }, [ledgerAddress]);
 
+  // Set accountIndex and addressOffset to next available pair
   useEffect(() => {
-    if (ledgerAddress) {
-      settings.set({ ledgerConn: 'webusb' });
+    const ledgerAccounts = accounts.filter((account) => account.isHardware && account.hardwareType === 'ledger');
+    const existingIndexOffsetMap = ledgerAccounts.reduce((indexOffsetMap: number[][], account) => {
+      const index = account.accountIndex as number;
+      const offset = account.addressOffset as number;
+
+      if (indexOffsetMap[index]) {
+        indexOffsetMap[index].push(offset);
+      } else {
+        indexOffsetMap[index] = [offset];
+      }
+
+      return indexOffsetMap;
+    }, []);
+
+    for (let offset = 0, shouldContinue = true; offset < 20 && shouldContinue; offset++) {
+      for (let index = 0; index < 20 && shouldContinue; index++) {
+        const isExistingIndexOffsetPair = existingIndexOffsetMap[index]?.includes(offset);
+
+        if (!isExistingIndexOffsetPair) {
+          setAccountIndex(index);
+          setAddressOffset(offset);
+
+          shouldContinue = false;
+        }
+      }
     }
-  }, [ledgerAddress]);
+  }, [accounts]);
 
   const accOps = useRef(AVAIL.map((value): AccOption => ({
     text: `Account type ${value}`,
@@ -167,7 +197,8 @@ function ImportLedger (): React.ReactElement {
                         <TextInput inputRef={register({ required: 'Account name is required' })}
                           name='accountName'
                           onChange={(e) => setName(e.target.value)}
-                          placeholder='Enter account name' />
+                          placeholder='Enter account name'
+                          value={name} />
                         <Box>
                           <Text color='alert'
                             variant='b3'>
@@ -208,7 +239,7 @@ function ImportLedger (): React.ReactElement {
                   <Box mb='m'>
                     <Text color='gray.1'
                       variant='b2m' >
-                    Account type
+                      Account type
                     </Text>
                     <Dropdown
                       className='accountType'
@@ -221,7 +252,7 @@ function ImportLedger (): React.ReactElement {
                   <Box mb='m'>
                     <Text color='gray.1'
                       variant='b2m' >
-                      Account index
+                      Address index
                     </Text>
                     <Dropdown
                       className='accountIndex'
