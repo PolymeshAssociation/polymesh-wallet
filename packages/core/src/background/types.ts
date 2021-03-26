@@ -1,4 +1,4 @@
-import { AccountJson, RequestAccountList, RequestAccountSubscribe } from '@polkadot/extension-base/background/types';
+import { AccountJson, RequestAccountList, RequestAccountSubscribe, RequestSignatures } from '@polkadot/extension-base/background/types';
 import { InjectedAccount, InjectedMetadataKnown, MetadataDef } from '@polkadot/extension-inject/types';
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
@@ -128,7 +128,7 @@ export interface RequestPolyGetUid {
   network: NetworkName;
 }
 
-export interface PolyRequestSignatures {
+export interface PolyRequestSignatures extends RequestSignatures {
   'poly:pri(accounts.subscribe)': [RequestPolyAccountsSubscribe, boolean, IdentifiedAccount[]];
   'poly:pri(network.subscribe)': [RequestPolyNetworkSubscribe, boolean, NetworkName];
   'poly:pri(selectedAccount.subscribe)': [RequestPolySelectedAccountSubscribe, boolean, string | undefined];
