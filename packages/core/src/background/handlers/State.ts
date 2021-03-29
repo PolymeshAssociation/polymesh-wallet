@@ -1,4 +1,5 @@
 
+import DotState from '@polkadot/extension-base/background/handlers/State';
 import { AccountJson } from '@polkadot/extension-base/background/types';
 import chrome from '@polkadot/extension-inject/chrome';
 import { BehaviorSubject } from 'rxjs';
@@ -40,7 +41,7 @@ function getId (): string {
   return `${Date.now()}.${++idCounter}`;
 }
 
-export default class State {
+export default class State extends DotState {
   readonly #proofRequests: Record<string, ProofRequestResolver> = {};
 
   readonly #provideUidRequests: Record<string, ProvideUidRequestResolver> = {};
@@ -56,6 +57,8 @@ export default class State {
   public uidsSubject: BehaviorSubject<UidRecord[]> = new BehaviorSubject<UidRecord[]>([]);
 
   constructor () {
+    super();
+
     this.updateUidSubject();
   }
 
@@ -85,14 +88,14 @@ export default class State {
       .map(({ id, request, url }): ProvideUidRequest => ({ id, request, url }));
   }
 
-  private popupClose (): void {
+  private _popupClose (): void {
     this.#windows.forEach((id: number): void =>
       chrome.windows.remove(id)
     );
     this.#windows = [];
   }
 
-  private popupOpen (): void {
+  private _popupOpen (): void {
     chrome.windows.create({ ...WINDOW_OPTS }, (window?: chrome.windows.Window): void => {
       if (window) {
         this.#windows.push(window.id);
@@ -146,7 +149,7 @@ export default class State {
     chrome.browserAction.setBadgeText({ text });
 
     if (shouldClose && text === '') {
-      this.popupClose();
+      this._popupClose();
     }
   }
 
@@ -160,7 +163,7 @@ export default class State {
     chrome.browserAction.setBadgeText({ text });
 
     if (shouldClose && text === '') {
-      this.popupClose();
+      this._popupClose();
     }
   }
 
@@ -185,7 +188,7 @@ export default class State {
       };
 
       this.updateIconProof();
-      this.popupOpen();
+      this._popupOpen();
     });
   }
 
@@ -201,7 +204,7 @@ export default class State {
       };
 
       this.updateIconProvideUid();
-      this.popupOpen();
+      this._popupOpen();
     });
   }
 

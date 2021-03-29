@@ -1,6 +1,5 @@
 // Runs in the extension background, handling all keyring access
 
-import handlers from '@polkadot/extension-base/background/handlers';
 import { PORT_CONTENT, PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 import { AccountsStore } from '@polkadot/extension-base/stores';
 import chrome from '@polkadot/extension-inject/chrome';
@@ -8,10 +7,10 @@ import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import subscribePolymesh, { accountsSynchronizer } from '@polymathnetwork/extension-core';
-import polyHandlers from '@polymathnetwork/extension-core/background/handlers';
+import handlers from '@polymathnetwork/extension-core/background/handlers';
 import SchemaService from '@polymathnetwork/extension-core/external/schema';
 import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
-import { fatalErrorHandler, isPolyMessage } from '@polymathnetwork/extension-core/utils';
+import { fatalErrorHandler } from '@polymathnetwork/extension-core/utils';
 
 const loadSchema = () => {
   SchemaService.load().catch(console.error);
@@ -53,8 +52,7 @@ chrome.runtime.onConnect.addListener((port): void => {
 
   // message handlers
   port.onMessage.addListener((data): void => {
-    if (isPolyMessage(data.message)) return polyHandlers(data, port);
-    else return handlers(data, port);
+    return handlers(data, port);
   });
 });
 
