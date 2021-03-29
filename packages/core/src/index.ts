@@ -20,8 +20,6 @@ import { apiErrorHandler, observeAccounts } from './utils';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
-let didCount = 0;
-
 /**
  * Synchronize accounts between keyring and redux store.
  */
@@ -125,8 +123,6 @@ function subscribePolymesh (): () => Promise<void> {
 
       apiPromise(network)
         .then((api) => {
-          didCount = 0;
-
           // Clear errors
           store.dispatch(statusActions.apiReady());
 
