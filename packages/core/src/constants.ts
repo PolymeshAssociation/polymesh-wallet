@@ -88,5 +88,6 @@ export const defaultNetworkState: NetworkState = {
 
 export const uidProvidersWhitelist = [
   'https://polymathnetwork.github.io',
-  'https://itn-polymesh.fractal.id'
+  'https://itn-polymesh.fractal.id',
+  'https://staging.itn-polymesh.fractal.id'
 ];
