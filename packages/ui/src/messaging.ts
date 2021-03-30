@@ -182,8 +182,8 @@ export async function validateAccount (address: string, password: string): Promi
   return sendMessage('pri(accounts.validate)', { address, password });
 }
 
-export async function forgetAccount (address: string, password: string): Promise<boolean> {
-  return sendMessage('pri(accounts.forget)', { address, password });
+export async function forgetAccount (address: string): Promise<boolean> {
+  return sendMessage('pri(accounts.forget)', { address });
 }
 
 export async function approveAuthRequest (id: string): Promise<boolean> {
