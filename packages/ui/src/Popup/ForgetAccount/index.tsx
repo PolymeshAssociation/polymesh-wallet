@@ -5,7 +5,7 @@ import { useErrorHandler } from 'react-error-boundary';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 
-import { ActionContext, ActivityContext } from '../../components';
+import { AccountContext, ActionContext, ActivityContext } from '../../components';
 import { forgetAccount, validatePassword } from '../../messaging';
 
 interface ParamTypes {
@@ -17,21 +17,31 @@ type PasswordForm = {
 }
 
 export const ForgetAccount: FC = () => {
+  const { accounts } = useContext(AccountContext);
   const onAction = useContext(ActionContext);
-  const { address } = useParams<ParamTypes>();
   const isBusy = useContext(ActivityContext);
+
+  const { address } = useParams<ParamTypes>();
+
   const handleError = useErrorHandler();
 
   const { errors, handleSubmit, register, setError } = useForm<PasswordForm>();
 
-  const onSubmit = async ({ currentPassword }: PasswordForm) => {
+  const account = accounts.find((_account) => _account.address === address);
+  const isLedgerAccount = account?.isHardware && account.hardwareType === 'ledger';
+
+  const performForgetAccount = async () => {
+    await forgetAccount(address);
+
+    onAction('/');
+  };
+
+  const onPasswordSubmit = async ({ currentPassword }: PasswordForm) => {
     try {
       const isValidPassword = await validatePassword(currentPassword);
 
       if (isValidPassword) {
-        await forgetAccount(address);
-
-        onAction('/');
+        await performForgetAccount();
       } else {
         setError('currentPassword', { type: 'WrongPassword' });
       }
@@ -72,8 +82,8 @@ export const ForgetAccount: FC = () => {
           </Text>
         </Box>
 
-        <form id='passwordForm'
-          onSubmit={handleSubmit(onSubmit)}>
+        {!isLedgerAccount && <form id='passwordForm'
+          onSubmit={handleSubmit(onPasswordSubmit)}>
           <Box mt='m'>
             <Box>
               <Text color='gray.1'
@@ -99,14 +109,23 @@ export const ForgetAccount: FC = () => {
             </Box>
           </Box>
         </form>
+        }
 
         <Box mt='auto'>
-          <Button busy={isBusy}
-            fluid
-            form='passwordForm'
-            type='submit'>
-            Forget account
-          </Button>
+          {isLedgerAccount
+            ? <Button busy={isBusy}
+              fluid
+              onClick={performForgetAccount}>
+              Forget account
+            </Button>
+            : <Button busy={isBusy}
+              fluid
+              form='passwordForm'
+              type='submit'>
+              Forget account
+            </Button>
+          }
+
         </Box>
       </Flex>
     </>
