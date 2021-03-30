@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 
 import { ActionContext, ActivityContext } from '../../components';
-import { forgetAccount } from '../../messaging';
+import { forgetAccount, validatePassword } from '../../messaging';
 
 interface ParamTypes {
   address: string
@@ -22,13 +22,19 @@ export const ForgetAccount: FC = () => {
   const isBusy = useContext(ActivityContext);
   const handleError = useErrorHandler();
 
-  const { errors, handleSubmit, register } = useForm<PasswordForm>();
+  const { errors, handleSubmit, register, setError } = useForm<PasswordForm>();
 
   const onSubmit = async ({ currentPassword }: PasswordForm) => {
     try {
-      await forgetAccount(address, currentPassword);
+      const isValidPassword = await validatePassword(currentPassword);
 
-      onAction('/');
+      if (isValidPassword) {
+        await forgetAccount(address);
+
+        onAction('/');
+      } else {
+        setError('currentPassword', { type: 'WrongPassword' });
+      }
     } catch (e) {
       handleError(e);
     }
@@ -72,7 +78,7 @@ export const ForgetAccount: FC = () => {
             <Box>
               <Text color='gray.1'
                 variant='b2m'>
-              Wallet password
+                Wallet password
               </Text>
             </Box>
             <Box>
