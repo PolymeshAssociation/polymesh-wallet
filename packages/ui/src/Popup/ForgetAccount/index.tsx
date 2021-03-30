@@ -1,7 +1,8 @@
 import { SvgAlertCircle, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Button, Flex, Header, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useContext } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
+import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 
 import { ActionContext, ActivityContext } from '../../components';
@@ -11,15 +12,21 @@ interface ParamTypes {
   address: string
 }
 
+type PasswordForm = {
+  currentPassword: string;
+}
+
 export const ForgetAccount: FC = () => {
   const onAction = useContext(ActionContext);
   const { address } = useParams<ParamTypes>();
   const isBusy = useContext(ActivityContext);
   const handleError = useErrorHandler();
 
-  const onExport = async () => {
+  const { errors, handleSubmit, register } = useForm<PasswordForm>();
+
+  const onSubmit = async ({ currentPassword }: PasswordForm) => {
     try {
-      await forgetAccount(address);
+      await forgetAccount(address, currentPassword);
 
       onAction('/');
     } catch (e) {
@@ -58,10 +65,40 @@ export const ForgetAccount: FC = () => {
             You are about to remove this account. Once removed, this account will not be accessible via this extension unless you re-add it via JSON file or seed phrase.
           </Text>
         </Box>
+
+        <form id='passwordForm'
+          onSubmit={handleSubmit(onSubmit)}>
+          <Box mt='m'>
+            <Box>
+              <Text color='gray.1'
+                variant='b2m'>
+              Wallet password
+              </Text>
+            </Box>
+            <Box>
+              <TextInput inputRef={register({ required: true, minLength: 8 })}
+                name='currentPassword'
+                placeholder='Enter your wallet password'
+                type='password' />
+              {errors.currentPassword &&
+              <Box>
+                <Text color='alert'
+                  variant='b3'>
+                  {(errors.currentPassword).type === 'required' && 'Required field'}
+                  {(errors.currentPassword).type === 'minLength' && 'Password too short'}
+                  {(errors.currentPassword).type === 'WrongPassword' && 'Invalid password'}
+                </Text>
+              </Box>
+              }
+            </Box>
+          </Box>
+        </form>
+
         <Box mt='auto'>
           <Button busy={isBusy}
             fluid
-            onClick={onExport}>
+            form='passwordForm'
+            type='submit'>
             Forget account
           </Button>
         </Box>
