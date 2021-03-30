@@ -100,6 +100,7 @@ function Unlock ({ error, isFirst, isLocked, onCancel, onSavePassChange, onSign,
         {isFirst && <Flex flex={1}
           ml='xs'>
           <Button busy={isBusy}
+            disabled={!!error}
             fluid
             form='passwordForm'
             type='submit'>
