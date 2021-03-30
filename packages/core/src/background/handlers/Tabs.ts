@@ -142,8 +142,6 @@ export default class Tabs extends DotTabs {
 
   // eslint-disable-next-line @typescript-eslint/require-await
   public async _handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], url: string, port: chrome.runtime.Port): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
-    this.#state.ensureUrlAuthorized(url);
-
     if (type !== 'pub(authorize.tab)') {
       this.#state.ensureUrlAuthorized(url);
     }
