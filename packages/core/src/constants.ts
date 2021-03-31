@@ -5,7 +5,7 @@ export const networkURLs: Record<NetworkName, string> = {
   alcyone: 'wss://alcyone-rpc.polymesh.live',
   pmf: 'wss://pmf.polymath.network',
   pme: 'wss://pme.polymath.network',
-  local: 'ws://localhost:9944'
+  local: 'wss://unmanaged-alcyone-rpc.polymesh.live'
 };
 
 export const networkLabels: Record<NetworkName, string> = {
