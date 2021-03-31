@@ -10,10 +10,10 @@
     "@polkadot/react-identicon": "^0.59.0-beta.8",
     "@polkadot/react-qr": "^0.59.0-beta.8",
     "@tippyjs/react": "^4.2.0",
-    "@polkadot/keyring": "^6.0.2",
-    "@polkadot/networks": "^6.0.2",
-    "@polkadot/util": "^6.0.2",
-    "@polkadot/util-crypto": "^6.0.2",
+    "@polkadot/keyring": "^6.0.5",
+    "@polkadot/networks": "^6.0.5",
+    "@polkadot/util": "^6.0.5",
+    "@polkadot/util-crypto": "^6.0.5",
     "@types/styled-system": "^5.1.10",
     "bignumber.js": "^9.0.0",
     "i18next": "^19.7.0",
@@ -46,7 +46,6 @@
     "@types/styled-components": "^5.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.3",
-    "raw-loader": "^4.0.2",
     "sinon-chrome": "^3.0.1"
   }
 }
