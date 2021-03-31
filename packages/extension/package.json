@@ -11,8 +11,9 @@
     "@polkadot/extension-inject": "^0.37.2",
     "@polkadot/hw-ledger": "^6.0.5",
     "@polkadot/keyring": "^6.0.5",
-    "@polkadot/phishing": "^0.4.9",
-    "@polkadot/ui-keyring": "0.69.1",
+    "@polkadot/phishing": "^0.6.51",
+    "@polkadot/ui-keyring": "^0.72.1",
+    "@polkadot/ui-settings": "^0.72.1",
     "@polymathnetwork/extension-core": "0.4.8",
     "@polymathnetwork/extension-ui": "0.4.8"
   },
