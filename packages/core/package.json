@@ -12,7 +12,7 @@
   "dependencies": {
     "@babel/runtime": "^7.12.13",
     "@polymathnetwork/confidential-identity": "1.0.1",
-    "@reduxjs/toolkit": "^1.4.0",
+    "@reduxjs/toolkit": "^1.5.1",
     "@types/crypto-js": "^4.0.1",
     "@types/lodash-es": "^4.17.3",
     "@types/redux-logger": "^3.0.8",
