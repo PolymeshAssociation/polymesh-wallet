@@ -164,8 +164,8 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
       <Flex flex={1}
         flexDirection='column'
         justifyContent='flex-end'
-        mx='xs'>
-        <Flex mb='s'>
+        m='s'>
+        <Flex width='100%'>
           <Button minsize
             onClick={onBack}
             variant='secondary'>
@@ -175,7 +175,7 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
               width={16} />
           </Button>
           <Box ml='s'
-            width={255}>
+            width='100%'>
             <Button disabled={confirmationStatus !== status.valid}
               fluid
               onClick={onContinue}>
