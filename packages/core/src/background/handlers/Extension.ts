@@ -1,3 +1,5 @@
+import DotExtension from '@polkadot/extension-base/background/handlers/Extension';
+import { MessageTypes, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
 import { KeyringPair } from '@polkadot/keyring/types';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
@@ -40,10 +42,12 @@ import { getScopeAttestationProof } from './utils';
 /**
  * Extension handles messages coming from the extension popup UI (i.e packages/ui)
  */
-export default class Extension {
+export default class Extension extends DotExtension {
   readonly #state: State;
 
   constructor (state: State) {
+    super(state);
+
     this.#state = state;
   }
 
@@ -386,7 +390,7 @@ export default class Extension {
     return false;
   }
 
-  public async handle<TMessageType extends PolyMessageTypes> (
+  public async _handle<TMessageType extends PolyMessageTypes> (
     id: string,
     type: TMessageType,
     request: PolyRequestTypes[TMessageType],
@@ -460,7 +464,7 @@ export default class Extension {
         return this.getUid(request as RequestPolyGetUid);
 
       default:
-        throw new Error(`Unable to handle message of type ${type}`);
+        return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, port);
     }
   }
 }
