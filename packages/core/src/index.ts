@@ -1,6 +1,7 @@
 import { Option } from '@polkadot/types/codec';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
+import BigNumber from 'bignumber.js';
 import { union } from 'lodash-es';
 import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
@@ -171,9 +172,13 @@ function subscribePolymesh (): () => Promise<void> {
                     [api.query.identity.keyToIdentityIds, account]
                   ], ([accData, linkedKeyInfo]: [AccountInfo, Option<LinkedKeyInfo>]) => {
                     // Store account metadata
+                    const { feeFrozen, free, miscFrozen } = accData.data;
+                    const locked = BigNumber.max(feeFrozen.toString(), miscFrozen.toString());
+                    const availableBalance = new BigNumber(free.toString()).minus(locked).toString();
+
                     store.dispatch(accountActions.setAccount({ data: {
                       address: account,
-                      balance: accData.data.free.toString(),
+                      balance: availableBalance,
                       name: accountName(account)
                     },
                     network }));
