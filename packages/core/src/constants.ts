@@ -9,10 +9,10 @@ export const networkURLs: Record<NetworkName, string> = {
 };
 
 export const networkLabels: Record<NetworkName, string> = {
-  itn: 'ITN',
   alcyone: 'Alcyone Testnet',
   pmf: 'PMF',
   pme: 'PME',
+  itn: 'PMI',
   local: 'Local node'
 };
 
