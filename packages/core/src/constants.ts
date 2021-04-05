@@ -9,10 +9,10 @@ export const networkURLs: Record<NetworkName, string> = {
 };
 
 export const networkLabels: Record<NetworkName, string> = {
-  itn: 'ITN',
   alcyone: 'Alcyone Testnet',
   pmf: 'PMF',
   pme: 'PME',
+  itn: 'PMI',
   local: 'Local node'
 };
 
@@ -88,7 +88,8 @@ export const defaultNetworkState: NetworkState = {
 
 export const uidProvidersWhitelist = [
   'https://polymathnetwork.github.io',
-  'https://itn-polymesh.fractal.id'
+  'https://itn-polymesh.fractal.id',
+  'https://staging.itn-polymesh.fractal.id'
 ];
 
 export const PORTS = {

@@ -23,3 +23,11 @@ export const formatAmount = (amount: BigNumber, minimumFractionDigits = 0, scale
 
   return formattter.format(parseFloat((scaleDown ? amount.div(1000000) : amount).toString()));
 };
+
+export const truncateString = (str: string, size = 30): string => {
+  if (str.length <= size) {
+    return str;
+  }
+
+  return str.slice(0, size) + '...';
+};

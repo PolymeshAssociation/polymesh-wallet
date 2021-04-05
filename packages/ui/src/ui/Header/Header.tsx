@@ -62,8 +62,7 @@ export const Header: FC<HeaderProps> = (props) => {
               </Box>
             }
           </Flex>
-          <Box pt='m'
-            width={220}>
+          <Box pt='m'>
             <Heading color='white'
               variant='h5'>
               {headerText}

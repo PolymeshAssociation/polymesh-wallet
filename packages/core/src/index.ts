@@ -20,8 +20,6 @@ import { apiErrorHandler, observeAccounts } from './utils';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
-let didCount = 0;
-
 /**
  * Synchronize accounts between keyring and redux store.
  */
@@ -104,7 +102,6 @@ function subscribePolymesh (): () => Promise<void> {
     for (const key in unsubCallbacks) {
       if (unsubCallbacks[key]) {
         try {
-          console.log('Poly: Unsubscribing from:', key);
           unsubCallbacks[key]();
           delete unsubCallbacks[key];
         } catch (error) {
@@ -116,18 +113,16 @@ function subscribePolymesh (): () => Promise<void> {
     return disconnect();
   }
 
-  console.log('Poly: subscribePolymesh');
+  console.log('Poly: fetching data from chain');
 
   !!unsubCallbacks.network && unsubCallbacks.network();
   unsubCallbacks.network = subscribeIsHydratedAndNetwork((network) => {
     if (network) {
-      console.log('Poly: selected network', network);
+      console.log('Poly: Selected network', network);
       store.dispatch(statusActions.init());
 
       apiPromise(network)
         .then((api) => {
-          didCount = 0;
-
           // Clear errors
           store.dispatch(statusActions.apiReady());
 
@@ -191,7 +186,6 @@ function subscribePolymesh (): () => Promise<void> {
                       const data = _didRecord(did, didRecords);
                       const params = { did, network, data };
 
-                      console.log(`Poly: Setting **identity** ${didCount++}`, data);
                       // store.dispatch(identityActions.setIdentitySecKeys(params));
                       store.dispatch(identityActions.setIdentity(params));
                     }, apiErrorHandler)
@@ -215,8 +209,6 @@ function subscribePolymesh (): () => Promise<void> {
 
               unsubCallbacks.dids = subscribeDidsList((dids: string[]) => {
                 if (network !== getNetwork()) { return; }
-
-                console.log('Poly: subscribeDidsList', network, getNetwork(), dids);
 
                 const removedDids = difference(prevDids, dids);
 

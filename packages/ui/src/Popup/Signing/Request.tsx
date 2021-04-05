@@ -71,12 +71,16 @@ export default function Request ({ account: { accountIndex, address, addressOffs
         payload: null
       });
     } else {
-      registry.setSignedExtensions(payload.signedExtensions);
+      try {
+        registry.setSignedExtensions(payload.signedExtensions);
 
-      setData({
-        hexBytes: null,
-        payload: registry.createType('ExtrinsicPayload', payload, { version: payload.version })
-      });
+        setData({
+          hexBytes: null,
+          payload: registry.createType('ExtrinsicPayload', payload, { version: payload.version })
+        });
+      } catch (error) {
+        setError(error.toString());
+      }
     }
   }, [request]);
 
@@ -218,17 +222,6 @@ export default function Request ({ account: { accountIndex, address, addressOffs
     : (
       <Flex flexDirection='column'
         p='s'>
-        {error && (
-          <Warning isDanger
-            style={{ alignItems: 'center', alignSelf: 'flex-start', marginBottom: '10px' }}>
-            {error}
-          </Warning>
-        )}
-        {warning && (
-          <Warning style={{ alignItems: 'center', alignSelf: 'flex-start', margin: '0 0 10px 0' }}>
-            {warning}
-          </Warning>
-        )}
         <Flex alignItems='stretch'
           flexDirection='row'
           width='100%'>
@@ -254,6 +247,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
               </Button>
               : <Button
                 busy={isBusy}
+                disabled={!!error}
                 fluid
                 onClick={_onSignQuick}
                 type='submit'>
@@ -292,7 +286,17 @@ export default function Request ({ account: { accountIndex, address, addressOffs
         </Box>
         {content()}
       </RequestContent>
-
+      {error && (
+        <Warning isDanger
+          style={{ alignItems: 'center', alignSelf: 'flex-start', marginBottom: '10px' }}>
+          {error}
+        </Warning>
+      )}
+      {warning && (
+        <Warning style={{ alignItems: 'center', alignSelf: 'flex-start', margin: '0 0 10px 0' }}>
+          {warning}
+        </Warning>
+      )}
       {signArea}
     </>
   );
