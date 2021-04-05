@@ -10,13 +10,13 @@ import { defaultSs58Format, uidProvidersWhitelist } from './constants';
 import { ErrorCodes, KeyringAccountData, NetworkName } from './types';
 
 // Sort an array by prioritizing a certain element
-export function prioritize<P, T>(first: P, extractor: (a: T) => P) {
+export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
   return function (a: T, b: T): number {
     return first !== undefined ? (extractor(a) === first ? -1 : 1) : 0;
   };
 }
 
-export function observeAccounts(cb: (accounts: KeyringAccountData[]) => void): Subscription {
+export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void): Subscription {
   return accountsObservable.subject.subscribe((accountsSubject: SubjectInfo) => {
     const accounts = Object.values(accountsSubject).map(({ json: { address, meta: { name } } }) => ({ address, name }));
 
@@ -34,7 +34,7 @@ export const apiErrorHandler = (error: Error): void => {
   }
 };
 
-export function subscribeOnlineStatus(cb: (status: boolean) => void): void {
+export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
   cb(navigator.onLine);
   // eslint-disable-next-line node/no-callback-literal
   window.addEventListener('offline', () => cb(false));
