@@ -6,9 +6,9 @@
   "dependencies": {
     "@babel/runtime": "^7.12.13",
     "@polkadot/api": "^3.11.1",
-    "@polkadot/extension-base": "^0.37.3-11",
-    "@polkadot/extension-chains": "^0.37.3-11",
-    "@polkadot/extension-inject": "^0.37.3-11",
+    "@polkadot/extension-base": "^0.37.2",
+    "@polkadot/extension-chains": "^0.37.2",
+    "@polkadot/extension-inject": "^0.37.2",
     "@polkadot/hw-ledger": "^5.9.2",
     "@polkadot/keyring": "^5.9.2",
     "@polkadot/phishing": "^0.6.1",
