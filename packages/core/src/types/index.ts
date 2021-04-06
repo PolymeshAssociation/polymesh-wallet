@@ -11,6 +11,7 @@ export type AccountData = {
   address: string;
   didType?: DidType;
   balance?: string;
+  lockedBalance?: string;
   name?: string;
 }
 
@@ -33,6 +34,7 @@ export type IdentifiedAccount = {
   didType?: DidType;
   didAlias: string;
   balance?: string;
+  lockedBalance?: string;
 }
 
 export type UnsubCallback = () => void;
