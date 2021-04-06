@@ -1,3 +1,5 @@
+import DotExtension from '@polkadot/extension-base/background/handlers/Extension';
+import { MessageTypes, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
 import { KeyringPair } from '@polkadot/keyring/types';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
@@ -8,9 +10,9 @@ import { renameIdentity,
   setSelectedAccount,
   toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
 import { subscribeIdentifiedAccounts,
-  subscribeIsDev,
-  subscribeNetwork,
+  subscribeNetworkState,
   subscribeSelectedAccount,
+  subscribeSelectedNetwork,
   subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 import { UidRecord } from '@polymathnetwork/extension-core/types';
 
@@ -31,15 +33,21 @@ import { Errors,
   RequestPolyProvideUidReject,
   RequestPolyRejectProof,
   RequestPolySelectedAccountSet,
+  RequestPolyValidatePassword,
   ResponsePolyCallDetails } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 import { getScopeAttestationProof } from './utils';
 
-export default class Extension {
+/**
+ * Extension handles messages coming from the extension popup UI (i.e packages/ui)
+ */
+export default class Extension extends DotExtension {
   readonly #state: State;
 
   constructor (state: State) {
+    super(state);
+
     this.#state = state;
   }
 
@@ -59,7 +67,20 @@ export default class Extension {
   private polyNetworkSubscribe (id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'poly:pri(network.subscribe)'>(id, port);
 
-    const reduxUnsub = subscribeNetwork(cb);
+    const reduxUnsub = subscribeSelectedNetwork(cb);
+
+    port.onDisconnect.addListener((): void => {
+      reduxUnsub();
+      unsubscribe(id);
+    });
+
+    return true;
+  }
+
+  private subscribeNetworkState (id: string, port: chrome.runtime.Port): boolean {
+    const cb = createSubscription<'poly:pri(networkState.subscribe)'>(id, port);
+
+    const reduxUnsub = subscribeNetworkState(cb);
 
     port.onDisconnect.addListener((): void => {
       reduxUnsub();
@@ -86,21 +107,6 @@ export default class Extension {
     const cb = createSubscription<'poly:pri(status.subscribe)'>(id, port);
 
     const reduxUnsub = subscribeStatus(cb);
-
-    port.onDisconnect.addListener((): void => {
-      reduxUnsub();
-      unsubscribe(id);
-    });
-
-    return true;
-  }
-
-  private polyIsDevSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'poly:pri(isDev.subscribe)'>(id, port);
-
-    const reduxUnsub = subscribeIsDev((data) => {
-      cb(data);
-    });
 
     port.onDisconnect.addListener((): void => {
       reduxUnsub();
@@ -208,14 +214,14 @@ export default class Extension {
 
     try {
       uid = await this.#state.getUid(account.did, network, password);
+
+      if (!uid) {
+        reject(new Error(Errors.NO_UID));
+
+        return false;
+      }
     } catch (error) {
       reject(error);
-
-      return false;
-    }
-
-    if (!uid) {
-      reject(new Error(Errors.NO_UID));
 
       return false;
     }
@@ -332,7 +338,59 @@ export default class Extension {
     return ret;
   }
 
-  public async handle<TMessageType extends PolyMessageTypes> (
+  private async isPasswordSet (): Promise<boolean> {
+    // If there's at least one, non-ledger account, or
+    // If there's at least one uid stored
+    // Then, user has set password before
+
+    const nonLedgerPairs = keyring.getPairs().filter((pair) => !pair.meta.isHardware).length > 0;
+
+    if (nonLedgerPairs) return true;
+
+    const uidRecords = await this.#state.allUidRecords();
+
+    if (uidRecords.length) return true;
+
+    return false;
+  }
+
+  private async validatePassword ({ password }: RequestPolyValidatePassword): Promise<boolean> {
+    const nonLedgerPair = keyring.getPairs().filter((pair) => !pair.meta.isHardware)[0];
+
+    // Try to validate against an existing pair.
+    if (nonLedgerPair) {
+      try {
+        if (!nonLedgerPair.isLocked) {
+          nonLedgerPair.lock();
+        }
+
+        nonLedgerPair.decodePkcs8(password);
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    // If no pairs found, try to validate an existing uID.
+    const uidRecords = await this.#state.allUidRecords();
+
+    if (uidRecords.length) {
+      const { did, network } = uidRecords[0];
+
+      try {
+        await this.#state.getUid(did, network, password);
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    return false;
+  }
+
+  public async _handle<TMessageType extends PolyMessageTypes> (
     id: string,
     type: TMessageType,
     request: PolyRequestTypes[TMessageType],
@@ -342,8 +400,17 @@ export default class Extension {
       case 'poly:pri(accounts.subscribe)':
         return this.polyAccountsSubscribe(id, port);
 
+      case 'poly:pri(password.isSet)':
+        return this.isPasswordSet();
+
+      case 'poly:pri(password.validate)':
+        return this.validatePassword(request as RequestPolyValidatePassword);
+
       case 'poly:pri(network.subscribe)':
         return this.polyNetworkSubscribe(id, port);
+
+      case 'poly:pri(networkState.subscribe)':
+        return this.subscribeNetworkState(id, port);
 
       case 'poly:pri(network.set)':
         return this.polyNetworkSet(request as RequestPolyNetworkSet);
@@ -365,9 +432,6 @@ export default class Extension {
 
       case 'poly:pri(isDev.toggle)':
         return this.polyIsDevToggle();
-
-      case 'poly:pri(isDev.subscribe)':
-        return this.polyIsDevSubscribe(id, port);
 
       case 'poly:pri(uid.proofRequests.subscribe)':
         return this.proofRequestsSubscribe(id, port);
@@ -400,7 +464,7 @@ export default class Extension {
         return this.getUid(request as RequestPolyGetUid);
 
       default:
-        throw new Error(`Unable to handle message of type ${type}`);
+        return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, port);
     }
   }
 }

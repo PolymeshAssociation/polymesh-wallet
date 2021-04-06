@@ -34,6 +34,7 @@ module.exports = {
     '@typescript-eslint/no-unsafe-call': 'warn',
     '@typescript-eslint/no-unsafe-return': 'warn',
     '@typescript-eslint/restrict-template-expressions': 'warn',
+    '@typescript-eslint/type-annotation-spacing': 'off',
     'multiline-ternary': 'warn',
     'simple-import-sort/imports': [2, {
       groups: [

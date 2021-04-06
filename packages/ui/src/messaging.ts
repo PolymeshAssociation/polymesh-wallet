@@ -30,7 +30,7 @@ import { PolyMessageTypes,
   ProofingRequest,
   ProvideUidRequest,
   ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
-import { IdentifiedAccount, NetworkName, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount, NetworkName, NetworkState, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 
 interface Handler {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -97,6 +97,10 @@ port.onMessage.addListener((data: Message['data']): void => {
   }
 });
 
+/**
+ * - Handles sending messages to be handled by polkadot extension.
+ * - Refer to packages/extension/src/background.ts for routing logic.
+ */
 function sendMessage<TMessageType extends MessageTypesWithNullRequest>(
   message: TMessageType
 ): Promise<ResponseTypes[TMessageType]>;
@@ -125,6 +129,11 @@ function sendMessage<TMessageType extends MessageTypes> (
   });
 }
 
+/**
+ * - Handles sending messages to be handled by our own core package at packages/core/src/background/handlers
+ * - Refer to packages/extension/src/background.ts for routing logic.
+ * - Handlers for these messages are defined in packages/core/src/background/handlers/Extension
+ */
 function polyMessage<TMessageType extends PolyMessageTypesWithNullRequest>(
   message: TMessageType
 ): Promise<PolyRequestTypes[TMessageType]>;
@@ -256,8 +265,8 @@ export async function subscribePolyAccounts (cb: (accounts: IdentifiedAccount[])
   return polyMessage('poly:pri(accounts.subscribe)', null, cb);
 }
 
-export async function subscribePolyNetwork (cb: (network: NetworkName) => void): Promise<boolean> {
-  return polyMessage('poly:pri(network.subscribe)', null, cb);
+export async function subscribeNetworkState (cb: (networkState: NetworkState) => void): Promise<boolean> {
+  return polyMessage('poly:pri(networkState.subscribe)', null, cb);
 }
 
 export async function rejectAuthRequest (id: string): Promise<boolean> {
@@ -284,16 +293,20 @@ export async function setPolyNetwork (network: NetworkName): Promise<boolean> {
   return polyMessage('poly:pri(network.set)', { network });
 }
 
+export async function isPasswordSet (): Promise<boolean> {
+  return polyMessage('poly:pri(password.isSet)', null);
+}
+
+export async function validatePassword (password: string): Promise<boolean> {
+  return polyMessage('poly:pri(password.validate)', { password });
+}
+
 export async function togglePolyIsDev (): Promise<boolean> {
   return polyMessage('poly:pri(isDev.toggle)', null);
 }
 
 export async function subscribePolyStatus (cb: (status: StoreStatus) => void): Promise<boolean> {
   return polyMessage('poly:pri(status.subscribe)', null, cb);
-}
-
-export async function subscribePolyIsDev (cb: (isDev: string) => void): Promise<boolean> {
-  return polyMessage('poly:pri(isDev.subscribe)', null, cb);
 }
 
 export async function subscribeProofingRequests (cb: (requests: ProofingRequest[]) => void): Promise<boolean> {

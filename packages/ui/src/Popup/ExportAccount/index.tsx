@@ -50,12 +50,14 @@ export const ExportAccount: FC = () => {
       <Header headerText='Export account'
         iconAsset={SvgOpenInNew}>
       </Header>
-      <Box pt='m'>
+      <Flex alignItems='stretch'
+        flexDirection='column'
+        height='100%'
+        p='s'>
         <Box borderColor='gray.4'
           borderRadius={3}
           borderStyle='solid'
           borderWidth={2}
-          m='xs'
           p='s'>
           <Flex>
             <Icon Asset={SvgAlertCircle}
@@ -74,22 +76,21 @@ export const ExportAccount: FC = () => {
             Please remember the password you enter below as you will need it to recover your account. You are exporting your account details as a JSON file. Keep this file safe and secured.
           </Text>
         </Box>
-      </Box>
-      <form id='passwordForm'
-        onSubmit={handleSubmit(onSubmit)}>
-        <Box mt='m'>
-          <Box>
-            <Text color='gray.1'
-              variant='b2m'>
+        <form id='passwordForm'
+          onSubmit={handleSubmit(onSubmit)}>
+          <Box mt='m'>
+            <Box>
+              <Text color='gray.1'
+                variant='b2m'>
               Wallet password
-            </Text>
-          </Box>
-          <Box>
-            <TextInput inputRef={register({ required: true, minLength: 8 })}
-              name='currentPassword'
-              placeholder='Enter your wallet password'
-              type='password' />
-            {errors.currentPassword &&
+              </Text>
+            </Box>
+            <Box>
+              <TextInput inputRef={register({ required: true, minLength: 8 })}
+                name='currentPassword'
+                placeholder='Enter your wallet password'
+                type='password' />
+              {errors.currentPassword &&
               <Box>
                 <Text color='alert'
                   variant='b3'>
@@ -98,21 +99,18 @@ export const ExportAccount: FC = () => {
                   {(errors.currentPassword).type === 'WrongPassword' && 'Invalid password'}
                 </Text>
               </Box>
-            }
+              }
+            </Box>
           </Box>
+        </form>
+        <Box mt='auto'>
+          <Button busy={isBusy}
+            fluid
+            form='passwordForm'
+            type='submit'>
+            Export account
+          </Button>
         </Box>
-      </form>
-      <Flex flex={1}
-        flexDirection='column'
-        justifyContent='flex-end'
-        mb='s'
-        mx='xs'>
-        <Button busy={isBusy}
-          fluid
-          form='passwordForm'
-          type='submit'>
-          Export account
-        </Button>
       </Flex>
     </>
   );

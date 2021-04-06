@@ -1,6 +1,6 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
 
-import { networkURLs } from '../../constants';
+import { apiConnTimeout, networkURLs } from '../../constants';
 import { NetworkName } from '../../types';
 import SchemaService from '../schema';
 
@@ -9,8 +9,6 @@ let api: ApiPromise | null = null;
 const metadata: Record<string, string> = {};
 
 async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiPromise> {
-  console.time('ApiReady');
-
   if (!reinitialize && api) { return api; }
 
   if (api) {
@@ -37,7 +35,9 @@ async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiProm
   // A) Wait until WS connection is successful.
   // B) A second later, if connection is not up, we throw an error.
   await new Promise<void>((resolve, reject) => {
-    const handle = setTimeout(() => reject(new Error(`Failed to connect to ${networkURLs[n]}`)), 1500);
+    const handle = setTimeout(() => {
+      reject(new Error(`Failed to connect to ${networkURLs[n]}`));
+    }, apiConnTimeout);
 
     unsubscribe = provider.on('connected', () => {
       clearTimeout(handle);
@@ -61,8 +61,6 @@ async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiProm
 
   // Cache metadata to speed up following Api creations.
   metadata[key] = api.runtimeMetadata.toHex();
-
-  console.timeEnd('ApiReady');
 
   return api;
 }

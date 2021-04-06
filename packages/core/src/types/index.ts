@@ -44,7 +44,8 @@ export enum NetworkName {
   pmf = 'pmf',
   alcyone = 'alcyone',
   pme = 'pme',
-  local = 'local'
+  local = 'local',
+  itn = 'itn',
 }
 
 export enum LinkName {
@@ -58,6 +59,12 @@ export type CDD = null | {
 }
 
 export type UID = Uint8Array;
+
+export type NetworkState = {
+  selected: NetworkName,
+  ss58Format: number,
+  isDeveloper: boolean
+}
 
 export type NetworkMeta = {
   name: NetworkName,

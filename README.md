@@ -3,22 +3,19 @@
 A simple browser extension that facilitates managing your Polymesh accounts outside of dapps. Injects the accounts and allows signing transactions for a specific account.
 
 With the Polymesh Wallet, you can: 
-- Create and manage your keys, including organizing them by Polymesh ID, designating signing keys, and more. 
-- Control transfers of POLYX and digital assets to and from your accounts to other accounts Securely sign transactions
+- Create and manage your keys, including organizing them by Polymesh ID. 
 - View and monitor the POLYX balance on each key.
+- Securely sign transactions, either with extension keys or with a hardware wallet.
 - Select a chain to connect to such as Polymesh development networks, incentivized testnet, or the eventual mainnet.
-- Connect to the Polymesh Dashboard and other Polymesh distributed apps (dApps) for enhanced benefits
+- Connect to the Polymesh Dashboard and other Polymesh distributed apps (dApps) for enhanced benefits.
 
-The extension wraps [Polkadot{.js} extension](https://github.com/polkadot-js/extension) and tweaks it 
-to provide better experience for Polymesh dapps users.
-
-Most notably, the extension establishes a connection to a chain via Polkadot.js [ApiPromise](https://github.com/polkadot-js/api). The connection is used to retrieve user accounts PolyX balance, Polymesh ID and CDD status. Fetched data stored in Redux and then serialized and stored in browser's localStorage.
+The extension wraps [Polkadot{.js} extension](https://github.com/polkadot-js/extension) and aims to offer optimized experience to Polymesh dapp users. It retrieves and displays account chain data such as: account balance, Polymesh ID, and onboarding status. Data is retrieved via Websocket [API](https://github.com/polkadot-js/api) connection, then stored in a central [Redux](https://redux.js.org/) and finally, redux store data gets persisted to local storage.
 
 Additionally, the wallet enables importing user's confidential identity from KYC providers, and then encrypts it with AES and stores in local storage. User must provide a password to decrypt the confidential identity for purpose of viewing, or to generate a uniqueness proof. 
 
 ## Installation
 
-- On Chrome, install via [Chrome web store](https://chrome.google.com/webstore/detail/polymesh-wallet/jojhfeoedkpkglbfimdfabpdfjaoolaf).
+- On Chrome, install via [Chrome web store](https://chrome.google.com/webstore/detail/polymesh-wallet/jojhfeoedkpkglbfimdfabpdfjaoolaf). _Firefox extension coming soon._
 
 ## Development environment
 
@@ -33,17 +30,19 @@ Steps to build the extension and view your changes in a browser:
     - "Load unpacked" and point to `packages/extension/build`
     - if developing, after making changes - refresh the extension
 
-_Optionally_, you can connect to a local node running on `ws://localhost:9944`, by selecting "Local node" from networks menu, after you enable dev network display.
+_Optionally_, you can connect to a local Polymesh node running on `ws://localhost:9944`, by selecting "Local node" from networks menu, after you enable dev network display.
 
 ![Dev network](docs/dev-network.png)
 
 ## Development
 
-The repo is split into a number of packages -
+The repo is split into a number of packages
 
 - [extension](packages/extension/) - The main entry point that glues everything else together.
-- [extension-ui](packages/ui/) - The UI components for the extension, to build up the popup.
-- [extension-dapp](packages/core/) - Request handlers, API maintenance and chain data syncing and caching.
+- [ui](packages/ui/) - The UI components for the extension, to build up the popup.
+- [code](packages/core/) - Polymesh-specific request handlers, api connection and data fetching and storage.
+
+You can find more information about the [directory structure here](docs/directory-structure.md)
 
 ## Dapp developers
 
@@ -59,6 +58,7 @@ enum NetworkName {
   alcyone = 'alcyone',
   pme = 'pme',
   local = 'local'
+  itn = 'itn'
 }
 
 type NetworkMeta = {

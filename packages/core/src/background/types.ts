@@ -1,11 +1,11 @@
-import { AccountJson, RequestAccountList, RequestAccountSubscribe } from '@polkadot/extension-base/background/types';
-import { InjectedAccount, InjectedMetadataKnown, MetadataDef } from '@polkadot/extension-inject/types';
+import { AccountJson, RequestSignatures as DotRequestSignatures } from '@polkadot/extension-base/background/types';
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 
 import { IdentifiedAccount,
   NetworkMeta,
   NetworkName,
+  NetworkState,
   ProofRequestPayload,
   RequestPolyProvideUid,
   StoreStatus,
@@ -40,6 +40,8 @@ export type RequestPolyNetworkGet = null;
 
 export type RequestPolyNetworkMetaSubscribe = null;
 
+export type RequestSubscribeNetworkState = null;
+
 export type RequestPolyIsDevSubscribe = null;
 
 export type RequestProofingSubscribe = null;
@@ -48,8 +50,16 @@ export type RequestPolyProvideUidSubscribe = null;
 
 export type RequestPolyUidRecordsSubscribe = null;
 
+export type RequestPolyIsUidSet = null;
+
+export type RequestPolyIsPasswordSet = null;
+
 export interface RequestPolyNetworkSet {
   network: NetworkName;
+}
+
+export interface RequestPolyValidatePassword {
+  password: string;
 }
 
 export type RequestPolyIsDevToggle = null;
@@ -120,43 +130,36 @@ export interface RequestPolyGetUid {
   network: NetworkName;
 }
 
-export interface PolyRequestSignatures {
+export interface PolyRequestSignatures extends DotRequestSignatures {
+  // private/internal requests, i.e. from a popup
   'poly:pri(accounts.subscribe)': [RequestPolyAccountsSubscribe, boolean, IdentifiedAccount[]];
   'poly:pri(network.subscribe)': [RequestPolyNetworkSubscribe, boolean, NetworkName];
   'poly:pri(selectedAccount.subscribe)': [RequestPolySelectedAccountSubscribe, boolean, string | undefined];
   'poly:pri(status.subscribe)': [RequestPolyStatusSubscribe, boolean, StoreStatus];
   'poly:pri(network.set)': [RequestPolyNetworkSet, boolean];
   'poly:pri(isDev.toggle)': [RequestPolyIsDevToggle, boolean];
-  'poly:pri(isDev.subscribe)': [RequestPolyIsDevSubscribe, boolean, string];
   'poly:pri(selectedAccount.set)': [RequestPolySelectedAccountSet, boolean];
   'poly:pri(callDetails.get)': [RequestPolyCallDetails, ResponsePolyCallDetails];
   'poly:pri(identity.rename)': [RequestPolyIdentityRename, boolean];
-  'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
-  'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
-
-  'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];
+  'poly:pri(networkState.subscribe)': [RequestSubscribeNetworkState, boolean, NetworkState];
   'poly:pri(uid.proofRequests.subscribe)': [RequestProofingSubscribe, boolean, ProofingRequest[]];
   'poly:pri(uid.proofRequests.approve)': [RequestPolyApproveProof, boolean];
   'poly:pri(uid.proofRequests.reject)': [RequestPolyRejectProof, boolean];
-
-  'poly:pub(uid.provide)': [RequestPolyProvideUid, boolean];
   'poly:pri(uid.provideRequests.subscribe)': [RequestPolyProvideUidSubscribe, boolean, ProvideUidRequest[]];
   'poly:pri(uid.provideRequests.approve)': [RequestPolyProvideUidApprove, boolean];
   'poly:pri(uid.provideRequests.reject)': [RequestPolyProvideUidReject, boolean];
   'poly:pri(uid.changePass)': [RequestPolyChangePass, boolean];
   'poly:pri(uid.records.subscribe)': [RequestPolyUidRecordsSubscribe, boolean, UidRecord[]];
-  'poly:pri(global.changePass)': [RequestPolyGlobalChangePass, boolean];
   'poly:pri(uid.getUid)': [RequestPolyGetUid, string];
-  /*
-    this is an inelegant yet effective way to take over these couple requests from Polkadot handlers,
-    in order to alter their behavior as needed.
-  */
-  // Re-order accounts list to bring the "selected" account, first.
-  'pub(accounts.list)': [RequestAccountList, InjectedAccount[]];
-  'pub(accounts.subscribe)': [RequestAccountSubscribe, boolean, InjectedAccount[]];
-  // Disable metadata requests.
-  'pub(metadata.list)': [null, InjectedMetadataKnown[]];
-  'pub(metadata.provide)': [MetadataDef, boolean];
+  'poly:pri(global.changePass)': [RequestPolyGlobalChangePass, boolean];
+  'poly:pri(password.isSet)': [RequestPolyIsPasswordSet, boolean];
+  'poly:pri(password.validate)': [RequestPolyValidatePassword, boolean];
+  // public/external requests, i.e. from a page
+  'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
+  'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
+  'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];
+  'poly:pub(uid.provide)': [RequestPolyProvideUid, boolean];
+  'poly:pub(uid.isSet)': [RequestPolyIsUidSet, boolean];
 }
 
 declare type IsNull<T, K extends keyof T> = {
