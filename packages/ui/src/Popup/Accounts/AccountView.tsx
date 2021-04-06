@@ -317,31 +317,30 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <Box
         bg={hover ? 'gray.5' : 'gray.0'}
         mt='s'
+        onClick={selectAccount}
         onMouseEnter={mouseEnter}
         onMouseLeave={mouseLeave}
         px='s'
+        style={{ cursor: 'pointer' }}
       >
         <AccountViewGrid>
-          <Box onClick={selectAccount}
-            style={{ cursor: 'pointer' }}>
-            <Flex height='100%'>
-              <Box
-                backgroundColor='brandLightest'
-                borderRadius='50%'
-                height={32}
-                px='2'
-                width={32}
-              >
-                <Flex justifyContent='center'
-                  pt='xxs'>
-                  <Text color='brandMain'
-                    variant='b2m'>
-                    {name?.substr(0, 1)}
-                  </Text>
-                </Flex>
-              </Box>
-            </Flex>
-          </Box>
+          <Flex height='100%'>
+            <Box
+              backgroundColor='brandLightest'
+              borderRadius='50%'
+              height={32}
+              px='2'
+              width={32}
+            >
+              <Flex justifyContent='center'
+                pt='xxs'>
+                <Text color='brandMain'
+                  variant='b2m'>
+                  {name?.substr(0, 1)}
+                </Text>
+              </Flex>
+            </Box>
+          </Flex>
           <Box>
             {(!hover || did) && renderAccountInfo()}
             {hover && !did && renderHoverAccountInfo()}
