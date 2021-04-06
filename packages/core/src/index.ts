@@ -173,12 +173,14 @@ function subscribePolymesh (): () => Promise<void> {
                   ], ([accData, linkedKeyInfo]: [AccountInfo, Option<LinkedKeyInfo>]) => {
                     // Store account metadata
                     const { feeFrozen, free, miscFrozen } = accData.data;
+                    const total = new BigNumber(free.toString());
                     const locked = BigNumber.max(feeFrozen.toString(), miscFrozen.toString());
-                    const availableBalance = new BigNumber(free.toString()).minus(locked).toString();
+                    const available = new BigNumber(total).minus(locked);
 
                     store.dispatch(accountActions.setAccount({ data: {
                       address: account,
-                      balance: availableBalance,
+                      balance: available.toString(),
+                      lockedBalance: locked.toString(),
                       name: accountName(account)
                     },
                     network }));
