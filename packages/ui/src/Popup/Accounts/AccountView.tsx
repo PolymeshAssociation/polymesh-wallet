@@ -18,7 +18,8 @@ export interface Props {
 }
 
 export const AccountView: FC<Props> = ({ account, isSelected }) => {
-  const { address, balance, did, keyType, name } = account;
+  const { address, balance, did, keyType, lockedBalance, name } = account;
+  const totalBalance = new BigNumber(balance || 0).plus(lockedBalance || 0);
 
   const { accounts } = useContext(AccountContext);
   const onAction = useContext(ActionContext);
@@ -210,7 +211,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             <Text color='gray.1'
               style={{ whiteSpace: 'nowrap' }}
               variant='b3'>
-              {formatters.formatAmount(new BigNumber(balance || 0), 2, true)}{' '}
+              {formatters.formatAmount(new BigNumber(totalBalance), 2, true)}{' '}
               POLYX
             </Text>
           </Flex>
