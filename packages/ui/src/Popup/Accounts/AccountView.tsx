@@ -210,6 +210,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             justifyContent='flex-end'>
             <Text color='gray.1'
               style={{ whiteSpace: 'nowrap' }}
+              title={balance && `${formatters.formatAmount(new BigNumber(balance), 2, true)} POLYX available to use`}
               variant='b3'>
               {formatters.formatAmount(new BigNumber(totalBalance), 2, true)}{' '}
               POLYX
