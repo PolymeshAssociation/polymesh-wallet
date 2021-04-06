@@ -121,24 +121,26 @@ export default function Accounts (): React.ReactElement {
 
           {
             // @TODO to be re-enabled once Polymesh Ledger app is released.
-            //
-            // isLedgerEnabled
-            //   ? <MenuItem
-            //     disabled={!isLedgerCapable}
-            //     onClick={
-            //       () => history.push('/account/import-ledger')
-            //     }>
-            //     <Text color='gray.2'
-            //       variant='b1'>{
-            //         !isLedgerCapable ? 'Ledger devices can only be connected with Chrome browser' : 'Attach ledger account'
-            //       }</Text>
-            //   </MenuItem>
+            false && (
+              isLedgerEnabled
+                ? <MenuItem
+                  disabled={!isLedgerCapable}
+                  onClick={
+                    () => history.push('/account/import-ledger')
+                  }>
+                  <Text color='gray.2'
+                    variant='b1'>{
+                      !isLedgerCapable ? 'Ledger devices can only be connected with Chrome browser' : 'Attach ledger account'
+                    }</Text>
+                </MenuItem>
 
-            //   : <MenuItem
-            //     onClick={_onOpenLedgerConnect}>
-            //     <Text color='gray.2'
-            //       variant='b1'>{'Connect Ledger device'}</Text>
-            //   </MenuItem>
+                : <MenuItem
+                  onClick={_onOpenLedgerConnect}>
+                  <Text color='gray.2'
+                    variant='b1'>{'Connect Ledger device'}</Text>
+                </MenuItem>
+
+            )
           }
 
         </Menu>
