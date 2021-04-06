@@ -139,9 +139,9 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, noHeader, o
       <Flex flex={1}
         flexDirection='column'
         justifyContent='flex-end'
-        mt='s'
-        mx='xs'>
-        <Flex mb='s'>
+        m='s'>
+        <Flex mb='s'
+          width='100%'>
           <Button minsize
             onClick={onBack}
             variant='secondary'>
@@ -151,7 +151,7 @@ export const AccountDetails: FC<Props> = ({ defaultName, headerText, noHeader, o
               width={16} />
           </Button>
           <Box ml='s'
-            width={255}>
+            width='100%'>
             <Button busy={isBusy}
               disabled={submitIsDisabled}
               fluid
