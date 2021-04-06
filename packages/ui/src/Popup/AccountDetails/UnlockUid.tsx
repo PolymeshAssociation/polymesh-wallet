@@ -54,7 +54,7 @@ export const DecodeUid: FC<Props> = ({ decode, onClose }) => {
           <Box>
             <Text color='gray.2'
               variant='b2'>
-              Please provide the wallet password in order to unlock your uID
+              Your uID is a unique identifier attached to a single person or entity in the real world. A person or entity can have multiple Polymesh Accounts, but only one uID.
             </Text>
           </Box>
           <Box mt='m'>
