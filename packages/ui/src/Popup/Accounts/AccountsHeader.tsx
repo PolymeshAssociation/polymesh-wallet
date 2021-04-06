@@ -150,7 +150,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
           textVariant='b3'
         />
       </Flex>
-      <Flex>
+      <Flex justifyContent='space-between'>
         <Flex alignItems='flex-end'
           flexDirection='row'
           mt='1'>
@@ -167,22 +167,17 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
         </Flex>
         <Flex alignItems='flex-end'
           flexDirection='row'
-          ml='1'
           mt='1'>
           <Heading color='gray.0'
             variant='h6'>
-            ({formatters.formatAmount(new BigNumber(account?.lockedBalance || 0), 2, true)}
+            {formatters.formatAmount(new BigNumber(account?.lockedBalance || 0), 2, true)}
           </Heading>
-          <Box ml='s'>
+          <Box ml='xs'>
             <Text color='gray.0'
               variant='b2'>
               POLYX locked
             </Text>
           </Box>
-          <Heading color='gray.0'
-            variant='h6'>
-            )
-          </Heading>
         </Flex>
       </Flex>
       {details && (
