@@ -7,7 +7,8 @@ import uiSettings from '@polkadot/ui-settings';
 import { SettingsStruct } from '@polkadot/ui-settings/types';
 import { setSS58Format } from '@polkadot/util-crypto';
 import { ProofingRequest, ProvideUidRequest } from '@polymathnetwork/extension-core/background/types';
-import { ErrorCodes, IdentifiedAccount, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
+import { defaultNetworkState } from '@polymathnetwork/extension-core/constants';
+import { ErrorCodes, IdentifiedAccount, NetworkState, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
 import React, { useEffect, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
@@ -31,9 +32,8 @@ import { busySubscriber,
   subscribeAccounts,
   subscribeAuthorizeRequests,
   subscribeMetadataRequests,
+  subscribeNetworkState,
   subscribePolyAccounts,
-  subscribePolyIsDev,
-  subscribePolyNetwork,
   subscribePolySelectedAccount,
   subscribePolyStatus,
   subscribeProofingRequests,
@@ -44,6 +44,7 @@ import { PolymeshContext as PolymeshContextType } from '../types';
 import { Box, Flex, Icon } from '../ui';
 import { Toast } from '../ui/Toast';
 import { buildHierarchy } from '../util/buildHierarchy';
+import ImportLedger from './ImportLedger/ImportLedger';
 import { AccountDetails } from './AccountDetails';
 import Accounts from './Accounts';
 import Authorize from './Authorize';
@@ -55,6 +56,7 @@ import { ImportSeed } from './ImportSeed';
 import { NewAccount } from './NewAccount';
 import ProofRequests from './ProofRequests';
 import ProvideUidRequests from './ProvideUidRequests';
+import { Restore } from './Restore';
 import Signing from './Signing';
 
 const startSettings = uiSettings.get();
@@ -71,38 +73,36 @@ function initAccountContext (accounts: AccountJson[]): AccountsContext {
 }
 
 function initPolymeshContext (
-  network: string,
+  networkState: NetworkState,
   polymeshAccounts: IdentifiedAccount[],
   selectedAccount: string,
-  isDeveloper: boolean,
   currentAccount?: IdentifiedAccount
+
 ): PolymeshContextType {
   return {
-    network,
+    networkState,
     polymeshAccounts,
     selectedAccount,
-    currentAccount,
-    isDeveloper
+    currentAccount
   };
 }
 
 export default function Popup (): React.ReactElement {
   const [accounts, setAccounts] = useState<null | AccountJson[]>(null);
   const [accountCtx, setAccountCtx] = useState<AccountsContext>({ accounts: [], hierarchy: [] });
-  const [polymeshCtx, setPolymeshCtx] = useState<PolymeshContextType>({ network: '', polymeshAccounts: [] });
+  const [polymeshCtx, setPolymeshCtx] = useState<PolymeshContextType>({ networkState: defaultNetworkState, polymeshAccounts: [] });
   const [authRequests, setAuthRequests] = useState<null | AuthorizeRequest[]>(null);
   const [metaRequests, setMetaRequests] = useState<null | MetadataRequest[]>(null);
   const [signRequests, setSignRequests] = useState<null | SigningRequest[]>(null);
   const [proofingRequests, setProofingRequests] = useState<null | ProofingRequest[]>(null);
   const [provideUidRequests, setProvideUidRequests] = useState<null | ProvideUidRequest[]>(null);
   const [settingsCtx, setSettingsCtx] = useState<SettingsStruct>(startSettings);
-  const [network, setNetwork] = useState('');
   const [polymeshAccounts, setPolymeshAccounts] = useState<IdentifiedAccount[]>([]);
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
   const [uidRecords, setUidRecords] = useState<null | UidRecord[]>(null);
   const [status, setStatus] = useState<undefined | StoreStatus>();
   const [isBusy, setIsBusy] = useState(false);
-  const [isDeveloper, setIsDeveloper] = useState(false);
+  const [networkState, setNetworkState] = useState<NetworkState>(defaultNetworkState);
   const handleError = useErrorHandler();
 
   useEffect(() => {
@@ -159,11 +159,8 @@ export default function Popup (): React.ReactElement {
     Promise.all([
       subscribePolyStatus(setStatus),
       subscribePolyAccounts(setPolymeshAccounts),
-      subscribePolyNetwork(setNetwork),
       subscribePolySelectedAccount(setSelectedAccountAddress),
-      subscribePolyIsDev((isDev) => {
-        setIsDeveloper(isDev === 'true');
-      }),
+      subscribeNetworkState(setNetworkState),
       subscribeAccounts(setAccounts),
       subscribeAuthorizeRequests(setAuthRequests),
       subscribeMetadataRequests(setMetaRequests),
@@ -192,9 +189,10 @@ export default function Popup (): React.ReactElement {
 
     setAccountCtx(initAccountContext(accounts || []));
     setPolymeshCtx(
-      initPolymeshContext(network, polymeshAccounts, selectedAccountAddress || '', isDeveloper, currentAccount)
+      initPolymeshContext(networkState, polymeshAccounts, selectedAccountAddress || '', currentAccount)
     );
-  }, [accounts, network, polymeshAccounts, selectedAccountAddress, isDeveloper]);
+  }, [accounts, networkState, polymeshAccounts, selectedAccountAddress
+  ]);
 
   const Root = (() => {
     if (authRequests && authRequests.length) {
@@ -216,11 +214,11 @@ export default function Popup (): React.ReactElement {
   //   B1) Accounts list is empty. ie this an empty wallet, or
   //   B2) Redux store is populated.
   const isReady = status?.apiStatus !== 'connecting' &&
-  (status?.populated[network] || accounts?.length === 0 || status?.apiStatus === 'error');
+  (status?.populated[networkState.selected] || accounts?.length === 0 || status?.apiStatus === 'error');
 
   return (
     <Loading>
-      {accounts &&
+      { accounts &&
         authRequests &&
         metaRequests &&
         signRequests &&
@@ -254,6 +252,12 @@ export default function Popup (): React.ReactElement {
                                 </Route>
                                 <Route path='/account/restore-json'>
                                   <ImportJson />
+                                </Route>
+                                <Route path='/account/restore'>
+                                  <Restore />
+                                </Route>
+                                <Route path='/account/import-ledger'>
+                                  <ImportLedger />
                                 </Route>
                                 <Route path='/account/change-password'>
                                   <ChangePassword />

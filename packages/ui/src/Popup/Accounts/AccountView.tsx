@@ -1,12 +1,13 @@
 import { networkLinks } from '@polymathnetwork/extension-core/constants';
-import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgCheck, SvgDotsVertical, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import BigNumber from 'bignumber.js';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { AccountType, ActionContext, PolymeshContext } from '../../components';
+import { AccountContext, AccountType, ActionContext, PolymeshContext } from '../../components';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
 import { Box, ButtonSmall, ContextMenuTrigger, Flex, Icon, LabelWithCopy, Menu, MenuItem, Text, TextInput, TextOverflowEllipsis } from '../../ui';
 import { formatters } from '../../util';
@@ -19,35 +20,36 @@ export interface Props {
 export const AccountView: FC<Props> = ({ account, isSelected }) => {
   const { address, balance, did, keyType, name } = account;
 
+  const { accounts } = useContext(AccountContext);
   const onAction = useContext(ActionContext);
+
   const history = useHistory();
 
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState(name);
   const [hover, setHover] = useState(false);
   const [nameHover, setNameHover] = useState(false);
-
-  const { network } = useContext(PolymeshContext);
+  const { networkState: { selected: network, ss58Format } } = useContext(PolymeshContext);
 
   const renderMenuItems = (address: string) => {
+    const account = accounts.find((_account) => _account.address === address);
+    const isLedgerAccount = account?.isHardware && account.hardwareType === 'ledger';
+
     return (
-      <>
-        {/* @ts-ignore */}
-        <Menu id={`account_menu_${address}`}>
-          {/* @ts-ignore */}
+      <Menu id={`account_menu_${address}`}>
+        {!isLedgerAccount &&
           <MenuItem data={{ action: 'export', address }}
             onClick={handleMenuClick}>
             <Text color='gray.2'
               variant='b1'>Export account</Text>
           </MenuItem>
-          {/* @ts-ignore */}
-          <MenuItem data={{ action: 'forget', address }}
-            onClick={handleMenuClick}>
-            <Text color='gray.2'
-              variant='b1'>Forget account</Text>
-          </MenuItem>
-        </Menu>
-      </>
+        }
+        <MenuItem data={{ action: 'forget', address }}
+          onClick={handleMenuClick}>
+          <Text color='gray.2'
+            variant='b1'>Forget account</Text>
+        </MenuItem>
+      </Menu>
     );
   };
 
@@ -190,12 +192,13 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             {!isEditing && did && <AccountType keyType={keyType} />}
           </Flex>
         </GridItem>
+        {/* @ADDRESS should be formatted */}
         <GridItem area='address'>
           <Flex alignItems='flex-end'
             height='100%'>
             <LabelWithCopy
               color='gray.3'
-              text={address}
+              text={recodeAddress(address, ss58Format)}
               textSize={13}
               textVariant='b3'
             />
@@ -217,7 +220,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   const getNetworkDashboardLink = () => {
-    return networkLinks[network as NetworkName].dashboard;
+    return networkLinks[network].dashboard;
   };
 
   const assign = (e: React.MouseEvent<HTMLElement>) => {
@@ -298,7 +301,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         <GridItem area='address'>
           <LabelWithCopy
             color='gray.3'
-            text={address}
+            text={recodeAddress(address, ss58Format)}
             textSize={13}
             textVariant='b3'
           />
@@ -369,7 +372,7 @@ const AccountViewGrid = styled.div`
   display: grid;
   grid-template-areas: 'avatar account-details options';
   gap: 10px;
-  grid-template-columns: 35px 200px 35px;
+  grid-template-columns: 35px auto 35px;
 `;
 
 const AccountDetailsGrid = styled.div`

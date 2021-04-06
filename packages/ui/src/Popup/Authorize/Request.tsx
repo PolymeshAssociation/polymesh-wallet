@@ -1,5 +1,6 @@
 import { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
 import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { truncateString } from '@polymathnetwork/extension-ui/util/formatters';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
@@ -51,10 +52,10 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
             <Box mt='m'
               mx='s'>
               <Heading mb={1}
-                variant='h5'>{`${origin} is requesting access`}</Heading>
+                variant='h5'>{'An application is requesting access'}</Heading>
               <Text color='gray.2'
                 variant='b2'>
-                An application, self-identifying as <strong>{origin}</strong>
+                An application, self-identifying as <strong>{truncateString(origin, 40)}</strong>
                 {' '}is requesting access from{' '}
                 <a
                   href={url}

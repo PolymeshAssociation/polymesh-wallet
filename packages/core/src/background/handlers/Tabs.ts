@@ -1,3 +1,5 @@
+import DotTabs from '@polkadot/extension-base/background/handlers/Tabs';
+import { MessageTypes, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
@@ -7,7 +9,7 @@ import polyNetworkSubscribe from '@polymathnetwork/extension-core/external/polyN
 import { getSelectedAccount, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
 import { NetworkMeta, ProofRequestPayload, RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
-import { allowedUidProvider, prioritize, validateDid, validateNetwork, validateTicker, validateUid } from '@polymathnetwork/extension-core/utils';
+import { allowedUidProvider, prioritize, recodeAddress, validateDid, validateNetwork, validateTicker, validateUid } from '@polymathnetwork/extension-core/utils';
 
 import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse } from '../types';
 import State from './State';
@@ -25,10 +27,15 @@ function transformAccounts (accounts: SubjectInfo): InjectedAccount[] {
     .sort(prioritize(getSelectedAccount(), (a) => a.address));
 }
 
-export default class Tabs {
+/**
+ * Tabs handles messages coming from the web app running in the currently open browser tabs
+ */
+export default class Tabs extends DotTabs {
   readonly #state: State;
 
   constructor (state: State) {
+    super(state);
+
     this.#state = state;
   }
 
@@ -59,11 +66,11 @@ export default class Tabs {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private accountsList (url: string): InjectedAccount[] {
+  private _accountsList (url: string): InjectedAccount[] {
     return transformAccounts(accountsObservable.subject.getValue());
   }
 
-  private accountsSubscribe (url: string, id: string, port: chrome.runtime.Port): boolean {
+  private _accountsSubscribe (url: string, id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
     let calls = 0;
 
@@ -104,7 +111,9 @@ export default class Tabs {
 
     assert(account.did, Errors.NO_DID);
 
-    return this.#state.generateProof(url, request, { address: account.address });
+    const address = recodeAddress(account.address);
+
+    return this.#state.generateProof(url, request, { address });
   }
 
   private provideUid (url: string, request: RequestPolyProvideUid): Promise<boolean> {
@@ -121,8 +130,22 @@ export default class Tabs {
     return this.#state.provideUid(url, request);
   }
 
+  private async isSet (): Promise<boolean> {
+    const uidRecords = await this.#state.allUidRecords();
+
+    const account = getSelectedIdentifiedAccount();
+
+    assert(account, 'No account is present or no account selected');
+
+    return uidRecords.some(({ did }) => did === account.did);
+  }
+
   // eslint-disable-next-line @typescript-eslint/require-await
-  public async handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], url: string, port: chrome.runtime.Port): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
+  public async _handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], url: string, port: chrome.runtime.Port): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
+    if (type !== 'pub(authorize.tab)') {
+      this.#state.ensureUrlAuthorized(url);
+    }
+
     switch (type) {
       case 'poly:pub(network.get)':
         return this.polyNetworkGet();
@@ -131,10 +154,10 @@ export default class Tabs {
         return this.polyNetworkSubscribe(id, port);
 
       case 'pub(accounts.list)':
-        return this.accountsList(url);
+        return this._accountsList(url);
 
       case 'pub(accounts.subscribe)':
-        return this.accountsSubscribe(url, id, port);
+        return this._accountsSubscribe(url, id, port);
 
       case 'pub(metadata.list)': {
         // Deny app's request to provide metadata because Polymesh wallet
@@ -156,8 +179,11 @@ export default class Tabs {
       case 'poly:pub(uid.provide)':
         return this.provideUid(url, request as RequestPolyProvideUid);
 
+      case 'poly:pub(uid.isSet)':
+        return this.isSet();
+
       default:
-        throw new Error(`Unable to handle message of type ${type}`);
+        return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, url, port);
     }
   }
 }
