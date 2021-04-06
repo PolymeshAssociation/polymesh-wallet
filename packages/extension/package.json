@@ -1,7 +1,7 @@
 {
   "name": "@polymathnetwork/extension",
   "description": "A Wallet extension for Polymesh blockchain",
-  "version": "0.4.8",
+  "version": "0.5.0",
   "type": "module",
   "dependencies": {
     "@babel/runtime": "^7.12.13",
@@ -14,8 +14,8 @@
     "@polkadot/phishing": "^0.6.1",
     "@polkadot/ui-keyring": "^0.70.1",
     "@polkadot/ui-settings": "^0.70.1",
-    "@polymathnetwork/extension-core": "0.4.8",
-    "@polymathnetwork/extension-ui": "0.4.8"
+    "@polymathnetwork/extension-core": "0.5.0",
+    "@polymathnetwork/extension-ui": "0.5.0"
   },
   "devDependencies": {
     "@polkadot/dev": "^0.61.30",
