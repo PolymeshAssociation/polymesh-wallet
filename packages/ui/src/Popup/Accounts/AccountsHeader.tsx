@@ -150,7 +150,8 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
           textVariant='b3'
         />
       </Flex>
-      <Flex justifyContent='space-between'
+      <Flex alignItems='baseline'
+        justifyContent='space-between'
         mt='1'>
         <Flex alignItems='flex-end'
           flexDirection='row'>
