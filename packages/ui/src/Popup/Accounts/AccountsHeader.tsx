@@ -63,7 +63,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
               onMouseLeave={mouseLeave}>
               <Text color='gray.0'
                 variant='b1m'>
-                {account.didAlias ? formatters.toShortAddress(account.didAlias, { size: 30 }) : '[Your Polymesh ID]'}
+                {account.didAlias ? formatters.toShortAddress(account.didAlias, { size: 30 }) : '[Your Polymesh Account]'}
               </Text>
               {hover && (
                 <Flex ml='xs'>
