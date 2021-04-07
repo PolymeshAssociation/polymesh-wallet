@@ -90,3 +90,8 @@ export const uidProvidersWhitelist = [
   'https://tokenstudio.polymesh.live',
   'https://dashboard.polymesh.live'
 ];
+
+export const PORTS = {
+  EXTENSION: 'polywallet_extension',
+  CONTENT: 'polywallet_content'
+};

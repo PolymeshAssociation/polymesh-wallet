@@ -14,7 +14,6 @@ import { AccountJson,
   SeedLengths,
   SigningRequest,
   SubscriptionMessageTypes } from '@polkadot/extension-base/background/types';
-import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 import { Message } from '@polkadot/extension-base/types';
 import chrome from '@polkadot/extension-inject/chrome';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
@@ -30,6 +29,7 @@ import { PolyMessageTypes,
   ProofingRequest,
   ProvideUidRequest,
   ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { PORTS } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount, NetworkName, NetworkState, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 
 interface Handler {
@@ -43,7 +43,7 @@ interface Handler {
 type Handlers = Record<string, Handler>;
 type CB = (isBusy: boolean) => void;
 
-const port = chrome.runtime.connect({ name: PORT_EXTENSION });
+const port = chrome.runtime.connect({ name: PORTS.EXTENSION });
 const handlers: Handlers = {};
 let idCounter = 0;
 
