@@ -151,7 +151,7 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
               <Text color='gray.1'
                 variant='b2m'>
                 You already have an existing uID assigned to the current Polymesh Account, accepting this uID will
-                overwrite the existing one. Do you like to accept?
+                overwrite the existing one. Would you like to accept?
               </Text>
             </Box>
             <Flex mb='s'
