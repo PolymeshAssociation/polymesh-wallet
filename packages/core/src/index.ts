@@ -17,7 +17,7 @@ import { subscribeDidsList, subscribeIsHydratedAndNetwork } from './store/subscr
 import { populatedDelay } from './constants';
 import store from './store';
 import { AccountData, KeyringAccountData, UnsubCallback } from './types';
-import { apiErrorHandler, observeAccounts } from './utils';
+import { accountBalances, apiErrorHandler, observeAccounts } from './utils';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
@@ -172,16 +172,12 @@ function subscribePolymesh (): () => Promise<void> {
                     [api.query.identity.keyToIdentityIds, account]
                   ], ([accData, linkedKeyInfo]: [AccountInfo, Option<LinkedKeyInfo>]) => {
                     // Store account metadata
-                    const { feeFrozen, free, miscFrozen } = accData.data;
-                    const total = new BigNumber(free.toString());
-                    const locked = BigNumber.max(feeFrozen.toString(), miscFrozen.toString());
-                    const available = new BigNumber(total).minus(locked);
+                    const { available, locked, total } = accountBalances(accData.data);
 
                     store.dispatch(accountActions.setAccount({ data: {
                       address: account,
-                      balance: available.toString(),
-                      lockedBalance: locked.toString(),
-                      name: accountName(account)
+                      name: accountName(account),
+                      balance: { total, available, locked }
                     },
                     network }));
 
