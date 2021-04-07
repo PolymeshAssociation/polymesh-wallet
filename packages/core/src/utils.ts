@@ -11,7 +11,7 @@ import { ErrorCodes, KeyringAccountData, NetworkName } from './types';
 // Sort an array by prioritizing a certain element
 export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
   return function (a: T, b: T): number {
-    return first !== undefined ? extractor(a) === first ? -1 : 1 : 0;
+    return first !== undefined ? (extractor(a) === first ? -1 : 1) : 0;
   };
 }
 
@@ -23,7 +23,8 @@ export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
   });
 }
 
-export const fatalErrorHandler = (error: Error): void => error && setError({ code: ErrorCodes.FatalError, msg: error.message });
+export const fatalErrorHandler = (error: Error): void =>
+  error && setError({ code: ErrorCodes.FatalError, msg: error.message });
 
 export const apiErrorHandler = (error: Error): void => {
   if (error && !!error.message && error.message.length) {
@@ -40,8 +41,7 @@ export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
   window.addEventListener('online', () => cb(true));
 }
 
-export const sleep = (ms: number):Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+export const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const allowedUidProvider = (url: string): boolean => {
   try {
@@ -61,16 +61,17 @@ export const allowedUidProvider = (url: string): boolean => {
 };
 
 export const validateTicker = (ticker: string): boolean => {
-  return !!ticker &&
+  return (
+    !!ticker &&
     typeof ticker === 'string' &&
     ticker.length > 0 &&
     ticker.length <= 12 &&
-    !!(/^[a-zA-Z0-9\-:]*$/.exec(ticker));
+    !!/^[a-zA-Z0-9\-:]*$/.exec(ticker)
+  );
 };
 
 export const validateNetwork = (network: string): boolean => {
-  return !!network &&
-    Object.keys(NetworkName).indexOf(network) > -1;
+  return !!network && Object.keys(NetworkName).indexOf(network) > -1;
 };
 
 export const validateDid = (did: string): boolean => {

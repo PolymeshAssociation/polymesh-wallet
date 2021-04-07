@@ -91,3 +91,8 @@ export const uidProvidersWhitelist = [
   'https://itn-polymesh.fractal.id',
   'https://staging.itn-polymesh.fractal.id'
 ];
+
+export const PORTS = {
+  EXTENSION: 'polywallet_extension',
+  CONTENT: 'polywallet_content'
+};
