@@ -18,8 +18,7 @@ export interface Props {
 }
 
 export const AccountView: FC<Props> = ({ account, isSelected }) => {
-  const { address, balance, did, keyType, lockedBalance, name } = account;
-  const totalBalance = new BigNumber(balance || 0).plus(lockedBalance || 0);
+  const { address, balance, did, keyType, name } = account;
 
   const { accounts } = useContext(AccountContext);
   const onAction = useContext(ActionContext);
@@ -210,9 +209,9 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             justifyContent='flex-end'>
             <Text color='gray.1'
               style={{ whiteSpace: 'nowrap' }}
-              title={balance && `${formatters.formatAmount(new BigNumber(balance), 2, true)} POLYX available to use`}
+              title={balance?.locked && `${formatters.formatAmount(new BigNumber(balance.locked), 2, true)} POLYX is unavailable to use`}
               variant='b3'>
-              {formatters.formatAmount(new BigNumber(totalBalance), 2, true)}{' '}
+              {formatters.formatAmount(new BigNumber(balance?.available || 0), 2, true)}{' '}
               POLYX
             </Text>
           </Flex>
