@@ -87,8 +87,8 @@ export const uidProvidersWhitelist = [
   'https://polymathnetwork.github.io',
   'https://itn-polymesh.fractal.id',
   'https://staging.itn-polymesh.fractal.id',
-  'https://tokenstudio.polymesh.live',
-  'https://dashboard.polymesh.live'
+  'https://alcyone-tokenstudio.polymesh.live',
+  'https://alcyone-dashboard.polymesh.live'
 ];
 
 export const PORTS = {
