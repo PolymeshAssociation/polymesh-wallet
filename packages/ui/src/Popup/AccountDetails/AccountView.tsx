@@ -183,7 +183,7 @@ export const AccountView: FC<Props> = ({ address,
               <Box>
                 <Text color='gray.1'
                   variant='b3'>
-                  {formatters.formatAmount(new BigNumber(selectedAccount?.balance || 0), 2, true)} POLYX
+                  {formatters.formatAmount(new BigNumber(selectedAccount?.balance?.transferrable || 0), 2, true)} POLYX
                 </Text>
               </Box>
             </Flex>

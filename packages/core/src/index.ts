@@ -1,7 +1,6 @@
 import { Option } from '@polkadot/types/codec';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
-import BigNumber from 'bignumber.js';
 import { union } from 'lodash-es';
 import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
