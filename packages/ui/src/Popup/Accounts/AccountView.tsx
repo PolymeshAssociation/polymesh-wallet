@@ -118,7 +118,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   const selectAccount = async () => {
-    if (address) {
+    if (address && !isEditing) {
       await setPolySelectedAccount(address);
       onAction();
     }
