@@ -16,6 +16,11 @@ const testnetTmp: Network = {
 };
 
 const testnets = [
+  // Alcyone
+  {
+    genesisHash: ['0x12fddc9e2128b3fe571e4e5427addcb87fcaf08493867a68dd6ae44b406b39c7'],
+    displayName: 'Polymesh - Development testnet'
+  },
   // PME
   {
     genesisHash: ['0x56fb854a431370af86de89a0003ca3eb500066ee66eb01a92810369b3dc435c3'],
