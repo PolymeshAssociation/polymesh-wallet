@@ -172,12 +172,12 @@ function subscribePolymesh (): () => Promise<void> {
                     [api.query.identity.keyToIdentityIds, account]
                   ], ([accData, linkedKeyInfo]: [AccountInfo, Option<LinkedKeyInfo>]) => {
                     // Store account metadata
-                    const { available, locked, total } = accountBalances(accData.data);
+                    const { locked, total, transferrable } = accountBalances(accData.data);
 
                     store.dispatch(accountActions.setAccount({ data: {
                       address: account,
                       name: accountName(account),
-                      balance: { total, available, locked }
+                      balance: { total, transferrable, locked }
                     },
                     network }));
 

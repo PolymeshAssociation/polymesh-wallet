@@ -13,7 +13,7 @@ export type AccountData = {
   name?: string;
   balance?: {
     total: string;
-    available: string;
+    transferrable: string;
     locked: string;
   };
 }
@@ -38,7 +38,7 @@ export type IdentifiedAccount = {
   didAlias: string;
   balance?: {
     total: string;
-    available: string;
+    transferrable: string;
     locked: string;
   };
 }

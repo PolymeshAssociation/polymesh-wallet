@@ -12,9 +12,9 @@ import { ErrorCodes, KeyringAccountData, NetworkName } from './types';
 
 type AccountBalances = {
   total: string;
-  available: string;
+  transferrable: string;
   locked: string;
-}
+};
 
 // Sort an array by prioritizing a certain element
 export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
@@ -106,8 +106,8 @@ export const accountBalances = ({ free, miscFrozen, reserved }: AccountData): Ac
   const reservedStr = reserved.toString();
 
   const total = new BigNumber(freeStr).plus(reservedStr).toString();
-  const available = new BigNumber(freeStr).minus(miscFrozenStr).toString();
+  const transferrable = new BigNumber(freeStr).minus(miscFrozenStr).toString();
   const locked = new BigNumber(reservedStr).plus(miscFrozenStr).toString();
 
-  return { total, available, locked };
+  return { total, transferrable, locked };
 };

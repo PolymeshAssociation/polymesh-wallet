@@ -211,7 +211,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               style={{ whiteSpace: 'nowrap' }}
               title={balance?.locked && `${formatters.formatAmount(new BigNumber(balance.locked), 2, true)} POLYX is unavailable to use`}
               variant='b3'>
-              {formatters.formatAmount(new BigNumber(balance?.available || 0), 2, true)}{' '}
+              {formatters.formatAmount(new BigNumber(balance?.transferrable || 0), 2, true)}{' '}
               POLYX
             </Text>
           </Flex>
