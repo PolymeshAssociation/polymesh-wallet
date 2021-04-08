@@ -2,19 +2,12 @@ import { AccountData } from '@polkadot/types/interfaces';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
-import BigNumber from 'bignumber.js';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
 import { getDids } from './store/getters';
 import { apiError, setError } from './store/setters';
 import { defaultSs58Format, uidProvidersWhitelist } from './constants';
-import { ErrorCodes, KeyringAccountData, NetworkName } from './types';
-
-type AccountBalances = {
-  total: string;
-  transferrable: string;
-  locked: string;
-};
+import { AccountBalances, ErrorCodes, KeyringAccountData, NetworkName } from './types';
 
 // Sort an array by prioritizing a certain element
 export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
@@ -101,13 +94,9 @@ export const recodeAddress = (address: string, ss58Format = defaultSs58Format): 
 };
 
 export const accountBalances = ({ free, miscFrozen, reserved }: AccountData): AccountBalances => {
-  const freeStr = free.toString();
-  const miscFrozenStr = miscFrozen.toString();
-  const reservedStr = reserved.toString();
-
-  const total = new BigNumber(freeStr).plus(reservedStr).toString();
-  const transferrable = new BigNumber(freeStr).minus(miscFrozenStr).toString();
-  const locked = new BigNumber(reservedStr).plus(miscFrozenStr).toString();
+  const total = free.add(reserved).toString();
+  const transferrable = free.sub(miscFrozen).toString();
+  const locked = reserved.add(miscFrozen).toString();
 
   return { total, transferrable, locked };
 };
