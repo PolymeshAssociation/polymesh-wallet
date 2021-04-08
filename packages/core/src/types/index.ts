@@ -7,15 +7,17 @@ export enum DidType {
   secondary = 'secondary'
 }
 
+export type AccountBalances = {
+  total: string;
+  transferrable: string;
+  locked: string;
+};
+
 export type AccountData = {
   address: string;
   didType?: DidType;
   name?: string;
-  balance?: {
-    total: string;
-    transferrable: string;
-    locked: string;
-  };
+  balance?: AccountBalances
 }
 
 export type IdentityData = {
