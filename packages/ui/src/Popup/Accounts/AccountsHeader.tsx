@@ -157,7 +157,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
           flexDirection='row'>
           <Heading color='gray.0'
             variant='h5'>
-            {formatters.formatAmount(new BigNumber(account?.balance?.available || 0), 2, true)}
+            {formatters.formatAmount(new BigNumber(account?.balance?.transferrable || 0), 2, true)}
           </Heading>
           <Box ml='s'>
             <Text color='gray.0'
