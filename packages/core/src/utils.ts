@@ -1,3 +1,4 @@
+import { AccountData } from '@polkadot/types/interfaces';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
@@ -6,7 +7,7 @@ import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 import { getDids } from './store/getters';
 import { apiError, setError } from './store/setters';
 import { defaultSs58Format, uidProvidersWhitelist } from './constants';
-import { ErrorCodes, KeyringAccountData, NetworkName } from './types';
+import { AccountBalances, ErrorCodes, KeyringAccountData, NetworkName } from './types';
 
 // Sort an array by prioritizing a certain element
 export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
@@ -90,4 +91,12 @@ export const validateUid = (uid: string): boolean => {
 
 export const recodeAddress = (address: string, ss58Format = defaultSs58Format): string => {
   return encodeAddress(decodeAddress(address), ss58Format);
+};
+
+export const accountBalances = ({ free, miscFrozen, reserved }: AccountData): AccountBalances => {
+  const total = free.add(reserved).toString();
+  const transferrable = free.sub(miscFrozen).toString();
+  const locked = reserved.add(miscFrozen).toString();
+
+  return { total, transferrable, locked };
 };
