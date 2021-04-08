@@ -109,7 +109,13 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
         return null;
       }
 
-      return retrieveLedger(genesis);
+      try {
+        const ledger = retrieveLedger(genesis);
+
+        return ledger;
+      } catch (error) {
+        setError((error as Error).message);
+      }
     }
 
     return null;
