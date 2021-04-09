@@ -7,11 +7,17 @@ export enum DidType {
   secondary = 'secondary'
 }
 
+export type AccountBalances = {
+  total: string;
+  transferrable: string;
+  locked: string;
+};
+
 export type AccountData = {
   address: string;
   didType?: DidType;
-  balance?: string;
   name?: string;
+  balance?: AccountBalances
 }
 
 export type IdentityData = {
@@ -32,7 +38,11 @@ export type IdentifiedAccount = {
   address: string;
   didType?: DidType;
   didAlias: string;
-  balance?: string;
+  balance?: {
+    total: string;
+    transferrable: string;
+    locked: string;
+  };
 }
 
 export type UnsubCallback = () => void;

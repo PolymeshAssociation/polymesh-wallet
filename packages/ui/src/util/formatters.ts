@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 /**
  * Shortens an address for display purposes
  */
-export const toShortAddress = (address: string, { size = 17 }: { size?: number } = {}) => {
+export const toShortAddress = (address: string, { size = 17 }: { size?: number } = {}): string => {
   const minSize = 10;
 
   if (address.length <= minSize || address.length <= size) {
@@ -16,7 +16,7 @@ export const toShortAddress = (address: string, { size = 17 }: { size?: number }
   return `${address.substring(0, portionSize + remainder)}...${address.slice(-portionSize)}`;
 };
 
-export const formatAmount = (amount: BigNumber, minimumFractionDigits = 0, scaleDown = false) => {
+export const formatAmount = (amount: BigNumber, minimumFractionDigits = 0, scaleDown = false): string => {
   const formattter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits
   });

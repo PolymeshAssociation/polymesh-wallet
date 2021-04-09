@@ -1,17 +1,18 @@
+import { AccountData } from '@polkadot/types/interfaces';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
-import { getDids } from './store/getters';
+import { getDids, getNetwork } from './store/getters';
 import { apiError, setError } from './store/setters';
 import { defaultSs58Format, uidProvidersWhitelist } from './constants';
-import { ErrorCodes, KeyringAccountData, NetworkName } from './types';
+import { AccountBalances, ErrorCodes, KeyringAccountData, NetworkName } from './types';
 
 // Sort an array by prioritizing a certain element
 export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
   return function (a: T, b: T): number {
-    return first !== undefined ? extractor(a) === first ? -1 : 1 : 0;
+    return first !== undefined ? (extractor(a) === first ? -1 : 1) : 0;
   };
 }
 
@@ -23,7 +24,8 @@ export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
   });
 }
 
-export const fatalErrorHandler = (error: Error): void => error && setError({ code: ErrorCodes.FatalError, msg: error.message });
+export const fatalErrorHandler = (error: Error): void =>
+  error && setError({ code: ErrorCodes.FatalError, msg: error.message });
 
 export const apiErrorHandler = (error: Error): void => {
   if (error && !!error.message && error.message.length) {
@@ -40,8 +42,7 @@ export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
   window.addEventListener('online', () => cb(true));
 }
 
-export const sleep = (ms: number):Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+export const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const allowedUidProvider = (url: string): boolean => {
   try {
@@ -61,16 +62,23 @@ export const allowedUidProvider = (url: string): boolean => {
 };
 
 export const validateTicker = (ticker: string): boolean => {
-  return !!ticker &&
+  return (
+    !!ticker &&
     typeof ticker === 'string' &&
     ticker.length > 0 &&
     ticker.length <= 12 &&
-    !!(/^[a-zA-Z0-9\-:]*$/.exec(ticker));
+    !!/^[a-zA-Z0-9\-:]*$/.exec(ticker)
+  );
 };
 
 export const validateNetwork = (network: string): boolean => {
-  return !!network &&
-    Object.keys(NetworkName).indexOf(network) > -1;
+  return !!network && Object.keys(NetworkName).indexOf(network) > -1;
+};
+
+export const validateSelectedNetwork = (network: NetworkName): boolean => {
+  const selectedNetwork = getNetwork();
+
+  return network === selectedNetwork;
 };
 
 export const validateDid = (did: string): boolean => {
@@ -89,4 +97,12 @@ export const validateUid = (uid: string): boolean => {
 
 export const recodeAddress = (address: string, ss58Format = defaultSs58Format): string => {
   return encodeAddress(decodeAddress(address), ss58Format);
+};
+
+export const accountBalances = ({ free, miscFrozen, reserved }: AccountData): AccountBalances => {
+  const total = free.add(reserved).toString();
+  const transferrable = free.sub(miscFrozen).toString();
+  const locked = reserved.add(miscFrozen).toString();
+
+  return { total, transferrable, locked };
 };

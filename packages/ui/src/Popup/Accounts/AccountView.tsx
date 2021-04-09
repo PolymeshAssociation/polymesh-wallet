@@ -118,7 +118,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   const selectAccount = async () => {
-    if (address) {
+    if (address && !isEditing) {
       await setPolySelectedAccount(address);
       onAction();
     }
@@ -209,8 +209,9 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             justifyContent='flex-end'>
             <Text color='gray.1'
               style={{ whiteSpace: 'nowrap' }}
+              title={balance?.locked && `${formatters.formatAmount(new BigNumber(balance.locked), 2, true)} POLYX is unavailable to use`}
               variant='b3'>
-              {formatters.formatAmount(new BigNumber(balance || 0), 2, true)}{' '}
+              {formatters.formatAmount(new BigNumber(balance?.transferrable || 0), 2, true)}{' '}
               POLYX
             </Text>
           </Flex>
@@ -316,31 +317,30 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <Box
         bg={hover ? 'gray.5' : 'gray.0'}
         mt='s'
+        onClick={selectAccount}
         onMouseEnter={mouseEnter}
         onMouseLeave={mouseLeave}
         px='s'
+        style={{ cursor: 'pointer' }}
       >
         <AccountViewGrid>
-          <Box onClick={selectAccount}
-            style={{ cursor: 'pointer' }}>
-            <Flex height='100%'>
-              <Box
-                backgroundColor='brandLightest'
-                borderRadius='50%'
-                height={32}
-                px='2'
-                width={32}
-              >
-                <Flex justifyContent='center'
-                  pt='xxs'>
-                  <Text color='brandMain'
-                    variant='b2m'>
-                    {name?.substr(0, 1)}
-                  </Text>
-                </Flex>
-              </Box>
-            </Flex>
-          </Box>
+          <Flex height='100%'>
+            <Box
+              backgroundColor='brandLightest'
+              borderRadius='50%'
+              height={32}
+              px='2'
+              width={32}
+            >
+              <Flex justifyContent='center'
+                pt='xxs'>
+                <Text color='brandMain'
+                  variant='b2m'>
+                  {name?.substr(0, 1)}
+                </Text>
+              </Flex>
+            </Box>
+          </Flex>
           <Box>
             {(!hover || did) && renderAccountInfo()}
             {hover && !did && renderHoverAccountInfo()}

@@ -9,10 +9,10 @@ export const networkURLs: Record<NetworkName, string> = {
 };
 
 export const networkLabels: Record<NetworkName, string> = {
+  itn: 'ITN',
   alcyone: 'Alcyone Testnet',
   pmf: 'PMF',
   pme: 'PME',
-  itn: 'PMI',
   local: 'Local node'
 };
 
@@ -21,7 +21,7 @@ export const networkIsDev: Record<NetworkName, boolean> = {
   pmf: true,
   pme: true,
   local: true,
-  itn: true
+  itn: false
 };
 
 export const dynamicSchemaEnabled: Record <NetworkName, boolean> = {
@@ -29,12 +29,12 @@ export const dynamicSchemaEnabled: Record <NetworkName, boolean> = {
   pmf: true,
   pme: true,
   local: false,
-  itn: false
+  itn: true
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   alcyone: {
-    dashboard: 'http://dashboard.polymesh.live/',
+    dashboard: 'https://alcyone-dashboard.polymesh.live/',
     explorer: 'http://18.223.97.65/'
   },
   pmf: {
@@ -50,20 +50,17 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
     explorer: 'unknown'
   },
   itn: {
-    dashboard: 'unknown',
+    dashboard: 'https://itn-dashboard.polymesh.live/',
     explorer: 'https://itn-app.polymesh.live/#/explorer'
   }
 };
 
-export const defaultNetwork: NetworkName = NetworkName.alcyone;
+export const defaultNetwork: NetworkName = NetworkName.itn;
 
 export const messagePrefix = 'poly:';
 
-// @TODO switch to ITN hash when launched
-// 0x9deeb940c92ae02111c3bd5baca89970384f4c9849f02a1b2e53e66414d30f9f
-
-// Alcyone genesis hash.
-export const genesisHash = '0x12fddc9e2128b3fe571e4e5427addcb87fcaf08493867a68dd6ae44b406b39c7';
+// ITN genesis hash.
+export const genesisHash = '0x9deeb940c92ae02111c3bd5baca89970384f4c9849f02a1b2e53e66414d30f9f';
 
 export const messages = [
   'pub(accounts.list)',
@@ -89,5 +86,12 @@ export const defaultNetworkState: NetworkState = {
 export const uidProvidersWhitelist = [
   'https://polymathnetwork.github.io',
   'https://itn-polymesh.fractal.id',
-  'https://staging.itn-polymesh.fractal.id'
+  'https://staging.itn-polymesh.fractal.id',
+  'https://alcyone-tokenstudio.polymesh.live',
+  'https://alcyone-dashboard.polymesh.live'
 ];
+
+export const PORTS = {
+  EXTENSION: 'polywallet_extension',
+  CONTENT: 'polywallet_content'
+};

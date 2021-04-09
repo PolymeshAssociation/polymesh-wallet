@@ -5,7 +5,7 @@ import { base64Decode, decodeAddress, encodeAddress } from '@polkadot/util-crypt
 
 function verifyJsonPassword (json: KeyringPair$Json, password: string): boolean {
   try {
-    const cryptoType = Array.isArray(json.encoding.content) ? json.encoding.content[1] : 'ed25519';
+    const cryptoType = (Array.isArray(json.encoding.content) ? json.encoding.content[1] : 'ed25519');
     const encType = Array.isArray(json.encoding.type) ? json.encoding.type : [json.encoding.type];
     const pair = createPair(
       { toSS58: encodeAddress, type: cryptoType },
