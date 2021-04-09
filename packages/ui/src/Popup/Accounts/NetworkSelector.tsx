@@ -1,10 +1,11 @@
-import { networkLabels } from '@polymathnetwork/extension-core/constants';
+import { networkIsDev, networkLabels } from '@polymathnetwork/extension-core/constants';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { setPolyNetwork } from '@polymathnetwork/extension-ui/messaging';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Icon, Text } from '@polymathnetwork/extension-ui/ui';
-import React from 'react';
+import React, { useContext } from 'react';
 
 type NetworkSelectorProps = {
   network: NetworkName;
@@ -20,20 +21,22 @@ const networkColors: Record<NetworkName, { bg: string, fg: string }> = {
     fg: '#E3A30C'
   },
   pmf: {
-    bg: 'lightgray',
-    fg: 'darkgray'
+    bg: '#EBF0F7',
+    fg: '#8C9BA5'
   },
   pme: {
-    bg: 'lightgray',
-    fg: 'darkgray'
+    bg: '#EBF0F7',
+    fg: '#8C9BA5'
   },
   local: {
-    bg: 'lightgray',
-    fg: 'darkgray'
+    bg: '#EBF0F7',
+    fg: '#8C9BA5'
   }
 };
 
 export function NetworkSelector ({ network }: NetworkSelectorProps): React.ReactElement {
+  const { networkState: { isDeveloper } } = useContext(PolymeshContext);
+
   const bg = networkColors[network].bg;
   const fg = networkColors[network].fg;
   const bg2 = `${fg}40`; // background color with 0.25 opacity, using 8 digit hex code
@@ -64,18 +67,30 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
         </DropdownIcon>
       </NetworkSelect>
 
-      <NetworkDropdown borderRadius='8px'>
-        <Text variant='b2m'>Networks</Text>
-        <ul>
-          {Object.entries(networkLabels).map(([key, label]) => {
+      <NetworkDropdown borderRadius='8px'
+        width='296px'>
+        <Box mx='16px'
+          my='8px'>
+          <Text color='gray.2'
+            variant='b2m'>
+              Networks
+          </Text>
+        </Box>
+        {Object.entries(networkLabels)
+          .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
+          .map(([_network, networkLabel]) => {
             return (
-              <li key={key}
-                onClick={() => changeNetwork(key as NetworkName)}>
-                {label}
-              </li>
+              <Box className='network-item'
+                key={_network}
+                onClick={() => changeNetwork(_network as NetworkName)}
+                px='16px'
+                py='8px'>
+                <Text variant='b2m'>
+                  {networkLabel}
+                </Text>
+              </Box>
             );
           })}
-        </ul>
       </NetworkDropdown>
     </Wrapper>
   );
@@ -116,16 +131,16 @@ const NetworkCircle = styled.div<{ color: string; }>`
 const NetworkDropdown = styled(Box)`
   position: absolute;
   background: white;
+  box-shadow: ${(props) => props.theme.shadows[1]};
   top: calc(100% + 4px);
   left: 0;
+  z-index: 1;
 
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
+  .network-item {
+    cursor: pointer;
 
-    li {
-      cursor: pointer;
+    &:hover {
+      background: ${(props) => props.theme.colors.gray[5]};
     }
   }
 `;
