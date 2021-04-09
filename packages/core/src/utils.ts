@@ -4,7 +4,7 @@ import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
-import { getDids } from './store/getters';
+import { getDids, getNetwork } from './store/getters';
 import { apiError, setError } from './store/setters';
 import { defaultSs58Format, uidProvidersWhitelist } from './constants';
 import { AccountBalances, ErrorCodes, KeyringAccountData, NetworkName } from './types';
@@ -73,6 +73,12 @@ export const validateTicker = (ticker: string): boolean => {
 
 export const validateNetwork = (network: string): boolean => {
   return !!network && Object.keys(NetworkName).indexOf(network) > -1;
+};
+
+export const validateSelectedNetwork = (network: NetworkName): boolean => {
+  const selectedNetwork = getNetwork();
+
+  return network === selectedNetwork;
 };
 
 export const validateDid = (did: string): boolean => {
