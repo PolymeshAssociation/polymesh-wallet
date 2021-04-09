@@ -7,32 +7,32 @@ import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
+const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[], foreground: string }> = {
+  itn: {
+    backgrounds: ['#F2E6FF', '#F2E6FF40'],
+    foreground: '#4D0198'
+  },
+  alcyone: {
+    backgrounds: ['#FBF3D0', '#FBF3D040'],
+    foreground: '#E3A30C'
+  },
+  pmf: {
+    backgrounds: ['#DCEFFE', '#DCEFFE40'],
+    foreground: '#1348E4'
+  },
+  pme: {
+    backgrounds: ['#DCEFFE', '#DCEFFE40'],
+    foreground: '#1348E4'
+  },
+  local: {
+    backgrounds: ['#DCEFFE', '#DCEFFE40'],
+    foreground: '#1348E4'
+  }
+};
+
 type NetworkSelectorProps = {
   network: NetworkName;
 }
-
-const networkColors: Record<NetworkName, { bg: string, fg: string }> = {
-  itn: {
-    bg: '#F2E6FF',
-    fg: '#4D0198'
-  },
-  alcyone: {
-    bg: '#FBF3D0',
-    fg: '#E3A30C'
-  },
-  pmf: {
-    bg: '#DCEFFE',
-    fg: '#1348E4'
-  },
-  pme: {
-    bg: '#DCEFFE',
-    fg: '#1348E4'
-  },
-  local: {
-    bg: '#DCEFFE',
-    fg: '#1348E4'
-  }
-};
 
 export function NetworkSelector ({ network }: NetworkSelectorProps): React.ReactElement {
   const { networkState: { isDeveloper, selected } } = useContext(PolymeshContext);
@@ -41,9 +41,8 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const bg = networkColors[network].bg;
-  const fg = networkColors[network].fg;
-  const bg2 = `${fg}40`; // background color with 0.25 opacity, using 8 digit hex code
+  const [background, backgroundLight] = NETWORK_COLORS[network].backgrounds;
+  const foreground = NETWORK_COLORS[network].foreground;
 
   const changeNetwork = async (networkKey: NetworkName) => {
     if (!!networkKey && networkKey !== network) {
@@ -76,20 +75,20 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
 
   return (
     <Wrapper>
-      <NetworkSelect bg={bg}
+      <NetworkSelect background={background}
         onClick={showDropdown}>
-        <NetworkCircle bg={bg}
-          color={fg} />
+        <NetworkCircle background={background}
+          color={foreground} />
         <Box ml='4px'
           mr='7px'>
-          <Text color={fg}
+          <Text color={foreground}
             variant='b3m'>
             {networkLabels[network]}
           </Text>
         </Box>
-        <DropdownIcon bg={bg2}>
+        <DropdownIcon background={backgroundLight}>
           <Icon Asset={SvgChevron}
-            color={fg}
+            color={foreground}
             rotate='180deg' />
         </DropdownIcon>
       </NetworkSelect>
@@ -114,8 +113,8 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
                   onClick={() => changeNetwork(_network as NetworkName)}
                   px='16px'
                   py='8px'>
-                  <NetworkCircle bg={networkColors[_network as NetworkName].bg}
-                    color={networkColors[_network as NetworkName].fg}
+                  <NetworkCircle background={NETWORK_COLORS[_network as NetworkName].backgrounds[0]}
+                    color={NETWORK_COLORS[_network as NetworkName].foreground}
                     size='24px'
                     thickness='4px'/>
                   <Box ml='8px'
@@ -145,31 +144,31 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const NetworkSelect = styled.div<{ bg: string; }>`
+const NetworkSelect = styled.div<{ background: string; }>`
   display: flex;
   align-items: center;
   height: 24px;
   border-radius: 24px;
   padding: 0 3px 0 6px;
-  background: ${(props) => props.bg};
+  background: ${(props) => props.background};
   cursor: pointer;
 `;
 
-const DropdownIcon = styled.div<{ bg: string; }>`
+const DropdownIcon = styled.div<{ background: string; }>`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background-color: ${(props) => props.bg};
+  background-color: ${(props) => props.background};
 `;
 
-const NetworkCircle = styled.span<{ bg: string; color: string; size?: string; thickness?: string; }>`
+const NetworkCircle = styled.span<{ background: string; color: string; size?: string; thickness?: string; }>`
   display: inline-box;
   width: ${(props) => props.size || '12px'};
   height: ${(props) => props.size || '12px'};
-  background: ${(props) => props.bg};
+  background: ${(props) => props.background};
   box-sizing: border-box;
   border: ${(props) => props.thickness || '2px'} solid ${(props) => props.color};
   border-radius: 50%;
