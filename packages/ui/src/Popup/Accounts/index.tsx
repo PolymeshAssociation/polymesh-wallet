@@ -1,4 +1,4 @@
-import { defaultNetwork, networkIsDev, networkLabels, networkLinks } from '@polymathnetwork/extension-core/constants';
+import { networkIsDev, networkLabels, networkLinks } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgDotsVertical,
   SvgPlus, SvgViewDashboard } from '@polymathnetwork/extension-ui/assets/images/icons';
@@ -11,10 +11,11 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { AccountContext, PolymeshContext } from '../../components';
-import { Box, Checkbox, ContextMenuTrigger, Flex, GrowingButton, Header, Icon, Menu, MenuItem, StatusBadge, Text } from '../../ui';
+import { Checkbox, ContextMenuTrigger, Flex, GrowingButton, Header, Icon, Menu, MenuItem, Text } from '../../ui';
 import { AccountsContainer } from './AccountsContainer';
 import { AccountsHeader } from './AccountsHeader';
 import AddAccount from './AddAccount';
+import { NetworkSelector } from './NetworkSelector';
 
 const jsonPath = '/account/restore-json';
 const ledgerPath = '/account/import-ledger';
@@ -36,17 +37,6 @@ export default function Accounts (): React.ReactElement {
     []
   );
 
-  const renderNetworksSelector = (network: NetworkName = defaultNetwork) => {
-    return (
-      <ContextMenuTrigger id='network_select'
-        mouseButton={0}>
-        <Box style={{ cursor: 'pointer' }}>
-          <StatusBadge variant='yellow'>{networkLabels[network]}</StatusBadge>
-        </Box>
-      </ContextMenuTrigger>
-    );
-  };
-
   const renderNetworkDropdown = () => {
     return (
       <>
@@ -61,7 +51,7 @@ export default function Accounts (): React.ReactElement {
                       key={index}
                       onClick={handleNetworkChange}>
                       <Text color='gray.2'
-                        variant='b1'>{networkLabels[_network as NetworkName]}</Text>
+                        variant='b1'>{networkLabels[_network as NetworkName]}!</Text>
                     </MenuItem>
                   </Fragment>
                 );
@@ -239,7 +229,7 @@ export default function Accounts (): React.ReactElement {
                 flexDirection='row'
                 justifyContent='space-between'
                 mb='m'>
-                {renderNetworksSelector(network)}
+                <NetworkSelector network={network} />
                 <Flex flexDirection='row'
                   justifyContent='center'>
                   <GrowingButton icon={SvgViewDashboard}
