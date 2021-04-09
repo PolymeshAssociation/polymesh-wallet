@@ -1,6 +1,6 @@
 {
   "name": "polymesh-wallet",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "description": "A Wallet extension for Polymesh blockchain",
   "private": true,
   "workspaces": [

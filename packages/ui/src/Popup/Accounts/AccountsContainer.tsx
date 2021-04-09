@@ -59,7 +59,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
             <Flex py='xxs'>
               <TextInput defaultValue={currentAccount?.didAlias}
                 onChange={handleAliasChange}
-                placeholder='Your Polymesh ID'
+                placeholder='Your Polymesh Account'
                 tight
                 value={newAlias} />
               <Icon Asset={SvgCheck}

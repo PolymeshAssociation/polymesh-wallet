@@ -1,4 +1,4 @@
-import { defaultNetwork, networkIsDev, networkLabels, networkLinks } from '@polymathnetwork/extension-core/constants';
+import { networkLinks } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgDotsVertical,
   SvgPlus, SvgViewDashboard } from '@polymathnetwork/extension-ui/assets/images/icons';
@@ -6,15 +6,16 @@ import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { setPolyNetwork, togglePolyIsDev, windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
-import React, { Fragment, useCallback, useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { AccountContext, PolymeshContext } from '../../components';
-import { Box, Checkbox, ContextMenuTrigger, Flex, GrowingButton, Header, Icon, Menu, MenuItem, StatusBadge, Text } from '../../ui';
+import { Checkbox, ContextMenuTrigger, Flex, GrowingButton, Header, Icon, Menu, MenuItem, Text } from '../../ui';
 import { AccountsContainer } from './AccountsContainer';
 import { AccountsHeader } from './AccountsHeader';
 import AddAccount from './AddAccount';
+import { NetworkSelector } from './NetworkSelector';
 
 const jsonPath = '/account/restore-json';
 const ledgerPath = '/account/import-ledger';
@@ -36,50 +37,8 @@ export default function Accounts (): React.ReactElement {
     []
   );
 
-  const renderNetworksSelector = (network: NetworkName = defaultNetwork) => {
-    return (
-      <ContextMenuTrigger id='network_select'
-        mouseButton={0}>
-        <Box style={{ cursor: 'pointer' }}>
-          <StatusBadge variant='yellow'>{networkLabels[network]}</StatusBadge>
-        </Box>
-      </ContextMenuTrigger>
-    );
-  };
-
-  const renderNetworkDropdown = () => {
-    return (
-      <>
-        <Menu id='network_select'>
-          {
-            Object.keys(networkLabels)
-              .filter((_network) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
-              .map((_network, index) => {
-                return (
-                  <Fragment key={index}>
-                    <MenuItem data={{ networkKey: _network }}
-                      key={index}
-                      onClick={handleNetworkChange}>
-                      <Text color='gray.2'
-                        variant='b1'>{networkLabels[_network as NetworkName]}</Text>
-                    </MenuItem>
-                  </Fragment>
-                );
-              })
-          }
-        </Menu>
-      </>
-    );
-  };
-
   const getNetworkDashboardLink = () => {
     return networkLinks[network].dashboard;
-  };
-
-  const handleNetworkChange = async (event: string, data: {networkKey: NetworkName}) => {
-    if (!!data.networkKey && data.networkKey !== network) {
-      await setPolyNetwork(data.networkKey);
-    }
   };
 
   const groupAccounts = () => (array:IdentifiedAccount[]) =>
@@ -90,6 +49,12 @@ export default function Accounts (): React.ReactElement {
 
       return groupedAccounts;
     }, {});
+
+  const setNetwork = async (_network: NetworkName) => {
+    if (_network !== network) {
+      await setPolyNetwork(_network);
+    }
+  };
 
   const groupedAccounts = polymeshAccounts ? groupAccounts()(polymeshAccounts) : {};
 
@@ -120,23 +85,27 @@ export default function Accounts (): React.ReactElement {
           </MenuItem>
 
           {
-            isLedgerEnabled
-              ? <MenuItem
-                disabled={!isLedgerCapable}
-                onClick={
-                  () => history.push('/account/import-ledger')
-                }>
-                <Text color='gray.2'
-                  variant='b1'>{
-                    !isLedgerCapable ? 'Ledger devices can only be connected with Chrome browser' : 'Attach ledger account'
-                  }</Text>
-              </MenuItem>
+            // @TODO to be re-enabled once Polymesh Ledger app is released.
+            false && (
+              isLedgerEnabled
+                ? <MenuItem
+                  disabled={!isLedgerCapable}
+                  onClick={
+                    () => history.push('/account/import-ledger')
+                  }>
+                  <Text color='gray.2'
+                    variant='b1'>{
+                      !isLedgerCapable ? 'Ledger devices can only be connected with Chrome browser' : 'Attach ledger account'
+                    }</Text>
+                </MenuItem>
 
-              : <MenuItem
-                onClick={_onOpenLedgerConnect}>
-                <Text color='gray.2'
-                  variant='b1'>{'Connect Ledger device'}</Text>
-              </MenuItem>
+                : <MenuItem
+                  onClick={_onOpenLedgerConnect}>
+                  <Text color='gray.2'
+                    variant='b1'>{'Connect Ledger device'}</Text>
+                </MenuItem>
+
+            )
           }
 
         </Menu>
@@ -169,7 +138,6 @@ export default function Accounts (): React.ReactElement {
   const renderTopMenuButton = () => {
     return (
       <>
-        {/* @ts-ignore */}
         <ContextMenuTrigger id='top_menu'
           mouseButton={0}>
           <Icon Asset={SvgDotsVertical}
@@ -223,7 +191,6 @@ export default function Accounts (): React.ReactElement {
     <>
       {renderTopMenu()}
       {renderAccountMenuItems()}
-      {renderNetworkDropdown()}
       {hierarchy.length === 0
         ? (
           <AddAccount />
@@ -235,7 +202,8 @@ export default function Accounts (): React.ReactElement {
                 flexDirection='row'
                 justifyContent='space-between'
                 mb='m'>
-                {renderNetworksSelector(network)}
+                <NetworkSelector currentNetwork={network}
+                  onSelect={setNetwork} />
                 <Flex flexDirection='row'
                   justifyContent='center'>
                   <GrowingButton icon={SvgViewDashboard}

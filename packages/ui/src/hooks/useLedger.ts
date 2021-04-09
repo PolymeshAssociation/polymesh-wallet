@@ -4,7 +4,7 @@ import uiSettings from '@polkadot/ui-settings';
 import { assert } from '@polkadot/util';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import ledgerChains from '../util/legerChains';
+import ledgerChains from '../util/ledgerChains';
 
 interface StateBase {
   isLedgerCapable: boolean;
@@ -109,7 +109,13 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
         return null;
       }
 
-      return retrieveLedger(genesis);
+      try {
+        const ledger = retrieveLedger(genesis);
+
+        return ledger;
+      } catch (error) {
+        setError((error as Error).message);
+      }
     }
 
     return null;

@@ -1,12 +1,13 @@
 import { handleResponse } from '@polkadot/extension-base/page';
 import { Message } from '@polkadot/extension-base/types';
 import { injectExtension } from '@polkadot/extension-inject';
+import { PORTS } from '@polymathnetwork/extension-core/constants';
 import { enable } from '@polymathnetwork/extension-core/page';
 
 // setup a response listener (events created by the loader for extension responses)
 window.addEventListener('message', ({ data, source }: Message): void => {
   // only allow messages from our window, by the loader
-  if (source !== window || data.origin !== 'content') {
+  if (source !== window || data.origin !== PORTS.CONTENT) {
     return;
   }
 
