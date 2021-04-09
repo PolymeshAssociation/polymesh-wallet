@@ -1,10 +1,10 @@
 import { networkIsDev, networkLabels } from '@polymathnetwork/extension-core/constants';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
-import { SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgCheck, SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { setPolyNetwork } from '@polymathnetwork/extension-ui/messaging';
 import { styled } from '@polymathnetwork/extension-ui/styles';
-import { Box, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useContext } from 'react';
 
 type NetworkSelectorProps = {
@@ -35,7 +35,7 @@ const networkColors: Record<NetworkName, { bg: string, fg: string }> = {
 };
 
 export function NetworkSelector ({ network }: NetworkSelectorProps): React.ReactElement {
-  const { networkState: { isDeveloper } } = useContext(PolymeshContext);
+  const { networkState: { isDeveloper, selected } } = useContext(PolymeshContext);
 
   const bg = networkColors[network].bg;
   const fg = networkColors[network].fg;
@@ -68,9 +68,9 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
       </NetworkSelect>
 
       <NetworkDropdown borderRadius='8px'
+        py='8px'
         width='296px'>
-        <Box mx='16px'
-          my='8px'>
+        <Box mx='16px'>
           <Text color='gray.2'
             variant='b2m'>
               Networks
@@ -80,15 +80,30 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
           .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
           .map(([_network, networkLabel]) => {
             return (
-              <Box className='network-item'
+              <Flex className='network-item'
                 key={_network}
                 onClick={() => changeNetwork(_network as NetworkName)}
                 px='16px'
                 py='8px'>
-                <Text variant='b2m'>
-                  {networkLabel}
-                </Text>
-              </Box>
+                <NetworkCircle color={networkColors[_network as NetworkName].fg}
+                  size='24px'
+                  thickness='4px'/>
+                <Box ml='8px'
+                  mr='auto'>
+                  <Text variant='b2m'>
+                    {networkLabel}
+                  </Text>
+                </Box>
+
+                {selected === _network &&
+                  <Icon
+                    Asset={SvgCheck}
+                    color='brandMain'
+                    height={24}
+                    width={24}
+                  />
+                }
+              </Flex>
             );
           })}
       </NetworkDropdown>
@@ -120,11 +135,12 @@ const DropdownIcon = styled.div<{ bg: string; }>`
   background-color: ${(props) => props.bg};
 `;
 
-const NetworkCircle = styled.div<{ color: string; }>`
-  width: 12px;
-  height: 12px;
+const NetworkCircle = styled.span<{ color: string; size?: string; thickness?: string; }>`
+  display: inline-box;
+  width: ${(props) => props.size || '12px'};
+  height: ${(props) => props.size || '12px'};
   box-sizing: border-box;
-  border: 2px solid ${(props) => props.color};
+  border: ${(props) => props.thickness || '2px'} solid ${(props) => props.color};
   border-radius: 50%;
 `;
 
@@ -138,6 +154,7 @@ const NetworkDropdown = styled(Box)`
 
   .network-item {
     cursor: pointer;
+    border-radius: 8px;
 
     &:hover {
       background: ${(props) => props.theme.colors.gray[5]};
