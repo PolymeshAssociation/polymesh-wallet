@@ -5,7 +5,7 @@ import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { setPolyNetwork } from '@polymathnetwork/extension-ui/messaging';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 type NetworkSelectorProps = {
   network: NetworkName;
@@ -39,6 +39,8 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
 
   const [isDropdownShowing, setIsDropdownShowing] = useState(false);
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const bg = networkColors[network].bg;
   const fg = networkColors[network].fg;
   const bg2 = `${fg}40`; // background color with 0.25 opacity, using 8 digit hex code
@@ -52,6 +54,25 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
   const showDropdown = () => {
     setIsDropdownShowing(true);
   };
+
+  const handleClick = (event: MouseEvent) => {
+    const hasClickedOutside = !dropdownRef.current?.contains(event.target as Node);
+
+    if (hasClickedOutside) {
+      setIsDropdownShowing(false);
+    }
+  };
+
+  // Toggle click listener to close dropdown when clicked outside of dropdown
+  useEffect(() => {
+    if (isDropdownShowing) {
+      document.addEventListener('mousedown', handleClick);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+    };
+  }, [isDropdownShowing]);
 
   return (
     <Wrapper>
@@ -76,6 +97,7 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
       {isDropdownShowing &&
         <NetworkDropdown borderRadius='8px'
           py='8px'
+          ref={dropdownRef}
           width='296px'>
           <Box mx='16px'>
             <Text color='gray.2'
