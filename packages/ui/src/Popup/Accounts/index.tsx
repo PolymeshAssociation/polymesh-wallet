@@ -1,12 +1,12 @@
-import { networkIsDev, networkLabels, networkLinks } from '@polymathnetwork/extension-core/constants';
-import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
+import { networkLinks } from '@polymathnetwork/extension-core/constants';
+import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { SvgDotsVertical,
   SvgPlus, SvgViewDashboard } from '@polymathnetwork/extension-ui/assets/images/icons';
 import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
-import { setPolyNetwork, togglePolyIsDev, windowOpen } from '@polymathnetwork/extension-ui/messaging';
+import { togglePolyIsDev, windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
-import React, { Fragment, useCallback, useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
@@ -37,39 +37,8 @@ export default function Accounts (): React.ReactElement {
     []
   );
 
-  const renderNetworkDropdown = () => {
-    return (
-      <>
-        <Menu id='network_select'>
-          {
-            Object.keys(networkLabels)
-              .filter((_network) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
-              .map((_network, index) => {
-                return (
-                  <Fragment key={index}>
-                    <MenuItem data={{ networkKey: _network }}
-                      key={index}
-                      onClick={handleNetworkChange}>
-                      <Text color='gray.2'
-                        variant='b1'>{networkLabels[_network as NetworkName]}!</Text>
-                    </MenuItem>
-                  </Fragment>
-                );
-              })
-          }
-        </Menu>
-      </>
-    );
-  };
-
   const getNetworkDashboardLink = () => {
     return networkLinks[network].dashboard;
-  };
-
-  const handleNetworkChange = async (event: string, data: {networkKey: NetworkName}) => {
-    if (!!data.networkKey && data.networkKey !== network) {
-      await setPolyNetwork(data.networkKey);
-    }
   };
 
   const groupAccounts = () => (array:IdentifiedAccount[]) =>
@@ -163,7 +132,6 @@ export default function Accounts (): React.ReactElement {
   const renderTopMenuButton = () => {
     return (
       <>
-        {/* @ts-ignore */}
         <ContextMenuTrigger id='top_menu'
           mouseButton={0}>
           <Icon Asset={SvgDotsVertical}
@@ -217,7 +185,6 @@ export default function Accounts (): React.ReactElement {
     <>
       {renderTopMenu()}
       {renderAccountMenuItems()}
-      {renderNetworkDropdown()}
       {hierarchy.length === 0
         ? (
           <AddAccount />
@@ -229,7 +196,7 @@ export default function Accounts (): React.ReactElement {
                 flexDirection='row'
                 justifyContent='space-between'
                 mb='m'>
-                <NetworkSelector network={network} />
+                <NetworkSelector currentNetwork={network} />
                 <Flex flexDirection='row'
                   justifyContent='center'>
                   <GrowingButton icon={SvgViewDashboard}
