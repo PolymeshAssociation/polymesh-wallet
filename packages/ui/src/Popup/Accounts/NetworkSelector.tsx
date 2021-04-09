@@ -5,7 +5,7 @@ import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { setPolyNetwork } from '@polymathnetwork/extension-ui/messaging';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 type NetworkSelectorProps = {
   network: NetworkName;
@@ -37,6 +37,8 @@ const networkColors: Record<NetworkName, { bg: string, fg: string }> = {
 export function NetworkSelector ({ network }: NetworkSelectorProps): React.ReactElement {
   const { networkState: { isDeveloper, selected } } = useContext(PolymeshContext);
 
+  const [isDropdownShowing, setIsDropdownShowing] = useState(false);
+
   const bg = networkColors[network].bg;
   const fg = networkColors[network].fg;
   const bg2 = `${fg}40`; // background color with 0.25 opacity, using 8 digit hex code
@@ -47,9 +49,14 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
     }
   };
 
+  const showDropdown = () => {
+    setIsDropdownShowing(true);
+  };
+
   return (
     <Wrapper>
-      <NetworkSelect bg={bg}>
+      <NetworkSelect bg={bg}
+        onClick={showDropdown}>
         <NetworkCircle bg={bg}
           color={fg} />
         <Box ml='4px'
@@ -66,46 +73,48 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
         </DropdownIcon>
       </NetworkSelect>
 
-      <NetworkDropdown borderRadius='8px'
-        py='8px'
-        width='296px'>
-        <Box mx='16px'>
-          <Text color='gray.2'
-            variant='b2m'>
-              Networks
-          </Text>
-        </Box>
-        {Object.entries(networkLabels)
-          .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
-          .map(([_network, networkLabel]) => {
-            return (
-              <Flex className='network-item'
-                key={_network}
-                onClick={() => changeNetwork(_network as NetworkName)}
-                px='16px'
-                py='8px'>
-                <NetworkCircle bg={networkColors[_network as NetworkName].bg}
-                  color={networkColors[_network as NetworkName].fg}
-                  size='24px'
-                  thickness='4px'/>
-                <Box ml='8px'
-                  mr='auto'>
-                  <Text variant='b2m'>
-                    {networkLabel}
-                  </Text>
-                </Box>
-                {selected === _network &&
-                  <Icon
-                    Asset={SvgCheck}
-                    color='brandMain'
-                    height={24}
-                    width={24}
-                  />
-                }
-              </Flex>
-            );
-          })}
-      </NetworkDropdown>
+      {isDropdownShowing &&
+        <NetworkDropdown borderRadius='8px'
+          py='8px'
+          width='296px'>
+          <Box mx='16px'>
+            <Text color='gray.2'
+              variant='b2m'>
+                Networks
+            </Text>
+          </Box>
+          {Object.entries(networkLabels)
+            .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
+            .map(([_network, networkLabel]) => {
+              return (
+                <Flex className='network-item'
+                  key={_network}
+                  onClick={() => changeNetwork(_network as NetworkName)}
+                  px='16px'
+                  py='8px'>
+                  <NetworkCircle bg={networkColors[_network as NetworkName].bg}
+                    color={networkColors[_network as NetworkName].fg}
+                    size='24px'
+                    thickness='4px'/>
+                  <Box ml='8px'
+                    mr='auto'>
+                    <Text variant='b2m'>
+                      {networkLabel}
+                    </Text>
+                  </Box>
+                  {selected === _network &&
+                    <Icon
+                      Asset={SvgCheck}
+                      color='brandMain'
+                      height={24}
+                      width={24}
+                    />
+                  }
+                </Flex>
+              );
+            })}
+        </NetworkDropdown>
+      }
     </Wrapper>
   );
 }
