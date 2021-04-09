@@ -7,6 +7,11 @@ import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
+const DEV_NETWORK_COLORS = {
+  backgrounds: ['#DCEFFE', '#DCEFFE40'],
+  foreground: '#1348E4'
+};
+
 const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[], foreground: string }> = {
   itn: {
     backgrounds: ['#F2E6FF', '#F2E6FF40'],
@@ -16,36 +21,27 @@ const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[], foreground: s
     backgrounds: ['#FBF3D0', '#FBF3D040'],
     foreground: '#E3A30C'
   },
-  pmf: {
-    backgrounds: ['#DCEFFE', '#DCEFFE40'],
-    foreground: '#1348E4'
-  },
-  pme: {
-    backgrounds: ['#DCEFFE', '#DCEFFE40'],
-    foreground: '#1348E4'
-  },
-  local: {
-    backgrounds: ['#DCEFFE', '#DCEFFE40'],
-    foreground: '#1348E4'
-  }
+  pmf: DEV_NETWORK_COLORS,
+  pme: DEV_NETWORK_COLORS,
+  local: DEV_NETWORK_COLORS
 };
 
 type NetworkSelectorProps = {
-  network: NetworkName;
+  currentNetwork: NetworkName;
 }
 
-export function NetworkSelector ({ network }: NetworkSelectorProps): React.ReactElement {
+export function NetworkSelector ({ currentNetwork }: NetworkSelectorProps): React.ReactElement {
   const { networkState: { isDeveloper, selected } } = useContext(PolymeshContext);
 
   const [isDropdownShowing, setIsDropdownShowing] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const [background, backgroundLight] = NETWORK_COLORS[network].backgrounds;
-  const foreground = NETWORK_COLORS[network].foreground;
+  const [background, backgroundLight] = NETWORK_COLORS[currentNetwork].backgrounds;
+  const foreground = NETWORK_COLORS[currentNetwork].foreground;
 
   const changeNetwork = async (networkKey: NetworkName) => {
-    if (!!networkKey && networkKey !== network) {
+    if (networkKey !== currentNetwork) {
       await setPolyNetwork(networkKey);
     }
   };
@@ -62,7 +58,7 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
     }
   };
 
-  // Toggle click listener to close dropdown when clicked outside of dropdown
+  // Toggle click listener to hide dropdown, when clicked outside of dropdown
   useEffect(() => {
     if (isDropdownShowing) {
       document.addEventListener('mousedown', handleClick);
@@ -83,7 +79,7 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
           mr='7px'>
           <Text color={foreground}
             variant='b3m'>
-            {networkLabels[network]}
+            {networkLabels[currentNetwork]}
           </Text>
         </Box>
         <DropdownIcon background={backgroundLight}>
