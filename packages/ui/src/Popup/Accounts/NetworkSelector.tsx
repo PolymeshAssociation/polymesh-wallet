@@ -21,16 +21,16 @@ const networkColors: Record<NetworkName, { bg: string, fg: string }> = {
     fg: '#E3A30C'
   },
   pmf: {
-    bg: '#EBF0F7',
-    fg: '#8C9BA5'
+    bg: '#DCEFFE',
+    fg: '#1348E4'
   },
   pme: {
-    bg: '#EBF0F7',
-    fg: '#8C9BA5'
+    bg: '#DCEFFE',
+    fg: '#1348E4'
   },
   local: {
-    bg: '#EBF0F7',
-    fg: '#8C9BA5'
+    bg: '#DCEFFE',
+    fg: '#1348E4'
   }
 };
 
@@ -50,8 +50,8 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
   return (
     <Wrapper>
       <NetworkSelect bg={bg}>
-        <NetworkCircle color={fg} />
-
+        <NetworkCircle bg={bg}
+          color={fg} />
         <Box ml='4px'
           mr='7px'>
           <Text color={fg}
@@ -59,7 +59,6 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
             {networkLabels[network]}
           </Text>
         </Box>
-
         <DropdownIcon bg={bg2}>
           <Icon Asset={SvgChevron}
             color={fg}
@@ -85,7 +84,8 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
                 onClick={() => changeNetwork(_network as NetworkName)}
                 px='16px'
                 py='8px'>
-                <NetworkCircle color={networkColors[_network as NetworkName].fg}
+                <NetworkCircle bg={networkColors[_network as NetworkName].bg}
+                  color={networkColors[_network as NetworkName].fg}
                   size='24px'
                   thickness='4px'/>
                 <Box ml='8px'
@@ -94,7 +94,6 @@ export function NetworkSelector ({ network }: NetworkSelectorProps): React.React
                     {networkLabel}
                   </Text>
                 </Box>
-
                 {selected === _network &&
                   <Icon
                     Asset={SvgCheck}
@@ -135,10 +134,11 @@ const DropdownIcon = styled.div<{ bg: string; }>`
   background-color: ${(props) => props.bg};
 `;
 
-const NetworkCircle = styled.span<{ color: string; size?: string; thickness?: string; }>`
+const NetworkCircle = styled.span<{ bg: string; color: string; size?: string; thickness?: string; }>`
   display: inline-box;
   width: ${(props) => props.size || '12px'};
   height: ${(props) => props.size || '12px'};
+  background: ${(props) => props.bg};
   box-sizing: border-box;
   border: ${(props) => props.thickness || '2px'} solid ${(props) => props.color};
   border-radius: 50%;
@@ -147,14 +147,13 @@ const NetworkCircle = styled.span<{ color: string; size?: string; thickness?: st
 const NetworkDropdown = styled(Box)`
   position: absolute;
   background: white;
-  box-shadow: ${(props) => props.theme.shadows[1]};
+  box-shadow: ${(props) => props.theme.shadows[3]};
   top: calc(100% + 4px);
   left: 0;
   z-index: 1;
 
   .network-item {
     cursor: pointer;
-    border-radius: 8px;
 
     &:hover {
       background: ${(props) => props.theme.colors.gray[5]};
