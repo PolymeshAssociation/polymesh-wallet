@@ -1,10 +1,10 @@
 import { networkLinks } from '@polymathnetwork/extension-core/constants';
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgDotsVertical,
   SvgPlus, SvgViewDashboard } from '@polymathnetwork/extension-ui/assets/images/icons';
 import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
-import { togglePolyIsDev, windowOpen } from '@polymathnetwork/extension-ui/messaging';
+import { setPolyNetwork, togglePolyIsDev, windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
 import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
@@ -49,6 +49,12 @@ export default function Accounts (): React.ReactElement {
 
       return groupedAccounts;
     }, {});
+
+  const setNetwork = async (_network: NetworkName) => {
+    if (_network !== network) {
+      await setPolyNetwork(_network);
+    }
+  };
 
   const groupedAccounts = polymeshAccounts ? groupAccounts()(polymeshAccounts) : {};
 
@@ -196,7 +202,8 @@ export default function Accounts (): React.ReactElement {
                 flexDirection='row'
                 justifyContent='space-between'
                 mb='m'>
-                <NetworkSelector currentNetwork={network} />
+                <NetworkSelector currentNetwork={network}
+                  onSelect={setNetwork} />
                 <Flex flexDirection='row'
                   justifyContent='center'>
                   <GrowingButton icon={SvgViewDashboard}

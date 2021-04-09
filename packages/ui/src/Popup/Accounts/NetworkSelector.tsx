@@ -2,23 +2,22 @@ import { networkIsDev, networkLabels } from '@polymathnetwork/extension-core/con
 import { NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgCheck, SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
-import { setPolyNetwork } from '@polymathnetwork/extension-ui/messaging';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
 const DEV_NETWORK_COLORS = {
-  backgrounds: ['#DCEFFE', '#DCEFFE40'],
+  backgrounds: ['#DCEFFE', '#1348E440'],
   foreground: '#1348E4'
 };
 
 const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[], foreground: string }> = {
   itn: {
-    backgrounds: ['#F2E6FF', '#F2E6FF40'],
+    backgrounds: ['#F2E6FF', '#4D019840'],
     foreground: '#4D0198'
   },
   alcyone: {
-    backgrounds: ['#FBF3D0', '#FBF3D040'],
+    backgrounds: ['#FBF3D0', '#E3A30C40'],
     foreground: '#E3A30C'
   },
   pmf: DEV_NETWORK_COLORS,
@@ -28,9 +27,10 @@ const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[], foreground: s
 
 type NetworkSelectorProps = {
   currentNetwork: NetworkName;
+  onSelect: (network: NetworkName) => void;
 }
 
-export function NetworkSelector ({ currentNetwork }: NetworkSelectorProps): React.ReactElement {
+export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorProps): React.ReactElement {
   const { networkState: { isDeveloper, selected } } = useContext(PolymeshContext);
 
   const [isDropdownShowing, setIsDropdownShowing] = useState(false);
@@ -39,12 +39,6 @@ export function NetworkSelector ({ currentNetwork }: NetworkSelectorProps): Reac
 
   const [background, backgroundLight] = NETWORK_COLORS[currentNetwork].backgrounds;
   const foreground = NETWORK_COLORS[currentNetwork].foreground;
-
-  const changeNetwork = async (networkKey: NetworkName) => {
-    if (networkKey !== currentNetwork) {
-      await setPolyNetwork(networkKey);
-    }
-  };
 
   const showDropdown = () => {
     setIsDropdownShowing(true);
@@ -106,7 +100,7 @@ export function NetworkSelector ({ currentNetwork }: NetworkSelectorProps): Reac
               return (
                 <Flex className='network-item'
                   key={_network}
-                  onClick={() => changeNetwork(_network as NetworkName)}
+                  onClick={() => onSelect(_network as NetworkName)}
                   px='16px'
                   py='8px'>
                   <NetworkCircle background={NETWORK_COLORS[_network as NetworkName].backgrounds[0]}
@@ -145,7 +139,7 @@ const NetworkSelect = styled.div<{ background: string; }>`
   align-items: center;
   height: 24px;
   border-radius: 24px;
-  padding: 0 3px 0 6px;
+  padding: 0 3px 0 8px;
   background: ${(props) => props.background};
   cursor: pointer;
 `;
