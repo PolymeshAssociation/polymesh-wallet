@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { ActivityContext } from '../../components';
-import { Box, Button, Checkbox, Flex, Text, TextInput } from '../../ui';
+import { Box, Button, Flex, Text, TextInput } from '../../ui';
 
 interface Props {
   isFirst: boolean | undefined;
@@ -15,7 +15,7 @@ interface Props {
   onSign: (password: string) => Promise<void>;
 }
 
-function Unlock ({ error, isFirst, isLocked, onCancel, onSavePassChange, onSign, savePass }: Props): React.ReactElement<Props> {
+function Unlock ({ error, isFirst, isLocked, onCancel, onSign }: Props): React.ReactElement<Props> {
   const isBusy = useContext(ActivityContext);
 
   const { errors, handleSubmit, register, setError } = useForm({
@@ -69,7 +69,7 @@ function Unlock ({ error, isFirst, isLocked, onCancel, onSavePassChange, onSign,
               </Box>
             </Box>
           </form>
-          <Box mb='s'
+          {/* <Box mb='s'
             mt='s'
             mx='s'>
             <Checkbox
@@ -82,12 +82,13 @@ function Unlock ({ error, isFirst, isLocked, onCancel, onSavePassChange, onSign,
               }
               onChange={onSavePassChange}
             />
-          </Box>
+          </Box> */}
         </>
       ) }
       <Flex
         flexDirection='row'
         mb='s'
+        mt='s'
         mx='s'>
         <Flex flex={1}>
           <Button
