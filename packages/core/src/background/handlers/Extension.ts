@@ -1,5 +1,5 @@
 import DotExtension from '@polkadot/extension-base/background/handlers/Extension';
-import { MessageTypes, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
+import { MessageTypes, RequestAuthorizeApprove, RequestAuthorizeReject, RequestRpcUnsubscribe, ResponseAuthorizeList } from '@polkadot/extension-base/background/types';
 import { KeyringPair } from '@polkadot/keyring/types';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
@@ -390,6 +390,34 @@ export default class Extension extends DotExtension {
     return false;
   }
 
+  private _authorizeApprove ({ id }: RequestAuthorizeApprove): boolean {
+    const queued = this.#state._getAuthRequest(id);
+
+    assert(queued, 'Unable to find request');
+
+    const { resolve } = queued;
+
+    resolve(true);
+
+    return true;
+  }
+
+  private _getAuthList (): ResponseAuthorizeList {
+    return { list: this.#state.authUrls };
+  }
+
+  private _authorizeReject ({ id }: RequestAuthorizeReject): boolean {
+    const queued = this.#state._getAuthRequest(id);
+
+    assert(queued, 'Unable to find request');
+
+    const { reject } = queued;
+
+    reject(new Error('Rejected'));
+
+    return true;
+  }
+
   public async _handle<TMessageType extends PolyMessageTypes> (
     id: string,
     type: TMessageType,
@@ -397,6 +425,15 @@ export default class Extension extends DotExtension {
     port: chrome.runtime.Port
   ): Promise<PolyResponseType<TMessageType>> {
     switch (type) {
+      case 'pri(authorize.approve)':
+        return this._authorizeApprove(request as RequestAuthorizeApprove);
+
+      case 'pri(authorize.list)':
+        return this._getAuthList();
+
+      case 'pri(authorize.reject)':
+        return this._authorizeReject(request as RequestAuthorizeReject);
+
       case 'poly:pri(accounts.subscribe)':
         return this.polyAccountsSubscribe(id, port);
 

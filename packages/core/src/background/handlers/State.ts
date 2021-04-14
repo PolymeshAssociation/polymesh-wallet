@@ -1,6 +1,6 @@
 
 import DotState, { AuthUrls } from '@polkadot/extension-base/background/handlers/State';
-import { AccountJson, RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
+import { AccountJson, AuthorizeRequest, RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
 import chrome from '@polkadot/extension-inject/chrome';
 import { assert } from '@polkadot/util';
 import { AUTH_URLS_KEY } from '@polymathnetwork/extension-core/constants';
@@ -114,6 +114,12 @@ export default class State extends DotState {
     localStorage.setItem(AUTH_URLS_KEY, JSON.stringify(this.#authUrls));
   }
 
+  public get allAuthRequests (): AuthorizeRequest[] {
+    return Object
+      .values(this.#authRequests)
+      .map(({ id, request, url }): AuthorizeRequest => ({ id, request, url }));
+  }
+
   public async authorizeUrl (url: string, request: RequestAuthorizeTab): Promise<boolean> {
     const idStr = stripUrl(url);
 
@@ -182,6 +188,10 @@ export default class State extends DotState {
         this.#windows.push(window.id);
       }
     });
+  }
+
+  public _getAuthRequest (id: string): AuthRequest {
+    return this.#authRequests[id];
   }
 
   private proofRequestComplete = (id: string, resolve: (result: ProofingResponse) => void, reject: (error: Error) => void): Resolver<ProofingResponse> => {

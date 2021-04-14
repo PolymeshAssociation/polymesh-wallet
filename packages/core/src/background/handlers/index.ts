@@ -19,7 +19,7 @@ export default function handler<TMessageType extends PolyMessageTypes> (
   const from = isExtension ? 'extension' : (sender.tab && sender.tab.url) || sender.url || '<unknown>';
   const source = `${from}: ${id}: ${message}`;
 
-  console.log(` [in] ${source}`); // :: ${JSON.stringify(request)}`);
+  console.log(` [poly:in] ${source}`); // :: ${JSON.stringify(request)}`);
 
   const promise = isExtension
     ? extension._handle(id, message, request, port)
@@ -27,7 +27,7 @@ export default function handler<TMessageType extends PolyMessageTypes> (
 
   promise
     .then((response): void => {
-      console.log(`[out] ${source}`); // :: ${JSON.stringify(response)}`);
+      console.log(`[poly:out] ${source}`); // :: ${JSON.stringify(response)}`);
 
       // between the start and the end of the promise, the user may have closed
       // the tab, in which case port will be undefined
@@ -36,7 +36,7 @@ export default function handler<TMessageType extends PolyMessageTypes> (
       port.postMessage({ id, response });
     })
     .catch((error: Error): void => {
-      console.log(`[err] ${source}:: ${error.message}`);
+      console.log(`[poly:err] ${source}:: ${error.message}`);
 
       // only send message back to port if it's still connected
       if (port) {

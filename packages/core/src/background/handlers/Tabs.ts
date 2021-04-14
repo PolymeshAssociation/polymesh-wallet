@@ -1,5 +1,5 @@
 import DotTabs from '@polkadot/extension-base/background/handlers/Tabs';
-import { MessageTypes, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
+import { MessageTypes, RequestAuthorizeTab, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
@@ -142,6 +142,10 @@ export default class Tabs extends DotTabs {
     return uidRecords.some(({ did }) => did === account.did);
   }
 
+  private _authorize (url: string, request: RequestAuthorizeTab): Promise<boolean> {
+    return this.#state.authorizeUrl(url, request);
+  }
+
   // eslint-disable-next-line @typescript-eslint/require-await
   public async _handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], url: string, port: chrome.runtime.Port): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
     if (type !== 'pub(authorize.tab)') {
@@ -160,6 +164,9 @@ export default class Tabs extends DotTabs {
 
       case 'pub(accounts.subscribe)':
         return this._accountsSubscribe(url, id, port);
+
+      case 'pub(authorize.tab)':
+        return this._authorize(url, request as RequestAuthorizeTab);
 
       case 'pub(metadata.list)': {
         // Deny app's request to provide metadata because Polymesh wallet
