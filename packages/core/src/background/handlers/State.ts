@@ -1,8 +1,9 @@
 
-import DotState from '@polkadot/extension-base/background/handlers/State';
+import DotState, { AuthUrls } from '@polkadot/extension-base/background/handlers/State';
 import { AccountJson, RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
 import chrome from '@polkadot/extension-inject/chrome';
 import { assert } from '@polkadot/util';
+import { AUTH_URLS_KEY } from '@polymathnetwork/extension-core/constants';
 import { BehaviorSubject } from 'rxjs';
 
 import { NetworkName, ProofRequestPayload, RequestPolyProvideUid, UidRecord } from '../../types';
@@ -30,6 +31,13 @@ interface ProvideUidRequestResolver extends Resolver<boolean> {
   url: string;
 }
 
+interface AuthRequest extends Resolver<boolean> {
+  id: string;
+  idStr: string;
+  request: RequestAuthorizeTab;
+  url: string;
+}
+
 const WINDOW_OPTS = {
   height: 621,
   left: 150,
@@ -52,6 +60,10 @@ export default class State extends DotState {
 
   #windows: number[] = [];
 
+  readonly #authUrls: AuthUrls = {};
+
+  readonly #authRequests: Record<string, AuthRequest> = {};
+
   public readonly proofSubject: BehaviorSubject<ProofingRequest[]> = new BehaviorSubject<ProofingRequest[]>([]);
 
   public readonly provideUidRequestsSubject: BehaviorSubject<ProvideUidRequest[]> = new BehaviorSubject<ProvideUidRequest[]>([]);
@@ -60,6 +72,14 @@ export default class State extends DotState {
 
   constructor () {
     super();
+
+    // retrieve previously set authorizations
+    const authString = localStorage.getItem(AUTH_URLS_KEY) || '{}';
+    const previousAuth = JSON.parse(authString) as AuthUrls;
+
+    this.#authUrls = previousAuth;
+
+    console.log('>>>> Post init >> this.#authUrls', this.#authUrls);
 
     this.updateUidSubject();
   }
@@ -90,6 +110,10 @@ export default class State extends DotState {
       .map(({ id, request, url }): ProvideUidRequest => ({ id, request, url }));
   }
 
+  private _saveCurrentAuthList () {
+    localStorage.setItem(AUTH_URLS_KEY, JSON.stringify(this.#authUrls));
+  }
+
   public async authorizeUrl (url: string, request: RequestAuthorizeTab): Promise<boolean> {
     const idStr = stripUrl(url);
 
@@ -99,7 +123,50 @@ export default class State extends DotState {
 
     assert(!isDuplicate, `The source ${url} has a pending authorization request`);
 
-    return super.authorizeUrl(url, request);
+    return new Promise((resolve, reject): void => {
+      const id = getId();
+
+      this.#authRequests[id] = {
+        ...this._authComplete(id, resolve, reject),
+        id,
+        idStr,
+        request,
+        url
+      };
+
+      this._updateIconAuth();
+      this._popupOpen();
+    });
+  }
+
+  private _authComplete = (id: string, resolve: (result: boolean) => void, reject: (error: Error) => void): Resolver<boolean> => {
+    const complete = (result: boolean | Error) => {
+      const isAllowed = result === true;
+      const { idStr, request: { origin }, url } = this.#authRequests[id];
+
+      this.#authUrls[stripUrl(url)] = {
+        count: 0,
+        id: idStr,
+        isAllowed,
+        origin,
+        url
+      };
+
+      this._saveCurrentAuthList();
+      delete this.#authRequests[id];
+      this._updateIconAuth(true);
+    };
+
+    return {
+      reject: (error: Error): void => {
+        complete(error);
+        reject(error);
+      },
+      resolve: (result: boolean): void => {
+        complete(result);
+        resolve(result);
+      }
+    };
   }
 
   private _popupClose (): void {
@@ -179,6 +246,30 @@ export default class State extends DotState {
     if (shouldClose && text === '') {
       this._popupClose();
     }
+  }
+
+  private _updateIcon (shouldClose?: boolean): void {
+    const authCount = this.numAuthRequests;
+    const metaCount = this.numMetaRequests;
+    const signCount = this.numSignRequests;
+    const text = (
+      authCount
+        ? 'Auth'
+        : metaCount
+          ? 'Meta'
+          : (signCount ? `${signCount}` : '')
+    );
+
+    chrome.browserAction.setBadgeText({ text });
+
+    if (shouldClose && text === '') {
+      this._popupClose();
+    }
+  }
+
+  private _updateIconAuth (shouldClose?: boolean): void {
+    this.authSubject.next(this.allAuthRequests);
+    this._updateIcon(shouldClose);
   }
 
   public getProofRequest (id: string): ProofRequestResolver {

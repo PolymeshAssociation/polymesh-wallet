@@ -95,3 +95,5 @@ export const PORTS = {
   EXTENSION: 'polywallet_extension',
   CONTENT: 'polywallet_content'
 };
+
+export const AUTH_URLS_KEY = 'authUrls';
