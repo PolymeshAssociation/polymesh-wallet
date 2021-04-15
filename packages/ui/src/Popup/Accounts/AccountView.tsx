@@ -197,7 +197,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             <LabelWithCopy
               color='gray.3'
               text={recodeAddress(address, ss58Format)}
-              textSize={13}
+              textSize={16}
               textVariant='b3'
             />
           </Flex>
@@ -299,7 +299,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           <LabelWithCopy
             color='gray.3'
             text={recodeAddress(address, ss58Format)}
-            textSize={13}
+            textSize={16}
             textVariant='b3'
           />
         </GridItem>
