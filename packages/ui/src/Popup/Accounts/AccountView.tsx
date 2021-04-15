@@ -166,9 +166,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               onMouseEnter={nameMouseEnter}
               onMouseLeave={nameMouseLeave}
             >
-              <TextOverflowEllipsis
-                color='gray.1'
-                maxWidth='100px'
+              <TextOverflowEllipsis color='gray.1'
                 variant='b2m'
               >
                 {name}
@@ -269,9 +267,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               onMouseEnter={nameMouseEnter}
               onMouseLeave={nameMouseLeave}
             >
-              <TextOverflowEllipsis
-                color='gray.1'
-                maxWidth='100px'
+              <TextOverflowEllipsis color='gray.1'
                 variant='b2m'
               >
                 {name}
@@ -381,6 +377,7 @@ const AccountDetailsGrid = styled.div`
     'name-edit name-edit name-edit name-edit'
     'name      name      name      type'
     'address   address   balance   balance';
+  grid-template-columns: repeat(3, 1fr) 110px;
 `;
 
 const UnassignedAccountHoverGrid = styled.div`
@@ -389,6 +386,7 @@ const UnassignedAccountHoverGrid = styled.div`
     'name-edit name-edit name-edit name-edit'
     'name      name      name      assign'
     'address   address   address   assign';
+  grid-template-columns: repeat(3, 1fr) 110px;
 `;
 
 const GridItem = styled.div<{ area: string }>`
