@@ -119,7 +119,7 @@ export default class Tabs extends DotTabs {
   private provideUid (url: string, request: RequestPolyProvideUid): Promise<boolean> {
     assert(allowedUidProvider(url), `App ${url} is not allowed to provide uid`);
 
-    const { did, network, uid } = request;
+    const { network, uid } = request;
 
     assert(validateNetwork(network), `Invalid network ${JSON.stringify(network)}`);
 
