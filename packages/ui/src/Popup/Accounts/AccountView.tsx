@@ -5,12 +5,12 @@ import { SvgCheck, SvgDotsVertical, SvgPencilOutline, SvgWindowClose } from '@po
 import BigNumber from 'bignumber.js';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
 
 import { AccountContext, AccountType, ActionContext, PolymeshContext } from '../../components';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
 import { Box, ButtonSmall, ContextMenuTrigger, Flex, Icon, LabelWithCopy, Menu, MenuItem, Text, TextInput, TextOverflowEllipsis } from '../../ui';
 import { formatters } from '../../util';
+import { AccountInfoGrid, AccountViewGrid, GridItem, UnassignedAccountHoverGrid } from './styles';
 
 type NameEditProps = {
   name?: string;
@@ -164,7 +164,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
 
   const renderAccountInfo = () => {
     return (
-      <AccountDetailsGrid>
+      <AccountInfoGrid>
         {isEditing && (
           <GridItem area='name-edit'>
             <NameEdit name={name}
@@ -230,7 +230,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             </Text>
           </Flex>
         </GridItem>
-      </AccountDetailsGrid>
+      </AccountInfoGrid>
     );
   };
 
@@ -315,75 +315,52 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         style={{ cursor: 'pointer' }}
       >
         <AccountViewGrid>
-          <Flex height='100%'>
-            <Box
-              backgroundColor='brandLightest'
-              borderRadius='50%'
-              height={32}
-              px='2'
-              width={32}
+          <GridItem area='avatar'>
+            <Flex height='100%'>
+              <Box
+                backgroundColor='brandLightest'
+                borderRadius='50%'
+                height={32}
+                px='2'
+                width={32}
+              >
+                <Flex justifyContent='center'
+                  pt='xxs'>
+                  <Text color='brandMain'
+                    variant='b2m'>
+                    {name?.substr(0, 1)}
+                  </Text>
+                </Flex>
+              </Box>
+            </Flex>
+          </GridItem>
+          <GridItem area='account-info'>
+            <Box>
+              {(!hover || did) && renderAccountInfo()}
+              {hover && !did && renderHoverAccountInfo()}
+            </Box>
+          </GridItem>
+          <GridItem area='options'>
+            <Flex
+              alignItems='flex-end'
+              flexDirection='column'
+              justifyContent='space-around'
             >
-              <Flex justifyContent='center'
-                pt='xxs'>
-                <Text color='brandMain'
-                  variant='b2m'>
-                  {name?.substr(0, 1)}
-                </Text>
-              </Flex>
-            </Box>
-          </Flex>
-          <Box>
-            {(!hover || did) && renderAccountInfo()}
-            {hover && !did && renderHoverAccountInfo()}
-          </Box>
-          <Flex
-            alignItems='flex-end'
-            flexDirection='column'
-            justifyContent='space-around'
-          >
-            <Box width={24}>
-              {isSelected && (
-                <Icon
-                  Asset={SvgCheck}
-                  color='brandMain'
-                  height={24}
-                  width={24}
-                />
-              )}
-            </Box>
-            <Box>{renderActionsMenuButton(address)}</Box>
-          </Flex>
+              <Box width={24}>
+                {isSelected && (
+                  <Icon
+                    Asset={SvgCheck}
+                    color='brandMain'
+                    height={24}
+                    width={24}
+                  />
+                )}
+              </Box>
+              <Box>{renderActionsMenuButton(address)}</Box>
+            </Flex>
+          </GridItem>
         </AccountViewGrid>
       </Box>
     </>
   );
 };
-
-const AccountViewGrid = styled.div`
-  display: grid;
-  grid-template-areas: 'avatar account-details options';
-  gap: 10px;
-  grid-template-columns: 35px auto 35px;
-`;
-
-const AccountDetailsGrid = styled.div`
-  display: grid;
-  grid-template-areas:
-    'name-edit name-edit name-edit type'
-    'name      name      name      type'
-    'address   address   balance   balance';
-  grid-template-columns: repeat(3, 1fr) 110px;
-`;
-
-const UnassignedAccountHoverGrid = styled.div`
-  display: grid;
-  grid-template-areas:
-    'name-edit name-edit name-edit assign'
-    'name      name      name      assign'
-    'address   address   .         assign';
-  grid-template-columns: repeat(3, 1fr) 110px;
-`;
-
-const GridItem = styled.div<{ area: string }>`
-  grid-area: ${(props) => props.area};
-`;
