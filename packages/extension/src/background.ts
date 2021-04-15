@@ -33,10 +33,9 @@ chrome.runtime.onConnect.addListener((port): void => {
     `Unknown connection from ${port.name}`
   );
   let polyUnsub: () => Promise<void>;
-  let accountsUnsub: VoidCallback;
+  const accountsUnsub = accountsSynchronizer();
 
   if (port.name === PORTS.EXTENSION) {
-    accountsUnsub = accountsSynchronizer();
     polyUnsub = subscribePolymesh();
     loadSchema();
 
@@ -47,10 +46,12 @@ chrome.runtime.onConnect.addListener((port): void => {
         polyUnsub()
           .then(() => console.log('ApiPromise: disconnected')).catch(console.error);
       }
-
-      if (accountsUnsub) accountsUnsub();
     });
   }
+
+  port.onDisconnect.addListener((): void => {
+    if (accountsUnsub) accountsUnsub();
+  });
 
   // message handlers
   port.onMessage.addListener((data): void => {
