@@ -125,7 +125,12 @@ export default class Tabs extends DotTabs {
 
     assert(validateSelectedNetwork(network), `Network ${JSON.stringify(network)} doesn't match the selected network in Polymesh Wallet`);
 
-    assert(validateDid(did), Errors.DID_NOT_MATCH);
+    // FIXME we're disabling this check temporarily.
+    // The problem is, CDD providers will create DID and attempt to push uid in on go.
+    // Until user opens wallet popup, it would have no awareness of the newly created DID,
+    // and will ultimately reject the uid provision request.
+
+    // assert(validateDid(did), Errors.DID_NOT_MATCH);
 
     assert(validateUid(uid), Errors.INVALID_UID);
 
