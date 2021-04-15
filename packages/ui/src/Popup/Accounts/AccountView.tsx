@@ -129,33 +129,35 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <AccountDetailsGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <Flex alignItems='end'
-              flexDirection='row'>
-              <TextInput
-                defaultValue={name}
-                onChange={handleNameChange}
-                tight
-                value={newName}
-              />
-              <Box ml='xs'>
-                <Icon
-                  Asset={SvgCheck}
-                  color='gray.2'
-                  height={16}
-                  onClick={save}
-                  width={16}
+            <Box py='3px'>
+              <Flex alignItems='center'
+                flexDirection='row'>
+                <TextInput
+                  defaultValue={name}
+                  onChange={handleNameChange}
+                  tight
+                  value={newName}
                 />
-              </Box>
-              <Box ml='xs'>
-                <Icon
-                  Asset={SvgWindowClose}
-                  color='gray.2'
-                  height={16}
-                  onClick={cancelEditing}
-                  width={16}
-                />
-              </Box>
-            </Flex>
+                <Box ml='xs'>
+                  <Icon
+                    Asset={SvgCheck}
+                    color='gray.2'
+                    height={16}
+                    onClick={save}
+                    width={16}
+                  />
+                </Box>
+                <Box ml='xs'>
+                  <Icon
+                    Asset={SvgWindowClose}
+                    color='gray.2'
+                    height={16}
+                    onClick={cancelEditing}
+                    width={16}
+                  />
+                </Box>
+              </Flex>
+            </Box>
           </GridItem>
         )}
         {!isEditing && (
@@ -187,7 +189,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         <GridItem area='type'>
           <Flex height='100%'
             justifyContent='flex-end'>
-            {!isEditing && did && <AccountType keyType={keyType} />}
+            {did && <AccountType keyType={keyType} />}
           </Flex>
         </GridItem>
         {/* @ADDRESS should be formatted */}
@@ -232,32 +234,35 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <UnassignedAccountHoverGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <Flex flexDirection='row'>
-              <TextInput
-                defaultValue={name}
-                onChange={handleNameChange}
-                tight
-                value={newName}
-              />
-              <Box ml='xs'>
-                <Icon
-                  Asset={SvgCheck}
-                  color='gray.2'
-                  height={16}
-                  onClick={save}
-                  width={16}
+            <Box py='3px'>
+              <Flex alignItems='center'
+                flexDirection='row'>
+                <TextInput
+                  defaultValue={name}
+                  onChange={handleNameChange}
+                  tight
+                  value={newName}
                 />
-              </Box>
-              <Box ml='xs'>
-                <Icon
-                  Asset={SvgWindowClose}
-                  color='gray.2'
-                  height={16}
-                  onClick={cancelEditing}
-                  width={16}
-                />
-              </Box>
-            </Flex>
+                <Box ml='xs'>
+                  <Icon
+                    Asset={SvgCheck}
+                    color='gray.2'
+                    height={16}
+                    onClick={save}
+                    width={16}
+                  />
+                </Box>
+                <Box ml='xs'>
+                  <Icon
+                    Asset={SvgWindowClose}
+                    color='gray.2'
+                    height={16}
+                    onClick={cancelEditing}
+                    width={16}
+                  />
+                </Box>
+              </Flex>
+            </Box>
           </GridItem>
         )}
         {!isEditing && (
@@ -374,7 +379,7 @@ const AccountViewGrid = styled.div`
 const AccountDetailsGrid = styled.div`
   display: grid;
   grid-template-areas:
-    'name-edit name-edit name-edit name-edit'
+    'name-edit name-edit name-edit type'
     'name      name      name      type'
     'address   address   balance   balance';
   grid-template-columns: repeat(3, 1fr) 110px;
@@ -383,9 +388,9 @@ const AccountDetailsGrid = styled.div`
 const UnassignedAccountHoverGrid = styled.div`
   display: grid;
   grid-template-areas:
-    'name-edit name-edit name-edit name-edit'
+    'name-edit name-edit name-edit assign'
     'name      name      name      assign'
-    'address   address   address   assign';
+    'address   address   .         assign';
   grid-template-columns: repeat(3, 1fr) 110px;
 `;
 
