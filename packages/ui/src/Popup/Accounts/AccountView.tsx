@@ -12,6 +12,44 @@ import { editAccount, setPolySelectedAccount } from '../../messaging';
 import { Box, ButtonSmall, ContextMenuTrigger, Flex, Icon, LabelWithCopy, Menu, MenuItem, Text, TextInput, TextOverflowEllipsis } from '../../ui';
 import { formatters } from '../../util';
 
+type NameEditProps = {
+  name?: string;
+  newName?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onSave: (e: React.MouseEvent<HTMLElement>) => Promise<void>
+  onCancel: (e: React.MouseEvent<HTMLElement>) => void;
+}
+
+const NameEdit: FC<NameEditProps> = ({ name, newName, onCancel, onChange, onSave }) => (<Box py='3px'>
+  <Flex alignItems='center'
+    flexDirection='row'>
+    <TextInput
+      defaultValue={name}
+      onChange={onChange}
+      tight
+      value={newName}
+    />
+    <Box ml='xs'>
+      <Icon
+        Asset={SvgCheck}
+        color='gray.2'
+        height={16}
+        onClick={onSave}
+        width={16}
+      />
+    </Box>
+    <Box ml='xs'>
+      <Icon
+        Asset={SvgWindowClose}
+        color='gray.2'
+        height={16}
+        onClick={onCancel}
+        width={16}
+      />
+    </Box>
+  </Flex>
+</Box>);
+
 export interface Props {
   account: IdentifiedAccount;
   isSelected?: boolean;
@@ -129,35 +167,11 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <AccountDetailsGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <Box py='3px'>
-              <Flex alignItems='center'
-                flexDirection='row'>
-                <TextInput
-                  defaultValue={name}
-                  onChange={handleNameChange}
-                  tight
-                  value={newName}
-                />
-                <Box ml='xs'>
-                  <Icon
-                    Asset={SvgCheck}
-                    color='gray.2'
-                    height={16}
-                    onClick={save}
-                    width={16}
-                  />
-                </Box>
-                <Box ml='xs'>
-                  <Icon
-                    Asset={SvgWindowClose}
-                    color='gray.2'
-                    height={16}
-                    onClick={cancelEditing}
-                    width={16}
-                  />
-                </Box>
-              </Flex>
-            </Box>
+            <NameEdit name={name}
+              newName={newName}
+              onCancel={cancelEditing}
+              onChange={handleNameChange}
+              onSave={save} />
           </GridItem>
         )}
         {!isEditing && (
@@ -234,35 +248,11 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <UnassignedAccountHoverGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <Box py='3px'>
-              <Flex alignItems='center'
-                flexDirection='row'>
-                <TextInput
-                  defaultValue={name}
-                  onChange={handleNameChange}
-                  tight
-                  value={newName}
-                />
-                <Box ml='xs'>
-                  <Icon
-                    Asset={SvgCheck}
-                    color='gray.2'
-                    height={16}
-                    onClick={save}
-                    width={16}
-                  />
-                </Box>
-                <Box ml='xs'>
-                  <Icon
-                    Asset={SvgWindowClose}
-                    color='gray.2'
-                    height={16}
-                    onClick={cancelEditing}
-                    width={16}
-                  />
-                </Box>
-              </Flex>
-            </Box>
+            <NameEdit name={name}
+              newName={newName}
+              onCancel={cancelEditing}
+              onChange={handleNameChange}
+              onSave={save} />
           </GridItem>
         )}
         {!isEditing && (
