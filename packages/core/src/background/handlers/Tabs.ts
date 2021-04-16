@@ -9,7 +9,7 @@ import polyNetworkSubscribe from '@polymathnetwork/extension-core/external/polyN
 import { getSelectedAccount, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
 import { NetworkMeta, ProofRequestPayload, RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
-import { allowedUidProvider, prioritize, recodeAddress, validateDid, validateNetwork, validateSelectedNetwork, validateTicker, validateUid } from '@polymathnetwork/extension-core/utils';
+import { allowedUidProvider, prioritize, recodeAddress, validateNetwork, validateSelectedNetwork, validateTicker, validateUid } from '@polymathnetwork/extension-core/utils';
 
 import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse } from '../types';
 import State from './State';
@@ -119,13 +119,18 @@ export default class Tabs extends DotTabs {
   private provideUid (url: string, request: RequestPolyProvideUid): Promise<boolean> {
     assert(allowedUidProvider(url), `App ${url} is not allowed to provide uid`);
 
-    const { did, network, uid } = request;
+    const { network, uid } = request;
 
     assert(validateNetwork(network), `Invalid network ${JSON.stringify(network)}`);
 
     assert(validateSelectedNetwork(network), `Network ${JSON.stringify(network)} doesn't match the selected network in Polymesh Wallet`);
 
-    assert(validateDid(did), Errors.DID_NOT_MATCH);
+    // FIXME we're disabling this check temporarily.
+    // The problem is, CDD providers will create DID and attempt to push uid in on go.
+    // Until user opens wallet popup, it would have no awareness of the newly created DID,
+    // and will ultimately reject the uid provision request.
+
+    // assert(validateDid(did), Errors.DID_NOT_MATCH);
 
     assert(validateUid(uid), Errors.INVALID_UID);
 
@@ -138,6 +143,8 @@ export default class Tabs extends DotTabs {
     const account = getSelectedIdentifiedAccount();
 
     assert(account, 'No account is present or no account selected');
+
+    if (!account.did) { return false; }
 
     return uidRecords.some(({ did }) => did === account.did);
   }

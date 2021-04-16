@@ -1,16 +1,17 @@
 import { networkLinks } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { SvgCheck, SvgDotsVertical, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgCheck, SvgDotsVertical, SvgPencilOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import BigNumber from 'bignumber.js';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
 
 import { AccountContext, AccountType, ActionContext, PolymeshContext } from '../../components';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
-import { Box, ButtonSmall, ContextMenuTrigger, Flex, Icon, LabelWithCopy, Menu, MenuItem, Text, TextInput, TextOverflowEllipsis } from '../../ui';
+import { Box, ButtonSmall, ContextMenuTrigger, Flex, Icon, LabelWithCopy, Menu, MenuItem, Text, TextOverflowEllipsis } from '../../ui';
 import { formatters } from '../../util';
+import { NameEdit } from './NameEdit';
+import { AccountInfoGrid, AccountViewGrid, GridItem, UnassignedAccountHoverGrid } from './styles';
 
 export interface Props {
   account: IdentifiedAccount;
@@ -126,36 +127,14 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
 
   const renderAccountInfo = () => {
     return (
-      <AccountDetailsGrid>
+      <AccountInfoGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <Flex alignItems='end'
-              flexDirection='row'>
-              <TextInput
-                defaultValue={name}
-                onChange={handleNameChange}
-                tight
-                value={newName}
-              />
-              <Box ml='xs'>
-                <Icon
-                  Asset={SvgCheck}
-                  color='gray.2'
-                  height={16}
-                  onClick={save}
-                  width={16}
-                />
-              </Box>
-              <Box ml='xs'>
-                <Icon
-                  Asset={SvgWindowClose}
-                  color='gray.2'
-                  height={16}
-                  onClick={cancelEditing}
-                  width={16}
-                />
-              </Box>
-            </Flex>
+            <NameEdit name={name}
+              newName={newName}
+              onCancel={cancelEditing}
+              onChange={handleNameChange}
+              onSave={save} />
           </GridItem>
         )}
         {!isEditing && (
@@ -166,9 +145,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               onMouseEnter={nameMouseEnter}
               onMouseLeave={nameMouseLeave}
             >
-              <TextOverflowEllipsis
-                color='gray.1'
-                maxWidth='100px'
+              <TextOverflowEllipsis color='gray.1'
                 variant='b2m'
               >
                 {name}
@@ -189,7 +166,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         <GridItem area='type'>
           <Flex height='100%'
             justifyContent='flex-end'>
-            {!isEditing && did && <AccountType keyType={keyType} />}
+            {did && <AccountType keyType={keyType} />}
           </Flex>
         </GridItem>
         {/* @ADDRESS should be formatted */}
@@ -199,7 +176,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             <LabelWithCopy
               color='gray.3'
               text={recodeAddress(address, ss58Format)}
-              textSize={13}
+              textSize={16}
               textVariant='b3'
             />
           </Flex>
@@ -216,7 +193,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             </Text>
           </Flex>
         </GridItem>
-      </AccountDetailsGrid>
+      </AccountInfoGrid>
     );
   };
 
@@ -234,32 +211,11 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <UnassignedAccountHoverGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <Flex flexDirection='row'>
-              <TextInput
-                defaultValue={name}
-                onChange={handleNameChange}
-                tight
-                value={newName}
-              />
-              <Box ml='xs'>
-                <Icon
-                  Asset={SvgCheck}
-                  color='gray.2'
-                  height={16}
-                  onClick={save}
-                  width={16}
-                />
-              </Box>
-              <Box ml='xs'>
-                <Icon
-                  Asset={SvgWindowClose}
-                  color='gray.2'
-                  height={16}
-                  onClick={cancelEditing}
-                  width={16}
-                />
-              </Box>
-            </Flex>
+            <NameEdit name={name}
+              newName={newName}
+              onCancel={cancelEditing}
+              onChange={handleNameChange}
+              onSave={save} />
           </GridItem>
         )}
         {!isEditing && (
@@ -269,9 +225,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               onMouseEnter={nameMouseEnter}
               onMouseLeave={nameMouseLeave}
             >
-              <TextOverflowEllipsis
-                color='gray.1'
-                maxWidth='100px'
+              <TextOverflowEllipsis color='gray.1'
                 variant='b2m'
               >
                 {name}
@@ -303,7 +257,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           <LabelWithCopy
             color='gray.3'
             text={recodeAddress(address, ss58Format)}
-            textSize={13}
+            textSize={16}
             textVariant='b3'
           />
         </GridItem>
@@ -324,73 +278,52 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         style={{ cursor: 'pointer' }}
       >
         <AccountViewGrid>
-          <Flex height='100%'>
-            <Box
-              backgroundColor='brandLightest'
-              borderRadius='50%'
-              height={32}
-              px='2'
-              width={32}
+          <GridItem area='avatar'>
+            <Flex height='100%'>
+              <Box
+                backgroundColor='brandLightest'
+                borderRadius='50%'
+                height={32}
+                px='2'
+                width={32}
+              >
+                <Flex justifyContent='center'
+                  pt='xxs'>
+                  <Text color='brandMain'
+                    variant='b2m'>
+                    {name?.substr(0, 1)}
+                  </Text>
+                </Flex>
+              </Box>
+            </Flex>
+          </GridItem>
+          <GridItem area='account-info'>
+            <Box>
+              {(!hover || did) && renderAccountInfo()}
+              {hover && !did && renderHoverAccountInfo()}
+            </Box>
+          </GridItem>
+          <GridItem area='options'>
+            <Flex
+              alignItems='flex-end'
+              flexDirection='column'
+              justifyContent='space-around'
             >
-              <Flex justifyContent='center'
-                pt='xxs'>
-                <Text color='brandMain'
-                  variant='b2m'>
-                  {name?.substr(0, 1)}
-                </Text>
-              </Flex>
-            </Box>
-          </Flex>
-          <Box>
-            {(!hover || did) && renderAccountInfo()}
-            {hover && !did && renderHoverAccountInfo()}
-          </Box>
-          <Flex
-            alignItems='flex-end'
-            flexDirection='column'
-            justifyContent='space-around'
-          >
-            <Box width={24}>
-              {isSelected && (
-                <Icon
-                  Asset={SvgCheck}
-                  color='brandMain'
-                  height={24}
-                  width={24}
-                />
-              )}
-            </Box>
-            <Box>{renderActionsMenuButton(address)}</Box>
-          </Flex>
+              <Box width={24}>
+                {isSelected && (
+                  <Icon
+                    Asset={SvgCheck}
+                    color='brandMain'
+                    height={24}
+                    width={24}
+                  />
+                )}
+              </Box>
+              <Box>{renderActionsMenuButton(address)}</Box>
+            </Flex>
+          </GridItem>
         </AccountViewGrid>
       </Box>
     </>
   );
 };
-
-const AccountViewGrid = styled.div`
-  display: grid;
-  grid-template-areas: 'avatar account-details options';
-  gap: 10px;
-  grid-template-columns: 35px auto 35px;
-`;
-
-const AccountDetailsGrid = styled.div`
-  display: grid;
-  grid-template-areas:
-    'name-edit name-edit name-edit name-edit'
-    'name      name      name      type'
-    'address   address   balance   balance';
-`;
-
-const UnassignedAccountHoverGrid = styled.div`
-  display: grid;
-  grid-template-areas:
-    'name-edit name-edit name-edit name-edit'
-    'name      name      name      assign'
-    'address   address   address   assign';
-`;
-
-const GridItem = styled.div<{ area: string }>`
-  grid-area: ${(props) => props.area};
-`;
