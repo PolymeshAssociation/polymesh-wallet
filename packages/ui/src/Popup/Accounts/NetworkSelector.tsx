@@ -71,7 +71,7 @@ export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorPr
           <Flex
             className='network-item'
             key={_network}
-            onClick={() => onSelect(_network as NetworkName)}
+            // onClick={() => onSelect(_network as NetworkName)}
             px='16px'
             py='8px'
           >
@@ -100,8 +100,13 @@ export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorPr
       };
     });
 
+  const changeNetwork = (network: NetworkName) => {
+    console.log({ network });
+  };
+
   return (
     <OptionSelector minWidth='296px'
+      onSelect={changeNetwork}
       options={networkOptions}>
       <NetworkSelect background={background}
         onClick={showDropdown}>

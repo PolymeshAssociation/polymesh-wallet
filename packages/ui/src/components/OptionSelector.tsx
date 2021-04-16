@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { CSSProperties, PropsWithChildren } from 'react';
+import React, { CSSProperties, MouseEventHandler, PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 import { BoxProps } from '../ui/Box';
@@ -13,11 +13,12 @@ export type Option = {
 
 type OptionSelectorProps = BoxProps & PropsWithChildren<{
   options: Option[];
+  onSelect: (value: any) => void;
   style?: CSSProperties;
 }>;
 
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
-  const { children, options, style, ...boxProps } = props;
+  const { children, onSelect, options, style, ...boxProps } = props;
 
   const renderOption = (label: OptionLabel) => {
     return typeof label === 'string'
@@ -40,7 +41,8 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
         style={style}>
         <ul>
           {options.map((option, index) => (
-            <li key={index}>
+            <li key={index}
+              onClick={() => onSelect(option.value)}>
               {renderOption(option.label)}
             </li>
           ))}
