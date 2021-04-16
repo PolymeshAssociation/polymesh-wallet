@@ -10,8 +10,8 @@ import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import { AccountContext, Option, OptionSelector, PolymeshContext } from '../../components';
-import { Box, Checkbox, ContextMenuTrigger, Flex, GrowingButton, Header, Icon, Menu, MenuItem, Text } from '../../ui';
+import { AccountContext, PolymeshContext } from '../../components';
+import { Checkbox, ContextMenuTrigger, Flex, GrowingButton, Header, Icon, Menu, MenuItem, Text } from '../../ui';
 import { AccountsContainer } from './AccountsContainer';
 import { AccountsHeader } from './AccountsHeader';
 import AddAccount from './AddAccount';
@@ -187,30 +187,6 @@ export default function Accounts (): React.ReactElement {
     );
   };
 
-  const networkOptions: Option[] = [
-    {
-      label: (
-        <Flex className='network-item'
-          px='16px'
-          py='8px'>
-          <NetworkCircle background={NETWORK_COLORS.itn.backgrounds[0]}
-            color={NETWORK_COLORS.itn.foreground}
-            size='24px'
-            thickness='4px'/>
-          <Box ml='8px'
-            mr='auto'>
-            <Text variant='b2m'>ITN</Text>
-          </Box>
-        </Flex>
-      ),
-      value: 'itn'
-    },
-    {
-      label: 'Alcyone',
-      value: 'pme'
-    }
-  ];
-
   return (
     <>
       {renderTopMenu()}
@@ -226,12 +202,8 @@ export default function Accounts (): React.ReactElement {
                 flexDirection='row'
                 justifyContent='space-between'
                 mb='m'>
-                {/* <NetworkSelector currentNetwork={network}
-                  onSelect={setNetwork} /> */}
-                <OptionSelector options={networkOptions}>
-                  <Text color='white'>Test</Text>
-                </OptionSelector>
-
+                <NetworkSelector currentNetwork={network}
+                  onSelect={setNetwork} />
                 <Flex flexDirection='row'
                   justifyContent='center'>
                   <GrowingButton icon={SvgViewDashboard}
@@ -297,32 +269,3 @@ const AccountsArea = styled.div`
     display: none;
   }
 `;
-
-const NetworkCircle = styled.span<{ background: string; color: string; size?: string; thickness?: string; }>`
-  display: inline-box;
-  width: ${(props) => props.size || '12px'};
-  height: ${(props) => props.size || '12px'};
-  background: ${(props) => props.background};
-  box-sizing: border-box;
-  border: ${(props) => props.thickness || '2px'} solid ${(props) => props.color};
-  border-radius: 50%;
-`;
-
-const DEV_NETWORK_COLORS = {
-  backgrounds: ['#DCEFFE', '#1348E440'],
-  foreground: '#1348E4'
-};
-
-const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[], foreground: string }> = {
-  itn: {
-    backgrounds: ['#F2E6FF', '#4D019840'],
-    foreground: '#4D0198'
-  },
-  alcyone: {
-    backgrounds: ['#FBF3D0', '#E3A30C40'],
-    foreground: '#E3A30C'
-  },
-  pmf: DEV_NETWORK_COLORS,
-  pme: DEV_NETWORK_COLORS,
-  local: DEV_NETWORK_COLORS
-};
