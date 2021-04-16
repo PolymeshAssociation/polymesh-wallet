@@ -1,6 +1,8 @@
-import { Flex, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { PropsWithChildren } from 'react';
+import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
+import React, { CSSProperties, PropsWithChildren } from 'react';
 import styled from 'styled-components';
+
+import { BoxProps } from '../ui/Box';
 
 type OptionLabel = string | JSX.Element;
 
@@ -9,12 +11,13 @@ export type Option = {
   value: any;
 };
 
-type OptionSelectorProps = PropsWithChildren<{
+type OptionSelectorProps = BoxProps & PropsWithChildren<{
   options: Option[];
+  style?: CSSProperties;
 }>;
 
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
-  const { children, options } = props;
+  const { children, options, style, ...boxProps } = props;
 
   const renderOption = (label: OptionLabel) => {
     return typeof label === 'string'
@@ -33,7 +36,8 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   return (
     <Wrapper>
       {children}
-      <Options>
+      <Options {...boxProps}
+        style={style}>
         <ul>
           {options.map((option, index) => (
             <li key={index}>
@@ -50,7 +54,7 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const Options = styled.div`
+const Options = styled(Box)`
   position: absolute;
   background: white;
   box-shadow: ${(props) => props.theme.shadows[3]};
@@ -61,5 +65,14 @@ const Options = styled.div`
     margin: 0;
     padding: 0;
     list-style-type: none;
+
+    li {
+      cursor: pointer;
+      white-space: nowrap;
+
+      &:hover {
+        background: ${(props) => props.theme.colors.gray[5]};
+      }
+    }
   }
 `;

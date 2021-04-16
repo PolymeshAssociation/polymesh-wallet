@@ -1,7 +1,7 @@
 import { networkIsDev, networkLabels } from '@polymathnetwork/extension-core/constants';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgCheck, SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { Option, OptionSelector, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -11,7 +11,7 @@ const DEV_NETWORK_COLORS = {
   foreground: '#1348E4'
 };
 
-const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[], foreground: string }> = {
+const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[]; foreground: string }> = {
   itn: {
     backgrounds: ['#F2E6FF', '#4D019840'],
     foreground: '#4D0198'
@@ -28,7 +28,7 @@ const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[], foreground: s
 type NetworkSelectorProps = {
   currentNetwork: NetworkName;
   onSelect: (network: NetworkName) => void;
-}
+};
 
 export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorProps): React.ReactElement {
   const { networkState: { isDeveloper, selected } } = useContext(PolymeshContext);
@@ -63,8 +63,46 @@ export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorPr
     };
   }, [isDropdownShowing]);
 
+  const networkOptions: Option[] = Object.entries(networkLabels)
+    .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
+    .map(([_network, networkLabel]) => {
+      return {
+        label: (
+          <Flex
+            className='network-item'
+            key={_network}
+            onClick={() => onSelect(_network as NetworkName)}
+            px='16px'
+            py='8px'
+          >
+            <NetworkCircle
+              background={NETWORK_COLORS[_network as NetworkName].backgrounds[0]}
+              color={NETWORK_COLORS[_network as NetworkName].foreground}
+              size='24px'
+              thickness='4px'
+            />
+            <Box ml='8px'
+              mr='auto'>
+              <Text variant='b2m'>{networkLabel}</Text>
+            </Box>
+
+            {selected === _network && (
+              <Box ml='auto'>
+                <Icon Asset={SvgCheck}
+                  color='brandMain'
+                  height={24}
+                  width={24} />
+              </Box>
+            )}
+          </Flex>
+        ),
+        value: _network
+      };
+    });
+
   return (
-    <Wrapper>
+    <OptionSelector minWidth='296px'
+      options={networkOptions}>
       <NetworkSelect background={background}
         onClick={showDropdown}>
         <NetworkCircle background={background}
@@ -82,59 +120,80 @@ export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorPr
             rotate='180deg' />
         </DropdownIcon>
       </NetworkSelect>
-
-      {isDropdownShowing &&
-        <NetworkDropdown borderRadius='8px'
-          py='8px'
-          ref={dropdownRef}
-          width='296px'>
-          <Box mx='16px'>
-            <Text color='gray.2'
-              variant='b2m'>
-                Networks
-            </Text>
-          </Box>
-          {Object.entries(networkLabels)
-            .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
-            .map(([_network, networkLabel]) => {
-              return (
-                <Flex className='network-item'
-                  key={_network}
-                  onClick={() => onSelect(_network as NetworkName)}
-                  px='16px'
-                  py='8px'>
-                  <NetworkCircle background={NETWORK_COLORS[_network as NetworkName].backgrounds[0]}
-                    color={NETWORK_COLORS[_network as NetworkName].foreground}
-                    size='24px'
-                    thickness='4px'/>
-                  <Box ml='8px'
-                    mr='auto'>
-                    <Text variant='b2m'>
-                      {networkLabel}
-                    </Text>
-                  </Box>
-                  {selected === _network &&
-                    <Icon
-                      Asset={SvgCheck}
-                      color='brandMain'
-                      height={24}
-                      width={24}
-                    />
-                  }
-                </Flex>
-              );
-            })}
-        </NetworkDropdown>
-      }
-    </Wrapper>
+    </OptionSelector>
   );
+
+  // return (
+  // <Wrapper>
+  // <NetworkSelect background={background}
+  //   onClick={showDropdown}>
+  //   <NetworkCircle background={background}
+  //     color={foreground} />
+  //   <Box ml='4px'
+  //     mr='7px'>
+  //     <Text color={foreground}
+  //       variant='b3m'>
+  //       {networkLabels[currentNetwork]}
+  //     </Text>
+  //   </Box>
+  //   <DropdownIcon background={backgroundLight}>
+  //     <Icon Asset={SvgChevron}
+  //       color={foreground}
+  //       rotate='180deg' />
+  //   </DropdownIcon>
+  // </NetworkSelect>
+  //   {isDropdownShowing &&
+  //     <NetworkDropdown borderRadius='8px'
+  //       py='8px'
+  //       ref={dropdownRef}
+  //       width='296px'>
+  //       <Box mx='16px'>
+  //         <Text color='gray.2'
+  //           variant='b2m'>
+  //             Networks
+  //         </Text>
+  //       </Box>
+  //       {Object.entries(networkLabels)
+  //         .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
+  //         .map(([_network, networkLabel]) => {
+  //           return (
+  //             <Flex className='network-item'
+  //               key={_network}
+  //               onClick={() => onSelect(_network as NetworkName)}
+  //               px='16px'
+  //               py='8px'>
+  //               <NetworkCircle background={NETWORK_COLORS[_network as NetworkName].backgrounds[0]}
+  //                 color={NETWORK_COLORS[_network as NetworkName].foreground}
+  //                 size='24px'
+  //                 thickness='4px'/>
+  //               <Box ml='8px'
+  //                 mr='auto'>
+  //                 <Text variant='b2m'>
+  //                   {networkLabel}
+  //                 </Text>
+  //               </Box>
+  //               {selected === _network &&
+  //                 <Icon
+  //                   Asset={SvgCheck}
+  //                   color='brandMain'
+  //                   height={24}
+  //                   width={24}
+  //                 />
+  //               }
+  //             </Flex>
+  //           );
+  //         })}
+  //     </NetworkDropdown>
+  //   }
+  // </Wrapper>
+  // );
 }
 
 const Wrapper = styled.div`
   position: relative;
 `;
 
-const NetworkSelect = styled.div<{ background: string; }>`
+const NetworkSelect = styled.div<{ background: string }>`
   display: flex;
   align-items: center;
   height: 24px;
@@ -144,7 +203,7 @@ const NetworkSelect = styled.div<{ background: string; }>`
   cursor: pointer;
 `;
 
-const DropdownIcon = styled.div<{ background: string; }>`
+const DropdownIcon = styled.div<{ background: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,7 +213,7 @@ const DropdownIcon = styled.div<{ background: string; }>`
   background-color: ${(props) => props.background};
 `;
 
-const NetworkCircle = styled.span<{ background: string; color: string; size?: string; thickness?: string; }>`
+const NetworkCircle = styled.span<{ background: string; color: string; size?: string; thickness?: string }>`
   display: inline-box;
   width: ${(props) => props.size || '12px'};
   height: ${(props) => props.size || '12px'};
@@ -162,6 +221,7 @@ const NetworkCircle = styled.span<{ background: string; color: string; size?: st
   box-sizing: border-box;
   border: ${(props) => props.thickness || '2px'} solid ${(props) => props.color};
   border-radius: 50%;
+  flex-shrink: 0;
 `;
 
 const NetworkDropdown = styled(Box)`
