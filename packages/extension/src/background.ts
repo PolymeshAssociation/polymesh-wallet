@@ -8,7 +8,7 @@ import subscribePolymesh, { accountsSynchronizer } from '@polymathnetwork/extens
 import handlers from '@polymathnetwork/extension-core/background/handlers';
 import { PORTS } from '@polymathnetwork/extension-core/constants';
 import SchemaService from '@polymathnetwork/extension-core/external/schema';
-import { setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
+import { resetState, setIsRehydrated } from '@polymathnetwork/extension-core/store/setters';
 import { fatalErrorHandler } from '@polymathnetwork/extension-core/utils';
 
 const loadSchema = () => {
@@ -20,6 +20,8 @@ chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
 
 // This listener is invoked every time the extension is installed, updated, or reloaded.
 chrome.runtime.onInstalled.addListener(() => {
+  // Reset stored state to avoid integrity issues. Store will be repopulated next time the wallet is opened.
+  resetState();
   setIsRehydrated();
   loadSchema();
 });
