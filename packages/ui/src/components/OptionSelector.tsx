@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { CSSProperties, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, Fragment, PropsWithChildren, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
@@ -12,9 +12,14 @@ export type Option = {
   value: any;
 };
 
+export type CategoryOptions = {
+  category: string;
+  options: Option[];
+};
+
 type OptionSelectorProps = BoxProps &
 PropsWithChildren<{
-  options: Option[];
+  options: Option[] | CategoryOptions[];
   onSelect: (value: any) => void;
   style?: CSSProperties;
 }>;
@@ -42,20 +47,6 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       y: rect.y + rect.height + SELECTOR_SPACING
     });
     setIsShowingOptions(true);
-  };
-
-  const renderOption = (label: OptionLabel) => {
-    return typeof label === 'string'
-      ? (
-        <Flex className='network-item'
-          px='16px'
-          py='8px'>
-          <Text variant='b2m'>{label}</Text>
-        </Flex>
-      )
-      : (
-        label
-      );
   };
 
   const handleClick = (event: MouseEvent) => {
@@ -89,6 +80,8 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     };
   }, [portalRoot]);
 
+  const hasCategories = 'category' in options[0];
+
   return (
     <Box onClick={showOptions}
       ref={wrapperRef}>
@@ -97,18 +90,30 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       {isShowingOptions &&
         ReactDOM.createPortal(
           <Options {...boxProps}
+            coords={coords}
             ref={optionsRef}
-            style={style}
-            x={coords.x}
-            y={coords.y}>
-            <ul>
-              {options.map((option, index) => (
-                <li key={index}
-                  onClick={() => onSelect(option.value)}>
-                  {renderOption(option.label)}
-                </li>
-              ))}
-            </ul>
+            style={style}>
+            {hasCategories &&
+              (options as CategoryOptions[]).map((option: CategoryOptions, index: number) => {
+                return (
+                  <Fragment key={index}>
+                    <Box mx='16px'>
+                      <Text color='gray.2'
+                        variant='b2m'>
+                        {option.category}
+                      </Text>
+                    </Box>
+                    <ul>
+                      {option.options.map((_option, _index) => (
+                        <li key={_index}
+                          onClick={() => onSelect(_option.value)}>
+                          {renderOptionLabel(_option.label)}
+                        </li>
+                      ))}
+                    </ul>
+                  </Fragment>
+                );
+              })}
           </Options>,
           portalRoot
         )}
@@ -116,10 +121,24 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   );
 }
 
-const Options = styled(Box)<{ x: number; y: number }>`
+function renderOptionLabel (label: OptionLabel) {
+  return typeof label === 'string'
+    ? (
+      <Flex className='network-item'
+        px='16px'
+        py='8px'>
+        <Text variant='b2m'>{label}</Text>
+      </Flex>
+    )
+    : (
+      label
+    );
+}
+
+const Options = styled(Box)<{ coords: { x: number; y: number } }>`
   position: absolute;
-  top: ${(props) => props.y}px;
-  left: ${(props) => props.x}px;
+  top: ${(props) => props.coords.y}px;
+  left: ${(props) => props.coords.x}px;
   background: white;
   box-shadow: ${(props) => props.theme.shadows[3]};
   border-radius: 8px;
