@@ -4,13 +4,12 @@ import { FLUSH,
   PAUSE,
   PERSIST,
   persistReducer,
-  persistStore,
-  PURGE,
+  persistStore, PURGE,
   REGISTER, REHYDRATE } from 'redux-persist';
+import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
 import { localStorage } from 'redux-persist-webextension-storage';
 
-import rootReducer from './rootReducer';
-import { setIsRehydrated } from './setters';
+import rootReducer, { AppReducer, RootState } from './rootReducer';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -18,10 +17,11 @@ const persistConfig = {
   key: 'root',
   storage: localStorage,
   version: 1,
-  blacklist: ['status']
+  blacklist: ['status'],
+  stateReconciler: hardSet
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer<RootState>(persistConfig, rootReducer);
 
 const middleware = [...getDefaultMiddleware({ serializableCheck: {
   ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
@@ -31,9 +31,9 @@ if (isDev) {
   middleware.push(logger);
 }
 
-const store: any = configureStore({
+const store = configureStore({
   middleware,
-  reducer: persistedReducer,
+  reducer: persistedReducer as unknown as AppReducer,
   devTools: isDev
 });
 
@@ -48,8 +48,6 @@ if (isDev && (module as any).hot) {
 
 export type Dispatch = typeof store.dispatch
 
-export const persister = persistStore(store, null, () => {
-  setIsRehydrated();
-});
+export const persister = persistStore(store);
 
 export default store;
