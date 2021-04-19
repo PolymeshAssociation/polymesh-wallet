@@ -1,5 +1,6 @@
 import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { CSSProperties, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
 import { BoxProps } from '../ui/Box';
@@ -19,13 +20,27 @@ PropsWithChildren<{
 }>;
 
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
-  const [isShowingOptions, setIsShowingOptions] = useState(false);
-
-  const optionsRef = useRef<HTMLDivElement>(null);
-
   const { children, onSelect, options, style, ...boxProps } = props;
 
+  const [isShowingOptions, setIsShowingOptions] = useState(false);
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const optionsRef = useRef<HTMLDivElement>(null);
+
+  const portalRoot = document.createElement('div');
+
   const showOptions = () => {
+    const rect = wrapperRef.current?.getBoundingClientRect();
+
+    if (!rect) return;
+
+    // @TODO add options, or calculate where to render the options: bottom-left, bottom-right, top-left, top-right, etc.
+    // Default: bottom-left
+    setCoords({
+      x: rect.x,
+      y: rect.y + rect.height + SELECTOR_SPACING
+    });
     setIsShowingOptions(true);
   };
 
@@ -61,38 +76,55 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     };
   }, [isShowingOptions]);
 
+  // Add root element for portal
+  useEffect(() => {
+    const root = document.getElementById('root');
+
+    portalRoot.id = 'option-selector-root';
+
+    root?.appendChild(portalRoot);
+
+    return () => {
+      portalRoot.remove();
+    };
+  }, [portalRoot]);
+
   return (
-    <Wrapper onClick={showOptions}>
+    <Box onClick={showOptions}
+      ref={wrapperRef}>
       {children}
 
-      {isShowingOptions && (
-        <Options {...boxProps}
-          ref={optionsRef}
-          style={style}>
-          <ul>
-            {options.map((option, index) => (
-              <li key={index}
-                onClick={() => onSelect(option.value)}>
-                {renderOption(option.label)}
-              </li>
-            ))}
-          </ul>
-        </Options>
-      )}
-    </Wrapper>
+      {isShowingOptions &&
+        ReactDOM.createPortal(
+          <Options {...boxProps}
+            ref={optionsRef}
+            style={style}
+            x={coords.x}
+            y={coords.y}>
+            <ul>
+              {options.map((option, index) => (
+                <li key={index}
+                  onClick={() => onSelect(option.value)}>
+                  {renderOption(option.label)}
+                </li>
+              ))}
+            </ul>
+          </Options>,
+          portalRoot
+        )}
+    </Box>
   );
 }
 
-const Wrapper = styled.div`
-  position: relative;
-`;
-
-const Options = styled(Box)`
+const Options = styled(Box)<{ x: number; y: number }>`
   position: absolute;
+  top: ${(props) => props.y}px;
+  left: ${(props) => props.x}px;
   background: white;
   box-shadow: ${(props) => props.theme.shadows[3]};
   border-radius: 8px;
   padding: 8px 0;
+  z-index: 1000;
 
   ul {
     margin: 0;
@@ -109,3 +141,5 @@ const Options = styled(Box)`
     }
   }
 `;
+
+const SELECTOR_SPACING = 4;
