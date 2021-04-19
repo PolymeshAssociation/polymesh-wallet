@@ -47,6 +47,7 @@ import { buildHierarchy } from '../util/buildHierarchy';
 import ImportLedger from './ImportLedger/ImportLedger';
 import { AccountDetails } from './AccountDetails';
 import Accounts from './Accounts';
+import AuthManagement from './AuthManagement';
 import Authorize from './Authorize';
 import { ChangePassword } from './ChangePassword';
 import { ExportAccount } from './ExportAccount';
@@ -264,6 +265,9 @@ export default function Popup (): React.ReactElement {
                                 </Route>
                                 <Route path='/account/details/:address'>
                                   <AccountDetails />
+                                </Route>
+                                <Route path='/settings/url-auth'>
+                                  <AuthManagement />
                                 </Route>
                                 <Route exact
                                   path='/'>

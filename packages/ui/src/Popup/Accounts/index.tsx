@@ -132,6 +132,8 @@ export default function Accounts (): React.ReactElement {
         return windowOpen('/');
       case 'toggleIsDev':
         return togglePolyIsDev();
+      case 'manageUrlAuth':
+        return history.push('/settings/url-auth');
     }
   };
 
@@ -165,19 +167,24 @@ export default function Accounts (): React.ReactElement {
             <MenuItem data={{ action: 'changePassword' }}
               onClick={handleTopMenuSelection}>
               <Text color='gray.2'
-                variant='b1'>Change password</Text>
+                variant='b1'>Change Password</Text>
             </MenuItem>
           }
           <MenuItem data={{ action: 'newWindow' }}
             onClick={handleTopMenuSelection}>
             <Text color='gray.2'
-              variant='b1'>Open extension in a new tab</Text>
+              variant='b1'>Open Extension in a New Tab</Text>
+          </MenuItem>
+          <MenuItem data={{ action: 'manageUrlAuth' }}
+            onClick={handleTopMenuSelection}>
+            <Text color='gray.2'
+              variant='b1'>Manage Website Access</Text>
           </MenuItem>
           <MenuItem data={{ action: 'toggleIsDev' }}
             onClick={handleTopMenuSelection}>
             <Checkbox checked={isDeveloper}
               disabled
-              label={<Text color='gray.2'>Display development networks</Text>}
+              label={<Text color='gray.2'>Display Development Networks</Text>}
               onClick={(e) => e.preventDefault()}
               style={{ cursor: 'pointer' }}
             />
