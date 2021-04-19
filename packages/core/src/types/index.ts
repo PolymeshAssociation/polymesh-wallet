@@ -138,7 +138,6 @@ export type Error = {
 }
 
 export type StoreStatus = {
-  rehydrated: boolean,
   error: Error | null,
   apiStatus: 'ready' | 'connecting' | 'error',
   populated: Record<string, boolean>,
