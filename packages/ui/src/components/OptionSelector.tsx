@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { CSSProperties, MouseEventHandler, PropsWithChildren } from 'react';
+import React, { CSSProperties, PropsWithChildren, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { BoxProps } from '../ui/Box';
@@ -11,14 +11,23 @@ export type Option = {
   value: any;
 };
 
-type OptionSelectorProps = BoxProps & PropsWithChildren<{
+type OptionSelectorProps = BoxProps &
+PropsWithChildren<{
   options: Option[];
   onSelect: (value: any) => void;
   style?: CSSProperties;
 }>;
 
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
+  const [isShowingOptions, setIsShowingOptions] = useState(false);
+
+  const optionsRef = useRef<HTMLDivElement>(null);
+
   const { children, onSelect, options, style, ...boxProps } = props;
+
+  const showOptions = () => {
+    setIsShowingOptions(true);
+  };
 
   const renderOption = (label: OptionLabel) => {
     return typeof label === 'string'
@@ -26,28 +35,50 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
         <Flex className='network-item'
           px='16px'
           py='8px'>
-          <Text variant='b2m'>
-            {label}
-          </Text>
+          <Text variant='b2m'>{label}</Text>
         </Flex>
       )
-      : label;
+      : (
+        label
+      );
   };
 
+  const handleClick = (event: MouseEvent) => {
+    const hasClickedOutside = !optionsRef.current?.contains(event.target as Node);
+
+    if (hasClickedOutside) {
+      setIsShowingOptions(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isShowingOptions) {
+      document.addEventListener('mousedown', handleClick);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+    };
+  }, [isShowingOptions]);
+
   return (
-    <Wrapper>
+    <Wrapper onClick={showOptions}>
       {children}
-      <Options {...boxProps}
-        style={style}>
-        <ul>
-          {options.map((option, index) => (
-            <li key={index}
-              onClick={() => onSelect(option.value)}>
-              {renderOption(option.label)}
-            </li>
-          ))}
-        </ul>
-      </Options>
+
+      {isShowingOptions && (
+        <Options {...boxProps}
+          ref={optionsRef}
+          style={style}>
+          <ul>
+            {options.map((option, index) => (
+              <li key={index}
+                onClick={() => onSelect(option.value)}>
+                {renderOption(option.label)}
+              </li>
+            ))}
+          </ul>
+        </Options>
+      )}
     </Wrapper>
   );
 }
