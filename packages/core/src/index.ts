@@ -12,7 +12,7 @@ import { actions as identityActions } from './store/features/identities';
 import { actions as networkActions } from './store/features/network';
 import { actions as statusActions } from './store/features/status';
 import { getAccountsList, getNetwork } from './store/getters';
-import { subscribeDidsList, subscribeIsHydratedAndNetwork } from './store/subscribers';
+import { subscribeDidsList, subscribeSelectedNetwork } from './store/subscribers';
 import { populatedDelay } from './constants';
 import store from './store';
 import { AccountData, KeyringAccountData, UnsubCallback } from './types';
@@ -116,7 +116,7 @@ function subscribePolymesh (): () => Promise<void> {
   console.log('Poly: fetching data from chain');
 
   !!unsubCallbacks.network && unsubCallbacks.network();
-  unsubCallbacks.network = subscribeIsHydratedAndNetwork((network) => {
+  unsubCallbacks.network = subscribeSelectedNetwork((network) => {
     if (network) {
       console.log('Poly: Selected network', network);
       store.dispatch(statusActions.init());

@@ -94,16 +94,16 @@ export const selectedAccountIdentified = createSelector(
   }
 );
 
-export const selectIsRehydrated = createSelector(
-  (state: RootState) => state.status,
-  ({ rehydrated }) => rehydrated
-);
+// export const selectIsRehydrated = createSelector(
+//   (state: RootState) => state.status,
+//   ({ rehydrated }) => rehydrated
+// );
 
-export const selectIsHydratedAndNetwork = createSelector(
-  selectIsRehydrated,
-  selectedNetwork,
-  (isHydrated, network) => { return isHydrated ? network : undefined; }
-);
+// export const selectIsHydratedAndNetwork = createSelector(
+//   selectIsRehydrated,
+//   selectedNetwork,
+//   (isHydrated, network) => { return isHydrated ? network : undefined; }
+// );
 
 export const selectStatus = createSelector(
   (state: RootState) => state.status,
