@@ -1,7 +1,8 @@
 import { networkIsDev, networkLabels } from '@polymathnetwork/extension-core/constants';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgCheck, SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Option, OptionSelector, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { OptionSelector, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { CategoryOptions, Option } from '@polymathnetwork/extension-ui/components/OptionSelector';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -63,7 +64,49 @@ export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorPr
     };
   }, [isDropdownShowing]);
 
-  const networkOptions: Option[] = Object.entries(networkLabels)
+  const networkOptions: CategoryOptions[] = [
+    {
+      category: 'Networks',
+      options: Object.entries(networkLabels)
+        .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
+        .map(([_network, networkLabel]) => {
+          return {
+            label: (
+              <Flex
+                className='network-item'
+                key={_network}
+                // onClick={() => onSelect(_network as NetworkName)}
+                px='16px'
+                py='8px'
+              >
+                <NetworkCircle
+                  background={NETWORK_COLORS[_network as NetworkName].backgrounds[0]}
+                  color={NETWORK_COLORS[_network as NetworkName].foreground}
+                  size='24px'
+                  thickness='4px'
+                />
+                <Box ml='8px'
+                  mr='auto'>
+                  <Text variant='b2m'>{networkLabel}</Text>
+                </Box>
+
+                {selected === _network && (
+                  <Box ml='auto'>
+                    <Icon Asset={SvgCheck}
+                      color='brandMain'
+                      height={24}
+                      width={24} />
+                  </Box>
+                )}
+              </Flex>
+            ),
+            value: _network
+          };
+        })
+    }
+  ];
+
+  const networkOptionsB: Option[] = Object.entries(networkLabels)
     .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
     .map(([_network, networkLabel]) => {
       return {
