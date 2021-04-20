@@ -2,7 +2,7 @@ import { networkIsDev, networkLabels } from '@polymathnetwork/extension-core/con
 import { NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgCheck, SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { OptionSelector, PolymeshContext } from '@polymathnetwork/extension-ui/components';
-import { CategoryOptions, Option } from '@polymathnetwork/extension-ui/components/OptionSelector';
+import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -111,27 +111,30 @@ export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorPr
   };
 
   return (
-    <OptionSelector minWidth='296px'
+    <OptionSelector
+      minWidth='296px'
       onSelect={changeNetwork}
-      options={networkOptions}>
-      <NetworkSelect background={background}
-        onClick={showDropdown}>
-        <NetworkCircle background={background}
-          color={foreground} />
-        <Box ml='4px'
-          mr='7px'>
-          <Text color={foreground}
-            variant='b3m'>
-            {networkLabels[currentNetwork]}
-          </Text>
-        </Box>
-        <DropdownIcon background={backgroundLight}>
-          <Icon Asset={SvgChevron}
-            color={foreground}
-            rotate='180deg' />
-        </DropdownIcon>
-      </NetworkSelect>
-    </OptionSelector>
+      options={networkOptions}
+      selector={
+        <NetworkSelect background={background}
+          onClick={showDropdown}>
+          <NetworkCircle background={background}
+            color={foreground} />
+          <Box ml='4px'
+            mr='7px'>
+            <Text color={foreground}
+              variant='b3m'>
+              {networkLabels[currentNetwork]}
+            </Text>
+          </Box>
+          <DropdownIcon background={backgroundLight}>
+            <Icon Asset={SvgChevron}
+              color={foreground}
+              rotate='180deg' />
+          </DropdownIcon>
+        </NetworkSelect>
+      }
+    ></OptionSelector>
   );
 
   // return (
