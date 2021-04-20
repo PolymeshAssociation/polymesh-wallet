@@ -44,6 +44,8 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   const portalRoot = document.getElementById(OPTION_SELECTOR_PORTAL_ID);
 
   const insertPortalRoot = () => {
+    if (portalRoot) return;
+
     const root = document.getElementById('root');
     const createdPortalRoot = document.createElement('div');
 
@@ -51,7 +53,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     root?.appendChild(createdPortalRoot);
   };
 
-  const positionOptionsEl = () => {
+  const cssPositionOptionsEl = () => {
     const wrapperRect = wrapperRef.current?.getBoundingClientRect();
 
     if (!wrapperRect) return;
@@ -73,7 +75,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
   const showOptions = () => {
     insertPortalRoot();
-    positionOptionsEl();
+    cssPositionOptionsEl();
     setIsShowingOptions(true);
   };
 
@@ -140,7 +142,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 function renderOptionLabel (label: OptionLabel) {
   return typeof label === 'string'
     ? (
-      <Flex className='network-item'
+      <Flex
         px='16px'
         py='8px'>
         <Text variant='b2m'>{label}</Text>
