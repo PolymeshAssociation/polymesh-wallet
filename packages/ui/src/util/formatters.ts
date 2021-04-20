@@ -22,9 +22,6 @@ export const formatAmount = (amount: BN | string | number, decimals = 6, minDigi
   const decimalsBN = new BN(decimals);
   const divisor = new BN(10).pow(decimalsBN);
 
-  console.log(amount.div(divisor).toString());
-  console.log(amount.mod(divisor).toString());
-
   const beforeDecimal = amount.div(divisor).toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Thousands separator;
   const afterDecimal =
