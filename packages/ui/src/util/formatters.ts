@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import BN from 'bn.js';
 
 /**
  * Shortens an address for display purposes
@@ -16,12 +16,19 @@ export const toShortAddress = (address: string, { size = 17 }: { size?: number }
   return `${address.substring(0, portionSize + remainder)}...${address.slice(-portionSize)}`;
 };
 
-export const formatAmount = (amount: BigNumber, minimumFractionDigits = 0, scaleDown = false): string => {
-  const formattter = new Intl.NumberFormat('en-US', {
-    minimumFractionDigits
-  });
+export const formatAmount = (amount: BN | string | number, decimals = 6, decimalPlaces = 3): string => {
+  amount = new BN(amount);
 
-  return formattter.format(parseFloat((scaleDown ? amount.div(1000000) : amount).toString()));
+  const decimalsBN = new BN(decimals);
+  const divisor = new BN(10).pow(decimalsBN);
+
+  const beforeDecimal = amount.div(divisor).toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Thousands separator;
+  const afterDecimal = amount.mod(divisor).toString()
+    .concat('0'.repeat(decimalPlaces)) // Padding with zeros
+    .slice(0, decimalPlaces); // trimming
+
+  return `${beforeDecimal}.${afterDecimal}`;
 };
 
 export const truncateString = (str: string, size = 30): string => {
