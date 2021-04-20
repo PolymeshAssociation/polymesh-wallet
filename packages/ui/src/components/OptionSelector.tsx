@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { CSSProperties, Fragment, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, Fragment, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
@@ -25,7 +25,7 @@ type OptionSelectorProps = BoxProps & {
   style?: CSSProperties;
 };
 
-type Position = {
+type CssPosition = {
   top?: string;
   right?: string;
   bottom?: string;
@@ -36,7 +36,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   const { onSelect, options, position, selector, style, ...boxProps } = props;
 
   const [isShowingOptions, setIsShowingOptions] = useState(false);
-  const [placePosition, setPlacePosition] = useState<Position>({});
+  const [cssPosition, setCssPosition] = useState<CssPosition>({});
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
@@ -59,12 +59,12 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     // @TODO add options, or calculate where to render the options: bottom-left, bottom-right, top-left, top-right, etc.
     // Default: bottom-left
     if (position === 'bottom-right') {
-      setPlacePosition({
+      setCssPosition({
         top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
         right: `calc(100% - ${wrapperRect.right}px)`
       });
     } else {
-      setPlacePosition({
+      setCssPosition({
         top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
         left: `${wrapperRect.left}px`
       });
@@ -106,7 +106,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
         !!portalRoot &&
         ReactDOM.createPortal(
           <Options {...boxProps}
-            position={placePosition}
+            cssPosition={cssPosition}
             ref={optionsRef}
             style={style}>
             {options.map((option, index) => (
@@ -151,17 +151,18 @@ function renderOptionLabel (label: OptionLabel) {
     );
 }
 
-const Options = styled(Box)<{ position: Position }>`
+const Options = styled(Box)<{ cssPosition: CssPosition }>`
   position: absolute;
-  ${({ position }) => position.top && `top: ${position.top}`};
-  ${({ position }) => position.right && `right: ${position.right}`};
-  ${({ position }) => position.bottom && `bottom: ${position.bottom}`};
-  ${({ position }) => position.left && `left: ${position.left}`};
   background: white;
   box-shadow: ${(props) => props.theme.shadows[3]};
   border-radius: 8px;
   padding: 8px 0;
   z-index: 1000;
+
+  ${({ cssPosition: { top } }) => top && `top: ${top};`}
+  ${({ cssPosition: { right } }) => right && `right: ${right};`}
+  ${({ cssPosition: { bottom } }) => bottom && `bottom: ${bottom};`}
+  ${({ cssPosition: { left } }) => left && `left: ${left};`}
 
   ul {
     margin: 0;
