@@ -5,6 +5,9 @@ import styled from 'styled-components';
 
 import { BoxProps } from '../ui/Box';
 
+const SELECTOR_SPACING = 4;
+const OPTION_SELECTOR_PORTAL_ID = 'option-selector-portal';
+
 type OptionLabel = string | JSX.Element;
 
 type OptionItem = {
@@ -44,8 +47,6 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   const portalRoot = document.getElementById(OPTION_SELECTOR_PORTAL_ID);
 
   const insertPortalRoot = () => {
-    if (portalRoot) return;
-
     const root = document.getElementById('root');
     const createdPortalRoot = document.createElement('div');
 
@@ -181,6 +182,3 @@ const Options = styled(Box)<{ cssPosition: CssPosition }>`
     }
   }
 `;
-
-const SELECTOR_SPACING = 4;
-const OPTION_SELECTOR_PORTAL_ID = 'option-selector-portal';
