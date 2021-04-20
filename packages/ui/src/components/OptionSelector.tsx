@@ -56,8 +56,6 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
     if (!wrapperRect) return;
 
-    console.log({ wrapperRect });
-
     // @TODO add options, or calculate where to render the options: bottom-left, bottom-right, top-left, top-right, etc.
     // Default: bottom-left
     if (position === 'bottom-right') {
@@ -90,11 +88,12 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   useEffect(() => {
     if (isShowingOptions) {
       document.addEventListener('mousedown', handleClick);
+    } else {
+      portalRoot?.remove();
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClick);
-      portalRoot?.remove();
     };
   }, [isShowingOptions, portalRoot]);
 
