@@ -17,19 +17,26 @@ export type Option = {
   options: OptionItem[];
 };
 
-type OptionSelectorProps = BoxProps &
-{
+type OptionSelectorProps = BoxProps & {
   options: Option[];
   selector: string | JSX.Element;
   onSelect: (value: any) => void;
+  position?: 'bottom-left' | 'bottom-right';
   style?: CSSProperties;
 };
 
+type Position = {
+  top?: string;
+  right?: string;
+  bottom?: string;
+  left?: string;
+};
+
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
-  const { onSelect, options, selector, style, ...boxProps } = props;
+  const { onSelect, options, position, selector, style, ...boxProps } = props;
 
   const [isShowingOptions, setIsShowingOptions] = useState(false);
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [placePosition, setPlacePosition] = useState<Position>({});
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
@@ -41,20 +48,29 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     const createdPortalRoot = document.createElement('div');
 
     createdPortalRoot.id = OPTION_SELECTOR_PORTAL_ID;
-    root?.parentNode?.insertBefore(createdPortalRoot, root.nextSibling);
+    root?.appendChild(createdPortalRoot);
   };
 
   const positionOptionsEl = () => {
-    const rect = wrapperRef.current?.getBoundingClientRect();
+    const wrapperRect = wrapperRef.current?.getBoundingClientRect();
 
-    if (!rect) return;
+    if (!wrapperRect) return;
+
+    console.log({ wrapperRect });
 
     // @TODO add options, or calculate where to render the options: bottom-left, bottom-right, top-left, top-right, etc.
     // Default: bottom-left
-    setCoords({
-      x: rect.x,
-      y: rect.y + rect.height + SELECTOR_SPACING
-    });
+    if (position === 'bottom-right') {
+      setPlacePosition({
+        top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
+        right: `calc(100% - ${wrapperRect.right}px)`
+      });
+    } else {
+      setPlacePosition({
+        top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
+        left: `${wrapperRect.left}px`
+      });
+    }
   };
 
   const showOptions = () => {
@@ -87,10 +103,11 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       ref={wrapperRef}>
       {selector}
 
-      {isShowingOptions && !!portalRoot &&
+      {isShowingOptions &&
+        !!portalRoot &&
         ReactDOM.createPortal(
           <Options {...boxProps}
-            coords={coords}
+            position={placePosition}
             ref={optionsRef}
             style={style}>
             {options.map((option, index) => (
@@ -135,10 +152,12 @@ function renderOptionLabel (label: OptionLabel) {
     );
 }
 
-const Options = styled(Box)<{ coords: { x: number; y: number } }>`
+const Options = styled(Box)<{ position: Position }>`
   position: absolute;
-  top: ${(props) => props.coords.y}px;
-  left: ${(props) => props.coords.x}px;
+  ${({ position }) => position.top && `top: ${position.top}`};
+  ${({ position }) => position.right && `right: ${position.right}`};
+  ${({ position }) => position.bottom && `bottom: ${position.bottom}`};
+  ${({ position }) => position.left && `left: ${position.left}`};
   background: white;
   box-shadow: ${(props) => props.theme.shadows[3]};
   border-radius: 8px;
