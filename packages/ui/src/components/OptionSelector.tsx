@@ -17,13 +17,15 @@ type OptionItem = {
 
 export type Option = {
   category?: string;
-  options: OptionItem[];
+  menu: OptionItem[];
 };
 
 type OptionSelectorProps = BoxProps & {
   options: Option[];
   selector: string | JSX.Element;
   onSelect: (value: any) => void;
+  // @TODO add more positioning options as needed.
+  // Or, add logic to dynamically calculate where to open like a context-menu (will make UI less predictable).
   position?: 'bottom-left' | 'bottom-right';
   style?: CSSProperties;
 };
@@ -36,7 +38,7 @@ type CssPosition = {
 };
 
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
-  const { onSelect, options, position, selector, style, ...boxProps } = props;
+  const { onSelect, options, position = 'bottom-left', selector, style, ...boxProps } = props;
 
   const [isShowingOptions, setIsShowingOptions] = useState(false);
   const [cssPosition, setCssPosition] = useState<CssPosition>({});
@@ -59,18 +61,17 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
     if (!wrapperRect) return;
 
-    // @TODO add options, or calculate where to render the options: bottom-left, bottom-right, top-left, top-right, etc.
-    // Default: bottom-left
-    if (position === 'bottom-right') {
-      setCssPosition({
-        top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
-        right: `calc(100% - ${wrapperRect.right}px)`
-      });
-    } else {
-      setCssPosition({
-        top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
-        left: `${wrapperRect.left}px`
-      });
+    switch (position) {
+      case 'bottom-right':
+        return setCssPosition({
+          top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
+          right: `calc(100% - ${wrapperRect.right}px)`
+        });
+      case 'bottom-left':
+        return setCssPosition({
+          top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
+          left: `${wrapperRect.left}px`
+        });
     }
   };
 
@@ -105,8 +106,8 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       ref={wrapperRef}>
       {selector}
 
-      {isShowingOptions &&
-        !!portalRoot &&
+      {portalRoot &&
+        isShowingOptions &&
         ReactDOM.createPortal(
           <Options {...boxProps}
             cssPosition={cssPosition}
@@ -124,10 +125,10 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
                   </Box>
                 )}
                 <ul>
-                  {option.options.map((_option, _index) => (
+                  {option.menu.map((_option, _index) => (
                     <li key={_index}
                       onClick={() => onSelect(_option.value)}>
-                      {renderOptionLabel(_option.label)}
+                      <OptionLabel label={_option.label} />
                     </li>
                   ))}
                 </ul>
@@ -140,11 +141,10 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   );
 }
 
-function renderOptionLabel (label: OptionLabel) {
+function OptionLabel ({ label }: { label: OptionLabel }) {
   return typeof label === 'string'
     ? (
-      <Flex
-        px='16px'
+      <Flex px='16px'
         py='8px'>
         <Text variant='b2m'>{label}</Text>
       </Flex>
@@ -162,6 +162,7 @@ const Options = styled(Box)<{ cssPosition: CssPosition }>`
   padding: 8px 0;
   z-index: 1000;
 
+  // Add only the necessary css positioning attributes
   ${({ cssPosition: { top } }) => top && `top: ${top};`}
   ${({ cssPosition: { right } }) => right && `right: ${right};`}
   ${({ cssPosition: { bottom } }) => bottom && `bottom: ${bottom};`}
