@@ -40,7 +40,7 @@ export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorPr
   const networkOptions: Option[] = [
     {
       category: 'Networks',
-      options: Object.entries(networkLabels)
+      menu: Object.entries(networkLabels)
         .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
         .map(([_network, networkLabel]) => {
           return {
