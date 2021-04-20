@@ -16,17 +16,21 @@ export const toShortAddress = (address: string, { size = 17 }: { size?: number }
   return `${address.substring(0, portionSize + remainder)}...${address.slice(-portionSize)}`;
 };
 
-export const formatAmount = (amount: BN | string | number, decimals = 6, decimalPlaces = 3): string => {
+export const formatAmount = (amount: BN | string | number, decimals = 6, minDigitsAfterDecimal = 3): string => {
   amount = new BN(amount);
 
   const decimalsBN = new BN(decimals);
   const divisor = new BN(10).pow(decimalsBN);
 
+  console.log(amount.div(divisor).toString());
+  console.log(amount.mod(divisor).toString());
+
   const beforeDecimal = amount.div(divisor).toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Thousands separator;
-  const afterDecimal = amount.mod(divisor).toString()
-    .concat('0'.repeat(decimalPlaces)) // Padding with zeros
-    .slice(0, decimalPlaces); // trimming
+  const afterDecimal =
+    '0'.repeat(decimals - amount.mod(divisor).toString().length) // Zero padding
+      .concat(amount.mod(divisor).toString())
+      .slice(0, minDigitsAfterDecimal); // trimming
 
   return `${beforeDecimal}.${afterDecimal}`;
 };
