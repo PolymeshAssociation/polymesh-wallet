@@ -128,6 +128,28 @@ export default function Accounts (): React.ReactElement {
     }
   };
 
+  const topMenuOptions: Option[] = [
+    {
+      options: [
+        { label: 'Change password', value: 'changePassword' },
+        { label: 'Open extension in a new tab', value: 'newWindow' },
+        {
+          label: (
+            <Flex px='16px'
+              py='8px'>
+              <Checkbox checked={isDeveloper}
+                disabled />
+              <Box ml='s'>
+                <Text variant='b2m'>Display development networks</Text>
+              </Box>
+            </Flex>
+          ),
+          value: 'toggleIsDev'
+        }
+      ]
+    }
+  ];
+
   const handleTopMenuSelection = (value: string) => {
     switch (value) {
       case 'changePassword':
@@ -139,92 +161,15 @@ export default function Accounts (): React.ReactElement {
     }
   };
 
-  const renderTopMenuButton = () => {
-    const options = [
-      {
-        options: [
-          { label: 'Change password', value: 'changePassword' },
-          { label: 'Open extension in a new tab', value: 'newWindow' },
-          {
-            label: (
-              <Flex px='16px'
-                py='8px'>
-                <Checkbox checked={isDeveloper}
-                  disabled />
-                <Box ml='s'>
-                  <Text variant='b2m'>Display development networks</Text>
-                </Box>
-              </Flex>
-            ),
-            value: 'toggleIsDev'
-          }
-        ]
-      }
-    ];
-
-    return (
-      <OptionSelector
-        onSelect={handleTopMenuSelection}
-        options={options}
-        position='bottom-right'
-        selector={<Icon Asset={SvgDotsVertical}
-          color='gray.0'
-          height={24}
-          style={{ cursor: 'pointer' }}
-          width={24} />}
-      />
-    );
-  };
-
   const openDashboard = () => {
     chrome.tabs.create({ url: getNetworkDashboardLink() });
   };
 
-  const renderTopMenu = () => {
-    const hasNonHardwareAccount = accounts.some((account) => !account.isHardware);
-
-    return (
-      <>
-        <Menu id='top_menu'>
-          {hasNonHardwareAccount && (
-            <MenuItem data={{ action: 'changePassword' }}
-              onClick={handleTopMenuSelection}>
-              <Text color='gray.2'
-                variant='b1'>
-                Change password
-              </Text>
-            </MenuItem>
-          )}
-          <MenuItem data={{ action: 'newWindow' }}
-            onClick={handleTopMenuSelection}>
-            <Text color='gray.2'
-              variant='b1'>
-              Open extension in a new tab
-            </Text>
-          </MenuItem>
-          <MenuItem data={{ action: 'toggleIsDev' }}
-            onClick={handleTopMenuSelection}>
-            <Checkbox
-              checked={isDeveloper}
-              disabled
-              label={<Text color='gray.2'>Display development networks</Text>}
-              onClick={(e) => e.preventDefault()}
-              style={{ cursor: 'pointer' }}
-            />
-          </MenuItem>
-        </Menu>
-      </>
-    );
-  };
-
   return (
     <>
-      {/* {renderTopMenu()} */}
       {renderAccountMenuItems()}
       {hierarchy.length === 0
-        ? (
-          <AddAccount />
-        )
+        ? <AddAccount />
         : (
           <>
             <Header>
@@ -238,7 +183,18 @@ export default function Accounts (): React.ReactElement {
                   justifyContent='center'>
                   <GrowingButton icon={SvgViewDashboard}
                     onClick={openDashboard} />
-                  {renderTopMenuButton()}
+                  <OptionSelector
+                    onSelect={handleTopMenuSelection}
+                    options={topMenuOptions}
+                    position='bottom-right'
+                    selector={
+                      <Icon Asset={SvgDotsVertical}
+                        color='gray.0'
+                        height={24}
+                        style={{ cursor: 'pointer' }}
+                        width={24} />
+                    }
+                  />
                 </Flex>
               </Flex>
               {currentAccount && <AccountsHeader account={currentAccount}
