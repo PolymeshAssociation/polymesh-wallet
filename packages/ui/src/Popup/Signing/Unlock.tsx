@@ -1,115 +1,56 @@
-import { validatePassword } from '@polymathnetwork/extension-ui/messaging';
-import React, { useContext, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-
-import { ActivityContext } from '../../components';
-import { Box, Button, Flex, Text, TextInput } from '../../ui';
+import { Box, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import React, { useCallback } from 'react';
 
 interface Props {
-  isFirst: boolean | undefined;
-  isLocked: boolean;
-  savePass: boolean;
-  onCancel: () => Promise<void>;
+  className?: string;
   error?: string | null;
-  onSavePassChange: React.Dispatch<React.SetStateAction<boolean>>;
-  onSign: (password: string) => Promise<void>;
+  isBusy: boolean;
+  onSign: () => Promise<void>;
+  password: string;
+  setError: (error: string | null) => void;
+  setPassword: (password: string) => void;
 }
 
-function Unlock ({ error, isFirst, isLocked, onCancel, onSign }: Props): React.ReactElement<Props> {
-  const isBusy = useContext(ActivityContext);
-
-  const { errors, handleSubmit, register, setError } = useForm({
-    defaultValues: {
-      currentPassword: ''
-    }
-  });
-
-  useEffect((): void => {
-    setError('currentPassword', { type: 'SigningError' });
-  }, [error, setError]);
-
-  const onSubmit = async (data: { [x: string]: string; }) => {
-    const valid = await validatePassword(data.currentPassword);
-
-    if (!valid) {
-      setError('currentPassword', { type: 'WrongPassword' });
-    } else {
-      await onSign(data.currentPassword);
-    }
-  };
+function Unlock ({ className, error, isBusy, password, setError, setPassword }: Props): React.ReactElement<Props> {
+  const _onChangePassword = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      setPassword(e.target.value);
+      setError(null);
+    },
+    [setError, setPassword]
+  );
 
   return (
-    <>
-      {isLocked && (
-        <>
-          <form id='passwordForm'
-            onSubmit={handleSubmit(onSubmit)}>
-            <Box mx='s'>
-              <Box>
-                <Text color='gray.1'
-                  variant='b2m'>
-            Wallet password
-                </Text>
-              </Box>
-              <Box>
-                <TextInput inputRef={register({ required: true })}
-                  name='currentPassword'
-                  placeholder='Enter wallet password'
-                  type='password' />
-                {errors.currentPassword &&
-            <Box>
-              <Text color='alert'
-                variant='b3'>
-                {(errors.currentPassword).type === 'required' && 'Required field'}
-                {(errors.currentPassword).type === 'WrongPassword' && 'Invalid password'}
-                {(errors.currentPassword).type === 'SigningError' && (errors.currentPassword).message}
-              </Text>
-            </Box>
-                }
-              </Box>
-            </Box>
-          </form>
-          {/* <Box mb='s'
-            mt='s'
-            mx='s'>
-            <Checkbox
-              checked={savePass}
-              label={
-                <Text color='gray.1'
-                  fontSize='1'>
-                  Don&apos;t ask me again for the next 15 minutes
-                </Text>
-              }
-              onChange={onSavePassChange}
-            />
-          </Box> */}
-        </>
-      ) }
-      <Flex
-        flexDirection='row'
-        mb='s'
-        mt='s'
-        mx='s'>
-        <Flex flex={1}>
-          <Button
-            fluid
-            onClick={onCancel}
-            variant='secondary'>
-            Reject
-          </Button>
-        </Flex>
-        {isFirst && <Flex flex={1}
-          ml='xs'>
-          <Button busy={isBusy}
-            disabled={!!error}
-            fluid
-            form='passwordForm'
-            type='submit'>
-            Sign
-          </Button>
-        </Flex> }
-      </Flex>
-    </>
+    <div className={className}
+      style={{ width: '100%' }}>
+      <Box>
+        <Text color='gray.1'
+          variant='b2m'>
+         Wallet password
+        </Text>
+      </Box>
+      <Box mb='s'>
+        <TextInput
+          autoFocus={true}
+          disabled={isBusy}
+          invalid={!password || !!error}
+          name='currentPassword'
+          onChange={_onChangePassword}
+          placeholder='Enter wallet password'
+          type='password'
+          value={password}
+        />
+        {error && (
+          <Box>
+            <Text color='alert'
+              variant='b3'>
+              {'Invalid password'}
+            </Text>
+          </Box>
+        )}
+      </Box>
+
+    </div>
   );
 }
 
