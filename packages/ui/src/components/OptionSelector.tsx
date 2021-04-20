@@ -18,14 +18,15 @@ export type Option = {
 };
 
 type OptionSelectorProps = BoxProps &
-PropsWithChildren<{
+{
   options: Option[];
+  selector: string | JSX.Element;
   onSelect: (value: any) => void;
   style?: CSSProperties;
-}>;
+};
 
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
-  const { children, onSelect, options, style, ...boxProps } = props;
+  const { onSelect, options, selector, style, ...boxProps } = props;
 
   const [isShowingOptions, setIsShowingOptions] = useState(false);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
@@ -84,7 +85,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   return (
     <Box onClick={showOptions}
       ref={wrapperRef}>
-      {children}
+      {selector}
 
       {isShowingOptions && !!portalRoot &&
         ReactDOM.createPortal(
