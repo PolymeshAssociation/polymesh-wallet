@@ -130,7 +130,7 @@ export default function Accounts (): React.ReactElement {
 
   const topMenuOptions: Option[] = [
     {
-      options: [
+      menu: [
         { label: 'Change password', value: 'changePassword' },
         { label: 'Open extension in a new tab', value: 'newWindow' },
         {
