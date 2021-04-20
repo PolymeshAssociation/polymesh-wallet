@@ -21,7 +21,7 @@ const jsonPath = '/account/restore-json';
 const ledgerPath = '/account/import-ledger';
 
 export default function Accounts (): React.ReactElement {
-  const { accounts, hierarchy } = useContext(AccountContext);
+  const { hierarchy } = useContext(AccountContext);
   const { currentAccount,
     networkState: { isDeveloper, selected: network },
     polymeshAccounts,
@@ -177,8 +177,7 @@ export default function Accounts (): React.ReactElement {
                 flexDirection='row'
                 justifyContent='space-between'
                 mb='m'>
-                <NetworkSelector currentNetwork={network}
-                  onSelect={setNetwork} />
+                <NetworkSelector onSelect={setNetwork} />
                 <Flex flexDirection='row'
                   justifyContent='center'>
                   <GrowingButton icon={SvgViewDashboard}

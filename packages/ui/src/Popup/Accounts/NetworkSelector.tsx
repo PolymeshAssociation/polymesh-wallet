@@ -27,12 +27,11 @@ const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[]; foreground: s
 };
 
 type NetworkSelectorProps = {
-  currentNetwork: NetworkName;
   onSelect: (network: NetworkName) => void;
 };
 
-export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorProps): React.ReactElement {
-  const { networkState: { isDeveloper, selected } } = useContext(PolymeshContext);
+export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.ReactElement {
+  const { networkState: { isDeveloper, selected: currentNetwork } } = useContext(PolymeshContext);
 
   const [background, backgroundLight] = NETWORK_COLORS[currentNetwork].backgrounds;
   const foreground = NETWORK_COLORS[currentNetwork].foreground;
@@ -62,7 +61,7 @@ export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorPr
                   <Text variant='b2m'>{networkLabel}</Text>
                 </Box>
 
-                {selected === _network && (
+                {currentNetwork === _network && (
                   <Box ml='auto'>
                     <Icon Asset={SvgCheck}
                       color='brandMain'

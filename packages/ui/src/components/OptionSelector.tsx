@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { CSSProperties, Fragment, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
@@ -81,7 +82,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     setIsShowingOptions(true);
   };
 
-  const handleClick = (event: MouseEvent) => {
+  const handleClickOutside = (event: MouseEvent) => {
     const hasClickedOutside = !optionsRef.current?.contains(event.target as Node);
 
     if (hasClickedOutside) {
@@ -91,13 +92,13 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
   useEffect(() => {
     if (isShowingOptions) {
-      document.addEventListener('mousedown', handleClick);
+      document.addEventListener('mousedown', handleClickOutside);
     } else {
       portalRoot?.remove();
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isShowingOptions, portalRoot]);
 
@@ -113,8 +114,9 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
             cssPosition={cssPosition}
             ref={optionsRef}
             style={style}>
-            {options.map((option, index) => (
-              <Fragment key={index}>
+            {/* Render option menus */}
+            {options.map((option, optionIndex) => (
+              <Fragment key={optionIndex}>
                 {option.category && (
                   <Box mx='16px'
                     textAlign='left'>
@@ -125,10 +127,20 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
                   </Box>
                 )}
                 <ul>
-                  {option.menu.map((_option, _index) => (
-                    <li key={_index}
-                      onClick={() => onSelect(_option.value)}>
-                      <OptionLabel label={_option.label} />
+                  {/* Render menu items */}
+                  {option.menu.map((optionItem, optionItemIndex) => (
+                    <li key={optionItemIndex}
+                      onClick={() => onSelect(optionItem.value)}>
+                      {typeof optionItem.label === 'string'
+                        ? (
+                          <Flex px='16px'
+                            py='8px'>
+                            <Text variant='b2m'>{optionItem.label}</Text>
+                          </Flex>
+                        )
+                        : (
+                          optionItem.label
+                        )}
                     </li>
                   ))}
                 </ul>
@@ -139,19 +151,6 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
         )}
     </Box>
   );
-}
-
-function OptionLabel ({ label }: { label: OptionLabel }) {
-  return typeof label === 'string'
-    ? (
-      <Flex px='16px'
-        py='8px'>
-        <Text variant='b2m'>{label}</Text>
-      </Flex>
-    )
-    : (
-      label
-    );
 }
 
 const Options = styled(Box)<{ cssPosition: CssPosition }>`
