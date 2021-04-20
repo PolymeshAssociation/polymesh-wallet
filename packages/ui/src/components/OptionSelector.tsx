@@ -7,19 +7,19 @@ import { BoxProps } from '../ui/Box';
 
 type OptionLabel = string | JSX.Element;
 
-export type Option = {
+type OptionItem = {
   label: OptionLabel;
   value: any;
 };
 
-export type CategoryOptions = {
-  category: string;
-  options: Option[];
+export type Option = {
+  category?: string;
+  options: OptionItem[];
 };
 
 type OptionSelectorProps = BoxProps &
 PropsWithChildren<{
-  options: Option[] | CategoryOptions[];
+  options: Option[];
   onSelect: (value: any) => void;
   style?: CSSProperties;
 }>;
@@ -33,9 +33,17 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
 
-  const portalRoot = document.createElement('div');
+  const portalRoot = document.getElementById(OPTION_SELECTOR_PORTAL_ID);
 
-  const showOptions = () => {
+  const insertPortalRoot = () => {
+    const root = document.getElementById('root');
+    const createdPortalRoot = document.createElement('div');
+
+    createdPortalRoot.id = OPTION_SELECTOR_PORTAL_ID;
+    root?.parentNode?.insertBefore(createdPortalRoot, root.nextSibling);
+  };
+
+  const positionOptionsEl = () => {
     const rect = wrapperRef.current?.getBoundingClientRect();
 
     if (!rect) return;
@@ -46,6 +54,11 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       x: rect.x,
       y: rect.y + rect.height + SELECTOR_SPACING
     });
+  };
+
+  const showOptions = () => {
+    insertPortalRoot();
+    positionOptionsEl();
     setIsShowingOptions(true);
   };
 
@@ -64,56 +77,42 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
     return () => {
       document.removeEventListener('mousedown', handleClick);
+      portalRoot?.remove();
     };
-  }, [isShowingOptions]);
-
-  // Add root element for portal
-  useEffect(() => {
-    const root = document.getElementById('root');
-
-    portalRoot.id = 'option-selector-root';
-
-    root?.appendChild(portalRoot);
-
-    return () => {
-      portalRoot.remove();
-    };
-  }, [portalRoot]);
-
-  const hasCategories = 'category' in options[0];
+  }, [isShowingOptions, portalRoot]);
 
   return (
     <Box onClick={showOptions}
       ref={wrapperRef}>
       {children}
 
-      {isShowingOptions &&
+      {isShowingOptions && !!portalRoot &&
         ReactDOM.createPortal(
           <Options {...boxProps}
             coords={coords}
             ref={optionsRef}
             style={style}>
-            {hasCategories &&
-              (options as CategoryOptions[]).map((option: CategoryOptions, index: number) => {
-                return (
-                  <Fragment key={index}>
-                    <Box mx='16px'>
-                      <Text color='gray.2'
-                        variant='b2m'>
-                        {option.category}
-                      </Text>
-                    </Box>
-                    <ul>
-                      {option.options.map((_option, _index) => (
-                        <li key={_index}
-                          onClick={() => onSelect(_option.value)}>
-                          {renderOptionLabel(_option.label)}
-                        </li>
-                      ))}
-                    </ul>
-                  </Fragment>
-                );
-              })}
+            {options.map((option, index) => (
+              <Fragment key={index}>
+                {option.category && (
+                  <Box mx='16px'
+                    textAlign='left'>
+                    <Text color='gray.2'
+                      variant='b2m'>
+                      {option.category}
+                    </Text>
+                  </Box>
+                )}
+                <ul>
+                  {option.options.map((_option, _index) => (
+                    <li key={_index}
+                      onClick={() => onSelect(_option.value)}>
+                      {renderOptionLabel(_option.label)}
+                    </li>
+                  ))}
+                </ul>
+              </Fragment>
+            ))}
           </Options>,
           portalRoot
         )}
@@ -162,3 +161,4 @@ const Options = styled(Box)<{ coords: { x: number; y: number } }>`
 `;
 
 const SELECTOR_SPACING = 4;
+const OPTION_SELECTOR_PORTAL_ID = 'option-selector-portal';

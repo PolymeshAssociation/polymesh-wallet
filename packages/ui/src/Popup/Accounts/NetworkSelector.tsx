@@ -64,7 +64,7 @@ export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorPr
     };
   }, [isDropdownShowing]);
 
-  const networkOptions: CategoryOptions[] = [
+  const networkOptions: Option[] = [
     {
       category: 'Networks',
       options: Object.entries(networkLabels)
@@ -105,43 +105,6 @@ export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorPr
         })
     }
   ];
-
-  const networkOptionsB: Option[] = Object.entries(networkLabels)
-    .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
-    .map(([_network, networkLabel]) => {
-      return {
-        label: (
-          <Flex
-            className='network-item'
-            key={_network}
-            // onClick={() => onSelect(_network as NetworkName)}
-            px='16px'
-            py='8px'
-          >
-            <NetworkCircle
-              background={NETWORK_COLORS[_network as NetworkName].backgrounds[0]}
-              color={NETWORK_COLORS[_network as NetworkName].foreground}
-              size='24px'
-              thickness='4px'
-            />
-            <Box ml='8px'
-              mr='auto'>
-              <Text variant='b2m'>{networkLabel}</Text>
-            </Box>
-
-            {selected === _network && (
-              <Box ml='auto'>
-                <Icon Asset={SvgCheck}
-                  color='brandMain'
-                  height={24}
-                  width={24} />
-              </Box>
-            )}
-          </Flex>
-        ),
-        value: _network
-      };
-    });
 
   const changeNetwork = (network: NetworkName) => {
     console.log({ network });
