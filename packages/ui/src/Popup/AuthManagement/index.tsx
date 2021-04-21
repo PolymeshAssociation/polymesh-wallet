@@ -14,7 +14,7 @@ export function AuthManagement (): JSX.Element {
   useEffect(() => {
     getAuthList()
       .then(({ list }) => setAuthList(list))
-      .catch((e) => console.error(e));
+      .catch(console.error);
   }, []);
 
   const _onChangeFilter = useCallback((filter: string) => {
@@ -33,7 +33,8 @@ export function AuthManagement (): JSX.Element {
     <Flex flexDirection='column'
       height='100%'>
       <Header headerText='Manage Website Access'
-        iconAsset={SvgFileLockOutline}>
+        iconAsset={SvgFileLockOutline}
+        width='100%'>
         <Box mb='m'
           mt='s'>
           <Text color='gray.0'
