@@ -21,7 +21,7 @@ const jsonPath = '/account/restore-json';
 const ledgerPath = '/account/import-ledger';
 
 export default function Accounts (): React.ReactElement {
-  const { hierarchy } = useContext(AccountContext);
+  const { accounts, hierarchy } = useContext(AccountContext);
   const { currentAccount,
     networkState: { isDeveloper, selected: network },
     polymeshAccounts,
@@ -128,10 +128,12 @@ export default function Accounts (): React.ReactElement {
     }
   };
 
+  const hasNonHardwareAccount = accounts.some((account) => !account.isHardware);
+
   const topMenuOptions: Option[] = [
     {
       menu: [
-        { label: 'Change password', value: 'changePassword' },
+        ...(hasNonHardwareAccount ? [{ label: 'Change password', value: 'changePassword' }] : []),
         { label: 'Open extension in a new tab', value: 'newWindow' },
         {
           label: (
