@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import styled from 'styled-components';
 
 import { TextInput } from '../ui';
 
@@ -10,7 +9,7 @@ interface Props {
   value: string;
 }
 
-function InputFilter ({ className, onChange, placeholder, value }: Props) {
+export function InputFilter ({ className, onChange, placeholder, value }: Props): JSX.Element {
   const onChangeFilter = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   }, [onChange]);
@@ -30,8 +29,3 @@ function InputFilter ({ className, onChange, placeholder, value }: Props) {
     </div>
   );
 }
-
-export default styled(InputFilter)`
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
-`;
