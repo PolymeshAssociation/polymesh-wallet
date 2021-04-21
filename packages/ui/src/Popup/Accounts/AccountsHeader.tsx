@@ -4,12 +4,11 @@ import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/ext
 import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
-import BigNumber from 'bignumber.js';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import { Box, Flex, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput, TextOverflowEllipsis } from '../../ui';
-import { formatters } from '../../util';
+import { formatAmount, toShortAddress } from '../../util/formatters';
 
 export interface Props {
   account: IdentifiedAccount;
@@ -63,7 +62,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
               onMouseLeave={mouseLeave}>
               <Text color='gray.0'
                 variant='b1m'>
-                {account.didAlias ? formatters.toShortAddress(account.didAlias, { size: 30 }) : '[Your Polymesh Account]'}
+                {account.didAlias ? toShortAddress(account.didAlias, { size: 30 }) : '[Your Polymesh Account]'}
               </Text>
               {hover && (
                 <Flex ml='xs'>
@@ -157,7 +156,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
           flexDirection='row'>
           <Heading color='gray.0'
             variant='h5'>
-            {formatters.formatAmount(new BigNumber(account?.balance?.transferrable || 0), 2, true)}
+            {formatAmount(account?.balance?.transferrable || 0)}
           </Heading>
           <Box ml='s'>
             <Text color='gray.0'
@@ -170,7 +169,7 @@ export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
           flexDirection='row'>
           <Heading color='gray.0'
             variant='h6'>
-            {formatters.formatAmount(new BigNumber(account?.balance?.locked || 0), 2, true)}
+            {formatAmount(account?.balance?.locked || 0)}
           </Heading>
           <Box ml='xs'>
             <Text color='gray.0'
