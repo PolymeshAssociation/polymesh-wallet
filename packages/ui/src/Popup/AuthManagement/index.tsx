@@ -2,7 +2,7 @@ import type { ThemeProps } from '../../types';
 
 import { AuthUrlInfo, AuthUrls } from '@polkadot/extension-base/background/handlers/State';
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Header, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Header, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -10,17 +10,14 @@ import { InputFilter } from '../../components';
 import { getAuthList, toggleAuthorization } from '../../messaging';
 import WebsiteEntry from './WebsiteEntry';
 
-interface Props extends ThemeProps {
-  className?: string;
-}
-
-function AuthManagement ({ className }: Props): React.ReactElement<Props> {
+export function AuthManagement (): JSX.Element {
   const [authList, setAuthList] = useState<AuthUrls | null>(null);
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
     getAuthList()
-      .then(({ list }) => setAuthList(list))
+      // .then(({ list }) => setAuthList(list))
+      .then(({ list }) => setAuthList([]))
       .catch((e) => console.error(e));
   }, []);
 
@@ -34,8 +31,10 @@ function AuthManagement ({ className }: Props): React.ReactElement<Props> {
       .catch(console.error);
   }, []);
 
+  const hasAuthList = !!(authList && Object.entries(authList)?.length);
+
   return (
-    <>
+    <Wrapper>
       <Header headerText='Manage Website Access'
         iconAsset={SvgFileLockOutline}>
         <Box mb='m'
@@ -46,51 +45,56 @@ function AuthManagement ({ className }: Props): React.ReactElement<Props> {
           </Text>
         </Box>
       </Header>
-      <Box m='s'>
-        <Box>
-          <Text color='gray.1'
-            variant='b2m'>
-            Filter by host name:
-          </Text>
-        </Box>
-        <Box>
-          <InputFilter
-            onChange={_onChangeFilter}
-            placeholder={'example.com'}
-            value={filter}
-          />
-        </Box>
-        <div className={className}>
-          {
-            !authList || !Object.entries(authList)?.length
-              ? <div className='empty-list'>{'No website request yet!'}</div>
-              : <>
+      <Flex alignItems='left'
+        flexDirection='column'
+        m='s'>
+        {hasAuthList && (
+          <Box mb='s'>
+            <Text color='gray.1'
+              variant='b2m'>
+              Filter by host name:
+            </Text>
+            <InputFilter onChange={_onChangeFilter}
+              placeholder={'example.com'}
+              value={filter} />
+          </Box>
+        )}
+        <div>
+          {hasAuthList
+            ? (
+              <>
                 <div className='website-list'>
-                  {Object.entries(authList)
+                  {Object.entries(authList!)
                     .filter(([url]: [string, AuthUrlInfo]) => url.includes(filter))
-                    .map(
-                      ([url, info]: [string, AuthUrlInfo]) =>
-                        <WebsiteEntry
-                          info={info}
-                          key={url}
-                          toggleAuth={toggleAuth}
-                          url={url}
-                        />
-                    )}
+                    .map(([url, info]: [string, AuthUrlInfo]) => (
+                      <WebsiteEntry info={info}
+                        key={url}
+                        toggleAuth={toggleAuth}
+                        url={url} />
+                    ))}
                 </div>
               </>
-          }
+            )
+            : (
+              <Text as='div'
+                textAlign='center'
+                variant='b1m'>
+                No website request yet!
+              </Text>
+            )}
         </div>
-      </Box>
-    </>
+      </Flex>
+    </Wrapper>
   );
 }
 
-export default styled(AuthManagement)`
-  height: 100%;
-  overflow-y: auto;
+const Wrapper = styled.div``;
 
-  .empty-list {
-    text-align: center;
-  }
-`;
+// export default styled(AuthManagement)`
+//   height: 100%;
+//   overflow-y: hidden;
+
+//   .empty-list {
+//     text-align: center;
+//   }
+// `;
