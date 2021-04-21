@@ -35,6 +35,9 @@ function Switch ({ checked, checkedLabel, className, onChange, uncheckedLabel }:
 }
 
 export default styled(Switch)(({ theme }: ThemeProps) => `
+  display: flex;
+  align-items: center;
+
   label {
     position: relative;
     display: inline-block;
