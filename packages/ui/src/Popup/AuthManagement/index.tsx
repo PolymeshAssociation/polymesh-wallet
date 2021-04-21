@@ -56,7 +56,8 @@ export function AuthManagement (): JSX.Element {
         </Box>
       )}
       <Box p='s'
-        style={{ overflowY: 'auto' }}>
+        style={{ overflowY: 'auto' }}
+        width='100%'>
         {hasAuthList
           ? (
             Object.entries(authList as AuthUrls)
