@@ -15,7 +15,6 @@
     "@polkadot/util-crypto": "^5.9.2",
     "@tippyjs/react": "^4.2.0",
     "@types/styled-system": "^5.1.10",
-    "bignumber.js": "^9.0.0",
     "polished": "^3.6.5",
     "react": "^17.0.1",
     "react-contextmenu": "^2.14.0",

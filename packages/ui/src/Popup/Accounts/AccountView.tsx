@@ -2,14 +2,13 @@ import { networkLinks } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgCheck, SvgDotsVertical, SvgPencilOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import BigNumber from 'bignumber.js';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { AccountContext, AccountType, ActionContext, PolymeshContext } from '../../components';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
 import { Box, ButtonSmall, ContextMenuTrigger, Flex, Icon, LabelWithCopy, Menu, MenuItem, Text, TextOverflowEllipsis } from '../../ui';
-import { formatters } from '../../util';
+import { formatAmount } from '../../util/formatters';
 import { NameEdit } from './NameEdit';
 import { AccountInfoGrid, AccountViewGrid, GridItem, UnassignedAccountHoverGrid } from './styles';
 
@@ -169,7 +168,6 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             {did && <AccountType keyType={keyType} />}
           </Flex>
         </GridItem>
-        {/* @ADDRESS should be formatted */}
         <GridItem area='address'>
           <Flex alignItems='flex-end'
             height='100%'>
@@ -186,9 +184,9 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             justifyContent='flex-end'>
             <Text color='gray.1'
               style={{ whiteSpace: 'nowrap' }}
-              title={balance?.locked && `${formatters.formatAmount(new BigNumber(balance.locked), 2, true)} POLYX is unavailable to use`}
+              title={balance?.locked && `${formatAmount(balance.locked)} POLYX is unavailable to use`}
               variant='b3'>
-              {formatters.formatAmount(new BigNumber(balance?.transferrable || 0), 2, true)}{' '}
+              {formatAmount(balance?.transferrable || 0)}{' '}
               POLYX
             </Text>
           </Flex>

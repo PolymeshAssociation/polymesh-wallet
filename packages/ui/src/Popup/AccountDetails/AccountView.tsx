@@ -4,10 +4,9 @@ import { SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 import { Box, Flex, Hr, Icon, LabelWithCopy, StatusBadge, Text, TextEllipsis, TextOverflowEllipsis } from '@polymathnetwork/extension-ui/ui';
-import BigNumber from 'bignumber.js';
 import React, { FC, useContext } from 'react';
 
-import { formatters } from '../../util';
+import { formatAmount } from '../../util/formatters';
 import { UidView } from './UidView';
 
 export interface Props {
@@ -183,7 +182,7 @@ export const AccountView: FC<Props> = ({ address,
               <Box>
                 <Text color='gray.1'
                   variant='b3'>
-                  {formatters.formatAmount(new BigNumber(selectedAccount?.balance?.transferrable || 0), 2, true)} POLYX
+                  {formatAmount(selectedAccount?.balance?.transferrable || 0)} POLYX
                 </Text>
               </Box>
             </Flex>
