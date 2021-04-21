@@ -1,10 +1,7 @@
-import type { ThemeProps } from '../../types';
-
 import { AuthUrlInfo, AuthUrls } from '@polkadot/extension-base/background/handlers/State';
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Box, Flex, Header, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
 
 import { InputFilter } from '../../components';
 import { getAuthList, toggleAuthorization } from '../../messaging';
@@ -61,24 +58,20 @@ export function AuthManagement (): JSX.Element {
         style={{ overflowY: 'auto' }}>
         {hasAuthList
           ? (
-            <>
-              <div className='website-list'>
-                {Object.entries(authList as AuthUrls)
-                  .filter(([url]: [string, AuthUrlInfo]) => url.includes(filter))
-                  .map(([url, info]: [string, AuthUrlInfo]) => (
-                    <WebsiteEntry info={info}
-                      key={url}
-                      toggleAuth={toggleAuth}
-                      url={url} />
-                  ))}
-              </div>
-            </>
+            Object.entries(authList as AuthUrls)
+              .filter(([url]: [string, AuthUrlInfo]) => url.includes(filter))
+              .map(([url, info]: [string, AuthUrlInfo]) => (
+                <WebsiteEntry info={info}
+                  key={url}
+                  toggleAuth={toggleAuth}
+                  url={url} />
+              ))
           )
           : (
             <Text as='div'
               textAlign='center'
               variant='b1m'>
-            No website request yet!
+              No website requests yet!
             </Text>
           )}
       </Box>
