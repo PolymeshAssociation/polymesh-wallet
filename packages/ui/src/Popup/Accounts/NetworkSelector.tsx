@@ -1,17 +1,19 @@
 import { networkIsDev, networkLabels } from '@polymathnetwork/extension-core/constants';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgCheck, SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { OptionSelector, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector';
+import { colors } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext } from 'react';
 
 const DEV_NETWORK_COLORS = {
   backgrounds: ['#DCEFFE', '#1348E440'],
   foreground: '#1348E4'
 };
 
-const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[], foreground: string }> = {
+const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[]; foreground: string }> = {
   itn: {
     backgrounds: ['#F2E6FF', '#4D019840'],
     foreground: '#4D0198'
@@ -26,115 +28,87 @@ const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[], foreground: s
 };
 
 type NetworkSelectorProps = {
-  currentNetwork: NetworkName;
   onSelect: (network: NetworkName) => void;
-}
+};
 
-export function NetworkSelector ({ currentNetwork, onSelect }: NetworkSelectorProps): React.ReactElement {
-  const { networkState: { isDeveloper, selected } } = useContext(PolymeshContext);
-
-  const [isDropdownShowing, setIsDropdownShowing] = useState(false);
-
-  const dropdownRef = useRef<HTMLDivElement>(null);
+export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.ReactElement {
+  const { networkState: { isDeveloper, selected: currentNetwork } } = useContext(PolymeshContext);
 
   const [background, backgroundLight] = NETWORK_COLORS[currentNetwork].backgrounds;
   const foreground = NETWORK_COLORS[currentNetwork].foreground;
 
-  const showDropdown = () => {
-    setIsDropdownShowing(true);
-  };
+  const networkOptions: Option[] = [
+    {
+      category: 'Networks',
+      menu: Object.entries(networkLabels)
+        .filter(([network]) => isDeveloper || (!isDeveloper && !networkIsDev[network as NetworkName]))
+        .map(([network, networkLabel]) => {
+          const isCurrentNetwork = currentNetwork === network;
 
-  const handleClick = (event: MouseEvent) => {
-    const hasClickedOutside = !dropdownRef.current?.contains(event.target as Node);
+          return {
+            label: (
+              <Flex
+                className='network-item'
+                key={network}
+                px='16px'
+                py='8px'
+                {...(isCurrentNetwork && { style: { background: colors.gray[5] } })}
+              >
+                <NetworkCircle
+                  background={NETWORK_COLORS[network as NetworkName].backgrounds[0]}
+                  color={NETWORK_COLORS[network as NetworkName].foreground}
+                  size='24px'
+                  thickness='4px'
+                />
+                <Box ml='8px'
+                  mr='auto'>
+                  <Text variant='b2m'>{networkLabel}</Text>
+                </Box>
 
-    if (hasClickedOutside) {
-      setIsDropdownShowing(false);
-    }
-  };
-
-  // Toggle click listener to hide dropdown, when clicked outside of dropdown
-  useEffect(() => {
-    if (isDropdownShowing) {
-      document.addEventListener('mousedown', handleClick);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClick);
-    };
-  }, [isDropdownShowing]);
-
-  return (
-    <Wrapper>
-      <NetworkSelect background={background}
-        onClick={showDropdown}>
-        <NetworkCircle background={background}
-          color={foreground} />
-        <Box ml='4px'
-          mr='7px'>
-          <Text color={foreground}
-            variant='b3m'>
-            {networkLabels[currentNetwork]}
-          </Text>
-        </Box>
-        <DropdownIcon background={backgroundLight}>
-          <Icon Asset={SvgChevron}
-            color={foreground}
-            rotate='180deg' />
-        </DropdownIcon>
-      </NetworkSelect>
-
-      {isDropdownShowing &&
-        <NetworkDropdown borderRadius='8px'
-          py='8px'
-          ref={dropdownRef}
-          width='296px'>
-          <Box mx='16px'>
-            <Text color='gray.2'
-              variant='b2m'>
-                Networks
-            </Text>
-          </Box>
-          {Object.entries(networkLabels)
-            .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
-            .map(([_network, networkLabel]) => {
-              return (
-                <Flex className='network-item'
-                  key={_network}
-                  onClick={() => onSelect(_network as NetworkName)}
-                  px='16px'
-                  py='8px'>
-                  <NetworkCircle background={NETWORK_COLORS[_network as NetworkName].backgrounds[0]}
-                    color={NETWORK_COLORS[_network as NetworkName].foreground}
-                    size='24px'
-                    thickness='4px'/>
-                  <Box ml='8px'
-                    mr='auto'>
-                    <Text variant='b2m'>
-                      {networkLabel}
-                    </Text>
-                  </Box>
-                  {selected === _network &&
-                    <Icon
-                      Asset={SvgCheck}
+                {isCurrentNetwork && (
+                  <Box ml='auto'>
+                    <Icon Asset={SvgCheck}
                       color='brandMain'
                       height={24}
-                      width={24}
-                    />
-                  }
-                </Flex>
-              );
-            })}
-        </NetworkDropdown>
+                      width={24} />
+                  </Box>
+                )}
+              </Flex>
+            ),
+            value: network
+          };
+        })
+    }
+  ];
+
+  return (
+    <OptionSelector
+      minWidth='296px'
+      onSelect={onSelect}
+      options={networkOptions}
+      selector={
+        <NetworkSelect background={background}>
+          <NetworkCircle background={background}
+            color={foreground} />
+          <Box ml='4px'
+            mr='7px'>
+            <Text color={foreground}
+              variant='b3m'>
+              {networkLabels[currentNetwork]}
+            </Text>
+          </Box>
+          <DropdownIcon background={backgroundLight}>
+            <Icon Asset={SvgChevron}
+              color={foreground}
+              rotate='180deg' />
+          </DropdownIcon>
+        </NetworkSelect>
       }
-    </Wrapper>
+    />
   );
 }
 
-const Wrapper = styled.div`
-  position: relative;
-`;
-
-const NetworkSelect = styled.div<{ background: string; }>`
+const NetworkSelect = styled.div<{ background: string }>`
   display: flex;
   align-items: center;
   height: 24px;
@@ -144,7 +118,7 @@ const NetworkSelect = styled.div<{ background: string; }>`
   cursor: pointer;
 `;
 
-const DropdownIcon = styled.div<{ background: string; }>`
+const DropdownIcon = styled.div<{ background: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,7 +128,7 @@ const DropdownIcon = styled.div<{ background: string; }>`
   background-color: ${(props) => props.background};
 `;
 
-const NetworkCircle = styled.span<{ background: string; color: string; size?: string; thickness?: string; }>`
+const NetworkCircle = styled.span<{ background: string; color: string; size?: string; thickness?: string }>`
   display: inline-box;
   width: ${(props) => props.size || '12px'};
   height: ${(props) => props.size || '12px'};
@@ -162,21 +136,5 @@ const NetworkCircle = styled.span<{ background: string; color: string; size?: st
   box-sizing: border-box;
   border: ${(props) => props.thickness || '2px'} solid ${(props) => props.color};
   border-radius: 50%;
-`;
-
-const NetworkDropdown = styled(Box)`
-  position: absolute;
-  background: white;
-  box-shadow: ${(props) => props.theme.shadows[3]};
-  top: calc(100% + 4px);
-  left: 0;
-  z-index: 1;
-
-  .network-item {
-    cursor: pointer;
-
-    &:hover {
-      background: ${(props) => props.theme.colors.gray[5]};
-    }
-  }
+  flex-shrink: 0;
 `;
