@@ -1,6 +1,6 @@
 import { Message } from '@polkadot/extension-base/types';
 import chrome from '@polkadot/extension-inject/chrome';
-import { PORTS } from '@polymathnetwork/extension-core/constants';
+import { ORIGINS, PORTS } from '@polymathnetwork/extension-core/constants';
 
 // connect to the extension
 const port = chrome.runtime.connect({ name: PORTS.CONTENT });
@@ -13,7 +13,7 @@ port.onMessage.addListener((data): void => {
 // all messages from the page, pass them to the extension
 window.addEventListener('message', ({ data, source }: Message): void => {
   // only allow messages from our window, by the inject
-  if (source !== window || data.origin !== 'page') {
+  if (source !== window || data.origin !== ORIGINS.PAGE) {
     return;
   }
 
