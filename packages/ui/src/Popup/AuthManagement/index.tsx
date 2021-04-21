@@ -16,8 +16,7 @@ export function AuthManagement (): JSX.Element {
 
   useEffect(() => {
     getAuthList()
-      // .then(({ list }) => setAuthList(list))
-      .then(({ list }) => setAuthList([]))
+      .then(({ list }) => setAuthList(list))
       .catch((e) => console.error(e));
   }, []);
 
@@ -34,7 +33,8 @@ export function AuthManagement (): JSX.Element {
   const hasAuthList = !!(authList && Object.entries(authList)?.length);
 
   return (
-    <Wrapper>
+    <Flex flexDirection='column'
+      height='100%'>
       <Header headerText='Manage Website Access'
         iconAsset={SvgFileLockOutline}>
         <Box mb='m'
@@ -45,56 +45,43 @@ export function AuthManagement (): JSX.Element {
           </Text>
         </Box>
       </Header>
-      <Flex alignItems='left'
-        flexDirection='column'
-        m='s'>
-        {hasAuthList && (
-          <Box mb='s'>
-            <Text color='gray.1'
-              variant='b2m'>
-              Filter by host name:
+      {hasAuthList && (
+        <Box p='s'
+          width='100%'>
+          <Text color='gray.1'
+            variant='b2m'>
+            Filter by host name:
+          </Text>
+          <InputFilter onChange={_onChangeFilter}
+            placeholder={'example.com'}
+            value={filter} />
+        </Box>
+      )}
+      <Box p='s'
+        style={{ overflowY: 'auto' }}>
+        {hasAuthList
+          ? (
+            <>
+              <div className='website-list'>
+                {Object.entries(authList as AuthUrls)
+                  .filter(([url]: [string, AuthUrlInfo]) => url.includes(filter))
+                  .map(([url, info]: [string, AuthUrlInfo]) => (
+                    <WebsiteEntry info={info}
+                      key={url}
+                      toggleAuth={toggleAuth}
+                      url={url} />
+                  ))}
+              </div>
+            </>
+          )
+          : (
+            <Text as='div'
+              textAlign='center'
+              variant='b1m'>
+            No website request yet!
             </Text>
-            <InputFilter onChange={_onChangeFilter}
-              placeholder={'example.com'}
-              value={filter} />
-          </Box>
-        )}
-        <div>
-          {hasAuthList
-            ? (
-              <>
-                <div className='website-list'>
-                  {Object.entries(authList!)
-                    .filter(([url]: [string, AuthUrlInfo]) => url.includes(filter))
-                    .map(([url, info]: [string, AuthUrlInfo]) => (
-                      <WebsiteEntry info={info}
-                        key={url}
-                        toggleAuth={toggleAuth}
-                        url={url} />
-                    ))}
-                </div>
-              </>
-            )
-            : (
-              <Text as='div'
-                textAlign='center'
-                variant='b1m'>
-                No website request yet!
-              </Text>
-            )}
-        </div>
-      </Flex>
-    </Wrapper>
+          )}
+      </Box>
+    </Flex>
   );
 }
-
-const Wrapper = styled.div``;
-
-// export default styled(AuthManagement)`
-//   height: 100%;
-//   overflow-y: hidden;
-
-//   .empty-list {
-//     text-align: center;
-//   }
-// `;
