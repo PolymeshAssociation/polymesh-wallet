@@ -1,8 +1,8 @@
 import { SignerPayloadJSON } from '@polkadot/types/types';
-import { formatBalance } from '@polkadot/util';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
 import { Box, ExpandableDetails, Flex, Hr, Loading, Text } from '@polymathnetwork/extension-ui/ui';
+import { formatAmount } from '@polymathnetwork/extension-ui/util/formatters';
 import BN from 'bn.js';
 import React, { FC, useEffect, useState } from 'react';
 
@@ -16,14 +16,14 @@ const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
   const fees: [string, string][] = [];
 
   if (networkFee && networkFee.length) {
-    fees.push(['Network fee', formatBalance(new BN(networkFee), { withUnit: false, decimals: 6 })]);
+    fees.push(['Network fee', formatAmount(networkFee)]);
   }
 
   if (protocolFee && protocolFee !== '0') {
-    fees.push(['Protocol fee', formatBalance(new BN(protocolFee), { withUnit: false, decimals: 6 })]);
+    fees.push(['Protocol fee', formatAmount(protocolFee)]);
     const totalFees = (new BN(networkFee)).add(new BN(protocolFee));
 
-    fees.push(['Total fees', formatBalance(new BN(totalFees), { withUnit: false, decimals: 6 })]);
+    fees.push(['Total fees', formatAmount(totalFees)]);
   }
 
   return (

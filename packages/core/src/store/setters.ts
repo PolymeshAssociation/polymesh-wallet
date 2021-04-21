@@ -21,10 +21,6 @@ function renameIdentity (network: NetworkName, did: string, name: string) {
   store.dispatch(identityActions.renameIdentity({ network, did, name }));
 }
 
-function setIsRehydrated () {
-  store.dispatch(statusActions.setRehydrated());
-}
-
 function resetState () {
   store.dispatch({ type: 'RESET' });
 }
@@ -41,7 +37,6 @@ export {
   setNetwork,
   setSelectedAccount,
   renameIdentity,
-  setIsRehydrated,
   resetState,
   toggleIsDeveloper,
   setError
