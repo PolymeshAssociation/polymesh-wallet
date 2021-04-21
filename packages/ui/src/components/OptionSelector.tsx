@@ -4,6 +4,7 @@ import React, { CSSProperties, Fragment, useEffect, useRef, useState } from 'rea
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
+import { ThemeProps } from '../types';
 import { BoxProps } from '../ui/Box';
 
 const SELECTOR_SPACING = 4;
@@ -153,7 +154,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   );
 }
 
-const Options = styled(Box)<{ cssPosition: CssPosition }>`
+const Options = styled(Box)<{ cssPosition: CssPosition } & ThemeProps>`
   position: absolute;
   background: white;
   box-shadow: ${(props) => props.theme.shadows[3]};
@@ -177,7 +178,7 @@ const Options = styled(Box)<{ cssPosition: CssPosition }>`
       white-space: nowrap;
 
       &:hover {
-        background: ${(props) => props.theme.colors.gray[5]};
+        background: ${(props) => props.theme.colors.gray[4]};
       }
     }
   }

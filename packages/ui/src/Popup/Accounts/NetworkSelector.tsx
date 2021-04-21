@@ -3,6 +3,7 @@ import { NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgCheck, SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { OptionSelector, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector';
+import { colors } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useContext } from 'react';
@@ -40,19 +41,22 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
     {
       category: 'Networks',
       menu: Object.entries(networkLabels)
-        .filter(([_network]) => isDeveloper || (!isDeveloper && !networkIsDev[_network as NetworkName]))
-        .map(([_network, networkLabel]) => {
+        .filter(([network]) => isDeveloper || (!isDeveloper && !networkIsDev[network as NetworkName]))
+        .map(([network, networkLabel]) => {
+          const isCurrentNetwork = currentNetwork === network;
+
           return {
             label: (
               <Flex
                 className='network-item'
-                key={_network}
+                key={network}
                 px='16px'
                 py='8px'
+                {...(isCurrentNetwork && { style: { background: colors.gray[5] } })}
               >
                 <NetworkCircle
-                  background={NETWORK_COLORS[_network as NetworkName].backgrounds[0]}
-                  color={NETWORK_COLORS[_network as NetworkName].foreground}
+                  background={NETWORK_COLORS[network as NetworkName].backgrounds[0]}
+                  color={NETWORK_COLORS[network as NetworkName].foreground}
                   size='24px'
                   thickness='4px'
                 />
@@ -61,7 +65,7 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
                   <Text variant='b2m'>{networkLabel}</Text>
                 </Box>
 
-                {currentNetwork === _network && (
+                {isCurrentNetwork && (
                   <Box ml='auto'>
                     <Icon Asset={SvgCheck}
                       color='brandMain'
@@ -71,7 +75,7 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
                 )}
               </Flex>
             ),
-            value: _network
+            value: network
           };
         })
     }
