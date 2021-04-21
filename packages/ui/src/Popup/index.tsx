@@ -47,7 +47,7 @@ import { buildHierarchy } from '../util/buildHierarchy';
 import ImportLedger from './ImportLedger/ImportLedger';
 import { AccountDetails } from './AccountDetails';
 import Accounts from './Accounts';
-import AuthManagement from './AuthManagement';
+import { AuthManagement } from './AuthManagement';
 import Authorize from './Authorize';
 import { ChangePassword } from './ChangePassword';
 import { ExportAccount } from './ExportAccount';
