@@ -1,4 +1,4 @@
-import { PASSWORD_EXPIRY_MIN } from '@polkadot/extension-base/defaults';
+import { PASSWORD_EXPIRY_MIN } from '@polymathnetwork/extension-core/constants';
 import { ActionContext } from '@polymathnetwork/extension-ui/components';
 import { Box, Button, Checkbox, Flex } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
