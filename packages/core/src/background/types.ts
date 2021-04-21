@@ -1,6 +1,7 @@
 import { AccountJson, RequestSignatures as DotRequestSignatures } from '@polkadot/extension-base/background/types';
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
+import { ORIGINS } from '@polymathnetwork/extension-core/constants';
 
 import { IdentifiedAccount,
   NetworkMeta,
@@ -196,6 +197,26 @@ export type PolyResponseType<TMessageType extends keyof PolyRequestSignatures> =
 export interface PolyTransportRequestMessage<TMessageType extends PolyMessageTypes> {
   id: string;
   message: TMessageType;
-  origin: 'page' | 'extension';
+  origin: ORIGINS.PAGE | ORIGINS.EXTENSION;
   request: PolyRequestTypes[TMessageType];
 }
+
+interface PolyTransportResponseMessageNoSub<TMessageType extends PolyMessageTypesWithNoSubscriptions> {
+  error?: string;
+  id: string;
+  response?: PolyResponseTypes[TMessageType];
+}
+
+interface PolyTransportResponseMessageSub<TMessageType extends PolyMessageTypesWithSubscriptions> {
+  error?: string;
+  id: string;
+  response?: PolyResponseTypes[TMessageType];
+  subscription?: PolySubscriptionMessageTypes[TMessageType];
+}
+
+export type PolyTransportResponseMessage<TMessageType extends PolyMessageTypes> =
+  TMessageType extends PolyMessageTypesWithNoSubscriptions
+    ? PolyTransportResponseMessageNoSub<TMessageType>
+    : TMessageType extends PolyMessageTypesWithSubscriptions
+      ? PolyTransportResponseMessageSub<TMessageType>
+      : never;
