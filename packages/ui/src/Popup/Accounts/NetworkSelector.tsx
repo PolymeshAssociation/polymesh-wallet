@@ -37,49 +37,68 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
   const [background, backgroundLight] = NETWORK_COLORS[currentNetwork].backgrounds;
   const foreground = NETWORK_COLORS[currentNetwork].foreground;
 
+  const { devNetworks, networks } = Object.entries(networkLabels).reduce(
+    ({ devNetworks, networks }: Record<string, string[][]>, networkLabel) => {
+      const [network, label] = networkLabel;
+
+      networkIsDev[network as NetworkName] ? devNetworks.push([network, label]) : networks.push([network, label]);
+
+      return { networks, devNetworks };
+    },
+    { networks: [], devNetworks: [] }
+  );
+
+  const networkMenuItems = (networks: string[][]) =>
+    networks.map(([network, networkLabel]) => {
+      const isCurrentNetwork = currentNetwork === network;
+
+      return {
+        label: (
+          <Flex
+            className='network-item'
+            key={network}
+            px='16px'
+            py='8px'
+            {...(isCurrentNetwork && { style: { background: colors.gray[5] } })}
+          >
+            <NetworkCircle
+              background={NETWORK_COLORS[network as NetworkName].backgrounds[0]}
+              color={NETWORK_COLORS[network as NetworkName].foreground}
+              size='24px'
+              thickness='4px'
+            />
+            <Box ml='8px'
+              mr='auto'>
+              <Text variant='b2m'>{networkLabel}</Text>
+            </Box>
+
+            {isCurrentNetwork && (
+              <Box ml='auto'>
+                <Icon Asset={SvgCheck}
+                  color='brandMain'
+                  height={24}
+                  width={24} />
+              </Box>
+            )}
+          </Flex>
+        ),
+        value: network
+      };
+    });
+
   const networkOptions: Option[] = [
     {
       category: 'Networks',
-      menu: Object.entries(networkLabels)
-        .filter(([network]) => isDeveloper || (!isDeveloper && !networkIsDev[network as NetworkName]))
-        .map(([network, networkLabel]) => {
-          const isCurrentNetwork = currentNetwork === network;
-
-          return {
-            label: (
-              <Flex
-                className='network-item'
-                key={network}
-                px='16px'
-                py='8px'
-                {...(isCurrentNetwork && { style: { background: colors.gray[5] } })}
-              >
-                <NetworkCircle
-                  background={NETWORK_COLORS[network as NetworkName].backgrounds[0]}
-                  color={NETWORK_COLORS[network as NetworkName].foreground}
-                  size='24px'
-                  thickness='4px'
-                />
-                <Box ml='8px'
-                  mr='auto'>
-                  <Text variant='b2m'>{networkLabel}</Text>
-                </Box>
-
-                {isCurrentNetwork && (
-                  <Box ml='auto'>
-                    <Icon Asset={SvgCheck}
-                      color='brandMain'
-                      height={24}
-                      width={24} />
-                  </Box>
-                )}
-              </Flex>
-            ),
-            value: network
-          };
-        })
+      menu: networkMenuItems(networks)
     }
   ];
+
+  if (isDeveloper) {
+    networkOptions.push({
+      category: 'Development',
+      menu: networkMenuItems(devNetworks)
+    });
+  }
 
   return (
     <OptionSelector
