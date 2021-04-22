@@ -154,10 +154,10 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   );
 }
 
-const Options = styled(Box)<{ cssPosition: CssPosition } & ThemeProps>`
+const Options = styled(Box)<{ cssPosition: CssPosition }>`
   position: absolute;
   background: white;
-  box-shadow: ${(props) => props.theme.shadows[3]};
+  box-shadow: ${({ theme }: ThemeProps) => theme.shadows[3]};
   border-radius: 8px;
   padding: 8px 0;
   z-index: 1000;
@@ -178,7 +178,7 @@ const Options = styled(Box)<{ cssPosition: CssPosition } & ThemeProps>`
       white-space: nowrap;
 
       &:hover {
-        background: ${(props) => props.theme.colors.gray[4]};
+        background: ${({ theme }: ThemeProps) => theme.colors.gray[4]};
       }
     }
   }
