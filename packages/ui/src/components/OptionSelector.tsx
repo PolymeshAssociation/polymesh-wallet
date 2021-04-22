@@ -84,7 +84,8 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    const hasClickedOutside = !optionsRef.current?.contains(event.target as Node);
+    const hasClickedOutside =
+      optionsRef.current !== event.target && !optionsRef.current?.contains(event.target as Node);
 
     if (hasClickedOutside) {
       setIsShowingOptions(false);
