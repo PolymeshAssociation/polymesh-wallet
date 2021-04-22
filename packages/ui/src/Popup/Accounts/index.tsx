@@ -135,6 +135,7 @@ export default function Accounts (): React.ReactElement {
       menu: [
         ...(hasNonHardwareAccount ? [{ label: 'Change password', value: 'changePassword' }] : []),
         { label: 'Open extension in a new tab', value: 'newWindow' },
+        { label: 'Manage website access', value: 'manageUrlAuth' },
         {
           label: (
             <Flex px='16px'
@@ -160,6 +161,8 @@ export default function Accounts (): React.ReactElement {
         return windowOpen('/');
       case 'toggleIsDev':
         return togglePolyIsDev();
+      case 'manageUrlAuth':
+        return history.push('/settings/url-auth');
     }
   };
 
