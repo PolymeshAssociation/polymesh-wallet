@@ -77,35 +77,42 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     }
   };
 
-  const showOptions = () => {
-    insertPortalRoot();
-    cssPositionOptionsEl();
-    setIsShowingOptions(true);
+  const toggleOptions = () => {
+    if (isShowingOptions) {
+      setIsShowingOptions(false);
+    } else {
+      insertPortalRoot();
+      cssPositionOptionsEl();
+      setIsShowingOptions(true);
+    }
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleClicks = (event: MouseEvent) => {
+    const hasClickedSelector =
+      wrapperRef.current === event.target || wrapperRef.current?.contains(event.target as Node);
+
+    if (hasClickedSelector) return;
+
     const hasClickedOutside =
       optionsRef.current !== event.target && !optionsRef.current?.contains(event.target as Node);
 
-    if (hasClickedOutside) {
-      setIsShowingOptions(false);
-    }
+    if (hasClickedOutside) setIsShowingOptions(false);
   };
 
   useEffect(() => {
     if (isShowingOptions) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', handleClicks);
     } else {
       portalRoot?.remove();
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClicks);
     };
   }, [isShowingOptions, portalRoot]);
 
   return (
-    <Box onClick={showOptions}
+    <Box onClick={toggleOptions}
       ref={wrapperRef}>
       {selector}
 
