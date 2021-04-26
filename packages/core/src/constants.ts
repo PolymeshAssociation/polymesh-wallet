@@ -95,3 +95,10 @@ export const PORTS = {
   EXTENSION: 'polywallet_extension',
   CONTENT: 'polywallet_content'
 };
+
+export enum ORIGINS {
+  EXTENSION = 'polywallet_extension',
+  PAGE = 'polywallet_page'
+}
+
+export const PASSWORD_EXPIRY_MIN = 15;
