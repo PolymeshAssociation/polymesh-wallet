@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { CSSProperties, Fragment, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
@@ -28,7 +28,7 @@ type OptionSelectorProps = BoxProps & {
   onSelect: (value: any) => void;
   // @TODO add more positioning options as needed.
   // Or, add logic to dynamically calculate where to open like a context-menu (will make UI less predictable).
-  position?: 'bottom-left' | 'bottom-right';
+  position?: 'context' | 'bottom-left' | 'bottom-right';
   style?: CSSProperties;
 };
 
@@ -40,13 +40,18 @@ type CssPosition = {
 };
 
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
-  const { onSelect, options, position = 'bottom-left', selector, style, ...boxProps } = props;
+  const { onSelect, options, position = 'context', selector, style, ...boxProps } = props;
 
-  const [isShowingOptions, setIsShowingOptions] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
   const [cssPosition, setCssPosition] = useState<CssPosition>({});
+  const [optionClickEvent, setOptionClickEvent] = useState<MouseEvent>();
+  const [optionsRef, setOptionsRef] = useState<React.RefObject<HTMLDivElement>>({ current: null });
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const optionsRef = useRef<HTMLDivElement>(null);
+
+  const optionsCallbackRef = useCallback((node: HTMLDivElement) => {
+    setOptionsRef({ current: node });
+  }, []);
 
   const portalRoot = document.getElementById(OPTION_SELECTOR_PORTAL_ID);
 
@@ -58,49 +63,59 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     root?.appendChild(createdPortalRoot);
   };
 
-  const cssPositionOptionsEl = () => {
-    const wrapperRect = wrapperRef.current?.getBoundingClientRect();
+  // const cssPositionOptionsEl = useCallback(() => {
+  //   const wrapperRect = wrapperRef.current?.getBoundingClientRect();
 
-    if (!wrapperRect) return;
+  //   console.log(optionsRef, optionClickEvent);
 
-    switch (position) {
-      case 'bottom-right':
-        return setCssPosition({
-          top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
-          right: `calc(100% - ${wrapperRect.right}px)`
-        });
-      case 'bottom-left':
-        return setCssPosition({
-          top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
-          left: `${wrapperRect.left}px`
-        });
-    }
-  };
+  //   if (!wrapperRect || option) return;
 
-  const toggleOptions = () => {
-    if (isShowingOptions) {
-      setIsShowingOptions(false);
+  //   switch (position) {
+  //     case 'context':
+  //       return setCssPosition({
+  //         top: `${optionClickEvent.clientY}px`,
+  //         left: `${optionClickEvent.clientX}px`
+  //       });
+  //     case 'bottom-right':
+  //       return setCssPosition({
+  //         top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
+  //         right: `calc(100% - ${wrapperRect.right}px)`
+  //       });
+  //     case 'bottom-left':
+  //       return setCssPosition({
+  //         top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
+  //         left: `${wrapperRect.left}px`
+  //       });
+  //   }
+  // }, [optionClickEvent, optionsRef, position]);
+
+  const toggleOptions = (e: MouseEvent) => {
+    if (showOptions) {
+      setShowOptions(false);
     } else {
       insertPortalRoot();
-      cssPositionOptionsEl();
-      setIsShowingOptions(true);
+      setOptionClickEvent(e);
+      setShowOptions(true);
     }
   };
 
-  const handleClicks = (event: MouseEvent) => {
-    const hasClickedSelector =
-      wrapperRef.current === event.target || wrapperRef.current?.contains(event.target as Node);
+  const handleClicks = useCallback(
+    (event: MouseEvent) => {
+      const hasClickedSelector =
+        wrapperRef.current === event.target || wrapperRef.current?.contains(event.target as Node);
 
-    if (hasClickedSelector) return;
+      if (hasClickedSelector) return;
 
-    const hasClickedOutside =
-      optionsRef.current !== event.target && !optionsRef.current?.contains(event.target as Node);
+      const hasClickedOutside =
+        optionsRef.current !== event.target && !optionsRef.current?.contains(event.target as Node);
 
-    if (hasClickedOutside) setIsShowingOptions(false);
-  };
+      if (hasClickedOutside) setShowOptions(false);
+    },
+    [optionsRef]
+  );
 
   useEffect(() => {
-    if (isShowingOptions) {
+    if (showOptions) {
       document.addEventListener('mousedown', handleClicks);
     } else {
       portalRoot?.remove();
@@ -109,7 +124,38 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     return () => {
       document.removeEventListener('mousedown', handleClicks);
     };
-  }, [isShowingOptions, portalRoot]);
+  }, [handleClicks, showOptions, portalRoot]);
+
+  useEffect(() => {
+    if (!wrapperRef.current || !optionsRef.current) return;
+
+    if (showOptions && portalRoot) {
+      const wrapperRect = wrapperRef.current.getBoundingClientRect();
+      const optionsRect = optionsRef.current.getBoundingClientRect();
+
+      console.log({ optionsRect, optionClickEvent });
+
+      if (!wrapperRect || !optionClickEvent) return;
+
+      switch (position) {
+        case 'context':
+          return setCssPosition({
+            top: `${optionClickEvent.clientY}px`,
+            left: `${optionClickEvent.clientX}px`
+          });
+        case 'bottom-right':
+          return setCssPosition({
+            top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
+            right: `calc(100% - ${wrapperRect.right}px)`
+          });
+        case 'bottom-left':
+          return setCssPosition({
+            top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
+            left: `${wrapperRect.left}px`
+          });
+      }
+    }
+  }, [optionClickEvent, optionsRef, portalRoot, position, showOptions]);
 
   return (
     <Box onClick={toggleOptions}
@@ -117,11 +163,11 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       {selector}
 
       {portalRoot &&
-        isShowingOptions &&
+        showOptions &&
         ReactDOM.createPortal(
           <Options {...boxProps}
             cssPosition={cssPosition}
-            ref={optionsRef}
+            ref={optionsCallbackRef}
             style={style}>
             {/* Render option menus */}
             {options.map((option, optionIndex) => (

@@ -190,7 +190,7 @@ export default function Accounts (): React.ReactElement {
                   <OptionSelector
                     onSelect={handleTopMenuSelection}
                     options={topMenuOptions}
-                    position='bottom-right'
+                    // position='bottom-right'
                     selector={
                       <Icon Asset={SvgDotsVertical}
                         color='gray.0'
