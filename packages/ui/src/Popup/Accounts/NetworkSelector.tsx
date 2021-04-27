@@ -105,6 +105,7 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
       minWidth='296px'
       onSelect={onSelect}
       options={networkOptions}
+      position='bottom-left'
       selector={
         <NetworkSelect background={background}>
           <NetworkCircle background={background}
