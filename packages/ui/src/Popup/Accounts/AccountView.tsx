@@ -279,6 +279,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             <Flex
               alignItems='flex-end'
               flexDirection='column'
+              height='100%'
               justifyContent='space-around'
             >
               <Box width={24}>
@@ -291,7 +292,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
                   />
                 )}
               </Box>
-              <Box>
+              <Box mb='xs'
+                mt='auto'>
                 <OptionSelector onSelect={(value) => handleMenuClick(address, value)}
                   options={getMenuItems(address)}
                   selector={<Icon Asset={SvgDotsVertical}
