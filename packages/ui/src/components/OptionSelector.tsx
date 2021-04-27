@@ -26,9 +26,7 @@ type OptionSelectorProps = BoxProps & {
   options: Option[];
   selector: string | JSX.Element;
   onSelect: (value: any) => void;
-  // @TODO add more positioning options as needed.
-  // Or, add logic to dynamically calculate where to open like a context-menu (will make UI less predictable).
-  position?: 'context' | 'bottom-left' | 'bottom-right';
+  position?: 'context' | 'bottom-left' | 'bottom-right'; // Add more positioning as needed
   style?: CSSProperties;
 };
 
@@ -39,7 +37,7 @@ type CssPosition = {
   left?: number;
 };
 
-export function OptionSelector (props: OptionSelectorProps): JSX.Element {
+function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
   const { onSelect, options, position = 'context', selector, style, ...boxProps } = props;
 
   const [shouldRenderOptions, setShouldRenderOptions] = useState(false);
@@ -64,6 +62,8 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   };
 
   const toggleOptions: React.MouseEventHandler = (event) => {
+    event.stopPropagation();
+
     if (shouldRenderOptions) {
       setShouldRenderOptions(false);
     } else {
@@ -78,7 +78,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       const hasClickedSelector =
         wrapperRef.current === event.target || wrapperRef.current?.contains(event.target as Node);
 
-      if (hasClickedSelector) return;
+      if (hasClickedSelector) return; // Handled by toggleOptions
 
       const hasClickedOutside =
         optionsRef.current !== event.target && !optionsRef.current?.contains(event.target as Node);
@@ -113,7 +113,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
     switch (position) {
       case 'context': {
-        const top = optionClickEvent.clientY;
+        let top = optionClickEvent.clientY;
         let left = optionClickEvent.clientX;
 
         // flip on x-axis
@@ -121,10 +121,10 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
           left = optionClickEvent.clientX - optionsRect.width;
         }
 
-        // // flip on x-axis
-        // if (optionClickEvent.clientX + optionsRect.width > document.body.clientWidth) {
-        //   left = `${optionClickEvent.clientX - optionsRect.width}px`;
-        // }
+        // flip on y-axis
+        if (optionClickEvent.clientY + optionsRect.height > document.body.clientHeight) {
+          top = optionClickEvent.clientY - optionsRect.height;
+        }
 
         return setCssPosition({
           top,
@@ -132,16 +132,16 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
         });
       }
 
-      // case 'bottom-right':
-      //   return setCssPosition({
-      //     top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
-      //     right: `calc(100% - ${wrapperRect.right}px)`
-      //   });
-      // case 'bottom-left':
-      //   return setCssPosition({
-      //     top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
-      //     left: `${wrapperRect.left}px`
-      //   });
+      case 'bottom-right':
+        return setCssPosition({
+          top: wrapperRect.bottom + SELECTOR_SPACING,
+          left: wrapperRect.left + wrapperRect.width - optionsRect.width
+        });
+      case 'bottom-left':
+        return setCssPosition({
+          top: wrapperRect.bottom + SELECTOR_SPACING,
+          left: wrapperRect.left
+        });
     }
   }, [optionClickEvent, optionsRef, position]);
 
@@ -155,9 +155,9 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
         ReactDOM.createPortal(
           <Options {...boxProps}
             cssPosition={cssPosition}
+            onClick={(event) => event.stopPropagation()} // Prevent event bubbling to toggleOptions
             ref={optionsCallbackRef}
-            style={style}
-          >
+            style={style}>
             {/* Render option menus */}
             {options.map((option, optionIndex) => (
               <Fragment key={optionIndex}>
@@ -197,6 +197,8 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   );
 }
 
+export const OptionSelector = React.memo(OptionSelectorComponent, () => true);
+
 const Options = styled(Box)<{ cssPosition: CssPosition }>`
   position: absolute;
   background: white;
@@ -207,7 +209,7 @@ const Options = styled(Box)<{ cssPosition: CssPosition }>`
 
   ${({ cssPosition }) => cssPosition}
 
-  visibility: ${({ cssPosition }) => Object.values(cssPosition).length ? 'visible' : 'hidden'};
+  visibility: ${({ cssPosition }) => (Object.values(cssPosition).length ? 'visible' : 'hidden')};
 
   ul {
     margin: 0;
