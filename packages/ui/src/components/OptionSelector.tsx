@@ -43,15 +43,16 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
   const [shouldRenderOptions, setShouldRenderOptions] = useState(false);
   const [clickCoords, setClickCoords] = useState<{ x: number; y: number }>();
   const [cssPosition, setCssPosition] = useState<CssPosition>({});
+  const [portalRoot, setPortalRoot] = useState<HTMLDivElement>();
   const [optionsRef, setOptionsRef] = useState<React.RefObject<HTMLDivElement>>({ current: null });
 
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const selectorRef = useRef<HTMLDivElement>(null);
 
   const optionsCallbackRef = useCallback((node: HTMLDivElement) => {
     setOptionsRef({ current: node });
   }, []);
 
-  const portalRoot = document.getElementById(OPTION_SELECTOR_PORTAL_ID);
+  // const portalRoot = document.getElementById(OPTION_SELECTOR_PORTAL_ID);
 
   const insertPortalRoot = () => {
     const root = document.getElementById('root');
@@ -59,6 +60,8 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
 
     createdPortalRoot.id = OPTION_SELECTOR_PORTAL_ID;
     root?.appendChild(createdPortalRoot);
+
+    setPortalRoot(createdPortalRoot);
   };
 
   const toggleOptions: React.MouseEventHandler = (event) => {
@@ -67,7 +70,6 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
     if (shouldRenderOptions) {
       setShouldRenderOptions(false);
     } else {
-      insertPortalRoot();
       setClickCoords({ x: event.clientX, y: event.clientY });
       setShouldRenderOptions(true);
     }
@@ -76,7 +78,7 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
   const handleClicks = useCallback(
     (event: MouseEvent) => {
       const hasClickedSelector =
-        wrapperRef.current === event.target || wrapperRef.current?.contains(event.target as Node);
+        selectorRef.current === event.target || selectorRef.current?.contains(event.target as Node);
 
       if (hasClickedSelector) return; // Handled by toggleOptions
 
@@ -88,27 +90,32 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
     [optionsRef]
   );
 
+  // Add and remove click listener to hide options when clicked outside
   useEffect(() => {
     if (shouldRenderOptions) {
       document.addEventListener('mousedown', handleClicks);
+
+      if (!portalRoot) {
+        insertPortalRoot();
+      }
     } else {
       portalRoot?.remove();
-      setCssPosition({});
+      setPortalRoot(undefined);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClicks);
     };
-  }, [handleClicks, shouldRenderOptions, portalRoot]);
+  }, [handleClicks, portalRoot, shouldRenderOptions]);
 
   // Position option selector
   useEffect(() => {
-    if (!wrapperRef.current || !optionsRef.current) return;
+    if (!selectorRef.current || !optionsRef.current) return;
 
-    const wrapperRect = wrapperRef.current.getBoundingClientRect();
+    const selectorRect = selectorRef.current.getBoundingClientRect();
     const optionsRect = optionsRef.current.getBoundingClientRect();
 
-    if (!wrapperRect || !clickCoords) return;
+    if (!selectorRect || !clickCoords) return;
 
     console.log({ clickCoords, optionsRect });
 
@@ -136,15 +143,15 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
 
       case 'bottom-right':
         setCssPosition({
-          top: wrapperRect.bottom + SELECTOR_SPACING,
-          left: wrapperRect.left + wrapperRect.width - optionsRect.width
+          top: selectorRect.bottom + SELECTOR_SPACING,
+          left: selectorRect.left + selectorRect.width - optionsRect.width
         });
         break;
 
       case 'bottom-left':
         setCssPosition({
-          top: wrapperRect.bottom + SELECTOR_SPACING,
-          left: wrapperRect.left
+          top: selectorRect.bottom + SELECTOR_SPACING,
+          left: selectorRect.left
         });
         break;
     }
@@ -153,7 +160,7 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
   return (
     <>
       <Box onClick={toggleOptions}
-        ref={wrapperRef}>
+        ref={selectorRef}>
         {selector}
       </Box>
 
