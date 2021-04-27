@@ -33,18 +33,18 @@ type OptionSelectorProps = BoxProps & {
 };
 
 type CssPosition = {
-  top?: string;
-  right?: string;
-  bottom?: string;
-  left?: string;
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
 };
 
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   const { onSelect, options, position = 'context', selector, style, ...boxProps } = props;
 
-  const [showOptions, setShowOptions] = useState(false);
+  const [shouldRenderOptions, setShouldRenderOptions] = useState(false);
   const [cssPosition, setCssPosition] = useState<CssPosition>({});
-  const [optionClickEvent, setOptionClickEvent] = useState<MouseEvent>();
+  const [optionClickEvent, setOptionClickEvent] = useState<React.MouseEvent>();
   const [optionsRef, setOptionsRef] = useState<React.RefObject<HTMLDivElement>>({ current: null });
 
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -63,39 +63,13 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     root?.appendChild(createdPortalRoot);
   };
 
-  // const cssPositionOptionsEl = useCallback(() => {
-  //   const wrapperRect = wrapperRef.current?.getBoundingClientRect();
-
-  //   console.log(optionsRef, optionClickEvent);
-
-  //   if (!wrapperRect || option) return;
-
-  //   switch (position) {
-  //     case 'context':
-  //       return setCssPosition({
-  //         top: `${optionClickEvent.clientY}px`,
-  //         left: `${optionClickEvent.clientX}px`
-  //       });
-  //     case 'bottom-right':
-  //       return setCssPosition({
-  //         top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
-  //         right: `calc(100% - ${wrapperRect.right}px)`
-  //       });
-  //     case 'bottom-left':
-  //       return setCssPosition({
-  //         top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
-  //         left: `${wrapperRect.left}px`
-  //       });
-  //   }
-  // }, [optionClickEvent, optionsRef, position]);
-
-  const toggleOptions = (e: MouseEvent) => {
-    if (showOptions) {
-      setShowOptions(false);
+  const toggleOptions: React.MouseEventHandler = (event) => {
+    if (shouldRenderOptions) {
+      setShouldRenderOptions(false);
     } else {
       insertPortalRoot();
-      setOptionClickEvent(e);
-      setShowOptions(true);
+      setOptionClickEvent(event);
+      setShouldRenderOptions(true);
     }
   };
 
@@ -109,53 +83,67 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       const hasClickedOutside =
         optionsRef.current !== event.target && !optionsRef.current?.contains(event.target as Node);
 
-      if (hasClickedOutside) setShowOptions(false);
+      if (hasClickedOutside) setShouldRenderOptions(false);
     },
     [optionsRef]
   );
 
   useEffect(() => {
-    if (showOptions) {
+    if (shouldRenderOptions) {
       document.addEventListener('mousedown', handleClicks);
     } else {
       portalRoot?.remove();
+      setCssPosition({});
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClicks);
     };
-  }, [handleClicks, showOptions, portalRoot]);
+  }, [handleClicks, shouldRenderOptions, portalRoot]);
 
   useEffect(() => {
     if (!wrapperRef.current || !optionsRef.current) return;
 
-    if (showOptions && portalRoot) {
-      const wrapperRect = wrapperRef.current.getBoundingClientRect();
-      const optionsRect = optionsRef.current.getBoundingClientRect();
+    const wrapperRect = wrapperRef.current.getBoundingClientRect();
+    const optionsRect = optionsRef.current.getBoundingClientRect();
 
-      console.log({ optionsRect, optionClickEvent });
+    if (!wrapperRect || !optionClickEvent) return;
 
-      if (!wrapperRect || !optionClickEvent) return;
+    console.log({ optionClickEvent, optionsRect });
 
-      switch (position) {
-        case 'context':
-          return setCssPosition({
-            top: `${optionClickEvent.clientY}px`,
-            left: `${optionClickEvent.clientX}px`
-          });
-        case 'bottom-right':
-          return setCssPosition({
-            top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
-            right: `calc(100% - ${wrapperRect.right}px)`
-          });
-        case 'bottom-left':
-          return setCssPosition({
-            top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
-            left: `${wrapperRect.left}px`
-          });
+    switch (position) {
+      case 'context': {
+        const top = optionClickEvent.clientY;
+        let left = optionClickEvent.clientX;
+
+        // flip on x-axis
+        if (optionClickEvent.clientX + optionsRect.width > document.body.clientWidth) {
+          left = optionClickEvent.clientX - optionsRect.width;
+        }
+
+        // // flip on x-axis
+        // if (optionClickEvent.clientX + optionsRect.width > document.body.clientWidth) {
+        //   left = `${optionClickEvent.clientX - optionsRect.width}px`;
+        // }
+
+        return setCssPosition({
+          top,
+          left
+        });
       }
+
+      // case 'bottom-right':
+      //   return setCssPosition({
+      //     top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
+      //     right: `calc(100% - ${wrapperRect.right}px)`
+      //   });
+      // case 'bottom-left':
+      //   return setCssPosition({
+      //     top: `${wrapperRect.bottom + SELECTOR_SPACING}px`,
+      //     left: `${wrapperRect.left}px`
+      //   });
     }
-  }, [optionClickEvent, optionsRef, portalRoot, position, showOptions]);
+  }, [optionClickEvent, optionsRef, position]);
 
   return (
     <Box onClick={toggleOptions}
@@ -163,12 +151,13 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       {selector}
 
       {portalRoot &&
-        showOptions &&
+        shouldRenderOptions &&
         ReactDOM.createPortal(
           <Options {...boxProps}
             cssPosition={cssPosition}
             ref={optionsCallbackRef}
-            style={style}>
+            style={style}
+          >
             {/* Render option menus */}
             {options.map((option, optionIndex) => (
               <Fragment key={optionIndex}>
@@ -216,11 +205,9 @@ const Options = styled(Box)<{ cssPosition: CssPosition }>`
   padding: 8px 0;
   z-index: 1000;
 
-  // Add only the necessary css positioning attributes
-  ${({ cssPosition: { top } }) => top && `top: ${top};`}
-  ${({ cssPosition: { right } }) => right && `right: ${right};`}
-  ${({ cssPosition: { bottom } }) => bottom && `bottom: ${bottom};`}
-  ${({ cssPosition: { left } }) => left && `left: ${left};`}
+  ${({ cssPosition }) => cssPosition}
+
+  visibility: ${({ cssPosition }) => Object.values(cssPosition).length ? 'visible' : 'hidden'};
 
   ul {
     margin: 0;
