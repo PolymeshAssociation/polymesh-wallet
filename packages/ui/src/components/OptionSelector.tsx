@@ -101,6 +101,7 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
     };
   }, [handleClicks, shouldRenderOptions, portalRoot]);
 
+  // Position option selector
   useEffect(() => {
     if (!wrapperRef.current || !optionsRef.current) return;
 
@@ -126,36 +127,41 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
           top = optionClickEvent.clientY - optionsRect.height;
         }
 
-        return setCssPosition({
+        setCssPosition({
           top,
           left
         });
+        break;
       }
 
       case 'bottom-right':
-        return setCssPosition({
+        setCssPosition({
           top: wrapperRect.bottom + SELECTOR_SPACING,
           left: wrapperRect.left + wrapperRect.width - optionsRect.width
         });
+        break;
+
       case 'bottom-left':
-        return setCssPosition({
+        setCssPosition({
           top: wrapperRect.bottom + SELECTOR_SPACING,
           left: wrapperRect.left
         });
+        break;
     }
   }, [optionClickEvent, optionsRef, position]);
 
   return (
-    <Box onClick={toggleOptions}
-      ref={wrapperRef}>
-      {selector}
+    <>
+      <Box onClick={toggleOptions}
+        ref={wrapperRef}>
+        {selector}
+      </Box>
 
-      {portalRoot &&
-        shouldRenderOptions &&
+      {shouldRenderOptions &&
+        portalRoot &&
         ReactDOM.createPortal(
           <Options {...boxProps}
             cssPosition={cssPosition}
-            onClick={(event) => event.stopPropagation()} // Prevent event bubbling to toggleOptions
             ref={optionsCallbackRef}
             style={style}>
             {/* Render option menus */}
@@ -193,7 +199,7 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
           </Options>,
           portalRoot
         )}
-    </Box>
+    </>
   );
 }
 
