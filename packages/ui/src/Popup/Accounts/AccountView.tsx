@@ -2,12 +2,13 @@ import { networkLinks } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgCheck, SvgDotsVertical, SvgPencilOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { AccountContext, AccountType, ActionContext, PolymeshContext } from '../../components';
+import { AccountContext, AccountType, ActionContext, OptionSelector, PolymeshContext } from '../../components';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
-import { Box, ButtonSmall, ContextMenuTrigger, Flex, Icon, LabelWithCopy, Menu, MenuItem, Text, TextOverflowEllipsis } from '../../ui';
+import { Box, ButtonSmall, Flex, Icon, LabelWithCopy, Text, TextOverflowEllipsis } from '../../ui';
 import { formatAmount } from '../../util/formatters';
 import { NameEdit } from './NameEdit';
 import { AccountInfoGrid, AccountViewGrid, GridItem, UnassignedAccountHoverGrid } from './styles';
@@ -31,52 +32,25 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   const [nameHover, setNameHover] = useState(false);
   const { networkState: { selected: network, ss58Format } } = useContext(PolymeshContext);
 
-  const renderMenuItems = (address: string) => {
+  const getMenuItems = (address: string): Option[] => {
     const account = accounts.find((_account) => _account.address === address);
     const isLedgerAccount = account?.isHardware && account.hardwareType === 'ledger';
+    const menuItems = [{ label: 'Forget account', value: 'forget' }];
 
-    return (
-      <Menu id={`account_menu_${address}`}>
-        {!isLedgerAccount &&
-          <MenuItem data={{ action: 'export', address }}
-            onClick={handleMenuClick}>
-            <Text color='gray.2'
-              variant='b1'>Export account</Text>
-          </MenuItem>
-        }
-        <MenuItem data={{ action: 'forget', address }}
-          onClick={handleMenuClick}>
-          <Text color='gray.2'
-            variant='b1'>Forget account</Text>
-        </MenuItem>
-      </Menu>
-    );
+    return [
+      {
+        menu: isLedgerAccount ? menuItems : [{ label: 'Export account', value: 'export' }, ...menuItems]
+      }
+    ];
   };
 
-  const handleMenuClick = (event: string, data: {action:string, address: string}) => {
-    const { action, address } = data;
-
+  const handleMenuClick = (address: string, action: string) => {
     switch (action) {
       case 'export':
         return history.push(`/account/export/${address}`);
       case 'forget':
         return history.push(`/account/forget/${address}`);
     }
-  };
-
-  const renderActionsMenuButton = (address: string) => {
-    return (
-      <>
-        <ContextMenuTrigger id={`account_menu_${address}`}
-          mouseButton={0}>
-          <Icon Asset={SvgDotsVertical}
-            color='gray.1'
-            height={16}
-            style={{ cursor: 'pointer' }}
-            width={16} />
-        </ContextMenuTrigger>
-      </>
-    );
   };
 
   const cancelEditing = (e: React.MouseEvent<HTMLElement>) => {
@@ -265,7 +239,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
 
   return (
     <>
-      {renderMenuItems(address)}
+      {/* {renderMenuItems(address)} */}
       <Box
         bg={hover ? 'gray.5' : 'gray.0'}
         mt='s'
@@ -317,7 +291,15 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
                   />
                 )}
               </Box>
-              <Box>{renderActionsMenuButton(address)}</Box>
+              <Box>
+                <OptionSelector onSelect={(value) => handleMenuClick(address, value)}
+                  options={getMenuItems(address)}
+                  selector={<Icon Asset={SvgDotsVertical}
+                    color='gray.1'
+                    height={16}
+                    style={{ cursor: 'pointer' }}
+                    width={16} />} />
+              </Box>
             </Flex>
           </GridItem>
         </AccountViewGrid>
