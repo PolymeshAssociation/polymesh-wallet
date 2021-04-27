@@ -41,8 +41,8 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
   const { onSelect, options, position = 'context', selector, style, ...boxProps } = props;
 
   const [shouldRenderOptions, setShouldRenderOptions] = useState(false);
+  const [clickCoords, setClickCoords] = useState<{ x: number; y: number }>();
   const [cssPosition, setCssPosition] = useState<CssPosition>({});
-  const [optionClickEvent, setOptionClickEvent] = useState<React.MouseEvent>();
   const [optionsRef, setOptionsRef] = useState<React.RefObject<HTMLDivElement>>({ current: null });
 
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -68,7 +68,7 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
       setShouldRenderOptions(false);
     } else {
       insertPortalRoot();
-      setOptionClickEvent(event);
+      setClickCoords({ x: event.clientX, y: event.clientY });
       setShouldRenderOptions(true);
     }
   };
@@ -108,23 +108,23 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
     const wrapperRect = wrapperRef.current.getBoundingClientRect();
     const optionsRect = optionsRef.current.getBoundingClientRect();
 
-    if (!wrapperRect || !optionClickEvent) return;
+    if (!wrapperRect || !clickCoords) return;
 
-    console.log({ optionClickEvent, optionsRect });
+    console.log({ clickCoords, optionsRect });
 
     switch (position) {
       case 'context': {
-        let top = optionClickEvent.clientY;
-        let left = optionClickEvent.clientX;
+        let top = clickCoords.y;
+        let left = clickCoords.x;
 
         // flip on x-axis
-        if (optionClickEvent.clientX + optionsRect.width > document.body.clientWidth) {
-          left = optionClickEvent.clientX - optionsRect.width;
+        if (clickCoords.x + optionsRect.width > document.body.clientWidth) {
+          left = clickCoords.x - optionsRect.width;
         }
 
         // flip on y-axis
-        if (optionClickEvent.clientY + optionsRect.height > document.body.clientHeight) {
-          top = optionClickEvent.clientY - optionsRect.height;
+        if (clickCoords.y + optionsRect.height > document.body.clientHeight) {
+          top = clickCoords.y - optionsRect.height;
         }
 
         setCssPosition({
@@ -148,7 +148,7 @@ function OptionSelectorComponent (props: OptionSelectorProps): JSX.Element {
         });
         break;
     }
-  }, [optionClickEvent, optionsRef, position]);
+  }, [clickCoords, optionsRef, position]);
 
   return (
     <>
