@@ -1,7 +1,9 @@
 import type { ThemeProps } from '../../types';
 
 import { AuthUrlInfo } from '@polkadot/extension-base/background/handlers/State';
+import { SvgWeb } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Switch } from '@polymathnetwork/extension-ui/components';
+import { Box, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
@@ -19,15 +21,21 @@ function WebsiteEntry ({ className = '', info, toggleAuth, url }: Props): React.
 
   return (
     <div className={`${className} ${info.isAllowed ? 'allowed' : 'denied'}`}>
-      <div className='url'>
-        {url}
-      </div>
+      <Box pr={10}>
+        <Icon Asset={SvgWeb}
+          color='primary'
+          height={20}
+          width={20}
+        />
+      </Box>
+      <Text style={{ flex: 1 }}
+        variant='b2m'>{url}</Text>
       <Switch
         checked={info.isAllowed}
-        checkedLabel={'allowed'}
+        checkedLabel={'Allowed'}
         className='info'
         onChange={switchAccess}
-        uncheckedLabel={'denied'}
+        uncheckedLabel={'Denied'}
       />
     </div>
   );
@@ -39,11 +47,5 @@ export default styled(WebsiteEntry)(({ theme }: Props) => `
 
   .url{
     flex: 1;
-  }
-
-  &.denied {
-    .slider::before {
-        background-color: ${theme.backButtonBackground};
-      }
   }
 `);
