@@ -66,18 +66,18 @@ export default styled(Switch)(({ checked, theme }: Props) => `
     background-color: ${checked ? theme.colors.success : theme.colors.gray[3]};
     transition: 0.2s;
     border-radius: 100px;
-    border: 1px solid ${theme.inputBorderColor};
 
     &:before {
       position: absolute;
       content: '';
-      height: 16px;
-      width: 16px;
-      left: 4px;
+      height: 18px;
+      width: 18px;
+      left: 3px;
       bottom: 3px;
       background-color: ${theme.colors.white};
       transition: 0.4s;
       border-radius: 12px;
+      box-shadow: 0px 1px 3px rgba(21, 41, 53, 0.12), 0px 1px 2px rgba(21, 41, 53, 0.24);
     }
   }
 `);
