@@ -11,7 +11,6 @@ export { IconCircled } from './IconCircled';
 export { Heading } from './Heading';
 export { Flex } from './Flex';
 export { TextEllipsis } from './TextEllipsis';
-export { ContextMenuTrigger, Menu, MenuItem } from './Menu';
 export { StatusBadge } from './StatusBadge';
 export { BaseInput } from './BaseInput';
 export { BaseInputArea } from './BaseInputArea';
