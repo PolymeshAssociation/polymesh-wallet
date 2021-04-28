@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
 import { BoxProps } from '@polymathnetwork/extension-ui/ui/Box';
-import React, { CSSProperties, Fragment, useCallback, useEffect, useReducer, useRef } from 'react';
+import React, { CSSProperties, Fragment, RefObject, useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import { initialState, reducer } from './reducer';
@@ -23,11 +23,10 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
   const selectorRef = useRef<HTMLDivElement>(null);
 
+  // Using a callback ref to set optionsRef since it is rendered conditionally
+  const [optionsRef, setOptionsRef] = useState<RefObject<HTMLDivElement>>({ current: null });
   const optionsCallbackRef = useCallback((node: HTMLDivElement) => {
-    dispatch({
-      type: 'setOptionsRef',
-      payload: { current: node }
-    });
+    setOptionsRef({ current: node });
   }, []);
 
   const toggleOptions: React.MouseEventHandler = (event) => {
@@ -54,11 +53,11 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       if (hasClickedSelector) return; // Handled by toggleOptions
 
       const hasClickedOutside =
-        state.optionsRef?.current !== event.target && !state.optionsRef?.current?.contains(event.target as Node);
+        optionsRef.current !== event.target && !optionsRef.current?.contains(event.target as Node);
 
       if (hasClickedOutside) dispatch({ type: 'hide' });
     },
-    [state.optionsRef]
+    [optionsRef]
   );
 
   // Add and remove click listener to hide options when clicked outside
@@ -68,7 +67,8 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
         type: 'setCssPosition',
         payload: {
           position,
-          selectorRef
+          selectorRef,
+          optionsRef
         }
       });
 
@@ -78,7 +78,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     return () => {
       document.removeEventListener('mousedown', handleClicks);
     };
-  }, [handleClicks, position, state.shouldRenderOptions]);
+  }, [handleClicks, optionsRef, position, state.shouldRenderOptions]);
 
   return (
     <>
