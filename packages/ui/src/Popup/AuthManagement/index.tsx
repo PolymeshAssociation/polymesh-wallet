@@ -1,6 +1,6 @@
 import { AuthUrlInfo, AuthUrls } from '@polkadot/extension-base/background/handlers/State';
-import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Flex, Header, Text } from '@polymathnetwork/extension-ui/ui';
+import { SvgFileLockOutline, SvgSearch } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Flex, Header, Hr, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { InputFilter } from '../../components';
@@ -32,26 +32,22 @@ export function AuthManagement (): JSX.Element {
   return (
     <Flex flexDirection='column'
       height='100%'>
-      <Header headerText='Manage Website Access'
+      <Header headerText='Manage connected dApps'
         iconAsset={SvgFileLockOutline}
         width='100%'>
         <Box mb='m'
           mt='s'>
           <Text color='gray.0'
             variant='b2'>
-            Grant or deny these applications access to Polymesh Wallet.
+            Allow or deny these applications to connect to your Polymesh Wallet.
           </Text>
         </Box>
       </Header>
       {hasAuthList && (
         <Box p='s'
           width='100%'>
-          <Text color='gray.1'
-            variant='b2m'>
-            Filter by host name:
-          </Text>
           <InputFilter onChange={_onChangeFilter}
-            placeholder={'example.com'}
+            placeholder={'Search by website name...'}
             value={filter} />
         </Box>
       )}
@@ -63,10 +59,14 @@ export function AuthManagement (): JSX.Element {
             Object.entries(authList as AuthUrls)
               .filter(([url]: [string, AuthUrlInfo]) => url.includes(filter))
               .map(([url, info]: [string, AuthUrlInfo]) => (
-                <WebsiteEntry info={info}
-                  key={url}
-                  toggleAuth={toggleAuth}
-                  url={url} />
+                <>
+                  <WebsiteEntry info={info}
+                    key={url}
+                    toggleAuth={toggleAuth}
+                    url={url} />
+                  <Hr />
+                </>
+
               ))
           )
           : (
