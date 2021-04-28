@@ -132,6 +132,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
         ReactDOM.createPortal(
           <Options {...boxProps}
             cssPosition={cssPosition}
+            onClick={(event) => event.stopPropagation()}
             ref={optionsCallbackRef}
             style={style}>
             {/* Render option menus */}
