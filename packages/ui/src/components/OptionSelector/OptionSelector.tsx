@@ -6,7 +6,10 @@ import ReactDOM from 'react-dom';
 
 import { initialState, reducer } from './reducer';
 import { Options } from './styles';
-import { Option, PositionType } from './types';
+import { CssPosition, Option, PositionType } from './types';
+
+const SELECTOR_SPACING = 4;
+const OPTION_SELECTOR_PORTAL_ID = 'option-selector-portal';
 
 type OptionSelectorProps = BoxProps & {
   options: Option[];
@@ -20,6 +23,8 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   const { onSelect, options, position = 'context', selector, style, ...boxProps } = props;
 
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const [cssPosition, setCssPosition] = useState<CssPosition>({});
 
   const selectorRef = useRef<HTMLDivElement>(null);
 
@@ -63,14 +68,53 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   // Add and remove click listener to hide options when clicked outside
   useEffect(() => {
     if (state.shouldRenderOptions) {
-      dispatch({
-        type: 'setCssPosition',
-        payload: {
-          position,
-          selectorRef,
-          optionsRef
+      const { clickCoords } = state;
+
+      if (!selectorRef.current || !optionsRef.current || !clickCoords) return;
+
+      const selectorRect = selectorRef.current.getBoundingClientRect();
+      const optionsRect = optionsRef.current.getBoundingClientRect();
+
+      let cssPosition: CssPosition = {};
+
+      switch (position) {
+        case 'context': {
+          let top = clickCoords.y;
+          let left = clickCoords.x;
+
+          // flip on x-axis
+          if (clickCoords.x + optionsRect.width > document.body.clientWidth) {
+            left = clickCoords.x - optionsRect.width;
+          }
+
+          // flip on y-axis
+          if (clickCoords.y + optionsRect.height > document.body.clientHeight) {
+            top = clickCoords.y - optionsRect.height;
+          }
+
+          cssPosition = {
+            top,
+            left
+          };
+          break;
         }
-      });
+
+        case 'bottom-right':
+          cssPosition = {
+            top: selectorRect.bottom + SELECTOR_SPACING,
+            left: selectorRect.left + selectorRect.width - optionsRect.width
+          };
+          break;
+
+        case 'bottom-left':
+          cssPosition = {
+            top: selectorRect.bottom + SELECTOR_SPACING,
+            left: selectorRect.left
+          };
+          break;
+      }
+
+      setCssPosition(cssPosition);
 
       document.addEventListener('mousedown', handleClicks);
     }
@@ -78,7 +122,9 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     return () => {
       document.removeEventListener('mousedown', handleClicks);
     };
-  }, [handleClicks, optionsRef, position, state.shouldRenderOptions]);
+  }, [handleClicks, optionsRef, position, state, state.shouldRenderOptions]);
+
+  console.log('render');
 
   return (
     <>
@@ -91,7 +137,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
         state.portalRoot &&
         ReactDOM.createPortal(
           <Options {...boxProps}
-            cssPosition={state.cssPosition}
+            cssPosition={cssPosition}
             ref={optionsCallbackRef}
             style={style}>
             {/* Render option menus */}
