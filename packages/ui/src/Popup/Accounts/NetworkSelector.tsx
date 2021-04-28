@@ -2,7 +2,7 @@ import { networkIsDev, networkLabels } from '@polymathnetwork/extension-core/con
 import { NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgCheck, SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { OptionSelector, PolymeshContext } from '@polymathnetwork/extension-ui/components';
-import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector';
+import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
 import { colors } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
