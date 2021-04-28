@@ -5,18 +5,17 @@ export type OptionSelectorState = {
   cssPosition: CssPosition;
   portalRoot?: HTMLDivElement;
   clickCoords?: Coordinates;
-  optionsRef?: React.RefObject<HTMLDivElement>;
 };
 
 export type OptionSelectorActions =
   | { type: 'show'; payload: Coordinates }
   | { type: 'hide' }
-  | { type: 'setOptionsRef'; payload: React.RefObject<HTMLDivElement> }
   | {
     type: 'setCssPosition';
     payload: {
       position: PositionType;
       selectorRef: React.RefObject<HTMLDivElement>;
+      optionsRef: React.RefObject<HTMLDivElement>;
     };
   };
 
@@ -28,7 +27,7 @@ export const initialState: OptionSelectorState = {
   cssPosition: {}
 };
 
-export function reducer (state: OptionSelectorState, action: OptionSelectorActions): OptionSelectorState {
+export function reducer (state: OptionSelectorState = initialState, action: OptionSelectorActions): OptionSelectorState {
   switch (action.type) {
     case 'show': {
       const root = document.getElementById('root');
@@ -53,24 +52,18 @@ export function reducer (state: OptionSelectorState, action: OptionSelectorActio
       };
     }
 
-    case 'setOptionsRef':
-      return {
-        ...state,
-        optionsRef: action.payload
-      };
-
     case 'setCssPosition': {
-      const { clickCoords, optionsRef } = state;
-      const { selectorRef } = action.payload;
+      const { clickCoords } = state;
+      const { optionsRef, position, selectorRef } = action.payload;
 
-      if (!selectorRef.current || !optionsRef?.current || !clickCoords) return state;
+      if (!selectorRef.current || !optionsRef.current || !clickCoords) return state;
 
       const selectorRect = selectorRef.current.getBoundingClientRect();
       const optionsRect = optionsRef.current.getBoundingClientRect();
 
       let cssPosition: CssPosition = {};
 
-      switch (action.payload.position) {
+      switch (position) {
         case 'context': {
           let top = clickCoords.y;
           let left = clickCoords.x;
