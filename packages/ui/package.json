@@ -17,7 +17,6 @@
     "@types/styled-system": "^5.1.10",
     "polished": "^3.6.5",
     "react": "^17.0.1",
-    "react-contextmenu": "^2.14.0",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.0.3",
     "react-error-boundary": "^3.0.2",
