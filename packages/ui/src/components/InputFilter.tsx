@@ -1,6 +1,7 @@
+import { Icon, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback } from 'react';
 
-import { TextInput } from '../ui';
+import { SvgSearch } from '../assets/images/icons';
 
 interface Props {
   className?: string;
@@ -20,6 +21,9 @@ export function InputFilter ({ className, onChange, placeholder, value }: Props)
         autoCapitalize='off'
         autoCorrect='off'
         autoFocus
+        icon={<Icon Asset={SvgSearch}
+          height={17.5}
+          width={17.5} />}
         onChange={onChangeFilter}
         placeholder={placeholder}
         spellCheck={false}

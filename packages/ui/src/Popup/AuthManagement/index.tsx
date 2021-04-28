@@ -51,7 +51,7 @@ export function AuthManagement (): JSX.Element {
             value={filter} />
         </Box>
       )}
-      <Box p='s'
+      <Box py='s'
         style={{ overflowY: 'auto' }}
         width='100%'>
         {hasAuthList
