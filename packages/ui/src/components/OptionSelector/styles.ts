@@ -14,6 +14,7 @@ export const Options = styled(Box)<{ cssPosition: CssPosition }>`
 
   ${({ cssPosition }) => cssPosition}
 
+  // Only show options once it is positioned in place
   visibility: ${({ cssPosition }) => (Object.values(cssPosition).length ? 'visible' : 'hidden')};
 
   ul {
