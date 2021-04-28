@@ -116,10 +116,15 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     };
   }, [handleClicks, shouldRenderOptions]);
 
-  // Position options element after rendering, otherwise remove portal root
+  // Position options element after rendering, otherwise remove portal root after hiding options
   useEffect(() => {
     shouldRenderOptions ? positionOptionsEl() : portalRoot?.remove();
   }, [portalRoot, positionOptionsEl, shouldRenderOptions]);
+
+  // Reset cssPosition after hiding options
+  useEffect(() => {
+    if (!shouldRenderOptions && Object.values(cssPosition).length) setCssPosition({});
+  }, [cssPosition, shouldRenderOptions]);
 
   return (
     <>
@@ -130,11 +135,13 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
       {shouldRenderOptions &&
         ReactDOM.createPortal(
-          <Options {...boxProps}
+          <Options
+            {...boxProps}
             cssPosition={cssPosition}
             onClick={(event) => event.stopPropagation()}
             ref={optionsCallbackRef}
-            style={style}>
+            style={style}
+          >
             {/* Render option menus */}
             {options.map((option, optionIndex) => (
               <Fragment key={optionIndex}>
