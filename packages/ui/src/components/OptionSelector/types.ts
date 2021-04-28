@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 export type OptionLabel = string | JSX.Element;
 
 export type OptionItem = {

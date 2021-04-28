@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
 import { BoxProps } from '@polymathnetwork/extension-ui/ui/Box';
-import React, { CSSProperties, Fragment, RefObject, useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import React, { CSSProperties, Fragment, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
-import { initialState, reducer } from './reducer';
 import { Options } from './styles';
-import { CssPosition, Option, PositionType } from './types';
+import { Coordinates, CssPosition, Option, PositionType } from './types';
 
 const SELECTOR_SPACING = 4;
 const OPTION_SELECTOR_PORTAL_ID = 'option-selector-portal';
@@ -22,9 +21,10 @@ type OptionSelectorProps = BoxProps & {
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   const { onSelect, options, position = 'context', selector, style, ...boxProps } = props;
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-
+  const [showOptions, setShowOptions] = useState(false);
   const [cssPosition, setCssPosition] = useState<CssPosition>({});
+  const [clickCoords, setClickCoords] = useState<Coordinates>();
+  const [portalRoot, setPortalRoot] = useState<HTMLDivElement>();
 
   const selectorRef = useRef<HTMLDivElement>(null);
 
@@ -34,19 +34,26 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
     setOptionsRef({ current: node });
   }, []);
 
+  const shouldRenderOptions = !!(showOptions && portalRoot);
+
   const toggleOptions: React.MouseEventHandler = (event) => {
     event.stopPropagation();
 
-    if (state.shouldRenderOptions) {
-      dispatch({ type: 'hide' });
+    if (showOptions) {
+      setShowOptions(false);
     } else {
-      dispatch({
-        type: 'show',
-        payload: {
-          x: event.clientX,
-          y: event.clientY
-        }
+      const root = document.getElementById('root');
+      const createdPortalRoot = document.createElement('div');
+
+      createdPortalRoot.id = OPTION_SELECTOR_PORTAL_ID;
+      root?.appendChild(createdPortalRoot);
+
+      setClickCoords({
+        x: event.clientX,
+        y: event.clientY
       });
+      setPortalRoot(createdPortalRoot);
+      setShowOptions(true);
     }
   };
 
@@ -60,71 +67,59 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       const hasClickedOutside =
         optionsRef.current !== event.target && !optionsRef.current?.contains(event.target as Node);
 
-      if (hasClickedOutside) dispatch({ type: 'hide' });
+      if (hasClickedOutside) setShowOptions(false);
     },
     [optionsRef]
   );
 
-  // Add and remove click listener to hide options when clicked outside
-  useEffect(() => {
-    if (state.shouldRenderOptions) {
-      const { clickCoords } = state;
+  const positionOptionsEl = useCallback(() => {
+    if (!selectorRef.current || !optionsRef.current || !clickCoords) return;
 
-      if (!selectorRef.current || !optionsRef.current || !clickCoords) return;
+    const selectorRect = selectorRef.current.getBoundingClientRect();
+    const optionsRect = optionsRef.current.getBoundingClientRect();
 
-      const selectorRect = selectorRef.current.getBoundingClientRect();
-      const optionsRect = optionsRef.current.getBoundingClientRect();
+    switch (position) {
+      // Position to show the options in available viewing area
+      case 'context': {
+        let top = clickCoords.y;
+        let left = clickCoords.x;
 
-      let cssPosition: CssPosition = {};
+        const isOverflowingBottom = clickCoords.y + optionsRect.height > document.body.clientHeight;
+        const isOverflowingRight = clickCoords.x + optionsRect.width > document.body.clientWidth;
 
-      switch (position) {
-        case 'context': {
-          let top = clickCoords.y;
-          let left = clickCoords.x;
+        if (isOverflowingBottom) top -= optionsRect.height; // Flip on y-axis
+        if (isOverflowingRight) left -= optionsRect.width; // Flip on x-axis
 
-          // flip on x-axis
-          if (clickCoords.x + optionsRect.width > document.body.clientWidth) {
-            left = clickCoords.x - optionsRect.width;
-          }
-
-          // flip on y-axis
-          if (clickCoords.y + optionsRect.height > document.body.clientHeight) {
-            top = clickCoords.y - optionsRect.height;
-          }
-
-          cssPosition = {
-            top,
-            left
-          };
-          break;
-        }
-
-        case 'bottom-right':
-          cssPosition = {
-            top: selectorRect.bottom + SELECTOR_SPACING,
-            left: selectorRect.left + selectorRect.width - optionsRect.width
-          };
-          break;
-
-        case 'bottom-left':
-          cssPosition = {
-            top: selectorRect.bottom + SELECTOR_SPACING,
-            left: selectorRect.left
-          };
-          break;
+        return setCssPosition({ top, left });
       }
 
-      setCssPosition(cssPosition);
+      case 'bottom-right':
+        return setCssPosition({
+          top: selectorRect.bottom + SELECTOR_SPACING,
+          left: selectorRect.left + selectorRect.width - optionsRect.width
+        });
 
-      document.addEventListener('mousedown', handleClicks);
+      case 'bottom-left':
+        return setCssPosition({
+          top: selectorRect.bottom + SELECTOR_SPACING,
+          left: selectorRect.left
+        });
     }
+  }, [clickCoords, optionsRef, position]);
+
+  // Add and remove click listener to hide options when clicked outside
+  useEffect(() => {
+    if (shouldRenderOptions) document.addEventListener('mousedown', handleClicks);
 
     return () => {
       document.removeEventListener('mousedown', handleClicks);
     };
-  }, [handleClicks, optionsRef, position, state, state.shouldRenderOptions]);
+  }, [handleClicks, shouldRenderOptions]);
 
-  console.log('render');
+  // Position options element after rendering, otherwise remove portal root
+  useEffect(() => {
+    shouldRenderOptions ? positionOptionsEl() : portalRoot?.remove();
+  }, [portalRoot, positionOptionsEl, shouldRenderOptions]);
 
   return (
     <>
@@ -133,8 +128,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
         {selector}
       </Box>
 
-      {state.shouldRenderOptions &&
-        state.portalRoot &&
+      {shouldRenderOptions &&
         ReactDOM.createPortal(
           <Options {...boxProps}
             cssPosition={cssPosition}
@@ -173,7 +167,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
               </Fragment>
             ))}
           </Options>,
-          state.portalRoot
+          portalRoot as HTMLDivElement
         )}
     </>
   );
