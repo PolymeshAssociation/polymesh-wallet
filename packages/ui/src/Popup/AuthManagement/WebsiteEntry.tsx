@@ -4,9 +4,11 @@ import { Switch } from '@polymathnetwork/extension-ui/components';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback } from 'react';
 
+import { fontSizes } from '../../components/themeDefinitions';
+
 interface Props {
   info: AuthUrlInfo;
-  toggleAuth: (url: string) => void
+  toggleAuth: (url: string) => void;
   url: string;
 }
 
@@ -22,18 +24,22 @@ function WebsiteEntry ({ info, toggleAuth, url }: Props): React.ReactElement<Pro
           <Icon Asset={SvgWeb}
             color='primary'
             height={20}
-            width={20}
+            width={20} />
+        </Box>
+        <Text lineHeight={fontSizes[4]}
+          style={{ flex: '1 1' }}
+          variant='b2m'>
+          {url}
+        </Text>
+        <Box width='108px'>
+          <Switch
+            checked={info.isAllowed}
+            checkedLabel={'Allowed'}
+            className='info'
+            onChange={switchAccess}
+            uncheckedLabel={'Denied'}
           />
         </Box>
-        <Text style={{ flex: 1 }}
-          variant='b2m'>{url}</Text>
-        <Switch
-          checked={info.isAllowed}
-          checkedLabel={'Allowed'}
-          className='info'
-          onChange={switchAccess}
-          uncheckedLabel={'Denied'}
-        />
       </Flex>
     </Box>
   );
