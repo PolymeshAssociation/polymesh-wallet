@@ -29,7 +29,7 @@ function Switch ({ checked, checkedLabel, className, onChange, uncheckedLabel }:
         <span className='slider'
         />
       </label>
-      <span style={{ width: 40 }}>{checked ? checkedLabel : uncheckedLabel}</span>
+      <span>{checked ? checkedLabel : uncheckedLabel}</span>
     </div>
   );
 }
