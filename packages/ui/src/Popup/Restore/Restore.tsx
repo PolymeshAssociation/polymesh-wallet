@@ -17,7 +17,7 @@ export const Restore: FC = () => {
         <Box pt='m'>
           <Text color='brandLightest'
             variant='b2'>
-            Import an account using one of the following methods.
+            Restore your Polymesh Account and/or key by entering your recovery phrase or uploading the JSON file and JSON password.
           </Text>
         </Box>
         <Flex mt='m'>
