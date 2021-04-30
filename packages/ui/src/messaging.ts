@@ -175,7 +175,7 @@ export async function tieAccount (address: string, genesisHash: string | null): 
   return sendMessage('pri(accounts.tie)', { address, genesisHash });
 }
 
-export async function exportAccount (address: string, password: string): Promise<{ exportedJson: string }> {
+export async function exportAccount (address: string, password: string): Promise<{ exportedJson: KeyringPair$Json }> {
   return sendMessage('pri(accounts.export)', { address, password });
 }
 
