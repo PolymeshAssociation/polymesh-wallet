@@ -86,7 +86,8 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
                 { !!currentAccount?.didAlias &&
                   <Text color='brandMain'
                     variant='c2'>
-                    <TextEllipsis size={10}>{currentAccount.didAlias}</TextEllipsis></Text>
+                    {currentAccount.didAlias}
+                  </Text>
                 }
                 <Box ml='xs'>
                   <LabelWithCopy color='brandMain'
