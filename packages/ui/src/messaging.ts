@@ -7,6 +7,7 @@ import { AccountJson,
   MessageTypesWithSubscriptions,
   MetadataRequest,
   RequestTypes,
+  ResponseAuthorizeList,
   ResponseDeriveValidate,
   ResponseJsonGetAccountInfo,
   ResponseSigningIsLocked,
@@ -188,6 +189,14 @@ export async function forgetAccount (address: string): Promise<boolean> {
 
 export async function approveAuthRequest (id: string): Promise<boolean> {
   return sendMessage('pri(authorize.approve)', { id });
+}
+
+export async function getAuthList (): Promise<ResponseAuthorizeList> {
+  return sendMessage('pri(authorize.list)');
+}
+
+export async function toggleAuthorization (url: string): Promise<ResponseAuthorizeList> {
+  return sendMessage('pri(authorize.toggle)', url);
 }
 
 export async function approveMetaRequest (id: string): Promise<boolean> {

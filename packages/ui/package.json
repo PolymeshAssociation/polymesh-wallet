@@ -1,7 +1,7 @@
 {
   "name": "@polymathnetwork/extension-ui",
   "description": "A sample signer extension for the @polkadot/api",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "license": "Apache-2",
   "type": "module",
   "dependencies": {
@@ -15,10 +15,8 @@
     "@polkadot/util-crypto": "^5.9.2",
     "@tippyjs/react": "^4.2.0",
     "@types/styled-system": "^5.1.10",
-    "bignumber.js": "^9.0.0",
     "polished": "^3.6.5",
     "react": "^17.0.1",
-    "react-contextmenu": "^2.14.0",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.0.3",
     "react-error-boundary": "^3.0.2",

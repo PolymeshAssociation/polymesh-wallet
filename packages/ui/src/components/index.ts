@@ -8,6 +8,8 @@ export { default as Warning } from './Warning';
 export { default as ErrorFallback } from './ErrorFallback';
 export { Password } from './Password';
 export { AccountType } from './AccountType';
-
+export { default as Switch } from './Switch';
+export { InputFilter } from './InputFilter';
+export { OptionSelector } from './OptionSelector';
 export * from './contexts';
 export * from './themes';

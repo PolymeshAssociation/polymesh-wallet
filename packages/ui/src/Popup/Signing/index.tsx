@@ -1,4 +1,6 @@
-import { Box, Header, Text } from '@polymathnetwork/extension-ui/ui';
+import type { SignerPayloadJSON } from '@polkadot/types/types';
+
+import { Header } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { Loading, SigningReqContext } from '../../components';
@@ -35,28 +37,24 @@ export default function Signing (): React.ReactElement {
         : requests[requests.length - 1]
       : requests[0]
     : null;
+  const isTransaction = !!((request?.request?.payload as SignerPayloadJSON)?.blockNumber);
 
   return request
     ? (
       <>
-        {requests.length > 1 && (
-          <Header>
-            <Box>
-              <Text color='gray.0'
-                variant='b2'>
-
-                <TransactionIndex
-                  index={requestIndex}
-                  onNextClick={_onNextClick}
-                  onPreviousClick={_onPreviousClick}
-                  totalItems={requests.length}
-                />
-              </Text>
-            </Box>
-          </Header>
-        )}
+        <Header text={isTransaction ? 'Transaction' : 'Sign message'}>
+          {requests.length > 1 && (
+            <TransactionIndex
+              index={requestIndex}
+              onNextClick={_onNextClick}
+              onPreviousClick={_onPreviousClick}
+              totalItems={requests.length}
+            />
+          )}
+        </Header>
         <Request
           account={request.account}
+          buttonText={'Sign'}
           isFirst={requestIndex === 0}
           request={request.request}
           signId={request.id}
