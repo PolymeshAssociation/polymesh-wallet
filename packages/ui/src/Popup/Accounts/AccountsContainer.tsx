@@ -5,7 +5,7 @@ import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
 import React, { FC, useContext, useState } from 'react';
 
-import { Box, Flex, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '../../ui';
+import { Box, Flex, Icon, LabelWithCopy, Text, TextInput } from '../../ui';
 import { AccountView } from './AccountView';
 
 export interface Props {
