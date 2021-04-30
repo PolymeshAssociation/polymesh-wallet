@@ -22,9 +22,6 @@ const ledgerPath = '/account/import-ledger';
 
 export default function Accounts (): React.ReactElement {
   const { accounts, hierarchy } = useContext(AccountContext);
-
-  console.log('hierarchy', hierarchy, accounts);
-
   const { currentAccount,
     networkState: { isDeveloper, selected: network },
     polymeshAccounts,
