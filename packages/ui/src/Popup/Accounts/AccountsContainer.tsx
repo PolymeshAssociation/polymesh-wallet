@@ -90,7 +90,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
                     {currentAccount.didAlias}
                   </TextOverflowEllipsis>
                 }
-                <Box ml='xs'>
+                <Box {...(!!currentAccount?.didAlias && { ml: 's' })}>
                   <LabelWithCopy color='brandMain'
                     text={did}
                     textSize={currentAccount?.didAlias ? 20 : 30}
