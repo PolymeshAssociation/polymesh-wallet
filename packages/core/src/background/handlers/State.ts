@@ -1,14 +1,12 @@
 
 import DotState from '@polkadot/extension-base/background/handlers/State';
-import { AccountJson, RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
+import { AccountJson } from '@polkadot/extension-base/background/types';
 import chrome from '@polkadot/extension-inject/chrome';
-import { assert } from '@polkadot/util';
 import { BehaviorSubject } from 'rxjs';
 
 import { NetworkName, ProofRequestPayload, RequestPolyProvideUid, UidRecord } from '../../types';
 import { ProofingRequest, ProofingResponse, ProvideUidRequest } from '../types';
 import AuxStore from './AuxStore';
-import { stripUrl } from './utils';
 
 interface Resolver <T> {
   reject: (error: Error) => void;
@@ -88,18 +86,6 @@ export default class State extends DotState {
     return Object
       .values(this.#provideUidRequests)
       .map(({ id, request, url }): ProvideUidRequest => ({ id, request, url }));
-  }
-
-  public async authorizeUrl (url: string, request: RequestAuthorizeTab): Promise<boolean> {
-    const idStr = stripUrl(url);
-
-    // Do not enqueue duplicate authorization requests.
-    const isDuplicate = Object.values(this.allAuthRequests)
-      .some((request) => stripUrl(request.url) === idStr);
-
-    assert(!isDuplicate, `The source ${url} has a pending authorization request`);
-
-    return super.authorizeUrl(url, request);
   }
 
   private _popupClose (): void {
