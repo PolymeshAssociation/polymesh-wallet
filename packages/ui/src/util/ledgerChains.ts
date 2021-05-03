@@ -12,7 +12,8 @@ const testnetTmp: Network = {
   standardAccount: '*25519',
   symbols: ['POLYX'],
   website: 'https://polymath.network/',
-  icon: 'substrate'
+  icon: 'substrate',
+  isIgnored: false
 };
 
 const polyGenesisHashes = [

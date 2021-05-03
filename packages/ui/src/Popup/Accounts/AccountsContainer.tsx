@@ -126,7 +126,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
   const renderAccounts = () => {
     return (
       <>
-        {accounts.map((account: IdentifiedAccount, index) => {
+        {accounts.sort((a) => a.keyType === 'primary' ? -1 : 1).map((account: IdentifiedAccount, index) => {
           return (
             <AccountView account={account}
               isSelected={account.address === selectedAccount}
