@@ -5,7 +5,7 @@ import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
 import React, { FC, useContext, useState } from 'react';
 
-import { Box, Flex, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '../../ui';
+import { Box, Flex, Icon, LabelWithCopy, Text, TextInput, TextOverflowEllipsis } from '../../ui';
 import { AccountView } from './AccountView';
 
 export interface Props {
@@ -84,11 +84,13 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
               onMouseLeave={mouseLeave}>
               <Flex alignItems='center'>
                 { !!currentAccount?.didAlias &&
-                  <Text color='brandMain'
+                  <TextOverflowEllipsis color='brandMain'
+                    maxWidth='140px'
                     variant='c2'>
-                    <TextEllipsis size={10}>{currentAccount.didAlias}</TextEllipsis></Text>
+                    {currentAccount.didAlias}
+                  </TextOverflowEllipsis>
                 }
-                <Box ml='xs'>
+                <Box {...(!!currentAccount?.didAlias && { ml: 's' })}>
                   <LabelWithCopy color='brandMain'
                     text={did}
                     textSize={currentAccount?.didAlias ? 20 : 30}
