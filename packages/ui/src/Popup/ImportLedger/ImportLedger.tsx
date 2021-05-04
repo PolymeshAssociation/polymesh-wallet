@@ -138,7 +138,7 @@ function ImportLedger (): React.ReactElement {
       {status !== Status.Ok
         ? <Box p='s'>
           <TroubleshootGuide
-            headerText='Please follow the instructions in order to import Ledger account'
+            headerText='Your Ledger is not connected'
             ledgerStatus={status}
             refresh={refresh}/>
         </Box>
