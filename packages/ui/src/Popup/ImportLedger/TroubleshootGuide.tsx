@@ -60,6 +60,28 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
         </Flex>
 
         <Heading variant='h5'>{headerText || 'Your Ledger is not connected'}</Heading>
+        <Box mb='m'
+          mt='4px'>
+          <Text color='gray.2'
+            variant='b2'>
+            Please check that you’ve set up your Ledger correctly and try to connect again.
+          </Text>
+        </Box>
+
+        <Button fluid
+          onClick={refresh}
+          variant='secondary'>
+          <Icon Asset={SvgLedgerLogo}
+            height={24}
+            mr='s'
+            width={24}/>
+          Connect your ledger
+        </Button>
+
+        <Box my='24px'>
+          <Text color='gray.1'
+            variant='c2'>SET UP YOUR LEDGER TO CONNECT</Text>
+        </Box>
 
         <Box mb='m'>
           <StepList>
@@ -68,14 +90,13 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
                 <Box mb='s'>
                   <img src={SvgConnectLedger} />
                 </Box>
-                <Text variant='b1m'>Ledger device</Text>
-                <Text color='gray.2'
-                  variant='b2'>
-                  <ul style={{ margin: 0, paddingLeft: 16 }}>
-                    <li>Make sure Ledger is plugged and unlocked.</li>
-                    <li>Accept the device pairing prompt.</li>
-                  </ul>
-                </Text>
+                <Text variant='b1m'>Plug-in Ledger</Text>
+                <Box mt='4px'>
+                  <Text color='gray.2'
+                    variant='b2'>
+                    Connect your Ledger Wallet to your computer.
+                  </Text>
+                </Box>
               </Box>
             </Step>
             <Step className={isAppIssue ? 'active' : ''}>
@@ -83,15 +104,15 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
                 <Box mb='s'>
                   <img src={SvgInstallLedgerApp} />
                 </Box>
-                <Text variant='b1m'>
-                Polymesh Ledger application
-                </Text>
+                <Text variant='b1m'>Install Polymesh app</Text>
                 <Text color='gray.2'
                   variant='b2'>
-                  <ul style={{ margin: 0, paddingLeft: 16 }}>
-                    <li>Install the Polymesh app on Ledger device.</li>
-                    <li>Open Polymesh app on Ledger device.</li>
-                  </ul>
+                  <Box mt='4px'>
+                    <Text color='gray.2'
+                      variant='b2'>
+                      Install the Polymesh app on your Ledger through the Ledger app.
+                    </Text>
+                  </Box>
                 </Text>
               </Box>
             </Step>
@@ -104,7 +125,7 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
             height={24}
             mr='s'
             width={24}/>
-        Refresh
+          Connect your ledger
         </Button>
       </Box>
   );
