@@ -1,6 +1,7 @@
 import SvgConnectLedger from '@polymathnetwork/extension-ui/assets/images/connect-ledger.svg';
 import { SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
 import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/install-ledger-app.svg';
+import SvgPlugInLedger from '@polymathnetwork/extension-ui/assets/images/plug-in-ledger.svg';
 import { colors, texts } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { Status } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { Box, Button, Flex, Heading, Icon, Link, Loading, Text } from '@polymathnetwork/extension-ui/ui';
@@ -78,44 +79,25 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
           Connect your ledger
         </Button>
 
-        <Box my='24px'>
+        <Box mb={3}
+          mt={4}>
           <Text color='gray.1'
-            variant='c2'>SET UP YOUR LEDGER TO CONNECT</Text>
+            variant='c2'>
+            SET UP YOUR LEDGER TO CONNECT
+          </Text>
         </Box>
 
         <Box mb='m'>
           <StepList>
-            <Step className={isDeviceIssue ? 'active' : ''}>
-              <Box my='m'>
-                <Box mb='s'>
-                  <img src={SvgConnectLedger} />
-                </Box>
-                <Text variant='b1m'>Plug-in Ledger</Text>
-                <Box mt='4px'>
-                  <Text color='gray.2'
-                    variant='b2'>
-                    Connect your Ledger Wallet to your computer.
-                  </Text>
-                </Box>
-              </Box>
-            </Step>
-            <Step className={isAppIssue ? 'active' : ''}>
-              <Box my='m'>
-                <Box mb='s'>
-                  <img src={SvgInstallLedgerApp} />
-                </Box>
-                <Text variant='b1m'>Install Polymesh app</Text>
-                <Text color='gray.2'
-                  variant='b2'>
-                  <Box mt='4px'>
-                    <Text color='gray.2'
-                      variant='b2'>
-                      Install the Polymesh app on your Ledger through the Ledger app.
-                    </Text>
-                  </Box>
-                </Text>
-              </Box>
-            </Step>
+            <StepItem description='Connect your Ledger Wallet to your computer.'
+              image={SvgPlugInLedger}
+              title='Plug-in Ledger' />
+            <StepItem description='Install the Polymesh app on your Ledger through the Ledger app.'
+              image={SvgInstallLedgerApp}
+              title='Install Polymesh app' />
+            <StepItem description='Click on the Connect your Ledger button below to connect.'
+              image={SvgConnectLedger}
+              title='Connect your Ledger to wallet' />
           </StepList>
         </Box>
         <Button fluid
@@ -131,6 +113,30 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
   );
 }
 
+function StepItem (props: { image: string; title: string; description: string; }) {
+  const { description, image, title } = props;
+
+  return (
+    <Step>
+      <Box my='m'>
+        <Box mb='s'>
+          <img src={image} />
+        </Box>
+        <Text variant='b1m'>{title}</Text>
+        <Text color='gray.2'
+          variant='b2'>
+          <Box mt='4px'>
+            <Text color='gray.2'
+              variant='b2'>
+              {description}
+            </Text>
+          </Box>
+        </Text>
+      </Box>
+    </Step>
+  );
+}
+
 const StepList = styled.ol`
   counter-reset: step;
   list-style: none;
@@ -142,6 +148,10 @@ const Step = styled.li`
   counter-increment: step;
   position: relative;
   padding-left: 48px;
+
+  :not(:last-child) {
+    margin-bottom: 48px;
+  }
 
   ::before {
     content: counter(step);
@@ -164,12 +174,8 @@ const Step = styled.li`
     position: absolute;
     left: 16px;
     top: calc(32px + 16px + 8px);
+    bottom: calc(-32px - 16px - 8px);
     width: 2px;
-    height: calc(100% - 32px);
     background: ${colors.brandLightest};
-  }
-
-  :not(.active) {
-    opacity: 50%;
   }
 `;
