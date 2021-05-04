@@ -33,9 +33,9 @@ export const ExportAccount: FC = () => {
       const { exportedJson } = await exportAccount(address, data.currentPassword);
 
       const element = document.createElement('a');
-      const { meta } = JSON.parse(exportedJson) as { meta: { name: string } };
+      const { meta } = exportedJson;
 
-      element.href = `data:text/plain;charset=utf-8,${exportedJson}`;
+      element.href = `data:text/plain;charset=utf-8,${JSON.stringify(exportedJson)}`;
       element.download = `${meta.name}_exported_account_${Date.now()}.json`;
       element.click();
 
