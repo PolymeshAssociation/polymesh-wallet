@@ -109,7 +109,7 @@ export default function Accounts (): React.ReactElement {
       menu: [
         ...(hasNonHardwareAccount ? [{ label: 'Change password', value: 'changePassword' }] : []),
         { label: 'Open extension in a new tab', value: 'newWindow' },
-        { label: 'Manage website access', value: 'manageUrlAuth' },
+        { label: 'Manage connected dApps', value: 'manageUrlAuth' },
         {
           label: (
             <Flex px='16px'
