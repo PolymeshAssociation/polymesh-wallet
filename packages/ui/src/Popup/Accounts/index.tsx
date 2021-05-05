@@ -69,7 +69,8 @@ export default function Accounts (): React.ReactElement {
         { label: 'Restore with recovery phrase', value: 'fromSeed' },
         { label: 'Import account with JSON file', value: 'fromJson' },
         // @TODO to be re-enabled once Polymesh Ledger app is released.
-        ...(true
+        // eslint-disable-next-line no-constant-condition
+        ...(false && isLedgerEnabled
           ? [
             {
               label: isLedgerCapable
