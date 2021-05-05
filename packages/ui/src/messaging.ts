@@ -1,5 +1,4 @@
 import { AccountJson,
-  AllowedPath,
   AuthorizeRequest,
   MessageTypes,
   MessageTypesWithNoSubscriptions,
@@ -20,7 +19,7 @@ import chrome from '@polkadot/extension-inject/chrome';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
-import { PolyMessageTypes,
+import { AllowedPath, PolyMessageTypes,
   PolyMessageTypesWithNoSubscriptions,
   PolyMessageTypesWithNullRequest,
   PolyMessageTypesWithSubscriptions,
@@ -359,7 +358,7 @@ export async function validateSeed (suri: string, type?: KeypairType): Promise<{
 }
 
 export async function windowOpen (path: AllowedPath): Promise<boolean> {
-  return sendMessage('pri(window.open)', path);
+  return polyMessage('poly:pri(window.open)', path);
 }
 
 export async function validateDerivationPath (
