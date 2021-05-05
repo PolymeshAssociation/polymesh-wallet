@@ -32,9 +32,13 @@ export const ChangePassword: FC = () => {
       return;
     }
 
-    await globalChangePass(data.currentPassword, data.currentPassword);
+    const ret = await globalChangePass(data.currentPassword, data.confirmPassword);
 
-    onAction('/');
+    if (ret) {
+      onAction('/');
+    } else {
+      setError('confirmPassword', { type: 'failed' });
+    }
   };
 
   return (
@@ -112,6 +116,7 @@ export const ChangePassword: FC = () => {
                     {(errors.confirmPassword).type === 'required' && 'Required field'}
                     {(errors.confirmPassword).type === 'minLength' && 'Password too short'}
                     {(errors.confirmPassword).type === 'manual' && 'Passwords do not match'}
+                    {(errors.confirmPassword).type === 'failed' && 'Password change failed - Please contact Polymath support.'}
                   </Text>
                 </Box>
               }
