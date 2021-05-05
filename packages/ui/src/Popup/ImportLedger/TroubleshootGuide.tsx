@@ -87,7 +87,7 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
           </Text>
         </Box>
 
-        <Box mb='m'>
+        <Box mb='l'>
           <StepList>
             <StepItem description='Connect your Ledger Wallet to your computer.'
               image={SvgPlugInLedger}
@@ -141,7 +141,7 @@ const StepList = styled.ol`
   counter-reset: step;
   list-style: none;
   margin: 0;
-  padding-left: 8px;
+  padding-left: 0;
 `;
 
 const Step = styled.li`
