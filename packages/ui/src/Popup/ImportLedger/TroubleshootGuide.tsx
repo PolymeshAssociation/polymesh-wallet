@@ -10,6 +10,8 @@ import { useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
+const toastId = 'ledger-connection-failed';
+
 type Props = {
   ledgerStatus: Status | null;
   refresh: () => void;
@@ -40,8 +42,9 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
     refresh();
   }, [refresh]);
 
+  // Show connection error toast after clicking "Connect your Ledger" at least once
   useEffect(() => {
-    if (hasAttempted && hasConnectionIssue) {
+    if (hasAttempted && hasConnectionIssue && !toast.isActive(toastId)) {
       toast.error(
         <Flex alignItems='flex-start'
           flexDirection='column'>
@@ -53,37 +56,45 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
             <Box ml='s'>
               <Text color='white'
                 variant='b1m'>
-            Ledger cannot connect
+                Ledger cannot connect
               </Text>
             </Box>
           </Flex>
           <Box mt='4px'>
             <Text color='gray.4'
               variant='b3'>
-              There was an error in setting up your Ledger to connect. Please ensure that you have plugged in your ledger and installed the Polymesh app on the Ledger.
+              There was an error in setting up your Ledger to connect. Please ensure that you have plugged in your
+              ledger and installed the Polymesh app on the Ledger.
             </Text>
           </Box>
-          <ToastConnectButton
-            onClick={attemptToConnect} >
-            Connect
-          </ToastConnectButton>
+          <ToastConnectButton onClick={attemptToConnect}>Connect</ToastConnectButton>
         </Flex>,
         {
-          hideProgressBar: true,
-          toastId: 'ledger-connection-failed'
+          toastId,
+          closeOnClick: false,
+          hideProgressBar: true
         }
       );
     }
   }, [attemptToConnect, hasAttempted, hasConnectionIssue]);
 
-  return (
-    isLoading
-      ? <Flex height='578px'
+  // Remove toast once connection is successful
+  useEffect(() => {
+    return () => {
+      toast.dismiss(toastId);
+    };
+  }, []);
+
+  return isLoading
+    ? (
+      <Flex height='578px'
         justifyContent='center'
         width='100%'>
         <Loading />
       </Flex>
-      : <Box>
+    )
+    : (
+      <Box>
         <Flex alignItems='flex-start'
           justifyContent='space-between'>
           <Flex bg='yellow.1'
@@ -100,7 +111,9 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
           <Box style={{ cursor: 'pointer' }}>
             <Link onClick={onCancel}>
               <Text color='brandLighter'
-                variant='b1'>Cancel</Text>
+                variant='b1'>
+                Cancel
+              </Text>
             </Link>
           </Box>
         </Flex>
@@ -120,7 +133,7 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
           <Icon Asset={SvgLedgerLogo}
             height={24}
             mr='s'
-            width={24}/>
+            width={24} />
           Connect your ledger
         </Button>
 
@@ -134,15 +147,21 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
 
         <Box mb='l'>
           <StepList>
-            <StepItem description='Connect your Ledger Wallet to your computer.'
+            <StepItem
+              description='Connect your Ledger Wallet to your computer.'
               image={SvgPlugInLedger}
-              title='Plug-in Ledger' />
-            <StepItem description='Install the Polymesh app on your Ledger through the Ledger app.'
+              title='Plug-in Ledger'
+            />
+            <StepItem
+              description='Install the Polymesh app on your Ledger through the Ledger app.'
               image={SvgInstallLedgerApp}
-              title='Install Polymesh app' />
-            <StepItem description='Click on the Connect your Ledger button below to connect.'
+              title='Install Polymesh app'
+            />
+            <StepItem
+              description='Click on the Connect your Ledger button below to connect.'
               image={SvgConnectLedger}
-              title='Connect your Ledger to wallet' />
+              title='Connect your Ledger to wallet'
+            />
           </StepList>
         </Box>
         <Button fluid
@@ -151,14 +170,14 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
           <Icon Asset={SvgLedgerLogo}
             height={24}
             mr='s'
-            width={24}/>
+            width={24} />
           Connect your ledger
         </Button>
       </Box>
-  );
+    );
 }
 
-function StepItem (props: { image: string; title: string; description: string; }) {
+function StepItem (props: { image: string; title: string; description: string }) {
   const { description, image, title } = props;
 
   return (
@@ -200,7 +219,7 @@ const Step = styled.li`
 
   ::before {
     content: counter(step);
-    ${texts.b1m}; 
+    ${texts.b1m};
     position: absolute;
     left: 0;
     top: 16px;
