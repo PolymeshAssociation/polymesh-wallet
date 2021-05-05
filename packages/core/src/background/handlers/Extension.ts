@@ -15,8 +15,9 @@ import { subscribeIdentifiedAccounts,
   subscribeSelectedNetwork,
   subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 import { UidRecord } from '@polymathnetwork/extension-core/types';
+import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 
-import { Errors,
+import { ALLOWED_PATH, AllowedPath, Errors,
   PolyMessageTypes,
   PolyRequestTypes,
   PolyResponseType,
@@ -315,27 +316,47 @@ export default class Extension extends DotExtension {
   }
 
   private async globalChangePassword ({ newPass, oldPass }: RequestPolyGlobalChangePass): Promise<boolean> {
-    const pairs = keyring.getPairs();
+    const pairs = keyring.getPairs().filter((account) => !account.meta.isHardware);
 
     let i = 0;
 
+    // Change passwords of all keys one by one.
     for (i; i < pairs.length; i++) {
       const ret = this._changePassword(pairs[i], oldPass, newPass);
 
+      // If password change for key "i" failed, do NOT change password
+      // for the remaining accounts.
+
       if (!ret) {
+        console.error('Changing password of account', recodeAddress(pairs[i].address, 12), 'has failed. Rolling back...');
         break;
       }
     }
 
-    if (i <= pairs.length - 1) {
+    // If one or more attempts to change passwords failed:
+    if (i < pairs.length - 1) {
+      // Rollback whatever password we managed to change.
       for (let j = 0; j < i; j++) {
         this._changePassword(pairs[j], newPass, oldPass);
       }
+
+      return false;
     }
 
     const ret = await this.uidChangePass({ oldPass, newPass });
 
-    return ret;
+    // If uID password change failed, rollback.
+    if (!ret) {
+      console.error('Changing password of uID storage has failed. Rolling back...');
+
+      for (let j = 0; j < pairs.length; j++) {
+        this._changePassword(pairs[j], newPass, oldPass);
+      }
+
+      return false;
+    }
+
+    return true;
   }
 
   private async isPasswordSet (): Promise<boolean> {
@@ -388,6 +409,20 @@ export default class Extension extends DotExtension {
     }
 
     return false;
+  }
+
+  private _windowOpen (path: AllowedPath): boolean {
+    const url = `${chrome.extension.getURL('index.html')}#${path}`;
+
+    if (!ALLOWED_PATH.includes(path)) {
+      console.error('Not allowed to open the url:', url);
+
+      return false;
+    }
+
+    chrome.tabs.create({ url });
+
+    return true;
   }
 
   public async _handle<TMessageType extends PolyMessageTypes> (
@@ -462,6 +497,9 @@ export default class Extension extends DotExtension {
 
       case 'poly:pri(uid.getUid)':
         return this.getUid(request as RequestPolyGetUid);
+
+      case 'poly:pri(window.open)':
+        return this._windowOpen(request as AllowedPath);
 
       default:
         return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, port);

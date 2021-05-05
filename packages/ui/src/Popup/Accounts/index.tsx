@@ -130,7 +130,9 @@ export default function Accounts (): React.ReactElement {
   const handleTopMenuSelection = (value: string) => {
     switch (value) {
       case 'changePassword':
-        return history.push('/account/change-password');
+        return isPopup
+          ? windowOpen('/account/change-password')
+          : history.push('/account/change-password');
       case 'newWindow':
         return windowOpen('/');
       case 'toggleIsDev':
