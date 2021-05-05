@@ -1,12 +1,13 @@
 import SvgConnectLedger from '@polymathnetwork/extension-ui/assets/images/connect-ledger.svg';
-import { SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgAlert, SvgAlertCircle, SvgCloseCircle, SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
 import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/install-ledger-app.svg';
 import SvgPlugInLedger from '@polymathnetwork/extension-ui/assets/images/plug-in-ledger.svg';
 import { colors, texts } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { Status } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { Box, Button, Flex, Heading, Icon, Link, Loading, Text } from '@polymathnetwork/extension-ui/ui';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 type Props = {
@@ -30,6 +31,39 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
 
     history.push('/');
   };
+
+  useEffect(() => {
+    if (isDeviceIssue || isAppIssue) {
+      toast.error(
+        <Flex alignItems='flex-start'
+          flexDirection='column'>
+          <Flex>
+            <Icon Asset={SvgAlertCircle}
+              color='yellow.0'
+              height={20}
+              width={20} />
+            <Box ml='s'>
+              <Text color='white'
+                variant='b1m'>
+            Ledger cannot connect
+              </Text>
+            </Box>
+          </Flex>
+          <Box mt='4px'>
+            <Text color='gray.4'
+              variant='b3'>
+              There was an error in setting up your Ledger to connect. Please ensure that you have plugged in your ledger and installed the Polymesh app on the Ledger.
+            </Text>
+          </Box>
+          <ToastConnectButton
+            onClick={refresh} >
+            Connect
+          </ToastConnectButton>
+        </Flex>,
+        { hideProgressBar: true }
+      );
+    }
+  }, [refresh, isDeviceIssue, isAppIssue]);
 
   return (
     isLoading
@@ -178,4 +212,14 @@ const Step = styled.li`
     width: 2px;
     background: ${colors.brandLightest};
   }
+`;
+
+const ToastConnectButton = styled.button`
+  color: white;
+  border: 2px solid white;
+  border-radius: 8px;
+  background: transparent;
+  width: 85px;
+  height: 32px;
+  margin-left: auto;
 `;
