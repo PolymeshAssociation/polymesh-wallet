@@ -1,11 +1,11 @@
 import SvgConnectLedger from '@polymathnetwork/extension-ui/assets/images/connect-ledger.svg';
-import { SvgAlert, SvgAlertCircle, SvgCloseCircle, SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgAlertCircle, SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
 import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/install-ledger-app.svg';
 import SvgPlugInLedger from '@polymathnetwork/extension-ui/assets/images/plug-in-ledger.svg';
 import { colors, texts } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { Status } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { Box, Button, Flex, Heading, Icon, Link, Loading, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -18,9 +18,12 @@ type Props = {
 };
 
 export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }: Props): React.ReactElement | null {
+  const [hasAttempted, setHasAttempted] = useState(false);
+
   const isDeviceIssue = ledgerStatus === Status.Device || ledgerStatus === Status.Error;
   const isAppIssue = ledgerStatus === Status.App;
   const isLoading = ledgerStatus === Status.Loading;
+  const hasConnectionIssue = isDeviceIssue || isAppIssue;
 
   const history = useHistory();
 
@@ -32,8 +35,13 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
     history.push('/');
   };
 
+  const attemptToConnect = useCallback(() => {
+    setHasAttempted(true);
+    refresh();
+  }, [refresh]);
+
   useEffect(() => {
-    if (isDeviceIssue || isAppIssue) {
+    if (hasAttempted && hasConnectionIssue) {
       toast.error(
         <Flex alignItems='flex-start'
           flexDirection='column'>
@@ -56,14 +64,17 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
             </Text>
           </Box>
           <ToastConnectButton
-            onClick={refresh} >
+            onClick={attemptToConnect} >
             Connect
           </ToastConnectButton>
         </Flex>,
-        { hideProgressBar: true }
+        {
+          hideProgressBar: true,
+          toastId: 'ledger-connection-failed'
+        }
       );
     }
-  }, [refresh, isDeviceIssue, isAppIssue]);
+  }, [attemptToConnect, hasAttempted, hasConnectionIssue]);
 
   return (
     isLoading
@@ -104,7 +115,7 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
         </Box>
 
         <Button fluid
-          onClick={refresh}
+          onClick={attemptToConnect}
           variant='secondary'>
           <Icon Asset={SvgLedgerLogo}
             height={24}
@@ -135,7 +146,7 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
           </StepList>
         </Box>
         <Button fluid
-          onClick={refresh}
+          onClick={attemptToConnect}
           variant='secondary'>
           <Icon Asset={SvgLedgerLogo}
             height={24}
