@@ -109,7 +109,7 @@ export default function Accounts (): React.ReactElement {
       menu: [
         ...(hasNonHardwareAccount ? [{ label: 'Change password', value: 'changePassword' }] : []),
         { label: 'Open extension in a new tab', value: 'newWindow' },
-        { label: 'Manage website access', value: 'manageUrlAuth' },
+        { label: 'Manage connected dApps', value: 'manageUrlAuth' },
         {
           label: (
             <Flex px='16px'
@@ -130,7 +130,9 @@ export default function Accounts (): React.ReactElement {
   const handleTopMenuSelection = (value: string) => {
     switch (value) {
       case 'changePassword':
-        return history.push('/account/change-password');
+        return isPopup
+          ? windowOpen('/account/change-password')
+          : history.push('/account/change-password');
       case 'newWindow':
         return windowOpen('/');
       case 'toggleIsDev':
