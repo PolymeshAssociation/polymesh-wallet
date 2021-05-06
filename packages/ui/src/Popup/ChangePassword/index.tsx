@@ -4,7 +4,7 @@ import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/ext
 import React, { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { ActionContext, ActivityContext } from '../../components';
+import { ActionContext, ActivityContext, ValidationError } from '../../components';
 
 export const ChangePassword: FC = () => {
   const onAction = useContext(ActionContext);
@@ -22,6 +22,12 @@ export const ChangePassword: FC = () => {
 
     if (!isValidPassword) {
       setError('currentPassword', { type: 'manual' });
+
+      return;
+    }
+
+    if (data.newPassword === data.currentPassword) {
+      setError('newPassword', { type: 'nochange' });
 
       return;
     }
@@ -56,20 +62,17 @@ export const ChangePassword: FC = () => {
                 Current password
               </Text>
             </Box>
-            <Box>
+            <Box className='currentPassword'>
               <TextInput inputRef={register({ required: true, minLength: 8 })}
                 name='currentPassword'
                 placeholder='Enter 8 characters or more'
                 type='password' />
               {errors.currentPassword &&
-                <Box>
-                  <Text color='alert'
-                    variant='b3'>
-                    {(errors.currentPassword).type === 'required' && 'Required field'}
-                    {(errors.currentPassword).type === 'minLength' && 'Password too short'}
-                    {(errors.currentPassword).type === 'manual' && 'Invalid password'}
-                  </Text>
-                </Box>
+                <ValidationError>
+                  {(errors.currentPassword).type === 'required' && 'Required field'}
+                  {(errors.currentPassword).type === 'minLength' && 'Password too short'}
+                  {(errors.currentPassword).type === 'manual' && 'Invalid password'}
+                </ValidationError>
               }
             </Box>
           </Box>
@@ -80,20 +83,18 @@ export const ChangePassword: FC = () => {
                 New password
               </Text>
             </Box>
-            <Box>
+            <Box className='newPassword'>
               <TextInput inputRef={register({ required: true, minLength: 8 })}
                 name='newPassword'
                 placeholder='Enter 8 characters or more'
                 type='password' />
               {errors.newPassword &&
-                <Box>
-                  <Text color='alert'
-                    variant='b3'>
-                    {(errors.newPassword).type === 'required' && 'Required field'}
-                    {(errors.newPassword).type === 'minLength' && 'Password too short'}
-                    {(errors.newPassword).type === 'manual' && 'Invalid password'}
-                  </Text>
-                </Box>
+                <ValidationError>
+                  {(errors.newPassword).type === 'required' && 'Required field'}
+                  {(errors.newPassword).type === 'minLength' && 'Password too short'}
+                  {(errors.newPassword).type === 'manual' && 'Invalid password'}
+                  {(errors.newPassword).type === 'nochange' && 'Current and new passwords are the same'}
+                </ValidationError>
               }
             </Box>
           </Box>
@@ -104,21 +105,18 @@ export const ChangePassword: FC = () => {
                 Confirm password
               </Text>
             </Box>
-            <Box>
+            <Box className='confirmPassword'>
               <TextInput inputRef={register({ required: true, minLength: 8 })}
                 name='confirmPassword'
                 placeholder='Enter 8 characters or more'
                 type='password' />
               {errors.confirmPassword &&
-                <Box>
-                  <Text color='alert'
-                    variant='b3'>
-                    {(errors.confirmPassword).type === 'required' && 'Required field'}
-                    {(errors.confirmPassword).type === 'minLength' && 'Password too short'}
-                    {(errors.confirmPassword).type === 'manual' && 'Passwords do not match'}
-                    {(errors.confirmPassword).type === 'failed' && 'Password change failed - Please contact Polymath support.'}
-                  </Text>
-                </Box>
+                <ValidationError>
+                  {(errors.confirmPassword).type === 'required' && 'Required field'}
+                  {(errors.confirmPassword).type === 'minLength' && 'Password too short'}
+                  {(errors.confirmPassword).type === 'manual' && 'Passwords do not match'}
+                  {(errors.confirmPassword).type === 'failed' && 'Password change failed - Please contact Polymath support.'}
+                </ValidationError>
               }
             </Box>
           </Box>

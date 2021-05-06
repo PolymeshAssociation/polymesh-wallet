@@ -163,6 +163,7 @@ export default function Accounts (): React.ReactElement {
                   <GrowingButton icon={SvgViewDashboard}
                     onClick={openDashboard} />
                   <OptionSelector
+                    className='settings-menu'
                     onSelect={handleTopMenuSelection}
                     options={topMenuOptions}
                     position='bottom-right'

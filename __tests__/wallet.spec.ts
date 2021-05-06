@@ -6,6 +6,9 @@ describe('Wallet', () => {
   let page: puppeteer.Page;
   let extensionUrl: string;
 
+  const accountName = 'Imported From Seed';
+  const accountPass = 'j457fkw72jfg89';
+
   beforeAll(async () => {
     jest.setTimeout(30000);
 
@@ -36,15 +39,12 @@ describe('Wallet', () => {
   });
 
   afterAll(async () => {
-    await page.close();
-    await browser.close();
+    // await page.close();
+    // await browser.close();
   });
 
   describe('Account creation', () => {
     describe('Import seed phrase', () => {
-      const accountName = 'Imported From Seed';
-      const accountPass = 'j457fkw72jfg89';
-
       it('Accept agreement checkboxes', async () => {
         await page.waitForSelector('div#agreement-checkboxes', { visible: true });
 
@@ -74,6 +74,56 @@ describe('Wallet', () => {
 
       it('Account is displayed in accounts list', async () => {
         await page.waitForXPath(`//span[text()='${accountName}']`);
+      });
+    });
+  });
+
+  describe('Changing password', () => {
+    const wrongCurrentPass = Math.random().toString();
+    const newPass = `${accountPass}NEW`;
+
+    it('Navigate to screen', async () => {
+      await (await page.waitForSelector('div.settings-menu')).click();
+      await (await page.waitForXPath("//span[contains(., 'Change password')]")).click();
+    });
+
+    describe('Validates user input', () => {
+      let currentPassInput: puppeteer.ElementHandle<Element>,
+        newPassInput: puppeteer.ElementHandle<Element>,
+        confirmPassInput: puppeteer.ElementHandle<Element>,
+        submitButton: puppeteer.ElementHandle<Element>;
+
+      beforeAll(async () => {
+        currentPassInput = await page.waitForSelector('#currentPassword');
+        newPassInput = await page.waitForSelector('#newPassword');
+        confirmPassInput = await page.waitForSelector('#confirmPassword');
+        submitButton = await page.waitForXPath("//button[contains(., 'Change password')]");
+      });
+
+      it('Validates current password', async () => {
+        await currentPassInput.type(wrongCurrentPass);
+        await newPassInput.type(newPass);
+        await confirmPassInput.type(newPass);
+        await submitButton.click();
+
+        const error = await (await page.waitForSelector('div.currentPassword span.validation-error')).evaluate((el) => el.textContent);
+
+        expect(error).toEqual('Invalid password');
+      });
+
+      it('Makes sure user does not repeat the previous password', async () => {
+        await currentPassInput.evaluate((el) => { console.log(el); el.nodeValue = ''; });
+        await newPassInput.evaluate((el) => { el.nodeValue = ''; });
+        await confirmPassInput.evaluate((el) => { el.nodeValue = ''; });
+
+        await currentPassInput.type(accountPass);
+        await newPassInput.type(accountPass);
+        await confirmPassInput.type(accountPass);
+        await submitButton.click();
+
+        const error = await (await page.waitForSelector('div.currentPassword span.validation-error')).evaluate((el) => el.textContent);
+
+        expect(error).toEqual('Current and new passwords are the same');
       });
     });
   });

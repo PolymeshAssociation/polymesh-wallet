@@ -16,10 +16,11 @@ type OptionSelectorProps = BoxProps & {
   onSelect: (value: any) => void;
   position?: PositionType;
   style?: CSSProperties;
+  className?: string;
 };
 
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
-  const { onSelect, options, position = 'context', selector, style, ...boxProps } = props;
+  const { className, onSelect, options, position = 'context', selector, style, ...boxProps } = props;
 
   const [showOptions, setShowOptions] = useState(false);
   const [cssPosition, setCssPosition] = useState<CssPosition>({});
@@ -128,7 +129,9 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
   return (
     <>
-      <Box onClick={toggleOptions}
+      <Box
+        className={className}
+        onClick={toggleOptions}
         ref={selectorRef}>
         {selector}
       </Box>
