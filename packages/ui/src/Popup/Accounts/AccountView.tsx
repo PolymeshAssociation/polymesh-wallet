@@ -3,7 +3,7 @@ import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgCheck, SvgDotsVertical, SvgPencilOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { AccountContext, AccountType, ActionContext, OptionSelector, PolymeshContext } from '../../components';
@@ -26,7 +26,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
 
   const history = useHistory();
 
-  const [isEditing, setEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(name);
   const [hover, setHover] = useState(false);
   const [nameHover, setNameHover] = useState(false);
@@ -54,13 +54,13 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   const cancelEditing = (e: React.MouseEvent<HTMLElement>) => {
-    setEditing(false);
+    setIsEditing(false);
     if (e.stopPropagation) e.stopPropagation();
   };
 
   const editName = (e: React.MouseEvent<HTMLElement>) => {
     setNameHover(false);
-    setEditing(true);
+    setIsEditing(true);
     if (e.stopPropagation) e.stopPropagation();
   };
 
@@ -72,7 +72,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     if (e.stopPropagation) e.stopPropagation();
     await editAccount(address || '', newName || '');
     onAction();
-    setEditing(false);
+    setIsEditing(false);
   };
 
   const mouseEnter = () => {
@@ -103,7 +103,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <AccountInfoGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <NameEdit name={name}
+            <NameEdit
               newName={newName}
               onCancel={cancelEditing}
               onChange={handleNameChange}
