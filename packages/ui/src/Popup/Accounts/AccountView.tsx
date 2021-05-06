@@ -54,6 +54,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   const cancelEditing = (e: React.MouseEvent<HTMLElement>) => {
+    setNewName(name);
     setIsEditing(false);
     if (e.stopPropagation) e.stopPropagation();
   };
@@ -182,8 +183,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <UnassignedAccountHoverGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <NameEdit name={name}
-              newName={newName}
+            <NameEdit newName={newName}
               onCancel={cancelEditing}
               onChange={handleNameChange}
               onSave={save} />
