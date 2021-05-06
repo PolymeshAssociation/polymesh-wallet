@@ -3,19 +3,18 @@ import { Box, Flex, Icon, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React from 'react';
 
 type NameEditProps = {
-  name?: string;
   newName?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSave: (e: React.MouseEvent<HTMLElement>) => Promise<void>;
   onCancel: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
-export function NameEdit ({ name, newName, onCancel, onChange, onSave }: NameEditProps): JSX.Element {
+export function NameEdit ({ newName, onCancel, onChange, onSave }: NameEditProps): JSX.Element {
   return (
     <Box py='3px'>
       <Flex alignItems='center'
         flexDirection='row'>
-        <TextInput defaultValue={name}
+        <TextInput
           onChange={onChange}
           tight
           value={newName} />
