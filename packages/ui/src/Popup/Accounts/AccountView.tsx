@@ -59,7 +59,6 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   const editName = (e: React.MouseEvent<HTMLElement>) => {
-    setNameHover(false);
     setIsEditing(true);
     if (e.stopPropagation) e.stopPropagation();
   };
