@@ -1,4 +1,4 @@
-import { AccountDetails, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountDetails';
+import { AccountForm, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountForm';
 import React, { FC, useContext, useState } from 'react';
 
 import { ActionContext } from '../../components';
@@ -30,7 +30,7 @@ export const ImportSeed: FC = () => {
     switch (step) {
       case 1:
         return (
-          <AccountDetails
+          <AccountForm
             headerText='Restore your account with your recovery phrase'
             onBack={prevStep}
             onContinue={importAccount}
