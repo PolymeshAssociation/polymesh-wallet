@@ -3,7 +3,7 @@ import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgCheck, SvgDotsVertical, SvgPencilOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { AccountContext, AccountType, ActionContext, OptionSelector, PolymeshContext } from '../../components';
