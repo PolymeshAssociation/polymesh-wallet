@@ -1,5 +1,5 @@
 import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { AccountDetails, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountDetails';
+import { AccountForm, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountForm';
 import React, { FC, useContext, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 
@@ -40,7 +40,7 @@ export const RestoreFromJson: FC = () => {
         await jsonRestore(accountJson, jsonPassword);
 
         // Change from the original JSON password, to the password user has just provided
-        // by AccountDetails form.
+        // by AccountForm.
         await changePassword(accountJson.address, jsonPassword, newAccountInfo.password);
 
         onAction('/');
@@ -56,7 +56,7 @@ export const RestoreFromJson: FC = () => {
     switch (step) {
       case 1:
         return (
-          <AccountDetails
+          <AccountForm
             defaultName={accountName}
             headerText='Import account using JSON file'
             noHeader={true}
