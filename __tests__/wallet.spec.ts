@@ -8,8 +8,13 @@ describe('Wallet', () => {
   let page: puppeteer.Page;
   let extensionUrl: string;
 
-  const accountName = 'Imported From Seed';
-  const accountPass = 'j457fkw72jfg89';
+  const seed = 'wash mosquito come blur bonus guard scissors anchor valid gadget deposit file';
+  const seedId = 'mother income drop mail lobster bulk idle swallow stomach patch warfare cloth';
+  const accountName = 'Unverified';
+  const accountNameId = 'Verified';
+  const indexHash = '#/';
+  const importSeedHash = '#/account/import-seed';
+  let globalPass = 'j457fkw72jfg89';
 
   beforeAll(async () => {
     jest.setTimeout(30000);
@@ -46,7 +51,7 @@ describe('Wallet', () => {
   });
 
   describe('Account creation', () => {
-    describe('Import seed phrase', () => {
+    describe('Import an unverified key using seed phrase', () => {
       it('Accept agreement checkboxes', async () => {
         await page.waitForSelector('div#agreement-checkboxes', { visible: true });
 
@@ -64,28 +69,59 @@ describe('Wallet', () => {
       });
 
       it('Fill import seed form', async () => {
-        const seed = 'wash mosquito come blur bonus guard scissors anchor valid gadget deposit file';
-
         await (await page.waitForXPath('//textarea')).type(seed);
         await (await page.waitForXPath("//button[contains(., 'Continue')]")).click();
         await (await page.waitForXPath("//input[@placeholder='Enter account name']")).type(accountName);
-        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more' or @placeholder='Enter your current wallet password']")).type(accountPass);
-        await (await page.waitForXPath("//input[@placeholder='Confirm your password']")).type(accountPass);
-        await (await page.waitForXPath("//button[contains(., 'Restore')]")).click();
+        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more' or @placeholder='Enter your current wallet password']")).type(globalPass);
+        await (await page.waitForXPath("//input[@placeholder='Confirm your password']")).type(globalPass);
+
+        await Promise.all([
+          page.waitForNavigation(),
+          (await page.waitForXPath("//button[contains(., 'Restore')]")).click()
+        ]);
       });
 
       it('Account is displayed in accounts list', async () => {
         await page.waitForXPath(`//span[text()='${accountName}']`);
       });
     });
+
+    describe('Import a verified key using seed phrase', () => {
+      it('Navigate to import screen', async () => {
+        expectHashToEqual(page, indexHash);
+
+        await (await page.waitForSelector('div.add-key-menu')).click();
+        await Promise.all([
+          (await page.waitForXPath('//*[@id="option-selector-portal"]/div/ul/li[2]')).click(),
+          page.waitForNavigation()
+        ]);
+
+        expectHashToEqual(page, importSeedHash);
+      });
+
+      it('Fill import seed form', async () => {
+        await (await page.waitForXPath('//textarea')).type(seedId);
+        await (await page.waitForXPath("//button[contains(., 'Continue')]")).click();
+        await (await page.waitForXPath("//input[@placeholder='Enter account name']")).type(accountNameId);
+        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more' or @placeholder='Enter your current wallet password']")).type(globalPass);
+
+        await Promise.all([
+          page.waitForNavigation(),
+          (await page.waitForXPath("//button[contains(., 'Restore')]")).click()
+        ]);
+      });
+
+      it('Account is displayed in accounts list', async () => {
+        await page.waitForXPath(`//span[text()='${accountNameId}']`);
+      });
+    });
   });
 
   describe('Changing password', () => {
     const wrongCurrentPass = Math.random().toString();
-    const newPass = `${accountPass}NEW`;
-    const newPassNotMatch = `${accountPass}newNotMatch`;
+    const newPass = `${globalPass}NEW`;
+    const newPassNotMatch = `${globalPass}newNotMatch`;
     const invalidPass = '0123456';
-    const indexHash = '#/';
     const passChangePath = '#/account/change-password';
 
     it('Navigate to screen', async () => {
@@ -126,9 +162,9 @@ describe('Wallet', () => {
       });
 
       it('Makes sure user does not repeat the previous password', async () => {
-        await refillTextInput(currentPassInput, accountPass);
-        await refillTextInput(newPassInput, accountPass);
-        await refillTextInput(confirmPassInput, accountPass);
+        await refillTextInput(currentPassInput, globalPass);
+        await refillTextInput(newPassInput, globalPass);
+        await refillTextInput(confirmPassInput, globalPass);
 
         await submitButton.click();
 
@@ -138,7 +174,7 @@ describe('Wallet', () => {
       });
 
       it('Makes sure that new and confirmation passwords match', async () => {
-        await refillTextInput(currentPassInput, accountPass);
+        await refillTextInput(currentPassInput, globalPass);
         await refillTextInput(newPassInput, newPass);
         await refillTextInput(confirmPassInput, newPassNotMatch);
         await submitButton.click();
@@ -149,7 +185,7 @@ describe('Wallet', () => {
       });
 
       it('Makes sure that new password is valid', async () => {
-        await refillTextInput(currentPassInput, accountPass);
+        await refillTextInput(currentPassInput, globalPass);
         await refillTextInput(newPassInput, invalidPass);
         await refillTextInput(confirmPassInput, invalidPass);
         await submitButton.click();
@@ -160,7 +196,7 @@ describe('Wallet', () => {
       });
 
       it('Makes sure that confirmation password is valid', async () => {
-        await refillTextInput(currentPassInput, accountPass);
+        await refillTextInput(currentPassInput, globalPass);
         await refillTextInput(newPassInput, newPass);
         await refillTextInput(confirmPassInput, invalidPass);
         await submitButton.click();
@@ -173,7 +209,7 @@ describe('Wallet', () => {
       it('Works when all requirements are met', async () => {
         expectHashToEqual(page, passChangePath);
 
-        await refillTextInput(currentPassInput, accountPass);
+        await refillTextInput(currentPassInput, globalPass);
         await refillTextInput(newPassInput, newPass);
         await refillTextInput(confirmPassInput, newPass);
 
@@ -181,6 +217,8 @@ describe('Wallet', () => {
           page.waitForNavigation(),
           submitButton.click()
         ]);
+
+        globalPass = newPass;
 
         expectHashToEqual(page, indexHash);
       });

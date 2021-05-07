@@ -189,6 +189,7 @@ export default function Accounts (): React.ReactElement {
                 ACCOUNTS
                 </Text>
                 <OptionSelector
+                  className='add-key-menu'
                   onSelect={handleAccountMenuClick}
                   options={accountMenuItems}
                   position='bottom-right'
