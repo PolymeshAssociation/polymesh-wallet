@@ -1,4 +1,4 @@
-import { AccountDetails, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountDetails';
+import { AccountForm, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountForm';
 import React, { FC, useContext, useEffect, useState } from 'react';
 
 import { ActionContext } from '../../components';
@@ -46,7 +46,7 @@ export const NewAccount: FC = () => {
         );
       case 2:
         return (
-          <AccountDetails
+          <AccountForm
             headerText='Create and confirm your account name and wallet password'
             onBack={prevStep}
             onContinue={createAccount}

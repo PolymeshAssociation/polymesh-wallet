@@ -25,7 +25,7 @@ type FormInputs = {
   confirmPassword: string;
 };
 
-export const AccountDetails: FC<Props> = ({ defaultName, headerText, noHeader, onBack, onContinue, submitText }) => {
+export const AccountForm: FC<Props> = ({ defaultName, headerText, noHeader, onBack, onContinue, submitText }) => {
   const methods = useForm<FormInputs>({
     defaultValues: {
       accountName: defaultName || '',
