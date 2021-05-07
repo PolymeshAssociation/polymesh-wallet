@@ -1,10 +1,7 @@
 import path from 'path';
 import puppeteer from 'puppeteer';
 
-async function _c (handle: puppeteer.ElementHandle<Element>): Promise<void> {
-  await handle.click({ clickCount: 3 });
-  await handle.press('Backspace');
-}
+import { expectHashToEqual, refillTextInput } from './utils';
 
 describe('Wallet', () => {
   let browser: puppeteer.Browser;
@@ -87,10 +84,20 @@ describe('Wallet', () => {
     const wrongCurrentPass = Math.random().toString();
     const newPass = `${accountPass}NEW`;
     const newPassNotMatch = `${accountPass}newNotMatch`;
+    const invalidPass = '0123456';
+    const indexHash = '#/';
+    const passChangePath = '#/account/change-password';
 
     it('Navigate to screen', async () => {
+      expectHashToEqual(page, indexHash);
+
       await (await page.waitForSelector('div.settings-menu')).click();
-      await (await page.waitForXPath("//span[contains(., 'Change password')]")).click();
+      await Promise.all([
+        (await page.waitForXPath("//span[contains(., 'Change password')]")).click(),
+        page.waitForNavigation()
+      ]);
+
+      expectHashToEqual(page, passChangePath);
     });
 
     describe('Validates user input', () => {
@@ -110,6 +117,7 @@ describe('Wallet', () => {
         await currentPassInput.type(wrongCurrentPass);
         await newPassInput.type(newPass);
         await confirmPassInput.type(newPass);
+
         await submitButton.click();
 
         const error = await (await page.waitForSelector('div.currentPassword span.validation-error')).evaluate((el) => el.textContent);
@@ -118,13 +126,10 @@ describe('Wallet', () => {
       });
 
       it('Makes sure user does not repeat the previous password', async () => {
-        await _c(currentPassInput);
-        await _c(newPassInput);
-        await _c(confirmPassInput);
+        await refillTextInput(currentPassInput, accountPass);
+        await refillTextInput(newPassInput, accountPass);
+        await refillTextInput(confirmPassInput, accountPass);
 
-        await currentPassInput.type(accountPass);
-        await newPassInput.type(accountPass);
-        await confirmPassInput.type(accountPass);
         await submitButton.click();
 
         const error = await (await page.waitForSelector('div.newPassword span.validation-error')).evaluate((el) => el.textContent);
@@ -133,18 +138,51 @@ describe('Wallet', () => {
       });
 
       it('Makes sure that new and confirmation passwords match', async () => {
-        await _c(currentPassInput);
-        await _c(newPassInput);
-        await _c(confirmPassInput);
-
-        await currentPassInput.type(accountPass);
-        await newPassInput.type(newPass);
-        await confirmPassInput.type(newPassNotMatch);
+        await refillTextInput(currentPassInput, accountPass);
+        await refillTextInput(newPassInput, newPass);
+        await refillTextInput(confirmPassInput, newPassNotMatch);
         await submitButton.click();
 
         const error = await (await page.waitForSelector('div.confirmPassword span.validation-error')).evaluate((el) => el.textContent);
 
         expect(error).toEqual('Passwords do not match');
+      });
+
+      it('Makes sure that new password is valid', async () => {
+        await refillTextInput(currentPassInput, accountPass);
+        await refillTextInput(newPassInput, invalidPass);
+        await refillTextInput(confirmPassInput, invalidPass);
+        await submitButton.click();
+
+        const error = await (await page.waitForSelector('div.newPassword span.validation-error')).evaluate((el) => el.textContent);
+
+        expect(error).toEqual('Password too short');
+      });
+
+      it('Makes sure that confirmation password is valid', async () => {
+        await refillTextInput(currentPassInput, accountPass);
+        await refillTextInput(newPassInput, newPass);
+        await refillTextInput(confirmPassInput, invalidPass);
+        await submitButton.click();
+
+        const error = await (await page.waitForSelector('div.confirmPassword span.validation-error')).evaluate((el) => el.textContent);
+
+        expect(error).toEqual('Password too short');
+      });
+
+      it('Works when all requirements are met', async () => {
+        expectHashToEqual(page, passChangePath);
+
+        await refillTextInput(currentPassInput, accountPass);
+        await refillTextInput(newPassInput, newPass);
+        await refillTextInput(confirmPassInput, newPass);
+
+        await Promise.all([
+          page.waitForNavigation(),
+          submitButton.click()
+        ]);
+
+        expectHashToEqual(page, indexHash);
       });
     });
   });

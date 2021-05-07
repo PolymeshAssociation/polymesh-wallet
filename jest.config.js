@@ -5,7 +5,7 @@ module.exports = {
   preset: 'ts-jest',
   browser: true,
   moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
-  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+  testMatch: ['**/__tests__/**/*.(spec|test).[jt]s?(x)'],
   verbose: true,
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest'
