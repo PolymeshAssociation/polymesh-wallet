@@ -13,5 +13,10 @@ module.exports = {
   },
   transformIgnorePatterns: [
     '<rootDir>/node_modules/*'
-  ]
+  ],
+  moduleNameMapper: {
+    '@polymathnetwork/extension-core/(.*)$': '<rootDir>/packages/core/src/$1',
+    '\\.(css|less)$': 'empty/object',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/__mocks__/fileMock.js'
+  }
 };

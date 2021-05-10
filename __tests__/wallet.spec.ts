@@ -1,7 +1,7 @@
 import path from 'path';
 import puppeteer from 'puppeteer';
 
-import { expectHashToEqual, refillTextInput } from './utils';
+import { expectHashToEqual, refillTextInput, requestAuthorization, requestSigning } from './utils';
 
 describe('Wallet', () => {
   let browser: puppeteer.Browser;
@@ -9,9 +9,12 @@ describe('Wallet', () => {
   let extensionUrl: string;
 
   const seed = 'wash mosquito come blur bonus guard scissors anchor valid gadget deposit file';
-  const seedId = 'mother income drop mail lobster bulk idle swallow stomach patch warfare cloth';
+  const accountId = '5Dye767XSYtqYLNFhVPWpY5phMwD1U5UAV5nJPutY741caDH';
   const accountName = 'Unverified';
-  const accountNameId = 'Verified';
+
+  const seedVerified = 'mother income drop mail lobster bulk idle swallow stomach patch warfare cloth';
+  const accountNameVerified = 'Verified';
+
   const indexHash = '#/';
   const importSeedHash = '#/account/import-seed';
   let globalPass = 'j457fkw72jfg89';
@@ -86,7 +89,7 @@ describe('Wallet', () => {
       });
     });
 
-    describe('Import a verified key using seed phrase', () => {
+    describe('Import a second, verified key using seed phrase', () => {
       it('Navigate to import screen', async () => {
         expectHashToEqual(page, indexHash);
 
@@ -100,9 +103,9 @@ describe('Wallet', () => {
       });
 
       it('Fill import seed form', async () => {
-        await (await page.waitForXPath('//textarea')).type(seedId);
+        await (await page.waitForXPath('//textarea')).type(seedVerified);
         await (await page.waitForXPath("//button[contains(., 'Continue')]")).click();
-        await (await page.waitForXPath("//input[@placeholder='Enter account name']")).type(accountNameId);
+        await (await page.waitForXPath("//input[@placeholder='Enter account name']")).type(accountNameVerified);
         await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more' or @placeholder='Enter your current wallet password']")).type(globalPass);
 
         await Promise.all([
@@ -112,8 +115,51 @@ describe('Wallet', () => {
       });
 
       it('Account is displayed in accounts list', async () => {
-        await page.waitForXPath(`//span[text()='${accountNameId}']`);
+        await page.waitForXPath(`//span[text()='${accountNameVerified}']`);
       });
+    });
+  });
+
+  describe('Signing', () => {
+    let mockApp: puppeteer.Page;
+
+    beforeAll(async () => {
+      // Open mock app in another tab. We will request signing from there.
+      mockApp = await browser.newPage();
+      await mockApp.goto('https://polymathnetwork.github.io/mock-uid-provider/');
+    });
+
+    afterAll(async () => {
+      await page.bringToFront();
+      await mockApp.close();
+    });
+
+    it('User can approve transaction after providing password', async () => {
+      requestAuthorization(mockApp);
+      await page.bringToFront();
+      await (await page.waitForXPath("//button[contains(., 'Authorize')]")).click();
+      await mockApp.bringToFront();
+      await requestSigning(mockApp, accountId);
+
+      await page.waitForTimeout(1000);
+
+      const signingPopup = (await browser.pages()).filter((page) => page.url().includes('notification.html'))[0];
+
+      // Close signing popup because we'll sign from the main popup window.
+      await signingPopup.close();
+
+      await page.bringToFront();
+
+      const passInput = await page.waitForSelector('#currentPassword');
+
+      await passInput.focus();
+      await passInput.type(globalPass);
+
+      await Promise.all([
+        (await page.waitForXPath("//button[contains(., 'Sign')]")).click(),
+        // Wait until we're back to homepage.
+        page.waitForSelector('#accounts-container')
+      ]);
     });
   });
 
