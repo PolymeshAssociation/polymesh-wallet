@@ -54,7 +54,6 @@ export const Restore: FC = () => {
           </Flex>
         </Flex>
       </Header>
-      {/* @TODO use the outer Seed and Json components instead of these */}
       {shouldRestoreWithSeed && <RestoreFromSeed />}
       {shouldRestoreWithJson && <RestoreFromJson />}
     </>
