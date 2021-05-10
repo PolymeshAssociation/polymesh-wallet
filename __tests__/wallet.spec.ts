@@ -2,10 +2,13 @@ import path from 'path';
 import puppeteer from 'puppeteer';
 
 import { expectHashToEqual, refillTextInput, requestAuthorization, requestSigning } from './utils';
+<<<<<<< HEAD
 
 async function _pages (browser: puppeteer.Browser): Promise<string[]> {
   return (await browser.pages()).map((page) => page.url());
 }
+=======
+>>>>>>> d30fae65c1c89f45d75ec3fdfd9b301bdf87794a
 
 describe('Wallet', () => {
   let browser: puppeteer.Browser;
