@@ -163,6 +163,7 @@ export default function Accounts (): React.ReactElement {
                   <GrowingButton icon={SvgViewDashboard}
                     onClick={openDashboard} />
                   <OptionSelector
+                    className='settings-menu'
                     onSelect={handleTopMenuSelection}
                     options={topMenuOptions}
                     position='bottom-right'
@@ -179,8 +180,9 @@ export default function Accounts (): React.ReactElement {
               {currentAccount && <AccountsHeader account={currentAccount}
                 details={true} />}
             </Header>
-            <AccountsArea>
-              <Flex justifyContent='space-between'
+            <AccountsArea id='accounts-container'>
+              <Flex
+                justifyContent='space-between'
                 pt='m'
                 px='s'>
                 <Text color='gray.1'
@@ -188,6 +190,7 @@ export default function Accounts (): React.ReactElement {
                 ACCOUNTS
                 </Text>
                 <OptionSelector
+                  className='add-key-menu'
                   onSelect={handleAccountMenuClick}
                   options={accountMenuItems}
                   position='bottom-right'
