@@ -180,8 +180,9 @@ export default function Accounts (): React.ReactElement {
               {currentAccount && <AccountsHeader account={currentAccount}
                 details={true} />}
             </Header>
-            <AccountsArea>
-              <Flex justifyContent='space-between'
+            <AccountsArea id='accounts-container'>
+              <Flex
+                justifyContent='space-between'
                 pt='m'
                 px='s'>
                 <Text color='gray.1'
