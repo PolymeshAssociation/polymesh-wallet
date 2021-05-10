@@ -248,13 +248,7 @@ export default function Popup (): React.ReactElement {
                                 <Route path='/account/export/:address'>
                                   <ExportAccount />
                                 </Route>
-                                <Route path='/account/import-seed'>
-                                  <ImportSeed />
-                                </Route>
-                                <Route path='/account/restore-json'>
-                                  <ImportJson />
-                                </Route>
-                                <Route path='/account/restore'>
+                                <Route path='/account/restore/:method'>
                                   <Restore />
                                 </Route>
                                 <Route path='/account/import-ledger'>

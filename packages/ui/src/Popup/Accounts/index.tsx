@@ -17,7 +17,7 @@ import { AccountsHeader } from './AccountsHeader';
 import AddAccount from './AddAccount';
 import { NetworkSelector } from './NetworkSelector';
 
-const jsonPath = '/account/restore-json';
+const jsonPath = '/account/restore/json';
 const ledgerPath = '/account/import-ledger';
 
 export default function Accounts (): React.ReactElement {
@@ -92,7 +92,7 @@ export default function Accounts (): React.ReactElement {
       case 'new':
         return history.push('/account/create');
       case 'fromSeed':
-        return history.push('/account/import-seed');
+        return history.push('/account/restore/seed');
       case 'fromJson':
         return isPopup ? _openJson() : history.push(jsonPath);
       case 'fromLedger':
