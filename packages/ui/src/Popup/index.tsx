@@ -52,8 +52,6 @@ import Authorize from './Authorize';
 import { ChangePassword } from './ChangePassword';
 import { ExportAccount } from './ExportAccount';
 import { ForgetAccount } from './ForgetAccount';
-import { ImportJson } from './ImportJson';
-import { ImportSeed } from './ImportSeed';
 import { NewAccount } from './NewAccount';
 import ProofRequests from './ProofRequests';
 import ProvideUidRequests from './ProvideUidRequests';
