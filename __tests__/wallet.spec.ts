@@ -227,6 +227,26 @@ describe('Wallet', () => {
         expect(error).toEqual('Current and new passwords are the same');
       });
 
+      it('Makes sure it validates all fields', async () => {
+        await refillTextInput(currentPassInput, '');
+        await refillTextInput(newPassInput, '');
+        await refillTextInput(confirmPassInput, '');
+
+        await submitButton.click();
+
+        expect(
+          await (await page.waitForSelector('div.currentPassword span.validation-error')).evaluate((el) => el.textContent)
+        ).toEqual('Required field');
+
+        expect(
+          await (await page.waitForSelector('div.newPassword span.validation-error')).evaluate((el) => el.textContent)
+        ).toEqual('Required field');
+
+        expect(
+          await (await page.waitForSelector('div.confirmPassword span.validation-error')).evaluate((el) => el.textContent)
+        ).toEqual('Required field');
+      });
+
       it('Makes sure that new and confirmation passwords match', async () => {
         await refillTextInput(currentPassInput, globalPass);
         await refillTextInput(newPassInput, newPass);
