@@ -45,14 +45,12 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
         variant='b2m'>
         12–word recovery phrase
       </Text>
-      <Box>
-        <TextArea
-          height={236}
-          invalid={!validSeed && seedPhrase.length > 0}
-          onChange={onChange}
-          placeholder='Enter your 12-word recovery phrase. Separate each word with a single space.'
-        />
-      </Box>
+      <TextArea
+        height={236}
+        invalid={!validSeed && seedPhrase.length > 0}
+        onChange={onChange}
+        placeholder='Enter your 12-word recovery phrase. Separate each word with a single space.'
+      />
       <Box mt='auto'>
         <Button disabled={!validSeed}
           fluid
