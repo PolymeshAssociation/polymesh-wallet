@@ -1,14 +1,23 @@
 import { SvgAccountReactivate } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Box, Flex, Header, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
+import { useHistory, useParams } from 'react-router';
 
 import { RestoreFromJson } from './RestoreFromJson';
 import { RestoreFromSeed } from './RestoreFromSeed';
 
-export const Restore: FC = () => {
-  const [currentMethod, setCurrentMethod] = useState<'JSON' | 'SEED'>('SEED');
+type RestoreMethod = 'seed' | 'json';
 
-  const setMethod = (method: 'SEED' | 'JSON') => () => setCurrentMethod(method);
+export const Restore: FC = () => {
+  const history = useHistory();
+
+  const { method } = useParams<{ method: RestoreMethod }>();
+
+  const shouldRestoreWithSeed = method === 'seed';
+  const shouldRestoreWithJson = method === 'json';
+
+  const restoreWithSeed = () => history.push('seed');
+  const restoreWithJson = () => history.push('json');
 
   return (
     <>
@@ -23,18 +32,18 @@ export const Restore: FC = () => {
         <Flex mt='m'>
           <Flex flex={1}
             justifyContent='center'
-            onClick={setMethod('SEED')}
+            onClick={restoreWithSeed}
             style={{ cursor: 'pointer' }}>
-            <Text color={currentMethod === 'SEED' ? 'brandLighter' : 'white'}
+            <Text color={shouldRestoreWithSeed ? 'brandLighter' : 'white'}
               variant='b2m'>
               With recovery phrase
             </Text>
           </Flex>
           <Flex flex={1}
             justifyContent='center'
-            onClick={setMethod('JSON')}
+            onClick={restoreWithJson}
             style={{ cursor: 'pointer' }}>
-            <Text color={currentMethod === 'JSON' ? 'brandLighter' : 'white'}
+            <Text color={shouldRestoreWithJson ? 'brandLighter' : 'white'}
               variant='b2m'>
               With JSON file
             </Text>
@@ -43,8 +52,8 @@ export const Restore: FC = () => {
       </Header>
       <Box>
         {/* @TODO use the outer Seed and Json components instead of these */}
-        {currentMethod === 'SEED' && <RestoreFromSeed />}
-        {currentMethod === 'JSON' && <RestoreFromJson />}
+        {shouldRestoreWithSeed && <RestoreFromSeed />}
+        {shouldRestoreWithJson && <RestoreFromJson />}
       </Box>
     </>
   );
