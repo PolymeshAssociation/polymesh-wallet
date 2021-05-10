@@ -1,4 +1,6 @@
 import { SvgAccountReactivate } from '@polymathnetwork/extension-ui/assets/images/icons';
+import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
+import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { Box, Flex, Header, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { FC } from 'react';
 import { useHistory, useParams } from 'react-router';
@@ -13,11 +15,13 @@ export const Restore: FC = () => {
 
   const { method } = useParams<{ method: RestoreMethod }>();
 
+  const isPopup = useIsPopup();
+
   const shouldRestoreWithSeed = method === 'seed';
   const shouldRestoreWithJson = method === 'json';
 
   const restoreWithSeed = () => history.push('seed');
-  const restoreWithJson = () => history.push('json');
+  const restoreWithJson = () => isPopup ? windowOpen('/account/restore/json') : history.push('json');
 
   return (
     <>
