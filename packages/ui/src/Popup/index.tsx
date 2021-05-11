@@ -52,8 +52,6 @@ import Authorize from './Authorize';
 import { ChangePassword } from './ChangePassword';
 import { ExportAccount } from './ExportAccount';
 import { ForgetAccount } from './ForgetAccount';
-import { ImportJson } from './ImportJson';
-import { ImportSeed } from './ImportSeed';
 import { NewAccount } from './NewAccount';
 import ProofRequests from './ProofRequests';
 import ProvideUidRequests from './ProvideUidRequests';
@@ -248,13 +246,7 @@ export default function Popup (): React.ReactElement {
                                 <Route path='/account/export/:address'>
                                   <ExportAccount />
                                 </Route>
-                                <Route path='/account/import-seed'>
-                                  <ImportSeed />
-                                </Route>
-                                <Route path='/account/restore-json'>
-                                  <ImportJson />
-                                </Route>
-                                <Route path='/account/restore'>
+                                <Route path='/account/restore/:method'>
                                   <Restore />
                                 </Route>
                                 <Route path='/account/import-ledger'>
