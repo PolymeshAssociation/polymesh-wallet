@@ -122,9 +122,8 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
 
   return (
     <>
-      <Box height={306}
-        mx='s'>
-        <Box pt='m'>
+      <Box mx='s'>
+        <Box pt='s'>
           <Text color='gray.1'
             variant='b2m'>
             JSON file

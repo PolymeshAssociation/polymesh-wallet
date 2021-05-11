@@ -20,7 +20,7 @@ function AddAccount (): React.ReactElement {
   // );
   const onCreateAccount = useCallback((): void => onAction('/account/create'), [onAction]);
 
-  const onImportAccount = useCallback((): void => onAction('/account/restore'), [onAction]);
+  const onImportAccount = useCallback((): void => onAction('/account/restore/seed'), [onAction]);
 
   // const onConnectLedger = useCallback((): void => {
   //   if (!isLedgerEnabled && isPopup) {

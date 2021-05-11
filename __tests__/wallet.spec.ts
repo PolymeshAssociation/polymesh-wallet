@@ -20,7 +20,7 @@ describe('Wallet', () => {
   const accountNameVerified = 'Verified';
 
   const indexHash = '#/';
-  const importSeedHash = '#/account/import-seed';
+  const importSeedHash = '#/account/restore/seed';
   let globalPass = 'j457fkw72jfg89';
 
   beforeAll(async () => {
