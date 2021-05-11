@@ -222,6 +222,6 @@ export type PolyTransportResponseMessage<TMessageType extends PolyMessageTypes> 
       ? PolyTransportResponseMessageSub<TMessageType>
       : never;
 
-export const ALLOWED_PATH = ['/', '/account/import-ledger', '/account/restore-json', '/account/change-password'];
+export const ALLOWED_PATH = ['/', '/account/import-ledger', '/account/restore/json', '/account/change-password'];
 
 export declare type AllowedPath = typeof ALLOWED_PATH[number];

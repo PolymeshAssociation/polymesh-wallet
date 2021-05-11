@@ -37,36 +37,27 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
   };
 
   return (
-    <>
-      <Box height={270}
-        mx='s'>
-        <Box pt='m'>
-          <Text color='gray.1'
-            variant='b2m'>
-            12–word recovery phrase
-          </Text>
-        </Box>
-        <Box>
-          <TextArea
-            height={188}
-            invalid={!validSeed && seedPhrase.length > 0}
-            onChange={onChange}
-            placeholder='Enter your 12-word recovery phrase. Separate each word with a single space.'
-          />
-        </Box>
-      </Box>
-      <Flex flex={1}
-        flexDirection='column'
-        justifyContent='flex-end'
-        mb='s'
-        mt='l'
-        mx='s'>
+    <Flex alignItems='stretch'
+      flexDirection='column'
+      height='100%'
+      p='s'>
+      <Text color='gray.1'
+        variant='b2m'>
+        12–word recovery phrase
+      </Text>
+      <TextArea
+        height={236}
+        invalid={!validSeed && seedPhrase.length > 0}
+        onChange={onChange}
+        placeholder='Enter your 12-word recovery phrase. Separate each word with a single space.'
+      />
+      <Box mt='auto'>
         <Button disabled={!validSeed}
           fluid
           onClick={nextStep}>
           Continue
         </Button>
-      </Flex>
-    </>
+      </Box>
+    </Flex>
   );
 };
