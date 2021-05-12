@@ -44,7 +44,7 @@ export const Checkbox: FC<Props> = ({ checked,
   };
 
   return (
-    <Label>
+    <Label htmlFor={name}>
       <InlineFlex>
         <sc.Input
           {...other}
