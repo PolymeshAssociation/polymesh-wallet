@@ -37,14 +37,14 @@ export const Checkbox: FC<Props> = ({ checked,
     checkedProps = { defaultChecked };
   }
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
       onChange(e.currentTarget.checked);
     }
   };
 
   return (
-    <label>
+    <Label htmlFor={name}>
       <InlineFlex>
         <sc.Input
           {...other}
@@ -74,10 +74,10 @@ export const Checkbox: FC<Props> = ({ checked,
         </sc.CheckboxInput>
         {label && (
           <InlineFlex ml={2}>
-            <Label htmlFor={name}>{label}</Label>
+            {label}
           </InlineFlex>
         )}
       </InlineFlex>
-    </label>
+    </Label>
   );
 };
