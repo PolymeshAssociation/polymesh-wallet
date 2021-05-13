@@ -5,13 +5,12 @@ import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types'
 import { TypeRegistry } from '@polkadot/types';
 import { getIdentifiedAccounts } from '@polymathnetwork/extension-core/store/getters';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { Box, Header, Heading } from '@polymathnetwork/extension-ui/ui';
+import { Box, Heading } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import { ActionContext, VerticalSpace } from '../../components';
 import { approveSignSignature } from '../../messaging';
-import { AccountsHeader } from '../Accounts/AccountsHeader';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
 import LedgerSignArea from './LedgerSignArea';
@@ -101,12 +100,14 @@ export default function Request ({ account: { accountIndex, address, addressOffs
 
     return (
       <>
-        {signingAccount &&
-          <Header>
-            <AccountsHeader account={signingAccount}
-              details={false} />
-          </Header>
-        }
+        {/* <AppHeader>
+          {signingAccount &&
+            <AccountMain account={signingAccount}
+              details={false}
+            />
+          }
+        </AppHeader> */}
+
         <RequestContent isFirst={isFirst}>
           <Box mt='xs'
             mx='s'>

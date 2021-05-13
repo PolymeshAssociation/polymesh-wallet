@@ -1,29 +1,27 @@
-import { networkLinks } from '@polymathnetwork/extension-core/constants';
-import { IdentifiedAccount, NetworkName } from '@polymathnetwork/extension-core/types';
-import { SvgDotsVertical, SvgPlus, SvgViewDashboard } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+import { SvgPlus } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
 import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
-import { setPolyNetwork, togglePolyIsDev, windowOpen } from '@polymathnetwork/extension-ui/messaging';
+import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
 import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { AccountContext, OptionSelector, PolymeshContext } from '../../components';
-import { Box, Checkbox, Flex, GrowingButton, Header, Icon, Text } from '../../ui';
+import { Flex, Icon, Text } from '../../ui';
+import { AppHeader } from '../AppHeader';
+import { AccountMain } from './AccountMain';
 import { AccountsContainer } from './AccountsContainer';
-import { AccountsHeader } from './AccountsHeader';
 import AddAccount from './AddAccount';
-import { NetworkSelector } from './NetworkSelector';
 
 const jsonPath = '/account/restore/json';
 const ledgerPath = '/account/import-ledger';
 
 export default function Accounts (): React.ReactElement {
-  const { accounts, hierarchy } = useContext(AccountContext);
+  const { hierarchy } = useContext(AccountContext);
   const { currentAccount,
-    networkState: { isDeveloper, selected: network },
     polymeshAccounts,
     selectedAccount } = useContext(PolymeshContext);
   const history = useHistory();
@@ -35,10 +33,6 @@ export default function Accounts (): React.ReactElement {
 
   const _onOpenLedgerConnect = useCallback(() => windowOpen(ledgerPath), []);
 
-  const getNetworkDashboardLink = () => {
-    return networkLinks[network].dashboard;
-  };
-
   const groupAccounts = () => (array: IdentifiedAccount[]) =>
     array.reduce((groupedAccounts: Record<string, IdentifiedAccount[]>, account: IdentifiedAccount) => {
       const value = account.did ? account.did : 'unassigned';
@@ -47,12 +41,6 @@ export default function Accounts (): React.ReactElement {
 
       return groupedAccounts;
     }, {});
-
-  const setNetwork = async (_network: NetworkName) => {
-    if (_network !== network) {
-      await setPolyNetwork(_network);
-    }
-  };
 
   const groupedAccounts = polymeshAccounts ? groupAccounts()(polymeshAccounts) : {};
 
@@ -102,84 +90,16 @@ export default function Accounts (): React.ReactElement {
     }
   };
 
-  const hasNonHardwareAccount = accounts.some((account) => !account.isHardware);
-
-  const topMenuOptions: Option[] = [
-    {
-      menu: [
-        ...(hasNonHardwareAccount ? [{ label: 'Change password', value: 'changePassword' }] : []),
-        { label: 'Open extension in a new tab', value: 'newWindow' },
-        { label: 'Manage connected dApps', value: 'manageUrlAuth' },
-        {
-          label: (
-            <Flex px='16px'
-              py='8px'>
-              <Checkbox checked={isDeveloper}
-                disabled />
-              <Box ml='s'>
-                <Text variant='b2m'>Display development networks</Text>
-              </Box>
-            </Flex>
-          ),
-          value: 'toggleIsDev'
-        }
-      ]
-    }
-  ];
-
-  const handleTopMenuSelection = (value: string) => {
-    switch (value) {
-      case 'changePassword':
-        return isPopup
-          ? windowOpen('/account/change-password')
-          : history.push('/account/change-password');
-      case 'newWindow':
-        return windowOpen('/');
-      case 'toggleIsDev':
-        return togglePolyIsDev();
-      case 'manageUrlAuth':
-        return history.push('/settings/url-auth');
-    }
-  };
-
-  const openDashboard = () => {
-    chrome.tabs.create({ url: getNetworkDashboardLink() });
-  };
-
   return (
     <>
       {hierarchy.length === 0
         ? <AddAccount />
         : (
           <>
-            <Header>
-              <Flex alignItems='center'
-                flexDirection='row'
-                justifyContent='space-between'
-                mb='m'>
-                <NetworkSelector onSelect={setNetwork} />
-                <Flex flexDirection='row'
-                  justifyContent='center'>
-                  <GrowingButton icon={SvgViewDashboard}
-                    onClick={openDashboard} />
-                  <OptionSelector
-                    className='settings-menu'
-                    onSelect={handleTopMenuSelection}
-                    options={topMenuOptions}
-                    position='bottom-right'
-                    selector={
-                      <Icon Asset={SvgDotsVertical}
-                        color='gray.0'
-                        height={24}
-                        style={{ cursor: 'pointer' }}
-                        width={24} />
-                    }
-                  />
-                </Flex>
-              </Flex>
-              {currentAccount && <AccountsHeader account={currentAccount}
+            <AppHeader>
+              {currentAccount && <AccountMain account={currentAccount}
                 details={true} />}
-            </Header>
+            </AppHeader>
             <AccountsArea id='accounts-container'>
               <Flex
                 justifyContent='space-between'

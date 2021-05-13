@@ -8,7 +8,7 @@ import { ActionContext, PolymeshContext } from '../../components';
 import { approveAuthRequest, rejectAuthRequest } from '../../messaging';
 import { ThemeProps } from '../../types';
 import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
-import { AccountsHeader } from '../Accounts/AccountsHeader';
+import { AccountMain } from '../Accounts/AccountMain';
 
 interface Props {
   authId: string;
@@ -44,7 +44,7 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
         style={{ height: '100%', ...(isFirst ? {} : { display: 'none' }) }}>
         <Box>
           <Header>
-            {currentAccount && <AccountsHeader account={currentAccount}
+            {currentAccount && <AccountMain account={currentAccount}
               details={false} />}
           </Header>
 

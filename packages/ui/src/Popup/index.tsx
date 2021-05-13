@@ -119,7 +119,7 @@ export default function Popup (): React.ReactElement {
               width={20} />
             <Box ml='s'>{status.error.msg}</Box>
           </Flex>,
-          { autoClose: false, toastId: 'error' }
+          { autoClose: false, toastId: 'error', closeButton: true }
         );
       }
     } else {
@@ -133,7 +133,7 @@ export default function Popup (): React.ReactElement {
         // Dismiss any toast that we might've displayed earlier.
         toast.dismiss('offline');
       } else {
-        // Show an un-closable alert about lack of connectivity.
+        // Show an alert about lack of connectivity.
         toast.error(
           <Flex>
             <Icon Asset={SvgCloseCircle}
@@ -142,7 +142,7 @@ export default function Popup (): React.ReactElement {
               width={20} />
             <Box ml='s'>No internet connection</Box>
           </Flex>
-          , { toastId: 'offline', autoClose: false, closeButton: false });
+          , { toastId: 'offline', autoClose: false, closeButton: true });
       }
     });
   }, []);
