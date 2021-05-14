@@ -65,7 +65,7 @@ export default function Accounts (): React.ReactElement {
   const accountMenuItems: Option[] = [
     {
       menu: [
-        { label: 'Create new account', value: 'new' },
+        { label: 'Create new key', value: 'new' },
         { label: 'Restore with recovery phrase', value: 'fromSeed' },
         { label: 'Import account with JSON file', value: 'fromJson' },
         // @TODO to be re-enabled once Polymesh Ledger app is released.
