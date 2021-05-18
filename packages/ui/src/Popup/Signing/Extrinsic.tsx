@@ -28,12 +28,12 @@ function Extrinsic ({ request }: Props): React.ReactElement<Props> {
     const selectedLabel = networkLabels[selectedNetwork];
     const targetLabel = !!targetNetwork && targetNetwork in networkLabels
       ? networkLabels[targetNetwork]
-      : '"Unknown network"';
-    const msg = `${selectedLabel} is selected on wallet while submitted an extrinsic to ${targetLabel}.
+      : 'Unknown network';
+    const msg = `"${selectedLabel}" is selected on wallet while submitting an extrinsic to ${targetLabel}.
     Network and Protocol fee estimation might not be accurate.`;
 
     if (networkMismatch) {
-      toast.warning(
+      toast.error(
         <Flex alignItems='flex-start'
           flexDirection='column'>
           <Flex>
