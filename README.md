@@ -127,4 +127,4 @@ wallet.uid.requestProof({ ticker: 'AMZN' })
 
 ## Security audit
 
-The extension has been reviewed and pen-tested in Q2 2021. The results can be found ![here](docs/audit-may2021.pdf).
+The extension has been reviewed and pen-tested in Q2 2021. The results can be found [here](docs/audit-may2021.pdf).
