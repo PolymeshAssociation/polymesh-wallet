@@ -1,5 +1,6 @@
 import polkadotNetworks from '@polkadot/networks';
 import { Network } from '@polkadot/networks/types';
+import { NetworkName } from '@polymathnetwork/extension-core/types';
 
 const testnetTmp: Network = {
   decimals: [6],
@@ -20,22 +21,26 @@ const polyGenesisHashes = [
   // ITN
   {
     genesisHash: ['0x9deeb940c92ae02111c3bd5baca89970384f4c9849f02a1b2e53e66414d30f9f'],
-    displayName: 'Polymesh - ITN'
+    displayName: 'Polymesh - ITN',
+    networkName: NetworkName.itn
   },
   // Alcyone
   {
     genesisHash: ['0x12fddc9e2128b3fe571e4e5427addcb87fcaf08493867a68dd6ae44b406b39c7'],
-    displayName: 'Polymesh - Development testnet'
+    displayName: 'Polymesh - Development testnet',
+    networkName: NetworkName.alcyone
   },
   // PME
   {
     genesisHash: ['0x56fb854a431370af86de89a0003ca3eb500066ee66eb01a92810369b3dc435c3'],
-    displayName: 'Polymesh - Development testnet'
+    displayName: 'Polymesh - Development testnet',
+    networkName: NetworkName.pme
   },
   // PMF
   {
     genesisHash: ['0xdeaafc11dcd5f779321e493b2a3f16ebee3725ffd398c0cb908e4b86e1b16245'],
-    displayName: 'Polymesh - Staging testnet'
+    displayName: 'Polymesh - Staging testnet',
+    networkName: NetworkName.pmf
   }
 ];
 
@@ -46,6 +51,10 @@ const polymeshNetworks = polyGenesisHashes
   .map((testnet) => ({ ...testnetTmp, ...testnet } as Network));
 
 // Append Polymesh chains to the list
-const networks = polkadotNetworks.concat(polymeshNetworks);
+export const chains = polkadotNetworks.concat(polymeshNetworks);
 
-export default networks.filter((network) => network.hasLedgerSupport);
+export const ledgerChains = chains.filter((network) => network.hasLedgerSupport);
+
+export function genesisToNetworkName (genesis: string): NetworkName | undefined {
+  return polyGenesisHashes.find(({ genesisHash }) => genesisHash[0] === genesis)?.networkName;
+}

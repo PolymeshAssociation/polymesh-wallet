@@ -8,7 +8,7 @@ import { ActionContext, ActivityContext, Password, PolymeshContext, UidContext }
 import { approveUidProvideRequest, isPasswordSet, rejectUidProvideRequest, validatePassword } from '../../messaging';
 import { ThemeProps } from '../../types';
 import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
-import { AccountsHeader } from '../Accounts/AccountsHeader';
+import { AccountMain } from '../Accounts/AccountMain';
 
 interface Props {
   reqId: string;
@@ -100,7 +100,7 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
         style={{ height: '100%', ...(isFirst ? {} : { display: 'none' }) }}
       >
         <Box>
-          <Header>{currentAccount && <AccountsHeader account={currentAccount}
+          <Header>{currentAccount && <AccountMain account={currentAccount}
             details={false} />}</Header>
 
           <Box>
