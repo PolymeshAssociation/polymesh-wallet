@@ -96,7 +96,7 @@ export const ToastContainerStyle = createGlobalStyle`
   background: #f1c40f;
 }
 .Toastify__toast--error {
-  background: #e74c3c;
+  background: #152935;
 }
 .Toastify__toast-body {
   margin: auto 0;

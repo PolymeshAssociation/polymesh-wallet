@@ -83,14 +83,6 @@ export default function Request ({ account: { accountIndex, address, addressOffs
 
     return (
       <>
-        {/* <AppHeader>
-          {signingAccount &&
-            <AccountMain account={signingAccount}
-              details={false}
-            />
-          }
-        </AppHeader> */}
-
         <RequestContent isFirst={isFirst}>
           <Box mt='xs'
             mx='s'>

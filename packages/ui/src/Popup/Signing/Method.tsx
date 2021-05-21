@@ -50,7 +50,6 @@ const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
         </ExpandableDetails>
       </Box>
 
-      {/* <Box mb='l'> */}
       <Box mt='auto'>
         {fees.length > 1 && <Hr color='gray.4' />}
         <Box>
