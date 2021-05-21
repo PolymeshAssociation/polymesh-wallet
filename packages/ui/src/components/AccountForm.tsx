@@ -70,7 +70,7 @@ export const AccountForm: FC<Props> = ({ defaultName, headerText, noHeader, onBa
   return (
     <>
       {!noHeader && <Header headerText={headerText}
-        iconAsset={SvgAccountCardDetailsOutline}></Header>}
+        iconAsset={SvgAccountCardDetailsOutline} />}
       <Box mx='s'>
         {passIsSet && <Box borderColor='gray.4'
           borderRadius={3}
