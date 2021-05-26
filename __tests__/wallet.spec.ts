@@ -9,7 +9,6 @@ describe('Wallet', () => {
   let extensionUrl: string;
 
   const seed = 'wash mosquito come blur bonus guard scissors anchor valid gadget deposit file';
-  const accountId = '5Dye767XSYtqYLNFhVPWpY5phMwD1U5UAV5nJPutY741caDH';
   const accountName = 'Unverified';
 
   const seedVerified = 'mother income drop mail lobster bulk idle swallow stomach patch warfare cloth';
