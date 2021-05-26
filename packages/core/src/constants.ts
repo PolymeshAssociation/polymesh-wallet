@@ -91,6 +91,11 @@ export const uidProvidersWhitelist = [
   'https://alcyone-dashboard.polymesh.live'
 ];
 
+export const uidReadersWhitelist = [
+  'http://localhost:3000',
+  'https://polymathnetwork.github.io/mock-uid-provider'
+];
+
 export const PORTS = {
   EXTENSION: 'polywallet_extension',
   CONTENT: 'polywallet_content'
