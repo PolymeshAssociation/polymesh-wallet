@@ -13,6 +13,7 @@ describe('Wallet', () => {
   const accountName = 'Unverified';
 
   const seedVerified = 'mother income drop mail lobster bulk idle swallow stomach patch warfare cloth';
+  const accountIdVerified = '5CLhoA9tHeBu5La9YsYL5Txn9bWsFuGMqyFBrDqHWXR7pNgY';
   const accountNameVerified = 'Verified';
 
   const indexHash = '#/';
@@ -120,7 +121,25 @@ describe('Wallet', () => {
     });
   });
 
-  describe('Signing', () => {
+  describe('Network & Account selection', () => {
+    it('Select "PME"', async () => {
+      await (await page.waitForSelector('div.settings-menu')).click();
+      await (await page.waitForXPath("//span[text()='Display development networks']")).click();
+
+      await (await page.waitForSelector('div#network-selector')).click();
+
+      await (await page.waitForXPath("//span[text()='PME']")).click();
+
+      // Wait for page loading.
+      await page.waitForTimeout(3000);
+    });
+
+    it('User can select account', async () => {
+      await (await page.waitForXPath(`//span[text()='${accountNameVerified}']`)).click();
+    });
+  });
+
+  describe('APIs', () => {
     let mockApp: puppeteer.Page;
 
     beforeAll(async () => {
@@ -134,7 +153,7 @@ describe('Wallet', () => {
       await mockApp.close();
     });
 
-    it('User can approve transaction after providing password', async () => {
+    it('User can authorize an app', async () => {
       await mockApp.bringToFront();
 
       // Wait for auth popup to open.
@@ -143,9 +162,11 @@ describe('Wallet', () => {
       const authPopup = (await browser.pages()).filter((page) => page.url().includes('notification.html'))[0];
 
       await (await authPopup.waitForXPath("//button[contains(., 'Authorize')]")).click();
+    });
 
+    it('User can approve transaction after providing password', async () => {
       await mockApp.bringToFront();
-      await requestSigning(mockApp, accountId);
+      await requestSigning(mockApp, accountIdVerified);
 
       // Wait for signing popup to open.
       await page.waitForTimeout(1000);
@@ -160,9 +181,33 @@ describe('Wallet', () => {
       await page.bringToFront();
       await page.waitForSelector('#accounts-container');
     });
+
+    it('User can import uID and export it to an app as well', async () => {
+      await mockApp.bringToFront();
+
+      console.log((await browser.pages()).map((page) => page.url()));
+
+      await (await mockApp.waitForXPath("//button[contains(., 'Generate a dummy uID and import it to Polymesh wallet')]")).click();
+
+      // Wait for provision popup to open.
+      await page.waitForTimeout(2000);
+
+      console.log((await browser.pages()).map((page) => page.url()));
+
+      const provisionPopup = (await browser.pages()).filter((page) => page.url().includes('index.html'))[1];
+
+      await provisionPopup.bringToFront();
+      const passInput = await provisionPopup.waitForSelector('input#password');
+
+      await passInput.focus();
+      await passInput.type(globalPass);
+
+      await (await provisionPopup.waitForXPath("//button[contains(., 'Accept uID')]")).click();
+      await page.bringToFront();
+    });
   });
 
-  describe('Changing password', () => {
+  describe.skip('Changing password', () => {
     const wrongCurrentPass = Math.random().toString();
     const newPass = `${globalPass}NEW`;
     const newPassNotMatch = `${globalPass}newNotMatch`;
