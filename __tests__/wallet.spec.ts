@@ -206,7 +206,7 @@ describe('Wallet', () => {
     });
   });
 
-  describe.skip('Changing password', () => {
+  describe('Changing password', () => {
     const wrongCurrentPass = Math.random().toString();
     const newPass = `${globalPass}NEW`;
     const newPassNotMatch = `${globalPass}newNotMatch`;
