@@ -8,7 +8,7 @@ import { ActionContext, ActivityContext, PolymeshContext } from '../../component
 import { approveProofRequest, rejectProofRequest, validatePassword } from '../../messaging';
 import { ThemeProps } from '../../types';
 import { Box, Button, Flex, Header, Heading, Icon, Text, TextInput } from '../../ui';
-import { AccountsHeader } from '../Accounts/AccountsHeader';
+import { AccountMain } from '../Accounts/AccountMain';
 
 interface Props {
   reqId: string;
@@ -67,7 +67,7 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
         <form id='passwordForm'
           onSubmit={handleSubmit(onSubmit)}>
           <Box>
-            <Header>{currentAccount && <AccountsHeader account={currentAccount}
+            <Header>{currentAccount && <AccountMain account={currentAccount}
               details={false} />}</Header>
 
             <Box>

@@ -15,7 +15,7 @@ export interface Props {
   details?: boolean;
 }
 
-export const AccountsHeader: FC<Props> = ({ account, details = true }) => {
+export const AccountMain: FC<Props> = ({ account, details = true }) => {
   const history = useHistory();
   const [editing, setEditing] = useState(false);
   const [newAlias, setNewAlias] = useState('');

@@ -3,10 +3,6 @@ import puppeteer from 'puppeteer';
 
 import { expectHashToEqual, refillTextInput, requestSigning } from './utils';
 
-async function _pages (browser: puppeteer.Browser): Promise<string[]> {
-  return (await browser.pages()).map((page) => page.url());
-}
-
 describe('Wallet', () => {
   let browser: puppeteer.Browser;
   let page: puppeteer.Page;
@@ -141,23 +137,18 @@ describe('Wallet', () => {
     it('User can approve transaction after providing password', async () => {
       await mockApp.bringToFront();
 
-      // Wait for auth popup to open
+      // Wait for auth popup to open.
       await page.waitForTimeout(2000);
-
-      console.log('PAGES 1:', await _pages(browser));
 
       const authPopup = (await browser.pages()).filter((page) => page.url().includes('notification.html'))[0];
 
       await (await authPopup.waitForXPath("//button[contains(., 'Authorize')]")).click();
 
-      console.log('PAGES 2:', await _pages(browser));
-
       await mockApp.bringToFront();
       await requestSigning(mockApp, accountId);
 
+      // Wait for signing popup to open.
       await page.waitForTimeout(1000);
-
-      console.log('PAGES 3:', await _pages(browser));
 
       const signingPopup = (await browser.pages()).filter((page) => page.url().includes('notification.html'))[0];
       const passInput = await signingPopup.waitForSelector('#currentPassword');

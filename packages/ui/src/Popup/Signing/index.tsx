@@ -1,9 +1,12 @@
 import type { SignerPayloadJSON } from '@polkadot/types/types';
 
-import { Header } from '@polymathnetwork/extension-ui/ui';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { getIdentifiedAccounts } from '@polymathnetwork/extension-core/store/getters';
+import { recodeAddress } from '@polymathnetwork/extension-core/utils';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { Loading, SigningReqContext } from '../../components';
+import { AccountMain } from '../Accounts/AccountMain';
+import { AppHeader } from '../AppHeader';
 import Request from './Request';
 import TransactionIndex from './TransactionIndex';
 
@@ -38,11 +41,25 @@ export default function Signing (): React.ReactElement {
       : requests[0]
     : null;
   const isTransaction = !!((request?.request?.payload as SignerPayloadJSON)?.blockNumber);
+  // The singing account, whose details will be displayed in the header.
+  const signingAccount = useMemo(() => {
+    if (request?.account.address) {
+      // Polkadot App actually respects chain ss58format and will encode polymesh public
+      // keys into an address that starts with '2'. However, our stored addresses start with '5'.
+      // Hence, we'll re-encode request address to make sure it could be found in our store.
+      const _address = recodeAddress(request?.account.address);
+      const polymeshAccount = getIdentifiedAccounts().find((account) => account.address === _address);
+
+      return polymeshAccount;
+    }
+
+    return undefined;
+  }, [request]);
 
   return request
     ? (
       <>
-        <Header text={isTransaction ? 'Transaction' : 'Sign message'}>
+        <AppHeader text={isTransaction ? 'Transaction' : 'Sign message'}>
           {requests.length > 1 && (
             <TransactionIndex
               index={requestIndex}
@@ -51,7 +68,12 @@ export default function Signing (): React.ReactElement {
               totalItems={requests.length}
             />
           )}
-        </Header>
+          {signingAccount &&
+            <AccountMain account={signingAccount}
+              details={false}
+            />
+          }
+        </AppHeader>
         <Request
           account={request.account}
           buttonText={'Sign'}

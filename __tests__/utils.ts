@@ -21,7 +21,7 @@ export async function requestSigning (page: puppeteer.Page, address: string): Pr
     blockHash: '0xa9195303fe7e5d25c22943bc6205daa217e6d04ca9ef5938909fc50dc4fc906a',
     blockNumber: '0x0038e185',
     era: '0x5500',
-    genesisHash: '0x12fddc9e2128b3fe571e4e5427addcb87fcaf08493867a68dd6ae44b406b39c7',
+    genesisHash: '0x9deeb940c92ae02111c3bd5baca89970384f4c9849f02a1b2e53e66414d30f9f',
     method: '0x0400ff549b9c93a68c946441854b286f843d6413b54eb490fe2940888bb4203cadb65600',
     nonce: '0x00000000',
     signedExtensions: ['CheckSpecVersion', 'CheckTxVersion', 'CheckGenesis', 'CheckMortality', 'CheckNonce', 'CheckWeight', 'ChargeTransactionPayment', 'StoreCallMetadata'],
