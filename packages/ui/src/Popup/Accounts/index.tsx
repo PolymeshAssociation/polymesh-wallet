@@ -5,7 +5,7 @@ import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
-import React, { useCallback, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
@@ -18,6 +18,10 @@ import AddAccount from './AddAccount';
 
 const jsonPath = '/account/restore/json';
 const ledgerPath = '/account/import-ledger';
+const seedPath = '/account/restore/seed';
+const newAccountPath = '/account/create';
+
+const _openWindow = (path: string) => windowOpen(path);
 
 export default function Accounts (): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
@@ -26,10 +30,6 @@ export default function Accounts (): React.ReactElement {
   const { isLedgerCapable, isLedgerEnabled } = useLedger();
 
   const isPopup = useIsPopup();
-
-  const _openJson = useCallback(() => windowOpen(jsonPath), []);
-
-  const _onOpenLedgerConnect = useCallback(() => windowOpen(ledgerPath), []);
 
   const groupAccounts = () => (array: IdentifiedAccount[]) =>
     array.reduce((groupedAccounts: Record<string, IdentifiedAccount[]>, account: IdentifiedAccount) => {
@@ -72,15 +72,15 @@ export default function Accounts (): React.ReactElement {
   const handleAccountMenuClick = (value: string) => {
     switch (value) {
       case 'new':
-        return history.push('/account/create');
+        return isPopup ? _openWindow(newAccountPath) : history.push(newAccountPath);
       case 'fromSeed':
-        return history.push('/account/restore/seed');
+        return isPopup ? _openWindow(seedPath) : history.push(seedPath);
       case 'fromJson':
-        return isPopup ? _openJson() : history.push(jsonPath);
+        return isPopup ? _openWindow(jsonPath) : history.push(jsonPath);
       case 'fromLedger':
-        return history.push('/account/import-ledger');
+        return history.push(ledgerPath);
       case 'connectLedger':
-        return _onOpenLedgerConnect();
+        return _openWindow(ledgerPath);
     }
   };
 
