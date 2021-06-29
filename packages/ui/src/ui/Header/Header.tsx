@@ -44,14 +44,14 @@ export const Header: FC<HeaderProps> = (props) => {
               backgroundColor='brandLightest'
               borderRadius='50%'
               height={48}
-              px={14}
-              py={14}
+              px={12}
+              py={12}
               width={48}
             >
               <Icon Asset={iconAsset}
                 color='brandMain'
-                height={20}
-                width={20} />
+                height={24}
+                width={24} />
             </Box>
             {pathname !== '/' &&
               <Box style={{ cursor: 'pointer' }}>
