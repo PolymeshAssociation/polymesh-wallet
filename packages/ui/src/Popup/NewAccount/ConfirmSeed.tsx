@@ -168,6 +168,7 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
         <Flex width='100%'>
           <Button minsize
             onClick={onBack}
+            style={{ padding: '0.9rem' }}
             variant='secondary'>
             <Icon Asset={SvgArrowLeft}
               color='gray.1'
