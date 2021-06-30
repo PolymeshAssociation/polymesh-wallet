@@ -5,7 +5,7 @@ export const networkURLs: Record<NetworkName, string> = {
   alcyone: 'wss://alcyone-rpc.polymesh.live',
   pmf: 'wss://pmf.polymath.network',
   pme: 'wss://pme.polymath.network',
-  local: 'ws://localhost:9944'
+  local: 'ws://localhost:9944',
 };
 
 export const networkLabels: Record<NetworkName, string> = {
@@ -13,7 +13,7 @@ export const networkLabels: Record<NetworkName, string> = {
   alcyone: 'Alcyone Testnet',
   pmf: 'PMF',
   pme: 'PME',
-  local: 'Local node'
+  local: 'Local node',
 };
 
 export const networkIsDev: Record<NetworkName, boolean> = {
@@ -21,38 +21,38 @@ export const networkIsDev: Record<NetworkName, boolean> = {
   pmf: true,
   pme: true,
   local: true,
-  itn: false
+  itn: false,
 };
 
-export const dynamicSchemaEnabled: Record <NetworkName, boolean> = {
+export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
   alcyone: true,
   pmf: true,
   pme: true,
   local: false,
-  itn: true
+  itn: true,
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   alcyone: {
     dashboard: 'https://alcyone-dashboard.polymesh.live/',
-    explorer: 'http://18.223.97.65/'
+    explorer: 'http://18.223.97.65/',
   },
   pmf: {
     dashboard: 'https://polymesh-dashboard-beta.herokuapp.com/',
-    explorer: 'http://18.224.67.149/'
+    explorer: 'http://18.224.67.149/',
   },
   pme: {
     dashboard: 'https://polymesh-dashboard-dev.herokuapp.com/',
-    explorer: 'http://ec2-3-15-5-195.us-east-2.compute.amazonaws.com'
+    explorer: 'http://ec2-3-15-5-195.us-east-2.compute.amazonaws.com',
   },
   local: {
     dashboard: 'unknown',
-    explorer: 'unknown'
+    explorer: 'unknown',
   },
   itn: {
     dashboard: 'https://itn-dashboard.polymesh.live/',
-    explorer: 'https://itn-app.polymesh.live/#/explorer'
-  }
+    explorer: 'https://itn-app.polymesh.live/#/explorer',
+  },
 };
 
 export const defaultNetwork: NetworkName = NetworkName.itn;
@@ -66,7 +66,7 @@ export const messages = [
   'pub(accounts.list)',
   'pub(accounts.subscribe)',
   'pub(metadata.provide)',
-  'pub(metadata.list)'
+  'pub(metadata.list)',
 ];
 
 export const polySchemaUrl = 'https://schema.polymesh.live/';
@@ -80,7 +80,7 @@ export const defaultSs58Format = 42;
 export const defaultNetworkState: NetworkState = {
   selected: defaultNetwork,
   ss58Format: defaultSs58Format,
-  isDeveloper: false
+  isDeveloper: false,
 };
 
 export const uidProvidersWhitelist = [
@@ -89,7 +89,8 @@ export const uidProvidersWhitelist = [
   'https://staging.itn-polymesh.fractal.id',
   'https://alcyone-tokenstudio.polymesh.live',
   'https://alcyone-dashboard.polymesh.live',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'https://polymesh-onboarding-dev.herokuapp.com',
 ];
 
 export const uidReadersWhitelist = [
@@ -99,12 +100,12 @@ export const uidReadersWhitelist = [
 
 export const PORTS = {
   EXTENSION: 'polywallet_extension',
-  CONTENT: 'polywallet_content'
+  CONTENT: 'polywallet_content',
 };
 
 export enum ORIGINS {
   EXTENSION = 'polywallet_extension',
-  PAGE = 'polywallet_page'
+  PAGE = 'polywallet_page',
 }
 
 export const PASSWORD_EXPIRY_MIN = 15;
