@@ -13,6 +13,7 @@
     "@polkadot/react-qr": "^0.71.1",
     "@polkadot/util": "^6.3.1",
     "@polkadot/util-crypto": "^6.3.1",
+    "@polymathnetwork/polymesh-ui": "^0.3.379",
     "@tippyjs/react": "^4.2.0",
     "@types/styled-system": "^5.1.10",
     "polished": "^3.6.5",
@@ -24,8 +25,7 @@
     "react-is": "^17.0.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-toastify": "^7.0.4",
-    "styled-components": "^5.1.1",
+    "react-toastify": "^7.0.4", 
     "styled-system": "^5.1.5"
   },
   "devDependencies": {
@@ -37,8 +37,7 @@
     "@types/react-dom": "^17.0.1",
     "@types/react-router": "^5.1.8",
     "@types/react-router-dom": "^5.1.5",
-    "@types/sinon-chrome": "^2.2.9",
-    "@types/styled-components": "^5.1.0",
+    "@types/sinon-chrome": "^2.2.9", 
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "sinon-chrome": "^3.0.1"
