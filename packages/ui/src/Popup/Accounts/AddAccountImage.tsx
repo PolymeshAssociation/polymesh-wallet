@@ -4,8 +4,8 @@
 /* eslint-disable react/jsx-sort-props */
 /* eslint-disable react/jsx-max-props-per-line */
 
+import { styled } from '@polymathnetwork/polymesh-ui';
 import React from 'react';
-import styled from 'styled-components';
 
 import { ThemeProps } from '../../types';
 

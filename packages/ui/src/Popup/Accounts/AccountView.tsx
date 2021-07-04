@@ -1,14 +1,14 @@
 import { networkLinks } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { SvgCheck, SvgDotsVertical, SvgPencilOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
+import { Box, ButtonSmall, Flex, Icon, icons, Text } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { AccountContext, AccountType, ActionContext, OptionSelector, PolymeshContext } from '../../components';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
-import { Box, ButtonSmall, Flex, Icon, LabelWithCopy, Text, TextOverflowEllipsis } from '../../ui';
+import { LabelWithCopy, TextOverflowEllipsis } from '../../ui';
 import { formatAmount } from '../../util/formatters';
 import { NameEdit } from './NameEdit';
 import { AccountInfoGrid, AccountViewGrid, GridItem, UnassignedAccountHoverGrid } from './styles';
@@ -125,7 +125,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               </TextOverflowEllipsis>
               <Flex ml='xs'>
                 <Icon
-                  Asset={SvgPencilOutline}
+                  Asset={icons.SvgPencilOutline}
                   color={nameHover ? 'gray.2' : 'gray.5'}
                   height={16}
                   onClick={editName}
@@ -203,7 +203,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               </TextOverflowEllipsis>
               <Flex ml='xs'>
                 <Icon
-                  Asset={SvgPencilOutline}
+                  Asset={icons.SvgPencilOutline}
                   color={nameHover ? 'gray.2' : 'gray.5'}
                   height={16}
                   onClick={editName}
@@ -250,6 +250,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         <AccountViewGrid>
           <GridItem area='avatar'>
             <Flex height='100%'>
+              {/* FIXME (waiting for Polymesh-UI to add backgroundColor) */}
               <Box
                 backgroundColor='brandLightest'
                 borderRadius='50%'
@@ -283,7 +284,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               <Box width={24}>
                 {isSelected && (
                   <Icon
-                    Asset={SvgCheck}
+                    Asset={icons.SvgCheck}
                     color='brandMain'
                     height={24}
                     width={24}
@@ -294,7 +295,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
                 mt='auto'>
                 <OptionSelector onSelect={(value) => handleMenuClick(address, value)}
                   options={getMenuItems(address)}
-                  selector={<Icon Asset={SvgDotsVertical}
+                  selector={<Icon Asset={icons.SvgDotsVertical}
                     color='gray.1'
                     height={16}
                     style={{ cursor: 'pointer' }}

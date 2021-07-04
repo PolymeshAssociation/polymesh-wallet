@@ -1,16 +1,14 @@
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
-import { SvgPlus } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
 import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
+import { Flex, Icon, icons, styled, Text } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
-import styled from 'styled-components';
 
 import { AccountContext, OptionSelector, PolymeshContext } from '../../components';
-import { Flex, Icon, Text } from '../../ui';
 import { AppHeader } from '../AppHeader';
 import { AccountMain } from './AccountMain';
 import { AccountsContainer } from './AccountsContainer';
@@ -21,6 +19,7 @@ const ledgerPath = '/account/import-ledger';
 
 export default function Accounts (): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
+
   const { currentAccount,
     polymeshAccounts,
     selectedAccount } = useContext(PolymeshContext);
@@ -118,7 +117,7 @@ export default function Accounts (): React.ReactElement {
                     <Flex justifyContent='center'
                       style={{ cursor: 'pointer' }}>
                       <Flex mx='s'>
-                        <Icon Asset={SvgPlus}
+                        <Icon Asset={icons.SvgPlus}
                           color='brandMain'
                           height={14}
                           width={14} />

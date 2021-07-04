@@ -1,13 +1,13 @@
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
+import { Box, Flex, Heading, Icon, icons, Text, TextEllipsis, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 
-import { Box, Flex, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput, TextOverflowEllipsis } from '../../ui';
+import { LabelWithCopy, TextOverflowEllipsis } from '../../ui';
 import { formatAmount, toShortAddress } from '../../util/formatters';
 
 export interface Props {
@@ -67,7 +67,7 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
               {hover && (
                 <Flex ml='xs'>
                   <Icon
-                    Asset={SvgPencilOutline}
+                    Asset={icons.SvgPencilOutline}
                     color='gray.0'
                     height={16}
                     onClick={startEdit}
@@ -85,14 +85,14 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
                 value={newAlias} />
               <Box onClick={saveAlias}
                 style={{ cursor: 'pointer' }}>
-                <Icon Asset={SvgCheck}
+                <Icon Asset={icons.SvgCheck}
                   color='gray.0'
                   height={24}
                   width={24} />
               </Box>
               <Box onClick={stopEdit}
                 style={{ cursor: 'pointer' }}>
-                <Icon Asset={SvgWindowClose}
+                <Icon Asset={icons.SvgWindowClose}
                   color='gray.0'
                   height={24}
                   width={24} />
@@ -182,10 +182,9 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
       {details && (
         <Box mt='m'>
           <Box
+            border='2px solid'
             borderColor='gray.0'
             borderRadius='3'
-            borderStyle='solid'
-            borderWidth={2}
             onClick={showAccountDetails}
             style={{ cursor: 'pointer' }}
           >

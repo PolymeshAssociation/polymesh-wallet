@@ -1,11 +1,11 @@
-import { SvgPolyNew } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Button, Checkbox, Flex, Heading, Icon, icons, Link, Text } from '@polymathnetwork/polymesh-ui';
 // import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 // import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 // import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import React, { useCallback, useContext, useState } from 'react';
 
 import { ActionContext } from '../../components';
-import { Box, Button, Checkbox, Flex, Header, Heading, Icon, Link, Text } from '../../ui';
+import { Header } from '../../ui';
 
 function AddAccount (): React.ReactElement {
   const onAction = useContext(ActionContext);
@@ -45,7 +45,7 @@ function AddAccount (): React.ReactElement {
             padding={18}
             width={72}
           >
-            <Icon Asset={SvgPolyNew}
+            <Icon Asset={icons.SvgPolyNew}
               color='brandMain'
               height={30}
               width={30} />

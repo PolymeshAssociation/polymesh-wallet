@@ -1,11 +1,11 @@
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
-import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
+import { Box, Flex, Icon, icons, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext, useState } from 'react';
 
-import { Box, Flex, Icon, LabelWithCopy, Text, TextInput, TextOverflowEllipsis } from '../../ui';
+import { LabelWithCopy, TextOverflowEllipsis } from '../../ui';
 import { AccountView } from './AccountView';
 
 export interface Props {
@@ -62,13 +62,13 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
                 placeholder='Your Polymesh Account'
                 tight
                 value={newAlias} />
-              <Icon Asset={SvgCheck}
+              <Icon Asset={icons.SvgCheck}
                 color='brandMain'
                 height={20}
                 onClick={saveAlias}
                 style={{ cursor: 'pointer' }}
                 width={20} />
-              <Icon Asset={SvgWindowClose}
+              <Icon Asset={icons.SvgWindowClose}
                 color='brandMain'
                 height={20}
                 onClick={stopEditAlias}
@@ -100,7 +100,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
               </Flex>
               <Flex>
                 <Flex mr='xs'>
-                  <Icon Asset={SvgPencilOutline}
+                  <Icon Asset={icons.SvgPencilOutline}
                     color={hover ? 'brandMain' : headerColor}
                     height={16}
                     onClick={editAlias}
