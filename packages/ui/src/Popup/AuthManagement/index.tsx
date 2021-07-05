@@ -1,6 +1,7 @@
 import { AuthUrlInfo, AuthUrls } from '@polkadot/extension-base/background/handlers/State';
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Flex, Header, Hr, Text } from '@polymathnetwork/extension-ui/ui';
+import { Header } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Hr, Text } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { InputFilter } from '../../components';

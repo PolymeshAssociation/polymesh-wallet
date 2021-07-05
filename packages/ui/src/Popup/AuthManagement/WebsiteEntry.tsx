@@ -1,10 +1,7 @@
 import { AuthUrlInfo } from '@polkadot/extension-base/background/handlers/State';
-import { SvgWeb } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Switch } from '@polymathnetwork/extension-ui/components';
-import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Icon, icons, Text, theme } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback } from 'react';
-
-import { fontSizes } from '../../components/themeDefinitions';
 
 interface Props {
   info: AuthUrlInfo;
@@ -21,12 +18,12 @@ function WebsiteEntry ({ info, toggleAuth, url }: Props): React.ReactElement<Pro
     <Box px='s'>
       <Flex direction='row'>
         <Box pr={10}>
-          <Icon Asset={SvgWeb}
+          <Icon Asset={icons.SvgWeb}
             color='primary'
             height={20}
             width={20} />
         </Box>
-        <Text lineHeight={fontSizes[4]}
+        <Text lineHeight={theme.fontSizes[4]}
           style={{ flex: '1 1' }}
           variant='b2m'>
           {url}
