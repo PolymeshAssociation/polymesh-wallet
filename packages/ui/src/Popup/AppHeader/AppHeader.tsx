@@ -1,12 +1,12 @@
 import { networkLinks } from '@polymathnetwork/extension-core/constants';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
-import { SvgDotsVertical, SvgViewDashboard } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountContext, OptionSelector, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
 import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 import { setPolyNetwork, togglePolyIsDev, windowOpen } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Checkbox, Flex, GrowingButton, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import { GrowingButton } from '@polymathnetwork/extension-ui/ui';
 import { Header, HeaderProps } from '@polymathnetwork/extension-ui/ui/Header/Header';
+import { Box, Checkbox, Flex, Icon, icons, Text } from '@polymathnetwork/polymesh-ui';
 import React, { ReactElement, useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 
@@ -79,7 +79,7 @@ const AppHeader = (props: Props): ReactElement<Props> => {
         <NetworkSelector onSelect={setNetwork} />
         <Flex flexDirection='row'
           justifyContent='center'>
-          <GrowingButton icon={SvgViewDashboard}
+          <GrowingButton icon={icons.SvgViewDashboard}
             onClick={openDashboard} />
           <OptionSelector
             className='settings-menu'
@@ -87,7 +87,7 @@ const AppHeader = (props: Props): ReactElement<Props> => {
             options={topMenuOptions}
             position='bottom-right'
             selector={
-              <Icon Asset={SvgDotsVertical}
+              <Icon Asset={icons.SvgDotsVertical}
                 color='gray.0'
                 height={24}
                 style={{ cursor: 'pointer' }}
