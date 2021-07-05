@@ -1,10 +1,6 @@
-import { SvgContentCopy } from '@polymathnetwork/extension-ui/assets/images/icons';
-import React, { FC, useEffect, useState } from 'react';
-import CopyToClipboard from 'react-copy-to-clipboard';
+import { CopyableText, Flex, Text } from '@polymathnetwork/polymesh-ui';
+import React, { FC, useState } from 'react';
 
-import { Flex } from '../Flex';
-import { Icon } from '../Icon';
-import { Text } from '../Text';
 import { TextEllipsis } from '../TextEllipsis';
 import * as sc from './styles';
 
@@ -18,8 +14,6 @@ export interface Props {
 
 export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, textVariant }) => {
   const [hover, setHover] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [timerRef, setTimerRef] = useState<ReturnType<typeof setTimeout>>();
 
   const onMouseOver = () => {
     setHover(true);
@@ -33,49 +27,32 @@ export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, te
     if (e.stopPropagation) e.stopPropagation();
   };
 
-  useEffect(() => {
-    return () => {
-      if (timerRef) clearTimeout(timerRef);
-    };
-  }, [timerRef]);
-
-  const handleCopy = () => {
-    setCopied(true);
-    setTimerRef(
-      setTimeout(() => {
-        setCopied(false);
-      }, 2000)
-    );
-  };
-
   const foreColor = hover ? hoverColor && hoverColor !== '' ? hoverColor : color : color;
 
   return (
-    <sc.StatusText copied={copied}>
+    <sc.StatusText>
       <Flex alignItems='center'
         onMouseOut={onMouseOut}
         onMouseOver={onMouseOver}
       >
         <Text color={foreColor}
-          variant={textVariant}>
+          variant={textVariant}
+        >
           <TextEllipsis size={textSize}>
             {text}
           </TextEllipsis>
         </Text>
-        <CopyToClipboard onCopy={handleCopy}
-          text={text}>
-          <Flex height={24}
-            ml='xs'
-            onClick={handleClick}>
-            <Icon Asset={SvgContentCopy}
-              color={foreColor}
-              height={16}
-              opacity={hover ? 1 : 0}
-              style={{ cursor: 'pointer' }}
-              width={16}
-            />
-          </Flex>
-        </CopyToClipboard>
+        <Flex height={24}
+          ml='xs'
+          onClick={handleClick}>
+          <Text
+            style={{ opacity: hover ? '1' : '0' }}
+            width={16}
+          >
+            <CopyableText color={foreColor}
+              copyText={text} />
+          </Text>
+        </Flex>
       </Flex>
     </sc.StatusText>
   );
