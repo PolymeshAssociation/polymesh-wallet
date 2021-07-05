@@ -1,13 +1,12 @@
 import { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
-import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { truncateString } from '@polymathnetwork/extension-ui/util/formatters';
+import { Box, Button, Flex, Heading, Icon, icons, styled, Text } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext } from 'react';
-import styled from 'styled-components';
 
 import { ActionContext, PolymeshContext } from '../../components';
 import { approveAuthRequest, rejectAuthRequest } from '../../messaging';
 import { ThemeProps } from '../../types';
-import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
+import { Header } from '../../ui';
 import { AccountMain } from '../Accounts/AccountMain';
 
 interface Props {
@@ -52,7 +51,7 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
             <Box mt='m'
               mx='s'>
               <Heading mb={1}
-                variant='h5'>{'An application is requesting access'}</Heading>
+                variant='h5'>An application is requesting access</Heading>
               <Text color='gray.2'
                 variant='b2'>
                 An application, self-identifying as <strong>{truncateString(origin, 40)}</strong>
@@ -75,7 +74,7 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
                 m='xs'
                 p='s'>
                 <Flex>
-                  <Icon Asset={SvgAlertCircle}
+                  <Icon Asset={icons.SvgAlertCircle}
                     color='warning'
                     height={20}
                     width={20} />
