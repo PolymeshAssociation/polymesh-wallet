@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
-import { BoxProps } from '@polymathnetwork/extension-ui/ui/Box';
+import { Box, BoxProps, Flex, Text } from '@polymathnetwork/polymesh-ui';
 import React, { CSSProperties, Fragment, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
