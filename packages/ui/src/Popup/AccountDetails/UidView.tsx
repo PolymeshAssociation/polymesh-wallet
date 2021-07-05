@@ -1,5 +1,5 @@
-import { SvgInfo, SvgLockOpenOutline, SvgLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Flex, Icon, LabelWithCopy, Text, Tooltip } from '@polymathnetwork/extension-ui/ui';
+import { LabelWithCopy } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Icon, icons, Text, Tooltip } from '@polymathnetwork/polymesh-ui';
 import React, { FC } from 'react';
 
 export interface Props {
@@ -28,7 +28,7 @@ export const UidView: FC<Props> = ({ isHidden, showHideUid, uid }) => {
               <Tooltip content={<Text variant='c2'>Your investor uID</Text>}
                 placement='bottom'
                 variant='secondary'>
-                <Icon Asset={SvgInfo}
+                <Icon Asset={icons.SvgInfo}
                   color='brandMain'
                   height={14}
                   style={{ cursor: 'pointer' }}
@@ -43,7 +43,7 @@ export const UidView: FC<Props> = ({ isHidden, showHideUid, uid }) => {
             style={{ cursor: 'pointer' }}>
             <Box>
               <Icon
-                Asset={isHidden ? SvgLockOpenOutline : SvgLockOutline}
+                Asset={isHidden ? icons.SvgEmailOpenOutline : icons.SvgLockOutline}
                 color='brandMain'
                 height={21}
                 style={{ cursor: 'pointer' }}
@@ -69,7 +69,8 @@ export const UidView: FC<Props> = ({ isHidden, showHideUid, uid }) => {
         {!isHidden && <LabelWithCopy color='brandMain'
           text={uid}
           textSize={39}
-          textVariant='b2' />}
+          textVariant='b2' />
+        }
       </Box>
     </Box>
   );

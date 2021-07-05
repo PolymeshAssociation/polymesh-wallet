@@ -1,5 +1,4 @@
-import { SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Button, Flex, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Icon, icons, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -37,7 +36,7 @@ export const DecodeUid: FC<Props> = ({ decode, onClose }) => {
         </Box>
         <Box>
           <Icon
-            Asset={SvgClose}
+            Asset={icons.SvgClose}
             color='gray.3'
             height={14}
             onClick={onClose}

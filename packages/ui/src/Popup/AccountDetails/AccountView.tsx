@@ -1,9 +1,9 @@
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
-import { Box, Flex, Hr, Icon, LabelWithCopy, StatusBadge, Text, TextEllipsis, TextOverflowEllipsis } from '@polymathnetwork/extension-ui/ui';
+import { LabelWithCopy, TextOverflowEllipsis } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Hr, Icon, icons, StatusBadge, Text, TextEllipsis } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext } from 'react';
 
 import { formatAmount } from '../../util/formatters';
@@ -38,7 +38,10 @@ export const AccountView: FC<Props> = ({ address,
     const color = keyType === 'primary' ? 'green' : 'blue';
     const text = keyType === 'primary' ? 'Primary' : 'Secondary';
 
-    return selectedAccount?.did && <StatusBadge variant={color}>{text}</StatusBadge>;
+    // FIXME: polymesh-ui could have small attr for <StatusBadge />
+    return selectedAccount?.did && <StatusBadge
+      style={{ lineHeight: '16px', height: '16px', marginLeft: '0' }}
+      variant={color}>{text}</StatusBadge>;
   };
 
   return (
@@ -54,7 +57,7 @@ export const AccountView: FC<Props> = ({ address,
         </Box>
         <Box>
           <Icon
-            Asset={SvgClose}
+            Asset={icons.SvgClose}
             color='gray.3'
             height={14}
             onClick={onClose}
@@ -148,7 +151,8 @@ export const AccountView: FC<Props> = ({ address,
         <Flex justifyContent='space-between'
           mx='s'>
           <Box>
-            <Box backgroundColor='brandLightest'
+            <Box
+              bg='brandLightest'
               borderRadius='50%'
               height={40}
               px='2'
