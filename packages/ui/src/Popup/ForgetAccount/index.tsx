@@ -1,5 +1,7 @@
-import { SvgAlertCircle, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+// FIXME: SvgFileLockOutline deletion
+import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Button, Header } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Icon, icons, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 import { useForm } from 'react-hook-form';
@@ -65,7 +67,7 @@ export const ForgetAccount: FC = () => {
           borderWidth={2}
           p='s'>
           <Flex>
-            <Icon Asset={SvgAlertCircle}
+            <Icon Asset={icons.SvgAlertCircle}
               color='alert'
               height={20}
               width={20} />
