@@ -1,6 +1,9 @@
+// FIXME: remove me after polymesh-ui update
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { globalChangePass, validatePassword } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+// FIXME: remove me(Button) after busy implemenation in the polymesh-ui
+import { Button, Header } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, icons, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
