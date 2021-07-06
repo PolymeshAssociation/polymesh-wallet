@@ -1,14 +1,14 @@
+// FIXME: removing the SVGs
 import SvgConnectLedger from '@polymathnetwork/extension-ui/assets/images/connect-ledger.svg';
 import { SvgAlertCircle, SvgInfo, SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
 import SvgInstallLedgerApp from '@polymathnetwork/extension-ui/assets/images/install-ledger-app.svg';
 import SvgPlugInLedger from '@polymathnetwork/extension-ui/assets/images/plug-in-ledger.svg';
-import { colors, texts } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { Status } from '@polymathnetwork/extension-ui/hooks/useLedger';
-import { Box, Button, Flex, Heading, Icon, Link, Loading, Text } from '@polymathnetwork/extension-ui/ui';
+import { Heading } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Icon, Link, Loading, styled, Text, theme } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { toast } from 'react-toastify';
-import styled from 'styled-components';
 
 const toastId = 'ledger-connection-failed';
 
@@ -219,18 +219,18 @@ const Step = styled.li`
 
   ::before {
     content: counter(step);
-    ${texts.b1m};
+    ${theme.texts.b1m};
     position: absolute;
     left: 0;
     top: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: ${colors.brandLightest};
+    background: ${theme.colors.brandLightest};
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    color: ${colors.brandMain};
+    color: ${theme.colors.brandMain};
   }
 
   :not(:last-child)::after {
@@ -240,7 +240,7 @@ const Step = styled.li`
     top: calc(32px + 16px + 8px);
     bottom: calc(-32px - 16px - 8px);
     width: 2px;
-    background: ${colors.brandLightest};
+    background: ${theme.colors.brandLightest};
   }
 `;
 

@@ -2,16 +2,15 @@ import { ErrorMessage } from '@hookform/error-message';
 import settings from '@polkadot/ui-settings';
 import { genesisHash } from '@polymathnetwork/extension-core/constants';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { SvgChevronDown, SvgLedgerLogo, SvgSettingsOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountContext, ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Header } from '@polymathnetwork/extension-ui/ui';
 import { formatters } from '@polymathnetwork/extension-ui/util';
+import { Box, Button, Flex, Icon, icons, styled, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import styled from 'styled-components';
 
 import { TroubleshootGuide } from './TroubleshootGuide';
 
@@ -145,7 +144,7 @@ function ImportLedger (): React.ReactElement {
         </Box>
         : <>
           <Header headerText='Import Ledger account'
-            iconAsset={SvgLedgerLogo}>
+            iconAsset={icons.SvgLedgerLogo}>
             <Box>
               <Text color='gray.0'
                 variant='b2'>
@@ -215,10 +214,10 @@ function ImportLedger (): React.ReactElement {
 
               <Box my='l'
                 width='100%'>
-                <SettingsButton mb='m'
+                <Button mb='m'
                   onClick={toggleShowingSettings}
                   width='100%'>
-                  <Icon Asset={SvgSettingsOutline}
+                  <Icon Asset={icons.SvgSettingsOutline}
                     color='brandMain'
                     height='20px'
                     width='20px' />
@@ -228,12 +227,12 @@ function ImportLedger (): React.ReactElement {
                     </Text>
                   </Box>
                   <Box ml='auto'>
-                    <Icon Asset={SvgChevronDown}
+                    <Icon Asset={icons.SvgChevronDown}
                       color='brandMain'
                       height='20px'
                       width='20px' />
                   </Box>
-                </SettingsButton>
+                </Button>
 
                 {isShowingSettings &&
                 <>
@@ -287,11 +286,5 @@ function ImportLedger (): React.ReactElement {
 export default styled(ImportLedger)`
   .refreshIcon {
     margin-right: 0.3rem;
-  }
-`;
-
-const SettingsButton = styled(Flex)`
-  :hover {
-    cursor: pointer;
   }
 `;
