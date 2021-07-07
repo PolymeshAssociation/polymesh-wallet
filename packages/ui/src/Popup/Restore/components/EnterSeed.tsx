@@ -1,4 +1,6 @@
-import { Box, Button, Flex, Text, TextArea } from '@polymathnetwork/extension-ui/ui';
+// FIXME: textarea
+import { TextArea } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Text } from '@polymathnetwork/polymesh-ui';
 import React, { ChangeEvent, FC, useState } from 'react';
 
 import { validateSeed } from '../../../messaging';

@@ -2,16 +2,11 @@ import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { hexToU8a, isHex, u8aToString } from '@polkadot/util';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box,
-  Button,
+import { Button,
   ButtonSmall,
-  Flex,
-  Icon,
-  LabelWithCopy,
-  Text,
-  TextEllipsis,
-  TextInput } from '@polymathnetwork/extension-ui/ui';
+  LabelWithCopy } from '@polymathnetwork/extension-ui/ui';
 import verifyJsonPassword from '@polymathnetwork/extension-ui/util/verifyJsonPassword';
+import { Box, Flex, Icon, Text, TextEllipsis, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext, useRef, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -157,7 +152,7 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
           <>
             <Flex>
               <Box mt='m'>
-                <Box backgroundColor='gray.4'
+                <Box bg='gray.4'
                   borderRadius='50%'
                   height={24}
                   px='1'
@@ -187,7 +182,7 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
             <Box mt='m'>
               <Flex justifyContent='space-between'>
                 <Box>
-                  <Box backgroundColor='brandLightest'
+                  <Box bg='brandLightest'
                     borderRadius='50%'
                     height={40}
                     px='2'
