@@ -5,7 +5,7 @@ import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
@@ -21,9 +21,7 @@ const ledgerPath = '/account/import-ledger';
 
 export default function Accounts (): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
-  const { currentAccount,
-    polymeshAccounts,
-    selectedAccount } = useContext(PolymeshContext);
+  const { currentAccount, polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
   const history = useHistory();
   const { isLedgerCapable, isLedgerEnabled } = useLedger();
 
@@ -65,10 +63,9 @@ export default function Accounts (): React.ReactElement {
               value: 'fromLedger'
               // @TODO: add "disabled" option feature in OptionSelector
               // disabled: !isLedgerCapable
-            },
-            { label: 'Connect Ledger device', value: 'connectLedger' }
+            }
           ]
-          : [])
+          : [{ label: 'Connect Ledger device', value: 'connectLedger' }])
       ]
     }
   ];
@@ -91,21 +88,20 @@ export default function Accounts (): React.ReactElement {
   return (
     <>
       {hierarchy.length === 0
-        ? <AddAccount />
+        ? (
+          <AddAccount />
+        )
         : (
           <>
-            <AppHeader>
-              {currentAccount && <AccountMain account={currentAccount}
-                details={true} />}
-            </AppHeader>
+            <AppHeader>{currentAccount && <AccountMain account={currentAccount}
+              details={true} />}</AppHeader>
             <AccountsArea id='accounts-container'>
-              <Flex
-                justifyContent='space-between'
+              <Flex justifyContent='space-between'
                 pt='m'
                 px='s'>
                 <Text color='gray.1'
                   variant='c2'>
-                ACCOUNTS
+                  ACCOUNTS
                 </Text>
                 <OptionSelector
                   className='add-key-menu'
@@ -123,7 +119,7 @@ export default function Accounts (): React.ReactElement {
                       </Flex>
                       <Text color='brandMain'
                         variant='b2'>
-                                    Add a key
+                        Add a key
                       </Text>
                     </Flex>
                   }
