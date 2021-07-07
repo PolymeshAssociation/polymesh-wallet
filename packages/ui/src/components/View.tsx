@@ -1,9 +1,9 @@
+import { createGlobalStyle, styled, styledComponents } from '@polymathnetwork/polymesh-ui';
 import React, { useState } from 'react';
-import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 import { ThemeProps } from '../types';
 // FIXME We should not import from index when this one is imported there as well
-import { AvailableThemes, chooseTheme, themes, ThemeSwitchContext } from '.';
+import { AvailableThemes, chooseTheme, themes } from '.';
 
 interface Props {
   children: React.ReactNode;
@@ -13,19 +13,20 @@ interface Props {
 function View ({ children, className }: Props): React.ReactElement<Props> {
   const [theme, setTheme] = useState(chooseTheme());
   const _theme = themes[theme];
+  const { ThemeProvider } = styledComponents;
 
-  const switchTheme = (theme: AvailableThemes): void => {
-    localStorage.setItem('theme', theme);
-    setTheme(theme);
-  };
+  // const switchTheme = (theme: AvailableThemes): void => {
+  //   localStorage.setItem('theme', theme);
+  //   setTheme(theme);
+  // };
 
   return (
-    <ThemeSwitchContext.Provider value={switchTheme}>
-      <ThemeProvider theme={_theme}>
-        <BodyTheme theme={_theme} />
-        <Main className={className}>{children}</Main>
-      </ThemeProvider>
-    </ThemeSwitchContext.Provider>
+    <ThemeProvider theme={_theme}>
+      <BodyTheme theme={_theme} />
+      <Main className={className}>
+        {children}
+      </Main>
+    </ThemeProvider>
   );
 }
 

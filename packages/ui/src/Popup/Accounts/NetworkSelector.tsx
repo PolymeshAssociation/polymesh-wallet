@@ -3,9 +3,7 @@ import { NetworkName } from '@polymathnetwork/extension-core/types';
 import { SvgCheck, SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { OptionSelector, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
-import { colors } from '@polymathnetwork/extension-ui/components/themeDefinitions';
-import { styled } from '@polymathnetwork/extension-ui/styles';
-import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Icon, styled, Text, theme } from '@polymathnetwork/polymesh-ui';
 import React, { useContext } from 'react';
 
 const DEV_NETWORK_COLORS = {
@@ -59,7 +57,7 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
             key={network}
             px='16px'
             py='8px'
-            {...(isCurrentNetwork && { style: { background: colors.gray[5] } })}
+            {...(isCurrentNetwork && { style: { background: theme.colors.gray[5] } })}
           >
             <NetworkCircle
               background={NETWORK_COLORS[network as NetworkName].backgrounds[0]}

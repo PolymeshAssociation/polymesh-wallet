@@ -10,12 +10,12 @@ import { ProofingRequest, ProvideUidRequest } from '@polymathnetwork/extension-c
 import { defaultNetworkState } from '@polymathnetwork/extension-core/constants';
 import { ErrorCodes, IdentifiedAccount, NetworkState, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
+import { Box, Flex, Icon, icons } from '@polymathnetwork/polymesh-ui';
 import React, { useEffect, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 import { Route, Switch } from 'react-router';
 import { toast } from 'react-toastify';
 
-import { SvgCloseCircle } from '../assets/images/icons';
 import { Loading } from '../components';
 import { AccountContext,
   ActionContext,
@@ -41,7 +41,6 @@ import { busySubscriber,
   subscribeSigningRequests,
   subscribeUidRecords } from '../messaging';
 import { PolymeshContext as PolymeshContextType } from '../types';
-import { Box, Flex, Icon } from '../ui';
 import { Toast } from '../ui/Toast';
 import { buildHierarchy } from '../util/buildHierarchy';
 import ImportLedger from './ImportLedger/ImportLedger';
@@ -113,7 +112,7 @@ export default function Popup (): React.ReactElement {
         // Otherwise, we just inform the user via a Toast component.
         toast.error(
           <Flex>
-            <Icon Asset={SvgCloseCircle}
+            <Icon Asset={icons.SvgCloseCircle}
               color='red.0'
               height={20}
               width={20} />
@@ -136,7 +135,7 @@ export default function Popup (): React.ReactElement {
         // Show an alert about lack of connectivity.
         toast.error(
           <Flex>
-            <Icon Asset={SvgCloseCircle}
+            <Icon Asset={icons.SvgCloseCircle}
               color='red.0'
               height={20}
               width={20} />

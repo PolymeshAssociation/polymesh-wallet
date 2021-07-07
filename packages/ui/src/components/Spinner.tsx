@@ -1,5 +1,5 @@
+import { styled } from '@polymathnetwork/polymesh-ui';
 import React from 'react';
-import styled from 'styled-components';
 
 import spinnerSrc from '../assets/spinner.png';
 import { ThemeProps } from '../types';

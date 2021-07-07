@@ -1,5 +1,5 @@
+import { styled } from '@polymathnetwork/polymesh-ui';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 
 import { ThemeProps } from '../types';
 import { Result, Validator } from '../util/validators';

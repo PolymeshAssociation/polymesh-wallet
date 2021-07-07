@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HashRouter } from 'react-router-dom';
 
-import { ErrorFallback, Fonts, View } from './components';
+import { ErrorFallback, View } from './components';
 
 export default function createView (Entry: React.ComponentType, rootId = 'root'): void {
   // @FIXME dirty hack
@@ -20,10 +20,9 @@ export default function createView (Entry: React.ComponentType, rootId = 'root')
 
   ReactDOM.render(
     <Suspense fallback='...'>
-      <Fonts />
+      {/* <Fonts /> */}
       <View>
         <HashRouter>
-
           <ErrorBoundary
             FallbackComponent={ErrorFallback}
             onReset={() => {

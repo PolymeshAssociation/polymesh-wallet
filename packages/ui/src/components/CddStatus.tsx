@@ -1,6 +1,5 @@
 import { CDD } from '@polymathnetwork/extension-core/types';
-import { SvgAlertCircle, SvgCheckboxMarkedCircle, SvgProgressClock } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import { Flex, Icon, icons, Text } from '@polymathnetwork/polymesh-ui';
 import React, { FC } from 'react';
 
 type Props = {
@@ -25,10 +24,10 @@ const statusColor: Record<Status, string> = {
 };
 
 const statusIcon: Record<Status, React.ComponentType<React.SVGAttributes<SVGElement>>> = {
-  checking: SvgProgressClock,
-  expired: SvgAlertCircle,
-  unverified: SvgAlertCircle,
-  verified: SvgCheckboxMarkedCircle
+  checking: icons.SvgProgressClock,
+  expired: icons.SvgAlertCircle,
+  unverified: icons.SvgAlertCircle,
+  verified: icons.SvgCheckboxMarkedCircle
 };
 
 export const CddStatus: FC<Props> = ({ cdd, withText = false }) => {

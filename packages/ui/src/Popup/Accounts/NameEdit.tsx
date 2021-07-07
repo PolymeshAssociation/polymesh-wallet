@@ -1,5 +1,4 @@
-import { SvgCheck, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Flex, Icon, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Icon, icons, TextInput } from '@polymathnetwork/polymesh-ui';
 import React from 'react';
 
 type NameEditProps = {
@@ -14,19 +13,20 @@ export function NameEdit ({ newName, onCancel, onChange, onSave }: NameEditProps
     <Box py='3px'>
       <Flex alignItems='center'
         flexDirection='row'>
+        {/* FIXME: tight attr */}
         <TextInput
           onChange={onChange}
           tight
           value={newName} />
         <Box ml='xs'>
-          <Icon Asset={SvgCheck}
+          <Icon Asset={icons.SvgCheck}
             color='gray.2'
             height={16}
             onClick={onSave}
             width={16} />
         </Box>
         <Box ml='xs'>
-          <Icon Asset={SvgWindowClose}
+          <Icon Asset={icons.SvgWindowClose}
             color='gray.2'
             height={16}
             onClick={onCancel}

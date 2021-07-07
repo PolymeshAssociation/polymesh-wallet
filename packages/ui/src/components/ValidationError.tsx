@@ -1,6 +1,5 @@
+import { Box, Text } from '@polymathnetwork/polymesh-ui';
 import React from 'react';
-
-import { Box, Text } from '../ui';
 
 interface Props {
   children: React.ReactNode;

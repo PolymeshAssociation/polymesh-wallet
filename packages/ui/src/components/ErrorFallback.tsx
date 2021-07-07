@@ -1,14 +1,12 @@
-import { SvgCrossOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Button, Heading, IconCircled, icons, Text } from '@polymathnetwork/polymesh-ui';
 import React, { FC } from 'react';
 import { FallbackProps } from 'react-error-boundary';
-
-import { Box, Button, Heading, IconCircled, Text } from '../ui';
 
 const ErrorBoundaryFallback: FC<FallbackProps> = ({ error, resetErrorBoundary }) => {
   return (
     <>
       <Box mt='xl'>
-        <IconCircled Asset={SvgCrossOutline}
+        <IconCircled Asset={icons.SvgCrossOutline}
           bg='red.1'
           color='red.0'
           scale={0.7} />

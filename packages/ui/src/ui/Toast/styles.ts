@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from '@polymathnetwork/polymesh-ui/';
 
 export const ToastContainerStyle = createGlobalStyle`
 .Toastify__toast-container {

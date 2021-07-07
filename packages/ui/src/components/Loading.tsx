@@ -1,6 +1,5 @@
+import { Flex, Loading as LoadingIndicator } from '@polymathnetwork/polymesh-ui';
 import React from 'react';
-
-import { Flex, Loading as LoadingIndicator } from '../ui';
 
 interface Props {
   children?: React.ReactNode;

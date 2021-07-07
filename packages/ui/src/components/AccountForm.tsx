@@ -1,7 +1,8 @@
-import { SvgAccountCardDetailsOutline, SvgAlertCircle, SvgArrowLeft } from '@polymathnetwork/extension-ui/assets/images/icons';
+// FIXME: icons
+import { SvgAccountCardDetailsOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
 import { isPasswordSet, validatePassword } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Header, Icon, icons, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -79,7 +80,7 @@ export const AccountForm: FC<Props> = ({ defaultName, headerText, noHeader, onBa
           mt='s'
           p='s'>
           <Flex mb='xs'>
-            <Icon Asset={SvgAlertCircle}
+            <Icon Asset={icons.SvgAlertCircle}
               color='warning'
               height={20}
               width={20} />
@@ -142,10 +143,11 @@ export const AccountForm: FC<Props> = ({ defaultName, headerText, noHeader, onBa
         m='s'>
         <Flex mb='s'
           width='100%'>
+          {/* FIXME */}
           <Button minsize
             onClick={onBack}
             variant='secondary'>
-            <Icon Asset={SvgArrowLeft}
+            <Icon Asset={icons.SvgArrowLeft}
               color='gray.1'
               height={16}
               width={16} />

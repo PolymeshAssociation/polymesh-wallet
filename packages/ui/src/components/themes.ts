@@ -1,46 +1,7 @@
-import { borderWidths,
-  breakpoints,
-  colors,
-  fontFamilies,
-  fontSizes,
-  fontWeights,
-  footer,
-  header,
-  headings,
-  lineHeights,
-  links,
-  maxWidth, radii,
-  shadows,
-  sidebar,
-  space,
-  texts,
-  transitions,
-  zIndexes } from './themeDefinitions';
-
-const polymathTheme = {
-  breakpoints,
-  fontSizes,
-  fontFamilies,
-  lineHeights,
-  fontWeights,
-  space,
-  zIndexes,
-  colors,
-  shadows,
-  radii,
-  headings,
-  texts,
-  links,
-  transitions,
-  maxWidth,
-  header,
-  sidebar,
-  footer,
-  borderWidths
-};
+import { theme } from '@polymathnetwork/polymesh-ui';
 
 const darkTheme = {
-  ...polymathTheme,
+  ...theme,
   accountBackground: '#1A1B20',
   accountDotsIconColor: '#8E8E8E',
   addAccountImageBackground: '#1A1B20',

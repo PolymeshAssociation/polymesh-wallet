@@ -48,9 +48,7 @@ export const Wrapper = styled.div<LoadingProps>`
     border-bottom-left-radius: 32px;
   }
   span:before {
-    content: '';
-    border-width: ${({ small }) => (small ? '2px' : '5px')};
-    border-color: ${({ theme }) => theme.colors.primary};
+    content: ''; 
     border-style: solid;
     border-right-color: transparent;
     animation: 4s ${mask} infinite linear;

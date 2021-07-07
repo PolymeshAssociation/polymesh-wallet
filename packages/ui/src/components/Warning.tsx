@@ -1,5 +1,5 @@
+import { styled } from '@polymathnetwork/polymesh-ui';
 import React from 'react';
-import styled from 'styled-components';
 
 import warningImageSrc from '../assets/warning.svg';
 import { ThemeProps } from '../types';

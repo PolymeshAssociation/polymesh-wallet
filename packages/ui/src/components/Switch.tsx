@@ -1,7 +1,7 @@
 import type { ThemeProps } from '../types';
 
+import { styled } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback } from 'react';
-import styled from 'styled-components';
 
 interface Props extends ThemeProps {
   checked: boolean;

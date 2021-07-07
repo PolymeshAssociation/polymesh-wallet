@@ -1,6 +1,5 @@
+import { StatusBadge } from '@polymathnetwork/polymesh-ui';
 import React, { FC } from 'react';
-
-import { StatusBadge } from '../ui';
 
 export interface Props {
   keyType?: string;
@@ -12,7 +11,7 @@ export const AccountType: FC<Props> = ({ keyType, large }) => {
   const text = keyType === 'primary' ? 'Primary' : 'Secondary';
 
   return (
-    <StatusBadge large={large}
+    <StatusBadge
       variant={color}>{text}</StatusBadge>
   );
 };

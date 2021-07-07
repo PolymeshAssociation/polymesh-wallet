@@ -1,7 +1,7 @@
+/* eslint-disable react/jsx-no-comment-textnodes */
+import { Box, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
-
-import { Box, Text, TextInput } from '../ui';
 
 export interface Props {
   label: string;

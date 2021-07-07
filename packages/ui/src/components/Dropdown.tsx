@@ -1,7 +1,7 @@
 import type { ThemeProps } from '../types';
 
+import { styled } from '@polymathnetwork/polymesh-ui';
 import React from 'react';
-import styled from 'styled-components';
 
 import arrow from '../assets/arrow-down.svg';
 import Label from './Label';

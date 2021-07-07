@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from '@polymathnetwork/polymesh-ui';
 
 import { ThemeProps } from '../types';
 

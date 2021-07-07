@@ -130,7 +130,7 @@ export const ChangePassword: FC = () => {
         justifyContent='flex-end'
         mb='s'
         mx='s'>
-        <Button busy={isBusy}
+        <Button busy={true}
           fluid
           form='passwordForm'
           type='submit'>
