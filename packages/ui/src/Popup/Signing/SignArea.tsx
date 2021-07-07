@@ -1,6 +1,7 @@
 import { PASSWORD_EXPIRY_MIN } from '@polymathnetwork/extension-core/constants';
 import { ActionContext } from '@polymathnetwork/extension-ui/components';
-import { Box, Button, Checkbox, Flex } from '@polymathnetwork/extension-ui/ui';
+import { Button } from '@polymathnetwork/extension-ui/ui';
+import { Box, Checkbox, Flex } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';

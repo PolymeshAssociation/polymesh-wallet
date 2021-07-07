@@ -1,4 +1,4 @@
-import { Box, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback } from 'react';
 
 interface Props {

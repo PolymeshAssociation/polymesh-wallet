@@ -1,7 +1,8 @@
 import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
 
 import { ActionContext, Warning } from '@polymathnetwork/extension-ui/components';
-import { Button, Flex } from '@polymathnetwork/extension-ui/ui';
+import { Button } from '@polymathnetwork/extension-ui/ui';
+import { Flex } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 
 import { Status, useLedger } from '../../hooks/useLedger';

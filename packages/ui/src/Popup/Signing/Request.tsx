@@ -3,9 +3,8 @@ import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
 import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 
 import { TypeRegistry } from '@polkadot/types';
-import { Box, Heading } from '@polymathnetwork/extension-ui/ui';
+import { Box, Heading, styled } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 
 import { ActionContext, VerticalSpace } from '../../components';
 import { approveSignSignature } from '../../messaging';

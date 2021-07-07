@@ -1,5 +1,5 @@
+import { styled } from '@polymathnetwork/polymesh-ui';
 import React from 'react';
-import styled from 'styled-components';
 
 import ArrowLeftImage from '../../assets/arrowLeft.svg';
 import { Svg } from '../../components';
