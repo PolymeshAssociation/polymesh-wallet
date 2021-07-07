@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Text } from '@polymathnetwork/polymesh-ui';
 import React, { FC } from 'react';
 
 export interface Props {
@@ -8,14 +8,14 @@ export interface Props {
 
 export const SeedWord: FC<Props> = ({ seedWord, wordOrder }) => {
   return (
-    <Box backgroundColor='gray.4'
+    <Box bg='gray.4'
       borderRadius='1'
       mt='xs'
       px='s'>
       <Flex>
         <Flex>
           <Flex alignItems='center'
-            backgroundColor='brandLighter'
+            bg='brandLighter'
             borderRadius='50%'
             height={16}
             justifyContent='center'

@@ -1,5 +1,6 @@
-import { SvgCheckboxMarkedCircle, SvgContentCopy } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+// FIXME: icons
+import { SvgCheckboxMarkedCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Flex, Icon, icons, Text } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -38,7 +39,7 @@ export const SeedPhrase: FC<Props> = ({ seedPhrase }) => {
             style={{ cursor: 'pointer' }}>
             <Box>
               <Flex>
-                <Icon Asset={SvgContentCopy}
+                <Icon Asset={icons.SvgContentCopy}
                   color='gray.3'
                   height={15}
                   width={15} />

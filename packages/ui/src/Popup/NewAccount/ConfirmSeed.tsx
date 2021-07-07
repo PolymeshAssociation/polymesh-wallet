@@ -1,5 +1,7 @@
-import { SvgArrowLeft, SvgCheckboxMarkedCircle, SvgClipboardListOutline, SvgCloseCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Button, ButtonSmall, Flex, Header, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+// FIXME
+import { SvgClipboardListOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Button, ButtonSmall, Header } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Icon, icons, Text } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 
 import { SeedWord } from './components/SeedWord';
@@ -73,7 +75,7 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
   const renderStatus = () => {
     const color = confirmationStatus === status.invalid ? 'alert' : 'success';
     const message = confirmationStatus === status.invalid ? 'Your recovery phrase is incorrect. Please try again.' : 'Your recovery phrase is correct. Thank you!';
-    const icon = confirmationStatus === status.invalid ? SvgCloseCircle : SvgCheckboxMarkedCircle;
+    const icon = confirmationStatus === status.invalid ? icons.SvgCloseCircle : icons.SvgCheckboxMarkedCircle;
 
     return (
       <Flex alignItems='flex-start'
@@ -169,7 +171,7 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
           <Button minsize
             onClick={onBack}
             variant='secondary'>
-            <Icon Asset={SvgArrowLeft}
+            <Icon Asset={icons.SvgArrowLeft}
               color='gray.1'
               height={16}
               width={16} />
