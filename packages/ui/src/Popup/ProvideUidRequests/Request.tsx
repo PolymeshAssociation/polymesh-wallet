@@ -1,13 +1,12 @@
 import { RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
-import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Flex, Heading, Icon, icons, styled, Text } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import styled from 'styled-components';
 
 import { ActionContext, ActivityContext, Password, PolymeshContext, UidContext } from '../../components';
 import { approveUidProvideRequest, isPasswordSet, rejectUidProvideRequest, validatePassword } from '../../messaging';
 import { ThemeProps } from '../../types';
-import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
+import { Button, Header } from '../../ui';
 import { AccountMain } from '../Accounts/AccountMain';
 
 interface Props {
@@ -137,7 +136,7 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
               m='xs'
               p='s'>
               <Flex>
-                <Icon Asset={SvgAlertCircle}
+                <Icon Asset={icons.SvgAlertCircle}
                   color='warning'
                   height={20}
                   width={20} />
@@ -190,7 +189,7 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
                   m='xs'
                   p='s'>
                   <Flex>
-                    <Icon Asset={SvgAlertCircle}
+                    <Icon Asset={icons.SvgAlertCircle}
                       color='warning'
                       height={20}
                       width={20} />

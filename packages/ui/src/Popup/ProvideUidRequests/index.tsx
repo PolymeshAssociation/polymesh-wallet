@@ -1,5 +1,5 @@
+import { styled } from '@polymathnetwork/polymesh-ui';
 import React, { useContext } from 'react';
-import styled from 'styled-components';
 
 import { ProvideUidReqContext } from '../../components';
 import Request from './Request';
