@@ -5,7 +5,7 @@ import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
@@ -58,11 +58,10 @@ export default function Accounts (): React.ReactElement {
           ? [
             {
               label: isLedgerCapable
-                ? 'Attach ledger account'
-                : 'Ledger devices can only be connected with Chrome browser',
-              value: 'fromLedger'
-              // @TODO: add "disabled" option feature in OptionSelector
-              // disabled: !isLedgerCapable
+                ? 'Attach Ledger account'
+                : 'Chrome browser is required to use Ledger',
+              value: 'fromLedger',
+              disabled: !isLedgerCapable
             }
           ]
           : [{ label: 'Connect Ledger device', value: 'connectLedger' }])
