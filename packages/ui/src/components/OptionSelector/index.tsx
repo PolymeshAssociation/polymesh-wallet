@@ -129,8 +129,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
   return (
     <>
-      <Box
-        className={className}
+      <Box className={className}
         onClick={toggleOptions}
         ref={selectorRef}>
         {selector}
@@ -160,13 +159,15 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
                 <ul>
                   {/* Render menu items */}
                   {option.menu.map((optionItem, optionItemIndex) => (
-                    <li key={optionItemIndex}
+                    <li className={`${optionItem.disabled ? 'disabled' : ''}`}
+                      key={optionItemIndex}
                       onClick={() => onSelect(optionItem.value)}>
                       {typeof optionItem.label === 'string'
                         ? (
                           <Flex px='16px'
                             py='8px'>
-                            <Text variant='b2m'>{optionItem.label}</Text>
+                            <Text className='option-text'
+                              variant='b2m'>{optionItem.label}</Text>
                           </Flex>
                         )
                         : (
