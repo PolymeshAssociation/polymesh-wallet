@@ -13,7 +13,7 @@
     "@polkadot/react-qr": "^0.71.1",
     "@polkadot/util": "^6.3.1",
     "@polkadot/util-crypto": "^6.3.1",
-    "@polymathnetwork/polymesh-ui": "^0.3.379",
+    "@polymathnetwork/polymesh-ui": "^0.3.81",
     "@tippyjs/react": "^4.2.0",
     "@types/styled-system": "^5.1.10",
     "polished": "^3.6.5",

@@ -1,4 +1,4 @@
-import { createGlobalStyle, styled, styledComponents } from '@polymathnetwork/polymesh-ui';
+import { createGlobalStyle, ScThemeProvider, styled } from '@polymathnetwork/polymesh-ui';
 import React, { useState } from 'react';
 
 import { ThemeProps } from '../types';
@@ -13,7 +13,6 @@ interface Props {
 function View ({ children, className }: Props): React.ReactElement<Props> {
   const [theme, setTheme] = useState(chooseTheme());
   const _theme = themes[theme];
-  const { ThemeProvider } = styledComponents;
 
   // const switchTheme = (theme: AvailableThemes): void => {
   //   localStorage.setItem('theme', theme);
@@ -21,12 +20,12 @@ function View ({ children, className }: Props): React.ReactElement<Props> {
   // };
 
   return (
-    <ThemeProvider theme={_theme}>
+    <ScThemeProvider theme={_theme}>
       <BodyTheme theme={_theme} />
       <Main className={className}>
         {children}
       </Main>
-    </ThemeProvider>
+    </ScThemeProvider>
   );
 }
 
