@@ -180,9 +180,7 @@ export default class State extends DotState {
   private updateIconProof (shouldClose?: boolean): void {
     this.proofSubject.next(this.allProofRequests);
     const count = this.numProofRequests;
-    const text = (
-      count ? `${count}` : '')
-    ;
+    const text = count ? `${count}` : '';
 
     chrome.browserAction.setBadgeText({ text });
 
