@@ -25,9 +25,7 @@ const _openWindow = (path: string) => windowOpen(path);
 
 export default function Accounts (): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
-  const { currentAccount,
-    polymeshAccounts,
-    selectedAccount } = useContext(PolymeshContext);
+  const { currentAccount, polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
   const history = useHistory();
   const { isLedgerCapable, isLedgerEnabled } = useLedger();
 
@@ -60,15 +58,13 @@ export default function Accounts (): React.ReactElement {
           ? [
             {
               label: isLedgerCapable
-                ? 'Attach ledger account'
-                : 'Ledger devices can only be connected with Chrome browser',
-              value: 'fromLedger'
-              // @TODO: add "disabled" option feature in OptionSelector
-              // disabled: !isLedgerCapable
-            },
-            { label: 'Connect Ledger device', value: 'connectLedger' }
+                ? 'Attach Ledger account'
+                : 'Chrome browser is required to use Ledger',
+              value: 'fromLedger',
+              disabled: !isLedgerCapable
+            }
           ]
-          : [])
+          : [{ label: 'Connect Ledger device', value: 'connectLedger' }])
       ]
     }
   ];
@@ -91,21 +87,20 @@ export default function Accounts (): React.ReactElement {
   return (
     <>
       {hierarchy.length === 0
-        ? <AddAccount />
+        ? (
+          <AddAccount />
+        )
         : (
           <>
-            <AppHeader>
-              {currentAccount && <AccountMain account={currentAccount}
-                details={true} />}
-            </AppHeader>
+            <AppHeader>{currentAccount && <AccountMain account={currentAccount}
+              details={true} />}</AppHeader>
             <AccountsArea id='accounts-container'>
-              <Flex
-                justifyContent='space-between'
+              <Flex justifyContent='space-between'
                 pt='m'
                 px='s'>
                 <Text color='gray.1'
                   variant='c2'>
-                ACCOUNTS
+                  ACCOUNTS
                 </Text>
                 <OptionSelector
                   className='add-key-menu'
@@ -123,7 +118,7 @@ export default function Accounts (): React.ReactElement {
                       </Flex>
                       <Text color='brandMain'
                         variant='b2'>
-                                    Add a key
+                        Add a key
                       </Text>
                     </Flex>
                   }
