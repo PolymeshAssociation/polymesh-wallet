@@ -26,8 +26,12 @@ export const Options = styled(Box)<{ cssPosition: CssPosition }>`
       cursor: pointer;
       white-space: nowrap;
 
-      &:hover {
+      &:hover:not(.disabled) {
         background: ${({ theme }: ThemeProps) => theme.colors.gray[4]};
+      }
+
+      &.disabled .option-text {
+        color: ${({ theme }: ThemeProps) => theme.colors.disabled};
       }
     }
   }
