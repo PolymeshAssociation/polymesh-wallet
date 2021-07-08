@@ -6,13 +6,15 @@ import { OptionItem } from './types';
 
 type OptionItemProps = {
   optionItem: OptionItem;
-  onSelect: (value: any) =>void; // eslint-disable-line @typescript-eslint/no-explicit-any
+  onSelect: (value: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export function OptionListItem ({ onSelect, optionItem }: OptionItemProps): JSX.Element {
+  const onClick = () => optionItem.disabled ? undefined : onSelect(optionItem.value);
+
   return (
     <StyledOptionListItem disabled={optionItem.disabled}
-      onClick={() => onSelect(optionItem.value)}>
+      onClick={onClick}>
       {typeof optionItem.label === 'string'
         ? (
           <Flex px='16px'
