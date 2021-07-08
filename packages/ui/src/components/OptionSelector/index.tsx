@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Text } from '@polymathnetwork/extension-ui/ui';
 import { BoxProps } from '@polymathnetwork/extension-ui/ui/Box';
 import React, { CSSProperties, Fragment, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
+import { OptionListItem } from './OptionItem';
 import { Options } from './styles';
 import { Coordinates, CssPosition, Option, PositionType } from './types';
 
@@ -13,7 +13,7 @@ const OPTION_SELECTOR_PORTAL_ID = 'option-selector-portal';
 type OptionSelectorProps = BoxProps & {
   options: Option[];
   selector: string | JSX.Element;
-  onSelect: (value: any) => void;
+  onSelect: (value: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
   position?: PositionType;
   style?: CSSProperties;
   className?: string;
@@ -159,21 +159,9 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
                 <ul>
                   {/* Render menu items */}
                   {option.menu.map((optionItem, optionItemIndex) => (
-                    <li className={`${optionItem.disabled ? 'disabled' : ''}`}
-                      key={optionItemIndex}
-                      onClick={() => onSelect(optionItem.value)}>
-                      {typeof optionItem.label === 'string'
-                        ? (
-                          <Flex px='16px'
-                            py='8px'>
-                            <Text className='option-text'
-                              variant='b2m'>{optionItem.label}</Text>
-                          </Flex>
-                        )
-                        : (
-                          optionItem.label
-                        )}
-                    </li>
+                    <OptionListItem key={optionItemIndex}
+                      onSelect={onSelect}
+                      optionItem={optionItem} />
                   ))}
                 </ul>
               </Fragment>
