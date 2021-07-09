@@ -1,4 +1,4 @@
-import { Box, BoxProps, Flex, Text } from '@polymathnetwork/polymesh-ui';
+import { Box, BoxProps, Text } from '@polymathnetwork/polymesh-ui';
 import React, { CSSProperties, Fragment, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -16,6 +16,7 @@ type OptionSelectorProps = BoxProps & {
   position?: PositionType;
   style?: CSSProperties;
   className?: string;
+  cssPosition?: CssPosition;
 };
 
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {

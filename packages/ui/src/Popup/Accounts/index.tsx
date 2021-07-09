@@ -5,8 +5,9 @@ import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
 import { Flex, Icon, icons, styled, Text } from '@polymathnetwork/polymesh-ui';
-import React, { useCallback, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
+
 import { AccountContext, OptionSelector, PolymeshContext } from '../../components';
 import { AppHeader } from '../AppHeader';
 import { AccountMain } from './AccountMain';

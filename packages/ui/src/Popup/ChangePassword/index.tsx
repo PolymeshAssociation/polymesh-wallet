@@ -3,7 +3,7 @@ import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/
 import { globalChangePass, validatePassword } from '@polymathnetwork/extension-ui/messaging';
 // FIXME: remove me(Button) after busy implemenation in the polymesh-ui
 import { Button, Header } from '@polymathnetwork/extension-ui/ui';
-import { Box, Flex, icons, Text, TextInput } from '@polymathnetwork/polymesh-ui';
+import { Box, Flex, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 

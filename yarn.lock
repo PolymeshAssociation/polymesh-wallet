@@ -2396,10 +2396,10 @@
   resolved "https://registry.yarnpkg.com/@polymathnetwork/confidential-identity/-/confidential-identity-1.0.1.tgz#00ebd7895d1bcda946414239c2275adf56eb9ffd"
   integrity sha512-XOsKwalb8eWgNI63/KOl5ge/VXX42FrOG0Ary2Fw8/C7XMqIdGsI23Gq0Q6Pt8OBwxibSY0ao+hg7SrBanR1/A==
 
-"@polymathnetwork/polymesh-ui@^0.3.379":
-  version "0.3.379"
-  resolved "https://registry.yarnpkg.com/@polymathnetwork/polymesh-ui/-/polymesh-ui-0.3.379.tgz#5a8562d9c56735c0138de8bd5085d263a56a3b39"
-  integrity sha512-AidynThwx2WJ8ChAL+fsq9n1ulmRxdTwn1v5z58IcSB845JrTCceOeAuy4MjO1VDi0BtlHH0GVF2et2p8yp/ag==
+"@polymathnetwork/polymesh-ui@^0.3.383":
+  version "0.3.383"
+  resolved "https://registry.yarnpkg.com/@polymathnetwork/polymesh-ui/-/polymesh-ui-0.3.383.tgz#c25a652ffe2cf9244b92bcb46a1d22b525525472"
+  integrity sha512-Afm98uHO8OA1Aow8uJoUnUuOHlPvf/rOzr+0miboFUFsnMUV+F4yfum/tJl8uosCPaOiw8KTZTo5lR3Ny0nM2g==
   dependencies:
     "@babel/polyfill" "^7.0.0"
     "@babel/runtime" "^7.2.0"

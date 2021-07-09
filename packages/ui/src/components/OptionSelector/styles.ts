@@ -1,6 +1,5 @@
 import { ThemeProps } from '@polymathnetwork/extension-ui/types';
-import { Box, styled } from '@polymathnetwork/polymesh-ui';
-import { css } from 'styled-components';
+import { Box, css, styled } from '@polymathnetwork/polymesh-ui';
 
 import { CssPosition } from './types';
 
