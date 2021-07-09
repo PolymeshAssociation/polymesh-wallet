@@ -1,5 +1,6 @@
 import { ThemeProps } from '@polymathnetwork/extension-ui/types';
 import { Box, styled } from '@polymathnetwork/polymesh-ui';
+import { css } from 'styled-components';
 
 import { CssPosition } from './types';
 
@@ -20,14 +21,29 @@ export const Options = styled(Box)<{ cssPosition: CssPosition }>`
     margin: 0;
     padding: 0;
     list-style-type: none;
+  }
+`;
 
-    li {
-      cursor: pointer;
-      white-space: nowrap;
+export const StyledOptionListItem = styled.li<{ disabled?: boolean }>`
+  cursor: pointer;
+  white-space: nowrap;
 
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      cursor: default;
+
+      .option-text {
+        color: ${({ theme }: ThemeProps) => theme.colors.disabled};
+      }
+    `}
+
+  ${({ disabled }) =>
+    !disabled &&
+    css`
       &:hover {
         background: ${({ theme }: ThemeProps) => theme.colors.gray[4]};
       }
-    }
-  }
+    `}
 `;

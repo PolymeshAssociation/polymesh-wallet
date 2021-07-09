@@ -7,7 +7,6 @@ import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
 import { Flex, Icon, icons, styled, Text } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
-
 import { AccountContext, OptionSelector, PolymeshContext } from '../../components';
 import { AppHeader } from '../AppHeader';
 import { AccountMain } from './AccountMain';
@@ -16,21 +15,18 @@ import AddAccount from './AddAccount';
 
 const jsonPath = '/account/restore/json';
 const ledgerPath = '/account/import-ledger';
+const seedPath = '/account/restore/seed';
+const newAccountPath = '/account/create';
+
+const _openWindow = (path: string) => windowOpen(path);
 
 export default function Accounts (): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
-
-  const { currentAccount,
-    polymeshAccounts,
-    selectedAccount } = useContext(PolymeshContext);
+  const { currentAccount, polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
   const history = useHistory();
   const { isLedgerCapable, isLedgerEnabled } = useLedger();
 
   const isPopup = useIsPopup();
-
-  const _openJson = useCallback(() => windowOpen(jsonPath), []);
-
-  const _onOpenLedgerConnect = useCallback(() => windowOpen(ledgerPath), []);
 
   const groupAccounts = () => (array: IdentifiedAccount[]) =>
     array.reduce((groupedAccounts: Record<string, IdentifiedAccount[]>, account: IdentifiedAccount) => {
@@ -59,15 +55,13 @@ export default function Accounts (): React.ReactElement {
           ? [
             {
               label: isLedgerCapable
-                ? 'Attach ledger account'
-                : 'Ledger devices can only be connected with Chrome browser',
-              value: 'fromLedger'
-              // @TODO: add "disabled" option feature in OptionSelector
-              // disabled: !isLedgerCapable
-            },
-            { label: 'Connect Ledger device', value: 'connectLedger' }
+                ? 'Attach Ledger account'
+                : 'Chrome browser is required to use Ledger',
+              value: 'fromLedger',
+              disabled: !isLedgerCapable
+            }
           ]
-          : [])
+          : [{ label: 'Connect Ledger device', value: 'connectLedger' }])
       ]
     }
   ];
@@ -75,36 +69,35 @@ export default function Accounts (): React.ReactElement {
   const handleAccountMenuClick = (value: string) => {
     switch (value) {
       case 'new':
-        return history.push('/account/create');
+        return isPopup ? _openWindow(newAccountPath) : history.push(newAccountPath);
       case 'fromSeed':
-        return history.push('/account/restore/seed');
+        return isPopup ? _openWindow(seedPath) : history.push(seedPath);
       case 'fromJson':
-        return isPopup ? _openJson() : history.push(jsonPath);
+        return isPopup ? _openWindow(jsonPath) : history.push(jsonPath);
       case 'fromLedger':
-        return history.push('/account/import-ledger');
+        return history.push(ledgerPath);
       case 'connectLedger':
-        return _onOpenLedgerConnect();
+        return _openWindow(ledgerPath);
     }
   };
 
   return (
     <>
       {hierarchy.length === 0
-        ? <AddAccount />
+        ? (
+          <AddAccount />
+        )
         : (
           <>
-            <AppHeader>
-              {currentAccount && <AccountMain account={currentAccount}
-                details={true} />}
-            </AppHeader>
+            <AppHeader>{currentAccount && <AccountMain account={currentAccount}
+              details={true} />}</AppHeader>
             <AccountsArea id='accounts-container'>
-              <Flex
-                justifyContent='space-between'
+              <Flex justifyContent='space-between'
                 pt='m'
                 px='s'>
                 <Text color='gray.1'
                   variant='c2'>
-                ACCOUNTS
+                  ACCOUNTS
                 </Text>
                 <OptionSelector
                   className='add-key-menu'
@@ -122,7 +115,7 @@ export default function Accounts (): React.ReactElement {
                       </Flex>
                       <Text color='brandMain'
                         variant='b2'>
-                                    Add a key
+                        Add a key
                       </Text>
                     </Flex>
                   }
