@@ -16,7 +16,7 @@ export function NameEdit ({ newName, onCancel, onChange, onSave }: NameEditProps
         {/* FIXME: tight attr */}
         <TextInput
           onChange={onChange}
-          tight
+          // tight
           value={newName} />
         <Box ml='xs'>
           <Icon Asset={icons.SvgCheck}

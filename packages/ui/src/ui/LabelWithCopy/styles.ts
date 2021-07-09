@@ -1,8 +1,9 @@
-import { styled } from '@polymathnetwork/extension-ui/styles';
+import { styled } from '@polymathnetwork/polymesh-ui';
+import { FC } from 'react';
 
 import { Box } from '../Box';
 
-export const StatusText = styled(Box)<{
+export const StatusText: FC = styled(Box)<{
   copied: boolean;
   noIcon?: boolean;
 }>`

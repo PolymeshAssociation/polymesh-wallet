@@ -2,6 +2,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import settings from '@polkadot/ui-settings';
 import { genesisHash } from '@polymathnetwork/extension-core/constants';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
+import { SvgLedgerLogo } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountContext, ActionContext, ActivityContext } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import { Status, useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
@@ -144,7 +145,7 @@ function ImportLedger (): React.ReactElement {
         </Box>
         : <>
           <Header headerText='Import Ledger account'
-            iconAsset={icons.SvgLedgerLogo}>
+            iconAsset={SvgLedgerLogo}>
             <Box>
               <Text color='gray.0'
                 variant='b2'>
@@ -214,7 +215,8 @@ function ImportLedger (): React.ReactElement {
 
               <Box my='l'
                 width='100%'>
-                <Button mb='m'
+                <Button
+                  // mb='m'
                   onClick={toggleShowingSettings}
                   width='100%'>
                   <Icon Asset={icons.SvgSettingsOutline}

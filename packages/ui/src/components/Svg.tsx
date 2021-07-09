@@ -2,11 +2,11 @@ import { styled } from '@polymathnetwork/polymesh-ui';
 
 import { ThemeProps } from '../types';
 
-interface Props {
+interface Props extends ThemeProps{
   src: string;
 }
 
-export default styled.span<Props>(({ src, theme }: Props & ThemeProps) => `
+export default styled.span<Props>(({ src, theme }: Props) => `
   background: ${theme.textColor};
   display: inline-block;
   mask: url(${src});

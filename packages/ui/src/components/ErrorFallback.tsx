@@ -20,7 +20,8 @@ const ErrorBoundaryFallback: FC<FallbackProps> = ({ error, resetErrorBoundary })
             mt='m'>
             <Text color='gray.1'
               fontSize='1'
-              variant='code'>
+              // variant='code'
+            >
               { error.message ? error.message : JSON.stringify(error) }
             </Text>
           </Box>

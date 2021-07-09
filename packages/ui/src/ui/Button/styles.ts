@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { darken, transparentize } from 'polished';
 
 import { Styles } from '../../styles/types';

@@ -2,7 +2,8 @@
 import { SvgAccountCardDetailsOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { ActivityContext, Password } from '@polymathnetwork/extension-ui/components';
 import { isPasswordSet, validatePassword } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Button, Flex, Header, Icon, icons, Text, TextInput } from '@polymathnetwork/polymesh-ui';
+import { Header } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Icon, icons, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -144,7 +145,8 @@ export const AccountForm: FC<Props> = ({ defaultName, headerText, noHeader, onBa
         <Flex mb='s'
           width='100%'>
           {/* FIXME */}
-          <Button minsize
+          <Button
+            // minsize
             onClick={onBack}
             variant='secondary'>
             <Icon Asset={icons.SvgArrowLeft}
@@ -154,10 +156,10 @@ export const AccountForm: FC<Props> = ({ defaultName, headerText, noHeader, onBa
           </Button>
           <Box ml='s'
             width='100%'>
-            <Button busy={isBusy}
-              disabled={submitIsDisabled}
+            <Button disabled={submitIsDisabled}
               fluid
               form='accountForm'
+              loading={isBusy}
               type='submit'>
               {submitText}
             </Button>

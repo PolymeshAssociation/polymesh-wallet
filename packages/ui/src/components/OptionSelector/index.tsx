@@ -16,7 +16,6 @@ type OptionSelectorProps = BoxProps & {
   position?: PositionType;
   style?: CSSProperties;
   className?: string;
-  cssPosition?: CssPosition;
 };
 
 export function OptionSelector (props: OptionSelectorProps): JSX.Element {
@@ -140,7 +139,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
           <Options
             {...boxProps}
             cssPosition={cssPosition}
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event: { stopPropagation: () => unknown; }) => event.stopPropagation()}
             ref={optionsCallbackRef}
             style={style}
           >

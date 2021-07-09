@@ -36,7 +36,7 @@ export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, te
         onMouseOver={onMouseOver}
       >
         <Text color={foreColor}
-          variant={textVariant}
+          // variant={textVariant}
         >
           <TextEllipsis size={textSize}>
             {text}

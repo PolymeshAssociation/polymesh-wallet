@@ -72,7 +72,6 @@ export default React.memo(styled(Dropdown)(({ isError, label, theme }: Props) =>
     box-sizing: border-box;
     color: ${isError ? theme.errorBorderColor : theme.textColor};
     display: block;
-    font-family: ${theme.texts.b2.fontFamily};
     font-size: ${theme.texts.b2.fontSize};
     font-weight: ${theme.texts.b2.fontWeight};
     line-height: ${theme.texts.b2.lineHeight};

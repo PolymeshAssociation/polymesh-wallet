@@ -1,3 +1,4 @@
+// @ts-nocheck
 import styled, { StyledProps } from 'styled-components';
 
 import { Styles } from '../../styles/types';

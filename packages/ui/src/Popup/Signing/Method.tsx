@@ -43,7 +43,8 @@ const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
             </Box>
             <Box>
               <Text color='gray.1'
-                variant='code'>
+                // variant='code'
+              >
                 {JSON.stringify(args, null, 2).slice(1, -1).trim()}
               </Text>
             </Box>

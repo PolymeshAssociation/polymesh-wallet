@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { ForwardRefRenderFunction } from 'react';
 
 import { styled } from '../../styles';

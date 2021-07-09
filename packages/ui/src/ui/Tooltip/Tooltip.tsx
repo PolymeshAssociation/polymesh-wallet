@@ -18,4 +18,4 @@ export const TooltipComponent: FC<TooltipProps> = ({ children, ...props }) => (
 
 TooltipComponent.defaultProps = TooltipDefaultProps;
 
-export const Tooltip = styled(TooltipComponent)<TooltipProps>(tooltipStyles as any, getVariant);
+export const Tooltip = styled(TooltipComponent)<TooltipProps>(tooltipStyles as any, getVariant as any);

@@ -81,7 +81,7 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
           {editing && (
             <Flex mb='xs'>
               <TextInput onChange={handleAliasChange}
-                tight
+                // tight
                 value={newAlias} />
               <Box onClick={saveAlias}
                 style={{ cursor: 'pointer' }}>

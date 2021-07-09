@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { ThemeProps } from '../types';
 // FIXME We should not import from index when this one is imported there as well
-import { AvailableThemes, chooseTheme, themes } from '.';
+import { chooseTheme, themes } from '.';
 
 interface Props {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 function View ({ children, className }: Props): React.ReactElement<Props> {
-  const [theme, setTheme] = useState(chooseTheme());
+  const [theme] = useState(chooseTheme());
   const _theme = themes[theme];
 
   // const switchTheme = (theme: AvailableThemes): void => {

@@ -1,16 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { ThemeProps } from '@polymathnetwork/extension-ui/types';
-import { Box, css, styled } from '@polymathnetwork/polymesh-ui';
+import { Box, BoxProps, css, styled } from '@polymathnetwork/polymesh-ui';
+import { FC } from 'react';
 
 import { CssPosition } from './types';
 
-export const Options = styled(Box)<{ cssPosition: CssPosition }>`
+interface Props extends ThemeProps {
+  cssPosition: CssPosition;
+}
+
+export const Options: FC<BoxProps> = styled(Box) <Props>`
   position: absolute;
   background: white;
   box-shadow: ${({ theme }: ThemeProps) => theme.shadows[3]};
   border-radius: 8px;
   padding: 8px 0;
   z-index: 1000;
-
+ 
   ${({ cssPosition }) => cssPosition}
 
   // Only show options once it is positioned in place
@@ -23,7 +29,11 @@ export const Options = styled(Box)<{ cssPosition: CssPosition }>`
   }
 `;
 
-export const StyledOptionListItem = styled.li<{ disabled?: boolean }>`
+interface StyledOptionListItemProps extends ThemeProps {
+  disabled?: boolean;
+}
+
+export const StyledOptionListItem = styled.li<StyledOptionListItemProps>`
   cursor: pointer;
   white-space: nowrap;
 

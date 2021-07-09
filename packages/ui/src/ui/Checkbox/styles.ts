@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { styled } from '../../styles';
 import { visuallyHidden } from '../../styles/utils';
 import { Icon } from '../Icon';

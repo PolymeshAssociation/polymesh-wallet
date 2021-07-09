@@ -16,7 +16,11 @@ function Toast ({ className, content }: Props): React.ReactElement<Props> {
   );
 }
 
-export default styled(Toast)<{visible: boolean}>`
+interface ToastProps extends ThemeProps{
+  visible?: boolean;
+}
+
+export default styled(Toast)<ToastProps>`
   position: fixed;
   display: ${({ visible }): string => visible ? 'block' : 'none'};
   height: 40px;

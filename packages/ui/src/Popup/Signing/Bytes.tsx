@@ -19,7 +19,8 @@ function Bytes ({ bytes, url }: Props): React.ReactElement<Props> {
       </Box>
       <Box mt='xs'>
         <Text color='gray.1'
-          variant='code'>
+          // variant='code'
+        >
           {url}
         </Text>
       </Box>
@@ -31,7 +32,8 @@ function Bytes ({ bytes, url }: Props): React.ReactElement<Props> {
       </Box>
       <Box mt='xs'>
         <Text color='gray.1'
-          variant='code'>
+          // variant='code'
+        >
           {bytes}
         </Text>
       </Box>
