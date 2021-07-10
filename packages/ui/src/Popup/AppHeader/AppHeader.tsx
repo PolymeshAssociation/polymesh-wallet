@@ -89,9 +89,9 @@ const AppHeader = (props: Props): ReactElement<Props> => {
             selector={
               <Icon Asset={icons.SvgDotsVertical}
                 color='gray.0'
-                height={24}
+                height={32}
                 style={{ cursor: 'pointer' }}
-                width={24} />
+                width={32} />
             }
           />
         </Flex>
