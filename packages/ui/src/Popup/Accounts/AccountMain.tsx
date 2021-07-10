@@ -137,7 +137,7 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
         </Box>
         <Box ml='s'>
           {account?.did && <AccountType keyType={account?.keyType}
-            large={true} />}
+            large />}
         </Box>
       </Flex>
       <Flex>
