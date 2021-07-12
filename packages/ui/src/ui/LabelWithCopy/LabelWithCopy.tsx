@@ -9,7 +9,15 @@ export interface Props {
   color: string;
   hoverColor?: string;
   textSize: number;
-  textVariant: 'b1m' | 'b1' | 'b2m' | 'b2' | 'b3m' | 'b3' | 'sh1' | 'c1' | 'c2' | 'c2m';
+  textVariant: | 'b1m'
+  | 'b1'
+  | 'b2m'
+  | 'b2'
+  | 'b3m'
+  | 'b3'
+  | 'sh1'
+  | 'c1'
+  | 'c2';
 }
 
 export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, textVariant }) => {
@@ -36,7 +44,7 @@ export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, te
         onMouseOver={onMouseOver}
       >
         <Text color={foreColor}
-          // variant={textVariant}
+          variant={textVariant}
         >
           <TextEllipsis size={textSize}>
             {text}
