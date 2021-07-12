@@ -251,16 +251,15 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
         <AccountViewGrid>
           <GridItem area='avatar'>
             <Flex height='100%'>
-              {/* FIXME (waiting for Polymesh-UI to add backgroundColor) */}
               <Box
-                backgroundColor='brandLightest'
+                bg='brandLightest'
                 borderRadius='50%'
                 height={32}
                 px='2'
                 width={32}
               >
                 <Flex justifyContent='center'
-                  pt='xxs'>
+                  pt='2px'>
                   <Text color='brandMain'
                     variant='b2m'>
                     {name?.substr(0, 1)}
