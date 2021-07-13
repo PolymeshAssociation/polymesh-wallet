@@ -125,3 +125,6 @@ wallet.uid.requestProof({ ticker: 'AMZN' })
   .then(console.log).catch(console.error)
 ```
 
+## Security audit
+
+The extension has been reviewed and pen-tested in Q2 2021. The results can be found [here](docs/audit-may2021.pdf).

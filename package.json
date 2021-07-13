@@ -45,7 +45,7 @@
     "ts-jest": "^26.5.3"
   },
   "author": "Remon Nashid <remon.sherin@gmail.com>",
-  "license": "ISC",
+  "license": "Apache-2",
   "bugs": {
     "url": "https://github.com/PolymathNetwork/polymesh-wallet/issues"
   },
