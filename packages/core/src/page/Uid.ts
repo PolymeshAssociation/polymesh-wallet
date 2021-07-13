@@ -1,6 +1,6 @@
 import { SendRequest } from '@polymathnetwork/extension-core/page/types';
 
-import { InjectedUid, ProofRequestPayload, ProofResult, RequestPolyProvideUid } from '../types';
+import { InjectedUid, ProofRequestPayload, ProofResult, ReadUidResult, RequestPolyProvideUid } from '../types';
 
 // External to class, this.# is not private enough (yet)
 let sendRequest: SendRequest;
@@ -27,5 +27,15 @@ export default class Uid implements InjectedUid {
 
   public async isSet (): Promise<boolean> {
     return sendRequest('poly:pub(uid.isSet)');
+  }
+
+  public async read (): Promise<ReadUidResult> {
+    const id = ++nextId;
+    const result = await sendRequest('poly:pub(uid.read)');
+
+    return {
+      ...result,
+      id
+    };
   }
 }

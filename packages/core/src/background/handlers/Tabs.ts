@@ -9,9 +9,9 @@ import polyNetworkSubscribe from '@polymathnetwork/extension-core/external/polyN
 import { getSelectedAccount, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
 import { NetworkMeta, ProofRequestPayload, RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
-import { allowedUidProvider, prioritize, recodeAddress, validateNetwork, validateSelectedNetwork, validateTicker, validateUid } from '@polymathnetwork/extension-core/utils';
+import { allowedUidProvider, allowedUidReader, prioritize, recodeAddress, validateNetwork, validateSelectedNetwork, validateTicker, validateUid } from '@polymathnetwork/extension-core/utils';
 
-import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse } from '../types';
+import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse, ReadUidResponse, RequestPolyReadUid } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 
@@ -137,7 +137,19 @@ export default class Tabs extends DotTabs {
     return this.#state.provideUid(url, request);
   }
 
-  private async isSet (): Promise<boolean> {
+  private readUid (url: string, request: RequestPolyReadUid): Promise<ReadUidResponse> {
+    assert(allowedUidReader(url), `App ${url} is not allowed access uid`);
+
+    const account = getSelectedIdentifiedAccount();
+
+    assert(account, Errors.NO_ACCOUNT);
+
+    assert(account.did, Errors.NO_DID);
+
+    return this.#state.readUid(url, request);
+  }
+
+  private async uidIsSet (): Promise<boolean> {
     const uidRecords = await this.#state.allUidRecords();
 
     const account = getSelectedIdentifiedAccount();
@@ -189,7 +201,10 @@ export default class Tabs extends DotTabs {
         return this.provideUid(url, request as RequestPolyProvideUid);
 
       case 'poly:pub(uid.isSet)':
-        return this.isSet();
+        return this.uidIsSet();
+
+      case 'poly:pub(uid.read)':
+        return this.readUid(url, request as RequestPolyReadUid);
 
       default:
         return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, url, port);
