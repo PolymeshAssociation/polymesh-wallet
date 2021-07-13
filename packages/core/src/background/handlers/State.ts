@@ -5,7 +5,7 @@ import chrome from '@polkadot/extension-inject/chrome';
 import { BehaviorSubject } from 'rxjs';
 
 import { NetworkName, ProofRequestPayload, RequestPolyProvideUid, UidRecord } from '../../types';
-import { ProofingRequest, ProofingResponse, ProvideUidRequest } from '../types';
+import { ProofingRequest, ProofingResponse, ProvideUidRequest, ReadUidRequest, ReadUidResponse, RequestPolyReadUid } from '../types';
 import AuxStore from './AuxStore';
 
 interface Resolver <T> {
@@ -19,6 +19,12 @@ interface ProofRequestResolver extends Resolver<ProofingResponse> {
   account: AccountJson;
   id: string;
   request: ProofRequestPayload;
+  url: string;
+}
+
+interface UidReadRequestResolver extends Resolver<ReadUidResponse> {
+  id: string;
+  request: RequestPolyReadUid;
   url: string;
 }
 
@@ -46,6 +52,8 @@ export default class State extends DotState {
 
   readonly #provideUidRequests: Record<string, ProvideUidRequestResolver> = {};
 
+  readonly #readUidRequests: Record<string, UidReadRequestResolver> = {};
+
   readonly #auxStore = new AuxStore();
 
   #windows: number[] = [];
@@ -53,6 +61,8 @@ export default class State extends DotState {
   public readonly proofSubject: BehaviorSubject<ProofingRequest[]> = new BehaviorSubject<ProofingRequest[]>([]);
 
   public readonly provideUidRequestsSubject: BehaviorSubject<ProvideUidRequest[]> = new BehaviorSubject<ProvideUidRequest[]>([]);
+
+  public readonly readUidRequestsSubject: BehaviorSubject<ReadUidRequest[]> = new BehaviorSubject<ReadUidRequest[]>([]);
 
   public uidsSubject: BehaviorSubject<UidRecord[]> = new BehaviorSubject<UidRecord[]>([]);
 
@@ -76,6 +86,10 @@ export default class State extends DotState {
     return Object.keys(this.#provideUidRequests).length;
   }
 
+  public get numReadUidRequests (): number {
+    return Object.keys(this.#readUidRequests).length;
+  }
+
   public get allProofRequests (): ProofingRequest[] {
     return Object
       .values(this.#proofRequests)
@@ -86,6 +100,12 @@ export default class State extends DotState {
     return Object
       .values(this.#provideUidRequests)
       .map(({ id, request, url }): ProvideUidRequest => ({ id, request, url }));
+  }
+
+  public get allReadUidRequests (): ReadUidRequest[] {
+    return Object
+      .values(this.#readUidRequests)
+      .map(({ id, request, url }): ReadUidRequest => ({ id, request, url }));
   }
 
   private _popupClose (): void {
@@ -121,6 +141,24 @@ export default class State extends DotState {
     };
   }
 
+  private readUidComplete = (id: string, resolve: (result: ReadUidResponse) => void, reject: (error: Error) => void): Resolver<ReadUidResponse> => {
+    const complete = (): void => {
+      delete this.#readUidRequests[id];
+      this.updateIconReadUid(true);
+    };
+
+    return {
+      reject: (error: Error): void => {
+        complete();
+        reject(error);
+      },
+      resolve: (result: ReadUidResponse): void => {
+        complete();
+        resolve(result);
+      }
+    };
+  }
+
   private provideUidComplete = (id: string, resolve: (result: boolean) => void, reject: (error: Error) => void): Resolver<boolean> => {
     const complete = (): void => {
       delete this.#provideUidRequests[id];
@@ -142,9 +180,7 @@ export default class State extends DotState {
   private updateIconProof (shouldClose?: boolean): void {
     this.proofSubject.next(this.allProofRequests);
     const count = this.numProofRequests;
-    const text = (
-      count ? `${count}` : '')
-    ;
+    const text = count ? `${count}` : '';
 
     chrome.browserAction.setBadgeText({ text });
 
@@ -167,12 +203,30 @@ export default class State extends DotState {
     }
   }
 
+  private updateIconReadUid (shouldClose?: boolean): void {
+    this.readUidRequestsSubject.next(this.allReadUidRequests);
+    const count = this.numReadUidRequests;
+    const text = (
+      count ? `${count}` : '')
+    ;
+
+    chrome.browserAction.setBadgeText({ text });
+
+    if (shouldClose && text === '') {
+      this._popupClose();
+    }
+  }
+
   public getProofRequest (id: string): ProofRequestResolver {
     return this.#proofRequests[id];
   }
 
   public getProvideUidRequest (id: string): ProvideUidRequestResolver {
     return this.#provideUidRequests[id];
+  }
+
+  public getReadUidRequest (id: string): UidReadRequestResolver {
+    return this.#readUidRequests[id];
   }
 
   public generateProof (url: string, request: ProofRequestPayload, account: AccountJson): Promise<ProofingResponse> {
@@ -188,6 +242,22 @@ export default class State extends DotState {
       };
 
       this.updateIconProof();
+      this._popupOpen();
+    });
+  }
+
+  public readUid (url: string, request: RequestPolyReadUid): Promise<ReadUidResponse> {
+    const id = getId();
+
+    return new Promise((resolve, reject): void => {
+      this.#readUidRequests[id] = {
+        ...this.readUidComplete(id, resolve, reject),
+        id,
+        request,
+        url
+      };
+
+      this.updateIconReadUid();
       this._popupOpen();
     });
   }
