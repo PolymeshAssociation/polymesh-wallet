@@ -1,4 +1,4 @@
-import { Flex, Text } from '@polymathnetwork/extension-ui/ui';
+import { Flex, Text } from '@polymathnetwork/polymesh-ui';
 import React from 'react';
 
 import { StyledOptionListItem } from './styles';

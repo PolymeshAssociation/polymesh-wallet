@@ -1,12 +1,12 @@
 import { RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
-import { Box, Flex, Heading, Icon, icons, styled, Text } from '@polymathnetwork/polymesh-ui';
+import { Box, Button, Flex, Heading, Icon, icons, styled, Text } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ActionContext, ActivityContext, Password, PolymeshContext, UidContext } from '../../components';
 import { approveUidProvideRequest, isPasswordSet, rejectUidProvideRequest, validatePassword } from '../../messaging';
 import { ThemeProps } from '../../types';
-import { Button, Header } from '../../ui';
+import { Header } from '../../ui';
 import { AccountMain } from '../Accounts/AccountMain';
 
 interface Props {

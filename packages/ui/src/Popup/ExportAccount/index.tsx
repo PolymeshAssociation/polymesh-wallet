@@ -1,5 +1,6 @@
 import { SvgAlertCircle, SvgOpenInNew } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Header } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Icon, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router';

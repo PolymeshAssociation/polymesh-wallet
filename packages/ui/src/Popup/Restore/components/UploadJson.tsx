@@ -2,11 +2,9 @@ import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { hexToU8a, isHex, u8aToString } from '@polkadot/util';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Button,
-  ButtonSmall,
-  LabelWithCopy } from '@polymathnetwork/extension-ui/ui';
+import { LabelWithCopy } from '@polymathnetwork/extension-ui/ui';
 import verifyJsonPassword from '@polymathnetwork/extension-ui/util/verifyJsonPassword';
-import { Box, Flex, Icon, Text, TextEllipsis, TextInput } from '@polymathnetwork/polymesh-ui';
+import { Box, Button, ButtonSmall, Flex, Icon, Text, TextEllipsis, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext, useRef, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -252,10 +250,10 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
         justifyContent='flex-end'
         mb='s'
         mx='s'>
-        <Button busy={isBusy}
-          disabled={!accountJson}
+        <Button disabled={!accountJson}
           fluid
           form='accountForm'
+          loading={isBusy}
           type='submit'>
           Verify
         </Button>

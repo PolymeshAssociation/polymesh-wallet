@@ -1,13 +1,12 @@
-// FIXME : button
 import { ProofRequestPayload } from '@polymathnetwork/extension-core/types';
-import { Box, Flex, Heading, Icon, icons, styled, Text, TextInput } from '@polymathnetwork/polymesh-ui';
+import { Box, Button, Flex, Heading, Icon, icons, styled, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { ActionContext, ActivityContext, PolymeshContext } from '../../components';
 import { approveProofRequest, rejectProofRequest, validatePassword } from '../../messaging';
 import { ThemeProps } from '../../types';
-import { Button, Header } from '../../ui';
+import { Header } from '../../ui';
 import { AccountMain } from '../Accounts/AccountMain';
 
 interface Props {

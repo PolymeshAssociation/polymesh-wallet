@@ -1,7 +1,7 @@
 // FIXME
 import { SvgClipboardListOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Button, ButtonSmall, Header } from '@polymathnetwork/extension-ui/ui';
-import { Box, Flex, Icon, icons, Text } from '@polymathnetwork/polymesh-ui';
+import { Header } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, ButtonSmall, Flex, Icon, icons, Text } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 
 import { SeedWord } from './components/SeedWord';

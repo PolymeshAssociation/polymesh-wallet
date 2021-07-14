@@ -1,7 +1,7 @@
 // FIXME: SvgFileLockOutline deletion
 import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Button, Header } from '@polymathnetwork/extension-ui/ui';
-import { Box, Flex, Icon, icons, Text, TextInput } from '@polymathnetwork/polymesh-ui';
+import { Header } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Flex, Icon, icons, Text, TextInput } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useContext } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 import { useForm } from 'react-hook-form';

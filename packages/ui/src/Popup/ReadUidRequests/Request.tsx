@@ -1,4 +1,5 @@
 import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Button, Flex, Heading, Icon, Text } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import styled from 'styled-components';
@@ -6,7 +7,7 @@ import styled from 'styled-components';
 import { ActionContext, ActivityContext, Password, PolymeshContext } from '../../components';
 import { approveUidReadRequest, isPasswordSet, rejectUidReadRequest, validatePassword } from '../../messaging';
 import { ThemeProps } from '../../types';
-import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
+import { Header } from '../../ui';
 import { AccountMain } from '../Accounts/AccountMain';
 
 interface Props {

@@ -1,7 +1,6 @@
 import { PASSWORD_EXPIRY_MIN } from '@polymathnetwork/extension-core/constants';
 import { ActionContext } from '@polymathnetwork/extension-ui/components';
-import { Button } from '@polymathnetwork/extension-ui/ui';
-import { Box, Checkbox, Flex } from '@polymathnetwork/polymesh-ui';
+import { Box, Button, Checkbox, Flex } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
@@ -113,9 +112,9 @@ function SignArea ({ buttonText, error, isExternal, isFirst, rejectOnly = false,
             { !rejectOnly && <Flex flex={1}
               ml='xs'>
               <Button
-                busy={isBusy}
                 disabled={(!!isLocked && !password) || !!error}
                 fluid
+                loading={isBusy}
                 onClick={_onSign}
                 type='submit'
               >

@@ -1,6 +1,7 @@
 // FIXME : icons, Checkbox
 import { SvgClipboardListOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Button, Checkbox, Flex, Header, Text } from '@polymathnetwork/extension-ui/ui';
+import { Header } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Checkbox, Flex, Text } from '@polymathnetwork/polymesh-ui';
 import React, { FC, useState } from 'react';
 
 import { SeedPhrase } from './components/SeedPhrase';

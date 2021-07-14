@@ -1,8 +1,7 @@
 import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
 
 import { ActionContext, Warning } from '@polymathnetwork/extension-ui/components';
-import { Button } from '@polymathnetwork/extension-ui/ui';
-import { Flex } from '@polymathnetwork/polymesh-ui';
+import { Button, Flex } from '@polymathnetwork/polymesh-ui';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 
 import { Status, useLedger } from '../../hooks/useLedger';
@@ -105,8 +104,8 @@ function LedgerSignArea ({ accountIndex, addressOffset, error, genesisHash, onSi
           {warning
             ? (
               <Button
-                busy={isBusy || ledgerLoading}
                 fluid
+                loading={isBusy || ledgerLoading}
                 onClick={_onRefresh}
                 type='submit'
               >
@@ -115,7 +114,7 @@ function LedgerSignArea ({ accountIndex, addressOffset, error, genesisHash, onSi
             )
             : (
               <Button
-                busy={isBusy || ledgerLoading}
+                loading={isBusy || ledgerLoading}
                 onClick={_onSignLedger}
               >
                 {'Sign on Ledger'}
