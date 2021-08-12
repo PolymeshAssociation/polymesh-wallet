@@ -156,17 +156,17 @@ const gradients = {
 
 export const colors = {
   ..._colors,
-  baseText: _colors.gray[3],
-  highlightText: _colors.gray[1],
-  placeholder: _colors.gray[3],
-  inactive: _colors.gray[2],
-  disabled: _colors.gray[4],
-  primary: _colors.brandMain,
-  secondary: _colors.brandLighter,
-  idle: _colors.brandLighter,
-  alert: _colors.red[0],
-  warning: _colors.yellow[0],
-  success: _colors.green[0],
+  baseText: _colors.gray1,
+  highlightText: _colors.gray1,
+  placeholder: _colors.gray5,
+  inactive: _colors.gray4,
+  disabled: _colors.gray7,
+  primary: _colors.polyPink,
+  secondary: _colors.polyPinkLight,
+  idle: _colors.polyPinkLight,
+  alert: _colors.danger1,
+  warning: _colors.warning1,
+  success: _colors.success1,
   gradient: gradients.gradient1
 };
 
