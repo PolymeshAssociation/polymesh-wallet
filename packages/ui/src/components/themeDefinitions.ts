@@ -151,11 +151,7 @@ const _colors = {
 };
 
 const gradients = {
-  primary: `linear-gradient(
-    180.63deg,
-    ${_colors.brandLightest} 0.03%,
-    rgba(220, 239, 254, 0) 79.96%
-  )`
+  gradient1: 'linear-gradient(193.19deg, #FF2E72 5.7%, #4A125E 91.16%)'
 };
 
 export const colors = {
@@ -171,7 +167,7 @@ export const colors = {
   alert: _colors.red[0],
   warning: _colors.yellow[0],
   success: _colors.green[0],
-  gradient: gradients.primary
+  gradient: gradients.gradient1
 };
 
 export const shadows = {

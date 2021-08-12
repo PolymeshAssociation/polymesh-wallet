@@ -1,3 +1,4 @@
+import { ThemeProps } from '@polymathnetwork/extension-ui/types';
 import React, { FC } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import styled from 'styled-components';
@@ -14,15 +15,11 @@ export interface HeaderProps extends BoxProps {
   headerText?: string;
 }
 
-const HeaderBox = styled(Box)({
-  // @ts-ignore
-  paddingTop: ({ theme }: { theme: any }) => theme.space.xs as string,
-  paddingBottom: ({ theme }: { theme: any }) => theme.space.m as string,
-  paddingLeft: ({ theme }: { theme: any }) => theme.space.s as string,
-  paddingRight: ({ theme }: { theme: any }) => theme.space.s as string,
-  backgroundImage: 'linear-gradient(to right, #170087, #1348E4)',
+const HeaderBox = styled(Box)(({ theme }: ThemeProps) => ({
+  padding: `${theme.space.xs} ${theme.space.s} ${theme.space.m}`,
+  background: theme.colors.gradient,
   zIndex: 500
-});
+}));
 
 export const Header: FC<HeaderProps> = (props) => {
   const { children, headerText, iconAsset, ...otherProps } = props;
@@ -36,31 +33,31 @@ export const Header: FC<HeaderProps> = (props) => {
 
   return (
     <HeaderBox {...otherProps}>
-      {iconAsset &&
+      {iconAsset && (
         <Box pt='m'>
           <Flex alignItems='flex-start'
             justifyContent='space-between'>
-            <Box
-              backgroundColor='brandLightest'
+            <Box backgroundColor='brandLightest'
               borderRadius='50%'
               height={48}
               px={12}
               py={12}
-              width={48}
-            >
+              width={48}>
               <Icon Asset={iconAsset}
                 color='brandMain'
                 height={24}
                 width={24} />
             </Box>
-            {pathname !== '/' &&
+            {pathname !== '/' && (
               <Box style={{ cursor: 'pointer' }}>
                 <Link onClick={onCancel}>
                   <Text color='brandLighter'
-                    variant='b1'>Cancel</Text>
+                    variant='b1'>
+                    Cancel
+                  </Text>
                 </Link>
               </Box>
-            }
+            )}
           </Flex>
           <Box pt='m'>
             <Heading color='white'
@@ -69,7 +66,7 @@ export const Header: FC<HeaderProps> = (props) => {
             </Heading>
           </Box>
         </Box>
-      }
+      )}
       {children}
     </HeaderBox>
   );
