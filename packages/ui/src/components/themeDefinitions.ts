@@ -29,7 +29,7 @@ export const borderWidths = {
 };
 
 export const fontFamilies = {
-  baseText: "'Inter', sans-serif",
+  baseText: 'Poppins',
   code: 'CodeFont, monospace, sans-serif'
 };
 
