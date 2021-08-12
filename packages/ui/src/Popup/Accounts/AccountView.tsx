@@ -249,22 +249,19 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       >
         <AccountViewGrid>
           <GridItem area='avatar'>
-            <Flex height='100%'>
-              <Box
-                backgroundColor='brandLightest'
-                borderRadius='50%'
-                height={32}
-                px='2'
-                width={32}
-              >
-                <Flex justifyContent='center'
-                  pt='xxs'>
-                  <Text color='brandMain'
-                    variant='b2m'>
-                    {name?.substr(0, 1)}
-                  </Text>
-                </Flex>
-              </Box>
+            <Flex
+              alignItems='center'
+              backgroundColor='gray7'
+              borderRadius='50%'
+              height={40}
+              justifyContent='center'
+              width={40}
+            >
+              <Text color='gray1'
+                variant='b2m'>
+                {/* @TODO: refactor */}
+                {name?.split(' ')[0].substr(0, 1).toUpperCase()}{name?.split(' ')[1].substr(0, 1).toUpperCase()}
+              </Text>
             </Flex>
           </GridItem>
           <GridItem area='account-info'>
