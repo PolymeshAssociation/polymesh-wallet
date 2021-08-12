@@ -99,7 +99,7 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
               </Box>
             </Flex>
           )}
-          <Box bg='brandLightest'
+          <Box bg='polyPinkLight'
             borderRadius='2'
             py='xs'>
             {account && (
@@ -107,8 +107,8 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
                 justifyContent='space-between'
                 mx='1'>
                 <Flex>
-                  <Text color='gray.2'
-                    variant='c2'>
+                  <Text color='polyIndigo'
+                    variant='b3m'>
                     <TextEllipsis size={29}>{account?.did}</TextEllipsis>
                   </Text>
                 </Flex>
