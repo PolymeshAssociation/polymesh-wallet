@@ -1,4 +1,3 @@
-export { default as Fonts } from './Fonts';
 export { default as Loading } from './Loading';
 export { default as Spinner } from './Spinner';
 export { default as Svg } from './Svg';
