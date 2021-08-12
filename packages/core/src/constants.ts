@@ -89,7 +89,8 @@ export const uidProvidersWhitelist = [
   'https://staging.itn-polymesh.fractal.id',
   'https://alcyone-tokenstudio.polymesh.live',
   'https://alcyone-dashboard.polymesh.live',
-  'http://localhost:3000'
+  'https://polymesh-onboarding-bullrun.herokuapp.com',
+  'http://localhost:3000',
 ];
 
 export const uidReadersWhitelist = [
