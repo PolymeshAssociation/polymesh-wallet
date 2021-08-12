@@ -6,11 +6,11 @@ import { ButtonDefaultProps, ButtonIconPosition, ButtonProps } from './definitio
 export const getVariant: Styles<ButtonProps> = ({ theme, variant = ButtonDefaultProps.variant }) =>
   ({
     primary: {
-      backgroundColor: theme.colors.primary,
+      backgroundColor: theme.colors.polyNavyBlue,
       color: '#fff',
       boxShadow: theme.shadows[2],
       '&:hover': {
-        backgroundColor: theme.colors.brandDark,
+        backgroundColor: theme.colors.polyNavyBlueDark,
         boxShadow: theme.shadows[3]
       },
       '&:active': {
