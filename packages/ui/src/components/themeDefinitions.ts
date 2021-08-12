@@ -39,11 +39,11 @@ export const lineHeights = {
   tighter: '1.166rem', // 18.66px
   tight: '1.313rem', // 21px
   lessTight: '1.452rem', // for fontSize 20px it is 29px
-  normal: '1.5rem', // 24 px
-  loose: '2.188rem', // 35 px
-  medium: '2.938rem', // 47 px
-  large: '4.188rem', // 67 px
-  xlarge: '4.938rem' // 79 px
+  normal: '1.5rem', // 24px
+  loose: '1.75rem', // 28px
+  medium: '2.1rem', // 33.6px
+  large: '2.975', // 47.6px
+  xlarge: '4.2rem' // 67.2px
 };
 
 export type TFontWeightCustom = 'light' | 'normal' | 'semiBold' | 'bold' | 'strong';
@@ -234,14 +234,14 @@ export const texts = {
   },
   sh1: {
     fontFamily: fontFamilies.baseText,
-    color: colors.gray[5],
+    color: colors.gray3,
     fontSize: fontSizes[3],
     lineHeight: lineHeights.normal,
     fontWeight: fontWeights.normal
   },
   c1: {
     fontFamily: fontFamilies.baseText,
-    color: colors.gray[1],
+    color: colors.gray1,
     fontSize: fontSizes[1],
     lineHeight: lineHeights.none,
     fontWeight: fontWeights.semiBold,
@@ -249,7 +249,7 @@ export const texts = {
   },
   c2: {
     fontFamily: fontFamilies.baseText,
-    color: colors.brandMain,
+    color: colors.polyPink,
     fontSize: fontSizes[0],
     lineHeight: lineHeights.none,
     fontWeight: fontWeights.normal,
@@ -257,7 +257,7 @@ export const texts = {
   },
   c2m: {
     fontFamily: fontFamilies.baseText,
-    color: colors.brandMain,
+    color: colors.polyPink,
     fontSize: fontSizes[0],
     lineHeight: lineHeights.none,
     fontWeight: fontWeights.semiBold,
@@ -275,41 +275,41 @@ export const texts = {
 
 export const headings = {
   h1: {
-    color: colors.highlightText,
-    fontSize: fontSizes[10],
+    color: colors.gray1,
+    fontSize: fontSizes[9],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.xlarge,
     letterSpacing: -1
   },
   h2: {
-    color: colors.highlightText,
-    fontSize: fontSizes[9],
+    color: colors.gray1,
+    fontSize: fontSizes[7],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.large,
     letterSpacing: -0.5
   },
   h3: {
-    color: colors.highlightText,
-    fontSize: fontSizes[7],
+    color: colors.gray1,
+    fontSize: fontSizes[5],
     fontWeight: fontWeights.semiBold,
     lineHeight: lineHeights.medium,
     letterSpacing: -0.25
   },
   h4: {
-    color: colors.highlightText,
-    fontSize: fontSizes[5],
+    color: colors.gray1,
+    fontSize: fontSizes[4],
     fontWeight: fontWeights.semiBold,
     lineHeight: lineHeights.loose
   },
   h5: {
-    color: colors.highlightText,
-    fontSize: fontSizes[4],
+    color: colors.gray1,
+    fontSize: fontSizes[3],
     fontWeight: fontWeights.semiBold,
     letterSpacing: 0.15,
-    lineHeight: lineHeights.normal
+    lineHeight: lineHeights.loose
   },
   h6: {
-    color: colors.highlightText,
+    color: colors.gray1,
     fontSize: fontSizes.baseText,
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.normal
@@ -317,9 +317,9 @@ export const headings = {
 };
 
 export const links = {
-  color: colors.brandMain,
+  color: colors.polyPink,
   '&:hover, &:focus': {
-    color: darken(0.2, colors.secondary)
+    color: darken(0.2, colors.polyPinkLight)
   }
 };
 
