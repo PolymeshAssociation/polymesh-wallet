@@ -84,17 +84,17 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
               onMouseLeave={mouseLeave}>
               <Flex alignItems='center'>
                 { !!currentAccount?.didAlias &&
-                  <TextOverflowEllipsis color='brandMain'
+                  <TextOverflowEllipsis color='polyIndigo'
                     maxWidth='140px'
-                    variant='c2'>
+                    variant='b3m'>
                     {currentAccount.didAlias}
                   </TextOverflowEllipsis>
                 }
                 <Box {...(!!currentAccount?.didAlias && { ml: 's' })}>
-                  <LabelWithCopy color='brandMain'
+                  <LabelWithCopy color='polyIndigo'
                     text={did}
                     textSize={currentAccount?.didAlias ? 20 : 30}
-                    textVariant='c2'
+                    textVariant='b3m'
                   />
                 </Box>
               </Flex>
