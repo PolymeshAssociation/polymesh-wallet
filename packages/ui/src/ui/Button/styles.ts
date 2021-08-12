@@ -19,14 +19,15 @@ export const getVariant: Styles<ButtonProps> = ({ theme, variant = ButtonDefault
       }
     },
     secondary: {
-      backgroundColor: theme.colors.disabled,
-      color: theme.colors.highlightText,
+      backgroundColor: theme.colors.white,
+      color: theme.colors.polyNavyBlue,
+      border: `1px solid ${theme.colors.polyNavyBlue}`,
       '&:hover': {
-        color: theme.colors.brandMain,
-        backgroundColor: theme.colors.brandLightest
+        color: theme.colors.polyNavyBlue,
+        backgroundColor: theme.colors.polyNavyBlueLight1
       },
       '&:active': {
-        backgroundColor: darken(0.1, theme.colors.brandLightest)
+        backgroundColor: darken(0.1, theme.colors.polyNavyBlueLight2)
       }
     },
     ghost: {
