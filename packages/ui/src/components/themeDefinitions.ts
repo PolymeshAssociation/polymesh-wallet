@@ -35,11 +35,11 @@ export const fontFamilies = {
 
 export const lineHeights = {
   none: '1rem', // 16 px
-  extraTight: '1.15rem', // 18 px
-  tighter: '1.4825rem', // 23.72px
-  tight: '1.392rem', // fS == 34px => 47px
+  extraTight: '1.125rem', // 18px
+  tighter: '1.166rem', // 18.66px
+  tight: '1.313rem', // 21px
   lessTight: '1.452rem', // for fontSize 20px it is 29px
-  normal: '1.688rem', // 27 px
+  normal: '1.5rem', // 24 px
   loose: '2.188rem', // 35 px
   medium: '2.938rem', // 47 px
   large: '4.188rem', // 67 px
@@ -192,44 +192,45 @@ export type TTextVariant = 'b1m' | 'b1' | 'b2m' | 'b2' | 'b3m' | 'b3' | 'sh1' | 
 export const texts = {
   b1: {
     fontFamily: fontFamilies.baseText,
-    color: colors.gray[5],
+    color: colors.gray1,
     fontSize: fontSizes[2],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.normal
   },
   b1m: {
     fontFamily: fontFamilies.baseText,
-    color: colors.highlightText,
+    color: colors.gray1,
     fontSize: fontSizes[2],
     fontWeight: fontWeights.semiBold,
     lineHeight: lineHeights.normal
   },
   b2: {
     fontFamily: fontFamilies.baseText,
-    color: colors.gray[5],
+    color: colors.gray1,
     fontSize: fontSizes[1],
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.tighter
+    lineHeight: lineHeights.tight
   },
   b2m: {
     fontFamily: fontFamilies.baseText,
-    color: colors.highlightText,
+    color: colors.gray1,
     fontSize: fontSizes[1],
     fontWeight: fontWeights.semiBold,
-    lineHeight: lineHeights.normal
+    lineHeight: lineHeights.tight
   },
   b3: {
     fontFamily: fontFamilies.baseText,
-    color: colors.highlightText,
+    color: colors.gray1,
     fontSize: fontSizes[0],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.extraTight
   },
   b3m: {
     fontFamily: fontFamilies.baseText,
-    color: colors.highlightText,
+    color: colors.gray1,
     fontSize: fontSizes[0],
-    fontWeight: fontWeights.semiBold
+    fontWeight: fontWeights.semiBold,
+    lineHeight: lineHeights.extraTight
   },
   sh1: {
     fontFamily: fontFamilies.baseText,
@@ -264,9 +265,9 @@ export const texts = {
   },
   code: {
     fontFamily: fontFamilies.code,
-    color: colors.gray[1],
+    color: colors.gray1,
     fontSize: fontSizes[0],
-    lineHeight: lineHeights.none,
+    lineHeight: lineHeights.tighter,
     fontWeight: fontWeights.normal,
     letterSpacing: '0.4px'
   }
