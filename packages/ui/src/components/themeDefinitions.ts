@@ -108,6 +108,35 @@ export const zIndexes = {
 };
 
 const _colors = {
+  polyIndigo: '#43195B',
+  polyFucisa: '#D557EA',
+  polyPink: '#EC4673',
+  polyPinkLight: '#FAD1DC',
+  polyMalachite: '#60D3CB',
+  polyMalachiteLight: '#D7F4F2',
+  polyNavyBlue: '#170087',
+  polyNavyBlueDark: '#100255',
+  polyNavyBlueLight1: '#F2EFFF',
+  polyNavyBlueLight2: '#DCD3FF',
+  white: '#FFFFFF',
+  grayBg: '#FBFBFB',
+  gray8: '#F5F5F5',
+  gray7: '#F0F0F0',
+  gray6: '#C7C7C7',
+  gray5: '#8F8F8F',
+  gray4: '#727272',
+  gray3: '#565656',
+  gray2: '#3A3A3A',
+  gray1: '#1E1E1E',
+  success1: '#00AA5E',
+  success2: '#D4F7E7',
+  warning1: '#EFC100',
+  warning2: '#FBF3D0',
+  warning3: '#E3A30C',
+  danger1: '#DB2C3E',
+  danger2: '#FAE6E8',
+
+  // Previous branding colors
   gray: ['#FFFFFF', '#152935', '#6C7D89', '#8C9BA5', '#EBF0F7', '#F8F9FC'],
   brandBg: '#FAFDFF',
   brandLightest: '#DCEFFE',
@@ -118,8 +147,7 @@ const _colors = {
   info: '#2574B5',
   green: ['#00AA5E', '#0B6B40', '#D4F7E7'],
   yellow: ['#EFC100', '#FBF3D0', '#E3A30C'],
-  red: ['#DB2C3E', '#FAE6E8'],
-  white: '#FFFFFF'
+  red: ['#DB2C3E', '#FAE6E8']
 };
 
 const gradients = {
@@ -156,7 +184,7 @@ export const shadows = {
 };
 
 export const radii = {
-  0: '',
+  0: '0px',
   1: '2px',
   2: '4px',
   3: '8px',
