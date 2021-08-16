@@ -243,9 +243,9 @@ export const texts = {
     fontFamily: fontFamilies.baseText,
     color: colors.gray1,
     fontSize: fontSizes[1],
-    lineHeight: lineHeights.none,
+    lineHeight: lineHeights.tight,
     fontWeight: fontWeights.semiBold,
-    letterSpacing: '0.4px'
+    letterSpacing: '4%'
   },
   c2: {
     fontFamily: fontFamilies.baseText,
@@ -253,7 +253,7 @@ export const texts = {
     fontSize: fontSizes[0],
     lineHeight: lineHeights.none,
     fontWeight: fontWeights.normal,
-    letterSpacing: '0.4px'
+    letterSpacing: '4%'
   },
   c2m: {
     fontFamily: fontFamilies.baseText,
@@ -261,7 +261,7 @@ export const texts = {
     fontSize: fontSizes[0],
     lineHeight: lineHeights.none,
     fontWeight: fontWeights.semiBold,
-    letterSpacing: '0.4px'
+    letterSpacing: '4%'
   },
   code: {
     fontFamily: fontFamilies.code,
@@ -269,7 +269,7 @@ export const texts = {
     fontSize: fontSizes[0],
     lineHeight: lineHeights.tighter,
     fontWeight: fontWeights.normal,
-    letterSpacing: '0.4px'
+    letterSpacing: '4%'
   }
 };
 

@@ -96,10 +96,11 @@ export default function Accounts (): React.ReactElement {
               details={true} />}</AppHeader>
             <AccountsArea id='accounts-container'>
               <Flex justifyContent='space-between'
-                pt='m'
-                px='s'>
+                mb='-4px'
+                mt='m'
+                mx='m'>
                 <Text color='gray.1'
-                  variant='c2'>
+                  variant='c1'>
                   ACCOUNTS
                 </Text>
                 <OptionSelector
