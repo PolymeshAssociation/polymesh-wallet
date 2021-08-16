@@ -269,7 +269,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
                 {isSelected && (
                   <Icon
                     Asset={SvgCheck}
-                    color='brandMain'
+                    color='polyPink'
                     height={24}
                     width={24}
                   />

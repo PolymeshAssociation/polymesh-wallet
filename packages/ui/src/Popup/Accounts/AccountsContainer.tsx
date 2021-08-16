@@ -63,13 +63,13 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
                 tight
                 value={newAlias} />
               <Icon Asset={SvgCheck}
-                color='brandMain'
+                color='polyPink'
                 height={20}
                 onClick={saveAlias}
                 style={{ cursor: 'pointer' }}
                 width={20} />
               <Icon Asset={SvgWindowClose}
-                color='brandMain'
+                color='polyPink'
                 height={20}
                 onClick={stopEditAlias}
                 style={{ cursor: 'pointer' }}
@@ -101,7 +101,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
               <Flex>
                 <Flex mr='xs'>
                   <Icon Asset={SvgPencilOutline}
-                    color={hover ? 'brandMain' : headerColor}
+                    color={hover ? 'polyPink' : headerColor}
                     height={16}
                     onClick={editAlias}
                     style={{ cursor: 'pointer' }}
