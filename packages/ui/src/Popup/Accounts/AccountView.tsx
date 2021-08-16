@@ -262,7 +262,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             <Flex
               alignItems='flex-end'
               flexDirection='column'
-              height='100%'
+              height='46px'
               justifyContent='space-around'
             >
               <Box width={24}>

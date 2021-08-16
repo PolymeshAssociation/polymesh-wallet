@@ -60,6 +60,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
               <TextInput defaultValue={currentAccount?.didAlias}
                 onChange={handleAliasChange}
                 placeholder='Your Polymesh Account'
+                style={{ height: '18px' }}
                 tight
                 value={newAlias} />
               <Icon Asset={SvgCheck}

@@ -4,7 +4,10 @@ export const AccountViewGrid = styled.div`
   display: grid;
   grid-template-areas: 'avatar account-info options';
   gap: 10px;
-  grid-template-columns: 43px auto 35px;
+  grid-template-columns: 43px auto 26px;
+  grid-template-rows: 56px;
+  align-items: center;
+  justify-items: stretch;
 `;
 
 export const AccountInfoGrid = styled.div`
