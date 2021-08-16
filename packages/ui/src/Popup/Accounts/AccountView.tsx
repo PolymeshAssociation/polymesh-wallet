@@ -2,6 +2,7 @@ import { networkLinks } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgCheck, SvgDotsVertical, SvgPencilOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -249,20 +250,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       >
         <AccountViewGrid>
           <GridItem area='avatar'>
-            <Flex
-              alignItems='center'
-              backgroundColor='gray7'
-              borderRadius='50%'
-              height={40}
-              justifyContent='center'
-              width={40}
-            >
-              <Text color='gray1'
-                variant='b2m'>
-                {/* @TODO: refactor */}
-                {name?.split(' ')[0].substr(0, 1).toUpperCase()}{name?.split(' ')[1].substr(0, 1).toUpperCase()}
-              </Text>
-            </Flex>
+            <InitialsAvatar name={name} />
           </GridItem>
           <GridItem area='account-info'>
             <Box>
