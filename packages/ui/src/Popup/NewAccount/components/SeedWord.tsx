@@ -10,8 +10,8 @@ export const SeedWord: FC<Props> = ({ seedWord, wordOrder }) => {
   return (
     <Flex backgroundColor='gray8'
       borderRadius='3'
+      height='24px'
       px='8px'
-      py='4px'
       width='min-content'>
       <Flex alignItems='center'
         backgroundColor='brandMain'
