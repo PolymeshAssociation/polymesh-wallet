@@ -25,14 +25,14 @@ export const SeedView: FC<Props> = ({ onContinue, seedPhrase }) => {
           </Text>
         </Box>
       </Header>
-      <Box mx='s'>
+      <Box mx='m'>
         <SeedPhrase seedPhrase={seedPhrase} />
       </Box>
       <Flex flex={1}
         flexDirection='column'
         justifyContent='flex-end'
         mb='s'
-        mx='s'>
+        mx='m'>
         <Box>
           <Flex justifyContent='flex-start'
             mb='s'>
