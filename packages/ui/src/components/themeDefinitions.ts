@@ -136,12 +136,12 @@ const _colors = {
   danger1: '#DB2C3E',
   danger2: '#FAE6E8',
 
-  // Previous branding colors
+  // Previous branding color names
   gray: ['#FFFFFF', '#152935', '#6C7D89', '#8C9BA5', '#EBF0F7', '#F8F9FC'],
   brandBg: '#FAFDFF',
   brandLightest: '#DCEFFE',
   brandLighter: '#6DC7F7',
-  brandMain: '#1348E4',
+  brandMain: '#EC4673',
   brandDark: '#0024BD',
   brandDarkest: '#170087',
   info: '#2574B5',
