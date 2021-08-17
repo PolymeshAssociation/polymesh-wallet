@@ -8,27 +8,24 @@ export interface Props {
 
 export const SeedWord: FC<Props> = ({ seedWord, wordOrder }) => {
   return (
-    <Box backgroundColor='gray.4'
-      borderRadius='1'
-      mt='xs'
-      px='s'>
-      <Flex>
-        <Flex>
-          <Flex alignItems='center'
-            backgroundColor='brandLighter'
-            borderRadius='50%'
-            height={16}
-            justifyContent='center'
-            width={16}>
-            <Text color='gray.0'
-              variant='b3m'>{wordOrder + 1}</Text>
-          </Flex>
-        </Flex>
-        <Flex ml='s'>
-          <Text color='gray.1'
-            variant='b2m'>{seedWord}</Text>
-        </Flex>
+    <Flex backgroundColor='gray8'
+      borderRadius='3'
+      px='8px'
+      py='4px'
+      width='min-content'>
+      <Flex alignItems='center'
+        backgroundColor='brandMain'
+        borderRadius='50%'
+        height={16}
+        justifyContent='center'
+        width={16}>
+        <Text color='white'
+          variant='b3m'>{wordOrder + 1}</Text>
       </Flex>
-    </Box>
+      <Box ml='4px'>
+        <Text color='gray1'
+          variant='b2m'>{seedWord}</Text>
+      </Box>
+    </Flex>
   );
 };
