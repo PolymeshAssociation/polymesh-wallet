@@ -16,7 +16,7 @@ export interface HeaderProps extends BoxProps {
 }
 
 const HeaderBox = styled(Box)(({ theme }: ThemeProps) => ({
-  padding: `${theme.space.xs} ${theme.space.s} ${theme.space.m}`,
+  padding: theme.space.m,
   background: theme.colors.gradient,
   zIndex: 500
 }));
@@ -34,25 +34,26 @@ export const Header: FC<HeaderProps> = (props) => {
   return (
     <HeaderBox {...otherProps}>
       {iconAsset && (
-        <Box pt='m'>
+        <>
           <Flex alignItems='flex-start'
             justifyContent='space-between'>
-            <Box backgroundColor='brandLightest'
+            <Flex backgroundColor='white'
               borderRadius='50%'
               height={48}
+              justifyContent='center'
               px={12}
               py={12}
               width={48}>
               <Icon Asset={iconAsset}
                 color='brandMain'
-                height={24}
-                width={24} />
-            </Box>
+                height={20}
+                width={20} />
+            </Flex>
             {pathname !== '/' && (
               <Box style={{ cursor: 'pointer' }}>
                 <Link onClick={onCancel}>
-                  <Text color='brandLighter'
-                    variant='b1'>
+                  <Text color='polyNavyBlue'
+                    variant='b2'>
                     Cancel
                   </Text>
                 </Link>
@@ -61,11 +62,11 @@ export const Header: FC<HeaderProps> = (props) => {
           </Flex>
           <Box pt='m'>
             <Heading color='white'
-              variant='h5'>
+              variant='h4'>
               {headerText}
             </Heading>
           </Box>
-        </Box>
+        </>
       )}
       {children}
     </HeaderBox>

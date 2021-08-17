@@ -20,7 +20,7 @@ export const SeedView: FC<Props> = ({ onContinue, seedPhrase }) => {
           mb='m'
           mt='s'>
           <Text color='brandLightest'
-            variant='b3'>
+            variant='b2'>
             These 12 words in order will recover your account should you lose or forget your password. It is recommended you store a hard copy in a secure place.
           </Text>
         </Box>

@@ -28,6 +28,10 @@ export const getVariant: Styles<ButtonProps> = ({ theme, variant = ButtonDefault
       },
       '&:active': {
         backgroundColor: darken(0.1, theme.colors.polyNavyBlueLight2)
+      },
+      '&:disabled': {
+        border: `1px solid ${theme.colors.gray7}`,
+        background: theme.colors.white
       }
     },
     ghost: {
