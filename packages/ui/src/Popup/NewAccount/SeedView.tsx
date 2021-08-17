@@ -17,7 +17,7 @@ export const SeedView: FC<Props> = ({ onContinue, seedPhrase }) => {
       <Header headerText='Your recovery phrase'
         iconAsset={SvgClipboardListOutline}>
         <Box mt='s'>
-          <Text color='brandLightest'
+          <Text color='white'
             variant='b2'>
             These 12 words in order will recover your account should you lose or forget your password. It is recommended
             you store a hard copy in a secure place.

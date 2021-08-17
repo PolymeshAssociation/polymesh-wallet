@@ -33,12 +33,10 @@ function AddAccount (): React.ReactElement {
   return (
     <>
       <Header>
-        <Box height={308}
-          pt='m'>
+        <Box pt='m'>
           <Icon Asset={SvgWalletLogo}
             height={80}
             width={80} />
-          {/* </Box> */}
           <Box pt='m'
             width={220}>
             <Heading color='white'
@@ -47,7 +45,7 @@ function AddAccount (): React.ReactElement {
             </Heading>
           </Box>
           <Box mt='s'>
-            <Text color='brandLightest'
+            <Text color='white'
               variant='b2'>
               Manage your Polymesh digital assets by creating an account or using an existing account.
             </Text>
@@ -58,7 +56,7 @@ function AddAccount (): React.ReactElement {
         flex={1}
         flexDirection='column'
         justifyContent='space-between'
-        mx='s'>
+        px='m'>
         <Box id='agreement-checkboxes'
           mt='m'>
           <Flex alignItems='flex-start'
