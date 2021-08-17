@@ -1,4 +1,8 @@
-import { SvgArrowLeft, SvgCheckboxMarkedCircle, SvgClipboardListOutline, SvgCloseCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgArrowLeft,
+  SvgCheckboxMarkedCircle,
+  SvgCheckOutline,
+  SvgClipboardListOutline,
+  SvgCloseCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Box, Button, ButtonSmall, Flex, Header, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 
@@ -6,14 +10,14 @@ import { SeedWord } from './components/SeedWord';
 
 export interface Props {
   seedPhrase?: string;
-  onBack:() => void;
+  onBack: () => void;
   onContinue: () => void;
 }
 
 enum status {
   pending,
   invalid,
-  valid
+  valid,
 }
 
 export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
@@ -72,19 +76,19 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
 
   const renderStatus = () => {
     const color = confirmationStatus === status.invalid ? 'alert' : 'success';
-    const message = confirmationStatus === status.invalid ? 'Your recovery phrase is incorrect. Please try again.' : 'Your recovery phrase is correct. Thank you!';
+    const message =
+      confirmationStatus === status.invalid
+        ? 'Your recovery phrase is incorrect. Please try again.'
+        : 'Your recovery phrase is correct. Thank you!';
     const icon = confirmationStatus === status.invalid ? SvgCloseCircle : SvgCheckboxMarkedCircle;
 
     return (
-      <Flex alignItems='flex-start'
-        mt='s'
-        mx='xs'>
-        <Box mt='xs'>
-          <Icon Asset={icon}
-            color={color}
-            height={15}
-            width={15} />
-        </Box>
+      <Flex alignItems='center'
+        mt='4px'>
+        <Icon Asset={icon}
+          color={color}
+          height={15}
+          width={15} />
         <Box ml='xs'>
           <Text color={color}
             variant='b2'>
@@ -98,33 +102,37 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
   return (
     <>
       <Header headerText='Confirm your recovery phrase'
-        iconAsset={SvgClipboardListOutline}>
-      </Header>
-      <Box mx='s'>
-        <Box pt='m'>
-          <Text color='gray.1'
-            variant='b2m'>
-            Enter your 12–word recovery phrase
-          </Text>
+        iconAsset={SvgCheckOutline}></Header>
+      <Box px='m'>
+        <Box mb='4px'
+          mt='m'>
+          <Text variant='b2m'>Enter your 12–word recovery phrase</Text>
         </Box>
-        <Flex alignItems='flex-start'
+        <Flex
+          alignItems='flex-start'
           backgroundColor={confirmationStatus === status.invalid ? 'red.1' : 'gray.0'}
-          borderColor={confirmationStatus === status.valid ? 'success' : confirmationStatus === status.invalid ? 'alert' : 'gray.3'}
-          borderRadius='1'
+          borderColor={
+            confirmationStatus === status.valid ? 'success' : confirmationStatus === status.invalid ? 'alert' : 'gray.3'
+          }
+          borderRadius='3'
           borderStyle='solid'
           borderWidth={1}
           height={190}
-          p='xs'>
-          {constructedPhrase.length === 0 &&
-            <Text color='gray.3'
-              variant='b2'>
-              Click on each word below in the correct order to confirm your recovery phrase.
-            </Text>
-          }
+          p='s'
+        >
+          {constructedPhrase.length === 0 && (
+            <Box mx='m'>
+              <Text color='gray4'
+                variant='b2'>
+                Click on each word below in the correct order to confirm your recovery phrase.
+              </Text>
+            </Box>
+          )}
           <Flex flexWrap='wrap'>
             {constructedPhrase.map((word, index) => (
               <Box key={index}
-                mr='xs'
+                mb='m'
+                mr='6px'
                 onClick={removeSeedWord(index)}
                 style={{ cursor: 'pointer' }}>
                 <SeedWord seedWord={word}
@@ -133,33 +141,38 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
             ))}
           </Flex>
         </Flex>
-        <Flex
-          flexWrap='wrap'>
-          {shuffledPhrase.map((word, index) => (
-            <Box backgroundColor='gray.4'
-              borderRadius='1'
-              key={index}
-              mr='s'
-              mt='s'
-              onClick={addSeedWord(index)}
-              px='s'
-              style={{ cursor: 'pointer' }}>
-              <Text color='gray.1'
-                variant='b2m'>{word}</Text>
-            </Box>
-          ))}
-        </Flex>
-        {confirmationStatus !== status.pending &&
-          renderStatus()
-        }
-        {
-          confirmationStatus === status.invalid &&
-            <Box mt='s'>
-              <ButtonSmall fluid
-                onClick={resetPhrase}
-                variant='secondary'>Reset the phrase</ButtonSmall>
-            </Box>
-        }
+        {shuffledPhrase.length > 0 && (
+          <Flex flexWrap='wrap'
+            mt='m'>
+            {shuffledPhrase.map((word, index) => (
+              <Box
+                backgroundColor='gray8'
+                borderRadius='3'
+                key={index}
+                mb='8px'
+                mr='m'
+                onClick={addSeedWord(index)}
+                px='s'
+                style={{ cursor: 'pointer' }}
+              >
+                <Text color='gray1'
+                  variant='b2m'>
+                  {word}
+                </Text>
+              </Box>
+            ))}
+          </Flex>
+        )}
+        {confirmationStatus !== status.pending && renderStatus()}
+        {confirmationStatus === status.invalid && (
+          <Box mt='s'>
+            <ButtonSmall fluid
+              onClick={resetPhrase}
+              variant='secondary'>
+              Reset the phrase
+            </ButtonSmall>
+          </Box>
+        )}
       </Box>
       <Flex flex={1}
         flexDirection='column'
