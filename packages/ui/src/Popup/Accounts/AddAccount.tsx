@@ -1,4 +1,4 @@
-import { SvgPolyNew } from '@polymathnetwork/extension-ui/assets/images/icons';
+import SvgWalletLogo from '@polymathnetwork/extension-ui/assets/images/SvgWalletLogo';
 // import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 // import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
 // import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
@@ -35,21 +35,10 @@ function AddAccount (): React.ReactElement {
       <Header>
         <Box height={308}
           pt='m'>
-          <Box
-            backgroundColor='brandLightest'
-            border='solid'
-            borderColor='white'
-            borderRadius='50%'
-            borderWidth={4}
-            height={72}
-            padding={18}
-            width={72}
-          >
-            <Icon Asset={SvgPolyNew}
-              color='brandMain'
-              height={30}
-              width={30} />
-          </Box>
+          <Icon Asset={SvgWalletLogo}
+            height={80}
+            width={80} />
+          {/* </Box> */}
           <Box pt='m'
             width={220}>
             <Heading color='white'
