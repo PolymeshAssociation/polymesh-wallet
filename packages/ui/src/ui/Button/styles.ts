@@ -9,6 +9,7 @@ export const getVariant: Styles<ButtonProps> = ({ theme, variant = ButtonDefault
       backgroundColor: theme.colors.polyNavyBlue,
       color: '#fff',
       boxShadow: theme.shadows[2],
+      height: '48px',
       '&:hover': {
         backgroundColor: theme.colors.polyNavyBlueDark,
         boxShadow: theme.shadows[3]
@@ -22,6 +23,7 @@ export const getVariant: Styles<ButtonProps> = ({ theme, variant = ButtonDefault
       backgroundColor: theme.colors.white,
       color: theme.colors.polyNavyBlue,
       border: `1px solid ${theme.colors.polyNavyBlue}`,
+      height: '48px',
       '&:hover': {
         color: theme.colors.polyNavyBlue,
         backgroundColor: theme.colors.polyNavyBlueLight1
