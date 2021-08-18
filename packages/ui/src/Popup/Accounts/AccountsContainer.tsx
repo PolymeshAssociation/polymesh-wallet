@@ -50,7 +50,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
   const renderContainerHeader = (isAssigned: boolean) => {
     if (isAssigned) {
       return (
-        <Box bg={headerColor}
+        <Box bg='polyPinkLight'
           borderRadius='2'
           mt='xs'
           mx='s'
@@ -102,7 +102,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
               <Flex>
                 <Flex mr='xs'>
                   <Icon Asset={SvgPencilOutline}
-                    color={hover ? 'polyPink' : headerColor}
+                    color={hover ? 'polyPink' : 'polyPinkLight'}
                     height={16}
                     onClick={editAlias}
                     style={{ cursor: 'pointer' }}
