@@ -125,8 +125,7 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
           Unassigned key
         </Text>
       )}
-      <Flex alignItems='center'
-        flexDirection='row'
+      <Flex alignItems='flexStart'
         mt='s'>
         <Box>
           <TextOverflowEllipsis color='gray.0'
