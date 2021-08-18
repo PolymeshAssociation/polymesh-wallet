@@ -49,8 +49,8 @@ export const Wrapper = styled.label<StyledProps<BaseInputProps>>((props) => ({
   ...{
     display: 'flex',
     alignItems: 'center',
-    border: `1px solid ${props.theme.colors.placeholder}`,
-    borderRadius: props.theme.radii[1],
+    border: `1px solid ${props.theme.colors.gray5}`,
+    borderRadius: props.theme.radii[3],
     color: props.theme.colors.highlightText,
     backgroundColor: 'white'
   },

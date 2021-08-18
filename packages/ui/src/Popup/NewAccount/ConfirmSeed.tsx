@@ -1,7 +1,6 @@
 import { SvgArrowLeft,
   SvgCheckboxMarkedCircle,
   SvgCheckOutline,
-  SvgClipboardListOutline,
   SvgCloseCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Box, Button, ButtonSmall, Flex, Header, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useCallback, useEffect, useState } from 'react';
@@ -121,7 +120,7 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
           p='s'
         >
           {constructedPhrase.length === 0 && (
-            <Box mx='m'>
+            <Box mx='s'>
               <Text color='gray4'
                 variant='b2'>
                 Click on each word below in the correct order to confirm your recovery phrase.
@@ -184,7 +183,7 @@ export const ConfirmSeed: FC<Props> = ({ onBack, onContinue, seedPhrase }) => {
             style={{ padding: '0.9rem' }}
             variant='secondary'>
             <Icon Asset={SvgArrowLeft}
-              color='gray.1'
+              color='polyNavyBlue'
               height={16}
               width={16} />
           </Button>
