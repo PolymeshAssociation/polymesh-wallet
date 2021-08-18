@@ -139,8 +139,8 @@ const _colors = {
   // Previous branding color names
   gray: ['#FFFFFF', '#152935', '#6C7D89', '#8C9BA5', '#EBF0F7', '#F8F9FC'],
   brandBg: '#FAFDFF',
-  brandLightest: '#DCEFFE',
-  brandLighter: '#6DC7F7',
+  brandLightest: '#FAD1DC',
+  brandLighter: '#DCD3FF',
   brandMain: '#EC4673',
   brandDark: '#0024BD',
   brandDarkest: '#170087',

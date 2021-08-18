@@ -21,6 +21,7 @@ export function InitialsAvatar ({ name }: InitialAvatarProps): JSX.Element {
       borderRadius='50%'
       height={40}
       justifyContent='center'
+      style={{ flexShrink: 0 }}
       width={40}>
       <Text color='gray1'
         variant='b2m'>

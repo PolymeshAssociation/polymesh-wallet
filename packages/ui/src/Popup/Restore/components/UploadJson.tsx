@@ -2,6 +2,7 @@ import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { hexToU8a, isHex, u8aToString } from '@polkadot/util';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
 import { Box,
   Button,
   ButtonSmall,
@@ -155,52 +156,36 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
         </>
         {accountJson && (
           <>
-            <Flex>
-              <Box mt='m'>
-                <Box backgroundColor='gray.4'
+            <Flex mt='s'>
+              <Box mr='s'>
+                <Flex backgroundColor='gray7'
                   borderRadius='50%'
-                  height={24}
-                  px='1'
-                  py='0'
-                  width={24}>
+                  height='24px'
+                  justifyContent='center'
+                  width='24px'>
                   <Icon Asset={SvgFileLockOutline}
-                    color='gray.3'
+                    color='gray4'
                     height={14}
                     width={14} />
-                </Box>
+                </Flex>
               </Box>
-              <Flex justifyContent='space-between'
-                ml='s'>
-                <Text color='gray.1'
+              <Box mr='s'>
+                <Text color='gray1'
                   variant='b2'>
                   <TextEllipsis size={32}>{filename}</TextEllipsis>
                 </Text>
-              </Flex>
+              </Box>
               <Box onClick={clearUploadedFile}
                 style={{ cursor: 'pointer' }}>
                 <Icon Asset={SvgDeleteOutline}
-                  color='gray.3'
+                  color='gray4'
                   height={18}
                   width={18} />
               </Box>
             </Flex>
             <Box mt='m'>
               <Flex justifyContent='space-between'>
-                <Box>
-                  <Box backgroundColor='brandLightest'
-                    borderRadius='50%'
-                    height={40}
-                    px='2'
-                    width={40}>
-                    <Flex justifyContent='center'
-                      pt='xs'>
-                      <Text color='brandMain'
-                        variant='b2m'>
-                        {accountName?.substr(0, 1)}
-                      </Text>
-                    </Flex>
-                  </Box>
-                </Box>
+                <InitialsAvatar name={accountName} />
                 <Box ml='s'
                   width='100%'>
                   <Flex flexDirection='row'
