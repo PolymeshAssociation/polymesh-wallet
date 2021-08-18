@@ -181,23 +181,21 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
       </Flex>
       {details && (
         <Box mt='m'>
-          <Box
+          <Flex
             borderColor='gray.0'
-            borderRadius='3'
+            borderRadius='100px'
             borderStyle='solid'
-            borderWidth={2}
+            borderWidth={1}
+            height='32px'
+            justifyContent='center'
             onClick={showAccountDetails}
             style={{ cursor: 'pointer' }}
           >
-            <Flex alignItems='center'
-              height={32}
-              justifyContent='center'>
-              <Text color='gray.0'
-                variant='b2m'>
+            <Text color='white'
+              variant='b2m'>
                 View details
-              </Text>
-            </Flex>
-          </Box>
+            </Text>
+          </Flex>
         </Box>
       )}
     </>
