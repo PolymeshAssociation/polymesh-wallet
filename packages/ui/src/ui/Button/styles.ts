@@ -15,7 +15,7 @@ export const getVariant: Styles<ButtonProps> = ({ theme, variant = ButtonDefault
         boxShadow: theme.shadows[3]
       },
       '&:active': {
-        backgroundColor: transparentize(0.2, theme.colors.brandDark),
+        backgroundColor: transparentize(0.2, theme.colors.polyNavyBlueDark),
         boxShadow: theme.shadows[3]
       }
     },

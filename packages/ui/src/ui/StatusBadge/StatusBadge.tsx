@@ -21,24 +21,24 @@ export const StatusBadge = styled(Box)<StatusBadgeProps>`
     variant === 'green'
       ? theme.colors.green[2]
       : variant === 'red'
-        ? theme.colors.red[1]
+        ? theme.colors.polyPinkLight
         : variant === 'yellow'
           ? theme.colors.yellow[1]
           : variant === 'gray'
             ? theme.colors.gray[4]
             : variant === 'blue'
-              ? theme.colors.brandLightest
+              ? theme.colors.polyNavyBlueLight2
               : theme.colors.gray[4]};
   color: ${({ theme, variant }) =>
     variant === 'green'
       ? theme.colors.green[0]
       : variant === 'red'
-        ? theme.colors.red[0]
+        ? theme.colors.polyPink
         : variant === 'yellow'
           ? theme.colors.yellow[2]
           : variant === 'gray'
             ? theme.colors.gray[2]
             : variant === 'blue'
-              ? theme.colors.brandMain
+              ? theme.colors.polyNavyBlue
               : theme.colors.gray[2]};
 `;
