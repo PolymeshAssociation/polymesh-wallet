@@ -219,8 +219,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           <Flex alignItems='center'
             height='100%'
             justifyContent='flex-end'>
-            <ButtonSmall onClick={assign}
-              variant='secondary'>
+            <ButtonSmall onClick={assign}>
               Assign
             </ButtonSmall>
           </Flex>

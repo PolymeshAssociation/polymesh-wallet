@@ -116,9 +116,9 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
       );
     } else {
       return (
-        <Box mx='xs'>
-          <Text color='gray.1'
-            variant='c2'>Unassigned keys</Text>
+        <Box mx='s'>
+          <Text color='gray1'
+            variant='b2m'>Unassigned keys</Text>
         </Box>
       );
     }
