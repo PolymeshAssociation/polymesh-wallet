@@ -11,28 +11,27 @@ type NameEditProps = {
 
 export function NameEdit ({ newName, onCancel, onChange, onSave }: NameEditProps): JSX.Element {
   return (
-    <Box py='3px'>
-      <Flex alignItems='center'
-        flexDirection='row'>
-        <TextInput
-          onChange={onChange}
-          tight
-          value={newName} />
-        <Box ml='xs'>
-          <Icon Asset={SvgCheck}
-            color='gray.2'
-            height={16}
-            onClick={onSave}
-            width={16} />
-        </Box>
-        <Box ml='xs'>
-          <Icon Asset={SvgWindowClose}
-            color='gray.2'
-            height={16}
-            onClick={onCancel}
-            width={16} />
-        </Box>
-      </Flex>
-    </Box>
+    <Flex alignItems='center'
+      flexDirection='row'>
+      <TextInput
+        onChange={onChange}
+        style={{ height: '20px' }}
+        tight
+        value={newName} />
+      <Box ml='xs'>
+        <Icon Asset={SvgCheck}
+          color='gray.2'
+          height={16}
+          onClick={onSave}
+          width={16} />
+      </Box>
+      <Box ml='xs'>
+        <Icon Asset={SvgWindowClose}
+          color='gray.2'
+          height={16}
+          onClick={onCancel}
+          width={16} />
+      </Box>
+    </Flex>
   );
 }
