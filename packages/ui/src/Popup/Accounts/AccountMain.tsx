@@ -17,45 +17,45 @@ export interface Props {
 
 export const AccountMain: FC<Props> = ({ account, details = true }) => {
   const history = useHistory();
-  const [editing, setEditing] = useState(false);
-  const [newAlias, setNewAlias] = useState('');
-  const [hover, setHover] = useState(false);
+  // const [editing, setEditing] = useState(false);
+  // const [newAlias, setNewAlias] = useState('');
+  // const [hover, setHover] = useState(false);
   const { networkState: { selected: network, ss58Format } } = useContext(PolymeshContext);
-  const onAction = useContext(ActionContext);
+  // const onAction = useContext(ActionContext);
 
   const showAccountDetails = () => {
     history.push(`/account/details/${account?.address}`);
   };
 
-  const startEdit = () => {
-    setHover(false);
-    setNewAlias(account.didAlias);
-    setEditing(true);
-  };
+  // const startEdit = () => {
+  //   setHover(false);
+  //   setNewAlias(account.didAlias);
+  //   setEditing(true);
+  // };
 
-  const stopEdit = () => {
-    setEditing(false);
-  };
+  // const stopEdit = () => {
+  //   setEditing(false);
+  // };
 
-  const mouseEnter = () => setHover(true);
+  // const mouseEnter = () => setHover(true);
 
-  const mouseLeave = () => setHover(false);
+  // const mouseLeave = () => setHover(false);
 
-  const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewAlias(e.target.value);
-  };
+  // const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setNewAlias(e.target.value);
+  // };
 
-  const saveAlias = async () => {
-    account && account.did && network && (await renameIdentity(network, account.did, newAlias));
-    stopEdit();
-    onAction();
-  };
+  // const saveAlias = async () => {
+  //   account && account.did && network && (await renameIdentity(network, account.did, newAlias));
+  //   stopEdit();
+  //   onAction();
+  // };
 
   return (
     <>
       {account?.did && (
         <>
-          {!editing && (
+          {/* {!editing && (
             <Flex alignItems='center'
               mb='xs'
               onMouseEnter={mouseEnter}
@@ -98,7 +98,7 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
                   width={24} />
               </Box>
             </Flex>
-          )}
+          )} */}
           <Box bg='polyPinkLight'
             borderRadius='2'
             py='xs'>
