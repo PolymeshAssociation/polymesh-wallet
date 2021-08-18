@@ -8,15 +8,15 @@ export interface StatusBadgeProps {
 }
 
 export const StatusBadge = styled(Box)<StatusBadgeProps>`
-  display: inline-block;
-  margin: 0 0 0 0px;
-  padding: ${({ large }) => large ? '4px 15px' : '0 15px'};
+  display: flex;
+  align-items: center;
+  border-radius: 100px;
+  margin: 0;
+  padding: 0 8px;
   height: ${({ large }) => large ? '24px' : '16px'};
-  line-height: 16px;
-  border-radius: 50px;
-  font-size: 12px;
-  font-weight: 500;
-  text-align: center;
+
+  ${({ theme }) => theme.texts.b3m}
+
   background-color: ${({ theme, variant }) =>
     variant === 'green'
       ? theme.colors.green[2]
@@ -29,6 +29,7 @@ export const StatusBadge = styled(Box)<StatusBadgeProps>`
             : variant === 'blue'
               ? theme.colors.polyNavyBlueLight2
               : theme.colors.gray[4]};
+
   color: ${({ theme, variant }) =>
     variant === 'green'
       ? theme.colors.green[0]
@@ -41,4 +42,5 @@ export const StatusBadge = styled(Box)<StatusBadgeProps>`
             : variant === 'blue'
               ? theme.colors.polyNavyBlue
               : theme.colors.gray[2]};
+
 `;
