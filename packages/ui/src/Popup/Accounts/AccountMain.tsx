@@ -150,34 +150,35 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
         />
       </Flex>
       <Flex alignItems='baseline'
-        justifyContent='space-between'
-        mt='1'>
-        <Flex alignItems='flex-end'
-          flexDirection='row'>
-          <Heading color='gray.0'
+        mt='m'>
+        <Heading color='white'
+          variant='h4'>
+          {formatAmount(account?.balance?.transferrable || 0)}
+        </Heading>
+        <Box ml='8px'>
+          <Heading color='white'
             variant='h5'>
-            {formatAmount(account?.balance?.transferrable || 0)}
-          </Heading>
-          <Box ml='s'>
-            <Text color='gray.0'
-              variant='b2'>
               POLYX
-            </Text>
-          </Box>
-        </Flex>
-        <Flex alignItems='flex-end'
-          flexDirection='row'>
-          <Heading color='gray.0'
-            variant='h6'>
-            {formatAmount(account?.balance?.locked || 0)}
           </Heading>
-          <Box ml='xs'>
-            <Text color='gray.0'
-              variant='b2'>
-              POLYX locked
-            </Text>
-          </Box>
-        </Flex>
+        </Box>
+      </Flex>
+      <Flex>
+        <Text color='white'
+          variant='b1'>
+          {formatAmount(account?.balance?.locked || 0)}
+        </Text>
+        <Box ml='4px'>
+          <Text color='white'
+            variant='b1'>
+              POLYX
+          </Text>
+        </Box>
+        <Box ml='8px'>
+          <Text color='white'
+            variant='b1'>
+              locked
+          </Text>
+        </Box>
       </Flex>
       {details && (
         <Box mt='m'>
