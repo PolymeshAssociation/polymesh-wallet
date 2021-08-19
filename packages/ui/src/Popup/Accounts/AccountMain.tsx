@@ -1,14 +1,16 @@
+// @TODO: remove commented out lines as part of clean up; once alias editing is no longer missed as a feature in the header.
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+// import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
-import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
+// import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import { Box, Flex, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput, TextOverflowEllipsis } from '../../ui';
-import { formatAmount, toShortAddress } from '../../util/formatters';
+import { formatAmount } from '../../util/formatters';
+// import { formatAmount, toShortAddress } from '../../util/formatters';
 
 export interface Props {
   account: IdentifiedAccount;
