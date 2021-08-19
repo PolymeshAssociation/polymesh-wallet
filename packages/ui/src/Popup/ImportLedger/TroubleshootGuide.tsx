@@ -121,7 +121,7 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
         <Heading variant='h5'>{headerText || 'Your Ledger is not connected'}</Heading>
         <Box mb='m'
           mt='4px'>
-          <Text color='gray.2'
+          <Text color='gray3'
             variant='b2'>
             Please check that you’ve set up your Ledger correctly and try to connect again.
           </Text>
@@ -187,15 +187,12 @@ function StepItem (props: { image: string; title: string; description: string })
           <img src={image} />
         </Box>
         <Text variant='b1m'>{title}</Text>
-        <Text color='gray.2'
-          variant='b2'>
-          <Box mt='4px'>
-            <Text color='gray.2'
-              variant='b2'>
-              {description}
-            </Text>
-          </Box>
-        </Text>
+        <Box mt='4px'>
+          <Text color='gray3'
+            variant='b2'>
+            {description}
+          </Text>
+        </Box>
       </Box>
     </Step>
   );
