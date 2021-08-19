@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-function SvgLogo (props) {
+// eslint-disable-next-line
+function SvgLogo (props: any) {
   return (
     <svg fill='none'
       height='1em'

@@ -1,6 +1,6 @@
 import { SvgCheckboxMarkedCircle, SvgContentCopy } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { styled } from '@polymathnetwork/extension-ui/styles';
-import { Box, Button, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, Icon } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
