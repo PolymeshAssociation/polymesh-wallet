@@ -2,15 +2,14 @@
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 // import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import { AccountType, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 // import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext } from 'react';
 import { useHistory } from 'react-router';
 
-import { Box, Flex, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput, TextOverflowEllipsis } from '../../ui';
+import { Box, Flex, Heading, LabelWithCopy, Text, TextEllipsis, TextOverflowEllipsis } from '../../ui';
 import { formatAmount } from '../../util/formatters';
-// import { formatAmount, toShortAddress } from '../../util/formatters';
 
 export interface Props {
   account: IdentifiedAccount;
@@ -22,7 +21,7 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
   // const [editing, setEditing] = useState(false);
   // const [newAlias, setNewAlias] = useState('');
   // const [hover, setHover] = useState(false);
-  const { networkState: { selected: network, ss58Format } } = useContext(PolymeshContext);
+  const { networkState: { ss58Format } } = useContext(PolymeshContext);
   // const onAction = useContext(ActionContext);
 
   const showAccountDetails = () => {
