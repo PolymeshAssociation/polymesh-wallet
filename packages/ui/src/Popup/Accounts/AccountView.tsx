@@ -2,6 +2,7 @@ import { networkLinks } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgCheck, SvgDotsVertical, SvgPencilOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -218,8 +219,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           <Flex alignItems='center'
             height='100%'
             justifyContent='flex-end'>
-            <ButtonSmall onClick={assign}
-              variant='secondary'>
+            <ButtonSmall onClick={assign}>
               Assign
             </ButtonSmall>
           </Flex>
@@ -249,23 +249,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       >
         <AccountViewGrid>
           <GridItem area='avatar'>
-            <Flex height='100%'>
-              <Box
-                backgroundColor='brandLightest'
-                borderRadius='50%'
-                height={32}
-                px='2'
-                width={32}
-              >
-                <Flex justifyContent='center'
-                  pt='xxs'>
-                  <Text color='brandMain'
-                    variant='b2m'>
-                    {name?.substr(0, 1)}
-                  </Text>
-                </Flex>
-              </Box>
-            </Flex>
+            <InitialsAvatar name={name} />
           </GridItem>
           <GridItem area='account-info'>
             <Box>
@@ -277,14 +261,14 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             <Flex
               alignItems='flex-end'
               flexDirection='column'
-              height='100%'
+              height='46px'
               justifyContent='space-around'
             >
               <Box width={24}>
                 {isSelected && (
                   <Icon
                     Asset={SvgCheck}
-                    color='brandMain'
+                    color='polyPink'
                     height={24}
                     width={24}
                   />

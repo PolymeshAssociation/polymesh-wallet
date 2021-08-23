@@ -50,7 +50,7 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
   const renderContainerHeader = (isAssigned: boolean) => {
     if (isAssigned) {
       return (
-        <Box bg={headerColor}
+        <Box bg='polyPinkLight'
           borderRadius='2'
           mt='xs'
           mx='s'
@@ -60,16 +60,17 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
               <TextInput defaultValue={currentAccount?.didAlias}
                 onChange={handleAliasChange}
                 placeholder='Your Polymesh Account'
+                style={{ height: '18px' }}
                 tight
                 value={newAlias} />
               <Icon Asset={SvgCheck}
-                color='brandMain'
+                color='polyPink'
                 height={20}
                 onClick={saveAlias}
                 style={{ cursor: 'pointer' }}
                 width={20} />
               <Icon Asset={SvgWindowClose}
-                color='brandMain'
+                color='polyPink'
                 height={20}
                 onClick={stopEditAlias}
                 style={{ cursor: 'pointer' }}
@@ -84,24 +85,24 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
               onMouseLeave={mouseLeave}>
               <Flex alignItems='center'>
                 { !!currentAccount?.didAlias &&
-                  <TextOverflowEllipsis color='brandMain'
+                  <TextOverflowEllipsis color='polyIndigo'
                     maxWidth='140px'
-                    variant='c2'>
+                    variant='b3m'>
                     {currentAccount.didAlias}
                   </TextOverflowEllipsis>
                 }
                 <Box {...(!!currentAccount?.didAlias && { ml: 's' })}>
-                  <LabelWithCopy color='brandMain'
+                  <LabelWithCopy color='polyIndigo'
                     text={did}
                     textSize={currentAccount?.didAlias ? 20 : 30}
-                    textVariant='c2'
+                    textVariant='b3m'
                   />
                 </Box>
               </Flex>
               <Flex>
                 <Flex mr='xs'>
                   <Icon Asset={SvgPencilOutline}
-                    color={hover ? 'brandMain' : headerColor}
+                    color={hover ? 'polyPink' : 'polyPinkLight'}
                     height={16}
                     onClick={editAlias}
                     style={{ cursor: 'pointer' }}
@@ -115,9 +116,9 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
       );
     } else {
       return (
-        <Box mx='xs'>
-          <Text color='gray.1'
-            variant='c2'>Unassigned keys</Text>
+        <Box mx='s'>
+          <Text color='gray1'
+            variant='b2m'>Unassigned keys</Text>
         </Box>
       );
     }
@@ -140,9 +141,9 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
 
   return (
     <Box bg='white'
-      borderRadius='2'
+      borderRadius='3'
       boxShadow='3'
-      m='s'
+      m='m'
       pb='xs'
       pt='xs'>
       {renderContainerHeader(accounts[0].did !== undefined)}

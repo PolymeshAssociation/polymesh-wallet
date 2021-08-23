@@ -16,39 +16,37 @@ export const SeedView: FC<Props> = ({ onContinue, seedPhrase }) => {
     <>
       <Header headerText='Your recovery phrase'
         iconAsset={SvgClipboardListOutline}>
-        <Box
-          mb='m'
-          mt='s'>
-          <Text color='brandLightest'
-            variant='b3'>
-            These 12 words in order will recover your account should you lose or forget your password. It is recommended you store a hard copy in a secure place.
+        <Box mt='s'>
+          <Text color='white'
+            variant='b2'>
+            These 12 words in order will recover your account should you lose or forget your password. It is recommended
+            you store a hard copy in a secure place.
           </Text>
         </Box>
       </Header>
-      <Box mx='s'>
+      <Box mx='m'>
         <SeedPhrase seedPhrase={seedPhrase} />
       </Box>
       <Flex flex={1}
         flexDirection='column'
         justifyContent='flex-end'
-        mb='s'
-        mx='s'>
+        mx='m'
+        my='m'>
         <Box>
           <Flex justifyContent='flex-start'
             mb='s'>
             <Checkbox
               checked={isCopied}
+              label={
+                <Text color='gray.3'
+                  fontSize='0'
+                  lineHeight='extraTight'
+                  variant='b3'>
+                    I confirm that I copied and stored the recovery phrase in a secure place.
+                </Text>
+              }
               onClick={() => setCopied(!isCopied)}
             />
-            <Flex ml='s'
-              mt='xs'>
-              <Text color='gray.3'
-                fontSize='0'
-                lineHeight='extraTight'
-                variant='b3'>
-                I confirm that I copied and stored the recovery phrase in a secure place.
-              </Text>
-            </Flex>
           </Flex>
           <Button disabled={!isCopied}
             fluid

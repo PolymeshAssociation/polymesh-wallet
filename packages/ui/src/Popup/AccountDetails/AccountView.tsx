@@ -35,7 +35,7 @@ export const AccountView: FC<Props> = ({ address,
   };
 
   const renderType = (keyType: string) => {
-    const color = keyType === 'primary' ? 'green' : 'blue';
+    const color = keyType === 'primary' ? 'red' : 'blue';
     const text = keyType === 'primary' ? 'Primary' : 'Secondary';
 
     return selectedAccount?.did && <StatusBadge variant={color}>{text}</StatusBadge>;

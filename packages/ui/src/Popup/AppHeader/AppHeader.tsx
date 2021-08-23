@@ -88,7 +88,7 @@ const AppHeader = (props: Props): ReactElement<Props> => {
             position='bottom-right'
             selector={
               <Icon Asset={SvgDotsVertical}
-                color='gray.0'
+                color='polyIndigo'
                 height={32}
                 style={{ cursor: 'pointer' }}
                 width={32} />

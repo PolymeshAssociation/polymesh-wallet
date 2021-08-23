@@ -1,14 +1,15 @@
+// @TODO: remove commented out lines as part of clean up; once alias editing is no longer missed as a feature in the header.
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { AccountType, ActionContext, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+// import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { AccountType, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
-import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
-import React, { FC, useContext, useState } from 'react';
+// import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
+import React, { FC, useContext } from 'react';
 import { useHistory } from 'react-router';
 
-import { Box, Flex, Heading, Icon, LabelWithCopy, Text, TextEllipsis, TextInput, TextOverflowEllipsis } from '../../ui';
-import { formatAmount, toShortAddress } from '../../util/formatters';
+import { Box, Flex, Heading, LabelWithCopy, Text, TextEllipsis, TextOverflowEllipsis } from '../../ui';
+import { formatAmount } from '../../util/formatters';
 
 export interface Props {
   account: IdentifiedAccount;
@@ -17,45 +18,45 @@ export interface Props {
 
 export const AccountMain: FC<Props> = ({ account, details = true }) => {
   const history = useHistory();
-  const [editing, setEditing] = useState(false);
-  const [newAlias, setNewAlias] = useState('');
-  const [hover, setHover] = useState(false);
-  const { networkState: { selected: network, ss58Format } } = useContext(PolymeshContext);
-  const onAction = useContext(ActionContext);
+  // const [editing, setEditing] = useState(false);
+  // const [newAlias, setNewAlias] = useState('');
+  // const [hover, setHover] = useState(false);
+  const { networkState: { ss58Format } } = useContext(PolymeshContext);
+  // const onAction = useContext(ActionContext);
 
   const showAccountDetails = () => {
     history.push(`/account/details/${account?.address}`);
   };
 
-  const startEdit = () => {
-    setHover(false);
-    setNewAlias(account.didAlias);
-    setEditing(true);
-  };
+  // const startEdit = () => {
+  //   setHover(false);
+  //   setNewAlias(account.didAlias);
+  //   setEditing(true);
+  // };
 
-  const stopEdit = () => {
-    setEditing(false);
-  };
+  // const stopEdit = () => {
+  //   setEditing(false);
+  // };
 
-  const mouseEnter = () => setHover(true);
+  // const mouseEnter = () => setHover(true);
 
-  const mouseLeave = () => setHover(false);
+  // const mouseLeave = () => setHover(false);
 
-  const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewAlias(e.target.value);
-  };
+  // const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setNewAlias(e.target.value);
+  // };
 
-  const saveAlias = async () => {
-    account && account.did && network && (await renameIdentity(network, account.did, newAlias));
-    stopEdit();
-    onAction();
-  };
+  // const saveAlias = async () => {
+  //   account && account.did && network && (await renameIdentity(network, account.did, newAlias));
+  //   stopEdit();
+  //   onAction();
+  // };
 
   return (
     <>
       {account?.did && (
         <>
-          {!editing && (
+          {/* {!editing && (
             <Flex alignItems='center'
               mb='xs'
               onMouseEnter={mouseEnter}
@@ -98,8 +99,8 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
                   width={24} />
               </Box>
             </Flex>
-          )}
-          <Box bg='brandLightest'
+          )} */}
+          <Box bg='polyPinkLight'
             borderRadius='2'
             py='xs'>
             {account && (
@@ -107,8 +108,8 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
                 justifyContent='space-between'
                 mx='1'>
                 <Flex>
-                  <Text color='gray.2'
-                    variant='c2'>
+                  <Text color='polyIndigo'
+                    variant='b3m'>
                     <TextEllipsis size={29}>{account?.did}</TextEllipsis>
                   </Text>
                 </Flex>
@@ -125,8 +126,7 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
           Unassigned key
         </Text>
       )}
-      <Flex alignItems='center'
-        flexDirection='row'
+      <Flex alignItems='flexStart'
         mt='s'>
         <Box>
           <TextOverflowEllipsis color='gray.0'
@@ -150,54 +150,53 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
         />
       </Flex>
       <Flex alignItems='baseline'
-        justifyContent='space-between'
-        mt='1'>
-        <Flex alignItems='flex-end'
-          flexDirection='row'>
-          <Heading color='gray.0'
+        mt='m'>
+        <Heading color='white'
+          variant='h4'>
+          {formatAmount(account?.balance?.transferrable || 0)}
+        </Heading>
+        <Box ml='8px'>
+          <Heading color='white'
             variant='h5'>
-            {formatAmount(account?.balance?.transferrable || 0)}
-          </Heading>
-          <Box ml='s'>
-            <Text color='gray.0'
-              variant='b2'>
               POLYX
-            </Text>
-          </Box>
-        </Flex>
-        <Flex alignItems='flex-end'
-          flexDirection='row'>
-          <Heading color='gray.0'
-            variant='h6'>
-            {formatAmount(account?.balance?.locked || 0)}
           </Heading>
-          <Box ml='xs'>
-            <Text color='gray.0'
-              variant='b2'>
-              POLYX locked
-            </Text>
-          </Box>
-        </Flex>
+        </Box>
+      </Flex>
+      <Flex>
+        <Text color='white'
+          variant='b1'>
+          {formatAmount(account?.balance?.locked || 0)}
+        </Text>
+        <Box ml='4px'>
+          <Text color='white'
+            variant='b1'>
+              POLYX
+          </Text>
+        </Box>
+        <Box ml='8px'>
+          <Text color='white'
+            variant='b1'>
+              locked
+          </Text>
+        </Box>
       </Flex>
       {details && (
         <Box mt='m'>
-          <Box
+          <Flex
             borderColor='gray.0'
-            borderRadius='3'
+            borderRadius='100px'
             borderStyle='solid'
-            borderWidth={2}
+            borderWidth={1}
+            height='32px'
+            justifyContent='center'
             onClick={showAccountDetails}
             style={{ cursor: 'pointer' }}
           >
-            <Flex alignItems='center'
-              height={32}
-              justifyContent='center'>
-              <Text color='gray.0'
-                variant='b2m'>
+            <Text color='white'
+              variant='b2m'>
                 View details
-              </Text>
-            </Flex>
-          </Box>
+            </Text>
+          </Flex>
         </Box>
       )}
     </>

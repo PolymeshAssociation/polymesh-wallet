@@ -43,7 +43,7 @@ export default function Accounts (): React.ReactElement {
   const groupedAccounts = polymeshAccounts ? groupAccounts()(polymeshAccounts) : {};
 
   const getHeaderColor = (index: number) => {
-    const colors = ['#DCEFFE', '#F2E6FF', '#F1FEE1', '#FFEBF1', '#FFEAE1', '#E6F9FE', '#FAF5FF', '#E6FFFA', '#EBF4FF'];
+    const colors = ['#FFEBF1', '#E6FFFA', '#F2E6FF', '#F1FEE1', '#E6F9FE', '#FAF5FF', '#FFEAE1', '#EBF4FF'];
 
     return colors[index % (colors.length - 1)];
   };
@@ -96,10 +96,11 @@ export default function Accounts (): React.ReactElement {
               details={true} />}</AppHeader>
             <AccountsArea id='accounts-container'>
               <Flex justifyContent='space-between'
-                pt='m'
-                px='s'>
+                mb='-4px'
+                mt='m'
+                mx='m'>
                 <Text color='gray.1'
-                  variant='c2'>
+                  variant='c1'>
                   ACCOUNTS
                 </Text>
                 <OptionSelector
@@ -112,11 +113,11 @@ export default function Accounts (): React.ReactElement {
                       style={{ cursor: 'pointer' }}>
                       <Flex mx='s'>
                         <Icon Asset={SvgPlus}
-                          color='brandMain'
+                          color='polyNavyBlue'
                           height={14}
                           width={14} />
                       </Flex>
-                      <Text color='brandMain'
+                      <Text color='polyNavyBlue'
                         variant='b2'>
                         Add a key
                       </Text>

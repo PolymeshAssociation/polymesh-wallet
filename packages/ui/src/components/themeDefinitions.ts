@@ -29,21 +29,21 @@ export const borderWidths = {
 };
 
 export const fontFamilies = {
-  baseText: "'Inter', sans-serif",
+  baseText: 'Poppins',
   code: 'CodeFont, monospace, sans-serif'
 };
 
 export const lineHeights = {
   none: '1rem', // 16 px
-  extraTight: '1.15rem', // 18 px
-  tighter: '1.4825rem', // 23.72px
-  tight: '1.392rem', // fS == 34px => 47px
+  extraTight: '1.125rem', // 18px
+  tighter: '1.166rem', // 18.66px
+  tight: '1.313rem', // 21px
   lessTight: '1.452rem', // for fontSize 20px it is 29px
-  normal: '1.688rem', // 27 px
-  loose: '2.188rem', // 35 px
-  medium: '2.938rem', // 47 px
-  large: '4.188rem', // 67 px
-  xlarge: '4.938rem' // 79 px
+  normal: '1.5rem', // 24px
+  loose: '1.75rem', // 28px
+  medium: '2.1rem', // 33.6px
+  large: '2.975', // 47.6px
+  xlarge: '4.2rem' // 67.2px
 };
 
 export type TFontWeightCustom = 'light' | 'normal' | 'semiBold' | 'bold' | 'strong';
@@ -108,55 +108,79 @@ export const zIndexes = {
 };
 
 const _colors = {
+  polyIndigo: '#43195B',
+  polyFucisa: '#D557EA',
+  polyPink: '#EC4673',
+  polyPinkLight: '#FAD1DC',
+  polyMalachite: '#60D3CB',
+  polyMalachiteLight: '#D7F4F2',
+  polyNavyBlue: '#170087',
+  polyNavyBlueDark: '#100255',
+  polyNavyBlueLight1: '#F2EFFF',
+  polyNavyBlueLight2: '#DCD3FF',
+  white: '#FFFFFF',
+  grayBg: '#FBFBFB',
+  gray8: '#F5F5F5',
+  gray7: '#F0F0F0',
+  gray6: '#C7C7C7',
+  gray5: '#8F8F8F',
+  gray4: '#727272',
+  gray3: '#565656',
+  gray2: '#3A3A3A',
+  gray1: '#1E1E1E',
+  success1: '#00AA5E',
+  success2: '#D4F7E7',
+  warning1: '#EFC100',
+  warning2: '#FBF3D0',
+  warning3: '#E3A30C',
+  danger1: '#DB2C3E',
+  danger2: '#FAE6E8',
+
+  // Previous branding color names
   gray: ['#FFFFFF', '#152935', '#6C7D89', '#8C9BA5', '#EBF0F7', '#F8F9FC'],
   brandBg: '#FAFDFF',
-  brandLightest: '#DCEFFE',
-  brandLighter: '#6DC7F7',
-  brandMain: '#1348E4',
+  brandLightest: '#FAD1DC',
+  brandLighter: '#DCD3FF',
+  brandMain: '#EC4673',
   brandDark: '#0024BD',
   brandDarkest: '#170087',
   info: '#2574B5',
   green: ['#00AA5E', '#0B6B40', '#D4F7E7'],
   yellow: ['#EFC100', '#FBF3D0', '#E3A30C'],
-  red: ['#DB2C3E', '#FAE6E8'],
-  white: '#FFFFFF'
+  red: ['#DB2C3E', '#FAE6E8']
 };
 
 const gradients = {
-  primary: `linear-gradient(
-    180.63deg,
-    ${_colors.brandLightest} 0.03%,
-    rgba(220, 239, 254, 0) 79.96%
-  )`
+  gradient1: 'linear-gradient(193.19deg, #FF2E72 5.7%, #4A125E 91.16%)'
 };
 
 export const colors = {
   ..._colors,
-  baseText: _colors.gray[3],
-  highlightText: _colors.gray[1],
-  placeholder: _colors.gray[3],
-  inactive: _colors.gray[2],
-  disabled: _colors.gray[4],
-  primary: _colors.brandMain,
-  secondary: _colors.brandLighter,
-  idle: _colors.brandLighter,
-  alert: _colors.red[0],
-  warning: _colors.yellow[0],
-  success: _colors.green[0],
-  gradient: gradients.primary
+  baseText: _colors.gray1,
+  highlightText: _colors.gray1,
+  placeholder: _colors.gray5,
+  inactive: _colors.gray4,
+  disabled: _colors.gray7,
+  primary: _colors.polyPink,
+  secondary: _colors.polyPinkLight,
+  idle: _colors.polyPinkLight,
+  alert: _colors.danger1,
+  warning: _colors.warning1,
+  success: _colors.success1,
+  gradient: gradients.gradient1
 };
 
 export const shadows = {
   0: '',
-  1: '0px 1px 2px rgba(21, 41, 53, 0.24), 0px 1px 3px rgba(21, 41, 53, 0.12);',
-  2: '0px 3px 6px rgba(21, 41, 53, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.16);',
-  3: '0px 3px 6px rgba(21, 41, 53, 0.1), 0px 10px 20px rgba(21, 41, 53, 0.15);',
-  4: '0px 5px 10px rgba(21, 41, 53, 0.05), 0px 15px 25px rgba(21, 41, 53, 0.15);',
-  5: '0px 20px 40px rgba(21, 41, 53, 0.1);'
+  1: '0px 1px 3px rgba(30, 30, 30, 0.12), 0px 1px 2px rgba(30, 30, 30, 0.24);',
+  2: '0px 2px 4px rgba(30, 30, 30, 0.16), 0px 3px 6px rgba(30, 30, 30, 0.12);',
+  3: '0px 10px 20px rgba(30, 30, 30, 0.15), 0px 3px 6px rgba(30, 30, 30, 0.1);',
+  4: '0px 15px 25px rgba(30, 30, 30, 0.15), 0px 5px 10px rgba(30, 30, 30, 0.05);',
+  5: '0px 20px 40px rgba(30, 30, 30, 0.1);'
 };
 
 export const radii = {
-  0: '',
+  0: '0px',
   1: '2px',
   2: '4px',
   3: '8px',
@@ -168,123 +192,124 @@ export type TTextVariant = 'b1m' | 'b1' | 'b2m' | 'b2' | 'b3m' | 'b3' | 'sh1' | 
 export const texts = {
   b1: {
     fontFamily: fontFamilies.baseText,
-    color: colors.gray[5],
+    color: colors.gray1,
     fontSize: fontSizes[2],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.normal
   },
   b1m: {
     fontFamily: fontFamilies.baseText,
-    color: colors.highlightText,
+    color: colors.gray1,
     fontSize: fontSizes[2],
     fontWeight: fontWeights.semiBold,
     lineHeight: lineHeights.normal
   },
   b2: {
     fontFamily: fontFamilies.baseText,
-    color: colors.gray[5],
+    color: colors.gray1,
     fontSize: fontSizes[1],
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.tighter
+    lineHeight: lineHeights.tight
   },
   b2m: {
     fontFamily: fontFamilies.baseText,
-    color: colors.highlightText,
+    color: colors.gray1,
     fontSize: fontSizes[1],
     fontWeight: fontWeights.semiBold,
-    lineHeight: lineHeights.normal
+    lineHeight: lineHeights.tight
   },
   b3: {
     fontFamily: fontFamilies.baseText,
-    color: colors.highlightText,
+    color: colors.gray1,
     fontSize: fontSizes[0],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.extraTight
   },
   b3m: {
     fontFamily: fontFamilies.baseText,
-    color: colors.highlightText,
+    color: colors.gray1,
     fontSize: fontSizes[0],
-    fontWeight: fontWeights.semiBold
+    fontWeight: fontWeights.semiBold,
+    lineHeight: lineHeights.extraTight
   },
   sh1: {
     fontFamily: fontFamilies.baseText,
-    color: colors.gray[5],
+    color: colors.gray3,
     fontSize: fontSizes[3],
     lineHeight: lineHeights.normal,
     fontWeight: fontWeights.normal
   },
   c1: {
     fontFamily: fontFamilies.baseText,
-    color: colors.gray[1],
+    color: colors.gray1,
     fontSize: fontSizes[1],
-    lineHeight: lineHeights.none,
+    lineHeight: lineHeights.tight,
     fontWeight: fontWeights.semiBold,
-    letterSpacing: '0.4px'
+    letterSpacing: '4%'
   },
   c2: {
     fontFamily: fontFamilies.baseText,
-    color: colors.brandMain,
+    color: colors.polyPink,
     fontSize: fontSizes[0],
     lineHeight: lineHeights.none,
     fontWeight: fontWeights.normal,
-    letterSpacing: '0.4px'
+    letterSpacing: '4%'
   },
   c2m: {
     fontFamily: fontFamilies.baseText,
-    color: colors.brandMain,
+    color: colors.polyPink,
     fontSize: fontSizes[0],
     lineHeight: lineHeights.none,
     fontWeight: fontWeights.semiBold,
-    letterSpacing: '0.4px'
+    letterSpacing: '4%'
   },
   code: {
     fontFamily: fontFamilies.code,
-    color: colors.gray[1],
+    color: colors.gray1,
     fontSize: fontSizes[0],
-    lineHeight: lineHeights.none,
+    lineHeight: lineHeights.tighter,
     fontWeight: fontWeights.normal,
-    letterSpacing: '0.4px'
+    letterSpacing: '4%'
   }
 };
 
 export const headings = {
   h1: {
-    color: colors.highlightText,
-    fontSize: fontSizes[10],
+    color: colors.gray1,
+    fontSize: fontSizes[9],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.xlarge,
     letterSpacing: -1
   },
   h2: {
-    color: colors.highlightText,
-    fontSize: fontSizes[9],
+    color: colors.gray1,
+    fontSize: fontSizes[7],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.large,
     letterSpacing: -0.5
   },
   h3: {
-    color: colors.highlightText,
-    fontSize: fontSizes[7],
+    color: colors.gray1,
+    fontSize: fontSizes[5],
     fontWeight: fontWeights.semiBold,
     lineHeight: lineHeights.medium,
     letterSpacing: -0.25
   },
   h4: {
-    color: colors.highlightText,
-    fontSize: fontSizes[5],
+    color: colors.gray1,
+    fontSize: fontSizes[4],
     fontWeight: fontWeights.semiBold,
     lineHeight: lineHeights.loose
   },
   h5: {
-    color: colors.highlightText,
-    fontSize: fontSizes[4],
+    color: colors.gray1,
+    fontSize: fontSizes[3],
     fontWeight: fontWeights.semiBold,
     letterSpacing: 0.15,
-    lineHeight: lineHeights.normal
+    lineHeight: lineHeights.loose
   },
   h6: {
-    color: colors.highlightText,
+    color: colors.gray1,
     fontSize: fontSizes.baseText,
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.normal
@@ -292,9 +317,9 @@ export const headings = {
 };
 
 export const links = {
-  color: colors.brandMain,
+  color: colors.polyPink,
   '&:hover, &:focus': {
-    color: darken(0.2, colors.secondary)
+    color: darken(0.2, colors.polyPinkLight)
   }
 };
 
