@@ -1,7 +1,7 @@
 {
   "name": "@polymathnetwork/extension",
   "description": "A Wallet extension for Polymesh blockchain",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "license": "Apache-2",
   "type": "module",
   "dependencies": {
@@ -15,8 +15,8 @@
     "@polkadot/phishing": "0.6.164",
     "@polkadot/ui-keyring": "^0.81.1",
     "@polkadot/ui-settings": "^0.81.1",
-    "@polymathnetwork/extension-core": "0.6.0",
-    "@polymathnetwork/extension-ui": "0.6.0"
+    "@polymathnetwork/extension-core": "0.7.0",
+    "@polymathnetwork/extension-ui": "0.7.0"
   },
   "devDependencies": {
     "@polkadot/dev": "^0.62.42",
@@ -35,7 +35,7 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.24.2",
     "webpack-cli": "^4.5.0",
-    "webpack-extension-manifest-plugin": "^0.6.0",
+    "webpack-extension-manifest-plugin": "^0.7.0",
     "raw-loader": "^4.0.2"
   }
 }
