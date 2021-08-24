@@ -89,6 +89,7 @@ export const uidProvidersWhitelist = [
   'https://staging.itn-polymesh.fractal.id',
   'https://alcyone-tokenstudio.polymesh.live',
   'https://alcyone-dashboard.polymesh.live',
+  'https://itn-onboarding.polymesh.live',
   'http://localhost:3000'
 ];
 
