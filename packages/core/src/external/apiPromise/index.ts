@@ -18,7 +18,7 @@ async function apiPromise (n: NetworkName): Promise<ApiPromise> {
 
   await provider.connect();
 
-  let unsubscribe: () => void = () => {};
+  let unsubscribe: () => void = () => { /**/ };
 
   // Unfortunately, provider.connect() does NOT throw an error when connection fails,
   // so we have to handle that in the following awkward way.
@@ -30,11 +30,12 @@ async function apiPromise (n: NetworkName): Promise<ApiPromise> {
       reject(new Error(`Failed to connect to ${networkURLs[n]}`));
     }, apiConnTimeout);
 
-    unsubscribe = provider.on('connected', () => {
+    unsubscribe = (provider as WsProvider).on('connected', () => {
       clearTimeout(handle);
       resolve();
     });
   });
+
   unsubscribe();
 
   const { rpc, types } = SchemaService.get(n);

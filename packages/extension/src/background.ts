@@ -39,7 +39,7 @@ chrome.runtime.onConnect.addListener((port): void => {
     port.onDisconnect.addListener((): void => {
       console.log(`Disconnected from ${port.name}`);
 
-      if (polyUnsub) { polyUnsub(); }
+      polyUnsub();
     });
   }
 
