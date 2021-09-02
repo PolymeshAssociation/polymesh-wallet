@@ -97,8 +97,8 @@ const claims2Record = (didClaims: IdentityClaim[]) => {
   return cdd;
 };
 
-function subscribePolymesh (): () => Promise<void> {
-  function unsubAll (): Promise<void> {
+function subscribePolymesh (): () => void {
+  function unsubAll (): void {
     for (const key in unsubCallbacks) {
       if (unsubCallbacks[key]) {
         try {
@@ -109,8 +109,6 @@ function subscribePolymesh (): () => Promise<void> {
         }
       }
     }
-
-    return disconnect();
   }
 
   console.log('Poly: fetching data from chain');
