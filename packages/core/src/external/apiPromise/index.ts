@@ -5,25 +5,28 @@ import { NetworkName } from '../../types';
 import SchemaService from '../schema';
 
 let api: ApiPromise | null = null;
+let provider: WsProvider | null = null;
 
 const metadata: Record<string, string> = {};
 
 async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiPromise> {
-  if (!reinitialize && api) { return api; }
-
-  if (api) {
-    try {
-      await api.disconnect();
-    } catch (error) {
-      console.error(error);
-    }
-
-    api = null;
+  if (!reinitialize && api && provider && provider.isConnected) {
+    return api;
   }
+
+  // if (api) {
+  //   try {
+  //     await api.disconnect();
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+
+  //   api = null;
+  // }
 
   // 'false' means to not retry connection if it fails. We need to report
   // connection issues to the user instead of retrying connection for minutes.
-  const provider = new WsProvider(networkURLs[n], false);
+  provider = new WsProvider(networkURLs[n], false);
 
   await provider.connect();
 
