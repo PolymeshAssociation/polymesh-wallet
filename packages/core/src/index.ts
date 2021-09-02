@@ -5,7 +5,7 @@ import { union } from 'lodash-es';
 import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
-import apiPromise, { disconnect } from './external/apiPromise';
+import apiPromise from './external/apiPromise';
 import { DidRecord, IdentityClaim, LinkedKeyInfo } from './external/apiPromise/types';
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
