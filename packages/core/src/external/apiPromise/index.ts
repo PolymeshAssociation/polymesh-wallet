@@ -5,29 +5,20 @@ import { NetworkName } from '../../types';
 import SchemaService from '../schema';
 
 let api: ApiPromise | null = null;
+let provider: WsProvider | null = null;
 
 const metadata: Record<string, string> = {};
 
-async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiPromise> {
-  if (!reinitialize && api) { return api; }
-
-  if (api) {
-    try {
-      await api.disconnect();
-    } catch (error) {
-      console.error(error);
-    }
-
-    api = null;
-  }
+async function apiPromise (n: NetworkName): Promise<ApiPromise> {
+  if (api && provider && provider.isConnected) return api;
 
   // 'false' means to not retry connection if it fails. We need to report
   // connection issues to the user instead of retrying connection for minutes.
-  const provider = new WsProvider(networkURLs[n], false);
+  provider = new WsProvider(networkURLs[n], false);
 
   await provider.connect();
 
-  let unsubscribe: () => void = () => {};
+  let unsubscribe: () => void = () => { /**/ };
 
   // Unfortunately, provider.connect() does NOT throw an error when connection fails,
   // so we have to handle that in the following awkward way.
@@ -39,11 +30,12 @@ async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiProm
       reject(new Error(`Failed to connect to ${networkURLs[n]}`));
     }, apiConnTimeout);
 
-    unsubscribe = provider.on('connected', () => {
+    unsubscribe = (provider as WsProvider).on('connected', () => {
       clearTimeout(handle);
       resolve();
     });
   });
+
   unsubscribe();
 
   const { rpc, types } = SchemaService.get(n);
