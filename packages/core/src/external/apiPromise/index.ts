@@ -35,7 +35,7 @@ async function apiPromise (network: NetworkName): Promise<ApiPromise> {
       reject(new Error(`Failed to connect to ${networkURLs[network]}`));
     }, apiConnTimeout);
 
-    unsubscribe = (provider).on('connected', () => {
+    unsubscribe = provider.on('connected', () => {
       clearTimeout(handle);
       resolve();
     });
