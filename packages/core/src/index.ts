@@ -114,6 +114,7 @@ function subscribePolymesh (): () => void {
   console.log('Poly: fetching data from chain');
 
   !!unsubCallbacks.network && unsubCallbacks.network();
+
   unsubCallbacks.network = subscribeSelectedNetwork((network) => {
     if (network) {
       console.log('Poly: Selected network', network);
