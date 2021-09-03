@@ -20,6 +20,7 @@ chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
 // This listener is invoked every time the extension is installed, updated, or reloaded.
 chrome.runtime.onInstalled.addListener(() => {
   loadSchema();
+  subscribePolymesh();
 });
 
 // listen to all messages and handle appropriately
