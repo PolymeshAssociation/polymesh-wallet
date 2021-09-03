@@ -13,7 +13,7 @@ const metadata: Record<string, string> = {};
 async function apiPromise (network: NetworkName): Promise<ApiPromise> {
   const shouldReinitialize = currentNetwork !== network;
 
-  if (!shouldReinitialize && api && provider && provider.isConnected) return api;
+  if (!shouldReinitialize && api && provider?.isConnected) return api;
 
   currentNetwork = network;
 
