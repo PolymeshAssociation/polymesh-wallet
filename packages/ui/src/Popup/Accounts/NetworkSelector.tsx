@@ -102,7 +102,7 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
 
   return (
     <OptionSelector
-      minWidth='296px'
+      minWidth='368px'
       onSelect={onSelect}
       options={networkOptions}
       position='bottom-left'
