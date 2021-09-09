@@ -5,7 +5,7 @@ import { AccountContext, OptionSelector, PolymeshContext } from '@polymathnetwor
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
 import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 import { setPolyNetwork, togglePolyIsDev, windowOpen } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Checkbox, Flex, GrowingButton, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import { Checkbox, Flex, GrowingButton, Icon } from '@polymathnetwork/extension-ui/ui';
 import { Header, HeaderProps } from '@polymathnetwork/extension-ui/ui/Header/Header';
 import React, { ReactElement, useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
