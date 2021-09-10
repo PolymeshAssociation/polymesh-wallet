@@ -44,11 +44,10 @@ export const AccountView: FC<Props> = ({ address,
   return (
     <>
       <Flex justifyContent='space-between'
-        mx='s'
-        my='s'>
+        m='m'>
         <Box>
-          <Text color='gray.1'
-            variant='c2'>
+          <Text color='gray1'
+            variant='c1'>
             ACCOUNT DETAILS
           </Text>
         </Box>

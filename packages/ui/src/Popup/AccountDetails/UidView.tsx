@@ -1,4 +1,4 @@
-import { SvgInfo, SvgLockOpenOutline, SvgLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgEyeOffOutline, SvgEyeOutline, SvgInfo } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Box, Flex, Icon, LabelWithCopy, Text, Tooltip } from '@polymathnetwork/extension-ui/ui';
 import React, { FC } from 'react';
 
@@ -10,48 +10,30 @@ export interface Props {
 
 export const UidView: FC<Props> = ({ isHidden, showHideUid, uid }) => {
   return (
-    <Box bg={isHidden ? 'gray.4' : 'yellow.1'}
+    <Box bg={isHidden ? 'gray8' : 'warning2'}
       borderRadius='2'
-      mt='m'
-      mx='s'
+      mx='m'
       p='s'>
       <Flex justifyContent='space-between'>
-        <Box>
-          <Flex alignItems='center'>
-            <Box>
-              <Text color='gray.2'
-                variant='b2m'>
+        <Text color='gray3'
+          variant='b2m'>
                 Your investor uID
-              </Text>
-            </Box>
-            <Box mx='xs'>
-              <Tooltip content={<Text variant='c2'>Your investor uID</Text>}
-                placement='bottom'
-                variant='secondary'>
-                <Icon Asset={SvgInfo}
-                  color='brandMain'
-                  height={14}
-                  style={{ cursor: 'pointer' }}
-                  width={14} />
-              </Tooltip>
-            </Box>
-          </Flex>
-        </Box>
+        </Text>
         <Box>
           <Flex alignItems='center'
             onClick={showHideUid}
             style={{ cursor: 'pointer' }}>
             <Box>
               <Icon
-                Asset={isHidden ? SvgLockOpenOutline : SvgLockOutline}
-                color='brandMain'
-                height={21}
+                Asset={isHidden ? SvgEyeOutline : SvgEyeOffOutline }
+                color='polyNavyBlue'
+                height={22}
                 style={{ cursor: 'pointer' }}
-                width={21}
+                width={22}
               />
             </Box>
             <Box mx='xs'>
-              <Text color='brandMain'
+              <Text color='polyNavyBlue'
                 variant='b2m'>
                 {isHidden ? 'Show my uID' : 'Hide my uID'}
               </Text>
@@ -66,7 +48,7 @@ export const UidView: FC<Props> = ({ isHidden, showHideUid, uid }) => {
             **********
           </Text>
         )}
-        {!isHidden && <LabelWithCopy color='brandMain'
+        {!isHidden && <LabelWithCopy color='gray1'
           text={uid}
           textSize={39}
           textVariant='b2' />}
