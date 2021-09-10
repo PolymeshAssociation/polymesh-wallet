@@ -14,7 +14,7 @@ export const Hr = styled.hr<HrProps>(colorProp, (props) => ({
 }));
 
 Hr.defaultProps = {
-  color: 'gray.4',
+  color: 'gray7',
   height: 2,
   bg: 'initial'
 };
