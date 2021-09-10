@@ -1,5 +1,5 @@
-import { SvgEyeOffOutline, SvgEyeOutline, SvgInfo } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Flex, Icon, LabelWithCopy, Text, Tooltip } from '@polymathnetwork/extension-ui/ui';
+import { SvgEyeOffOutline, SvgEyeOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Flex, Icon, LabelWithCopy, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { FC } from 'react';
 
 export interface Props {
