@@ -1,4 +1,4 @@
-import polkadotNetworks from '@polkadot/networks';
+import { allNetworks } from '@polkadot/networks';
 import { Network } from '@polkadot/networks/types';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
 
@@ -46,12 +46,12 @@ const polyGenesisHashes = [
 
 const polymeshNetworks = polyGenesisHashes
   // Do not override a chain if it's already in the Polkadot list
-  .filter((chain) => !polkadotNetworks.some((network) => network.genesisHash[0] === chain.genesisHash[0]))
+  .filter((chain) => !allNetworks.some((network) => network.genesisHash[0] === chain.genesisHash[0]))
   // Fill chain template with chain details from polyGenesisHashes
   .map((testnet) => ({ ...testnetTmp, ...testnet } as Network));
 
 // Append Polymesh chains to the list
-export const chains = polkadotNetworks.concat(polymeshNetworks);
+export const chains = allNetworks.concat(polymeshNetworks);
 
 export const ledgerChains = chains.filter((network) => network.hasLedgerSupport);
 

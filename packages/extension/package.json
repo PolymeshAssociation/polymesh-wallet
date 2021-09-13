@@ -6,15 +6,15 @@
   "type": "module",
   "dependencies": {
     "@babel/runtime": "^7.14.6",
-    "@polkadot/api": "^4.15.1",
-    "@polkadot/extension-base": "0.38.6",
-    "@polkadot/extension-chains": "0.38.6",
-    "@polkadot/extension-inject": "0.38.6",
-    "@polkadot/hw-ledger": "^6.9.1",
-    "@polkadot/keyring": "^6.9.1",
-    "@polkadot/phishing": "0.6.164",
-    "@polkadot/ui-keyring": "^0.81.1",
-    "@polkadot/ui-settings": "^0.81.1",
+    "@polkadot/api": "^5.9.1",
+    "@polkadot/extension-base": "0.39.3",
+    "@polkadot/extension-chains": "0.39.3",
+    "@polkadot/extension-inject": "0.39.3",
+    "@polkadot/hw-ledger": "^7.3.1",
+    "@polkadot/keyring": "^7.3.1",
+    "@polkadot/phishing": "0.6.289",
+    "@polkadot/ui-keyring": "^0.85.3",
+    "@polkadot/ui-settings": "^0.85.3",
     "@polymathnetwork/extension-core": "0.7.3",
     "@polymathnetwork/extension-ui": "0.7.3"
   },
@@ -30,12 +30,12 @@
     "html-loader": "^2.1.1",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
+    "raw-loader": "^4.0.2",
     "stream-browserify": "^3.0.0",
     "thread-loader": "^3.0.1",
     "url-loader": "^4.1.1",
     "webpack": "^5.24.2",
     "webpack-cli": "^4.5.0",
-    "webpack-extension-manifest-plugin": "^0.6.0",
-    "raw-loader": "^4.0.2"
+    "webpack-extension-manifest-plugin": "^0.6.0"
   }
 }
