@@ -1,24 +1,26 @@
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
-import { networkLabels } from '@polymathnetwork/extension-core/constants';
-import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
+// import { networkLabels } from '@polymathnetwork/extension-core/constants';
+// import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+// import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Flex, Icon, Loading, Text } from '@polymathnetwork/extension-ui/ui';
-import { genesisToNetworkName } from '@polymathnetwork/extension-ui/util/chains';
-import React, { useContext, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+// import { Box, Flex, Icon, Loading, Text } from '@polymathnetwork/extension-ui/ui';
+import { Flex, Loading } from '@polymathnetwork/extension-ui/ui';
+// import { genesisToNetworkName } from '@polymathnetwork/extension-ui/util/chains';
+// import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+// import { toast } from 'react-toastify';
 import Method from './Method';
 
-const toastId = 'network-mismatch';
+// const toastId = 'network-mismatch';
 
 interface Props {
   request: SignerPayloadJSON;
 }
 
 function Extrinsic ({ request }: Props): React.ReactElement<Props> {
-  const { networkState: { selected: selectedNetwork } } = useContext(PolymeshContext);
+  // const { networkState: { selected: selectedNetwork } } = useContext(PolymeshContext);
   const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
   const [loading, setLoading] = useState(false);
 
