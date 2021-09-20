@@ -9,8 +9,8 @@ import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useContext } from 'react';
 
 const DEV_NETWORK_COLORS = {
-  backgrounds: ['#DCEFFE', '#1348E440'],
-  foreground: '#1348E4'
+  backgrounds: ['#D7F4F2', '#60D3CB40'],
+  foreground: '#60D3CB'
 };
 
 const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[]; foreground: string }> = {
@@ -102,7 +102,7 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
 
   return (
     <OptionSelector
-      minWidth='296px'
+      minWidth='368px'
       onSelect={onSelect}
       options={networkOptions}
       position='bottom-left'

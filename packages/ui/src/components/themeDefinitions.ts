@@ -135,13 +135,13 @@ const _colors = {
   warning3: '#E3A30C',
   danger1: '#DB2C3E',
   danger2: '#FAE6E8',
-
-  // Previous branding color names
-  gray: ['#FFFFFF', '#152935', '#6C7D89', '#8C9BA5', '#EBF0F7', '#F8F9FC'],
-  brandBg: '#FAFDFF',
+  gray: ['#FFFFFF', '#1E1E1E', '#565656', '#727272', '#8F8F8F', '#F0F0F0'],
+  brandMain: '#EC4673',
   brandLightest: '#FAD1DC',
   brandLighter: '#DCD3FF',
-  brandMain: '#EC4673',
+
+  // Previous branding color names
+  brandBg: '#FAFDFF',
   brandDark: '#0024BD',
   brandDarkest: '#170087',
   info: '#2574B5',

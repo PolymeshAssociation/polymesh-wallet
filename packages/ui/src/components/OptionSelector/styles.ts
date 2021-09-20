@@ -44,7 +44,7 @@ export const StyledOptionListItem = styled.li<{ disabled?: boolean }>`
     !disabled &&
     css`
       &:hover {
-        background: ${({ theme }: ThemeProps) => theme.colors.gray[4]};
+        background: ${({ theme }: ThemeProps) => theme.colors.gray[5]};
       }
     `}
 `;
