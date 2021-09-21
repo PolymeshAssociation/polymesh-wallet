@@ -7,7 +7,6 @@ import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
 // import { Box, Flex, Icon, Loading, Text } from '@polymathnetwork/extension-ui/ui';
 import { Flex, Loading } from '@polymathnetwork/extension-ui/ui';
 // import { genesisToNetworkName } from '@polymathnetwork/extension-ui/util/chains';
-// import React, { useContext, useEffect, useState } from 'react';
 import React, { useEffect, useState } from 'react';
 
 // import { toast } from 'react-toastify';
@@ -84,13 +83,13 @@ function Extrinsic ({ request }: Props): React.ReactElement<Props> {
 
   return (
     <>
-      {loading &&
+      {loading && (
         <Flex alignItems='center'
           justifyContent='center'
           my='l'>
           <Loading />
         </Flex>
-      }
+      )}
       {callDetails && <Method call={callDetails} />}
     </>
   );

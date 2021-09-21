@@ -1,11 +1,11 @@
 import { networkLinks } from '@polymathnetwork/extension-core/constants';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
-import { SvgDotsVertical, SvgViewDashboard } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgDotsVertical, SvgLockOutline, SvgOpenInNew, SvgSettingsOutline, SvgViewDashboard } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { AccountContext, OptionSelector, PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
 import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
 import { setPolyNetwork, togglePolyIsDev, windowOpen } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Checkbox, Flex, GrowingButton, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+import { Checkbox, Flex, GrowingButton, Icon } from '@polymathnetwork/extension-ui/ui';
 import { Header, HeaderProps } from '@polymathnetwork/extension-ui/ui/Header/Header';
 import React, { ReactElement, useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
@@ -35,21 +35,42 @@ const AppHeader = (props: Props): ReactElement<Props> => {
   const topMenuOptions: Option[] = [
     {
       menu: [
-        ...(hasNonHardwareAccount ? [{ label: 'Change password', value: 'changePassword' }] : []),
-        { label: 'Open extension in a new tab', value: 'newWindow' },
-        { label: 'Manage connected dApps', value: 'manageUrlAuth' },
+        ...(hasNonHardwareAccount
+          ? [
+            {
+              label: 'Change password',
+              value: 'changePassword',
+              icon: (<Icon Asset={SvgLockOutline}
+                color='gray5'
+                height={24}
+                width={24} />)
+            }
+          ]
+          : []),
         {
-          label: (
-            <Flex px='16px'
-              py='8px'>
-              <Checkbox checked={isDeveloper}
-                disabled />
-              <Box ml='s'>
-                <Text variant='b2m'>Display development networks</Text>
-              </Box>
-            </Flex>
-          ),
-          value: 'toggleIsDev'
+          label: 'Open extension in a new tab',
+          value: 'newWindow',
+          icon: <Icon Asset={SvgOpenInNew}
+            color='gray5'
+            height={24}
+            width={24} />
+        },
+        {
+          label: 'Manage connected dApps',
+          value: 'manageUrlAuth',
+          icon: <Icon Asset={SvgSettingsOutline}
+            color='gray5'
+            height={24}
+            width={24} />
+        },
+        {
+          label: 'Display development networks',
+          value: 'toggleIsDev',
+          icon: (<Flex justifyContent='center'
+            width={24}>
+            <Checkbox checked={isDeveloper}
+              disabled />
+          </Flex>)
         }
       ]
     }
@@ -58,9 +79,7 @@ const AppHeader = (props: Props): ReactElement<Props> => {
   const handleTopMenuSelection = (value: string) => {
     switch (value) {
       case 'changePassword':
-        return isPopup
-          ? windowOpen('/account/change-password')
-          : history.push('/account/change-password');
+        return isPopup ? windowOpen('/account/change-password') : history.push('/account/change-password');
       case 'newWindow':
         return windowOpen('/');
       case 'toggleIsDev':
@@ -71,7 +90,7 @@ const AppHeader = (props: Props): ReactElement<Props> => {
   };
 
   return (
-    <Header {...rest }>
+    <Header {...rest}>
       <Flex alignItems='center'
         flexDirection='row'
         justifyContent='space-between'
@@ -83,6 +102,7 @@ const AppHeader = (props: Props): ReactElement<Props> => {
             onClick={openDashboard} />
           <OptionSelector
             className='settings-menu'
+            minWidth='368px'
             onSelect={handleTopMenuSelection}
             options={topMenuOptions}
             position='bottom-right'
