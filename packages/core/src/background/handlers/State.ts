@@ -109,6 +109,7 @@ export default class State extends DotState {
   }
 
   private _popupClose (): void {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     this.#windows.forEach((id: number) =>
       chrome.windows.remove(id)
     );

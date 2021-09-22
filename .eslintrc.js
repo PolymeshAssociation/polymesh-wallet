@@ -11,13 +11,11 @@ module.exports = {
     '**/coverage/*',
     '**/node_modules/*',
     '**/uidCrypto/*',
-    'packages/ui/src/assets/images/icons/generated/*'
+    'packages/ui/src/assets/images/icons/generated/*',
   ],
   parserOptions: {
     ...base.parserOptions,
-    project: [
-      './tsconfig.json'
-    ]
+    project: ['./tsconfig.json'],
   },
   rules: {
     ...base.rules,
@@ -36,14 +34,19 @@ module.exports = {
     '@typescript-eslint/restrict-template-expressions': 'warn',
     '@typescript-eslint/type-annotation-spacing': 'off',
     'multiline-ternary': 'warn',
-    'simple-import-sort/imports': [2, {
-      groups: [
-        ['^\u0000'], // all side-effects (0 at start)
-        ['\u0000$', '^@@polymathnetwork.*\u0000$', '^\\..*\u0000$'], // types (0 at end)
-        ['^[^/\\.]'], // non-@polymathnetwork
-        ['^@@polymathnetwork'], // @polymathnetwork
-        ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'] // local (. last)
-      ]
-    }]
-  }
+    'simple-import-sort/imports': [
+      2,
+      {
+        groups: [
+          ['^\u0000'], // all side-effects (0 at start)
+          ['\u0000$', '^@@polymathnetwork.*\u0000$', '^\\..*\u0000$'], // types (0 at end)
+          ['^[^/\\.]'], // non-@polymathnetwork
+          ['^@@polymathnetwork'], // @polymathnetwork
+          ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'], // local (. last)
+        ],
+      },
+    ],
+    '@typescript-eslint/no-floating-promises': 'off',
+    'react/jsx-no-bind': 'warn',
+  },
 };
