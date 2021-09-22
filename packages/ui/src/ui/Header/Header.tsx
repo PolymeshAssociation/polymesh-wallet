@@ -35,25 +35,33 @@ export const Header: FC<HeaderProps> = (props) => {
     <HeaderBox {...otherProps}>
       {iconAsset && (
         <>
-          <Flex alignItems='flex-start'
-            justifyContent='space-between'>
-            <Flex backgroundColor='white'
+          <Flex
+            alignItems='flex-start'
+            justifyContent='space-between'
+          >
+            <Flex
+              backgroundColor='white'
               borderRadius='50%'
               height={48}
               justifyContent='center'
               px={12}
               py={12}
-              width={48}>
-              <Icon Asset={iconAsset}
+              width={48}
+            >
+              <Icon
+                Asset={iconAsset}
                 color='brandMain'
                 height={20}
-                width={20} />
+                width={20}
+              />
             </Flex>
             {pathname !== '/' && (
               <Box style={{ cursor: 'pointer' }}>
                 <Link onClick={onCancel}>
-                  <Text color='polyNavyBlue'
-                    variant='b2'>
+                  <Text
+                    color='polyNavyBlue'
+                    variant='b2'
+                  >
                     Cancel
                   </Text>
                 </Link>
@@ -61,8 +69,10 @@ export const Header: FC<HeaderProps> = (props) => {
             )}
           </Flex>
           <Box pt='m'>
-            <Heading color='white'
-              variant='h4'>
+            <Heading
+              color='white'
+              variant='h4'
+            >
               {headerText}
             </Heading>
           </Box>

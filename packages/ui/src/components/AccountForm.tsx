@@ -69,39 +69,53 @@ export const AccountForm: FC<Props> = ({ defaultName, headerText, noHeader, onBa
 
   return (
     <>
-      {!noHeader && <Header headerText={headerText}
-        iconAsset={SvgAccountCardDetailsOutline} />}
+      {!noHeader && <Header
+        headerText={headerText}
+        iconAsset={SvgAccountCardDetailsOutline}
+      />}
       <Box mx='s'>
-        {passIsSet && <Box borderColor='gray.4'
+        {passIsSet && <Box
+          borderColor='gray.4'
           borderRadius={3}
           borderStyle='solid'
           borderWidth={2}
           mt='s'
-          p='s'>
+          p='s'
+        >
           <Flex mb='xs'>
-            <Icon Asset={SvgAlertCircle}
+            <Icon
+              Asset={SvgAlertCircle}
               color='warning'
               height={20}
-              width={20} />
+              width={20}
+            />
             <Box ml='s'>
-              <Text color='warning'
-                variant='b2m'>
+              <Text
+                color='warning'
+                variant='b2m'
+              >
                 Attention
               </Text>
             </Box>
           </Flex>
-          <Text color='gray.1'
-            variant='b2m'>
+          <Text
+            color='gray.1'
+            variant='b2m'
+          >
             Enter your current wallet password in order to add this account.
           </Text>
         </Box> }
-        <FormProvider {...methods} >
-          <form id='accountForm'
-            onSubmit={handleSubmit(onSubmit)}>
+        <FormProvider {...methods}>
+          <form
+            id='accountForm'
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Box mt='m'>
               <Box>
-                <Text color='gray.1'
-                  variant='b2m'>
+                <Text
+                  color='gray.1'
+                  variant='b2m'
+                >
                   Account name
                 </Text>
               </Box>
@@ -113,8 +127,10 @@ export const AccountForm: FC<Props> = ({ defaultName, headerText, noHeader, onBa
                 />
                 {errors?.accountName && (
                   <Box>
-                    <Text color='alert'
-                      variant='b3'>
+                    <Text
+                      color='alert'
+                      variant='b3'
+                    >
                       {errors.accountName.type === 'required' && 'Required field'}
                     </Text>
                   </Box>
@@ -123,41 +139,57 @@ export const AccountForm: FC<Props> = ({ defaultName, headerText, noHeader, onBa
             </Box>
             {!passIsSet && (
               <Box mt='m'>
-                <Text color='gray.2'
-                  variant='b2'>
+                <Text
+                  color='gray.2'
+                  variant='b2'
+                >
                   Please enter a new wallet password below to complete account creation.
                 </Text>
               </Box>
             )}
-            <Password label={passIsSet ? 'Wallet password' : 'Password'}
+            <Password
+              label={passIsSet ? 'Wallet password' : 'Password'}
               placeholder='Enter your current wallet password'
-              withConfirm={!passIsSet} />
+              withConfirm={!passIsSet}
+            />
           </form>
         </FormProvider>
       </Box>
 
-      <Flex flex={1}
+      <Flex
+        flex={1}
         flexDirection='column'
         justifyContent='flex-end'
-        m='s'>
-        <Flex mb='s'
-          width='100%'>
-          <Button minsize
+        m='s'
+      >
+        <Flex
+          mb='s'
+          width='100%'
+        >
+          <Button
+            minsize
             onClick={onBack}
             style={{ padding: '0.9rem' }}
-            variant='secondary'>
-            <Icon Asset={SvgArrowLeft}
+            variant='secondary'
+          >
+            <Icon
+              Asset={SvgArrowLeft}
               color='polyNavyBlue'
               height={16}
-              width={16} />
+              width={16}
+            />
           </Button>
-          <Box ml='s'
-            width='100%'>
-            <Button busy={isBusy}
+          <Box
+            ml='s'
+            width='100%'
+          >
+            <Button
+              busy={isBusy}
               disabled={submitIsDisabled}
               fluid
               form='accountForm'
-              type='submit'>
+              type='submit'
+            >
               {submitText}
             </Button>
           </Box>

@@ -21,28 +21,39 @@ const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
   }
 
   return (
-    <Flex alignItems='stretch'
+    <Flex
+      alignItems='stretch'
       flexDirection='column'
-      height='100%'>
-      <Box height='100%'
+      height='100%'
+    >
+      <Box
+        height='100%'
         mt='m'
-        style={{ overflowY: 'scroll' }}>
+        style={{ overflowY: 'scroll' }}
+      >
         <ExpandableDetails title={`${section}: ${method}${
           meta
             ? `(${meta.args.map(({ name }) => name).join(', ')})`
             : ''
-        }`}>
-          <Box mt='m'
-            mx='s'>
+        }`}
+        >
+          <Box
+            mt='m'
+            mx='s'
+          >
             <Box>
-              <Text color='gray.2'
-                variant='b2'>
+              <Text
+                color='gray.2'
+                variant='b2'
+              >
                 Parameters
               </Text>
             </Box>
             <Box>
-              <Text color='gray.1'
-                variant='code'>
+              <Text
+                color='gray.1'
+                variant='code'
+              >
                 {JSON.stringify(args, null, 2).slice(1, -1).trim()}
               </Text>
             </Box>
@@ -59,23 +70,31 @@ const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
                 {...(index === fees.length - 1 ? { bg: 'gray.4' } : {})}
                 key={index}
               >
-                <Flex justifyContent='space-between'
-                  mx='s'>
+                <Flex
+                  justifyContent='space-between'
+                  mx='s'
+                >
                   <Box>
-                    <Text color='gray.1'
-                      variant='b3m'>
+                    <Text
+                      color='gray.1'
+                      variant='b3m'
+                    >
                       {tuple[0]}
                     </Text>
                   </Box>
 
                   <Box>
-                    <Text color='gray.1'
-                      variant='b2m'>
+                    <Text
+                      color='gray.1'
+                      variant='b2m'
+                    >
                       {tuple[1]}
                     </Text>
-                    <Text color='gray.2'
+                    <Text
+                      color='gray.2'
                       ml={1}
-                      variant='b2m'>POLYX</Text>
+                      variant='b2m'
+                    >POLYX</Text>
                   </Box>
                 </Flex>
               </Box>

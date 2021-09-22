@@ -39,8 +39,10 @@ export const RestoreFromSeed: FC = () => {
           />
         );
       default:
-        return <EnterSeed onContinue={nextStep}
-          setPhrase={setSeedPhrase} />;
+        return <EnterSeed
+          onContinue={nextStep}
+          setPhrase={setSeedPhrase}
+        />;
     }
   };
 

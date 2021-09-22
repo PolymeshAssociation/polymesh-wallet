@@ -136,48 +136,67 @@ function ImportLedger (): React.ReactElement {
   return (
     <>
       {status !== Status.Ok
-        ? <Box p='s'
-          style={{ overflow: 'auto' }}>
+        ? <Box
+          p='s'
+          style={{ overflow: 'auto' }}
+        >
           <TroubleshootGuide
             headerText='Your Ledger is not connected'
             ledgerStatus={status}
-            refresh={refresh}/>
+            refresh={refresh}
+          />
         </Box>
         : <>
-          <Header headerText='Import Ledger account'
-            iconAsset={SvgLedgerLogo}>
+          <Header
+            headerText='Import Ledger account'
+            iconAsset={SvgLedgerLogo}
+          >
             <Box>
-              <Text color='gray.0'
-                variant='b2'>
+              <Text
+                color='gray.0'
+                variant='b2'
+              >
                 Please enter a name to import account.
               </Text>
             </Box>
           </Header>
 
           <>
-            <Flex alignItems='flex-start'
+            <Flex
+              alignItems='flex-start'
               flexDirection='column'
               height='100%'
               p='8px'
-              style={{ overflowY: 'scroll ' }}>
+              style={{ overflowY: 'scroll ' }}
+            >
               <Flex width='100%'>
-                <Flex bg='brandLightest'
+                <Flex
+                  bg='brandLightest'
                   borderRadius='50%'
                   flex='0 0 40px'
                   height={40}
-                  justifyContent='center'>
-                  <Text color='brandMain'
-                    fontSize={1}>
+                  justifyContent='center'
+                >
+                  <Text
+                    color='brandMain'
+                    fontSize={1}
+                  >
                     {getInitials(name)}
                   </Text>
                 </Flex>
-                <Flex alignItems='flex-start'
+                <Flex
+                  alignItems='flex-start'
                   flexDirection='column'
-                  ml='8px'>
-                  <Text color='gray.1'
-                    variant='b2m'>{name}</Text>
-                  <Text color='gray.2'
-                    variant='b3'>
+                  ml='8px'
+                >
+                  <Text
+                    color='gray.1'
+                    variant='b2m'
+                  >{name}</Text>
+                  <Text
+                    color='gray.2'
+                    variant='b3'
+                  >
                     {address && formatters.toShortAddress(address, { size: 33 })}
                   </Text>
                 </Flex>
@@ -185,26 +204,36 @@ function ImportLedger (): React.ReactElement {
 
               <Box width='100%'>
                 <FormProvider {...methods}>
-                  <form id='ledgerImport'
-                    onSubmit={handleSubmit(onContinue)}>
+                  <form
+                    id='ledgerImport'
+                    onSubmit={handleSubmit(onContinue)}
+                  >
                     <Box mt='m'>
                       <Box>
-                        <Text color='gray.1'
-                          variant='b2m' >
+                        <Text
+                          color='gray.1'
+                          variant='b2m'
+                        >
                           Account name
                         </Text>
                       </Box>
                       <Box>
-                        <TextInput inputRef={register({ required: 'Account name is required' })}
+                        <TextInput
+                          inputRef={register({ required: 'Account name is required' })}
                           name='accountName'
                           onChange={(e) => setName(e.target.value)}
                           placeholder='Enter account name'
-                          value={name} />
+                          value={name}
+                        />
                         <Box>
-                          <Text color='alert'
-                            variant='b3'>
-                            <ErrorMessage errors={errors}
-                              name='accountName' />
+                          <Text
+                            color='alert'
+                            variant='b3'
+                          >
+                            <ErrorMessage
+                              errors={errors}
+                              name='accountName'
+                            />
                           </Text>
                         </Box>
                       </Box>
@@ -213,33 +242,43 @@ function ImportLedger (): React.ReactElement {
                 </FormProvider>
               </Box>
 
-              <Box my='l'
-                width='100%'>
-                <SettingsButton mb='m'
+              <Box
+                my='l'
+                width='100%'
+              >
+                <SettingsButton
+                  mb='m'
                   onClick={toggleShowingSettings}
-                  width='100%'>
-                  <Icon Asset={SvgSettingsOutline}
+                  width='100%'
+                >
+                  <Icon
+                    Asset={SvgSettingsOutline}
                     color='brandMain'
                     height='20px'
-                    width='20px' />
+                    width='20px'
+                  />
                   <Box ml='s'>
                     <Text color='brandMain'>
                       Advanced settings
                     </Text>
                   </Box>
                   <Box ml='auto'>
-                    <Icon Asset={SvgChevronDown}
+                    <Icon
+                      Asset={SvgChevronDown}
                       color='brandMain'
                       height='20px'
-                      width='20px' />
+                      width='20px'
+                    />
                   </Box>
                 </SettingsButton>
 
                 {isShowingSettings &&
                 <>
                   <Box mb='m'>
-                    <Text color='gray.1'
-                      variant='b2m' >
+                    <Text
+                      color='gray.1'
+                      variant='b2m'
+                    >
                       Account type
                     </Text>
                     <Dropdown
@@ -251,8 +290,10 @@ function ImportLedger (): React.ReactElement {
                     />
                   </Box>
                   <Box mb='m'>
-                    <Text color='gray.1'
-                      variant='b2m' >
+                    <Text
+                      color='gray.1'
+                      variant='b2m'
+                    >
                       Address index
                     </Text>
                     <Dropdown
@@ -267,12 +308,16 @@ function ImportLedger (): React.ReactElement {
                 }
               </Box>
 
-              <Box mt='auto'
-                width='100%'>
-                <Button disabled={isBusy}
+              <Box
+                mt='auto'
+                width='100%'
+              >
+                <Button
+                  disabled={isBusy}
                   fluid
                   form='ledgerImport'
-                  type='submit'>
+                  type='submit'
+                >
                   Continue
                 </Button>
               </Box>

@@ -16,15 +16,19 @@ export function InitialsAvatar ({ name }: InitialAvatarProps): JSX.Element {
   }, [name]);
 
   return (
-    <Flex alignItems='center'
+    <Flex
+      alignItems='center'
       backgroundColor='gray7'
       borderRadius='50%'
       height={40}
       justifyContent='center'
       style={{ flexShrink: 0 }}
-      width={40}>
-      <Text color='gray1'
-        variant='b2m'>
+      width={40}
+    >
+      <Text
+        color='gray1'
+        variant='b2m'
+      >
         {initials}
       </Text>
     </Flex>

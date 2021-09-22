@@ -83,8 +83,10 @@ function SignArea ({ buttonText, error, isExternal, isFirst, rejectOnly = false,
   return (
     <>
       {isFirst && !isExternal && (
-        <Flex flexDirection='column'
-          p='s'>
+        <Flex
+          flexDirection='column'
+          p='s'
+        >
           { isLocked && (
             <Unlock
               error={error}
@@ -98,19 +100,24 @@ function SignArea ({ buttonText, error, isExternal, isFirst, rejectOnly = false,
           <Box mb='s'>
             <RememberPasswordCheckbox />
           </Box>
-          <Flex alignItems='stretch'
+          <Flex
+            alignItems='stretch'
             flexDirection='row'
-            width='100%'>
+            width='100%'
+          >
             <Flex flex={1}>
               <Button
                 fluid
                 onClick={_onCancel}
-                variant='secondary'>
+                variant='secondary'
+              >
                   Reject
               </Button>
-            </Flex >
-            { !rejectOnly && <Flex flex={1}
-              ml='xs'>
+            </Flex>
+            { !rejectOnly && <Flex
+              flex={1}
+              ml='xs'
+            >
               <Button
                 busy={isBusy}
                 disabled={(!!isLocked && !password) || !!error}

@@ -38,23 +38,33 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
 
   return (
     <>
-      <Flex flex={1}
+      <Flex
+        flex={1}
         flexDirection='column'
         justifyContent='space-between'
-        style={{ height: '100%', ...(isFirst ? {} : { display: 'none' }) }}>
+        style={{ height: '100%', ...(isFirst ? {} : { display: 'none' }) }}
+      >
         <Box>
           <Header>
-            {currentAccount && <AccountMain account={currentAccount}
-              details={false} />}
+            {currentAccount && <AccountMain
+              account={currentAccount}
+              details={false}
+            />}
           </Header>
 
           <Box>
-            <Box mt='m'
-              mx='s'>
-              <Heading mb={1}
-                variant='h5'>{'An application is requesting access'}</Heading>
-              <Text color='gray.2'
-                variant='b2'>
+            <Box
+              mt='m'
+              mx='s'
+            >
+              <Heading
+                mb={1}
+                variant='h5'
+              >{'An application is requesting access'}</Heading>
+              <Text
+                color='gray.2'
+                variant='b2'
+              >
                 An application, self-identifying as <strong>{truncateString(origin, 40)}</strong>
                 {' '}is requesting access from{' '}
                 <a
@@ -68,49 +78,63 @@ function Request ({ authId, isFirst, request: { origin }, url }: Props): React.R
             </Box>
 
             <Box pt='m'>
-              <Box borderColor='gray.4'
+              <Box
+                borderColor='gray.4'
                 borderRadius={3}
                 borderStyle='solid'
                 borderWidth={2}
                 m='xs'
-                p='s'>
+                p='s'
+              >
                 <Flex>
-                  <Icon Asset={SvgAlertCircle}
+                  <Icon
+                    Asset={SvgAlertCircle}
                     color='warning'
                     height={20}
-                    width={20} />
+                    width={20}
+                  />
                   <Box ml='s'>
-                    <Text color='warning'
-                      variant='b3m'>
+                    <Text
+                      color='warning'
+                      variant='b3m'
+                    >
                       Attention
                     </Text>
                   </Box>
                 </Flex>
-                <Text color='gray.1'
-                  variant='b2m'>
+                <Text
+                  color='gray.1'
+                  variant='b2m'
+                >
                   Only approve this request if you trust the application. By approving this connection, you may give the application access to the key addresses of your accounts.
                 </Text>
               </Box>
             </Box>
           </Box>
         </Box>
-        <Flex mb='s'
+        <Flex
+          mb='s'
           px='s'
-          style={{ width: '100%' }}>
+          style={{ width: '100%' }}
+        >
           <Flex flex={1}>
             <Button
               fluid
               onClick={_onReject}
-              variant='secondary'>
+              variant='secondary'
+            >
               Reject
             </Button>
           </Flex>
-          {isFirst && <Flex flex={1}
-            ml='xs'>
+          {isFirst && <Flex
+            flex={1}
+            ml='xs'
+          >
             <Button
               fluid
               onClick={_onApprove}
-              type='submit'>
+              type='submit'
+            >
               Authorize
             </Button>
           </Flex> }

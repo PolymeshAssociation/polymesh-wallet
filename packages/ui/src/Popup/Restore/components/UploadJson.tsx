@@ -3,15 +3,7 @@ import { hexToU8a, isHex, u8aToString } from '@polkadot/util';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgDeleteOutline, SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
-import { Box,
-  Button,
-  ButtonSmall,
-  Flex,
-  Icon,
-  LabelWithCopy,
-  Text,
-  TextEllipsis,
-  TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Box, Button, ButtonSmall, Flex, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymathnetwork/extension-ui/ui';
 import verifyJsonPassword from '@polymathnetwork/extension-ui/util/verifyJsonPassword';
 import React, { FC, useContext, useRef, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
@@ -125,28 +117,36 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
     <>
       <Box mx='s'>
         <Box pt='s'>
-          <Text color='gray.1'
-            variant='b2m'>
+          <Text
+            color='gray.1'
+            variant='b2m'
+          >
             JSON file
           </Text>
         </Box>
         <>
-          <input accept='.json'
+          <input
+            accept='.json'
             hidden={true}
             name='jsonFile'
             onChange={handleFileChange}
             ref={fileRef}
-            type='file' />
+            type='file'
+          />
           <Box mt='s'>
-            <ButtonSmall fluid
+            <ButtonSmall
+              fluid
               onClick={showUpload}
-              variant='secondary'>
+              variant='secondary'
+            >
               Choose file
             </ButtonSmall>
             {errors.jsonFile && (
               <Box mt='s'>
-                <Text color='alert'
-                  variant='b3'>
+                <Text
+                  color='alert'
+                  variant='b3'
+                >
                   {errors.jsonFile.type === 'required' && 'Json file is require'}
                   {errors.jsonFile.type === 'invalid' && 'Uploaded file is invalid'}
                 </Text>
@@ -158,59 +158,81 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
           <>
             <Flex mt='s'>
               <Box mr='s'>
-                <Flex backgroundColor='gray7'
+                <Flex
+                  backgroundColor='gray7'
                   borderRadius='50%'
                   height='24px'
                   justifyContent='center'
-                  width='24px'>
-                  <Icon Asset={SvgFileLockOutline}
+                  width='24px'
+                >
+                  <Icon
+                    Asset={SvgFileLockOutline}
                     color='gray4'
                     height={14}
-                    width={14} />
+                    width={14}
+                  />
                 </Flex>
               </Box>
               <Box mr='s'>
-                <Text color='gray1'
-                  variant='b2'>
+                <Text
+                  color='gray1'
+                  variant='b2'
+                >
                   <TextEllipsis size={32}>{filename}</TextEllipsis>
                 </Text>
               </Box>
-              <Box onClick={clearUploadedFile}
-                style={{ cursor: 'pointer' }}>
-                <Icon Asset={SvgDeleteOutline}
+              <Box
+                onClick={clearUploadedFile}
+                style={{ cursor: 'pointer' }}
+              >
+                <Icon
+                  Asset={SvgDeleteOutline}
                   color='gray4'
                   height={18}
-                  width={18} />
+                  width={18}
+                />
               </Box>
             </Flex>
             <Box mt='m'>
               <Flex justifyContent='space-between'>
                 <InitialsAvatar name={accountName} />
-                <Box ml='s'
-                  width='100%'>
-                  <Flex flexDirection='row'
-                    justifyContent='space-between'>
+                <Box
+                  ml='s'
+                  width='100%'
+                >
+                  <Flex
+                    flexDirection='row'
+                    justifyContent='space-between'
+                  >
                     <Flex flexDirection='row'>
-                      <Text color='gray.1'
-                        variant='b2m'>
+                      <Text
+                        color='gray.1'
+                        variant='b2m'
+                      >
                         {accountName}
                       </Text>
                     </Flex>
                   </Flex>
-                  <LabelWithCopy color='gray.3'
+                  <LabelWithCopy
+                    color='gray.3'
                     text={accountJson?.address ? recodeAddress(accountJson.address, ss58Format) : ''}
                     textSize={30}
-                    textVariant='b3' />
+                    textVariant='b3'
+                  />
                 </Box>
               </Flex>
             </Box>
             <FormProvider {...methods}>
-              <form id='accountForm'
-                onSubmit={handleSubmit(onSubmit)}>
+              <form
+                id='accountForm'
+                onSubmit={handleSubmit(onSubmit)}
+              >
                 <Box mt='s'>
                   <Box>
-                    <Text color='gray.1'
-                      variant='b2m'>
+                    <Text
+                      color='gray.1'
+                      variant='b2m'
+                    >
                       JSON Password
                     </Text>
                   </Box>
@@ -223,8 +245,10 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
                     />
                     {errors.jsonPassword && (
                       <Box>
-                        <Text color='alert'
-                          variant='b3'>
+                        <Text
+                          color='alert'
+                          variant='b3'
+                        >
                           {errors.jsonPassword.type === 'required' && 'Required field'}
                           {errors.jsonPassword.type === 'manual' && 'Invalid password'}
                         </Text>
@@ -237,16 +261,20 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
           </>
         )}
       </Box>
-      <Flex flex={1}
+      <Flex
+        flex={1}
         flexDirection='column'
         justifyContent='flex-end'
         mb='s'
-        mx='s'>
-        <Button busy={isBusy}
+        mx='s'
+      >
+        <Button
+          busy={isBusy}
           disabled={!accountJson}
           fluid
           form='accountForm'
-          type='submit'>
+          type='submit'
+        >
           Verify
         </Button>
       </Flex>

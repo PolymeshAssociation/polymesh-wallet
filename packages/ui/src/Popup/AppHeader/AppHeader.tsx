@@ -40,36 +40,46 @@ const AppHeader = (props: Props): ReactElement<Props> => {
             {
               label: 'Change password',
               value: 'changePassword',
-              icon: (<Icon Asset={SvgLockOutline}
+              icon: (<Icon
+                Asset={SvgLockOutline}
                 color='gray5'
                 height={24}
-                width={24} />)
+                width={24}
+              />)
             }
           ]
           : []),
         {
           label: 'Open extension in a new tab',
           value: 'newWindow',
-          icon: <Icon Asset={SvgOpenInNew}
+          icon: <Icon
+            Asset={SvgOpenInNew}
             color='gray5'
             height={24}
-            width={24} />
+            width={24}
+          />
         },
         {
           label: 'Manage connected dApps',
           value: 'manageUrlAuth',
-          icon: <Icon Asset={SvgSettingsOutline}
+          icon: <Icon
+            Asset={SvgSettingsOutline}
             color='gray5'
             height={24}
-            width={24} />
+            width={24}
+          />
         },
         {
           label: 'Display development networks',
           value: 'toggleIsDev',
-          icon: (<Flex justifyContent='center'
-            width={24}>
-            <Checkbox checked={isDeveloper}
-              disabled />
+          icon: (<Flex
+            justifyContent='center'
+            width={24}
+          >
+            <Checkbox
+              checked={isDeveloper}
+              disabled
+            />
           </Flex>)
         }
       ]
@@ -91,15 +101,21 @@ const AppHeader = (props: Props): ReactElement<Props> => {
 
   return (
     <Header {...rest}>
-      <Flex alignItems='center'
+      <Flex
+        alignItems='center'
         flexDirection='row'
         justifyContent='space-between'
-        mb='m'>
+        mb='m'
+      >
         <NetworkSelector onSelect={setNetwork} />
-        <Flex flexDirection='row'
-          justifyContent='center'>
-          <GrowingButton icon={SvgViewDashboard}
-            onClick={openDashboard} />
+        <Flex
+          flexDirection='row'
+          justifyContent='center'
+        >
+          <GrowingButton
+            icon={SvgViewDashboard}
+            onClick={openDashboard}
+          />
           <OptionSelector
             className='settings-menu'
             minWidth='368px'
@@ -107,11 +123,13 @@ const AppHeader = (props: Props): ReactElement<Props> => {
             options={topMenuOptions}
             position='bottom-right'
             selector={
-              <Icon Asset={SvgDotsVertical}
+              <Icon
+                Asset={SvgDotsVertical}
                 color='polyIndigo'
                 height={32}
                 style={{ cursor: 'pointer' }}
-                width={32} />
+                width={32}
+              />
             }
           />
         </Flex>

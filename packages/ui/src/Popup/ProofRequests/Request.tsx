@@ -64,25 +64,37 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
         justifyContent='space-between'
         style={{ height: '100%', ...(isFirst ? {} : { display: 'none' }) }}
       >
-        <form id='passwordForm'
-          onSubmit={handleSubmit(onSubmit)}>
+        <form
+          id='passwordForm'
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Box>
-            <Header>{currentAccount && <AccountMain account={currentAccount}
-              details={false} />}</Header>
+            <Header>{currentAccount && <AccountMain
+              account={currentAccount}
+              details={false}
+            />}</Header>
 
             <Box>
-              <Box mt='m'
-                mx='s'>
-                <Heading mb={1}
-                  variant='h5'>
+              <Box
+                mt='m'
+                mx='s'
+              >
+                <Heading
+                  mb={1}
+                  variant='h5'
+                >
                   {'Proof request'}
                 </Heading>
-                <Text color='gray.2'
-                  variant='b2'>
+                <Text
+                  color='gray.2'
+                  variant='b2'
+                >
                   An application is requesting an attestation proof for asset &quot;{`${ticker}`}&quot; from{' '}
-                  <a href={url}
+                  <a
+                    href={url}
                     rel='noopener noreferrer'
-                    target='_blank'>
+                    target='_blank'
+                  >
                     <span className='tab-url'>{new URL(url).hostname}</span>
                   </a>
                   .
@@ -90,26 +102,34 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
               </Box>
 
               <Box pt='m'>
-                <Box borderColor='gray.4'
+                <Box
+                  borderColor='gray.4'
                   borderRadius={3}
                   borderStyle='solid'
                   borderWidth={2}
                   m='xs'
-                  p='s'>
+                  p='s'
+                >
                   <Flex>
-                    <Icon Asset={SvgAlertCircle}
+                    <Icon
+                      Asset={SvgAlertCircle}
                       color='warning'
                       height={20}
-                      width={20} />
+                      width={20}
+                    />
                     <Box ml='s'>
-                      <Text color='warning'
-                        variant='b3m'>
+                      <Text
+                        color='warning'
+                        variant='b3m'
+                      >
                         Attention
                       </Text>
                     </Box>
                   </Flex>
-                  <Text color='gray.1'
-                    variant='b2m'>
+                  <Text
+                    color='gray.1'
+                    variant='b2m'
+                  >
                     Only approve this request if you trust the application. By approving this connection, you may give
                     the application access to the key addresses of your accounts.
                   </Text>
@@ -118,11 +138,15 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
             </Box>
           </Box>
 
-          <Box mt='m'
-            mx='s'>
+          <Box
+            mt='m'
+            mx='s'
+          >
             <Box>
-              <Text color='gray.1'
-                variant='b2m'>
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 Wallet password
               </Text>
             </Box>
@@ -135,8 +159,10 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
               />
               {errors.currentPassword && (
                 <Box>
-                  <Text color='alert'
-                    variant='b3'>
+                  <Text
+                    color='alert'
+                    variant='b3'
+                  >
                     {errors.currentPassword.type === 'required' && 'Please enter wallet password'}
                     {errors.currentPassword.type === 'WrongPassword' && 'Invalid password'}
                     {errors.currentPassword.type === 'SigningError' && errors.currentPassword.message}
@@ -147,25 +173,35 @@ function Request ({ isFirst, reqId, request, url }: Props): React.ReactElement<P
           </Box>
         </form>
 
-        <Flex mb='s'
+        <Flex
+          mb='s'
           px='s'
-          style={{ width: '100%' }}>
+          style={{ width: '100%' }}
+        >
           <Flex flex={1}>
-            <Button fluid
+            <Button
+              fluid
               onClick={_onReject}
-              variant='secondary'>
+              variant='secondary'
+            >
               Reject
             </Button>
           </Flex>
           {isFirst && (
-            <Flex flex={1}
-              ml='xs'>
-              <Flex flex={1}
-                ml='xs'>
-                <Button busy={isBusy}
+            <Flex
+              flex={1}
+              ml='xs'
+            >
+              <Flex
+                flex={1}
+                ml='xs'
+              >
+                <Button
+                  busy={isBusy}
                   fluid
                   form='passwordForm'
-                  type='submit'>
+                  type='submit'
+                >
                   Generate proof
                 </Button>
               </Flex>

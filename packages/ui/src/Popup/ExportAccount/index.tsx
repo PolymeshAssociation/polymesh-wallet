@@ -47,53 +47,73 @@ export const ExportAccount: FC = () => {
 
   return (
     <>
-      <Header headerText='Export account'
-        iconAsset={SvgOpenInNew}>
+      <Header
+        headerText='Export account'
+        iconAsset={SvgOpenInNew}
+      >
       </Header>
-      <Flex alignItems='stretch'
+      <Flex
+        alignItems='stretch'
         flexDirection='column'
         height='100%'
-        p='s'>
-        <Box borderColor='gray.4'
+        p='s'
+      >
+        <Box
+          borderColor='gray.4'
           borderRadius={3}
           borderStyle='solid'
           borderWidth={2}
-          p='s'>
+          p='s'
+        >
           <Flex>
-            <Icon Asset={SvgAlertCircle}
+            <Icon
+              Asset={SvgAlertCircle}
               color='warning'
               height={20}
-              width={20} />
+              width={20}
+            />
             <Box ml='s'>
-              <Text color='warning'
-                variant='b3m'>
+              <Text
+                color='warning'
+                variant='b3m'
+              >
                 Attention
               </Text>
             </Box>
           </Flex>
-          <Text color='gray.1'
-            variant='b2m'>
+          <Text
+            color='gray.1'
+            variant='b2m'
+          >
             Please remember the password you enter below as you will need it to recover your account. You are exporting your account details as a JSON file. Keep this file safe and secured.
           </Text>
         </Box>
-        <form id='passwordForm'
-          onSubmit={handleSubmit(onSubmit)}>
+        <form
+          id='passwordForm'
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Box mt='m'>
             <Box>
-              <Text color='gray.1'
-                variant='b2m'>
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
               Wallet password
               </Text>
             </Box>
             <Box>
-              <TextInput inputRef={register({ required: true, minLength: 8 })}
+              <TextInput
+                inputRef={register({ required: true, minLength: 8 })}
                 name='currentPassword'
                 placeholder='Enter your wallet password'
-                type='password' />
+                type='password'
+              />
               {errors.currentPassword &&
               <Box>
-                <Text color='alert'
-                  variant='b3'>
+                <Text
+                  color='alert'
+                  variant='b3'
+                >
                   {(errors.currentPassword).type === 'required' && 'Required field'}
                   {(errors.currentPassword).type === 'minLength' && 'Password too short'}
                   {(errors.currentPassword).type === 'WrongPassword' && 'Invalid password'}
@@ -104,10 +124,12 @@ export const ExportAccount: FC = () => {
           </Box>
         </form>
         <Box mt='auto'>
-          <Button busy={isBusy}
+          <Button
+            busy={isBusy}
             fluid
             form='passwordForm'
-            type='submit'>
+            type='submit'
+          >
             Export account
           </Button>
         </Box>

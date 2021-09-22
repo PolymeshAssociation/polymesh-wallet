@@ -59,8 +59,10 @@ export const AccountDetails: FC = () => {
   const selectedAccount = polymeshAccounts?.find((account) => account.address === address);
 
   if (showDecode) {
-    return <DecodeUid decode={decodeUid}
-      onClose={closeDecode} />;
+    return <DecodeUid
+      decode={decodeUid}
+      onClose={closeDecode}
+    />;
   } else {
     return (
       <AccountView

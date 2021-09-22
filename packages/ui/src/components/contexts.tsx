@@ -1,7 +1,4 @@
-import { AccountsContext,
-  AuthorizeRequest,
-  MetadataRequest,
-  SigningRequest } from '@polkadot/extension-base/background/types';
+import { AccountsContext, AuthorizeRequest, MetadataRequest, SigningRequest } from '@polkadot/extension-base/background/types';
 import settings from '@polkadot/ui-settings';
 import { SettingsStruct } from '@polkadot/ui-settings/types';
 import { ProofingRequest, ProvideUidRequest, ReadUidRequest } from '@polymathnetwork/extension-core/background/types';

@@ -67,17 +67,21 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
               size='24px'
               thickness='4px'
             />
-            <Box ml='8px'
-              mr='auto'>
+            <Box
+              ml='8px'
+              mr='auto'
+            >
               <Text variant='b2m'>{networkLabel}</Text>
             </Box>
 
             {isCurrentNetwork && (
               <Box ml='auto'>
-                <Icon Asset={SvgCheck}
+                <Icon
+                  Asset={SvgCheck}
                   color='brandMain'
                   height={24}
-                  width={24} />
+                  width={24}
+                />
               </Box>
             )}
           </Flex>
@@ -108,21 +112,31 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
       position='bottom-left'
       selector={
 
-        <NetworkSelect background={background}
-          id='network-selector'>
-          <NetworkCircle background={background}
-            color={foreground} />
-          <Box ml='4px'
-            mr='7px'>
-            <Text color={foreground}
-              variant='b3m'>
+        <NetworkSelect
+          background={background}
+          id='network-selector'
+        >
+          <NetworkCircle
+            background={background}
+            color={foreground}
+          />
+          <Box
+            ml='4px'
+            mr='7px'
+          >
+            <Text
+              color={foreground}
+              variant='b3m'
+            >
               {networkLabels[currentNetwork]}
             </Text>
           </Box>
           <DropdownIcon background={backgroundLight}>
-            <Icon Asset={SvgChevron}
+            <Icon
+              Asset={SvgChevron}
               color={foreground}
-              rotate='180deg' />
+              rotate='180deg'
+            />
           </DropdownIcon>
         </NetworkSelect>
       }

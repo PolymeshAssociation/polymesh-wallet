@@ -84,8 +84,10 @@ export default function Request ({ account: { accountIndex, address, addressOffs
     return (
       <>
         <RequestContent isFirst={isFirst}>
-          <Box mt='xs'
-            mx='s'>
+          <Box
+            mt='xs'
+            mx='s'
+          >
             <Heading variant='h5'>Signing Request</Heading>
           </Box>
           <Extrinsic

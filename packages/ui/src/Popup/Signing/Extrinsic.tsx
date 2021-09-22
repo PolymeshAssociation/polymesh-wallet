@@ -84,9 +84,11 @@ function Extrinsic ({ request }: Props): React.ReactElement<Props> {
   return (
     <>
       {loading && (
-        <Flex alignItems='center'
+        <Flex
+          alignItems='center'
           justifyContent='center'
-          my='l'>
+          my='l'
+        >
           <Loading />
         </Flex>
       )}

@@ -26,8 +26,7 @@ function Switch ({ checked, checkedLabel, className, onChange, uncheckedLabel }:
           onChange={_onChange}
           type='checkbox'
         />
-        <span className='slider'
-        />
+        <span className='slider' />
       </label>
       <span>{checked ? checkedLabel : uncheckedLabel}</span>
     </div>

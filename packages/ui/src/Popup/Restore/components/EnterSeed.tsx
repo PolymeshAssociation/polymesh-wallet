@@ -37,12 +37,16 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
   };
 
   return (
-    <Flex alignItems='stretch'
+    <Flex
+      alignItems='stretch'
       flexDirection='column'
       height='100%'
-      p='s'>
-      <Text color='gray.1'
-        variant='b2m'>
+      p='s'
+    >
+      <Text
+        color='gray.1'
+        variant='b2m'
+      >
         12–word recovery phrase
       </Text>
       <TextArea
@@ -52,9 +56,11 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
         placeholder='Enter your 12-word recovery phrase. Separate each word with a single space.'
       />
       <Box mt='auto'>
-        <Button disabled={!validSeed}
+        <Button
+          disabled={!validSeed}
           fluid
-          onClick={nextStep}>
+          onClick={nextStep}
+        >
           Continue
         </Button>
       </Box>

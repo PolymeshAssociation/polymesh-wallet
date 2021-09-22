@@ -1,16 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { alignItems,
-  AlignItemsProps,
-  alignSelf,
-  AlignSelfProps, flex,
-  flexDirection,
-  FlexDirectionProps,
-  FlexProps as CSSFlexProps,
-  flexWrap,
-  FlexWrapProps,
-  justifyContent,
-  JustifyContentProps } from 'styled-system';
+import { alignItems, AlignItemsProps, alignSelf, AlignSelfProps, flex, flexDirection, FlexDirectionProps, FlexProps as CSSFlexProps, flexWrap, FlexWrapProps, justifyContent, JustifyContentProps } from 'styled-system';
 
 import { Box, BoxProps } from '../Box';
 

@@ -12,7 +12,9 @@ export const AccountType: FC<Props> = ({ keyType, large }) => {
   const text = keyType === 'primary' ? 'Primary' : 'Secondary';
 
   return (
-    <StatusBadge large={large}
-      variant={color}>{text}</StatusBadge>
+    <StatusBadge
+      large={large}
+      variant={color}
+    >{text}</StatusBadge>
   );
 };

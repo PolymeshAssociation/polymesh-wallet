@@ -92,15 +92,21 @@ export default function Accounts (): React.ReactElement {
         )
         : (
           <>
-            <AppHeader>{currentAccount && <AccountMain account={currentAccount}
-              details={true} />}</AppHeader>
+            <AppHeader>{currentAccount && <AccountMain
+              account={currentAccount}
+              details={true}
+            />}</AppHeader>
             <AccountsArea id='accounts-container'>
-              <Flex justifyContent='space-between'
+              <Flex
+                justifyContent='space-between'
                 mb='-4px'
                 mt='m'
-                mx='m'>
-                <Text color='gray.1'
-                  variant='c1'>
+                mx='m'
+              >
+                <Text
+                  color='gray.1'
+                  variant='c1'
+                >
                   ACCOUNTS
                 </Text>
                 <OptionSelector
@@ -109,16 +115,22 @@ export default function Accounts (): React.ReactElement {
                   options={accountMenuItems}
                   position='bottom-right'
                   selector={
-                    <Flex justifyContent='center'
-                      style={{ cursor: 'pointer' }}>
+                    <Flex
+                      justifyContent='center'
+                      style={{ cursor: 'pointer' }}
+                    >
                       <Flex mx='s'>
-                        <Icon Asset={SvgPlus}
+                        <Icon
+                          Asset={SvgPlus}
                           color='polyNavyBlue'
                           height={14}
-                          width={14} />
+                          width={14}
+                        />
                       </Flex>
-                      <Text color='polyNavyBlue'
-                        variant='b2'>
+                      <Text
+                        color='polyNavyBlue'
+                        variant='b2'
+                      >
                         Add a key
                       </Text>
                     </Flex>

@@ -21,11 +21,15 @@ function Unlock ({ className, error, isBusy, password, setError, setPassword }: 
   );
 
   return (
-    <div className={className}
-      style={{ width: '100%' }}>
+    <div
+      className={className}
+      style={{ width: '100%' }}
+    >
       <Box>
-        <Text color='gray.1'
-          variant='b2m'>
+        <Text
+          color='gray.1'
+          variant='b2m'
+        >
          Wallet password
         </Text>
       </Box>
@@ -42,8 +46,10 @@ function Unlock ({ className, error, isBusy, password, setError, setPassword }: 
         />
         {error && (
           <Box>
-            <Text color='alert'
-              variant='b3'>
+            <Text
+              color='alert'
+              variant='b3'
+            >
               {'Invalid password'}
             </Text>
           </Box>

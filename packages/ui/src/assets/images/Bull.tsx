@@ -24,8 +24,10 @@ export const SvgBull = (props: React.SVGProps<SVGSVGElement>) => (
         y2='0.712136'
       >
         <stop stopColor='#1348E4' />
-        <stop offset='1'
-          stopColor='#6DC7F7' />
+        <stop
+          offset='1'
+          stopColor='#6DC7F7'
+        />
       </linearGradient>
     </defs>
   </svg>

@@ -1,17 +1,5 @@
 import styled, { DefaultTheme, StyledComponentProps } from 'styled-components';
-import { color,
-  ColorProps,
-  fontFamily,
-  FontFamilyProps,
-  fontSize,
-  FontSizeProps,
-  fontWeight,
-  FontWeightProps,
-  letterSpacing,
-  LetterSpacingProps,
-  lineHeight,
-  LineHeightProps,
-  variant } from 'styled-system';
+import { color, ColorProps, fontFamily, FontFamilyProps, fontSize, FontSizeProps, fontWeight, FontWeightProps, letterSpacing, LetterSpacingProps, lineHeight, LineHeightProps, variant } from 'styled-system';
 
 import { TFontWeightCustom, TTextVariant } from '../../components/themeDefinitions';
 import { Box, BoxThemeProps } from '../Box';

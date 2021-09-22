@@ -13,15 +13,21 @@ export function OptionListItem ({ onSelect, optionItem }: OptionItemProps): JSX.
   const onClick = () => (optionItem.disabled ? undefined : onSelect(optionItem.value));
 
   return (
-    <StyledOptionListItem disabled={optionItem.disabled}
-      onClick={onClick}>
+    <StyledOptionListItem
+      disabled={optionItem.disabled}
+      onClick={onClick}
+    >
       {typeof optionItem.label === 'string'
         ? (
-          <Flex px='16px'
-            py='8px'>
+          <Flex
+            px='16px'
+            py='8px'
+          >
             {optionItem.icon && <Box mr='s'>{optionItem.icon}</Box>}
-            <Text className='option-text'
-              variant='b2m'>
+            <Text
+              className='option-text'
+              variant='b2m'
+            >
               {optionItem.label}
             </Text>
           </Flex>

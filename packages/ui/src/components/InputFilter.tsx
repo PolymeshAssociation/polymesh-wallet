@@ -21,9 +21,11 @@ export function InputFilter ({ className, onChange, placeholder, value }: Props)
         autoCapitalize='off'
         autoCorrect='off'
         autoFocus
-        icon={<Icon Asset={SvgSearch}
+        icon={<Icon
+          Asset={SvgSearch}
           height={17.5}
-          width={17.5} />}
+          width={17.5}
+        />}
         onChange={onChangeFilter}
         placeholder={placeholder}
         spellCheck={false}
