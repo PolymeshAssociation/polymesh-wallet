@@ -239,7 +239,7 @@ export default class Extension extends DotExtension {
         return false;
       }
     } catch (error) {
-      reject(error);
+      reject(error as Error);
 
       return false;
     }
@@ -339,7 +339,7 @@ export default class Extension extends DotExtension {
         return false;
       }
     } catch (error) {
-      reject(error);
+      reject(error as Error);
 
       return false;
     }

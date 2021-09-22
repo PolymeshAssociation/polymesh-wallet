@@ -57,7 +57,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
           payload: registry.createType('ExtrinsicPayload', payload, { version: payload.version })
         });
       } catch (error) {
-        setError(error.toString());
+        setError((error as Error).toString());
       }
     }
   }, [request]);

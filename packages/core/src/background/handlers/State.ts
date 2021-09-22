@@ -38,7 +38,7 @@ const WINDOW_OPTS = {
   height: 621,
   left: 150,
   top: 150,
-  type: 'popup',
+  type: 'popup' as const,
   url: chrome.extension.getURL('index.html'),
   width: 400
 };
@@ -109,7 +109,7 @@ export default class State extends DotState {
   }
 
   private _popupClose (): void {
-    this.#windows.forEach((id: number): void =>
+    this.#windows.forEach((id: number) =>
       chrome.windows.remove(id)
     );
     this.#windows = [];
@@ -117,7 +117,7 @@ export default class State extends DotState {
 
   private _popupOpen (): void {
     chrome.windows.create({ ...WINDOW_OPTS }, (window?: chrome.windows.Window): void => {
-      if (window) {
+      if (window?.id) {
         this.#windows.push(window.id);
       }
     });
