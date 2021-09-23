@@ -100,44 +100,60 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
               </Box>
             </Flex>
           )} */}
-          <Box bg='polyPinkLight'
+          <Box
+            bg='polyPinkLight'
             borderRadius='2'
-            py='xs'>
+            py='xs'
+          >
             {account && (
-              <Flex flexDirection='row'
+              <Flex
+                flexDirection='row'
                 justifyContent='space-between'
-                mx='1'>
+                mx='1'
+              >
                 <Flex>
-                  <Text color='polyIndigo'
-                    variant='b3m'>
+                  <Text
+                    color='polyIndigo'
+                    variant='b3m'
+                  >
                     <TextEllipsis size={29}>{account?.did}</TextEllipsis>
                   </Text>
                 </Flex>
-                <CddStatus cdd={account.cdd}
-                  withText />
+                <CddStatus
+                  cdd={account.cdd}
+                  withText
+                />
               </Flex>
             )}
           </Box>
         </>
       )}
       {!account?.did && (
-        <Text color='brandLighter'
-          variant='b2m'>
+        <Text
+          color='brandLighter'
+          variant='b2m'
+        >
           Unassigned key
         </Text>
       )}
-      <Flex alignItems='flexStart'
-        mt='s'>
+      <Flex
+        alignItems='flexStart'
+        mt='s'
+      >
         <Box>
-          <TextOverflowEllipsis color='gray.0'
+          <TextOverflowEllipsis
+            color='gray.0'
             maxWidth='206px'
-            variant='b1m'>
+            variant='b1m'
+          >
             {account?.name}
           </TextOverflowEllipsis>
         </Box>
         <Box ml='s'>
-          {account?.did && <AccountType keyType={account?.keyType}
-            large={true} />}
+          {account?.did && <AccountType
+            keyType={account?.keyType}
+            large={true}
+          />}
         </Box>
       </Flex>
       <Flex>
@@ -149,33 +165,45 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
           textVariant='b3'
         />
       </Flex>
-      <Flex alignItems='baseline'
-        mt='m'>
-        <Heading color='white'
-          variant='h4'>
+      <Flex
+        alignItems='baseline'
+        mt='m'
+      >
+        <Heading
+          color='white'
+          variant='h4'
+        >
           {formatAmount(account?.balance?.transferrable || 0)}
         </Heading>
         <Box ml='8px'>
-          <Heading color='white'
-            variant='h5'>
+          <Heading
+            color='white'
+            variant='h5'
+          >
               POLYX
           </Heading>
         </Box>
       </Flex>
       <Flex>
-        <Text color='white'
-          variant='b1'>
+        <Text
+          color='white'
+          variant='b1'
+        >
           {formatAmount(account?.balance?.locked || 0)}
         </Text>
         <Box ml='4px'>
-          <Text color='white'
-            variant='b1'>
+          <Text
+            color='white'
+            variant='b1'
+          >
               POLYX
           </Text>
         </Box>
         <Box ml='8px'>
-          <Text color='white'
-            variant='b1'>
+          <Text
+            color='white'
+            variant='b1'
+          >
               locked
           </Text>
         </Box>
@@ -192,8 +220,10 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
             onClick={showAccountDetails}
             style={{ cursor: 'pointer' }}
           >
-            <Text color='white'
-              variant='b2m'>
+            <Text
+              color='white'
+              variant='b2m'
+            >
                 View details
             </Text>
           </Flex>

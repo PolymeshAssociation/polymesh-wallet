@@ -9,10 +9,12 @@ interface Props {
 export default function Loading ({ children }: Props): React.ReactElement<Props> {
   if (!children) {
     return (
-      <Flex alignItems='center'
+      <Flex
+        alignItems='center'
         flex={1}
         flexDirection='column'
-        justifyContent='center'>
+        justifyContent='center'
+      >
         <LoadingIndicator />
       </Flex>
     );

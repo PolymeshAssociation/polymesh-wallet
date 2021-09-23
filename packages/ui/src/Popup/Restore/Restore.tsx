@@ -25,30 +25,42 @@ export const Restore: FC = () => {
 
   return (
     <>
-      <Header headerText='Restore account'
-        iconAsset={SvgAccountReactivate}>
+      <Header
+        headerText='Restore account'
+        iconAsset={SvgAccountReactivate}
+      >
         <Box pt='m'>
-          <Text color='brandLightest'
-            variant='b2'>
+          <Text
+            color='brandLightest'
+            variant='b2'
+          >
             Restore your Polymesh Account and/or key by entering your recovery phrase or uploading the JSON file and JSON password.
           </Text>
         </Box>
         <Flex mt='m'>
-          <Flex flex={1}
+          <Flex
+            flex={1}
             justifyContent='center'
             onClick={restoreWithSeed}
-            style={{ cursor: 'pointer' }}>
-            <Text color={shouldRestoreWithSeed ? 'brandLighter' : 'white'}
-              variant='b2m'>
+            style={{ cursor: 'pointer' }}
+          >
+            <Text
+              color={shouldRestoreWithSeed ? 'brandLighter' : 'white'}
+              variant='b2m'
+            >
               With recovery phrase
             </Text>
           </Flex>
-          <Flex flex={1}
+          <Flex
+            flex={1}
             justifyContent='center'
             onClick={restoreWithJson}
-            style={{ cursor: 'pointer' }}>
-            <Text color={shouldRestoreWithJson ? 'brandLighter' : 'white'}
-              variant='b2m'>
+            style={{ cursor: 'pointer' }}
+          >
+            <Text
+              color={shouldRestoreWithJson ? 'brandLighter' : 'white'}
+              variant='b2m'
+            >
               With JSON file
             </Text>
           </Flex>

@@ -129,9 +129,11 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
   return (
     <>
-      <Box className={className}
+      <Box
+        className={className}
         onClick={toggleOptions}
-        ref={selectorRef}>
+        ref={selectorRef}
+      >
         {selector}
       </Box>
 
@@ -148,10 +150,14 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
             {options.map((option, optionIndex) => (
               <Fragment key={optionIndex}>
                 {option.category && (
-                  <Box mx='16px'
-                    textAlign='left'>
-                    <Text color='gray.2'
-                      variant='b2m'>
+                  <Box
+                    mx='16px'
+                    textAlign='left'
+                  >
+                    <Text
+                      color='gray.2'
+                      variant='b2m'
+                    >
                       {option.category}
                     </Text>
                   </Box>
@@ -159,15 +165,17 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
                 <ul>
                   {/* Render menu items */}
                   {option.menu.map((optionItem, optionItemIndex) => (
-                    <OptionListItem key={optionItemIndex}
+                    <OptionListItem
+                      key={optionItemIndex}
                       onSelect={onSelect}
-                      optionItem={optionItem} />
+                      optionItem={optionItem}
+                    />
                   ))}
                 </ul>
               </Fragment>
             ))}
           </Options>,
-          portalRoot as HTMLDivElement
+          portalRoot
         )}
     </>
   );

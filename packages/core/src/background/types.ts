@@ -3,14 +3,7 @@ import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 import { ORIGINS } from '@polymathnetwork/extension-core/constants';
 
-import { IdentifiedAccount,
-  NetworkMeta,
-  NetworkName,
-  NetworkState,
-  ProofRequestPayload,
-  RequestPolyProvideUid,
-  StoreStatus,
-  UidRecord } from '../types';
+import { IdentifiedAccount, NetworkMeta, NetworkName, NetworkState, ProofRequestPayload, RequestPolyProvideUid, StoreStatus, UidRecord } from '../types';
 
 export enum Errors {
   NO_ACCOUNT = 'No accounts found.',

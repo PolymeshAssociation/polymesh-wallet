@@ -35,14 +35,18 @@ export const NewAccount: FC = () => {
     switch (currentStep) {
       case 0:
         return (
-          <SeedView onContinue={nextStep}
-            seedPhrase={account?.seed} />
+          <SeedView
+            onContinue={nextStep}
+            seedPhrase={account?.seed}
+          />
         );
       case 1:
         return (
-          <ConfirmSeed onBack={prevStep}
+          <ConfirmSeed
+            onBack={prevStep}
             onContinue={nextStep}
-            seedPhrase={account?.seed} />
+            seedPhrase={account?.seed}
+          />
         );
       case 2:
         return (
@@ -50,7 +54,8 @@ export const NewAccount: FC = () => {
             headerText='Create and confirm your account name and wallet password'
             onBack={prevStep}
             onContinue={createAccount}
-            submitText='Create account'/>
+            submitText='Create account'
+          />
         );
       default:
         return null;

@@ -1,11 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
-import { FLUSH,
-  PAUSE,
-  PERSIST,
-  persistReducer,
-  persistStore, PURGE,
-  REGISTER, REHYDRATE } from 'redux-persist';
+import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
 import { localStorage } from 'redux-persist-webextension-storage';
 

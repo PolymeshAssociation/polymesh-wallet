@@ -30,49 +30,67 @@ export function AuthManagement (): JSX.Element {
   const hasAuthList = !!(authList && Object.entries(authList)?.length);
 
   return (
-    <Flex flexDirection='column'
-      height='100%'>
-      <Header headerText='Manage connected dApps'
+    <Flex
+      flexDirection='column'
+      height='100%'
+    >
+      <Header
+        headerText='Manage connected dApps'
         iconAsset={SvgFileLockOutline}
-        width='100%'>
-        <Box mb='m'
-          mt='s'>
-          <Text color='gray.0'
-            variant='b2'>
+        width='100%'
+      >
+        <Box
+          mb='m'
+          mt='s'
+        >
+          <Text
+            color='gray.0'
+            variant='b2'
+          >
             Allow or deny these applications to connect to your Polymesh Wallet.
           </Text>
         </Box>
       </Header>
       {hasAuthList && (
-        <Box p='s'
-          width='100%'>
-          <InputFilter onChange={_onChangeFilter}
+        <Box
+          p='s'
+          width='100%'
+        >
+          <InputFilter
+            onChange={_onChangeFilter}
             placeholder={'Search by website name...'}
-            value={filter} />
+            value={filter}
+          />
         </Box>
       )}
-      <Box py='s'
+      <Box
+        py='s'
         style={{ overflowY: 'auto' }}
-        width='100%'>
+        width='100%'
+      >
         {hasAuthList
           ? (
-            Object.entries(authList as AuthUrls)
+            Object.entries(authList)
               .filter(([url]: [string, AuthUrlInfo]) => url.includes(filter))
               .map(([url, info]: [string, AuthUrlInfo]) => (
                 <>
-                  <WebsiteEntry info={info}
+                  <WebsiteEntry
+                    info={info}
                     key={url}
                     toggleAuth={toggleAuth}
-                    url={url} />
+                    url={url}
+                  />
                   <Hr />
                 </>
 
               ))
           )
           : (
-            <Text as='div'
+            <Text
+              as='div'
               textAlign='center'
-              variant='b1m'>
+              variant='b1m'
+            >
               No website requests yet!
             </Text>
           )}

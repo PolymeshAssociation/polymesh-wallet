@@ -7,7 +7,8 @@ export const Toast: FC = () => {
   return <>
     <ToastContainer
       closeButton={true}
-      position='bottom-center' />
+      position='bottom-center'
+    />
     <ToastContainerStyle />
   </>;
 };

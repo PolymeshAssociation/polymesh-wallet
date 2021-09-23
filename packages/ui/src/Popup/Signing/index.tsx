@@ -69,7 +69,8 @@ export default function Signing (): React.ReactElement {
             />
           )}
           {signingAccount &&
-            <AccountMain account={signingAccount}
+            <AccountMain
+              account={signingAccount}
               details={false}
             />
           }

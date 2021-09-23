@@ -5,40 +5,12 @@ import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { callDetails } from '@polymathnetwork/extension-core/external';
 import { getNetwork, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
-import { renameIdentity,
-  setNetwork,
-  setSelectedAccount,
-  toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
-import { subscribeIdentifiedAccounts,
-  subscribeNetworkState,
-  subscribeSelectedAccount,
-  subscribeSelectedNetwork,
-  subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
+import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
+import { subscribeIdentifiedAccounts, subscribeNetworkState, subscribeSelectedAccount, subscribeSelectedNetwork, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 import { UidRecord } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 
-import { ALLOWED_PATH, AllowedPath, Errors,
-  PolyMessageTypes,
-  PolyRequestTypes,
-  PolyResponseType,
-  ProofingRequest,
-  ProvideUidRequest,
-  ReadUidRequest,
-  RequestPolyApproveProof,
-  RequestPolyCallDetails,
-  RequestPolyChangePass,
-  RequestPolyGetUid,
-  RequestPolyGlobalChangePass,
-  RequestPolyIdentityRename,
-  RequestPolyNetworkSet,
-  RequestPolyProvideUidApprove,
-  RequestPolyProvideUidReject,
-  RequestPolyReadUidApprove,
-  RequestPolyReadUidReject,
-  RequestPolyRejectProof,
-  RequestPolySelectedAccountSet,
-  RequestPolyValidatePassword,
-  ResponsePolyCallDetails } from '../types';
+import { ALLOWED_PATH, AllowedPath, Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, ProvideUidRequest, ReadUidRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyChangePass, RequestPolyGetUid, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolyProvideUidApprove, RequestPolyProvideUidReject, RequestPolyReadUidApprove, RequestPolyReadUidReject, RequestPolyRejectProof, RequestPolySelectedAccountSet, RequestPolyValidatePassword, ResponsePolyCallDetails } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 import { getScopeAttestationProof } from './utils';
@@ -239,7 +211,7 @@ export default class Extension extends DotExtension {
         return false;
       }
     } catch (error) {
-      reject(error);
+      reject(error as Error);
 
       return false;
     }
@@ -339,7 +311,7 @@ export default class Extension extends DotExtension {
         return false;
       }
     } catch (error) {
-      reject(error);
+      reject(error as Error);
 
       return false;
     }

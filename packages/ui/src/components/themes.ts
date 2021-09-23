@@ -1,21 +1,4 @@
-import { borderWidths,
-  breakpoints,
-  colors,
-  fontFamilies,
-  fontSizes,
-  fontWeights,
-  footer,
-  header,
-  headings,
-  lineHeights,
-  links,
-  maxWidth, radii,
-  shadows,
-  sidebar,
-  space,
-  texts,
-  transitions,
-  zIndexes } from './themeDefinitions';
+import { borderWidths, breakpoints, colors, fontFamilies, fontSizes, fontWeights, footer, header, headings, lineHeights, links, maxWidth, radii, shadows, sidebar, space, texts, transitions, zIndexes } from './themeDefinitions';
 
 const polymathTheme = {
   breakpoints,

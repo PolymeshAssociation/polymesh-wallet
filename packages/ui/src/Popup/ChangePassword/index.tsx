@@ -49,24 +49,32 @@ export const ChangePassword: FC = () => {
 
   return (
     <>
-      <Header headerText='Change password'
-        iconAsset={SvgFileLockOutline}>
+      <Header
+        headerText='Change password'
+        iconAsset={SvgFileLockOutline}
+      >
       </Header>
       <Box mx='s'>
-        <form id='passwordForm'
-          onSubmit={handleSubmit(onSubmit)}>
+        <form
+          id='passwordForm'
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Box mt='m'>
             <Box>
-              <Text color='gray.1'
-                variant='b2m'>
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 Current password
               </Text>
             </Box>
             <Box className='currentPassword'>
-              <TextInput inputRef={register({ required: true, minLength: 8 })}
+              <TextInput
+                inputRef={register({ required: true, minLength: 8 })}
                 name='currentPassword'
                 placeholder='Enter 8 characters or more'
-                type='password' />
+                type='password'
+              />
               {errors.currentPassword &&
                 <ValidationError>
                   {(errors.currentPassword).type === 'required' && 'Required field'}
@@ -78,16 +86,20 @@ export const ChangePassword: FC = () => {
           </Box>
           <Box mt='m'>
             <Box>
-              <Text color='gray.1'
-                variant='b2m'>
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 New password
               </Text>
             </Box>
             <Box className='newPassword'>
-              <TextInput inputRef={register({ required: true, minLength: 8 })}
+              <TextInput
+                inputRef={register({ required: true, minLength: 8 })}
                 name='newPassword'
                 placeholder='Enter 8 characters or more'
-                type='password' />
+                type='password'
+              />
               {errors.newPassword &&
                 <ValidationError>
                   {(errors.newPassword).type === 'required' && 'Required field'}
@@ -100,16 +112,20 @@ export const ChangePassword: FC = () => {
           </Box>
           <Box mt='m'>
             <Box>
-              <Text color='gray.1'
-                variant='b2m'>
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 Confirm password
               </Text>
             </Box>
             <Box className='confirmPassword'>
-              <TextInput inputRef={register({ required: true, minLength: 8 })}
+              <TextInput
+                inputRef={register({ required: true, minLength: 8 })}
                 name='confirmPassword'
                 placeholder='Enter 8 characters or more'
-                type='password' />
+                type='password'
+              />
               {errors.confirmPassword &&
                 <ValidationError>
                   {(errors.confirmPassword).type === 'required' && 'Required field'}
@@ -122,15 +138,19 @@ export const ChangePassword: FC = () => {
           </Box>
         </form>
       </Box>
-      <Flex flex={1}
+      <Flex
+        flex={1}
         flexDirection='column'
         justifyContent='flex-end'
         mb='s'
-        mx='s'>
-        <Button busy={isBusy}
+        mx='s'
+      >
+        <Button
+          busy={isBusy}
           fluid
           form='passwordForm'
-          type='submit'>
+          type='submit'
+        >
           Change password
         </Button>
       </Flex>

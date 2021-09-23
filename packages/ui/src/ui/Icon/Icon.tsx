@@ -31,11 +31,15 @@ const IconComponent: FC<IconProps> = ({ Asset,
   width,
   ...props }) => {
   return (
-    <Box as='span'
+    <Box
+      as='span'
       className={className}
-      {...props}>
-      <Asset aria-label={ariaLabel}
-        role='img' />
+      {...props}
+    >
+      <Asset
+        aria-label={ariaLabel}
+        role='img'
+      />
     </Box>
   );
 };

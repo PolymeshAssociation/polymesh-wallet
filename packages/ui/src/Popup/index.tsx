@@ -1,8 +1,4 @@
-import { AccountJson,
-  AccountsContext,
-  AuthorizeRequest,
-  MetadataRequest,
-  SigningRequest } from '@polkadot/extension-base/background/types';
+import { AccountJson, AccountsContext, AuthorizeRequest, MetadataRequest, SigningRequest } from '@polkadot/extension-base/background/types';
 import uiSettings from '@polkadot/ui-settings';
 import { SettingsStruct } from '@polkadot/ui-settings/types';
 import { setSS58Format } from '@polkadot/util-crypto';
@@ -17,31 +13,8 @@ import { toast } from 'react-toastify';
 
 import { SvgCloseCircle } from '../assets/images/icons';
 import { Loading } from '../components';
-import { AccountContext,
-  ActionContext,
-  ActivityContext,
-  AuthorizeReqContext,
-  MetadataReqContext,
-  PolymeshContext,
-  ProofReqContext,
-  ProvideUidReqContext,
-  ReadUidReqContext,
-  SettingsContext,
-  SigningReqContext,
-  UidContext } from '../components/contexts';
-import { busySubscriber,
-  subscribeAccounts,
-  subscribeAuthorizeRequests,
-  subscribeMetadataRequests,
-  subscribeNetworkState,
-  subscribePolyAccounts,
-  subscribePolySelectedAccount,
-  subscribePolyStatus,
-  subscribeProofingRequests,
-  subscribeProvideUidRequests,
-  subscribeReadUidRequests,
-  subscribeSigningRequests,
-  subscribeUidRecords } from '../messaging';
+import { AccountContext, ActionContext, ActivityContext, AuthorizeReqContext, MetadataReqContext, PolymeshContext, ProofReqContext, ProvideUidReqContext, ReadUidReqContext, SettingsContext, SigningReqContext, UidContext } from '../components/contexts';
+import { busySubscriber, subscribeAccounts, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeNetworkState, subscribePolyAccounts, subscribePolySelectedAccount, subscribePolyStatus, subscribeProofingRequests, subscribeProvideUidRequests, subscribeReadUidRequests, subscribeSigningRequests, subscribeUidRecords } from '../messaging';
 import { PolymeshContext as PolymeshContextType } from '../types';
 import { Box, Flex, Icon } from '../ui';
 import { Toast } from '../ui/Toast';
@@ -117,10 +90,12 @@ export default function Popup (): React.ReactElement {
         // Otherwise, we just inform the user via a Toast component.
         toast.error(
           <Flex>
-            <Icon Asset={SvgCloseCircle}
+            <Icon
+              Asset={SvgCloseCircle}
               color='red.0'
               height={20}
-              width={20} />
+              width={20}
+            />
             <Box ml='s'>{status.error.msg}</Box>
           </Flex>,
           { autoClose: false, toastId: 'error', closeButton: true }
@@ -140,10 +115,12 @@ export default function Popup (): React.ReactElement {
         // Show an alert about lack of connectivity.
         toast.error(
           <Flex>
-            <Icon Asset={SvgCloseCircle}
+            <Icon
+              Asset={SvgCloseCircle}
               color='red.0'
               height={20}
-              width={20} />
+              width={20}
+            />
             <Box ml='s'>No internet connection</Box>
           </Flex>
           , { toastId: 'offline', autoClose: false, closeButton: true });
@@ -270,8 +247,10 @@ export default function Popup (): React.ReactElement {
                                   <Route path='/settings/url-auth'>
                                     <AuthManagement />
                                   </Route>
-                                  <Route exact
-                                    path='/'>
+                                  <Route
+                                    exact
+                                    path='/'
+                                  >
                                     <Root />
                                   </Route>
                                 </Switch>

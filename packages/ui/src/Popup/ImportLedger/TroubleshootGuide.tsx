@@ -46,23 +46,31 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
   useEffect(() => {
     if (hasAttempted && hasConnectionIssue && !toast.isActive(toastId)) {
       toast.error(
-        <Flex alignItems='flex-start'
-          flexDirection='column'>
+        <Flex
+          alignItems='flex-start'
+          flexDirection='column'
+        >
           <Flex>
-            <Icon Asset={SvgAlertCircle}
+            <Icon
+              Asset={SvgAlertCircle}
               color='yellow.0'
               height={20}
-              width={20} />
+              width={20}
+            />
             <Box ml='s'>
-              <Text color='white'
-                variant='b1m'>
+              <Text
+                color='white'
+                variant='b1m'
+              >
                 Ledger cannot connect
               </Text>
             </Box>
           </Flex>
           <Box mt='4px'>
-            <Text color='gray.4'
-              variant='b3'>
+            <Text
+              color='gray.4'
+              variant='b3'
+            >
               There was an error in setting up your Ledger to connect. Please ensure that you have plugged in your
               ledger and installed the Polymesh app on the Ledger.
             </Text>
@@ -87,31 +95,41 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
 
   return isLoading
     ? (
-      <Flex height='578px'
+      <Flex
+        height='578px'
         justifyContent='center'
-        width='100%'>
+        width='100%'
+      >
         <Loading />
       </Flex>
     )
     : (
       <Box>
-        <Flex alignItems='flex-start'
-          justifyContent='space-between'>
-          <Flex bg='yellow.1'
+        <Flex
+          alignItems='flex-start'
+          justifyContent='space-between'
+        >
+          <Flex
+            bg='yellow.1'
             borderRadius='50%'
             height={48}
             justifyContent='center'
             mb={12}
-            width={48}>
-            <Icon Asset={SvgInfo}
+            width={48}
+          >
+            <Icon
+              Asset={SvgInfo}
               color='yellow.0'
               height={20}
-              width={20} />
+              width={20}
+            />
           </Flex>
           <Box style={{ cursor: 'pointer' }}>
             <Link onClick={onCancel}>
-              <Text color='brandLighter'
-                variant='b1'>
+              <Text
+                color='brandLighter'
+                variant='b1'
+              >
                 Cancel
               </Text>
             </Link>
@@ -119,28 +137,40 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
         </Flex>
 
         <Heading variant='h5'>{headerText || 'Your Ledger is not connected'}</Heading>
-        <Box mb='m'
-          mt='4px'>
-          <Text color='gray3'
-            variant='b2'>
+        <Box
+          mb='m'
+          mt='4px'
+        >
+          <Text
+            color='gray3'
+            variant='b2'
+          >
             Please check that you’ve set up your Ledger correctly and try to connect again.
           </Text>
         </Box>
 
-        <Button fluid
+        <Button
+          fluid
           onClick={attemptToConnect}
-          variant='secondary'>
-          <Icon Asset={SvgLedgerLogo}
+          variant='secondary'
+        >
+          <Icon
+            Asset={SvgLedgerLogo}
             height={24}
             mr='s'
-            width={24} />
+            width={24}
+          />
           Connect your ledger
         </Button>
 
-        <Box mb={3}
-          mt={4}>
-          <Text color='gray.1'
-            variant='c2'>
+        <Box
+          mb={3}
+          mt={4}
+        >
+          <Text
+            color='gray.1'
+            variant='c2'
+          >
             SET UP YOUR LEDGER TO CONNECT
           </Text>
         </Box>
@@ -164,13 +194,17 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
             />
           </StepList>
         </Box>
-        <Button fluid
+        <Button
+          fluid
           onClick={attemptToConnect}
-          variant='secondary'>
-          <Icon Asset={SvgLedgerLogo}
+          variant='secondary'
+        >
+          <Icon
+            Asset={SvgLedgerLogo}
             height={24}
             mr='s'
-            width={24} />
+            width={24}
+          />
           Connect your ledger
         </Button>
       </Box>
@@ -188,8 +222,10 @@ function StepItem (props: { image: string; title: string; description: string })
         </Box>
         <Text variant='b1m'>{title}</Text>
         <Box mt='4px'>
-          <Text color='gray3'
-            variant='b2'>
+          <Text
+            color='gray3'
+            variant='b2'
+          >
             {description}
           </Text>
         </Box>

@@ -12,7 +12,9 @@ export interface Props extends BaseInputProps {
 export const TextArea: FC<Props> = (props) => {
   const { name, ...otherProps } = props;
 
-  return <BaseInputArea id={name}
+  return <BaseInputArea
+    id={name}
     name={name}
-    {...otherProps} />;
+    {...otherProps}
+  />;
 };

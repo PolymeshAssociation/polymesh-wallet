@@ -10,19 +10,25 @@ export interface Props {
 
 export const UidView: FC<Props> = ({ isHidden, showHideUid, uid }) => {
   return (
-    <Box bg={isHidden ? 'gray8' : 'warning2'}
+    <Box
+      bg={isHidden ? 'gray8' : 'warning2'}
       borderRadius='2'
       mx='m'
-      p='s'>
+      p='s'
+    >
       <Flex justifyContent='space-between'>
-        <Text color='gray3'
-          variant='b2m'>
+        <Text
+          color='gray3'
+          variant='b2m'
+        >
                 Your investor uID
         </Text>
         <Box>
-          <Flex alignItems='center'
+          <Flex
+            alignItems='center'
             onClick={showHideUid}
-            style={{ cursor: 'pointer' }}>
+            style={{ cursor: 'pointer' }}
+          >
             <Box>
               <Icon
                 Asset={isHidden ? SvgEyeOutline : SvgEyeOffOutline }
@@ -33,8 +39,10 @@ export const UidView: FC<Props> = ({ isHidden, showHideUid, uid }) => {
               />
             </Box>
             <Box mx='xs'>
-              <Text color='polyNavyBlue'
-                variant='b2m'>
+              <Text
+                color='polyNavyBlue'
+                variant='b2m'
+              >
                 {isHidden ? 'Show my uID' : 'Hide my uID'}
               </Text>
             </Box>
@@ -43,15 +51,19 @@ export const UidView: FC<Props> = ({ isHidden, showHideUid, uid }) => {
       </Flex>
       <Box mt='s'>
         {isHidden && (
-          <Text color='gray.1'
-            variant='b1'>
+          <Text
+            color='gray.1'
+            variant='b1'
+          >
             **********
           </Text>
         )}
-        {!isHidden && <LabelWithCopy color='gray1'
+        {!isHidden && <LabelWithCopy
+          color='gray1'
           text={uid}
           textSize={39}
-          textVariant='b2' />}
+          textVariant='b2'
+        />}
       </Box>
     </Box>
   );

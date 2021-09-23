@@ -22,29 +22,39 @@ export const SeedPhrase: FC<Props> = ({ seedPhrase }) => {
       <Box my='m'>
         <SeedGrid>
           {seedPhrase?.split(' ').map((word, index) => (
-            <SeedWord key={index}
+            <SeedWord
+              key={index}
               seedWord={word}
-              wordOrder={index} />
+              wordOrder={index}
+            />
           ))}
         </SeedGrid>
       </Box>
-      <CopyToClipboard onCopy={onCopy}
-        text={seedPhrase || ''}>
-        <Button fluid
-          variant='secondary'>
+      <CopyToClipboard
+        onCopy={onCopy}
+        text={seedPhrase || ''}
+      >
+        <Button
+          fluid
+          variant='secondary'
+        >
           {isCopied
             ? <>
-              <Icon Asset={SvgCheckboxMarkedCircle}
+              <Icon
+                Asset={SvgCheckboxMarkedCircle}
                 color='polyNavyBlue'
                 height={20}
-                width={20} />
+                width={20}
+              />
               <Box ml='s'>Your recovery phrase copied</Box>
             </>
             : <>
-              <Icon Asset={SvgContentCopy}
+              <Icon
+                Asset={SvgContentCopy}
                 color='polyNavyBlue'
                 height={20}
-                width={20} />
+                width={20}
+              />
               <Box ml='s'>Copy your recovery phrase</Box>
             </> }
         </Button>

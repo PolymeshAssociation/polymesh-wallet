@@ -34,60 +34,88 @@ function AddAccount (): React.ReactElement {
     <>
       <Header>
         <Box pt='m'>
-          <Icon Asset={SvgWalletLogo}
+          <Icon
+            Asset={SvgWalletLogo}
             height={80}
-            width={80} />
-          <Box pt='m'
-            width={220}>
-            <Heading color='white'
-              variant='h4'>
+            width={80}
+          />
+          <Box
+            pt='m'
+            width={220}
+          >
+            <Heading
+              color='white'
+              variant='h4'
+            >
               Welcome to the Polymesh Wallet!
             </Heading>
           </Box>
           <Box mt='s'>
-            <Text color='white'
-              variant='b2'>
+            <Text
+              color='white'
+              variant='b2'
+            >
               Manage your Polymesh digital assets by creating an account or using an existing account.
             </Text>
           </Box>
         </Box>
       </Header>
-      <Flex alignItems='stretch'
+      <Flex
+        alignItems='stretch'
         flex={1}
         flexDirection='column'
         justifyContent='space-between'
-        px='m'>
-        <Box id='agreement-checkboxes'
-          mt='m'>
-          <Flex alignItems='flex-start'
+        px='m'
+      >
+        <Box
+          id='agreement-checkboxes'
+          mt='m'
+        >
+          <Flex
+            alignItems='flex-start'
             justifyContent='flex-start'
-            mb='xs'>
-            <Checkbox checked={policyAccepted}
-              onClick={() => setPolicyAccepted(!policyAccepted)} />
+            mb='xs'
+          >
+            <Checkbox
+              checked={policyAccepted}
+              onClick={() => setPolicyAccepted(!policyAccepted)}
+            />
             <Flex ml='s'>
-              <Text color='gray.3'
-                variant='b3'>
+              <Text
+                color='gray.3'
+                variant='b3'
+              >
                 I have read and accept the Polymath{' '}
-                <Link href='https://polymath.network/privacy-policy'
-                  id='sign-up-privacy-link'>
+                <Link
+                  href='https://polymath.network/privacy-policy'
+                  id='sign-up-privacy-link'
+                >
                   Privacy Policy
                 </Link>
                 .
               </Text>
             </Flex>
           </Flex>
-          <Flex alignItems='flex-start'
+          <Flex
+            alignItems='flex-start'
             justifyContent='flex-start'
             mb='s'
-            mt='xs'>
-            <Checkbox checked={termsAccepted}
-              onClick={() => setTermsAccepted(!termsAccepted)} />
+            mt='xs'
+          >
+            <Checkbox
+              checked={termsAccepted}
+              onClick={() => setTermsAccepted(!termsAccepted)}
+            />
             <Flex ml='s'>
-              <Text color='gray.3'
-                variant='b3'>
+              <Text
+                color='gray.3'
+                variant='b3'
+              >
                 I have read and accept the Polymath{' '}
-                <Link href='https://polymath.network/polymesh-testnet/wallet-terms'
-                  id='sign-up-privacy-link'>
+                <Link
+                  href='https://polymath.network/polymesh-testnet/wallet-terms'
+                  id='sign-up-privacy-link'
+                >
                   Terms of Use
                 </Link>
                 .
@@ -97,18 +125,24 @@ function AddAccount (): React.ReactElement {
         </Box>
         <Box mb='s'>
           <Box mx='xs'>
-            <Button disabled={!(policyAccepted && termsAccepted)}
+            <Button
+              disabled={!(policyAccepted && termsAccepted)}
               fluid
-              onClick={onCreateAccount}>
+              onClick={onCreateAccount}
+            >
               Create new account
             </Button>
           </Box>
-          <Box mt='s'
-            mx='xs'>
-            <Button disabled={!(policyAccepted && termsAccepted)}
+          <Box
+            mt='s'
+            mx='xs'
+          >
+            <Button
+              disabled={!(policyAccepted && termsAccepted)}
               fluid
               onClick={onImportAccount}
-              variant='secondary'>
+              variant='secondary'
+            >
               Restore account
             </Button>
           </Box>

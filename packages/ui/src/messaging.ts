@@ -1,35 +1,10 @@
-import { AccountJson,
-  AuthorizeRequest,
-  MessageTypes,
-  MessageTypesWithNoSubscriptions,
-  MessageTypesWithNullRequest,
-  MessageTypesWithSubscriptions,
-  MetadataRequest,
-  RequestTypes,
-  ResponseAuthorizeList,
-  ResponseDeriveValidate,
-  ResponseJsonGetAccountInfo,
-  ResponseSigningIsLocked,
-  ResponseTypes,
-  SeedLengths,
-  SigningRequest,
-  SubscriptionMessageTypes } from '@polkadot/extension-base/background/types';
+import { AccountJson, AuthorizeRequest, MessageTypes, MessageTypesWithNoSubscriptions, MessageTypesWithNullRequest, MessageTypesWithSubscriptions, MetadataRequest, RequestTypes, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSigningIsLocked, ResponseTypes, SeedLengths, SigningRequest, SubscriptionMessageTypes } from '@polkadot/extension-base/background/types';
 import { Message } from '@polkadot/extension-base/types';
 import chrome from '@polkadot/extension-inject/chrome';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
-import { AllowedPath, PolyMessageTypes,
-  PolyMessageTypesWithNoSubscriptions,
-  PolyMessageTypesWithNullRequest,
-  PolyMessageTypesWithSubscriptions,
-  PolyRequestTypes,
-  PolyResponseTypes,
-  PolySubscriptionMessageTypes,
-  ProofingRequest,
-  ProvideUidRequest,
-  ReadUidRequest,
-  ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { AllowedPath, PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, ProofingRequest, ProvideUidRequest, ReadUidRequest, ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 import { PORTS } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount, NetworkName, NetworkState, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 

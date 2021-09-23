@@ -52,22 +52,30 @@ export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, te
 
   return (
     <sc.StatusText copied={copied}>
-      <Flex alignItems='center'
+      <Flex
+        alignItems='center'
         onMouseOut={onMouseOut}
         onMouseOver={onMouseOver}
       >
-        <Text color={foreColor}
-          variant={textVariant}>
+        <Text
+          color={foreColor}
+          variant={textVariant}
+        >
           <TextEllipsis size={textSize}>
             {text}
           </TextEllipsis>
         </Text>
-        <CopyToClipboard onCopy={handleCopy}
-          text={text}>
-          <Flex height={24}
+        <CopyToClipboard
+          onCopy={handleCopy}
+          text={text}
+        >
+          <Flex
+            height={24}
             ml='xs'
-            onClick={handleClick}>
-            <Icon Asset={SvgContentCopy}
+            onClick={handleClick}
+          >
+            <Icon
+              Asset={SvgContentCopy}
               color={foreColor}
               height={16}
               opacity={hover ? 1 : 0}
