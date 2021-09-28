@@ -1,3 +1,10 @@
+# [1.0.0-semantic-release.3](https://github.com/PolymathNetwork/polymesh-wallet/compare/v1.0.0-semantic-release.2...v1.0.0-semantic-release.3) (2021-09-28)
+
+
+### Bug Fixes
+
+* **CI:** release plugin order ([7bc54a5](https://github.com/PolymathNetwork/polymesh-wallet/commit/7bc54a58adc9f8f01ba67a94733d9a2cc3e581a2))
+
 # [1.0.0-semantic-release.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/v1.0.0-semantic-release.1...v1.0.0-semantic-release.2) (2021-09-28)
 
 
