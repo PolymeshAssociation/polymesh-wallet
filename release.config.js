@@ -23,7 +23,9 @@ module.exports = {
             path: 'master-build.zip',
             label: '${nextRelease.version}.zip' // eslint-disable-line no-template-curly-in-string
           }
-        ]
+        ],
+        successComment: false,
+        failComment: false
       }
     ],
     '@semantic-release/changelog',
