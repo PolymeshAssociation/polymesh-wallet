@@ -13,6 +13,7 @@ module.exports = {
   plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
+    ['@semantic-release/exec', { successCmd: 'yarn build' }],
     '@semantic-release/npm',
     [
       '@semantic-release/github',
@@ -32,7 +33,6 @@ module.exports = {
         assets: ['package.json', 'yarn.lock', 'CHANGELOG.md'],
         message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}' // eslint-disable-line no-template-curly-in-string
       }
-    ],
-    ['@semantic-release/exec', { successCmd: 'yarn build' }]
+    ]
   ]
 };
