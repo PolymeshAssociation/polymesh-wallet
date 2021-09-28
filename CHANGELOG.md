@@ -1,3 +1,10 @@
+# [1.0.0-semantic-release.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/v1.0.0-semantic-release.1...v1.0.0-semantic-release.2) (2021-09-28)
+
+
+### Bug Fixes
+
+* prevent PR/issue comments ([05b7ad3](https://github.com/PolymathNetwork/polymesh-wallet/commit/05b7ad3c6c3e7236fd8536a034ee2ce060cc3fa2))
+
 # 1.0.0-semantic-release.1 (2021-09-28)
 
 
