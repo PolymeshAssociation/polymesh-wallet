@@ -21,7 +21,8 @@
     "start": "yarn watch",
     "test": "polkadot-dev-run-test",
     "watch": "cd packages/extension && NODE_ENV=development yarn polkadot-exec-webpack --config webpack.watch.cjs --mode development --watch",
-    "e2e": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --config jest.e2e.config.js"
+    "e2e": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --config jest.e2e.config.js",
+    "prepare": "husky install"
   },
   "resolutions": {
     "@polkadot/api": "^4.12.1",
@@ -37,11 +38,14 @@
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
+    "@commitlint/cli": "^13.2.0",
+    "@commitlint/config-conventional": "^13.2.0",
     "@semantic-release/changelog": "^6.0.0",
     "@semantic-release/exec": "^6.0.1",
     "@semantic-release/git": "^10.0.0",
     "@types/jest": "^26.0.15",
     "@types/puppeteer": "^5.4.0",
+    "husky": "^7.0.0",
     "jest": "^26.6.3",
     "puppeteer": "^5.5.0",
     "sinon-chrome": "^3.0.1",
