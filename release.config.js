@@ -14,7 +14,7 @@ module.exports = {
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
     '@semantic-release/npm',
-    ['@semantic-release/exec', { prepareCmd: 'yarn build' }],
+    ['@semantic-release/exec', { publishCmd: 'yarn build' }],
     [
       '@semantic-release/github',
       {
