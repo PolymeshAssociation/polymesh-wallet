@@ -14,7 +14,7 @@ module.exports = {
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
     '@semantic-release/npm',
-    ['@semantic-release/exec', { prepareCmd: 'npm version --workspaces ${nextRelease.version}' }],
+    ['@semantic-release/exec', { verifyConditionsCmd: 'npm version --workspaces ${nextRelease.version} && git commit -am "chore(release): update workspaces versions ${nextRelease.version} [skip ci]"' }],
     [
       '@semantic-release/github',
       {
