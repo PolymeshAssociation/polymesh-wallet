@@ -18,13 +18,7 @@ module.exports = {
     [
       '@semantic-release/exec',
       {
-        prepareCmd:
-          "npm version --workspaces ${nextRelease.version} && \
-          npm version --no-git-tag-version --allow-same-version ${nextRelease.version} && \
-          yarn build && \
-          git add . && \
-          git commit -am 'chore(release): update package versions ${nextRelease.version} [skip ci]' && \
-          git push"
+        prepareCmd: './bump-versions.sh ${nextRelease.version}'
       }
     ],
     [
