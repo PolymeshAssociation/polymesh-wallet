@@ -1,3 +1,10 @@
+# [1.0.0-semantic-release.4](https://github.com/PolymathNetwork/polymesh-wallet/compare/v1.0.0-semantic-release.3...1.0.0-semantic-release.4) (2021-09-29)
+
+
+### Bug Fixes
+
+* update tag format ([770bb7f](https://github.com/PolymathNetwork/polymesh-wallet/commit/770bb7f902e5aad82f85671431d3dd47258416c0))
+
 # [1.0.0-semantic-release.3](https://github.com/PolymathNetwork/polymesh-wallet/compare/v1.0.0-semantic-release.2...v1.0.0-semantic-release.3) (2021-09-28)
 
 

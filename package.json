@@ -1,6 +1,6 @@
 {
   "name": "polymesh-wallet",
-  "version": "1.0.0-semantic-release.3",
+  "version": "1.0.0-semantic-release.4",
   "description": "A Wallet extension for Polymesh blockchain",
   "private": true,
   "workspaces": [
