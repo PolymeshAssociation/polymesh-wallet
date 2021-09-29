@@ -1,4 +1,4 @@
-git pull origin $(git rev-parse --abbrev-ref HEAD)
+git pull
 
 yarn workspace @polymathnetwork/extension-core version --no-git-tag-version --no-commit-hooks --new-version ${1}
 yarn workspace @polymathnetwork/extension-ui version --no-git-tag-version --no-commit-hooks --new-version ${1}
