@@ -21,9 +21,9 @@ module.exports = {
         prepareCmd:
           "npm version --workspaces ${nextRelease.version} && \
           npm version --no-git-tag-version --allow-same-version ${nextRelease.version} && \
+          yarn build && \
           git commit -am 'chore(release): update package versions ${nextRelease.version} [skip ci]' && \
-          git push && \
-          yarn build"
+          git push"
       }
     ],
     [
