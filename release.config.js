@@ -13,8 +13,8 @@ module.exports = {
   plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
-    '@semantic-release/npm',
-    ['@semantic-release/exec', { prepareCmd: 'npm version --workspaces ${nextRelease.version} && git commit -am "chore(release): update workspaces versions ${nextRelease.version} [skip ci]" && yarn build' }],
+    // '@semantic-release/npm',
+    ['@semantic-release/exec', { prepareCmd: 'npm version --workspaces ${nextRelease.version} && npm version --no-git-tag-version ${nextRelease.version} && git commit -am "chore(release): update package versions ${nextRelease.version} [skip ci]" && yarn build' }],
     [
       '@semantic-release/github',
       {
