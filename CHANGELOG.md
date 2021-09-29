@@ -1,3 +1,34 @@
+# [1.2.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.1.0...1.2.0) (2021-09-29)
+
+
+### Bug Fixes
+
+* add build step ([4e6fa0a](https://github.com/PolymathNetwork/polymesh-wallet/commit/4e6fa0ac925f189f14a224dfd462589c7f576b29))
+* add commit-versions script ([ac6cbf1](https://github.com/PolymathNetwork/polymesh-wallet/commit/ac6cbf1fb37dd83943a2f48e3dc8b7daa6a8961b))
+* add git add . ([ab261b5](https://github.com/PolymathNetwork/polymesh-wallet/commit/ab261b544ba4d107fd4be735a31c31462893b167))
+* add git push ([4fd6d89](https://github.com/PolymathNetwork/polymesh-wallet/commit/4fd6d897f8444c2fd152e872b298a1882964eb06))
+* add git push ([b52e46e](https://github.com/PolymathNetwork/polymesh-wallet/commit/b52e46efaa5dd6fb5fc953d3a5621ea6021074c6))
+* bump-versions script ([6f7244c](https://github.com/PolymathNetwork/polymesh-wallet/commit/6f7244c1bd5809edbfc59c17677be71173efddc5))
+* change exec commands order ([e6b95e8](https://github.com/PolymathNetwork/polymesh-wallet/commit/e6b95e877ff27301f3442dfa1b8f67464c02fc0a))
+* commit workspaces version bumps ([8d82f5c](https://github.com/PolymathNetwork/polymesh-wallet/commit/8d82f5c1dfb1bcfb0912f495f934127c0be430bb))
+* consolidate scripts into bump-versions ([3892172](https://github.com/PolymathNetwork/polymesh-wallet/commit/3892172c8f1989ae8abe39cb561e555ed2909587))
+* disable npm plugin and use exec to update package versions ([622abf5](https://github.com/PolymathNetwork/polymesh-wallet/commit/622abf5ed090c8a8054c7b802f49e20d7721d075))
+* exec step ([f1488b9](https://github.com/PolymathNetwork/polymesh-wallet/commit/f1488b914c80bb172c0f906f19b0cbdb5aa62e5d))
+* exec step ([5d7a122](https://github.com/PolymathNetwork/polymesh-wallet/commit/5d7a122bf12db87a585878306ad853bf89671c15))
+* re-enable publish exec script ([93e9e01](https://github.com/PolymathNetwork/polymesh-wallet/commit/93e9e019ea2d8901fdccea4880f3d770fe506f4a))
+* test exec build ([be990e9](https://github.com/PolymathNetwork/polymesh-wallet/commit/be990e924901f7f7e24e22102bb155f02ce6fd3d))
+* test script update ([51b95fd](https://github.com/PolymathNetwork/polymesh-wallet/commit/51b95fdbeee0ed983c6803df38e6f7f4effd6ce8))
+* test scripts ([faf7211](https://github.com/PolymathNetwork/polymesh-wallet/commit/faf7211f541c3989ec414b18c240a1e28b7b0493))
+* update bump-versions script ([eb26b35](https://github.com/PolymathNetwork/polymesh-wallet/commit/eb26b35df9344a424390699cbfc8482b43a43d6d))
+* use bump-versions script ([ebabc56](https://github.com/PolymathNetwork/polymesh-wallet/commit/ebabc56d6ce60462e082c1d52a1f08243cb16cb0))
+* use npm again ([377a672](https://github.com/PolymathNetwork/polymesh-wallet/commit/377a672e3bad030bd0ed4bf5156f5cd0c3954c39))
+
+
+### Features
+
+* add bump-version script ([432090a](https://github.com/PolymathNetwork/polymesh-wallet/commit/432090a429c91a78c33f1654c7f8355d83f7c264))
+* use npm to bump workspace versions ([8f78858](https://github.com/PolymathNetwork/polymesh-wallet/commit/8f78858026854e48b5d6b1fa5f5ce031dd74be99))
+
 # [1.1.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0...1.1.0) (2021-09-29)
 
 
