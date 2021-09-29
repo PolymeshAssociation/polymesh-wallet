@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.2.0...1.2.1) (2021-09-29)
+
+
+### Bug Fixes
+
+* add success script to squash commits ([1d4cc6d](https://github.com/PolymathNetwork/polymesh-wallet/commit/1d4cc6d37c8188c5a9c33af9cdfd08ac851bb446))
+* pull latest in script ([f3dd3e5](https://github.com/PolymathNetwork/polymesh-wallet/commit/f3dd3e5f374b07b045ab7213dd3a41f990c8449b))
+
 # [1.2.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.1.0...1.2.0) (2021-09-29)
 
 
