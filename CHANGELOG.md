@@ -1,3 +1,16 @@
+# [1.3.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.2.1...1.3.0) (2021-09-29)
+
+
+### Bug Fixes
+
+* disable husky during release ([e94ea2b](https://github.com/PolymathNetwork/polymesh-wallet/commit/e94ea2bade1ffe12bd3a784c68092ee5185b606d))
+* remove obligatory commitizen for commit msgs ([70452b8](https://github.com/PolymathNetwork/polymesh-wallet/commit/70452b8b8284250892c447c6901cbdb248ed1e43))
+
+
+### Features
+
+* add husky + commitlint ([9f13793](https://github.com/PolymathNetwork/polymesh-wallet/commit/9f137938bf2db24ff8b355337aec023ad6a49fbc))
+
 ## [1.2.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.2.0...1.2.1) (2021-09-29)
 
 
