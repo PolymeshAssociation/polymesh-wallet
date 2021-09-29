@@ -1,3 +1,20 @@
+# [1.1.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0...1.1.0) (2021-09-29)
+
+
+### Bug Fixes
+
+* add missing packages ([3088560](https://github.com/PolymathNetwork/polymesh-wallet/commit/3088560ead09af5e357b670fbfc191032a2c7d56))
+* **CI:** release plugin order ([7bc54a5](https://github.com/PolymathNetwork/polymesh-wallet/commit/7bc54a58adc9f8f01ba67a94733d9a2cc3e581a2))
+* prevent PR/issue comments ([05b7ad3](https://github.com/PolymathNetwork/polymesh-wallet/commit/05b7ad3c6c3e7236fd8536a034ee2ce060cc3fa2))
+* **release:** use publishCmd for exec ([c5c00c5](https://github.com/PolymathNetwork/polymesh-wallet/commit/c5c00c5dc4dfc396c12868987730b031f3ea71dc))
+* test with non prepublish ([7175046](https://github.com/PolymathNetwork/polymesh-wallet/commit/7175046725de3ca4cd30ad42b9a797b9aa1999bf))
+* update tag format ([770bb7f](https://github.com/PolymathNetwork/polymesh-wallet/commit/770bb7f902e5aad82f85671431d3dd47258416c0))
+
+
+### Features
+
+* semantic-release ([cac0e4b](https://github.com/PolymathNetwork/polymesh-wallet/commit/cac0e4b359cf23e1e387acf94ae32e71c985c6ac))
+
 # [1.0.0-semantic-release.4](https://github.com/PolymathNetwork/polymesh-wallet/compare/v1.0.0-semantic-release.3...1.0.0-semantic-release.4) (2021-09-29)
 
 
