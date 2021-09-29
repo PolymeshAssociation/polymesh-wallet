@@ -15,7 +15,13 @@ module.exports = {
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
     '@semantic-release/npm',
-    ['@semantic-release/exec', { prepareCmd: './bump-versions.sh ${nextRelease.version}' }],
+    [
+      '@semantic-release/exec',
+      {
+        prepareCmd: './bump-versions.sh ${nextRelease.version}',
+        successCmd: './squash-commits.sh ${nextRelease.version}'
+      }
+    ],
     [
       '@semantic-release/github',
       {
