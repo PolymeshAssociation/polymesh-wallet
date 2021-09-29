@@ -18,8 +18,8 @@ module.exports = {
     [
       '@semantic-release/exec',
       {
-        prepareCmd: './bump-versions.sh ${nextRelease.version}',
-        publishCmd: './commit-versions.sh ${nextRelease.version}'
+        prepareCmd: './bump-versions.sh ${nextRelease.version}'
+        // publishCmd: './commit-versions.sh ${nextRelease.version}'
       }
     ],
     [
