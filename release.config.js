@@ -1,3 +1,4 @@
+/* eslint-disable no-multi-str */
 /* eslint-disable no-template-curly-in-string */
 
 module.exports = {
@@ -14,7 +15,16 @@ module.exports = {
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
     // '@semantic-release/npm',
-    ['@semantic-release/exec', { prepareCmd: 'npm version --workspaces ${nextRelease.version} && npm version --no-git-tag-version ${nextRelease.version} && git commit -am "chore(release): update package versions ${nextRelease.version} [skip ci]" && yarn build' }],
+    [
+      '@semantic-release/exec',
+      {
+        prepareCmd:
+          "npm version --workspaces ${nextRelease.version} && \
+          npm version --no-git-tag-version --allow-same-version ${nextRelease.version} && \
+          git commit -am 'chore(release): update package versions ${nextRelease.version} [skip ci]' && \
+          yarn build"
+      }
+    ],
     [
       '@semantic-release/github',
       {
