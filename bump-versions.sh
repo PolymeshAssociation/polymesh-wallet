@@ -1,4 +1,4 @@
-npm version --workspaces ${nextRelease.version}
+npm version --workspaces ${1}
 npm version --no-git-tag-version --allow-same-version ${1}
 yarn build
 git add .
