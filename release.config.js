@@ -1,3 +1,5 @@
+/* eslint-disable no-template-curly-in-string */
+
 module.exports = {
   branches: [
     'master',
@@ -10,6 +12,7 @@ module.exports = {
       prerelease: true
     }
   ],
+  tagFormat: '${version}',
   plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
@@ -21,7 +24,7 @@ module.exports = {
         assets: [
           {
             path: 'master-build.zip',
-            label: '${nextRelease.version}.zip' // eslint-disable-line no-template-curly-in-string
+            label: '${nextRelease.version}.zip'
           }
         ],
         successComment: false,
@@ -33,7 +36,7 @@ module.exports = {
       '@semantic-release/git',
       {
         assets: ['package.json', 'yarn.lock', 'CHANGELOG.md'],
-        message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}' // eslint-disable-line no-template-curly-in-string
+        message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}'
       }
     ]
   ]
