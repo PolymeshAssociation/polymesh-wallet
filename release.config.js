@@ -7,10 +7,7 @@ module.exports = {
       name: 'develop',
       prerelease: true
     },
-    {
-      name: 'semantic-release',
-      prerelease: true
-    }
+    'semantic-release'
   ],
   tagFormat: '${version}',
   plugins: [
