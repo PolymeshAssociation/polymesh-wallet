@@ -37,5 +37,3 @@ jobs:
           name: build
           path: |
             master-build.zip
-      - name: semantic-pull-request
-        uses: amannn/action-semantic-pull-request@v3.4.2
