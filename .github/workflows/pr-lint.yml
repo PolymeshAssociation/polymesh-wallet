@@ -3,9 +3,10 @@ name: "Lint PR"
 on:
   pull_request:
     types: [opened, edited, synchronize]
-    
+
 jobs:
   validate-pr-title:
+    name: Validate PR title
     runs-on: ubuntu-latest
     steps:
       - name: Validate pull request title
