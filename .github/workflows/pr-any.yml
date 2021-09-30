@@ -55,10 +55,9 @@ jobs:
             master-build.zip
 
   test:
+    needs: build
     name: Test e2e
     runs-on: ubuntu-latest
-    env:
-      CI: 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
