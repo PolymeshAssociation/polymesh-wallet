@@ -3,13 +3,14 @@ on: [pull_request]
 
 jobs:
   build-and-test:
-    name: Build and test
+    name: Validate, build, and test
     runs-on: ubuntu-latest
     env:
       CI: 'true'
     steps:
       - name: Validate semantic pull request
         uses: amannn/action-semantic-pull-request@v3.4.2
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       - name: Check out code
