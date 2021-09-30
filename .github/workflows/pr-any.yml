@@ -8,12 +8,7 @@ jobs:
     env:
       CI: 'true'
     steps:
-      - name: Validate semantic pull request
-        uses: amannn/action-semantic-pull-request@v3.4.2
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v2
       - name: Install node
         uses: actions/setup-node@v2-beta
@@ -37,3 +32,7 @@ jobs:
           name: build
           path: |
             master-build.zip
+      - name: Validate semantic pull request
+        uses: amannn/action-semantic-pull-request@v3.4.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
