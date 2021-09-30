@@ -1,4 +1,3 @@
-/* eslint-disable no-multi-str */
 /* eslint-disable no-template-curly-in-string */
 
 module.exports = {
