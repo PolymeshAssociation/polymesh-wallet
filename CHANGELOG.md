@@ -1,3 +1,10 @@
+# [1.0.0-develop.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.1...1.0.0-develop.2) (2021-10-05)
+
+
+### Features
+
+* **UI:** update Development network names ([#213](https://github.com/PolymathNetwork/polymesh-wallet/issues/213)) ([c4d4ec6](https://github.com/PolymathNetwork/polymesh-wallet/commit/c4d4ec697de1d0ae317fc5b454dda657eccebf3d))
+
 # 1.0.0-develop.1 (2021-10-05)
 
 
