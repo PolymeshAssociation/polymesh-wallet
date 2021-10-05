@@ -30,13 +30,13 @@ const polyGenesisHashes = [
     displayName: 'Polymesh - Development testnet',
     networkName: NetworkName.alcyone
   },
-  // PME
+  // Tooling
   {
     genesisHash: ['0x56fb854a431370af86de89a0003ca3eb500066ee66eb01a92810369b3dc435c3'],
-    displayName: 'Polymesh - Development testnet',
+    displayName: 'Polymesh - Tooling testnet',
     networkName: NetworkName.pme
   },
-  // PMF
+  // Staging
   {
     genesisHash: ['0xdeaafc11dcd5f779321e493b2a3f16ebee3725ffd398c0cb908e4b86e1b16245'],
     displayName: 'Polymesh - Staging testnet',

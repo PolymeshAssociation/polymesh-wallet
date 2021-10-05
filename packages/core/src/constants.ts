@@ -11,8 +11,8 @@ export const networkURLs: Record<NetworkName, string> = {
 export const networkLabels: Record<NetworkName, string> = {
   itn: 'ITN',
   alcyone: 'Alcyone Testnet',
-  pmf: 'PMF',
-  pme: 'PME',
+  pmf: 'Staging',
+  pme: 'Tooling',
   local: 'Local node'
 };
 
