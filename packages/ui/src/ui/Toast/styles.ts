@@ -8,7 +8,7 @@ export const ToastContainerStyle = createGlobalStyle`
   padding: 4px;
   width: 320px;
   box-sizing: border-box;
-  color: #fff;
+  width: 100vw;
 }
 .Toastify__toast-container--top-left {
   top: 1em;
@@ -28,7 +28,7 @@ export const ToastContainerStyle = createGlobalStyle`
   left: 1em;
 }
 .Toastify__toast-container--bottom-center {
-  bottom: 1em;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -37,33 +37,12 @@ export const ToastContainerStyle = createGlobalStyle`
   right: 1em;
 }
 
-@media only screen and (max-width : 480px) {
-  .Toastify__toast-container {
-    width: 100vw;
-    padding: 0;
-    left: 0;
-    margin: 0;
-  }
-  .Toastify__toast-container--top-left, .Toastify__toast-container--top-center, .Toastify__toast-container--top-right {
-    top: 0;
-    transform: translateX(0);
-  }
-  .Toastify__toast-container--bottom-left, .Toastify__toast-container--bottom-center, .Toastify__toast-container--bottom-right {
-    bottom: 0;
-    transform: translateX(0);
-  }
-  .Toastify__toast-container--rtl {
-    right: 0;
-    left: initial;
-  }
-}
 .Toastify__toast {
   position: relative;
   min-height: 64px;
   box-sizing: border-box;
-  margin-bottom: 1rem;
+  margin: 16px;
   padding: 8px;
-  border-radius: 4px;
   box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1), 0 2px 15px 0 rgba(0, 0, 0, 0.05);
   display: -ms-flexbox;
   display: flex;
@@ -74,6 +53,7 @@ export const ToastContainerStyle = createGlobalStyle`
   font-family: sans-serif;
   cursor: pointer;
   direction: ltr;
+  border-radius: 8px;
 }
 .Toastify__toast--rtl {
   direction: rtl;
@@ -87,16 +67,16 @@ export const ToastContainerStyle = createGlobalStyle`
   color: #aaa;
 }
 .Toastify__toast--info {
-  background: #3498db;
+  background: #1E1E1E;
 }
 .Toastify__toast--success {
-  background: #07bc0c;
+  background: #1E1E1E;
 }
 .Toastify__toast--warning {
-  background: #f1c40f;
+  background: #1E1E1E;
 }
 .Toastify__toast--error {
-  background: #152935;
+  background: #1E1E1E;
 }
 .Toastify__toast-body {
   margin: auto 0;
@@ -110,12 +90,6 @@ export const ToastContainerStyle = createGlobalStyle`
   animation-duration: 0.7s;
 }
 
-@media only screen and (max-width : 480px) {
-  .Toastify__toast {
-    margin-bottom: 0;
-    border-radius: 0;
-  }
-}
 .Toastify__close-button {
   color: #fff;
   background: transparent;

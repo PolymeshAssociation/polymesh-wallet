@@ -25,6 +25,7 @@ export default styled(Toast)<{visible: boolean}>`
   line-height: 7px;
   top: 460px;
   left: calc(50% - 50px);
+
   && {
     margin: auto;
     border-radius: 25px;
