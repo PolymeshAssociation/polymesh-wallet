@@ -80,7 +80,7 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
         {
           toastId,
           closeOnClick: false,
-          hideProgressBar: true,
+          hideProgressBar: true
         }
       );
     }
