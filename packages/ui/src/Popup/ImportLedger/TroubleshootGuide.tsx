@@ -66,9 +66,9 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
               </Text>
             </Box>
           </Flex>
-          <Box mt='4px'>
+          <Box mt='4px' mb='20px'>
             <Text
-              color='gray.4'
+              color='gray7'
               variant='b3'
             >
               There was an error in setting up your Ledger to connect. Please ensure that you have plugged in your
@@ -80,7 +80,7 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
         {
           toastId,
           closeOnClick: false,
-          hideProgressBar: true
+          hideProgressBar: true,
         }
       );
     }
@@ -279,8 +279,8 @@ const Step = styled.li`
 
 const ToastConnectButton = styled.button`
   color: white;
-  border: 2px solid white;
-  border-radius: 8px;
+  border: 1px solid white;
+  border-radius: 100px;
   background: transparent;
   width: 85px;
   height: 32px;
