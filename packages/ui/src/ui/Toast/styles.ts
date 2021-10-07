@@ -5,10 +5,10 @@ export const ToastContainerStyle = createGlobalStyle`
   z-index: 9999;
   -webkit-transform: translate3d(0, 0, 9999px);
   position: fixed;
-  padding: 4px;
   width: 320px;
   box-sizing: border-box;
   width: 100vw;
+  max-width: 400px;
 }
 .Toastify__toast-container--top-left {
   top: 1em;
