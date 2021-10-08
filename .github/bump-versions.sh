@@ -7,6 +7,6 @@ yarn workspace @polymathnetwork/extension add @polymathnetwork/extension-core@${
 
 yarn build
 
-git add .
-git commit -am "chore(release): update package versions ${1} [skip ci]"
+git add -A
+git commit -m "chore(release): update package versions to ${1} [skip ci]"
 git push
