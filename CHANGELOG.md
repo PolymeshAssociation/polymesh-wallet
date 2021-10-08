@@ -1,3 +1,15 @@
+# [1.0.0-develop.3](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.2...1.0.0-develop.3) (2021-10-08)
+
+
+### Bug Fixes
+
+* **CI:** update bump-versions script ([66191e2](https://github.com/PolymathNetwork/polymesh-wallet/commit/66191e2a72901dd633af741497682b9d63c881dc))
+
+
+### Features
+
+* **UI:** update toast notification styles [GTN-349] ([#214](https://github.com/PolymathNetwork/polymesh-wallet/issues/214)) ([ba548cb](https://github.com/PolymathNetwork/polymesh-wallet/commit/ba548cb2736f6ec125e4902369d420c2af16a0b7))
+
 # [1.0.0-develop.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.1...1.0.0-develop.2) (2021-10-05)
 
 
