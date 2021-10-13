@@ -83,6 +83,7 @@ export const ToastContainerStyle = createGlobalStyle`
   -ms-flex: 1 1 auto;
       flex: 1 1 auto;
   padding: 6px;
+  color: white;
 }
 
 .Toastify--animate {
