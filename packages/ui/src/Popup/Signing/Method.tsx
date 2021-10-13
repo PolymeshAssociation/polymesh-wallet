@@ -67,7 +67,7 @@ const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
           {fees.map((tuple, index) => {
             return (
               <Box
-                {...(index === fees.length - 1 ? { bg: 'gray.4' } : {})}
+                {...(index === fees.length - 1 ? { bg: 'gray.5' } : {})}
                 key={index}
               >
                 <Flex
