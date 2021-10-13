@@ -1,3 +1,11 @@
+# [1.0.0-develop.4](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.3...1.0.0-develop.4) (2021-10-13)
+
+
+### Bug Fixes
+
+* revert "--no-ci" from semantic release ([429e97f](https://github.com/PolymathNetwork/polymesh-wallet/commit/429e97fc216782d33afa9c94c5a5a20a7a6c2349))
+* toast colors ([#215](https://github.com/PolymathNetwork/polymesh-wallet/issues/215)) ([c9cd8dd](https://github.com/PolymathNetwork/polymesh-wallet/commit/c9cd8ddf89d00dc90b0e6259a91b3d20101b0c4d))
+
 # [1.0.0-develop.3](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.2...1.0.0-develop.3) (2021-10-08)
 
 
