@@ -66,7 +66,10 @@ export function TroubleshootGuide ({ cancel, headerText, ledgerStatus, refresh }
               </Text>
             </Box>
           </Flex>
-          <Box mt='4px' mb='20px'>
+          <Box
+            mb='20px'
+            mt='4px'
+          >
             <Text
               color='gray7'
               variant='b3'
