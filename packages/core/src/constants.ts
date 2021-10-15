@@ -46,7 +46,7 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
     explorer: 'http://18.223.97.65/'
   },
   testnet: {
-    dashboard: 'unknown',
+    dashboard: 'https://testnet-dashboard.polymesh.network/',
     explorer: 'https://polymesh-testnet.subscan.io/'
   },
   pmf: {
