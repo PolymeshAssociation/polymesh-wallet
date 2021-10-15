@@ -8,17 +8,19 @@ import v3_2_0 from './v3.2.0';
 import v3_3_0 from './v3.3.0';
 
 const itn = v3_2_0;
+const testnet = v3_2_0;
 const alcyone = v3_2_0;
 const pmf = v3_2_0;
 const pme = v3_3_0;
 const local = v3_3_0;
 
 const schemas: Record<NetworkName, Schema> = {
-  pme,
-  pmf,
+  itn,
+  testnet,
   alcyone,
-  local,
-  itn
+  pmf,
+  pme,
+  local
 };
 
 export default schemas;
