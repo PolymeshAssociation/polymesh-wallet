@@ -18,6 +18,10 @@ const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[]; foreground: s
     backgrounds: ['#F2E6FF', '#4D019840'],
     foreground: '#4D0198'
   },
+  testnet: {
+    backgrounds: ['#DCEFFE', '#1348E440'],
+    foreground: '#1348E4'
+  },
   alcyone: {
     backgrounds: ['#FBF3D0', '#E3A30C40'],
     foreground: '#E3A30C'
