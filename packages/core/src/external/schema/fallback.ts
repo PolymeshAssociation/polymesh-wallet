@@ -11,8 +11,8 @@ import v4_0_0 from './v4.0.0';
 const itn = v3_2_0;
 const testnet = v4_0_0;
 const alcyone = v3_3_0;
-const pmf = v3_3_0;
-const pme = v3_3_0;
+const pmf = v4_0_0;
+const pme = v4_0_0;
 const local = v4_0_0;
 
 const schemas: Record<NetworkName, Schema> = {
