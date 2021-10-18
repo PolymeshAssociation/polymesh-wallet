@@ -1,6 +1,6 @@
 {
   "name": "@polymathnetwork/extension-core",
-  "version": "1.0.0-develop.4",
+  "version": "1.0.0-develop.5",
   "description": "",
   "main": "index.js",
   "type": "module",
