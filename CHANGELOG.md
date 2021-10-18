@@ -1,3 +1,10 @@
+# [1.0.0-develop.6](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.5...1.0.0-develop.6) (2021-10-18)
+
+
+### Bug Fixes
+
+* use autoMergeLevel2 to reconcile state ([#218](https://github.com/PolymathNetwork/polymesh-wallet/issues/218)) ([a856a51](https://github.com/PolymathNetwork/polymesh-wallet/commit/a856a5123fcec9f6370fe9dd46fc13ea9bf067cc))
+
 # [1.0.0-develop.5](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.4...1.0.0-develop.5) (2021-10-18)
 
 
