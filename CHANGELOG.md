@@ -1,3 +1,10 @@
+# [1.0.0-develop.5](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.4...1.0.0-develop.5) (2021-10-18)
+
+
+### Features
+
+* **UI:** add Testnet network selector ([#217](https://github.com/PolymathNetwork/polymesh-wallet/issues/217)) ([973f4b8](https://github.com/PolymathNetwork/polymesh-wallet/commit/973f4b8f1384a5cfa40f9adbb3e5edb8ca3b3905))
+
 # [1.0.0-develop.4](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.3...1.0.0-develop.4) (2021-10-13)
 
 
