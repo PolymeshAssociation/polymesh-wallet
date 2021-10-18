@@ -3,6 +3,7 @@ import { LinkName, NetworkName, NetworkState } from './types';
 export const networkURLs: Record<NetworkName, string> = {
   itn: 'wss://itn-rpc.polymesh.live',
   alcyone: 'wss://alcyone-rpc.polymesh.live',
+  testnet: 'wss://testnet-rpc.polymesh.live/',
   pmf: 'wss://pmf.polymath.network',
   pme: 'wss://pme.polymath.network',
   local: 'ws://localhost:9944'
@@ -10,6 +11,7 @@ export const networkURLs: Record<NetworkName, string> = {
 
 export const networkLabels: Record<NetworkName, string> = {
   itn: 'ITN',
+  testnet: 'Testnet',
   alcyone: 'Alcyone Testnet',
   pmf: 'Staging',
   pme: 'Tooling',
@@ -17,25 +19,35 @@ export const networkLabels: Record<NetworkName, string> = {
 };
 
 export const networkIsDev: Record<NetworkName, boolean> = {
+  itn: false,
   alcyone: false,
+  testnet: false,
   pmf: true,
   pme: true,
-  local: true,
-  itn: false
+  local: true
 };
 
-export const dynamicSchemaEnabled: Record <NetworkName, boolean> = {
+export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
+  itn: true,
   alcyone: true,
+  testnet: true,
   pmf: true,
   pme: true,
-  local: false,
-  itn: true
+  local: false
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
+  itn: {
+    dashboard: 'https://itn-dashboard.polymesh.live/',
+    explorer: 'https://itn-app.polymesh.live/#/explorer'
+  },
   alcyone: {
     dashboard: 'https://alcyone-dashboard.polymesh.live/',
     explorer: 'http://18.223.97.65/'
+  },
+  testnet: {
+    dashboard: 'https://testnet-dashboard.polymath.network/',
+    explorer: 'https://polymesh-testnet.subscan.io/'
   },
   pmf: {
     dashboard: 'https://polymesh-dashboard-beta.herokuapp.com/',
@@ -48,10 +60,6 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   local: {
     dashboard: 'unknown',
     explorer: 'unknown'
-  },
-  itn: {
-    dashboard: 'https://itn-dashboard.polymesh.live/',
-    explorer: 'https://itn-app.polymesh.live/#/explorer'
   }
 };
 
@@ -93,10 +101,7 @@ export const uidProvidersWhitelist = [
   'http://localhost:3000'
 ];
 
-export const uidReadersWhitelist = [
-  'http://localhost:3000',
-  'https://polymathnetwork.github.io/mock-uid-provider'
-];
+export const uidReadersWhitelist = ['http://localhost:3000', 'https://polymathnetwork.github.io/mock-uid-provider'];
 
 export const PORTS = {
   EXTENSION: 'polywallet_extension',
