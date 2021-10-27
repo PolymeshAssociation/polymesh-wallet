@@ -18,6 +18,10 @@ const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[]; foreground: s
   //   backgrounds: ['#F2E6FF', '#4D019840'],
   //   foreground: '#4D0198'
   // },
+  mainnet: {
+    backgrounds: ['#FAD1DC', '#EC467340'],
+    foreground: '#43195B'
+  },
   testnet: {
     backgrounds: ['#DCEFFE', '#1348E440'],
     foreground: '#1348E4'
