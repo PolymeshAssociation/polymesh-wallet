@@ -14,10 +14,10 @@ const DEV_NETWORK_COLORS = {
 };
 
 const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[]; foreground: string }> = {
-  itn: {
-    backgrounds: ['#F2E6FF', '#4D019840'],
-    foreground: '#4D0198'
-  },
+  // itn: {
+  //   backgrounds: ['#F2E6FF', '#4D019840'],
+  //   foreground: '#4D0198'
+  // },
   testnet: {
     backgrounds: ['#DCEFFE', '#1348E440'],
     foreground: '#1348E4'
@@ -38,8 +38,9 @@ type NetworkSelectorProps = {
 export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.ReactElement {
   const { networkState: { isDeveloper, selected: currentNetwork } } = useContext(PolymeshContext);
 
-  const [background, backgroundLight] = NETWORK_COLORS[currentNetwork].backgrounds;
-  const foreground = NETWORK_COLORS[currentNetwork].foreground;
+  const [background, backgroundLight] =
+    NETWORK_COLORS[currentNetwork]?.backgrounds || NETWORK_COLORS.testnet.backgrounds;
+  const foreground = NETWORK_COLORS[currentNetwork]?.foreground || NETWORK_COLORS.testnet.foreground;
 
   const { devNetworks, networks } = Object.entries(networkLabels).reduce(
     ({ devNetworks, networks }: Record<string, string[][]>, networkLabel) => {
@@ -115,7 +116,6 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
       options={networkOptions}
       position='bottom-left'
       selector={
-
         <NetworkSelect
           background={background}
           id='network-selector'

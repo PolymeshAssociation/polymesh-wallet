@@ -1,7 +1,7 @@
 import { LinkName, NetworkName, NetworkState } from './types';
 
 export const networkURLs: Record<NetworkName, string> = {
-  itn: 'wss://itn-rpc.polymesh.live',
+  // itn: 'wss://itn-rpc.polymesh.live',
   // alcyone: 'wss://alcyone-rpc.polymesh.live',
   testnet: 'wss://testnet-rpc.polymesh.live/',
   pmf: 'wss://pmf.polymath.network',
@@ -10,7 +10,7 @@ export const networkURLs: Record<NetworkName, string> = {
 };
 
 export const networkLabels: Record<NetworkName, string> = {
-  itn: 'ITN',
+  // itn: 'ITN',
   testnet: 'Testnet',
   // alcyone: 'Alcyone Testnet',
   pmf: 'Staging',
@@ -19,7 +19,7 @@ export const networkLabels: Record<NetworkName, string> = {
 };
 
 export const networkIsDev: Record<NetworkName, boolean> = {
-  itn: false,
+  // itn: false,
   // alcyone: false,
   testnet: false,
   pmf: true,
@@ -28,7 +28,7 @@ export const networkIsDev: Record<NetworkName, boolean> = {
 };
 
 export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
-  itn: true,
+  // itn: true,
   // alcyone: true,
   testnet: true,
   pmf: true,
@@ -37,10 +37,10 @@ export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
-  itn: {
-    dashboard: 'https://itn-dashboard.polymesh.live/',
-    explorer: 'https://itn-app.polymesh.live/#/explorer'
-  },
+  // itn: {
+  //   dashboard: 'https://itn-dashboard.polymesh.live/',
+  //   explorer: 'https://itn-app.polymesh.live/#/explorer'
+  // },
   // alcyone: {
   //   dashboard: 'https://alcyone-dashboard.polymesh.live/',
   //   explorer: 'http://18.223.97.65/'
@@ -63,12 +63,12 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   }
 };
 
-export const defaultNetwork: NetworkName = NetworkName.itn;
+export const defaultNetwork: NetworkName = NetworkName.testnet;
 
 export const messagePrefix = 'poly:';
 
 // ITN genesis hash.
-export const genesisHash = '0x9deeb940c92ae02111c3bd5baca89970384f4c9849f02a1b2e53e66414d30f9f';
+export const genesisHash = '0x2ace05e703aa50b48c0ccccfc8b424f7aab9a1e2c424ed12e45d20b1e8ffd0d6';
 
 export const messages = [
   'pub(accounts.list)',
