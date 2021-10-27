@@ -50,7 +50,7 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   //   explorer: 'http://18.223.97.65/'
   // },
   mainnet: {
-    dashboard: 'https://mainnet-dashboard.polymath.network/',
+    dashboard: 'https://dashboard.polymath.network/',
     explorer: 'https://polymesh-mainnet.subscan.io/'
   },
   testnet: {
