@@ -1,8 +1,6 @@
 import { LinkName, NetworkName, NetworkState } from './types';
 
 export const networkURLs: Record<NetworkName, string> = {
-  // itn: 'wss://itn-rpc.polymesh.live',
-  // alcyone: 'wss://alcyone-rpc.polymesh.live',
   mainnet: 'wss://mainnet-rpc.polymesh.live',
   testnet: 'wss://testnet-rpc.polymesh.live',
   pmf: 'wss://pmf.polymath.network',
@@ -11,18 +9,14 @@ export const networkURLs: Record<NetworkName, string> = {
 };
 
 export const networkLabels: Record<NetworkName, string> = {
-  // itn: 'ITN',
   mainnet: 'Mainnet',
   testnet: 'Testnet',
-  // alcyone: 'Alcyone Testnet',
   pmf: 'Staging',
   pme: 'Tooling',
   local: 'Local node'
 };
 
 export const networkIsDev: Record<NetworkName, boolean> = {
-  // itn: false,
-  // alcyone: false,
   mainnet: false,
   testnet: false,
   pmf: true,
@@ -31,8 +25,6 @@ export const networkIsDev: Record<NetworkName, boolean> = {
 };
 
 export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
-  // itn: true,
-  // alcyone: true,
   mainnet: true,
   testnet: true,
   pmf: true,
@@ -41,14 +33,6 @@ export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
-  // itn: {
-  //   dashboard: 'https://itn-dashboard.polymesh.live/',
-  //   explorer: 'https://itn-app.polymesh.live/#/explorer'
-  // },
-  // alcyone: {
-  //   dashboard: 'https://alcyone-dashboard.polymesh.live/',
-  //   explorer: 'http://18.223.97.65/'
-  // },
   mainnet: {
     dashboard: 'https://dashboard.polymath.network/',
     explorer: 'https://polymesh-mainnet.subscan.io/'

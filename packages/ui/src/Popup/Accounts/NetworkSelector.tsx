@@ -14,10 +14,6 @@ const DEV_NETWORK_COLORS = {
 };
 
 const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[]; foreground: string }> = {
-  // itn: {
-  //   backgrounds: ['#F2E6FF', '#4D019840'],
-  //   foreground: '#4D0198'
-  // },
   mainnet: {
     backgrounds: ['#FAD1DC', '#EC467340'],
     foreground: '#43195B'
@@ -26,10 +22,6 @@ const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[]; foreground: s
     backgrounds: ['#DCEFFE', '#1348E440'],
     foreground: '#1348E4'
   },
-  // alcyone: {
-  //   backgrounds: ['#FBF3D0', '#E3A30C40'],
-  //   foreground: '#E3A30C'
-  // },
   pmf: DEV_NETWORK_COLORS,
   pme: DEV_NETWORK_COLORS,
   local: DEV_NETWORK_COLORS
