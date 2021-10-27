@@ -55,7 +55,7 @@ export type ReversedDidList =
 export enum NetworkName {
   itn = 'itn',
   testnet = 'testnet',
-  alcyone = 'alcyone',
+  // alcyone = 'alcyone',
   pmf = 'pmf',
   pme = 'pme',
   local = 'local'

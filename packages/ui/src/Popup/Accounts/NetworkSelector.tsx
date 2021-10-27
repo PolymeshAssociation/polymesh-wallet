@@ -22,10 +22,10 @@ const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[]; foreground: s
     backgrounds: ['#DCEFFE', '#1348E440'],
     foreground: '#1348E4'
   },
-  alcyone: {
-    backgrounds: ['#FBF3D0', '#E3A30C40'],
-    foreground: '#E3A30C'
-  },
+  // alcyone: {
+  //   backgrounds: ['#FBF3D0', '#E3A30C40'],
+  //   foreground: '#E3A30C'
+  // },
   pmf: DEV_NETWORK_COLORS,
   pme: DEV_NETWORK_COLORS,
   local: DEV_NETWORK_COLORS

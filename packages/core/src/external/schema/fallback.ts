@@ -18,7 +18,7 @@ const local = v4_0_0;
 const schemas: Record<NetworkName, Schema> = {
   itn,
   testnet,
-  alcyone,
+  // alcyone,
   pmf,
   pme,
   local
