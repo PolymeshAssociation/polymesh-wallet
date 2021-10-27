@@ -1,3 +1,10 @@
+# [1.0.0-develop.7](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.6...1.0.0-develop.7) (2021-10-27)
+
+
+### Features
+
+* re-enable Connect Ledger button ([#220](https://github.com/PolymathNetwork/polymesh-wallet/issues/220)) ([93b077a](https://github.com/PolymathNetwork/polymesh-wallet/commit/93b077a7c4de0ca5cebee1318414b1c6e8697484))
+
 # [1.0.0-develop.6](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.5...1.0.0-develop.6) (2021-10-18)
 
 
