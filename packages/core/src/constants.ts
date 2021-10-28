@@ -1,7 +1,7 @@
 import { LinkName, NetworkName, NetworkState } from './types';
 
 export const networkURLs: Record<NetworkName, string> = {
-  mainnet: 'wss://mainnet-rpc.polymesh.live',
+  mainnet: 'wss://mainnet-rpc.polymesh.network',
   testnet: 'wss://testnet-rpc.polymesh.live',
   pmf: 'wss://pmf.polymath.network',
   pme: 'wss://pme.polymath.network',
