@@ -2,6 +2,8 @@ import { Unsubcall } from '@polkadot/extension-inject/types';
 import { Call } from '@polkadot/types/interfaces';
 import { AnyJson, DefinitionRpc, DefinitionRpcSub, RegistryTypes } from '@polkadot/types/types';
 
+import { RequestPolyReadUid } from '../background/types';
+
 export enum DidType {
   primary = 'primary',
   secondary = 'secondary'
@@ -51,11 +53,11 @@ export type ReversedDidList =
   Record<string, {did: string, keyType: DidType, cdd?: CDD, didAlias: string}>;
 
 export enum NetworkName {
+  mainnet = 'mainnet',
+  testnet = 'testnet',
   pmf = 'pmf',
-  alcyone = 'alcyone',
   pme = 'pme',
-  local = 'local',
-  itn = 'itn',
+  local = 'local'
 }
 
 export enum LinkName {
@@ -111,9 +113,15 @@ export interface ProofResult {
   proof: string;
 }
 
+export interface ReadUidResult {
+  id: number;
+  uid: string;
+}
+
 export interface InjectedUid {
   requestProof: (req: ProofRequestPayload) => Promise<ProofResult>;
   provide: (req: RequestPolyProvideUid) => Promise<boolean>;
+  read: (req: RequestPolyReadUid) => Promise<ReadUidResult>;
 }
 
 export type KeyringAccountData = {

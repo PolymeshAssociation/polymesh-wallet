@@ -50,62 +50,78 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
   const renderContainerHeader = (isAssigned: boolean) => {
     if (isAssigned) {
       return (
-        <Box bg={headerColor}
+        <Box
+          bg='polyPinkLight'
           borderRadius='2'
           mt='xs'
           mx='s'
-          px='s'>
+          px='s'
+        >
           { isEditing &&
             <Flex py='xxs'>
-              <TextInput defaultValue={currentAccount?.didAlias}
+              <TextInput
+                defaultValue={currentAccount?.didAlias}
                 onChange={handleAliasChange}
                 placeholder='Your Polymesh Account'
+                style={{ height: '18px' }}
                 tight
-                value={newAlias} />
-              <Icon Asset={SvgCheck}
-                color='brandMain'
+                value={newAlias}
+              />
+              <Icon
+                Asset={SvgCheck}
+                color='polyPink'
                 height={20}
                 onClick={saveAlias}
                 style={{ cursor: 'pointer' }}
-                width={20} />
-              <Icon Asset={SvgWindowClose}
-                color='brandMain'
+                width={20}
+              />
+              <Icon
+                Asset={SvgWindowClose}
+                color='polyPink'
                 height={20}
                 onClick={stopEditAlias}
                 style={{ cursor: 'pointer' }}
-                width={20} />
+                width={20}
+              />
             </Flex>
           }
           { !isEditing &&
-            <Flex alignItems='center'
+            <Flex
+              alignItems='center'
               flexDirection='row'
               justifyContent='space-between'
               onMouseEnter={mouseEnter}
-              onMouseLeave={mouseLeave}>
+              onMouseLeave={mouseLeave}
+            >
               <Flex alignItems='center'>
                 { !!currentAccount?.didAlias &&
-                  <TextOverflowEllipsis color='brandMain'
+                  <TextOverflowEllipsis
+                    color='polyIndigo'
                     maxWidth='140px'
-                    variant='c2'>
+                    variant='b3m'
+                  >
                     {currentAccount.didAlias}
                   </TextOverflowEllipsis>
                 }
                 <Box {...(!!currentAccount?.didAlias && { ml: 's' })}>
-                  <LabelWithCopy color='brandMain'
+                  <LabelWithCopy
+                    color='polyIndigo'
                     text={did}
                     textSize={currentAccount?.didAlias ? 20 : 30}
-                    textVariant='c2'
+                    textVariant='b3m'
                   />
                 </Box>
               </Flex>
               <Flex>
                 <Flex mr='xs'>
-                  <Icon Asset={SvgPencilOutline}
-                    color={hover ? 'brandMain' : headerColor}
+                  <Icon
+                    Asset={SvgPencilOutline}
+                    color={hover ? 'polyPink' : 'polyPinkLight'}
                     height={16}
                     onClick={editAlias}
                     style={{ cursor: 'pointer' }}
-                    width={16} />
+                    width={16}
+                  />
                 </Flex>
                 <CddStatus cdd={accounts[0].cdd} />
               </Flex>
@@ -115,9 +131,11 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
       );
     } else {
       return (
-        <Box mx='xs'>
-          <Text color='gray.1'
-            variant='c2'>Unassigned keys</Text>
+        <Box mx='s'>
+          <Text
+            color='gray1'
+            variant='b2m'
+          >Unassigned keys</Text>
         </Box>
       );
     }
@@ -128,7 +146,8 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
       <>
         {accounts.sort((a) => a.keyType === 'primary' ? -1 : 1).map((account: IdentifiedAccount, index) => {
           return (
-            <AccountView account={account}
+            <AccountView
+              account={account}
               isSelected={account.address === selectedAccount}
               key={index}
             />
@@ -139,12 +158,14 @@ export const AccountsContainer: FC<Props> = ({ accounts, did, headerColor, selec
   };
 
   return (
-    <Box bg='white'
-      borderRadius='2'
+    <Box
+      bg='white'
+      borderRadius='3'
       boxShadow='3'
-      m='s'
+      m='m'
       pb='xs'
-      pt='xs'>
+      pt='xs'
+    >
       {renderContainerHeader(accounts[0].did !== undefined)}
       {renderAccounts()}
     </Box>

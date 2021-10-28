@@ -1,12 +1,8 @@
-import { AccountJson,
-  AccountsContext,
-  AuthorizeRequest,
-  MetadataRequest,
-  SigningRequest } from '@polkadot/extension-base/background/types';
+import { AccountJson, AccountsContext, AuthorizeRequest, MetadataRequest, SigningRequest } from '@polkadot/extension-base/background/types';
 import uiSettings from '@polkadot/ui-settings';
 import { SettingsStruct } from '@polkadot/ui-settings/types';
 import { setSS58Format } from '@polkadot/util-crypto';
-import { ProofingRequest, ProvideUidRequest } from '@polymathnetwork/extension-core/background/types';
+import { ProofingRequest, ProvideUidRequest, ReadUidRequest } from '@polymathnetwork/extension-core/background/types';
 import { defaultNetworkState } from '@polymathnetwork/extension-core/constants';
 import { ErrorCodes, IdentifiedAccount, NetworkState, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
@@ -17,29 +13,8 @@ import { toast } from 'react-toastify';
 
 import { SvgCloseCircle } from '../assets/images/icons';
 import { Loading } from '../components';
-import { AccountContext,
-  ActionContext,
-  ActivityContext,
-  AuthorizeReqContext,
-  MetadataReqContext,
-  PolymeshContext,
-  ProofReqContext,
-  ProvideUidReqContext,
-  SettingsContext,
-  SigningReqContext,
-  UidContext } from '../components/contexts';
-import { busySubscriber,
-  subscribeAccounts,
-  subscribeAuthorizeRequests,
-  subscribeMetadataRequests,
-  subscribeNetworkState,
-  subscribePolyAccounts,
-  subscribePolySelectedAccount,
-  subscribePolyStatus,
-  subscribeProofingRequests,
-  subscribeProvideUidRequests,
-  subscribeSigningRequests,
-  subscribeUidRecords } from '../messaging';
+import { AccountContext, ActionContext, ActivityContext, AuthorizeReqContext, MetadataReqContext, PolymeshContext, ProofReqContext, ProvideUidReqContext, ReadUidReqContext, SettingsContext, SigningReqContext, UidContext } from '../components/contexts';
+import { busySubscriber, subscribeAccounts, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeNetworkState, subscribePolyAccounts, subscribePolySelectedAccount, subscribePolyStatus, subscribeProofingRequests, subscribeProvideUidRequests, subscribeReadUidRequests, subscribeSigningRequests, subscribeUidRecords } from '../messaging';
 import { PolymeshContext as PolymeshContextType } from '../types';
 import { Box, Flex, Icon } from '../ui';
 import { Toast } from '../ui/Toast';
@@ -52,11 +27,10 @@ import Authorize from './Authorize';
 import { ChangePassword } from './ChangePassword';
 import { ExportAccount } from './ExportAccount';
 import { ForgetAccount } from './ForgetAccount';
-import { ImportJson } from './ImportJson';
-import { ImportSeed } from './ImportSeed';
 import { NewAccount } from './NewAccount';
 import ProofRequests from './ProofRequests';
 import ProvideUidRequests from './ProvideUidRequests';
+import ReadUidRequests from './ReadUidRequests';
 import { Restore } from './Restore';
 import Signing from './Signing';
 
@@ -97,6 +71,7 @@ export default function Popup (): React.ReactElement {
   const [signRequests, setSignRequests] = useState<null | SigningRequest[]>(null);
   const [proofingRequests, setProofingRequests] = useState<null | ProofingRequest[]>(null);
   const [provideUidRequests, setProvideUidRequests] = useState<null | ProvideUidRequest[]>(null);
+  const [readUidRequests, setReadUidRequests] = useState<null | ReadUidRequest[]>(null);
   const [settingsCtx, setSettingsCtx] = useState<SettingsStruct>(startSettings);
   const [polymeshAccounts, setPolymeshAccounts] = useState<IdentifiedAccount[]>([]);
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
@@ -115,13 +90,15 @@ export default function Popup (): React.ReactElement {
         // Otherwise, we just inform the user via a Toast component.
         toast.error(
           <Flex>
-            <Icon Asset={SvgCloseCircle}
+            <Icon
+              Asset={SvgCloseCircle}
               color='red.0'
               height={20}
-              width={20} />
+              width={20}
+            />
             <Box ml='s'>{status.error.msg}</Box>
           </Flex>,
-          { autoClose: false, toastId: 'error' }
+          { autoClose: false, toastId: 'error', closeButton: true }
         );
       }
     } else {
@@ -135,16 +112,18 @@ export default function Popup (): React.ReactElement {
         // Dismiss any toast that we might've displayed earlier.
         toast.dismiss('offline');
       } else {
-        // Show an un-closable alert about lack of connectivity.
+        // Show an alert about lack of connectivity.
         toast.error(
           <Flex>
-            <Icon Asset={SvgCloseCircle}
+            <Icon
+              Asset={SvgCloseCircle}
               color='red.0'
               height={20}
-              width={20} />
+              width={20}
+            />
             <Box ml='s'>No internet connection</Box>
           </Flex>
-          , { toastId: 'offline', autoClose: false, closeButton: false });
+          , { toastId: 'offline', autoClose: false, closeButton: true });
       }
     });
   }, []);
@@ -168,6 +147,7 @@ export default function Popup (): React.ReactElement {
       subscribeSigningRequests(setSignRequests),
       subscribeProofingRequests(setProofingRequests),
       subscribeProvideUidRequests(setProvideUidRequests),
+      subscribeReadUidRequests(setReadUidRequests),
       subscribeUidRecords(setUidRecords),
       busySubscriber.addListener(setIsBusy)
     ])
@@ -204,6 +184,8 @@ export default function Popup (): React.ReactElement {
       return Signing;
     } else if (provideUidRequests && provideUidRequests.length) {
       return ProvideUidRequests;
+    } else if (readUidRequests && readUidRequests.length) {
+      return ReadUidRequests;
     }
 
     return Accounts;
@@ -225,6 +207,7 @@ export default function Popup (): React.ReactElement {
         signRequests &&
         proofingRequests &&
         provideUidRequests &&
+        readUidRequests &&
         uidRecords &&
         isReady && (
         <ActivityContext.Provider value={isBusy}>
@@ -237,45 +220,43 @@ export default function Popup (): React.ReactElement {
                       <SigningReqContext.Provider value={signRequests}>
                         <ProofReqContext.Provider value={proofingRequests}>
                           <ProvideUidReqContext.Provider value={provideUidRequests}>
-                            <PolymeshContext.Provider value={polymeshCtx}>
-                              <Switch>
-                                <Route path='/account/create'>
-                                  <NewAccount />
-                                </Route>
-                                <Route path='/account/forget/:address'>
-                                  <ForgetAccount />
-                                </Route>
-                                <Route path='/account/export/:address'>
-                                  <ExportAccount />
-                                </Route>
-                                <Route path='/account/import-seed'>
-                                  <ImportSeed />
-                                </Route>
-                                <Route path='/account/restore-json'>
-                                  <ImportJson />
-                                </Route>
-                                <Route path='/account/restore'>
-                                  <Restore />
-                                </Route>
-                                <Route path='/account/import-ledger'>
-                                  <ImportLedger />
-                                </Route>
-                                <Route path='/account/change-password'>
-                                  <ChangePassword />
-                                </Route>
-                                <Route path='/account/details/:address'>
-                                  <AccountDetails />
-                                </Route>
-                                <Route path='/settings/url-auth'>
-                                  <AuthManagement />
-                                </Route>
-                                <Route exact
-                                  path='/'>
-                                  <Root />
-                                </Route>
-                              </Switch>
-                              <Toast />
-                            </PolymeshContext.Provider>
+                            <ReadUidReqContext.Provider value={readUidRequests}>
+                              <PolymeshContext.Provider value={polymeshCtx}>
+                                <Switch>
+                                  <Route path='/account/create'>
+                                    <NewAccount />
+                                  </Route>
+                                  <Route path='/account/forget/:address'>
+                                    <ForgetAccount />
+                                  </Route>
+                                  <Route path='/account/export/:address'>
+                                    <ExportAccount />
+                                  </Route>
+                                  <Route path='/account/restore/:method'>
+                                    <Restore />
+                                  </Route>
+                                  <Route path='/account/import-ledger'>
+                                    <ImportLedger />
+                                  </Route>
+                                  <Route path='/account/change-password'>
+                                    <ChangePassword />
+                                  </Route>
+                                  <Route path='/account/details/:address'>
+                                    <AccountDetails />
+                                  </Route>
+                                  <Route path='/settings/url-auth'>
+                                    <AuthManagement />
+                                  </Route>
+                                  <Route
+                                    exact
+                                    path='/'
+                                  >
+                                    <Root />
+                                  </Route>
+                                </Switch>
+                                <Toast />
+                              </PolymeshContext.Provider>
+                            </ReadUidReqContext.Provider>
                           </ProvideUidReqContext.Provider>
                         </ProofReqContext.Provider>
                       </SigningReqContext.Provider>

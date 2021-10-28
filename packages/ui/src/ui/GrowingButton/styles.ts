@@ -1,14 +1,15 @@
 import { styled } from '@polymathnetwork/extension-ui/styles';
+import { ThemeProps } from '@polymathnetwork/extension-ui/types';
 
 import { Flex } from '../Flex';
 
-export const Wrapper = styled(Flex)`
+export const Wrapper = styled(Flex)<ThemeProps>`
   width: 24px;
   height: 24px;
   padding: 0 30px 0  0;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
-  color: #ffffff;
+  color: ${({ theme }) => theme.colors.polyIndigo};
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -16,7 +17,6 @@ export const Wrapper = styled(Flex)`
   white-space: nowrap;
   &:hover {
     width: 150px;
-    color: #6DC7F7;
   }
   &:hover:after {
     content: 'Go to dashboard';

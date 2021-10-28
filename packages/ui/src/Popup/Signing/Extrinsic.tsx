@@ -1,103 +1,72 @@
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+// import { networkLabels } from '@polymathnetwork/extension-core/constants';
+// import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+// import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
 import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
-import { Box, ExpandableDetails, Flex, Hr, Loading, Text } from '@polymathnetwork/extension-ui/ui';
-import { formatAmount } from '@polymathnetwork/extension-ui/util/formatters';
-import BN from 'bn.js';
-import React, { FC, useEffect, useState } from 'react';
+// import { Box, Flex, Icon, Loading, Text } from '@polymathnetwork/extension-ui/ui';
+import { Flex, Loading } from '@polymathnetwork/extension-ui/ui';
+// import { genesisToNetworkName } from '@polymathnetwork/extension-ui/util/chains';
+import React, { useEffect, useState } from 'react';
+
+// import { toast } from 'react-toastify';
+import Method from './Method';
+
+// const toastId = 'network-mismatch';
 
 interface Props {
   request: SignerPayloadJSON;
 }
 
-const Method: FC<{call: ResponsePolyCallDetails}> = ({ call }) => {
-  const { args, meta, method, networkFee, protocolFee, section } = call;
-
-  const fees: [string, string][] = [];
-
-  if (networkFee && networkFee.length) {
-    fees.push(['Network fee', formatAmount(networkFee)]);
-  }
-
-  if (protocolFee && protocolFee !== '0') {
-    fees.push(['Protocol fee', formatAmount(protocolFee)]);
-    const totalFees = (new BN(networkFee)).add(new BN(protocolFee));
-
-    fees.push(['Total fees', formatAmount(totalFees)]);
-  }
-
-  return (
-    <Flex alignItems='stretch'
-      flexDirection='column'
-      height='100%'>
-      <Box height='100%'
-        mt='m'
-        style={{ overflowY: 'scroll' }}>
-        <ExpandableDetails title={`${section}: ${method}${
-          meta
-            ? `(${meta.args.map(({ name }) => name).join(', ')})`
-            : ''
-        }`}>
-          <Box mt='m'
-            mx='s'>
-            <Box>
-              <Text color='gray.2'
-                variant='b2'>
-                Parameters
-              </Text>
-            </Box>
-            <Box>
-              <Text color='gray.1'
-                variant='code'>
-                {JSON.stringify(args, null, 2).slice(1, -1).trim()}
-              </Text>
-            </Box>
-          </Box>
-        </ExpandableDetails>
-      </Box>
-
-      {/* <Box mb='l'> */}
-      <Box mt='auto'>
-        {fees.length > 1 && <Hr color='gray.4' />}
-        <Box>
-          {fees.map((tuple, index) => {
-            return (
-              <Box
-                {...(index === fees.length - 1 ? { bg: 'gray.4' } : {})}
-                key={index}
-              >
-                <Flex justifyContent='space-between'
-                  mx='s'>
-                  <Box>
-                    <Text color='gray.1'
-                      variant='b3m'>
-                      {tuple[0]}
-                    </Text>
-                  </Box>
-
-                  <Box>
-                    <Text color='gray.1'
-                      variant='b2m'>
-                      {tuple[1]}
-                    </Text>
-                    <Text color='gray.2'
-                      ml={1}
-                      variant='b2m'>POLYX</Text>
-                  </Box>
-                </Flex>
-              </Box>
-            );
-          }
-          )}
-        </Box>
-      </Box>
-    </Flex>
-  );
-};
-
 function Extrinsic ({ request }: Props): React.ReactElement<Props> {
+  // const { networkState: { selected: selectedNetwork } } = useContext(PolymeshContext);
   const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
   const [loading, setLoading] = useState(false);
+
+  // @TODO: determine how to detect network mismatch differently. Since genesis hash can be the same for different networks.
+  // useEffect(() => {
+  //   const targetNetwork = genesisToNetworkName(request.genesisHash);
+  //   const networkMismatch = targetNetwork !== selectedNetwork;
+  //   const selectedLabel = networkLabels[selectedNetwork];
+  //   const targetLabel = !!targetNetwork && targetNetwork in networkLabels
+  //     ? networkLabels[targetNetwork]
+  //     : 'Unknown network';
+  //   const msg = `"${selectedLabel}" is selected on wallet while submitting an extrinsic to "${targetLabel}".
+  //   Network and Protocol fee estimation might not be accurate.`;
+
+  //   if (networkMismatch) {
+  //     toast.error(
+  //       <Flex alignItems='flex-start'
+  //         flexDirection='column'>
+  //         <Flex>
+  //           <Icon Asset={SvgAlertCircle}
+  //             color='yellow.0'
+  //             height={20}
+  //             width={20} />
+  //           <Box ml='s'>
+  //             <Text color='white'
+  //               variant='b1m'>
+  //               Network mismatch detected
+  //             </Text>
+  //           </Box>
+  //         </Flex>
+  //         <Box mt='4px'>
+  //           <Text color='gray.4'
+  //             variant='b3'>
+  //             {msg}
+  //           </Text>
+  //         </Box>
+  //       </Flex>, {
+  //         toastId,
+  //         hideProgressBar: true,
+  //         closeButton: true,
+  //         autoClose: false
+  //       }
+  //     );
+  //   } else {
+  //     toast.dismiss(toastId);
+  //   }
+  // }, [request, selectedNetwork]);
 
   useEffect(() => {
     setLoading(true);
@@ -114,13 +83,15 @@ function Extrinsic ({ request }: Props): React.ReactElement<Props> {
 
   return (
     <>
-      {loading &&
-        <Flex alignItems='center'
+      {loading && (
+        <Flex
+          alignItems='center'
           justifyContent='center'
-          my='l'>
+          my='l'
+        >
           <Loading />
         </Flex>
-      }
+      )}
       {callDetails && <Method call={callDetails} />}
     </>
   );

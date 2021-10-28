@@ -59,7 +59,7 @@ module.exports = (entry, isDev) => ({
       Buffer: ['buffer', 'Buffer'],
       process: 'process/browser.js'
     }),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.IgnorePlugin({ contextRegExp: /^\.\/locale$/, resourceRegExp: /moment$/ }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(isDev ? 'development' : 'production'),

@@ -3,15 +3,12 @@ import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
 import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 
 import { TypeRegistry } from '@polkadot/types';
-import { getIdentifiedAccounts } from '@polymathnetwork/extension-core/store/getters';
-import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { Box, Header, Heading } from '@polymathnetwork/extension-ui/ui';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { Box, Heading } from '@polymathnetwork/extension-ui/ui';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { ActionContext, VerticalSpace } from '../../components';
 import { approveSignSignature } from '../../messaging';
-import { AccountsHeader } from '../Accounts/AccountsHeader';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
 import LedgerSignArea from './LedgerSignArea';
@@ -60,7 +57,7 @@ export default function Request ({ account: { accountIndex, address, addressOffs
           payload: registry.createType('ExtrinsicPayload', payload, { version: payload.version })
         });
       } catch (error) {
-        setError(error.toString());
+        setError((error as Error).toString());
       }
     }
   }, [request]);
@@ -76,21 +73,6 @@ export default function Request ({ account: { accountIndex, address, addressOffs
     [onAction, signId]
   );
 
-  // The singing account, whose details will be displayed in the header.
-  const signingAccount = useMemo(() => {
-    if (address) {
-      // Polkadot App actually respects chain ss58format and will encode polymesh public
-      // keys into an address that starts with '2'. However, our stored addresses start with '5'.
-      // Hence, we'll re-encode request address to make sure it could be found in our store.
-      const _address = recodeAddress(address);
-      const polymeshAccount = getIdentifiedAccounts().find((account) => account.address === _address);
-
-      return polymeshAccount;
-    }
-
-    return undefined;
-  }, [address]);
-
   // @TODO show an error
   if (isExternal && !isHardware) {
     return null;
@@ -101,15 +83,11 @@ export default function Request ({ account: { accountIndex, address, addressOffs
 
     return (
       <>
-        {signingAccount &&
-          <Header>
-            <AccountsHeader account={signingAccount}
-              details={false} />
-          </Header>
-        }
         <RequestContent isFirst={isFirst}>
-          <Box mt='xs'
-            mx='s'>
+          <Box
+            mt='xs'
+            mx='s'
+          >
             <Heading variant='h5'>Signing Request</Heading>
           </Box>
           <Extrinsic

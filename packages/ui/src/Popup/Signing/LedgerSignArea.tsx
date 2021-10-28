@@ -74,8 +74,10 @@ function LedgerSignArea ({ accountIndex, addressOffset, error, genesisHash, onSi
 
   return (
 
-    <Flex flexDirection='column'
-      p='s'>
+    <Flex
+      flexDirection='column'
+      p='s'
+    >
       {error &&
         (<Warning isDanger>
           {error}
@@ -87,20 +89,25 @@ function LedgerSignArea ({ accountIndex, addressOffset, error, genesisHash, onSi
         </Warning>
         )}
 
-      <Flex alignItems='stretch'
+      <Flex
+        alignItems='stretch'
         flexDirection='row'
         mt='s'
-        width='100%'>
+        width='100%'
+      >
         <Flex flex={1}>
           <Button
             fluid
             onClick={_onCancel}
-            variant='secondary'>
+            variant='secondary'
+          >
                   Reject
           </Button>
-        </Flex >
-        <Flex flex={1}
-          ml='xs'>
+        </Flex>
+        <Flex
+          flex={1}
+          ml='xs'
+        >
           {warning
             ? (
               <Button

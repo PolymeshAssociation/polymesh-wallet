@@ -21,14 +21,18 @@ function WebsiteEntry ({ info, toggleAuth, url }: Props): React.ReactElement<Pro
     <Box px='s'>
       <Flex direction='row'>
         <Box pr={10}>
-          <Icon Asset={SvgWeb}
+          <Icon
+            Asset={SvgWeb}
             color='primary'
             height={20}
-            width={20} />
+            width={20}
+          />
         </Box>
-        <Text lineHeight={fontSizes[4]}
+        <Text
+          lineHeight={fontSizes[4]}
           style={{ flex: '1 1' }}
-          variant='b2m'>
+          variant='b2m'
+        >
           {url}
         </Text>
         <Box width='108px'>

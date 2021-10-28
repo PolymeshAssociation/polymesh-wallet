@@ -1,6 +1,6 @@
 {
   "name": "@polymathnetwork/extension-core",
-  "version": "0.5.8",
+  "version": "1.0.0-develop.8",
   "description": "",
   "main": "index.js",
   "type": "module",
@@ -8,9 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2",
   "dependencies": {
-    "@babel/runtime": "^7.13.17",
+    "@babel/runtime": "^7.14.6",
     "@polymathnetwork/confidential-identity": "1.0.1",
     "@reduxjs/toolkit": "^1.5.1",
     "@types/crypto-js": "^4.0.1",

@@ -28,6 +28,7 @@ export const CheckboxInput = styled.div(({ theme }) => ({
   height: '18px',
   backgroundColor: '#fff',
   userSelect: 'none',
+  flexShrink: 0,
 
   [`${Input}:focus + &`]: {
     borderColor: theme.colors.primary

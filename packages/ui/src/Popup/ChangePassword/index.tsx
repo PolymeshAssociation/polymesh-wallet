@@ -4,7 +4,7 @@ import { Box, Button, Flex, Header, Text, TextInput } from '@polymathnetwork/ext
 import React, { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { ActionContext, ActivityContext } from '../../components';
+import { ActionContext, ActivityContext, ValidationError } from '../../components';
 
 export const ChangePassword: FC = () => {
   const onAction = useContext(ActionContext);
@@ -26,6 +26,12 @@ export const ChangePassword: FC = () => {
       return;
     }
 
+    if (data.newPassword === data.currentPassword) {
+      setError('newPassword', { type: 'nochange' });
+
+      return;
+    }
+
     if (data.newPassword !== data.confirmPassword) {
       setError('confirmPassword', { type: 'manual' });
 
@@ -43,96 +49,108 @@ export const ChangePassword: FC = () => {
 
   return (
     <>
-      <Header headerText='Change password'
-        iconAsset={SvgFileLockOutline}>
+      <Header
+        headerText='Change password'
+        iconAsset={SvgFileLockOutline}
+      >
       </Header>
       <Box mx='s'>
-        <form id='passwordForm'
-          onSubmit={handleSubmit(onSubmit)}>
+        <form
+          id='passwordForm'
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Box mt='m'>
             <Box>
-              <Text color='gray.1'
-                variant='b2m'>
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 Current password
               </Text>
             </Box>
-            <Box>
-              <TextInput inputRef={register({ required: true, minLength: 8 })}
+            <Box className='currentPassword'>
+              <TextInput
+                inputRef={register({ required: true, minLength: 8 })}
                 name='currentPassword'
                 placeholder='Enter 8 characters or more'
-                type='password' />
+                type='password'
+              />
               {errors.currentPassword &&
-                <Box>
-                  <Text color='alert'
-                    variant='b3'>
-                    {(errors.currentPassword).type === 'required' && 'Required field'}
-                    {(errors.currentPassword).type === 'minLength' && 'Password too short'}
-                    {(errors.currentPassword).type === 'manual' && 'Invalid password'}
-                  </Text>
-                </Box>
+                <ValidationError>
+                  {(errors.currentPassword).type === 'required' && 'Required field'}
+                  {(errors.currentPassword).type === 'minLength' && 'Password too short'}
+                  {(errors.currentPassword).type === 'manual' && 'Invalid password'}
+                </ValidationError>
               }
             </Box>
           </Box>
           <Box mt='m'>
             <Box>
-              <Text color='gray.1'
-                variant='b2m'>
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 New password
               </Text>
             </Box>
-            <Box>
-              <TextInput inputRef={register({ required: true, minLength: 8 })}
+            <Box className='newPassword'>
+              <TextInput
+                inputRef={register({ required: true, minLength: 8 })}
                 name='newPassword'
                 placeholder='Enter 8 characters or more'
-                type='password' />
+                type='password'
+              />
               {errors.newPassword &&
-                <Box>
-                  <Text color='alert'
-                    variant='b3'>
-                    {(errors.newPassword).type === 'required' && 'Required field'}
-                    {(errors.newPassword).type === 'minLength' && 'Password too short'}
-                    {(errors.newPassword).type === 'manual' && 'Invalid password'}
-                  </Text>
-                </Box>
+                <ValidationError>
+                  {(errors.newPassword).type === 'required' && 'Required field'}
+                  {(errors.newPassword).type === 'minLength' && 'Password too short'}
+                  {(errors.newPassword).type === 'manual' && 'Invalid password'}
+                  {(errors.newPassword).type === 'nochange' && 'Current and new passwords are the same'}
+                </ValidationError>
               }
             </Box>
           </Box>
           <Box mt='m'>
             <Box>
-              <Text color='gray.1'
-                variant='b2m'>
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 Confirm password
               </Text>
             </Box>
-            <Box>
-              <TextInput inputRef={register({ required: true, minLength: 8 })}
+            <Box className='confirmPassword'>
+              <TextInput
+                inputRef={register({ required: true, minLength: 8 })}
                 name='confirmPassword'
                 placeholder='Enter 8 characters or more'
-                type='password' />
+                type='password'
+              />
               {errors.confirmPassword &&
-                <Box>
-                  <Text color='alert'
-                    variant='b3'>
-                    {(errors.confirmPassword).type === 'required' && 'Required field'}
-                    {(errors.confirmPassword).type === 'minLength' && 'Password too short'}
-                    {(errors.confirmPassword).type === 'manual' && 'Passwords do not match'}
-                    {(errors.confirmPassword).type === 'failed' && 'Password change failed - Please contact Polymath support.'}
-                  </Text>
-                </Box>
+                <ValidationError>
+                  {(errors.confirmPassword).type === 'required' && 'Required field'}
+                  {(errors.confirmPassword).type === 'minLength' && 'Password too short'}
+                  {(errors.confirmPassword).type === 'manual' && 'Passwords do not match'}
+                  {(errors.confirmPassword).type === 'failed' && 'Password change failed - Please contact Polymath support.'}
+                </ValidationError>
               }
             </Box>
           </Box>
         </form>
       </Box>
-      <Flex flex={1}
+      <Flex
+        flex={1}
         flexDirection='column'
         justifyContent='flex-end'
         mb='s'
-        mx='s'>
-        <Button busy={isBusy}
+        mx='s'
+      >
+        <Button
+          busy={isBusy}
           fluid
           form='passwordForm'
-          type='submit'>
+          type='submit'
+        >
           Change password
         </Button>
       </Flex>

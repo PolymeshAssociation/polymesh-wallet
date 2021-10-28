@@ -6,7 +6,7 @@ import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
 import { getDids, getNetwork } from './store/getters';
 import { apiError, setError } from './store/setters';
-import { defaultSs58Format, uidProvidersWhitelist } from './constants';
+import { defaultSs58Format, uidProvidersWhitelist, uidReadersWhitelist } from './constants';
 import { AccountBalances, ErrorCodes, KeyringAccountData, NetworkName } from './types';
 
 // Sort an array by prioritizing a certain element
@@ -28,7 +28,7 @@ export const fatalErrorHandler = (error: Error): void =>
   error && setError({ code: ErrorCodes.FatalError, msg: error.message });
 
 export const apiErrorHandler = (error: Error): void => {
-  if (error && !!error.message && error.message.length) {
+  if (error && !!error.message && error.message.length && !error.message.includes('Normal Closure')) {
     setError({ code: ErrorCodes.NonFatalError, msg: error.message });
     apiError();
   }
@@ -44,21 +44,23 @@ export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
 
 export const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const allowedUidProvider = (url: string): boolean => {
-  try {
-    const parsed = new URL(url);
+export const isWhitelisted = (whitelist: string[]) => {
+  return (url: string): boolean => {
+    try {
+      const parsed = new URL(url);
 
-    // Remove params, path and trailing slash
-    parsed.search = '';
-    parsed.pathname = '';
-    const cleanUrl = parsed.toString().replace(/\/$/, '');
+      // Remove params, path and trailing slash
+      parsed.search = '';
+      parsed.pathname = '';
+      const cleanUrl = parsed.toString().replace(/\/$/, '');
 
-    return uidProvidersWhitelist.includes(cleanUrl);
-  } catch (error) {
-    console.error('Error parsing app url', url, error);
-  }
+      return whitelist.includes(cleanUrl);
+    } catch (error) {
+      console.error('Error parsing app url', url, error);
+    }
 
-  return false;
+    return false;
+  };
 };
 
 export const validateTicker = (ticker: string): boolean => {
@@ -70,6 +72,10 @@ export const validateTicker = (ticker: string): boolean => {
     !!/^[a-zA-Z0-9\-:]*$/.exec(ticker)
   );
 };
+
+export const allowedUidProvider = isWhitelisted(uidProvidersWhitelist);
+
+export const allowedUidReader = isWhitelisted(uidReadersWhitelist);
 
 export const validateNetwork = (network: string): boolean => {
   return !!network && Object.keys(NetworkName).indexOf(network) > -1;

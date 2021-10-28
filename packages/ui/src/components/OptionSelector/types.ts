@@ -4,6 +4,8 @@ export type OptionLabel = string | JSX.Element;
 export type OptionItem = {
   label: OptionLabel;
   value: any;
+  icon?: JSX.Element;
+  disabled?: boolean;
 };
 
 export type Option = {

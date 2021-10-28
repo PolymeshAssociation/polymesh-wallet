@@ -1,37 +1,5 @@
 import { StyledComponentProps } from 'styled-components';
-import { border,
-  borderBottom,
-  BorderBottomProps,
-  borderColor,
-  BorderColorProps,
-  borderLeft, BorderLeftProps,
-  BorderProps,
-  borderRadius,
-  BorderRadiusProps,
-  borderRight,
-  BorderRightProps,
-  borderStyle,
-  borderTop,
-  BorderTopProps,
-  borderWidth,
-  BorderWidthProps,
-  boxShadow,
-  BoxShadowProps,
-  color,
-  ColorProps,
-  height,
-  HeightProps,
-  lineHeight,
-  LineHeightProps,
-  MaxWidthProps,
-  minWidth,
-  MinWidthProps,
-  space,
-  SpaceProps,
-  textAlign,
-  TextAlignProps,
-  width,
-  WidthProps } from 'styled-system';
+import { border, borderBottom, BorderBottomProps, borderColor, BorderColorProps, borderLeft, BorderLeftProps, BorderProps, borderRadius, BorderRadiusProps, borderRight, BorderRightProps, borderStyle, borderTop, BorderTopProps, borderWidth, BorderWidthProps, boxShadow, BoxShadowProps, color, ColorProps, height, HeightProps, lineHeight, LineHeightProps, MaxWidthProps, minWidth, MinWidthProps, space, SpaceProps, textAlign, TextAlignProps, width, WidthProps } from 'styled-system';
 
 import { styled } from '../../styles';
 import { ScaleProps } from '../../styles/themeTypes';

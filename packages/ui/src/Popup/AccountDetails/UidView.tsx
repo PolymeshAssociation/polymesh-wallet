@@ -1,5 +1,5 @@
-import { SvgInfo, SvgLockOpenOutline, SvgLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Flex, Icon, LabelWithCopy, Text, Tooltip } from '@polymathnetwork/extension-ui/ui';
+import { SvgEyeOffOutline, SvgEyeOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { Box, Flex, Icon, LabelWithCopy, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { FC } from 'react';
 
 export interface Props {
@@ -10,49 +10,39 @@ export interface Props {
 
 export const UidView: FC<Props> = ({ isHidden, showHideUid, uid }) => {
   return (
-    <Box bg={isHidden ? 'gray.4' : 'yellow.1'}
+    <Box
+      bg={isHidden ? 'gray8' : 'warning2'}
       borderRadius='2'
-      mt='m'
-      mx='s'
-      p='s'>
+      mx='m'
+      p='s'
+    >
       <Flex justifyContent='space-between'>
-        <Box>
-          <Flex alignItems='center'>
-            <Box>
-              <Text color='gray.2'
-                variant='b2m'>
+        <Text
+          color='gray3'
+          variant='b2m'
+        >
                 Your investor uID
-              </Text>
-            </Box>
-            <Box mx='xs'>
-              <Tooltip content={<Text variant='c2'>Your investor uID</Text>}
-                placement='bottom'
-                variant='secondary'>
-                <Icon Asset={SvgInfo}
-                  color='brandMain'
-                  height={14}
-                  style={{ cursor: 'pointer' }}
-                  width={14} />
-              </Tooltip>
-            </Box>
-          </Flex>
-        </Box>
+        </Text>
         <Box>
-          <Flex alignItems='center'
+          <Flex
+            alignItems='center'
             onClick={showHideUid}
-            style={{ cursor: 'pointer' }}>
+            style={{ cursor: 'pointer' }}
+          >
             <Box>
               <Icon
-                Asset={isHidden ? SvgLockOpenOutline : SvgLockOutline}
-                color='brandMain'
-                height={21}
+                Asset={isHidden ? SvgEyeOutline : SvgEyeOffOutline }
+                color='polyNavyBlue'
+                height={22}
                 style={{ cursor: 'pointer' }}
-                width={21}
+                width={22}
               />
             </Box>
             <Box mx='xs'>
-              <Text color='brandMain'
-                variant='b2m'>
+              <Text
+                color='polyNavyBlue'
+                variant='b2m'
+              >
                 {isHidden ? 'Show my uID' : 'Hide my uID'}
               </Text>
             </Box>
@@ -61,15 +51,19 @@ export const UidView: FC<Props> = ({ isHidden, showHideUid, uid }) => {
       </Flex>
       <Box mt='s'>
         {isHidden && (
-          <Text color='gray.1'
-            variant='b1'>
+          <Text
+            color='gray.1'
+            variant='b1'
+          >
             **********
           </Text>
         )}
-        {!isHidden && <LabelWithCopy color='brandMain'
+        {!isHidden && <LabelWithCopy
+          color='gray1'
           text={uid}
           textSize={39}
-          textVariant='b2' />}
+          textVariant='b2'
+        />}
       </Box>
     </Box>
   );

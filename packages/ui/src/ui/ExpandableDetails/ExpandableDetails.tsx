@@ -18,18 +18,22 @@ export const ExpandableDetails: FC<Props> = ({ children, title }) => {
   return (
     <Box style={{ position: 'relative' }}>
       <Box style={{ position: 'absolute', overflowY: 'scroll' }}>
-        <Flex justifyContent='space-between'
-          mx='s'>
+        <Flex
+          justifyContent='space-between'
+          mx='s'
+        >
           <Box>
             <Text variant='code'>{title}</Text>
           </Box>
           <Box>
-            <Icon Asset={expanded ? SvgChevronUp : SvgChevronDown}
+            <Icon
+              Asset={expanded ? SvgChevronUp : SvgChevronDown}
               color='gray.3'
               height={24}
               onClick={toggle}
               style={{ cursor: 'pointer' }}
-              width={24} />
+              width={24}
+            />
           </Box>
         </Flex>
         {

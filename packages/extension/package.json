@@ -1,24 +1,25 @@
 {
   "name": "@polymathnetwork/extension",
   "description": "A Wallet extension for Polymesh blockchain",
-  "version": "0.5.8",
+  "version": "1.0.0-develop.8",
+  "license": "Apache-2",
   "type": "module",
   "dependencies": {
-    "@babel/runtime": "^7.13.17",
-    "@polkadot/api": "^4.7.1",
-    "@polkadot/extension-base": "^0.37.3-17",
-    "@polkadot/extension-chains": "^0.37.3-17",
-    "@polkadot/extension-inject": "^0.37.3-17",
-    "@polkadot/hw-ledger": "^6.3.1",
-    "@polkadot/keyring": "^6.3.1",
-    "@polkadot/phishing": "^0.6.110",
-    "@polkadot/ui-keyring": "^0.75.1",
-    "@polkadot/ui-settings": "^0.75.1",
-    "@polymathnetwork/extension-core": "0.5.8",
-    "@polymathnetwork/extension-ui": "0.5.8"
+    "@babel/runtime": "^7.14.6",
+    "@polkadot/api": "^4.12.1",
+    "@polkadot/extension-base": "0.38.3",
+    "@polkadot/extension-chains": "0.38.3",
+    "@polkadot/extension-inject": "0.38.3",
+    "@polkadot/hw-ledger": "^6.6.1",
+    "@polkadot/keyring": "^6.6.1",
+    "@polkadot/phishing": "0.6.164",
+    "@polkadot/ui-keyring": "^0.78.1",
+    "@polkadot/ui-settings": "^0.78.1",
+    "@polymathnetwork/extension-core": "1.0.0-develop.8",
+    "@polymathnetwork/extension-ui": "1.0.0-develop.8"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.62.10",
+    "@polkadot/dev": "^0.62.42",
     "babel-loader": "^8.2.2",
     "browser-resolve": "^2.0.0",
     "buffer": "^6.0.3",
@@ -29,12 +30,12 @@
     "html-loader": "^2.1.1",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
+    "raw-loader": "^4.0.2",
     "stream-browserify": "^3.0.0",
     "thread-loader": "^3.0.1",
     "url-loader": "^4.1.1",
     "webpack": "^5.24.2",
     "webpack-cli": "^4.5.0",
-    "webpack-extension-manifest-plugin": "^0.6.0",
-    "raw-loader": "^4.0.2"
+    "webpack-extension-manifest-plugin": "^0.6.0"
   }
 }
