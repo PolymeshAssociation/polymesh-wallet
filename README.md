@@ -40,7 +40,7 @@ The repo is split into a number of packages
 
 - [extension](packages/extension/) - The main entry point that glues everything else together.
 - [ui](packages/ui/) - The UI components for the extension, to build up the popup.
-- [code](packages/core/) - Polymesh-specific request handlers, api connection and data fetching and storage.
+- [core](packages/core/) - Polymesh-specific request handlers, api connection and data fetching and storage.
 
 You can find more information about the [directory structure here](docs/directory-structure.md)
 
@@ -125,3 +125,6 @@ wallet.uid.requestProof({ ticker: 'AMZN' })
   .then(console.log).catch(console.error)
 ```
 
+## Security audit
+
+The extension has been reviewed and pen-tested in Q2 2021. The results can be found [here](docs/audit-may2021.pdf).

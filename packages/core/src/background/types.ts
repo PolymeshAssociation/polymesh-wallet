@@ -3,14 +3,7 @@ import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 import { ORIGINS } from '@polymathnetwork/extension-core/constants';
 
-import { IdentifiedAccount,
-  NetworkMeta,
-  NetworkName,
-  NetworkState,
-  ProofRequestPayload,
-  RequestPolyProvideUid,
-  StoreStatus,
-  UidRecord } from '../types';
+import { IdentifiedAccount, NetworkMeta, NetworkName, NetworkState, ProofRequestPayload, RequestPolyProvideUid, StoreStatus, UidRecord } from '../types';
 
 export enum Errors {
   NO_ACCOUNT = 'No accounts found.',
@@ -49,7 +42,11 @@ export type RequestProofingSubscribe = null;
 
 export type RequestPolyProvideUidSubscribe = null;
 
+export type RequestPolyReadUidSubscribe = null;
+
 export type RequestPolyUidRecordsSubscribe = null;
+
+export type RequestPolyReadUid = null;
 
 export type RequestPolyIsUidSet = null;
 
@@ -84,6 +81,11 @@ export interface ProofingResponse {
   proof: string;
 }
 
+export interface ReadUidResponse {
+  id: string;
+  uid: string;
+}
+
 export interface ProofingRequest {
   account: AccountJson;
   id: string;
@@ -94,6 +96,12 @@ export interface ProofingRequest {
 export interface ProvideUidRequest {
   id: string;
   request: RequestPolyProvideUid;
+  url: string;
+}
+
+export interface ReadUidRequest {
+  id: string;
+  request: RequestPolyReadUid;
   url: string;
 }
 
@@ -111,6 +119,11 @@ export interface RequestPolyProvideUidApprove {
   password: string;
 }
 
+export interface RequestPolyReadUidApprove {
+  id: string;
+  password: string;
+}
+
 export interface RequestPolyChangePass {
   oldPass: string;
   newPass: string;
@@ -122,6 +135,10 @@ export interface RequestPolyGlobalChangePass {
 }
 
 export interface RequestPolyProvideUidReject {
+  id: string;
+}
+
+export interface RequestPolyReadUidReject {
   id: string;
 }
 
@@ -149,6 +166,9 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
   'poly:pri(uid.provideRequests.subscribe)': [RequestPolyProvideUidSubscribe, boolean, ProvideUidRequest[]];
   'poly:pri(uid.provideRequests.approve)': [RequestPolyProvideUidApprove, boolean];
   'poly:pri(uid.provideRequests.reject)': [RequestPolyProvideUidReject, boolean];
+  'poly:pri(uid.readRequests.subscribe)': [RequestPolyReadUidSubscribe, boolean, ReadUidRequest[]];
+  'poly:pri(uid.readRequests.approve)': [RequestPolyReadUidApprove, boolean];
+  'poly:pri(uid.readRequests.reject)': [RequestPolyReadUidReject, boolean];
   'poly:pri(uid.changePass)': [RequestPolyChangePass, boolean];
   'poly:pri(uid.records.subscribe)': [RequestPolyUidRecordsSubscribe, boolean, UidRecord[]];
   'poly:pri(uid.getUid)': [RequestPolyGetUid, string];
@@ -161,6 +181,7 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
   'poly:pub(network.subscribe)': [RequestPolyNetworkMetaSubscribe, boolean, NetworkMeta];
   'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];
   'poly:pub(uid.provide)': [RequestPolyProvideUid, boolean];
+  'poly:pub(uid.read)': [RequestPolyReadUid, ReadUidResponse];
   'poly:pub(uid.isSet)': [RequestPolyIsUidSet, boolean];
 }
 
@@ -222,6 +243,13 @@ export type PolyTransportResponseMessage<TMessageType extends PolyMessageTypes> 
       ? PolyTransportResponseMessageSub<TMessageType>
       : never;
 
-export const ALLOWED_PATH = ['/', '/account/import-ledger', '/account/restore-json', '/account/change-password'];
+export const ALLOWED_PATH = [
+  '/',
+  '/account/import-ledger',
+  '/account/restore/json',
+  '/account/restore/seed',
+  '/account/change-password',
+  '/account/create'
+];
 
 export declare type AllowedPath = typeof ALLOWED_PATH[number];

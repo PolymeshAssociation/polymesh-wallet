@@ -1,4 +1,3 @@
-export { default as Fonts } from './Fonts';
 export { default as Loading } from './Loading';
 export { default as Spinner } from './Spinner';
 export { default as Svg } from './Svg';
@@ -11,5 +10,6 @@ export { AccountType } from './AccountType';
 export { default as Switch } from './Switch';
 export { InputFilter } from './InputFilter';
 export { OptionSelector } from './OptionSelector';
+export { default as ValidationError } from './ValidationError';
 export * from './contexts';
 export * from './themes';

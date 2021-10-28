@@ -1,0 +1,20 @@
+name: Semantic Release 
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+      - name: Install dependencies
+        run: yarn
+      - name: Semantic release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npx semantic-release@18

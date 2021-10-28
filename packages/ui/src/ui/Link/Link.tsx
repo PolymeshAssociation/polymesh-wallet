@@ -21,9 +21,11 @@ const LinkComponent = ({ href, ...rest }: LinkProps) => {
     };
   }
 
-  return <a href={href}
+  return <a
+    href={href}
     {...linkProps}
-    {...rest} />;
+    {...rest}
+  />;
 };
 
 export const Link = styled(LinkComponent)(

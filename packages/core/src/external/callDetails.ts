@@ -7,7 +7,7 @@ import { NetworkName } from '../types';
 import apiPromise from './apiPromise';
 
 async function callDetails (request: SignerPayloadJSON, network: NetworkName): Promise<ResponsePolyCallDetails> {
-  const api = await apiPromise(network, false);
+  const api = await apiPromise(network);
   let protocolFee = '0';
   let networkFee = '0';
 

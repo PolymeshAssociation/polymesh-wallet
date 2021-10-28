@@ -8,11 +8,13 @@ export interface Props {
 }
 
 export const AccountType: FC<Props> = ({ keyType, large }) => {
-  const color = keyType === 'primary' ? 'green' : 'blue';
+  const color = keyType === 'primary' ? 'red' : 'blue';
   const text = keyType === 'primary' ? 'Primary' : 'Secondary';
 
   return (
-    <StatusBadge large={large}
-      variant={color}>{text}</StatusBadge>
+    <StatusBadge
+      large={large}
+      variant={color}
+    >{text}</StatusBadge>
   );
 };

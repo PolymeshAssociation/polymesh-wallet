@@ -5,37 +5,12 @@ import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { callDetails } from '@polymathnetwork/extension-core/external';
 import { getNetwork, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
-import { renameIdentity,
-  setNetwork,
-  setSelectedAccount,
-  toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
-import { subscribeIdentifiedAccounts,
-  subscribeNetworkState,
-  subscribeSelectedAccount,
-  subscribeSelectedNetwork,
-  subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
+import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
+import { subscribeIdentifiedAccounts, subscribeNetworkState, subscribeSelectedAccount, subscribeSelectedNetwork, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
 import { UidRecord } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 
-import { ALLOWED_PATH, AllowedPath, Errors,
-  PolyMessageTypes,
-  PolyRequestTypes,
-  PolyResponseType,
-  ProofingRequest,
-  ProvideUidRequest,
-  RequestPolyApproveProof,
-  RequestPolyCallDetails,
-  RequestPolyChangePass,
-  RequestPolyGetUid,
-  RequestPolyGlobalChangePass,
-  RequestPolyIdentityRename,
-  RequestPolyNetworkSet,
-  RequestPolyProvideUidApprove,
-  RequestPolyProvideUidReject,
-  RequestPolyRejectProof,
-  RequestPolySelectedAccountSet,
-  RequestPolyValidatePassword,
-  ResponsePolyCallDetails } from '../types';
+import { ALLOWED_PATH, AllowedPath, Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, ProvideUidRequest, ReadUidRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyChangePass, RequestPolyGetUid, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolyProvideUidApprove, RequestPolyProvideUidReject, RequestPolyReadUidApprove, RequestPolyReadUidReject, RequestPolyRejectProof, RequestPolySelectedAccountSet, RequestPolyValidatePassword, ResponsePolyCallDetails } from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 import { getScopeAttestationProof } from './utils';
@@ -143,6 +118,20 @@ export default class Extension extends DotExtension {
     return true;
   }
 
+  private uidReadRequestsSubscribe (id: string, port: chrome.runtime.Port): boolean {
+    const cb = createSubscription<'poly:pri(uid.readRequests.subscribe)'>(id, port);
+    const subscription = this.#state.readUidRequestsSubject.subscribe((requests: ReadUidRequest[]): void =>
+      cb(requests)
+    );
+
+    port.onDisconnect.addListener((): void => {
+      unsubscribe(id);
+      subscription.unsubscribe();
+    });
+
+    return true;
+  }
+
   private uidRecordsSubscribe (id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'poly:pri(uid.records.subscribe)'>(id, port);
     const subscription = this.#state.uidsSubject.subscribe((records: UidRecord[]): void => cb(records));
@@ -222,7 +211,7 @@ export default class Extension extends DotExtension {
         return false;
       }
     } catch (error) {
-      reject(error);
+      reject(error as Error);
 
       return false;
     }
@@ -269,6 +258,68 @@ export default class Extension extends DotExtension {
     const { reject } = queued;
 
     reject(new Error('Rejected'));
+
+    return true;
+  }
+
+  private uidReadRequestsReject ({ id }: RequestPolyReadUidReject): boolean {
+    const queued = this.#state.getReadUidRequest(id);
+
+    console.log('allReadUidRequests', this.#state.allReadUidRequests);
+
+    assert(queued, 'Unable to find request');
+    const { reject } = queued;
+
+    reject(new Error('Rejected'));
+
+    return true;
+  }
+
+  private async uidReadRequestsApprove ({ id, password }: RequestPolyReadUidApprove): Promise<Promise<boolean>> {
+    const queued = this.#state.getReadUidRequest(id);
+
+    console.log('allReadUidRequests', this.#state.allReadUidRequests);
+
+    assert(queued, 'Unable to find request');
+
+    const { reject, resolve } = queued;
+
+    const account = getSelectedIdentifiedAccount();
+
+    const network = getNetwork();
+
+    if (account === undefined) {
+      reject(new Error(Errors.NO_ACCOUNT));
+
+      return false;
+    }
+
+    if (account.did === undefined) {
+      reject(new Error(Errors.NO_DID));
+
+      return false;
+    }
+
+    let uid = null;
+
+    try {
+      uid = await this.#state.getUid(account.did, network, password);
+
+      if (!uid) {
+        reject(new Error(Errors.NO_UID));
+
+        return false;
+      }
+    } catch (error) {
+      reject(error as Error);
+
+      return false;
+    }
+
+    resolve({
+      id,
+      uid
+    });
 
     return true;
   }
@@ -482,6 +533,15 @@ export default class Extension extends DotExtension {
 
       case 'poly:pri(uid.provideRequests.approve)':
         return this.uidProvideRequestsApprove(request as RequestPolyProvideUidApprove);
+
+      case 'poly:pri(uid.readRequests.subscribe)':
+        return this.uidReadRequestsSubscribe(id, port);
+
+      case 'poly:pri(uid.readRequests.approve)':
+        return this.uidReadRequestsApprove(request as RequestPolyReadUidApprove);
+
+      case 'poly:pri(uid.readRequests.reject)':
+        return this.uidReadRequestsReject(request as RequestPolyReadUidReject);
 
       case 'poly:pri(uid.changePass)':
         return this.uidChangePass(request as RequestPolyChangePass);

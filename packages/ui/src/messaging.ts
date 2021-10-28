@@ -1,34 +1,10 @@
-import { AccountJson,
-  AuthorizeRequest,
-  MessageTypes,
-  MessageTypesWithNoSubscriptions,
-  MessageTypesWithNullRequest,
-  MessageTypesWithSubscriptions,
-  MetadataRequest,
-  RequestTypes,
-  ResponseAuthorizeList,
-  ResponseDeriveValidate,
-  ResponseJsonGetAccountInfo,
-  ResponseSigningIsLocked,
-  ResponseTypes,
-  SeedLengths,
-  SigningRequest,
-  SubscriptionMessageTypes } from '@polkadot/extension-base/background/types';
+import { AccountJson, AuthorizeRequest, MessageTypes, MessageTypesWithNoSubscriptions, MessageTypesWithNullRequest, MessageTypesWithSubscriptions, MetadataRequest, RequestTypes, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSigningIsLocked, ResponseTypes, SeedLengths, SigningRequest, SubscriptionMessageTypes } from '@polkadot/extension-base/background/types';
 import { Message } from '@polkadot/extension-base/types';
 import chrome from '@polkadot/extension-inject/chrome';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
-import { AllowedPath, PolyMessageTypes,
-  PolyMessageTypesWithNoSubscriptions,
-  PolyMessageTypesWithNullRequest,
-  PolyMessageTypesWithSubscriptions,
-  PolyRequestTypes,
-  PolyResponseTypes,
-  PolySubscriptionMessageTypes,
-  ProofingRequest,
-  ProvideUidRequest,
-  ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { AllowedPath, PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, ProofingRequest, ProvideUidRequest, ReadUidRequest, ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 import { PORTS } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount, NetworkName, NetworkState, StoreStatus, UidRecord } from '@polymathnetwork/extension-core/types';
 
@@ -234,6 +210,14 @@ export async function rejectUidProvideRequest (id: string): Promise<boolean> {
   return polyMessage('poly:pri(uid.provideRequests.reject)', { id });
 }
 
+export async function approveUidReadRequest (id: string, password: string): Promise<boolean> {
+  return polyMessage('poly:pri(uid.readRequests.approve)', { id, password });
+}
+
+export async function rejectUidReadRequest (id: string): Promise<boolean> {
+  return polyMessage('poly:pri(uid.readRequests.reject)', { id });
+}
+
 export async function createAccountExternal (name: string, address: string, genesisHash: string): Promise<boolean> {
   return sendMessage('pri(accounts.create.external)', { address, genesisHash, name });
 }
@@ -323,6 +307,10 @@ export async function subscribeProofingRequests (cb: (requests: ProofingRequest[
 
 export async function subscribeProvideUidRequests (cb: (requests: ProvideUidRequest[]) => void): Promise<boolean> {
   return polyMessage('poly:pri(uid.provideRequests.subscribe)', null, cb);
+}
+
+export async function subscribeReadUidRequests (cb: (requests: ReadUidRequest[]) => void): Promise<boolean> {
+  return polyMessage('poly:pri(uid.readRequests.subscribe)', null, cb);
 }
 
 export async function renameIdentity (network: NetworkName, did: string, name: string): Promise<boolean> {

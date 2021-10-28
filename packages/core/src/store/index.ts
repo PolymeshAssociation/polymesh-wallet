@@ -1,12 +1,7 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
-import { FLUSH,
-  PAUSE,
-  PERSIST,
-  persistReducer,
-  persistStore, PURGE,
-  REGISTER, REHYDRATE } from 'redux-persist';
-import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
+import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { localStorage } from 'redux-persist-webextension-storage';
 
 import rootReducer, { AppReducer, RootState } from './rootReducer';
@@ -18,7 +13,7 @@ const persistConfig = {
   storage: localStorage,
   version: 1,
   blacklist: ['status'],
-  stateReconciler: hardSet
+  stateReconciler: autoMergeLevel2
 };
 
 const persistedReducer = persistReducer<RootState>(persistConfig, rootReducer);

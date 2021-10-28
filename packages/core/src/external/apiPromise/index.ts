@@ -5,29 +5,25 @@ import { NetworkName } from '../../types';
 import SchemaService from '../schema';
 
 let api: ApiPromise | null = null;
+let provider: WsProvider;
+let currentNetwork: NetworkName;
 
 const metadata: Record<string, string> = {};
 
-async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiPromise> {
-  if (!reinitialize && api) { return api; }
+async function apiPromise (network: NetworkName): Promise<ApiPromise> {
+  const shouldReinitialize = currentNetwork !== network;
 
-  if (api) {
-    try {
-      await api.disconnect();
-    } catch (error) {
-      console.error(error);
-    }
+  if (!shouldReinitialize && api && provider?.isConnected) return api;
 
-    api = null;
-  }
+  currentNetwork = network;
 
   // 'false' means to not retry connection if it fails. We need to report
   // connection issues to the user instead of retrying connection for minutes.
-  const provider = new WsProvider(networkURLs[n], false);
+  provider = new WsProvider(networkURLs[network], false);
 
   await provider.connect();
 
-  let unsubscribe: () => void = () => {};
+  let unsubscribe: () => void = () => { /**/ };
 
   // Unfortunately, provider.connect() does NOT throw an error when connection fails,
   // so we have to handle that in the following awkward way.
@@ -36,7 +32,7 @@ async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiProm
   // B) A second later, if connection is not up, we throw an error.
   await new Promise<void>((resolve, reject) => {
     const handle = setTimeout(() => {
-      reject(new Error(`Failed to connect to ${networkURLs[n]}`));
+      reject(new Error(`Failed to connect to ${networkURLs[network]}`));
     }, apiConnTimeout);
 
     unsubscribe = provider.on('connected', () => {
@@ -44,9 +40,10 @@ async function apiPromise (n: NetworkName, reinitialize = true): Promise<ApiProm
       resolve();
     });
   });
+
   unsubscribe();
 
-  const { rpc, types } = SchemaService.get(n);
+  const { rpc, types } = SchemaService.get(network);
 
   api = await ApiPromise.create({
     provider,

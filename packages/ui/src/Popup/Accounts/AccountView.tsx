@@ -2,6 +2,7 @@ import { networkLinks } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import { SvgCheck, SvgDotsVertical, SvgPencilOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -26,7 +27,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
 
   const history = useHistory();
 
-  const [isEditing, setEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(name);
   const [hover, setHover] = useState(false);
   const [nameHover, setNameHover] = useState(false);
@@ -54,13 +55,13 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   };
 
   const cancelEditing = (e: React.MouseEvent<HTMLElement>) => {
-    setEditing(false);
+    setNewName(name);
+    setIsEditing(false);
     if (e.stopPropagation) e.stopPropagation();
   };
 
   const editName = (e: React.MouseEvent<HTMLElement>) => {
-    setNameHover(false);
-    setEditing(true);
+    setIsEditing(true);
     if (e.stopPropagation) e.stopPropagation();
   };
 
@@ -72,7 +73,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     if (e.stopPropagation) e.stopPropagation();
     await editAccount(address || '', newName || '');
     onAction();
-    setEditing(false);
+    setIsEditing(false);
   };
 
   const mouseEnter = () => {
@@ -103,11 +104,12 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <AccountInfoGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <NameEdit name={name}
+            <NameEdit
               newName={newName}
               onCancel={cancelEditing}
               onChange={handleNameChange}
-              onSave={save} />
+              onSave={save}
+            />
           </GridItem>
         )}
         {!isEditing && (
@@ -118,7 +120,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               onMouseEnter={nameMouseEnter}
               onMouseLeave={nameMouseLeave}
             >
-              <TextOverflowEllipsis color='gray.1'
+              <TextOverflowEllipsis
+                color='gray.1'
                 variant='b2m'
               >
                 {name}
@@ -137,14 +140,18 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           </GridItem>
         )}
         <GridItem area='type'>
-          <Flex height='100%'
-            justifyContent='flex-end'>
+          <Flex
+            height='100%'
+            justifyContent='flex-end'
+          >
             {did && <AccountType keyType={keyType} />}
           </Flex>
         </GridItem>
         <GridItem area='address'>
-          <Flex alignItems='flex-end'
-            height='100%'>
+          <Flex
+            alignItems='flex-end'
+            height='100%'
+          >
             <LabelWithCopy
               color='gray.3'
               text={recodeAddress(address, ss58Format)}
@@ -154,12 +161,16 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           </Flex>
         </GridItem>
         <GridItem area='balance'>
-          <Flex height='100%'
-            justifyContent='flex-end'>
-            <Text color='gray.1'
+          <Flex
+            height='100%'
+            justifyContent='flex-end'
+          >
+            <Text
+              color='gray.1'
               style={{ whiteSpace: 'nowrap' }}
               title={balance?.locked && `${formatAmount(balance.locked)} POLYX is unavailable to use`}
-              variant='b3'>
+              variant='b3'
+            >
               {formatAmount(balance?.transferrable || 0)}{' '}
               POLYX
             </Text>
@@ -183,11 +194,12 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       <UnassignedAccountHoverGrid>
         {isEditing && (
           <GridItem area='name-edit'>
-            <NameEdit name={name}
+            <NameEdit
               newName={newName}
               onCancel={cancelEditing}
               onChange={handleNameChange}
-              onSave={save} />
+              onSave={save}
+            />
           </GridItem>
         )}
         {!isEditing && (
@@ -197,7 +209,8 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               onMouseEnter={nameMouseEnter}
               onMouseLeave={nameMouseLeave}
             >
-              <TextOverflowEllipsis color='gray.1'
+              <TextOverflowEllipsis
+                color='gray.1'
                 variant='b2m'
               >
                 {name}
@@ -216,11 +229,12 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           </GridItem>
         )}
         <GridItem area='assign'>
-          <Flex alignItems='center'
+          <Flex
+            alignItems='center'
             height='100%'
-            justifyContent='flex-end'>
-            <ButtonSmall onClick={assign}
-              variant='secondary'>
+            justifyContent='flex-end'
+          >
+            <ButtonSmall onClick={assign}>
               Assign
             </ButtonSmall>
           </Flex>
@@ -250,23 +264,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
       >
         <AccountViewGrid>
           <GridItem area='avatar'>
-            <Flex height='100%'>
-              <Box
-                backgroundColor='brandLightest'
-                borderRadius='50%'
-                height={32}
-                px='2'
-                width={32}
-              >
-                <Flex justifyContent='center'
-                  pt='xxs'>
-                  <Text color='brandMain'
-                    variant='b2m'>
-                    {name?.substr(0, 1)}
-                  </Text>
-                </Flex>
-              </Box>
-            </Flex>
+            <InitialsAvatar name={name} />
           </GridItem>
           <GridItem area='account-info'>
             <Box>
@@ -278,28 +276,34 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             <Flex
               alignItems='flex-end'
               flexDirection='column'
-              height='100%'
+              height='46px'
               justifyContent='space-around'
             >
               <Box width={24}>
                 {isSelected && (
                   <Icon
                     Asset={SvgCheck}
-                    color='brandMain'
+                    color='polyPink'
                     height={24}
                     width={24}
                   />
                 )}
               </Box>
-              <Box mb='xs'
-                mt='auto'>
-                <OptionSelector onSelect={(value) => handleMenuClick(address, value)}
+              <Box
+                mb='xs'
+                mt='auto'
+              >
+                <OptionSelector
+                  onSelect={(value) => handleMenuClick(address, value)}
                   options={getMenuItems(address)}
-                  selector={<Icon Asset={SvgDotsVertical}
+                  selector={<Icon
+                    Asset={SvgDotsVertical}
                     color='gray.1'
                     height={16}
                     style={{ cursor: 'pointer' }}
-                    width={16} />} />
+                    width={16}
+                  />}
+                />
               </Box>
             </Flex>
           </GridItem>

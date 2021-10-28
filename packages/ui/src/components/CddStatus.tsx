@@ -43,14 +43,18 @@ export const CddStatus: FC<Props> = ({ cdd, withText = false }) => {
   return (
     <Flex flexDirection='row'>
       <Flex mr='1'>
-        <Icon Asset={statusIcon[status]}
+        <Icon
+          Asset={statusIcon[status]}
           color={statusColor[status]}
           height={14}
-          width={14} />
+          width={14}
+        />
       </Flex>
       { withText && <Flex>
-        <Text color={statusColor[status]}
-          variant='b3m'>
+        <Text
+          color={statusColor[status]}
+          variant='b3m'
+        >
           {statusText[status]}
         </Text>
       </Flex> }

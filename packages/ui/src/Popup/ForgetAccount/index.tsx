@@ -52,54 +52,74 @@ export const ForgetAccount: FC = () => {
 
   return (
     <>
-      <Header headerText='Forget account'
-        iconAsset={SvgFileLockOutline}>
+      <Header
+        headerText='Forget account'
+        iconAsset={SvgFileLockOutline}
+      >
       </Header>
-      <Flex alignItems='stretch'
+      <Flex
+        alignItems='stretch'
         flexDirection='column'
         height='100%'
-        p='s'>
-        <Box borderColor='gray.4'
+        p='s'
+      >
+        <Box
+          borderColor='gray.4'
           borderRadius={3}
           borderStyle='solid'
           borderWidth={2}
-          p='s'>
+          p='s'
+        >
           <Flex>
-            <Icon Asset={SvgAlertCircle}
+            <Icon
+              Asset={SvgAlertCircle}
               color='alert'
               height={20}
-              width={20} />
+              width={20}
+            />
             <Box ml='s'>
-              <Text color='alert'
-                variant='b3m'>
+              <Text
+                color='alert'
+                variant='b3m'
+              >
                 Attention
               </Text>
             </Box>
           </Flex>
-          <Text color='gray.1'
-            variant='b2m'>
+          <Text
+            color='gray.1'
+            variant='b2m'
+          >
             You are about to remove this account. Once removed, this account will not be accessible via this extension unless you re-add it via JSON file or seed phrase.
           </Text>
         </Box>
 
-        {!isLedgerAccount && <form id='passwordForm'
-          onSubmit={handleSubmit(onPasswordSubmit)}>
+        {!isLedgerAccount && <form
+          id='passwordForm'
+          onSubmit={handleSubmit(onPasswordSubmit)}
+        >
           <Box mt='m'>
             <Box>
-              <Text color='gray.1'
-                variant='b2m'>
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 Wallet password
               </Text>
             </Box>
             <Box>
-              <TextInput inputRef={register({ required: true, minLength: 8 })}
+              <TextInput
+                inputRef={register({ required: true, minLength: 8 })}
                 name='currentPassword'
                 placeholder='Enter your wallet password'
-                type='password' />
+                type='password'
+              />
               {errors.currentPassword &&
               <Box>
-                <Text color='alert'
-                  variant='b3'>
+                <Text
+                  color='alert'
+                  variant='b3'
+                >
                   {(errors.currentPassword).type === 'required' && 'Required field'}
                   {(errors.currentPassword).type === 'minLength' && 'Password too short'}
                   {(errors.currentPassword).type === 'WrongPassword' && 'Invalid password'}
@@ -113,15 +133,19 @@ export const ForgetAccount: FC = () => {
 
         <Box mt='auto'>
           {isLedgerAccount
-            ? <Button busy={isBusy}
+            ? <Button
+              busy={isBusy}
               fluid
-              onClick={performForgetAccount}>
+              onClick={performForgetAccount}
+            >
               Forget account
             </Button>
-            : <Button busy={isBusy}
+            : <Button
+              busy={isBusy}
               fluid
               form='passwordForm'
-              type='submit'>
+              type='submit'
+            >
               Forget account
             </Button>
           }

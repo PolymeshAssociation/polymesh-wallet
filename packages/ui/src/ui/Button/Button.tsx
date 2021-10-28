@@ -53,7 +53,7 @@ export const Button = styled(ButtonWithRef)<ButtonProps>(
     fontFamily: theme.fontFamilies.baseText,
     fontSize: theme.fontSizes[1],
     fontWeight: theme.fontWeights.semiBold,
-    borderRadius: '8px',
+    borderRadius: '100px',
     ...(fluid && { width: '100%' }),
 
     '&:disabled, &:disabled:hover': {

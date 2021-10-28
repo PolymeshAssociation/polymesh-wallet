@@ -20,6 +20,7 @@ chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
 // This listener is invoked every time the extension is installed, updated, or reloaded.
 chrome.runtime.onInstalled.addListener(() => {
   loadSchema();
+  subscribePolymesh();
 });
 
 // listen to all messages and handle appropriately
@@ -28,7 +29,8 @@ chrome.runtime.onConnect.addListener((port): void => {
     [PORTS.CONTENT, PORTS.EXTENSION].includes(port.name),
     `Unknown connection from ${port.name}`
   );
-  let polyUnsub: () => Promise<void>;
+
+  let polyUnsub: () => void;
   const accountsUnsub = accountsSynchronizer();
 
   if (port.name === PORTS.EXTENSION) {
@@ -38,10 +40,7 @@ chrome.runtime.onConnect.addListener((port): void => {
     port.onDisconnect.addListener((): void => {
       console.log(`Disconnected from ${port.name}`);
 
-      if (polyUnsub) {
-        polyUnsub()
-          .then(() => console.log('ApiPromise: disconnected')).catch(console.error);
-      }
+      polyUnsub();
     });
   }
 
