@@ -1,3 +1,10 @@
+# [1.0.0-develop.8](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.7...1.0.0-develop.8) (2021-10-28)
+
+
+### Bug Fixes
+
+* mainnet rpc url ([#222](https://github.com/PolymathNetwork/polymesh-wallet/issues/222)) ([c619e86](https://github.com/PolymathNetwork/polymesh-wallet/commit/c619e86e55dee3185a1786483fbf05c4703212f6))
+
 # [1.0.0-develop.7](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0-develop.6...1.0.0-develop.7) (2021-10-27)
 
 
