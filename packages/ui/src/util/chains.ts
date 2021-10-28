@@ -18,17 +18,11 @@ const testnetTmp: Network = {
 };
 
 const polyGenesisHashes = [
-  // ITN
+  // Testnet
   {
-    genesisHash: ['0x9deeb940c92ae02111c3bd5baca89970384f4c9849f02a1b2e53e66414d30f9f'],
-    displayName: 'Polymesh - ITN',
-    networkName: NetworkName.itn
-  },
-  // Alcyone
-  {
-    genesisHash: ['0x12fddc9e2128b3fe571e4e5427addcb87fcaf08493867a68dd6ae44b406b39c7'],
-    displayName: 'Polymesh - Development testnet',
-    networkName: NetworkName.alcyone
+    genesisHash: ['0x2ace05e703aa50b48c0ccccfc8b424f7aab9a1e2c424ed12e45d20b1e8ffd0d6'],
+    displayName: 'Polymesh - Testnet',
+    networkName: NetworkName.testnet
   },
   // Tooling
   {

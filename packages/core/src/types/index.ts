@@ -53,9 +53,8 @@ export type ReversedDidList =
   Record<string, {did: string, keyType: DidType, cdd?: CDD, didAlias: string}>;
 
 export enum NetworkName {
-  itn = 'itn',
+  mainnet = 'mainnet',
   testnet = 'testnet',
-  alcyone = 'alcyone',
   pmf = 'pmf',
   pme = 'pme',
   local = 'local'

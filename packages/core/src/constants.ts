@@ -1,26 +1,23 @@
 import { LinkName, NetworkName, NetworkState } from './types';
 
 export const networkURLs: Record<NetworkName, string> = {
-  itn: 'wss://itn-rpc.polymesh.live',
-  alcyone: 'wss://alcyone-rpc.polymesh.live',
-  testnet: 'wss://testnet-rpc.polymesh.live/',
+  mainnet: 'wss://mainnet-rpc.polymesh.live',
+  testnet: 'wss://testnet-rpc.polymesh.live',
   pmf: 'wss://pmf.polymath.network',
   pme: 'wss://pme.polymath.network',
   local: 'ws://localhost:9944'
 };
 
 export const networkLabels: Record<NetworkName, string> = {
-  itn: 'ITN',
+  mainnet: 'Mainnet',
   testnet: 'Testnet',
-  alcyone: 'Alcyone Testnet',
   pmf: 'Staging',
   pme: 'Tooling',
   local: 'Local node'
 };
 
 export const networkIsDev: Record<NetworkName, boolean> = {
-  itn: false,
-  alcyone: false,
+  mainnet: false,
   testnet: false,
   pmf: true,
   pme: true,
@@ -28,8 +25,7 @@ export const networkIsDev: Record<NetworkName, boolean> = {
 };
 
 export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
-  itn: true,
-  alcyone: true,
+  mainnet: true,
   testnet: true,
   pmf: true,
   pme: true,
@@ -37,13 +33,9 @@ export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
-  itn: {
-    dashboard: 'https://itn-dashboard.polymesh.live/',
-    explorer: 'https://itn-app.polymesh.live/#/explorer'
-  },
-  alcyone: {
-    dashboard: 'https://alcyone-dashboard.polymesh.live/',
-    explorer: 'http://18.223.97.65/'
+  mainnet: {
+    dashboard: 'https://dashboard.polymath.network/',
+    explorer: 'https://polymesh-mainnet.subscan.io/'
   },
   testnet: {
     dashboard: 'https://testnet-dashboard.polymath.network/',
@@ -63,12 +55,12 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   }
 };
 
-export const defaultNetwork: NetworkName = NetworkName.itn;
+export const defaultNetwork: NetworkName = NetworkName.testnet;
 
 export const messagePrefix = 'poly:';
 
-// ITN genesis hash.
-export const genesisHash = '0x9deeb940c92ae02111c3bd5baca89970384f4c9849f02a1b2e53e66414d30f9f';
+// Testnet genesis hash.
+export const genesisHash = '0x2ace05e703aa50b48c0ccccfc8b424f7aab9a1e2c424ed12e45d20b1e8ffd0d6';
 
 export const messages = [
   'pub(accounts.list)',
