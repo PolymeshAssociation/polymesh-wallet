@@ -57,7 +57,9 @@ export default function Accounts (): React.ReactElement {
         ...(isLedgerEnabled
           ? [
             {
-              label: isLedgerCapable ? 'Attach Ledger account' : 'Chrome browser is required to use Ledger',
+              label: isLedgerCapable
+                ? 'Attach Ledger account'
+                : 'Chrome browser is required to use Ledger',
               value: 'fromLedger',
               disabled: !isLedgerCapable
             }
@@ -93,7 +95,7 @@ export default function Accounts (): React.ReactElement {
             <AppHeader>{currentAccount && <AccountMain
               account={currentAccount}
               details={true}
-                                          />}</AppHeader>
+            />}</AppHeader>
             <AccountsArea id='accounts-container'>
               <Flex
                 justifyContent='space-between'
@@ -105,7 +107,7 @@ export default function Accounts (): React.ReactElement {
                   color='gray.1'
                   variant='c1'
                 >
-                ACCOUNTS
+                  ACCOUNTS
                 </Text>
                 <OptionSelector
                   className='add-key-menu'
@@ -129,7 +131,7 @@ export default function Accounts (): React.ReactElement {
                         color='polyNavyBlue'
                         variant='b2'
                       >
-                      Add a key
+                        Add a key
                       </Text>
                     </Flex>
                   }
