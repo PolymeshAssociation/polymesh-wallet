@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.1.1...1.2.0) (2021-11-01)
+
+
+### Features
+
+* clickable addresses (copy icon by default & adding tooltip) ([#219](https://github.com/PolymathNetwork/polymesh-wallet/issues/219)) ([2d9f6ba](https://github.com/PolymathNetwork/polymesh-wallet/commit/2d9f6ba737fd2a0b25ef78e813745adcc6b17bc4))
+
 # [1.1.0-develop.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0...1.1.0-develop.1) (2021-10-28)
 
 
