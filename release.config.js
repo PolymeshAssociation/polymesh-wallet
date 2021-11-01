@@ -1,13 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 
 module.exports = {
-  branches: [
-    'master',
-    {
-      name: 'develop',
-      prerelease: true
-    }
-  ],
+  branches: ['master', 'develop'],
   tagFormat: '${version}',
   plugins: [
     '@semantic-release/commit-analyzer',
