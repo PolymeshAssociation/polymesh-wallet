@@ -5,8 +5,8 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { Flex } from '../Flex';
 import { Icon } from '../Icon';
 import { Text } from '../Text';
-import { Tooltip } from '../Tooltip';
 import { TextEllipsis } from '../TextEllipsis';
+import { Tooltip } from '../Tooltip';
 import * as sc from './styles';
 
 export interface Props {
@@ -49,11 +49,22 @@ export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, te
 
   return (
     <sc.StatusText copied={copied}>
-      <CopyToClipboard onCopy={handleCopy} text={text}>
-        <Flex alignItems='center' style={{ cursor: 'pointer' }} onMouseOut={onMouseOut} onMouseOver={onMouseOver}>
+      <CopyToClipboard
+        onCopy={handleCopy}
+        text={text}
+      >
+        <Flex
+          alignItems='center'
+          onMouseOut={onMouseOut}
+          onMouseOver={onMouseOver}
+          style={{ cursor: 'pointer' }}
+        >
           <Tooltip content='copy to clipboard'>
             <Flex>
-              <Text color={foreColor} variant={textVariant}>
+              <Text
+                color={foreColor}
+                variant={textVariant}
+              >
                 <TextEllipsis size={textSize}>{text}</TextEllipsis>
               </Text>
 
