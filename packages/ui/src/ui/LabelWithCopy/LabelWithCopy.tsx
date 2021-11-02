@@ -71,10 +71,10 @@ export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, te
               <Icon
                 Asset={SvgContentCopy}
                 color={foreColor}
-                height={16}
+                height={14}
                 ml='xs'
                 style={{ cursor: 'pointer' }}
-                width={16}
+                width={14}
               />
             </Tooltip>
           </Flex>

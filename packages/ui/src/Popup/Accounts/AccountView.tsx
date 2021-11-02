@@ -129,7 +129,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               <Flex ml='xs'>
                 <Icon
                   Asset={SvgPencilOutline}
-                  color={nameHover ? 'gray.2' : 'gray.5'}
+                  color={nameHover ? 'gray.2' : 'white'}
                   height={16}
                   onClick={editName}
                   style={{ cursor: 'pointer' }}
@@ -302,7 +302,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
                     height={16}
                     style={{ cursor: 'pointer' }}
                     width={16}
-                            />}
+                  />}
                 />
               </Box>
             </Flex>
