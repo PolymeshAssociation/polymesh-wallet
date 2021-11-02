@@ -59,15 +59,15 @@ export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, te
           onMouseOver={onMouseOver}
           style={{ cursor: 'pointer' }}
         >
-          <Tooltip content='copy to clipboard'>
-            <Flex>
-              <Text
-                color={foreColor}
-                variant={textVariant}
-              >
-                <TextEllipsis size={textSize}>{text}</TextEllipsis>
-              </Text>
+          <Flex>
+            <Text
+              color={foreColor}
+              variant={textVariant}
+            >
+              <TextEllipsis size={textSize}>{text}</TextEllipsis>
+            </Text>
 
+            <Tooltip content='copy to clipboard'>
               <Icon
                 Asset={SvgContentCopy}
                 color={foreColor}
@@ -76,8 +76,8 @@ export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, te
                 style={{ cursor: 'pointer' }}
                 width={16}
               />
-            </Flex>
-          </Tooltip>
+            </Tooltip>
+          </Flex>
         </Flex>
       </CopyToClipboard>
     </sc.StatusText>
