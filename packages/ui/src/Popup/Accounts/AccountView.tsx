@@ -254,7 +254,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   return (
     <>
       <Box
-        bg={hover ? 'gray8' : 'white'}
+        bg={hover ? 'gray8' : isSelected ? '#F8F9FC' : 'white'}
         mt='s'
         onClick={selectAccount}
         onMouseEnter={mouseEnter}
@@ -302,7 +302,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
                     height={16}
                     style={{ cursor: 'pointer' }}
                     width={16}
-                            />}
+                  />}
                 />
               </Box>
             </Flex>
