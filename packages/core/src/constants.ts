@@ -90,6 +90,8 @@ export const uidProvidersWhitelist = [
   'https://alcyone-tokenstudio.polymesh.live',
   'https://alcyone-dashboard.polymesh.live',
   'https://itn-onboarding.polymesh.live',
+  'https://testnet-onboarding.polymesh.network',
+  'https://onboarding.polymesh.network',
   'http://localhost:3000'
 ];
 
