@@ -35,7 +35,7 @@ export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   mainnet: {
     dashboard: 'https://dashboard.polymath.network/',
-    explorer: 'https://polymesh-mainnet.subscan.io/'
+    explorer: 'https://polymesh.subscan.io/'
   },
   testnet: {
     dashboard: 'https://testnet-dashboard.polymath.network/',
