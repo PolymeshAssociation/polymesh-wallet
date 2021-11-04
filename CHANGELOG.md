@@ -1,3 +1,47 @@
+## [1.2.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.2.0...1.2.1) (2021-11-04)
+
+
+### Bug Fixes
+
+* remove trailing slash in url ([#226](https://github.com/PolymathNetwork/polymesh-wallet/issues/226)) ([b2fd040](https://github.com/PolymathNetwork/polymesh-wallet/commit/b2fd040af491fcc2f2ea7ca9801003e9c69ce12f))
+
+# [1.2.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.1.1...1.2.0) (2021-11-01)
+
+
+### Features
+
+* clickable addresses (copy icon by default & adding tooltip) ([#219](https://github.com/PolymathNetwork/polymesh-wallet/issues/219)) ([2d9f6ba](https://github.com/PolymathNetwork/polymesh-wallet/commit/2d9f6ba737fd2a0b25ef78e813745adcc6b17bc4))
+
+# [1.1.0-develop.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.0.0...1.1.0-develop.1) (2021-10-28)
+
+
+### Bug Fixes
+
+* **CI:** update bump-versions script ([66191e2](https://github.com/PolymathNetwork/polymesh-wallet/commit/66191e2a72901dd633af741497682b9d63c881dc))
+* downgrade packages to work with ITN Rewards [GTN-2084] ([#211](https://github.com/PolymathNetwork/polymesh-wallet/issues/211)) ([d2d87a7](https://github.com/PolymathNetwork/polymesh-wallet/commit/d2d87a747096392909c6f059748597039a0b49cd))
+* lint ([c9d3d02](https://github.com/PolymathNetwork/polymesh-wallet/commit/c9d3d0248ec1d127b316116c86a728133afa246d))
+* mainnet rpc url ([#222](https://github.com/PolymathNetwork/polymesh-wallet/issues/222)) ([c619e86](https://github.com/PolymathNetwork/polymesh-wallet/commit/c619e86e55dee3185a1786483fbf05c4703212f6))
+* network change bug ([#204](https://github.com/PolymathNetwork/polymesh-wallet/issues/204)) ([26a6d4d](https://github.com/PolymathNetwork/polymesh-wallet/commit/26a6d4d36fc496e45b11653f0c2cb00b53441f48))
+* pass build ([54a3a2f](https://github.com/PolymathNetwork/polymesh-wallet/commit/54a3a2fe4cda7764bc2b0dc1827915deb2201f62))
+* refactor api connection ([#203](https://github.com/PolymathNetwork/polymesh-wallet/issues/203)) ([82746d7](https://github.com/PolymathNetwork/polymesh-wallet/commit/82746d7b26fec5ff00507e7d505852bd4856aecc))
+* revert "--no-ci" from semantic release ([429e97f](https://github.com/PolymathNetwork/polymesh-wallet/commit/429e97fc216782d33afa9c94c5a5a20a7a6c2349))
+* temporarily disable network mismatch detection ([#210](https://github.com/PolymathNetwork/polymesh-wallet/issues/210)) ([09563c9](https://github.com/PolymathNetwork/polymesh-wallet/commit/09563c9730e4e43fd2d97275edfefda9a04eeba8))
+* toast colors ([#215](https://github.com/PolymathNetwork/polymesh-wallet/issues/215)) ([c9cd8dd](https://github.com/PolymathNetwork/polymesh-wallet/commit/c9cd8ddf89d00dc90b0e6259a91b3d20101b0c4d))
+* update fallback schemas ([5f01948](https://github.com/PolymathNetwork/polymesh-wallet/commit/5f01948aab7ba8a76560b748b911c10520aae659))
+* use autoMergeLevel2 to reconcile state ([#218](https://github.com/PolymathNetwork/polymesh-wallet/issues/218)) ([a856a51](https://github.com/PolymathNetwork/polymesh-wallet/commit/a856a5123fcec9f6370fe9dd46fc13ea9bf067cc))
+
+
+### Features
+
+* **CI:** use semantic release ([#212](https://github.com/PolymathNetwork/polymesh-wallet/issues/212)) ([f96610e](https://github.com/PolymathNetwork/polymesh-wallet/commit/f96610eb87fbcff3e90b0c5f1f894a1e3e4a1669)), closes [#58](https://github.com/PolymathNetwork/polymesh-wallet/issues/58) [#211](https://github.com/PolymathNetwork/polymesh-wallet/issues/211) [#204](https://github.com/PolymathNetwork/polymesh-wallet/issues/204) [#203](https://github.com/PolymathNetwork/polymesh-wallet/issues/203) [#210](https://github.com/PolymathNetwork/polymesh-wallet/issues/210) [#205](https://github.com/PolymathNetwork/polymesh-wallet/issues/205) [#198](https://github.com/PolymathNetwork/polymesh-wallet/issues/198) [#206](https://github.com/PolymathNetwork/polymesh-wallet/issues/206)
+* re-enable Connect Ledger button ([#220](https://github.com/PolymathNetwork/polymesh-wallet/issues/220)) ([93b077a](https://github.com/PolymathNetwork/polymesh-wallet/commit/93b077a7c4de0ca5cebee1318414b1c6e8697484))
+* **UI:** add Testnet network selector ([#217](https://github.com/PolymathNetwork/polymesh-wallet/issues/217)) ([973f4b8](https://github.com/PolymathNetwork/polymesh-wallet/commit/973f4b8f1384a5cfa40f9adbb3e5edb8ca3b3905))
+* **UI:** network selector update [GTN-346] ([#205](https://github.com/PolymathNetwork/polymesh-wallet/issues/205)) ([d62f173](https://github.com/PolymathNetwork/polymesh-wallet/commit/d62f17313e6c51d11f817561d0a486b7dc71e2c3))
+* **UI:** new Polymesh theme [WAL-168] ([#198](https://github.com/PolymathNetwork/polymesh-wallet/issues/198)) ([a51e011](https://github.com/PolymathNetwork/polymesh-wallet/commit/a51e0114bc506e81722ecc4e498c57703f0e58ad))
+* **UI:** update Development network names ([#213](https://github.com/PolymathNetwork/polymesh-wallet/issues/213)) ([c4d4ec6](https://github.com/PolymathNetwork/polymesh-wallet/commit/c4d4ec697de1d0ae317fc5b454dda657eccebf3d))
+* **UI:** update main menu UI [GTN-344] ([#206](https://github.com/PolymathNetwork/polymesh-wallet/issues/206)) ([8a47d3c](https://github.com/PolymathNetwork/polymesh-wallet/commit/8a47d3c0eb88be7475bf73d00694d92357ae4b67))
+* **UI:** update toast notification styles [GTN-349] ([#214](https://github.com/PolymathNetwork/polymesh-wallet/issues/214)) ([ba548cb](https://github.com/PolymathNetwork/polymesh-wallet/commit/ba548cb2736f6ec125e4902369d420c2af16a0b7))
+
 # 1.0.0 (2021-10-28)
 
 

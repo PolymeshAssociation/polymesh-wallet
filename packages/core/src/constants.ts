@@ -35,7 +35,7 @@ export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   mainnet: {
     dashboard: 'https://dashboard.polymath.network/',
-    explorer: 'https://polymesh-mainnet.subscan.io/'
+    explorer: 'https://polymesh.subscan.io/'
   },
   testnet: {
     dashboard: 'https://testnet-dashboard.polymath.network/',
@@ -47,7 +47,7 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   },
   pme: {
     dashboard: 'https://polymesh-dashboard-dev.herokuapp.com/',
-    explorer: 'http://ec2-3-15-5-195.us-east-2.compute.amazonaws.com'
+    explorer: 'https://tooling-app.polymesh.live/'
   },
   local: {
     dashboard: 'unknown',
@@ -90,6 +90,9 @@ export const uidProvidersWhitelist = [
   'https://alcyone-tokenstudio.polymesh.live',
   'https://alcyone-dashboard.polymesh.live',
   'https://itn-onboarding.polymesh.live',
+  'https://testnet-onboarding.polymesh.network',
+  'https://onboarding.polymesh.network',
+  'https://testnet-dashboard.polymath.network',
   'http://localhost:3000'
 ];
 
