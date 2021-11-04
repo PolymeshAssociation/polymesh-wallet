@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.2.0...1.2.1) (2021-11-04)
+
+
+### Bug Fixes
+
+* remove trailing slash in url ([#226](https://github.com/PolymathNetwork/polymesh-wallet/issues/226)) ([b2fd040](https://github.com/PolymathNetwork/polymesh-wallet/commit/b2fd040af491fcc2f2ea7ca9801003e9c69ce12f))
+
 # [1.2.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.1.1...1.2.0) (2021-11-01)
 
 
