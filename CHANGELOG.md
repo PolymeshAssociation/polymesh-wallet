@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.2.1...1.2.2) (2021-11-05)
+
+
+### Bug Fixes
+
+* disable uid whitelist checks ([#227](https://github.com/PolymathNetwork/polymesh-wallet/issues/227)) ([a437f4c](https://github.com/PolymathNetwork/polymesh-wallet/commit/a437f4c26da1de6194e7f076736dd3a195957ee4))
+
 ## [1.2.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.2.0...1.2.1) (2021-11-04)
 
 
