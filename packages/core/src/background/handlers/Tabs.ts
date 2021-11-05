@@ -9,7 +9,7 @@ import polyNetworkSubscribe from '@polymathnetwork/extension-core/external/polyN
 import { getSelectedAccount, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
 import { NetworkMeta, ProofRequestPayload, RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
-import { allowedUidProvider, allowedUidReader, prioritize, recodeAddress, validateNetwork, validateSelectedNetwork, validateTicker, validateUid } from '@polymathnetwork/extension-core/utils';
+import { prioritize, recodeAddress, validateNetwork, validateSelectedNetwork, validateTicker, validateUid } from '@polymathnetwork/extension-core/utils';
 
 import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse, ReadUidResponse, RequestPolyReadUid } from '../types';
 import State from './State';
@@ -66,11 +66,11 @@ export default class Tabs extends DotTabs {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _accountsList (url: string): InjectedAccount[] {
+  private _accountsList (): InjectedAccount[] {
     return transformAccounts(accountsObservable.subject.getValue());
   }
 
-  private _accountsSubscribe (url: string, id: string, port: chrome.runtime.Port): boolean {
+  private _accountsSubscribe (id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
     let calls = 0;
 
@@ -177,10 +177,10 @@ export default class Tabs extends DotTabs {
         return this.polyNetworkSubscribe(id, port);
 
       case 'pub(accounts.list)':
-        return this._accountsList(url);
+        return this._accountsList();
 
       case 'pub(accounts.subscribe)':
-        return this._accountsSubscribe(url, id, port);
+        return this._accountsSubscribe(id, port);
 
       case 'pub(metadata.list)': {
         // Deny app's request to provide metadata because Polymesh wallet
