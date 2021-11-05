@@ -117,7 +117,8 @@ export default class Tabs extends DotTabs {
   }
 
   private provideUid (url: string, request: RequestPolyProvideUid): Promise<boolean> {
-    assert(allowedUidProvider(url), `App ${url} is not allowed to provide uid`);
+    // XXX: felt unnecessary, might delete later
+    // assert(allowedUidProvider(url), `App ${url} is not allowed to provide uid`);
 
     const { network, uid } = request;
 
@@ -138,7 +139,8 @@ export default class Tabs extends DotTabs {
   }
 
   private readUid (url: string, request: RequestPolyReadUid): Promise<ReadUidResponse> {
-    assert(allowedUidReader(url), `App ${url} is not allowed access uid`);
+    // XXX: felt unnecessary, might delete later
+    // assert(allowedUidReader(url), `App ${url} is not allowed access uid`);
 
     const account = getSelectedIdentifiedAccount();
 
