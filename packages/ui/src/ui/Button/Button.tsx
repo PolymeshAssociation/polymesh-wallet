@@ -6,9 +6,23 @@ import { Loading } from '../Loading';
 import { ButtonDefaultProps, ButtonProps } from './definitions';
 import { getIconStyle, getVariant } from './styles';
 
-const ButtonComponent: ForwardRefRenderFunction<HTMLButtonElement, React.PropsWithChildren<ButtonProps>> = (
+const ButtonComponent: ForwardRefRenderFunction<
+  HTMLButtonElement,
+  React.PropsWithChildren<ButtonProps>
+> = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  { RouterLink, busy, children, disabled, fluid, href, iconPosition, onClick, variant, ...otherProps },
+  {
+    RouterLink,
+    busy,
+    children,
+    disabled,
+    fluid,
+    href,
+    iconPosition,
+    onClick,
+    variant,
+    ...otherProps
+  },
   ref
 ) => {
   if (RouterLink) {
@@ -23,9 +37,7 @@ const ButtonComponent: ForwardRefRenderFunction<HTMLButtonElement, React.PropsWi
         {...(href && { type: undefined })}
         {...otherProps}
       >
-        {busy &&
-          <Loading small />
-        }
+        {busy && <Loading small />}
         {!busy && children}
       </button>
     );
@@ -60,14 +72,14 @@ export const Button = styled(ButtonWithRef)<ButtonProps>(
       backgroundColor: theme.colors.disabled,
       color: theme.colors.inactive,
       boxShadow: 'none',
-      cursor: 'not-allowed'
+      cursor: 'not-allowed',
     },
 
     [Icon]: {
       ...(iconPosition && {
-        [`margin${getIconStyle(iconPosition)}`]: theme.space.s
-      })
-    }
+        [`margin${getIconStyle(iconPosition)}`]: theme.space.s,
+      }),
+    },
   }),
   getVariant
 );

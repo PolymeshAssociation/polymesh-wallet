@@ -5,7 +5,10 @@ import { HashRouter } from 'react-router-dom';
 
 import { ErrorFallback, View } from './components';
 
-export default function createView (Entry: React.ComponentType, rootId = 'root'): void {
+export default function createView(
+  Entry: React.ComponentType,
+  rootId = 'root'
+): void {
   // @FIXME dirty hack
   // First thing, we set window size because the default window size is too wide.
   // There's hardly any clean way to accomplish this, since window size is set initially
@@ -19,10 +22,9 @@ export default function createView (Entry: React.ComponentType, rootId = 'root')
   }
 
   ReactDOM.render(
-    <Suspense fallback='...'>
+    <Suspense fallback="...">
       <View>
         <HashRouter>
-
           <ErrorBoundary
             FallbackComponent={ErrorFallback}
             onReset={() => {

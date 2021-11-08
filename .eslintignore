@@ -1,4 +1,7 @@
 .eslintrc.js
+jest.config.js
+jest.e2e.config.js
+release.config.js
 **/build/*
 **/coverage/*
 **/node_modules/*

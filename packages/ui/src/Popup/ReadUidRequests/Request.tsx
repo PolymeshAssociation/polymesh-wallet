@@ -3,8 +3,18 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
-import { ActionContext, ActivityContext, Password, PolymeshContext } from '../../components';
-import { approveUidReadRequest, isPasswordSet, rejectUidReadRequest, validatePassword } from '../../messaging';
+import {
+  ActionContext,
+  ActivityContext,
+  Password,
+  PolymeshContext,
+} from '../../components';
+import {
+  approveUidReadRequest,
+  isPasswordSet,
+  rejectUidReadRequest,
+  validatePassword,
+} from '../../messaging';
 import { ThemeProps } from '../../types';
 import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
 import { AccountMain } from '../Accounts/AccountMain';
@@ -21,7 +31,7 @@ type FormInputs = {
   confirmPassword: string;
 };
 
-function Request ({ isFirst, reqId, url }: Props): React.ReactElement<Props> {
+function Request({ isFirst, reqId, url }: Props): React.ReactElement<Props> {
   const onAction = useContext(ActionContext);
   const { currentAccount } = useContext(PolymeshContext);
   const [passIsSet, setPassIsSet] = useState<boolean>(false);
@@ -35,10 +45,10 @@ function Request ({ isFirst, reqId, url }: Props): React.ReactElement<Props> {
   const methods = useForm<FormInputs>({
     defaultValues: {
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
     },
     mode: 'onChange',
-    reValidateMode: 'onChange'
+    reValidateMode: 'onChange',
   });
   const { handleSubmit, setError } = methods;
 
@@ -71,7 +81,10 @@ function Request ({ isFirst, reqId, url }: Props): React.ReactElement<Props> {
       if (data.password === data.confirmPassword) {
         await _onApprove(data.password);
       } else {
-        setError('confirmPassword', { type: 'manual', message: 'Passwords do not match' });
+        setError('confirmPassword', {
+          type: 'manual',
+          message: 'Passwords do not match',
+        });
       }
     }
   };
@@ -80,38 +93,27 @@ function Request ({ isFirst, reqId, url }: Props): React.ReactElement<Props> {
     <>
       <Flex
         flex={1}
-        flexDirection='column'
-        justifyContent='space-between'
+        flexDirection="column"
+        justifyContent="space-between"
         style={{ height: '100%', ...(isFirst ? {} : { display: 'none' }) }}
       >
         <Box>
-          <Header>{currentAccount && <AccountMain
-            account={currentAccount}
-            details={false}
-          />}</Header>
+          <Header>
+            {currentAccount && (
+              <AccountMain account={currentAccount} details={false} />
+            )}
+          </Header>
 
           <Box>
-            <Box
-              mt='m'
-              mx='s'
-            >
-              <Heading
-                mb={1}
-                variant='h5'
-              >
+            <Box mt="m" mx="s">
+              <Heading mb={1} variant="h5">
                 UID Access Requests
               </Heading>
-              <Text
-                color='gray.2'
-                variant='b2'
-              >
-                An application wants to access your uId with the following details{' '}
-                <a
-                  href={url}
-                  rel='noopener noreferrer'
-                  target='_blank'
-                >
-                  <span className='tab-url'>{new URL(url).hostname}</span>
+              <Text color="gray.2" variant="b2">
+                An application wants to access your uId with the following
+                details{' '}
+                <a href={url} rel="noopener noreferrer" target="_blank">
+                  <span className="tab-url">{new URL(url).hostname}</span>
                 </a>
                 .
               </Text>
@@ -120,97 +122,64 @@ function Request ({ isFirst, reqId, url }: Props): React.ReactElement<Props> {
         </Box>
 
         <FormProvider {...methods}>
-
-          <form
-            id='passwordForm'
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <Box pt='m'>
+          <form id="passwordForm" onSubmit={handleSubmit(onSubmit)}>
+            <Box pt="m">
               <Box
-                borderColor='gray.4'
+                borderColor="gray.4"
                 borderRadius={3}
-                borderStyle='solid'
+                borderStyle="solid"
                 borderWidth={2}
-                m='xs'
-                p='s'
+                m="xs"
+                p="s"
               >
                 <Flex>
                   <Icon
                     Asset={SvgAlertCircle}
-                    color='warning'
+                    color="warning"
                     height={20}
                     width={20}
                   />
-                  <Box ml='s'>
-                    <Text
-                      color='warning'
-                      variant='b3m'
-                    >
-                        Attention
+                  <Box ml="s">
+                    <Text color="warning" variant="b3m">
+                      Attention
                     </Text>
                   </Box>
                 </Flex>
-                <Text
-                  color='gray.1'
-                  variant='b2m'
-                >
-                    Only approve this request if you trust the application. By approving this connection, you will give
-                    the application access to your uId.
+                <Text color="gray.1" variant="b2m">
+                  Only approve this request if you trust the application. By
+                  approving this connection, you will give the application
+                  access to your uId.
                 </Text>
               </Box>
             </Box>
 
-            <Flex
-              flexDirection='column'
-              mx='s'
-            >
-              <Box
-                mb='s'
-                style={{ width: '100%' }}
-              >
+            <Flex flexDirection="column" mx="s">
+              <Box mb="s" style={{ width: '100%' }}>
                 {!passIsSet && (
-                  <Box mt='m'>
-                    <Text
-                      color='gray.2'
-                      variant='b2'
-                    >
-                        Please enter a new wallet password below to complete uId access.
+                  <Box mt="m">
+                    <Text color="gray.2" variant="b2">
+                      Please enter a new wallet password below to complete uId
+                      access.
                     </Text>
                   </Box>
                 )}
                 <Password
                   label={passIsSet ? 'Wallet password' : 'Password'}
-                  placeholder='Enter your current wallet password'
+                  placeholder="Enter your current wallet password"
                   withConfirm={!passIsSet}
                 />
               </Box>
             </Flex>
-            <Flex
-              mb='s'
-              px='s'
-              style={{ width: '100%' }}
-            >
+            <Flex mb="s" px="s" style={{ width: '100%' }}>
               <Flex flex={1}>
-                <Button
-                  fluid
-                  onClick={_onReject}
-                  variant='secondary'
-                >
-                    Reject
+                <Button fluid onClick={_onReject} variant="secondary">
+                  Reject
                 </Button>
               </Flex>
               {isFirst && (
-                <Flex
-                  flex={1}
-                  ml='xs'
-                >
-                  <Button
-                    busy={isBusy}
-                    fluid
-                    form='passwordForm'
-                    type='submit'
-                  >
-                      Authorize
+                <Flex flex={1} ml="xs">
+                  <Button busy={isBusy} fluid form="passwordForm" type="submit">
+                    Authorize
                   </Button>
                 </Flex>
               )}
@@ -224,7 +193,8 @@ function Request ({ isFirst, reqId, url }: Props): React.ReactElement<Props> {
 
 export default styled(Request)`
   .icon {
-    background: ${({ theme }: ThemeProps): string => theme.buttonBackgroundDanger};
+    background: ${({ theme }: ThemeProps): string =>
+      theme.buttonBackgroundDanger};
     color: white;
     min-width: 18px;
     width: 14px;

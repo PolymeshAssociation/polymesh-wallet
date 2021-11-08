@@ -1,6 +1,14 @@
 import { Box, Text } from '@polymathnetwork/extension-ui/ui';
 import { BoxProps } from '@polymathnetwork/extension-ui/ui/Box';
-import React, { CSSProperties, Fragment, RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  CSSProperties,
+  Fragment,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import ReactDOM from 'react-dom';
 
 import { OptionListItem } from './OptionItem';
@@ -19,8 +27,16 @@ type OptionSelectorProps = BoxProps & {
   className?: string;
 };
 
-export function OptionSelector (props: OptionSelectorProps): JSX.Element {
-  const { className, onSelect, options, position = 'context', selector, style, ...boxProps } = props;
+export function OptionSelector(props: OptionSelectorProps): JSX.Element {
+  const {
+    className,
+    onSelect,
+    options,
+    position = 'context',
+    selector,
+    style,
+    ...boxProps
+  } = props;
 
   const [showOptions, setShowOptions] = useState(false);
   const [cssPosition, setCssPosition] = useState<CssPosition>({});
@@ -30,7 +46,9 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   const selectorRef = useRef<HTMLDivElement>(null);
 
   // Using a callback ref to set optionsRef since it is rendered conditionally
-  const [optionsRef, setOptionsRef] = useState<RefObject<HTMLDivElement>>({ current: null });
+  const [optionsRef, setOptionsRef] = useState<RefObject<HTMLDivElement>>({
+    current: null,
+  });
   const optionsCallbackRef = useCallback((node: HTMLDivElement) => {
     setOptionsRef({ current: node });
   }, []);
@@ -51,7 +69,7 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
       setClickCoords({
         x: event.clientX,
-        y: event.clientY
+        y: event.clientY,
       });
       setPortalRoot(createdPortalRoot);
       setShowOptions(true);
@@ -61,12 +79,14 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
   const handleClicks = useCallback(
     (event: MouseEvent) => {
       const hasClickedSelector =
-        selectorRef.current === event.target || selectorRef.current?.contains(event.target as Node);
+        selectorRef.current === event.target ||
+        selectorRef.current?.contains(event.target as Node);
 
       if (hasClickedSelector) return; // Handled by toggleOptions
 
       const hasClickedOutside =
-        optionsRef.current !== event.target && !optionsRef.current?.contains(event.target as Node);
+        optionsRef.current !== event.target &&
+        !optionsRef.current?.contains(event.target as Node);
 
       if (hasClickedOutside) setShowOptions(false);
     },
@@ -85,8 +105,10 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
         let top = clickCoords.y;
         let left = clickCoords.x;
 
-        const isOverflowingBottom = clickCoords.y + optionsRect.height > document.body.clientHeight;
-        const isOverflowingRight = clickCoords.x + optionsRect.width > document.body.clientWidth;
+        const isOverflowingBottom =
+          clickCoords.y + optionsRect.height > document.body.clientHeight;
+        const isOverflowingRight =
+          clickCoords.x + optionsRect.width > document.body.clientWidth;
 
         if (isOverflowingBottom) top -= optionsRect.height; // Flip on y-axis
         if (isOverflowingRight) left -= optionsRect.width; // Flip on x-axis
@@ -97,20 +119,21 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
       case 'bottom-right':
         return setCssPosition({
           top: selectorRect.bottom + SELECTOR_SPACING,
-          left: selectorRect.left + selectorRect.width - optionsRect.width
+          left: selectorRect.left + selectorRect.width - optionsRect.width,
         });
 
       case 'bottom-left':
         return setCssPosition({
           top: selectorRect.bottom + SELECTOR_SPACING,
-          left: selectorRect.left
+          left: selectorRect.left,
         });
     }
   }, [clickCoords, optionsRef, position]);
 
   // Add and remove click listener to hide options when clicked outside
   useEffect(() => {
-    if (shouldRenderOptions) document.addEventListener('mousedown', handleClicks);
+    if (shouldRenderOptions)
+      document.addEventListener('mousedown', handleClicks);
 
     return () => {
       document.removeEventListener('mousedown', handleClicks);
@@ -124,16 +147,13 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
 
   // Reset cssPosition after hiding options
   useEffect(() => {
-    if (!shouldRenderOptions && Object.values(cssPosition).length) setCssPosition({});
+    if (!shouldRenderOptions && Object.values(cssPosition).length)
+      setCssPosition({});
   }, [cssPosition, shouldRenderOptions]);
 
   return (
     <>
-      <Box
-        className={className}
-        onClick={toggleOptions}
-        ref={selectorRef}
-      >
+      <Box className={className} onClick={toggleOptions} ref={selectorRef}>
         {selector}
       </Box>
 
@@ -150,14 +170,8 @@ export function OptionSelector (props: OptionSelectorProps): JSX.Element {
             {options.map((option, optionIndex) => (
               <Fragment key={optionIndex}>
                 {option.category && (
-                  <Box
-                    mx='16px'
-                    textAlign='left'
-                  >
-                    <Text
-                      color='gray.2'
-                      variant='b2m'
-                    >
+                  <Box mx="16px" textAlign="left">
+                    <Text color="gray.2" variant="b2m">
                       {option.category}
                     </Text>
                   </Box>

@@ -3,22 +3,26 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { defaultNetwork, defaultSs58Format } from '../../constants';
 import { NetworkName, NetworkState } from '../../types';
 
-const initialState: NetworkState = { selected: defaultNetwork, ss58Format: defaultSs58Format, isDeveloper: false };
+const initialState: NetworkState = {
+  selected: defaultNetwork,
+  ss58Format: defaultSs58Format,
+  isDeveloper: false,
+};
 
 const networkSlice = createSlice({
   name: 'network',
   initialState,
   reducers: {
-    setNetwork (state, action: PayloadAction<NetworkName>) {
+    setNetwork(state, action: PayloadAction<NetworkName>) {
       state.selected = action.payload;
     },
-    setFormat (state, action: PayloadAction<number | undefined>) {
+    setFormat(state, action: PayloadAction<number | undefined>) {
       state.ss58Format = action.payload || defaultSs58Format;
     },
-    toggleIsDeveloper (state) {
+    toggleIsDeveloper(state) {
       state.isDeveloper = !state.isDeveloper;
-    }
-  }
+    },
+  },
 });
 
 export const actions = networkSlice.actions;

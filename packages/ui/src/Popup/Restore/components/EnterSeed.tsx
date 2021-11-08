@@ -1,4 +1,10 @@
-import { Box, Button, Flex, Text, TextArea } from '@polymathnetwork/extension-ui/ui';
+import {
+  Box,
+  Button,
+  Flex,
+  Text,
+  TextArea,
+} from '@polymathnetwork/extension-ui/ui';
 import React, { ChangeEvent, FC, useState } from 'react';
 
 import { validateSeed } from '../../../messaging';
@@ -37,30 +43,18 @@ export const EnterSeed: FC<Props> = ({ onContinue, setPhrase }) => {
   };
 
   return (
-    <Flex
-      alignItems='stretch'
-      flexDirection='column'
-      height='100%'
-      p='s'
-    >
-      <Text
-        color='gray.1'
-        variant='b2m'
-      >
+    <Flex alignItems="stretch" flexDirection="column" height="100%" p="s">
+      <Text color="gray.1" variant="b2m">
         12–word recovery phrase
       </Text>
       <TextArea
         height={236}
         invalid={!validSeed && seedPhrase.length > 0}
         onChange={onChange}
-        placeholder='Enter your 12-word recovery phrase. Separate each word with a single space.'
+        placeholder="Enter your 12-word recovery phrase. Separate each word with a single space."
       />
-      <Box mt='auto'>
-        <Button
-          disabled={!validSeed}
-          fluid
-          onClick={nextStep}
-        >
+      <Box mt="auto">
+        <Button disabled={!validSeed} fluid onClick={nextStep}>
           Continue
         </Button>
       </Box>

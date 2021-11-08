@@ -1,4 +1,7 @@
-import { PolymeshContext, UidContext } from '@polymathnetwork/extension-ui/components';
+import {
+  PolymeshContext,
+  UidContext,
+} from '@polymathnetwork/extension-ui/components';
 import { getUid } from '@polymathnetwork/extension-ui/messaging';
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
@@ -13,7 +16,11 @@ interface AddressState {
 export const AccountDetails: FC = () => {
   const history = useHistory();
   const { address } = useParams<AddressState>();
-  const { currentAccount, networkState: { selected: network }, polymeshAccounts } = useContext(PolymeshContext);
+  const {
+    currentAccount,
+    networkState: { selected: network },
+    polymeshAccounts,
+  } = useContext(PolymeshContext);
   const uidRecords = useContext(UidContext);
   const [hasUid, setHasUid] = useState(false);
   const [uidHidden, setUidHidden] = useState(true);
@@ -21,7 +28,9 @@ export const AccountDetails: FC = () => {
   const [uid, setUid] = useState('');
 
   useEffect(() => {
-    const uid = uidRecords?.find((item) => item.did === currentAccount?.did && network === item.network);
+    const uid = uidRecords?.find(
+      (item) => item.did === currentAccount?.did && network === item.network
+    );
 
     setHasUid(uid !== undefined);
   }, [uidRecords, currentAccount, network]);
@@ -56,13 +65,12 @@ export const AccountDetails: FC = () => {
 
   const closeDecode = () => setShowDecode(false);
 
-  const selectedAccount = polymeshAccounts?.find((account) => account.address === address);
+  const selectedAccount = polymeshAccounts?.find(
+    (account) => account.address === address
+  );
 
   if (showDecode) {
-    return <DecodeUid
-      decode={decodeUid}
-      onClose={closeDecode}
-    />;
+    return <DecodeUid decode={decodeUid} onClose={closeDecode} />;
   } else {
     return (
       <AccountView

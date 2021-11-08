@@ -14,7 +14,7 @@ interface DropdownOption {
 interface Props extends ThemeProps {
   className?: string;
   defaultValue?: string | null;
-  isDisabled?: boolean
+  isDisabled?: boolean;
   isError?: boolean;
   isFocussed?: boolean;
   label: string;
@@ -24,17 +24,26 @@ interface Props extends ThemeProps {
   value?: string;
 }
 
-function Dropdown ({ className, defaultValue, isDisabled, isFocussed, label, onBlur, onChange, options, value }: Props): React.ReactElement<Props> {
-  const _onChange = ({ target: { value } }: React.ChangeEvent<HTMLSelectElement>): void => {
+function Dropdown({
+  className,
+  defaultValue,
+  isDisabled,
+  isFocussed,
+  label,
+  onBlur,
+  onChange,
+  options,
+  value,
+}: Props): React.ReactElement<Props> {
+  const _onChange = ({
+    target: { value },
+  }: React.ChangeEvent<HTMLSelectElement>): void => {
     onChange && onChange(value.trim());
   };
 
   return (
     <>
-      <Label
-        className={className}
-        label={label}
-      >
+      <Label className={className} label={label}>
         <select
           autoFocus={isFocussed}
           defaultValue={defaultValue || undefined}
@@ -43,21 +52,22 @@ function Dropdown ({ className, defaultValue, isDisabled, isFocussed, label, onB
           onChange={_onChange}
           value={value}
         >
-          {options.map(({ text, value }): React.ReactNode => (
-            <option
-              key={value}
-              value={value}
-            >
-              {text}
-            </option>
-          ))}
+          {options.map(
+            ({ text, value }): React.ReactNode => (
+              <option key={value} value={value}>
+                {text}
+              </option>
+            )
+          )}
         </select>
       </Label>
     </>
   );
 }
 
-export default React.memo(styled(Dropdown)(({ isError, label, theme }: Props) => `
+export default React.memo(
+  styled(Dropdown)(
+    ({ isError, label, theme }: Props) => `
   position: relative;
 
   select {
@@ -97,4 +107,6 @@ export default React.memo(styled(Dropdown)(({ isError, label, theme }: Props) =>
     background: url(${arrow}) center no-repeat;
     pointer-events: none;
   }
-`));
+`
+  )
+);

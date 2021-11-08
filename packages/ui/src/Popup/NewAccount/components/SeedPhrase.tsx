@@ -1,4 +1,7 @@
-import { SvgCheckboxMarkedCircle, SvgContentCopy } from '@polymathnetwork/extension-ui/assets/images/icons';
+import {
+  SvgCheckboxMarkedCircle,
+  SvgContentCopy,
+} from '@polymathnetwork/extension-ui/assets/images/icons';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Button, Icon } from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useState } from 'react';
@@ -19,44 +22,36 @@ export const SeedPhrase: FC<Props> = ({ seedPhrase }) => {
 
   return (
     <>
-      <Box my='m'>
+      <Box my="m">
         <SeedGrid>
           {seedPhrase?.split(' ').map((word, index) => (
-            <SeedWord
-              key={index}
-              seedWord={word}
-              wordOrder={index}
-            />
+            <SeedWord key={index} seedWord={word} wordOrder={index} />
           ))}
         </SeedGrid>
       </Box>
-      <CopyToClipboard
-        onCopy={onCopy}
-        text={seedPhrase || ''}
-      >
-        <Button
-          fluid
-          variant='secondary'
-        >
-          {isCopied
-            ? <>
+      <CopyToClipboard onCopy={onCopy} text={seedPhrase || ''}>
+        <Button fluid variant="secondary">
+          {isCopied ? (
+            <>
               <Icon
                 Asset={SvgCheckboxMarkedCircle}
-                color='polyNavyBlue'
+                color="polyNavyBlue"
                 height={20}
                 width={20}
               />
-              <Box ml='s'>Your recovery phrase copied</Box>
+              <Box ml="s">Your recovery phrase copied</Box>
             </>
-            : <>
+          ) : (
+            <>
               <Icon
                 Asset={SvgContentCopy}
-                color='polyNavyBlue'
+                color="polyNavyBlue"
                 height={20}
                 width={20}
               />
-              <Box ml='s'>Copy your recovery phrase</Box>
-            </> }
+              <Box ml="s">Copy your recovery phrase</Box>
+            </>
+          )}
         </Button>
       </CopyToClipboard>
     </>

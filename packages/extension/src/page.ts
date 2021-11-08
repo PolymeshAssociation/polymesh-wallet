@@ -20,5 +20,5 @@ window.addEventListener('message', ({ data, source }: Message): void => {
 
 injectExtension(enable, {
   name: 'polywallet',
-  version: process.env.PKG_VERSION as string
+  version: process.env.PKG_VERSION as string,
 });

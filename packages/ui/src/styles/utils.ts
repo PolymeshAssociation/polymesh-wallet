@@ -7,39 +7,39 @@ export const MaxWidthScale = style({
   // React prop name
   prop: 'maxWidth',
   // key for theme values
-  key: 'maxWidth'
+  key: 'maxWidth',
 });
 
 export const ellipsis: Styles = () => ({
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
-  overflow: 'hidden'
+  overflow: 'hidden',
 });
 
 export const FormFieldLabel: Styles = ({ theme }) => ({
   color: theme.colors.highlightText,
   fontSize: theme.fontSizes[1],
-  fontWeight: 600
+  fontWeight: 600,
 });
 
 export const FormFieldError: Styles = ({ theme }) => ({
   fontSize: theme.fontSizes[0],
   color: theme.colors.red[0],
-  fontWeight: 400
+  fontWeight: 400,
 });
 
 export const textLinkInverted: Styles = () => ({
   textDecoration: 'none',
 
   '&:hover, &:focus': {
-    textDecoration: 'underline'
-  }
+    textDecoration: 'underline',
+  },
 });
 
 export const ulReset: Styles = () => ({
   listStyle: 'none',
   padding: 0,
-  margin: 0
+  margin: 0,
 });
 
 export const buttonReset: Styles = ({ theme }) => ({
@@ -50,13 +50,13 @@ export const buttonReset: Styles = ({ theme }) => ({
   border: 'none',
   cursor: 'pointer',
   transitionDuration: `${theme.transitions.hover.ms}ms`,
-  transitionProperty: 'background, color, box-shadow, opacity'
+  transitionProperty: 'background, color, box-shadow, opacity',
 });
 
 export const inputs: Styles = ({ theme }) => ({
   height: 40, // this needs to be a number because it's being used in JS logic
   backgroundColor: theme.colors.gray[1],
-  borderRadius: theme.radii[1]
+  borderRadius: theme.radii[1],
 });
 
 export const getHoverColor = (color: string) =>
@@ -70,9 +70,9 @@ export const visuallyHidden: Styles = () => ({
   margin: '-1px',
   overflow: 'hidden',
   clip: 'rect(0, 0, 0, 0)',
-  border: 0
+  border: 0,
 });
 
-export function hasKey<O> (obj: O, key: keyof any): key is keyof O {
+export function hasKey<O>(obj: O, key: keyof any): key is keyof O {
   return key in obj;
 }

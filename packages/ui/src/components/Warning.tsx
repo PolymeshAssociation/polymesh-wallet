@@ -11,30 +11,32 @@ interface Props extends ThemeProps {
   isDanger?: boolean;
 }
 
-function Warning ({ children, className, ...props }: Props): React.ReactElement<Props> {
+function Warning({
+  children,
+  className,
+  ...props
+}: Props): React.ReactElement<Props> {
   return (
-    <div
-      className={className}
-      {...props}
-    >
+    <div className={className} {...props}>
       <div>
-        <Svg
-          className='warningImage'
-          src={warningImageSrc}
-        />
+        <Svg className="warningImage" src={warningImageSrc} />
       </div>
       <div>{children}</div>
     </div>
   );
 }
 
-export default React.memo(styled(Warning)(({ isDanger, theme }: Props) => `
+export default React.memo(
+  styled(Warning)(
+    ({ isDanger, theme }: Props) => `
   display: flex;
   flex-direction: row;
   padding-left: ${isDanger ? '18px' : ''};
   color: ${theme.subTextColor};
   margin-right: 20px;
-  border-left: ${isDanger ? `0.25rem solid ${theme.buttonBackgroundDanger}` : ''};
+  border-left: ${
+    isDanger ? `0.25rem solid ${theme.buttonBackgroundDanger}` : ''
+  };
 
   .warningImage {
     width: 16px;
@@ -42,4 +44,6 @@ export default React.memo(styled(Warning)(({ isDanger, theme }: Props) => `
     margin: 5px 10px 5px 0;
     background: ${isDanger ? theme.iconDangerColor : theme.iconWarningColor};
   }
-`));
+`
+  )
+);

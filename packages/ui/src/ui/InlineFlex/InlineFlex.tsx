@@ -4,5 +4,5 @@ import { Box } from '../Box';
 
 export const InlineFlex = styled(Box)({
   display: 'inline-flex',
-  alignItems: 'center'
+  alignItems: 'center',
 });

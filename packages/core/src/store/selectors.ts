@@ -29,18 +29,21 @@ export const reversedDidList = createSelector(
   (state: RootState) => state.identities,
   selectedNetwork,
   (identities, network): ReversedDidList => {
-    return Object.keys(identities[network]).reduce((reversedList: ReversedDidList, did) => {
-      const identity = identities[network][did];
-      const data = { cdd: identity.cdd, did, didAlias: identity.alias || '' };
+    return Object.keys(identities[network]).reduce(
+      (reversedList: ReversedDidList, did) => {
+        const identity = identities[network][did];
+        const data = { cdd: identity.cdd, did, didAlias: identity.alias || '' };
 
-      reversedList[identity.priKey] = { ...data, keyType: DidType.primary };
+        reversedList[identity.priKey] = { ...data, keyType: DidType.primary };
 
-      identity.secKeys?.forEach((secKey) => {
-        reversedList[secKey] = { ...data, keyType: DidType.secondary };
-      });
+        identity.secKeys?.forEach((secKey) => {
+          reversedList[secKey] = { ...data, keyType: DidType.secondary };
+        });
 
-      return reversedList;
-    }, {} as ReversedDidList);
+        return reversedList;
+      },
+      {} as ReversedDidList
+    );
   }
 );
 
@@ -50,9 +53,8 @@ export const accounts = createSelector(
   (network, accounts) => accounts[network]
 );
 
-export const accountsAddresses = createSelector(
-  accounts,
-  (accounts) => Object.keys(accounts)
+export const accountsAddresses = createSelector(accounts, (accounts) =>
+  Object.keys(accounts)
 );
 
 export const accountsCount = createSelector(
@@ -64,7 +66,10 @@ export const identifiedAccounts = createSelector(
   accounts,
   reversedDidList,
   (accounts, reversedDidList: ReversedDidList) => {
-    return Object.values(accounts).map((account) => ({ ...account, ...reversedDidList[account.address] }));
+    return Object.values(accounts).map((account) => ({
+      ...account,
+      ...reversedDidList[account.address],
+    }));
   }
 );
 
@@ -87,7 +92,9 @@ export const selectedAccountIdentified = createSelector(
   identifiedAccounts,
   (selectedAccount, identifiedAccounts) => {
     if (selectedAccount) {
-      return identifiedAccounts.filter((account) => account.address === selectedAccount)[0];
+      return identifiedAccounts.filter(
+        (account) => account.address === selectedAccount
+      )[0];
     }
 
     return undefined;

@@ -8,17 +8,17 @@ interface Props {
   className?: string;
 }
 
-function Toast ({ className, content }: Props): React.ReactElement<Props> {
+function Toast({ className, content }: Props): React.ReactElement<Props> {
   return (
     <div className={className}>
-      <p className='snackbar-content'>{content}</p>
+      <p className="snackbar-content">{content}</p>
     </div>
   );
 }
 
-export default styled(Toast)<{visible: boolean}>`
+export default styled(Toast)<{ visible: boolean }>`
   position: fixed;
-  display: ${({ visible }): string => visible ? 'block' : 'none'};
+  display: ${({ visible }): string => (visible ? 'block' : 'none')};
   height: 40px;
   text-align: center;
   vertical-align: middle;
@@ -29,6 +29,7 @@ export default styled(Toast)<{visible: boolean}>`
   && {
     margin: auto;
     border-radius: 25px;
-    background: ${({ theme }: ThemeProps): string => theme.highlightedAreaBackground};
+    background: ${({ theme }: ThemeProps): string =>
+      theme.highlightedAreaBackground};
   }
 `;

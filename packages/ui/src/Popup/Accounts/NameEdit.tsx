@@ -1,4 +1,7 @@
-import { SvgCheck, SvgWindowClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import {
+  SvgCheck,
+  SvgWindowClose,
+} from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Box, Flex, Icon, TextInput } from '@polymathnetwork/extension-ui/ui';
 import React from 'react';
 
@@ -9,31 +12,33 @@ type NameEditProps = {
   onCancel: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
-export function NameEdit ({ newName, onCancel, onChange, onSave }: NameEditProps): JSX.Element {
+export function NameEdit({
+  newName,
+  onCancel,
+  onChange,
+  onSave,
+}: NameEditProps): JSX.Element {
   return (
-    <Flex
-      alignItems='center'
-      flexDirection='row'
-    >
+    <Flex alignItems="center" flexDirection="row">
       <TextInput
         onChange={onChange}
         style={{ height: '20px' }}
         tight
         value={newName}
       />
-      <Box ml='xs'>
+      <Box ml="xs">
         <Icon
           Asset={SvgCheck}
-          color='gray.2'
+          color="gray.2"
           height={16}
           onClick={onSave}
           width={16}
         />
       </Box>
-      <Box ml='xs'>
+      <Box ml="xs">
         <Icon
           Asset={SvgWindowClose}
-          color='gray.2'
+          color="gray.2"
           height={16}
           onClick={onCancel}
           width={16}

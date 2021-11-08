@@ -36,5 +36,5 @@ export const ButtonDefaultProps = {
   fluid: false,
   busy: false,
   tabIndex: 0,
-  type: 'button' as HtmlButtonProps['type']
+  type: 'button' as HtmlButtonProps['type'],
 };

@@ -1,5 +1,16 @@
-import { SvgAlertCircle, SvgOpenInNew } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymathnetwork/extension-ui/ui';
+import {
+  SvgAlertCircle,
+  SvgOpenInNew,
+} from '@polymathnetwork/extension-ui/assets/images/icons';
+import {
+  Box,
+  Button,
+  Flex,
+  Header,
+  Icon,
+  Text,
+  TextInput,
+} from '@polymathnetwork/extension-ui/ui';
 import React, { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
@@ -19,23 +30,28 @@ export const ExportAccount: FC = () => {
     defaultValues: {
       currentPassword: '',
       newPassword: '',
-      confirmPassword: ''
-    }
+      confirmPassword: '',
+    },
   });
   const isBusy = useContext(ActivityContext);
 
-  const onSubmit = async (data: { [x: string]: string; }) => {
+  const onSubmit = async (data: { [x: string]: string }) => {
     if (!address) {
       return;
     }
 
     try {
-      const { exportedJson } = await exportAccount(address, data.currentPassword);
+      const { exportedJson } = await exportAccount(
+        address,
+        data.currentPassword
+      );
 
       const element = document.createElement('a');
       const { meta } = exportedJson;
 
-      element.href = `data:text/plain;charset=utf-8,${JSON.stringify(exportedJson)}`;
+      element.href = `data:text/plain;charset=utf-8,${JSON.stringify(
+        exportedJson
+      )}`;
       element.download = `${meta.name}_exported_account_${Date.now()}.json`;
       element.click();
 
@@ -47,89 +63,65 @@ export const ExportAccount: FC = () => {
 
   return (
     <>
-      <Header
-        headerText='Export account'
-        iconAsset={SvgOpenInNew}
-      >
-      </Header>
-      <Flex
-        alignItems='stretch'
-        flexDirection='column'
-        height='100%'
-        p='s'
-      >
+      <Header headerText="Export account" iconAsset={SvgOpenInNew}></Header>
+      <Flex alignItems="stretch" flexDirection="column" height="100%" p="s">
         <Box
-          borderColor='gray.4'
+          borderColor="gray.4"
           borderRadius={3}
-          borderStyle='solid'
+          borderStyle="solid"
           borderWidth={2}
-          p='s'
+          p="s"
         >
           <Flex>
             <Icon
               Asset={SvgAlertCircle}
-              color='warning'
+              color="warning"
               height={20}
               width={20}
             />
-            <Box ml='s'>
-              <Text
-                color='warning'
-                variant='b3m'
-              >
+            <Box ml="s">
+              <Text color="warning" variant="b3m">
                 Attention
               </Text>
             </Box>
           </Flex>
-          <Text
-            color='gray.1'
-            variant='b2m'
-          >
-            Please remember the password you enter below as you will need it to recover your account. You are exporting your account details as a JSON file. Keep this file safe and secured.
+          <Text color="gray.1" variant="b2m">
+            Please remember the password you enter below as you will need it to
+            recover your account. You are exporting your account details as a
+            JSON file. Keep this file safe and secured.
           </Text>
         </Box>
-        <form
-          id='passwordForm'
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <Box mt='m'>
+        <form id="passwordForm" onSubmit={handleSubmit(onSubmit)}>
+          <Box mt="m">
             <Box>
-              <Text
-                color='gray.1'
-                variant='b2m'
-              >
-              Wallet password
+              <Text color="gray.1" variant="b2m">
+                Wallet password
               </Text>
             </Box>
             <Box>
               <TextInput
                 inputRef={register({ required: true, minLength: 8 })}
-                name='currentPassword'
-                placeholder='Enter your wallet password'
-                type='password'
+                name="currentPassword"
+                placeholder="Enter your wallet password"
+                type="password"
               />
-              {errors.currentPassword &&
-              <Box>
-                <Text
-                  color='alert'
-                  variant='b3'
-                >
-                  {(errors.currentPassword).type === 'required' && 'Required field'}
-                  {(errors.currentPassword).type === 'minLength' && 'Password too short'}
-                  {(errors.currentPassword).type === 'WrongPassword' && 'Invalid password'}
-                </Text>
-              </Box>
-              }
+              {errors.currentPassword && (
+                <Box>
+                  <Text color="alert" variant="b3">
+                    {errors.currentPassword.type === 'required' &&
+                      'Required field'}
+                    {errors.currentPassword.type === 'minLength' &&
+                      'Password too short'}
+                    {errors.currentPassword.type === 'WrongPassword' &&
+                      'Invalid password'}
+                  </Text>
+                </Box>
+              )}
             </Box>
           </Box>
         </form>
-        <Box mt='auto'>
-          <Button
-            busy={isBusy}
-            fluid
-            form='passwordForm'
-            type='submit'
-          >
+        <Box mt="auto">
+          <Button busy={isBusy} fluid form="passwordForm" type="submit">
             Export account
           </Button>
         </Box>

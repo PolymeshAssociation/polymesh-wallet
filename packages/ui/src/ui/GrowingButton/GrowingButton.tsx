@@ -12,12 +12,8 @@ export interface GrowingButtonProps {
 export const GrowingButton: FC<GrowingButtonProps> = ({ icon, onClick }) => {
   return (
     <sc.Wrapper onClick={onClick}>
-      <Flex mr='xs'>
-        <Icon
-          Asset={icon}
-          height={24}
-          width={24}
-        />
+      <Flex mr="xs">
+        <Icon Asset={icon} height={24} width={24} />
       </Flex>
     </sc.Wrapper>
   );

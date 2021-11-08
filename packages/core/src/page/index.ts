@@ -1,5 +1,14 @@
-
-import { PolyMessageTypes, PolyMessageTypesWithNoSubscriptions, PolyMessageTypesWithNullRequest, PolyMessageTypesWithSubscriptions, PolyRequestTypes, PolyResponseTypes, PolySubscriptionMessageTypes, PolyTransportRequestMessage, PolyTransportResponseMessage } from '../background/types';
+import {
+  PolyMessageTypes,
+  PolyMessageTypesWithNoSubscriptions,
+  PolyMessageTypesWithNullRequest,
+  PolyMessageTypesWithSubscriptions,
+  PolyRequestTypes,
+  PolyResponseTypes,
+  PolySubscriptionMessageTypes,
+  PolyTransportRequestMessage,
+  PolyTransportResponseMessage,
+} from '../background/types';
 import { ORIGINS } from '../constants';
 import PolymeshInjected from './injected';
 
@@ -18,11 +27,28 @@ let idCounter = 0;
 
 // a generic message sender that creates an event, returning a promise that will
 // resolve once the event is resolved (by the response listener just below this)
-export function sendMessage<TMessageType extends PolyMessageTypesWithNullRequest>(message: TMessageType): Promise<PolyResponseTypes[TMessageType]>;
-export function sendMessage<TMessageType extends PolyMessageTypesWithNoSubscriptions>(message: TMessageType, request: PolyRequestTypes[TMessageType]): Promise<PolyResponseTypes[TMessageType]>;
-export function sendMessage<TMessageType extends PolyMessageTypesWithSubscriptions>(message: TMessageType, request: PolyRequestTypes[TMessageType], subscriber: (data:PolySubscriptionMessageTypes[TMessageType]) => void): Promise<PolyResponseTypes[TMessageType]>;
+export function sendMessage<
+  TMessageType extends PolyMessageTypesWithNullRequest
+>(message: TMessageType): Promise<PolyResponseTypes[TMessageType]>;
+export function sendMessage<
+  TMessageType extends PolyMessageTypesWithNoSubscriptions
+>(
+  message: TMessageType,
+  request: PolyRequestTypes[TMessageType]
+): Promise<PolyResponseTypes[TMessageType]>;
+export function sendMessage<
+  TMessageType extends PolyMessageTypesWithSubscriptions
+>(
+  message: TMessageType,
+  request: PolyRequestTypes[TMessageType],
+  subscriber: (data: PolySubscriptionMessageTypes[TMessageType]) => void
+): Promise<PolyResponseTypes[TMessageType]>;
 
-export function sendMessage<TMessageType extends PolyMessageTypes> (message: TMessageType, request?: PolyRequestTypes[TMessageType], subscriber?: (data: unknown) => void): Promise<PolyResponseTypes[TMessageType]> {
+export function sendMessage<TMessageType extends PolyMessageTypes>(
+  message: TMessageType,
+  request?: PolyRequestTypes[TMessageType],
+  subscriber?: (data: unknown) => void
+): Promise<PolyResponseTypes[TMessageType]> {
   return new Promise((resolve, reject): void => {
     const id = `${Date.now()}.${++idCounter}`;
 
@@ -32,20 +58,22 @@ export function sendMessage<TMessageType extends PolyMessageTypes> (message: TMe
       id,
       message,
       origin: ORIGINS.PAGE,
-      request: request || null as PolyRequestTypes[TMessageType]
+      request: request || (null as PolyRequestTypes[TMessageType]),
     };
 
     window.postMessage(transportRequestMessage, '*');
   });
 }
 
-export async function enable (origin: string): Promise<PolymeshInjected> {
+export async function enable(origin: string): Promise<PolymeshInjected> {
   await sendMessage('pub(authorize.tab)', { origin });
 
   return new PolymeshInjected(sendMessage);
 }
 
-export function handleResponse<TMessageType extends PolyMessageTypes> (data: PolyTransportResponseMessage<TMessageType> & { subscription?: string }): void {
+export function handleResponse<TMessageType extends PolyMessageTypes>(
+  data: PolyTransportResponseMessage<TMessageType> & { subscription?: string }
+): void {
   const handler = handlers[data.id];
 
   if (!handler) {
