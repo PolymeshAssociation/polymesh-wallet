@@ -92,7 +92,7 @@ export const uidProvidersWhitelist = [
   'https://itn-onboarding.polymesh.live',
   'https://testnet-onboarding.polymesh.network',
   'https://onboarding.polymesh.network',
-  'https://testnet-dashboard.polymath.network/',
+  'https://testnet-dashboard.polymath.network',
   'http://localhost:3000'
 ];
 
