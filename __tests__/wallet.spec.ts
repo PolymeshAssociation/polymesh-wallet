@@ -8,10 +8,12 @@ describe('Wallet', () => {
   let page: puppeteer.Page;
   let extensionUrl: string;
 
-  const seed = 'wash mosquito come blur bonus guard scissors anchor valid gadget deposit file';
+  const seed =
+    'wash mosquito come blur bonus guard scissors anchor valid gadget deposit file';
   const accountName = 'Unverified';
 
-  const seedVerified = 'mother income drop mail lobster bulk idle swallow stomach patch warfare cloth';
+  const seedVerified =
+    'mother income drop mail lobster bulk idle swallow stomach patch warfare cloth';
   const accountIdVerified = '5CLhoA9tHeBu5La9YsYL5Txn9bWsFuGMqyFBrDqHWXR7pNgY';
   const accountNameVerified = 'Verified';
 
@@ -24,19 +26,23 @@ describe('Wallet', () => {
 
     const pathToExtension = path.join(__dirname, '../packages/extension/build');
 
-    browser = await puppeteer.launch({ headless: false,
+    browser = await puppeteer.launch({
+      headless: false,
       executablePath: process.env.PUPPETEER_EXEC_PATH,
       args: [
         '--no-sandbox', // to get around this issue https://github.com/puppeteer/puppeteer/issues/3698
         `--disable-extensions-except=${pathToExtension}`,
-        `--load-extension=${pathToExtension}`
-      ] });
+        `--load-extension=${pathToExtension}`,
+      ],
+    });
 
     const targets = await browser.targets();
-    const backgroundPageTarget: any = targets.find((target) => target.type() === 'background_page');
+    const backgroundPageTarget: any = targets.find(
+      (target) => target.type() === 'background_page'
+    );
 
     if (backgroundPageTarget._targetInfo.url) {
-      const [,, extensionID] = backgroundPageTarget._targetInfo.url.split('/');
+      const [, , extensionID] = backgroundPageTarget._targetInfo.url.split('/');
 
       extensionUrl = `chrome-extension://${extensionID}/index.html`;
       console.log('>>>> extensionUrl', extensionUrl);
@@ -56,7 +62,9 @@ describe('Wallet', () => {
   describe('Account creation', () => {
     describe('Import an unverified key using seed phrase', () => {
       it('Accept agreement checkboxes', async () => {
-        await page.waitForSelector('div#agreement-checkboxes', { visible: true });
+        await page.waitForSelector('div#agreement-checkboxes', {
+          visible: true,
+        });
 
         await page.evaluate(() => {
           document.querySelectorAll('input[type=checkbox]').forEach((el) => {
@@ -68,19 +76,33 @@ describe('Wallet', () => {
       });
 
       it('Proceed with importing seed phrase', async () => {
-        await (await page.waitForXPath("//button[contains(., 'Restore account')]")).click();
+        await (
+          await page.waitForXPath("//button[contains(., 'Restore account')]")
+        ).click();
       });
 
       it('Fill import seed form', async () => {
         await (await page.waitForXPath('//textarea')).type(seed);
-        await (await page.waitForXPath("//button[contains(., 'Continue')]")).click();
-        await (await page.waitForXPath("//input[@placeholder='Enter account name']")).type(accountName);
-        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more' or @placeholder='Enter your current wallet password']")).type(globalPass);
-        await (await page.waitForXPath("//input[@placeholder='Confirm your password']")).type(globalPass);
+        await (
+          await page.waitForXPath("//button[contains(., 'Continue')]")
+        ).click();
+        await (
+          await page.waitForXPath("//input[@placeholder='Enter account name']")
+        ).type(accountName);
+        await (
+          await page.waitForXPath(
+            "//input[@placeholder='Enter 8 characters or more' or @placeholder='Enter your current wallet password']"
+          )
+        ).type(globalPass);
+        await (
+          await page.waitForXPath(
+            "//input[@placeholder='Confirm your password']"
+          )
+        ).type(globalPass);
 
         await Promise.all([
           page.waitForNavigation(),
-          (await page.waitForXPath("//button[contains(., 'Restore')]")).click()
+          (await page.waitForXPath("//button[contains(., 'Restore')]")).click(),
         ]);
       });
 
@@ -95,8 +117,12 @@ describe('Wallet', () => {
 
         await (await page.waitForSelector('div.add-key-menu')).click();
         await Promise.all([
-          (await page.waitForXPath('//*[@id="option-selector-portal"]/div/ul/li[2]')).click(),
-          page.waitForNavigation()
+          (
+            await page.waitForXPath(
+              '//*[@id="option-selector-portal"]/div/ul/li[2]'
+            )
+          ).click(),
+          page.waitForNavigation(),
         ]);
 
         expectHashToEqual(page, importSeedHash);
@@ -104,13 +130,21 @@ describe('Wallet', () => {
 
       it('Fill import seed form', async () => {
         await (await page.waitForXPath('//textarea')).type(seedVerified);
-        await (await page.waitForXPath("//button[contains(., 'Continue')]")).click();
-        await (await page.waitForXPath("//input[@placeholder='Enter account name']")).type(accountNameVerified);
-        await (await page.waitForXPath("//input[@placeholder='Enter 8 characters or more' or @placeholder='Enter your current wallet password']")).type(globalPass);
+        await (
+          await page.waitForXPath("//button[contains(., 'Continue')]")
+        ).click();
+        await (
+          await page.waitForXPath("//input[@placeholder='Enter account name']")
+        ).type(accountNameVerified);
+        await (
+          await page.waitForXPath(
+            "//input[@placeholder='Enter 8 characters or more' or @placeholder='Enter your current wallet password']"
+          )
+        ).type(globalPass);
 
         await Promise.all([
           page.waitForNavigation(),
-          (await page.waitForXPath("//button[contains(., 'Restore')]")).click()
+          (await page.waitForXPath("//button[contains(., 'Restore')]")).click(),
         ]);
       });
 
@@ -123,7 +157,9 @@ describe('Wallet', () => {
   describe('Network & Account selection', () => {
     it('Select "Tooling"', async () => {
       await (await page.waitForSelector('div.settings-menu')).click();
-      await (await page.waitForXPath("//span[text()='Display development networks']")).click();
+      await (
+        await page.waitForXPath("//span[text()='Display development networks']")
+      ).click();
 
       await (await page.waitForSelector('div#network-selector')).click();
 
@@ -134,7 +170,9 @@ describe('Wallet', () => {
     });
 
     it('User can select account', async () => {
-      await (await page.waitForXPath(`//span[text()='${accountNameVerified}']`)).click();
+      await (
+        await page.waitForXPath(`//span[text()='${accountNameVerified}']`)
+      ).click();
     });
   });
 
@@ -144,7 +182,9 @@ describe('Wallet', () => {
     beforeAll(async () => {
       // Open mock app in another tab. We will request signing from there.
       mockApp = await browser.newPage();
-      await mockApp.goto('https://polymathnetwork.github.io/mock-uid-provider/');
+      await mockApp.goto(
+        'https://polymathnetwork.github.io/mock-uid-provider/'
+      );
     });
 
     afterAll(async () => {
@@ -158,9 +198,13 @@ describe('Wallet', () => {
       // Wait for auth popup to open.
       await page.waitForTimeout(2000);
 
-      const authPopup = (await browser.pages()).filter((page) => page.url().includes('notification.html'))[0];
+      const authPopup = (await browser.pages()).filter((page) =>
+        page.url().includes('notification.html')
+      )[0];
 
-      await (await authPopup.waitForXPath("//button[contains(., 'Authorize')]")).click();
+      await (
+        await authPopup.waitForXPath("//button[contains(., 'Authorize')]")
+      ).click();
     });
 
     it('User can approve transaction after providing password', async () => {
@@ -170,13 +214,17 @@ describe('Wallet', () => {
       // Wait for signing popup to open.
       await page.waitForTimeout(1000);
 
-      const signingPopup = (await browser.pages()).filter((page) => page.url().includes('notification.html'))[0];
+      const signingPopup = (await browser.pages()).filter((page) =>
+        page.url().includes('notification.html')
+      )[0];
       const passInput = await signingPopup.waitForSelector('#currentPassword');
 
       await passInput.focus();
       await passInput.type(globalPass);
 
-      await (await signingPopup.waitForXPath("//button[contains(., 'Sign')]")).click();
+      await (
+        await signingPopup.waitForXPath("//button[contains(., 'Sign')]")
+      ).click();
       await page.bringToFront();
       await page.waitForSelector('#accounts-container');
     });
@@ -186,14 +234,20 @@ describe('Wallet', () => {
 
       console.log((await browser.pages()).map((page) => page.url()));
 
-      await (await mockApp.waitForXPath("//button[contains(., 'Generate a dummy uID and import it to Polymesh wallet')]")).click();
+      await (
+        await mockApp.waitForXPath(
+          "//button[contains(., 'Generate a dummy uID and import it to Polymesh wallet')]"
+        )
+      ).click();
 
       // Wait for provision popup to open.
       await page.waitForTimeout(2000);
 
       console.log((await browser.pages()).map((page) => page.url()));
 
-      const provisionPopup = (await browser.pages()).filter((page) => page.url().includes('index.html'))[1];
+      const provisionPopup = (await browser.pages()).filter((page) =>
+        page.url().includes('index.html')
+      )[1];
 
       await provisionPopup.bringToFront();
       const passInput = await provisionPopup.waitForSelector('input#password');
@@ -201,7 +255,9 @@ describe('Wallet', () => {
       await passInput.focus();
       await passInput.type(globalPass);
 
-      await (await provisionPopup.waitForXPath("//button[contains(., 'Accept uID')]")).click();
+      await (
+        await provisionPopup.waitForXPath("//button[contains(., 'Accept uID')]")
+      ).click();
       await page.bringToFront();
     });
   });
@@ -218,8 +274,10 @@ describe('Wallet', () => {
 
       await (await page.waitForSelector('div.settings-menu')).click();
       await Promise.all([
-        (await page.waitForXPath("//span[contains(., 'Change password')]")).click(),
-        page.waitForNavigation()
+        (
+          await page.waitForXPath("//span[contains(., 'Change password')]")
+        ).click(),
+        page.waitForNavigation(),
       ]);
 
       expectHashToEqual(page, passChangePath);
@@ -235,7 +293,9 @@ describe('Wallet', () => {
         currentPassInput = await page.waitForSelector('#currentPassword');
         newPassInput = await page.waitForSelector('#newPassword');
         confirmPassInput = await page.waitForSelector('#confirmPassword');
-        submitButton = await page.waitForXPath("//button[contains(., 'Change password')]");
+        submitButton = await page.waitForXPath(
+          "//button[contains(., 'Change password')]"
+        );
       });
 
       it('Validates current password', async () => {
@@ -245,7 +305,11 @@ describe('Wallet', () => {
 
         await submitButton.click();
 
-        const error = await (await page.waitForSelector('div.currentPassword span.validation-error')).evaluate((el) => el.textContent);
+        const error = await (
+          await page.waitForSelector(
+            'div.currentPassword span.validation-error'
+          )
+        ).evaluate((el) => el.textContent);
 
         expect(error).toEqual('Invalid password');
       });
@@ -257,7 +321,9 @@ describe('Wallet', () => {
 
         await submitButton.click();
 
-        const error = await (await page.waitForSelector('div.newPassword span.validation-error')).evaluate((el) => el.textContent);
+        const error = await (
+          await page.waitForSelector('div.newPassword span.validation-error')
+        ).evaluate((el) => el.textContent);
 
         expect(error).toEqual('Current and new passwords are the same');
       });
@@ -270,15 +336,25 @@ describe('Wallet', () => {
         await submitButton.click();
 
         expect(
-          await (await page.waitForSelector('div.currentPassword span.validation-error')).evaluate((el) => el.textContent)
+          await (
+            await page.waitForSelector(
+              'div.currentPassword span.validation-error'
+            )
+          ).evaluate((el) => el.textContent)
         ).toEqual('Required field');
 
         expect(
-          await (await page.waitForSelector('div.newPassword span.validation-error')).evaluate((el) => el.textContent)
+          await (
+            await page.waitForSelector('div.newPassword span.validation-error')
+          ).evaluate((el) => el.textContent)
         ).toEqual('Required field');
 
         expect(
-          await (await page.waitForSelector('div.confirmPassword span.validation-error')).evaluate((el) => el.textContent)
+          await (
+            await page.waitForSelector(
+              'div.confirmPassword span.validation-error'
+            )
+          ).evaluate((el) => el.textContent)
         ).toEqual('Required field');
       });
 
@@ -288,7 +364,11 @@ describe('Wallet', () => {
         await refillTextInput(confirmPassInput, newPassNotMatch);
         await submitButton.click();
 
-        const error = await (await page.waitForSelector('div.confirmPassword span.validation-error')).evaluate((el) => el.textContent);
+        const error = await (
+          await page.waitForSelector(
+            'div.confirmPassword span.validation-error'
+          )
+        ).evaluate((el) => el.textContent);
 
         expect(error).toEqual('Passwords do not match');
       });
@@ -299,7 +379,9 @@ describe('Wallet', () => {
         await refillTextInput(confirmPassInput, invalidPass);
         await submitButton.click();
 
-        const error = await (await page.waitForSelector('div.newPassword span.validation-error')).evaluate((el) => el.textContent);
+        const error = await (
+          await page.waitForSelector('div.newPassword span.validation-error')
+        ).evaluate((el) => el.textContent);
 
         expect(error).toEqual('Password too short');
       });
@@ -310,7 +392,11 @@ describe('Wallet', () => {
         await refillTextInput(confirmPassInput, invalidPass);
         await submitButton.click();
 
-        const error = await (await page.waitForSelector('div.confirmPassword span.validation-error')).evaluate((el) => el.textContent);
+        const error = await (
+          await page.waitForSelector(
+            'div.confirmPassword span.validation-error'
+          )
+        ).evaluate((el) => el.textContent);
 
         expect(error).toEqual('Password too short');
       });
@@ -322,10 +408,7 @@ describe('Wallet', () => {
         await refillTextInput(newPassInput, newPass);
         await refillTextInput(confirmPassInput, newPass);
 
-        await Promise.all([
-          page.waitForNavigation(),
-          submitButton.click()
-        ]);
+        await Promise.all([page.waitForNavigation(), submitButton.click()]);
 
         globalPass = newPass;
 

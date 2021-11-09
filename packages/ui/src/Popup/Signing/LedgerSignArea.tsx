@@ -1,6 +1,9 @@
 import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
 
-import { ActionContext, Warning } from '@polymathnetwork/extension-ui/components';
+import {
+  ActionContext,
+  Warning,
+} from '@polymathnetwork/extension-ui/components';
 import { Button, Flex } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 
@@ -9,7 +12,7 @@ import { cancelSignRequest } from '../../messaging';
 
 interface Props {
   accountIndex?: number;
-  addressOffset? : number;
+  addressOffset?: number;
   className?: string;
   error: string | null;
   genesisHash?: string;
@@ -19,10 +22,24 @@ interface Props {
   signId: string;
 }
 
-function LedgerSignArea ({ accountIndex, addressOffset, error, genesisHash, onSignature, payload, setError, signId }: Props): React.ReactElement<Props> {
+function LedgerSignArea({
+  accountIndex,
+  addressOffset,
+  error,
+  genesisHash,
+  onSignature,
+  payload,
+  setError,
+  signId,
+}: Props): React.ReactElement<Props> {
   const [isBusy, setIsBusy] = useState(false);
-  const { error: ledgerError, isLoading: ledgerLoading, ledger, refresh, status: ledgerStatus } =
-    useLedger(genesisHash, accountIndex, addressOffset);
+  const {
+    error: ledgerError,
+    isLoading: ledgerLoading,
+    ledger,
+    refresh,
+    status: ledgerStatus,
+  } = useLedger(genesisHash, accountIndex, addressOffset);
   const onAction = useContext(ActionContext);
 
   const _onRefresh = useCallback(() => {
@@ -30,29 +47,29 @@ function LedgerSignArea ({ accountIndex, addressOffset, error, genesisHash, onSi
     setError(null);
   }, [refresh, setError]);
 
-  const _onSignLedger = useCallback(
-    (): void => {
-      if (!ledger || !payload || !onSignature) {
-        return;
-      }
+  const _onSignLedger = useCallback((): void => {
+    if (!ledger || !payload || !onSignature) {
+      return;
+    }
 
-      setError(null);
-      setIsBusy(true);
-      ledger.sign(payload.toU8a(true), accountIndex, addressOffset)
-        .then((signature) => {
-          onSignature(signature);
-        }).catch((e: Error) => {
-          setError(e.message);
-          setIsBusy(false);
-        });
-    },
-    [accountIndex, addressOffset, ledger, onSignature, payload, setError]
-  );
+    setError(null);
+    setIsBusy(true);
+    ledger
+      .sign(payload.toU8a(true), accountIndex, addressOffset)
+      .then((signature) => {
+        onSignature(signature);
+      })
+      .catch((e: Error) => {
+        setError(e.message);
+        setIsBusy(false);
+      });
+  }, [accountIndex, addressOffset, ledger, onSignature, payload, setError]);
 
   const _onCancel = useCallback(
-    (): Promise<void> => cancelSignRequest(signId)
-      .then(() => onAction())
-      .catch((error: Error) => console.error(error)),
+    (): Promise<void> =>
+      cancelSignRequest(signId)
+        .then(() => onAction())
+        .catch((error: Error) => console.error(error)),
     [onAction, signId]
   );
 
@@ -73,65 +90,34 @@ function LedgerSignArea ({ accountIndex, addressOffset, error, genesisHash, onSi
   }, [ledgerStatus, ledgerError]);
 
   return (
+    <Flex flexDirection="column" p="s">
+      {error && <Warning isDanger>{error}</Warning>}
+      {warning && <Warning>{warning}</Warning>}
 
-    <Flex
-      flexDirection='column'
-      p='s'
-    >
-      {error &&
-        (<Warning isDanger>
-          {error}
-        </Warning>
-        )}
-      {warning &&
-        (<Warning>
-          {warning}
-        </Warning>
-        )}
-
-      <Flex
-        alignItems='stretch'
-        flexDirection='row'
-        mt='s'
-        width='100%'
-      >
+      <Flex alignItems="stretch" flexDirection="row" mt="s" width="100%">
         <Flex flex={1}>
-          <Button
-            fluid
-            onClick={_onCancel}
-            variant='secondary'
-          >
-                  Reject
+          <Button fluid onClick={_onCancel} variant="secondary">
+            Reject
           </Button>
         </Flex>
-        <Flex
-          flex={1}
-          ml='xs'
-        >
-          {warning
-            ? (
-              <Button
-                busy={isBusy || ledgerLoading}
-                fluid
-                onClick={_onRefresh}
-                type='submit'
-              >
-                {'Refresh'}
-              </Button>
-            )
-            : (
-              <Button
-                busy={isBusy || ledgerLoading}
-                onClick={_onSignLedger}
-              >
-                {'Sign on Ledger'}
-              </Button>
-            )
-          }
+        <Flex flex={1} ml="xs">
+          {warning ? (
+            <Button
+              busy={isBusy || ledgerLoading}
+              fluid
+              onClick={_onRefresh}
+              type="submit"
+            >
+              {'Refresh'}
+            </Button>
+          ) : (
+            <Button busy={isBusy || ledgerLoading} onClick={_onSignLedger}>
+              {'Sign on Ledger'}
+            </Button>
+          )}
         </Flex>
       </Flex>
     </Flex>
-
   );
 }
 

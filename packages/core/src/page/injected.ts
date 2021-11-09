@@ -8,7 +8,7 @@ class PolymeshInjected extends Injected {
   public readonly network: Network;
   public readonly uid: Uid;
 
-  constructor (sendRequest: SendRequest) {
+  constructor(sendRequest: SendRequest) {
     super(sendRequest);
     this.network = new Network(sendRequest);
     this.uid = new Uid(sendRequest);

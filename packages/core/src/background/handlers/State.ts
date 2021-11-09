@@ -1,14 +1,25 @@
-
 import DotState from '@polkadot/extension-base/background/handlers/State';
 import { AccountJson } from '@polkadot/extension-base/background/types';
 import chrome from '@polkadot/extension-inject/chrome';
 import { BehaviorSubject } from 'rxjs';
 
-import { NetworkName, ProofRequestPayload, RequestPolyProvideUid, UidRecord } from '../../types';
-import { ProofingRequest, ProofingResponse, ProvideUidRequest, ReadUidRequest, ReadUidResponse, RequestPolyReadUid } from '../types';
+import {
+  NetworkName,
+  ProofRequestPayload,
+  RequestPolyProvideUid,
+  UidRecord,
+} from '../../types';
+import {
+  ProofingRequest,
+  ProofingResponse,
+  ProvideUidRequest,
+  ReadUidRequest,
+  ReadUidResponse,
+  RequestPolyReadUid,
+} from '../types';
 import AuxStore from './AuxStore';
 
-interface Resolver <T> {
+interface Resolver<T> {
   reject: (error: Error) => void;
   resolve: (result: T) => void;
 }
@@ -40,10 +51,10 @@ const WINDOW_OPTS = {
   top: 150,
   type: 'popup' as const,
   url: chrome.extension.getURL('index.html'),
-  width: 400
+  width: 400,
 };
 
-function getId (): string {
+function getId(): string {
   return `${Date.now()}.${++idCounter}`;
 }
 
@@ -58,73 +69,92 @@ export default class State extends DotState {
 
   #windows: number[] = [];
 
-  public readonly proofSubject: BehaviorSubject<ProofingRequest[]> = new BehaviorSubject<ProofingRequest[]>([]);
+  public readonly proofSubject: BehaviorSubject<ProofingRequest[]> =
+    new BehaviorSubject<ProofingRequest[]>([]);
 
-  public readonly provideUidRequestsSubject: BehaviorSubject<ProvideUidRequest[]> = new BehaviorSubject<ProvideUidRequest[]>([]);
+  public readonly provideUidRequestsSubject: BehaviorSubject<
+    ProvideUidRequest[]
+  > = new BehaviorSubject<ProvideUidRequest[]>([]);
 
-  public readonly readUidRequestsSubject: BehaviorSubject<ReadUidRequest[]> = new BehaviorSubject<ReadUidRequest[]>([]);
+  public readonly readUidRequestsSubject: BehaviorSubject<ReadUidRequest[]> =
+    new BehaviorSubject<ReadUidRequest[]>([]);
 
-  public uidsSubject: BehaviorSubject<UidRecord[]> = new BehaviorSubject<UidRecord[]>([]);
+  public uidsSubject: BehaviorSubject<UidRecord[]> = new BehaviorSubject<
+    UidRecord[]
+  >([]);
 
-  constructor () {
+  constructor() {
     super();
 
     this.updateUidSubject();
   }
 
-  private updateUidSubject (): void {
-    this.#auxStore.allRecords().then((keys) => {
-      this.uidsSubject.next(keys);
-    }).catch(console.error);
+  private updateUidSubject(): void {
+    this.#auxStore
+      .allRecords()
+      .then((keys) => {
+        this.uidsSubject.next(keys);
+      })
+      .catch(console.error);
   }
 
-  public get numProofRequests (): number {
+  public get numProofRequests(): number {
     return Object.keys(this.#proofRequests).length;
   }
 
-  public get numProvideUidRequests (): number {
+  public get numProvideUidRequests(): number {
     return Object.keys(this.#provideUidRequests).length;
   }
 
-  public get numReadUidRequests (): number {
+  public get numReadUidRequests(): number {
     return Object.keys(this.#readUidRequests).length;
   }
 
-  public get allProofRequests (): ProofingRequest[] {
-    return Object
-      .values(this.#proofRequests)
-      .map(({ account, id, request, url }): ProofingRequest => ({ account, id, request, url }));
-  }
-
-  public get allProvideUidRequests (): ProvideUidRequest[] {
-    return Object
-      .values(this.#provideUidRequests)
-      .map(({ id, request, url }): ProvideUidRequest => ({ id, request, url }));
-  }
-
-  public get allReadUidRequests (): ReadUidRequest[] {
-    return Object
-      .values(this.#readUidRequests)
-      .map(({ id, request, url }): ReadUidRequest => ({ id, request, url }));
-  }
-
-  private _popupClose (): void {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    this.#windows.forEach((id: number) =>
-      chrome.windows.remove(id)
+  public get allProofRequests(): ProofingRequest[] {
+    return Object.values(this.#proofRequests).map(
+      ({ account, id, request, url }): ProofingRequest => ({
+        account,
+        id,
+        request,
+        url,
+      })
     );
+  }
+
+  public get allProvideUidRequests(): ProvideUidRequest[] {
+    return Object.values(this.#provideUidRequests).map(
+      ({ id, request, url }): ProvideUidRequest => ({ id, request, url })
+    );
+  }
+
+  public get allReadUidRequests(): ReadUidRequest[] {
+    return Object.values(this.#readUidRequests).map(
+      ({ id, request, url }): ReadUidRequest => ({ id, request, url })
+    );
+  }
+
+  private _popupClose(): void {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    this.#windows.forEach((id: number) => chrome.windows.remove(id));
     this.#windows = [];
   }
 
-  private _popupOpen (): void {
-    chrome.windows.create({ ...WINDOW_OPTS }, (window?: chrome.windows.Window): void => {
-      if (window?.id) {
-        this.#windows.push(window.id);
+  private _popupOpen(): void {
+    chrome.windows.create(
+      { ...WINDOW_OPTS },
+      (window?: chrome.windows.Window): void => {
+        if (window?.id) {
+          this.#windows.push(window.id);
+        }
       }
-    });
+    );
   }
 
-  private proofRequestComplete = (id: string, resolve: (result: ProofingResponse) => void, reject: (error: Error) => void): Resolver<ProofingResponse> => {
+  private proofRequestComplete = (
+    id: string,
+    resolve: (result: ProofingResponse) => void,
+    reject: (error: Error) => void
+  ): Resolver<ProofingResponse> => {
     const complete = (): void => {
       delete this.#proofRequests[id];
       this.updateIconProof(true);
@@ -138,11 +168,15 @@ export default class State extends DotState {
       resolve: (result: ProofingResponse): void => {
         complete();
         resolve(result);
-      }
+      },
     };
-  }
+  };
 
-  private readUidComplete = (id: string, resolve: (result: ReadUidResponse) => void, reject: (error: Error) => void): Resolver<ReadUidResponse> => {
+  private readUidComplete = (
+    id: string,
+    resolve: (result: ReadUidResponse) => void,
+    reject: (error: Error) => void
+  ): Resolver<ReadUidResponse> => {
     const complete = (): void => {
       delete this.#readUidRequests[id];
       this.updateIconReadUid(true);
@@ -156,11 +190,15 @@ export default class State extends DotState {
       resolve: (result: ReadUidResponse): void => {
         complete();
         resolve(result);
-      }
+      },
     };
-  }
+  };
 
-  private provideUidComplete = (id: string, resolve: (result: boolean) => void, reject: (error: Error) => void): Resolver<boolean> => {
+  private provideUidComplete = (
+    id: string,
+    resolve: (result: boolean) => void,
+    reject: (error: Error) => void
+  ): Resolver<boolean> => {
     const complete = (): void => {
       delete this.#provideUidRequests[id];
       this.updateIconProvideUid(true);
@@ -174,11 +212,11 @@ export default class State extends DotState {
       resolve: (result: boolean): void => {
         complete();
         resolve(result);
-      }
+      },
     };
-  }
+  };
 
-  private updateIconProof (shouldClose?: boolean): void {
+  private updateIconProof(shouldClose?: boolean): void {
     this.proofSubject.next(this.allProofRequests);
     const count = this.numProofRequests;
     const text = count ? `${count}` : '';
@@ -190,13 +228,10 @@ export default class State extends DotState {
     }
   }
 
-  private updateIconProvideUid (shouldClose?: boolean): void {
+  private updateIconProvideUid(shouldClose?: boolean): void {
     this.provideUidRequestsSubject.next(this.allProvideUidRequests);
     const count = this.numProvideUidRequests;
-    const text = (
-      count ? `${count}` : '')
-    ;
-
+    const text = count ? `${count}` : '';
     chrome.browserAction.setBadgeText({ text });
 
     if (shouldClose && text === '') {
@@ -204,13 +239,10 @@ export default class State extends DotState {
     }
   }
 
-  private updateIconReadUid (shouldClose?: boolean): void {
+  private updateIconReadUid(shouldClose?: boolean): void {
     this.readUidRequestsSubject.next(this.allReadUidRequests);
     const count = this.numReadUidRequests;
-    const text = (
-      count ? `${count}` : '')
-    ;
-
+    const text = count ? `${count}` : '';
     chrome.browserAction.setBadgeText({ text });
 
     if (shouldClose && text === '') {
@@ -218,19 +250,23 @@ export default class State extends DotState {
     }
   }
 
-  public getProofRequest (id: string): ProofRequestResolver {
+  public getProofRequest(id: string): ProofRequestResolver {
     return this.#proofRequests[id];
   }
 
-  public getProvideUidRequest (id: string): ProvideUidRequestResolver {
+  public getProvideUidRequest(id: string): ProvideUidRequestResolver {
     return this.#provideUidRequests[id];
   }
 
-  public getReadUidRequest (id: string): UidReadRequestResolver {
+  public getReadUidRequest(id: string): UidReadRequestResolver {
     return this.#readUidRequests[id];
   }
 
-  public generateProof (url: string, request: ProofRequestPayload, account: AccountJson): Promise<ProofingResponse> {
+  public generateProof(
+    url: string,
+    request: ProofRequestPayload,
+    account: AccountJson
+  ): Promise<ProofingResponse> {
     const id = getId();
 
     return new Promise((resolve, reject): void => {
@@ -239,7 +275,7 @@ export default class State extends DotState {
         account,
         id,
         request,
-        url
+        url,
       };
 
       this.updateIconProof();
@@ -247,7 +283,10 @@ export default class State extends DotState {
     });
   }
 
-  public readUid (url: string, request: RequestPolyReadUid): Promise<ReadUidResponse> {
+  public readUid(
+    url: string,
+    request: RequestPolyReadUid
+  ): Promise<ReadUidResponse> {
     const id = getId();
 
     return new Promise((resolve, reject): void => {
@@ -255,7 +294,7 @@ export default class State extends DotState {
         ...this.readUidComplete(id, resolve, reject),
         id,
         request,
-        url
+        url,
       };
 
       this.updateIconReadUid();
@@ -263,7 +302,10 @@ export default class State extends DotState {
     });
   }
 
-  public provideUid (url: string, request: RequestPolyProvideUid): Promise<boolean> {
+  public provideUid(
+    url: string,
+    request: RequestPolyProvideUid
+  ): Promise<boolean> {
     return new Promise((resolve, reject): void => {
       const id = getId();
 
@@ -271,7 +313,7 @@ export default class State extends DotState {
         ...this.provideUidComplete(id, resolve, reject),
         id,
         request,
-        url
+        url,
       };
 
       this.updateIconProvideUid();
@@ -279,20 +321,32 @@ export default class State extends DotState {
     });
   }
 
-  public getUid (did: string, network: NetworkName, password: string): Promise<string | null> {
+  public getUid(
+    did: string,
+    network: NetworkName,
+    password: string
+  ): Promise<string | null> {
     return this.#auxStore.getn(did, network, password);
   }
 
-  public setUid (did: string, network: NetworkName, uid: string, password: string): void {
+  public setUid(
+    did: string,
+    network: NetworkName,
+    uid: string,
+    password: string
+  ): void {
     this.#auxStore.setn(did, network, uid, password);
     this.updateUidSubject();
   }
 
-  public async changeUidPassword (oldPass: string, newPass: string): Promise<void> {
+  public async changeUidPassword(
+    oldPass: string,
+    newPass: string
+  ): Promise<void> {
     return this.#auxStore.changePassword(oldPass, newPass);
   }
 
-  public async allUidRecords (): Promise<UidRecord[]> {
+  public async allUidRecords(): Promise<UidRecord[]> {
     return this.#auxStore.allRecords();
   }
 }

@@ -2,47 +2,72 @@ import { AccountData } from '@polkadot/types/interfaces';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
+import { Subscription } from 'rxjs';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
 import { getDids, getNetwork } from './store/getters';
 import { apiError, setError } from './store/setters';
-import { defaultSs58Format, uidProvidersWhitelist, uidReadersWhitelist } from './constants';
-import { AccountBalances, ErrorCodes, KeyringAccountData, NetworkName } from './types';
+import {
+  defaultSs58Format,
+  uidProvidersWhitelist,
+  uidReadersWhitelist,
+} from './constants';
+import {
+  AccountBalances,
+  ErrorCodes,
+  KeyringAccountData,
+  NetworkName,
+} from './types';
 
 // Sort an array by prioritizing a certain element
-export function prioritize<P, T> (first: P, extractor: (a: T) => P) {
-  return function (a: T, b: T): number {
+export function prioritize<P, T>(first: P, extractor: (a: T) => P) {
+  return function (a: T): number {
     return first !== undefined ? (extractor(a) === first ? -1 : 1) : 0;
   };
 }
 
-export function observeAccounts (cb: (accounts: KeyringAccountData[]) => void) {
-  return accountsObservable.subject.subscribe((accountsSubject: SubjectInfo) => {
-    const accounts = Object.values(accountsSubject).map(({ json: { address, meta: { name } } }) => ({ address, name }));
+export function observeAccounts(
+  cb: (accounts: KeyringAccountData[]) => void
+): Subscription {
+  return accountsObservable.subject.subscribe(
+    (accountsSubject: SubjectInfo) => {
+      const accounts = Object.values(accountsSubject).map(
+        ({
+          json: {
+            address,
+            meta: { name },
+          },
+        }) => ({ address, name })
+      );
 
-    cb(accounts);
-  });
+      cb(accounts);
+    }
+  );
 }
 
 export const fatalErrorHandler = (error: Error): void =>
   error && setError({ code: ErrorCodes.FatalError, msg: error.message });
 
 export const apiErrorHandler = (error: Error): void => {
-  if (error && !!error.message && error.message.length && !error.message.includes('Normal Closure')) {
+  if (
+    error &&
+    !!error.message &&
+    error.message.length &&
+    !error.message.includes('Normal Closure')
+  ) {
     setError({ code: ErrorCodes.NonFatalError, msg: error.message });
     apiError();
   }
 };
 
-export function subscribeOnlineStatus (cb: (status: boolean) => void): void {
+export function subscribeOnlineStatus(cb: (status: boolean) => void): void {
   cb(navigator.onLine);
-  // eslint-disable-next-line node/no-callback-literal
   window.addEventListener('offline', () => cb(false));
-  // eslint-disable-next-line node/no-callback-literal
   window.addEventListener('online', () => cb(true));
 }
 
-export const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+export const sleep = (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 
 export const isWhitelisted = (whitelist: string[]) => {
   return (url: string): boolean => {
@@ -101,11 +126,18 @@ export const validateUid = (uid: string): boolean => {
   return uuidValidate(uid) && uuidVersion(uid) === 4;
 };
 
-export const recodeAddress = (address: string, ss58Format = defaultSs58Format): string => {
+export const recodeAddress = (
+  address: string,
+  ss58Format = defaultSs58Format
+): string => {
   return encodeAddress(decodeAddress(address), ss58Format);
 };
 
-export const accountBalances = ({ free, miscFrozen, reserved }: AccountData): AccountBalances => {
+export const accountBalances = ({
+  free,
+  miscFrozen,
+  reserved,
+}: AccountData): AccountBalances => {
   const total = free.add(reserved).toString();
   const transferrable = free.sub(miscFrozen).toString();
   const locked = reserved.add(miscFrozen).toString();

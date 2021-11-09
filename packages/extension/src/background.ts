@@ -4,7 +4,9 @@ import chrome from '@polkadot/extension-inject/chrome';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import subscribePolymesh, { accountsSynchronizer } from '@polymathnetwork/extension-core';
+import subscribePolymesh, {
+  accountsSynchronizer,
+} from '@polymathnetwork/extension-core';
 import handlers from '@polymathnetwork/extension-core/background/handlers';
 import { PORTS } from '@polymathnetwork/extension-core/constants';
 import SchemaService from '@polymathnetwork/extension-core/external/schema';

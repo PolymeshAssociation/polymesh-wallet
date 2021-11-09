@@ -72,10 +72,13 @@ export const TippyStyles = createGlobalStyle`
 
 export const tooltipStyles: Styles = () => ({
   userSelect: 'auto',
-  cursor: 'auto'
+  cursor: 'auto',
 });
 
-export const getVariant: Styles<TooltipProps> = ({ theme, variant = TooltipDefaultProps.variant }) =>
+export const getVariant: Styles<TooltipProps> = ({
+  theme,
+  variant = TooltipDefaultProps.variant,
+}) =>
   ({
     primary: {
       boxShadow: theme.shadows[1],
@@ -84,7 +87,7 @@ export const getVariant: Styles<TooltipProps> = ({ theme, variant = TooltipDefau
       backgroundColor: theme.colors.gray[1],
       color: 'white',
       padding: `${theme.space[1]} ${theme.space[3]}`,
-      fontSize: theme.fontSizes[0]
+      fontSize: theme.fontSizes[0],
     },
     secondary: {
       boxShadow: theme.shadows[3],
@@ -96,7 +99,7 @@ export const getVariant: Styles<TooltipProps> = ({ theme, variant = TooltipDefau
       wordWrap: 'break-word' as const,
       fontWeight: 'normal' as const,
       lineHeight: theme.lineHeights.normal,
-      fontSize: theme.fontSizes.baseText
+      fontSize: theme.fontSizes.baseText,
     },
-    raw: {}
+    raw: {},
   }[variant]);

@@ -1,16 +1,58 @@
 import DotExtension from '@polkadot/extension-base/background/handlers/Extension';
-import { MessageTypes, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
+import {
+  MessageTypes,
+  RequestRpcUnsubscribe,
+} from '@polkadot/extension-base/background/types';
 import { KeyringPair } from '@polkadot/keyring/types';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { callDetails } from '@polymathnetwork/extension-core/external';
-import { getNetwork, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
-import { renameIdentity, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymathnetwork/extension-core/store/setters';
-import { subscribeIdentifiedAccounts, subscribeNetworkState, subscribeSelectedAccount, subscribeSelectedNetwork, subscribeStatus } from '@polymathnetwork/extension-core/store/subscribers';
+import {
+  getNetwork,
+  getSelectedIdentifiedAccount,
+} from '@polymathnetwork/extension-core/store/getters';
+import {
+  renameIdentity,
+  setNetwork,
+  setSelectedAccount,
+  toggleIsDeveloper,
+} from '@polymathnetwork/extension-core/store/setters';
+import {
+  subscribeIdentifiedAccounts,
+  subscribeNetworkState,
+  subscribeSelectedAccount,
+  subscribeSelectedNetwork,
+  subscribeStatus,
+} from '@polymathnetwork/extension-core/store/subscribers';
 import { UidRecord } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 
-import { ALLOWED_PATH, AllowedPath, Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseType, ProofingRequest, ProvideUidRequest, ReadUidRequest, RequestPolyApproveProof, RequestPolyCallDetails, RequestPolyChangePass, RequestPolyGetUid, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolyProvideUidApprove, RequestPolyProvideUidReject, RequestPolyReadUidApprove, RequestPolyReadUidReject, RequestPolyRejectProof, RequestPolySelectedAccountSet, RequestPolyValidatePassword, ResponsePolyCallDetails } from '../types';
+import {
+  ALLOWED_PATH,
+  AllowedPath,
+  Errors,
+  PolyMessageTypes,
+  PolyRequestTypes,
+  PolyResponseType,
+  ProofingRequest,
+  ProvideUidRequest,
+  ReadUidRequest,
+  RequestPolyApproveProof,
+  RequestPolyCallDetails,
+  RequestPolyChangePass,
+  RequestPolyGetUid,
+  RequestPolyGlobalChangePass,
+  RequestPolyIdentityRename,
+  RequestPolyNetworkSet,
+  RequestPolyProvideUidApprove,
+  RequestPolyProvideUidReject,
+  RequestPolyReadUidApprove,
+  RequestPolyReadUidReject,
+  RequestPolyRejectProof,
+  RequestPolySelectedAccountSet,
+  RequestPolyValidatePassword,
+  ResponsePolyCallDetails,
+} from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 import { getScopeAttestationProof } from './utils';
@@ -21,13 +63,16 @@ import { getScopeAttestationProof } from './utils';
 export default class Extension extends DotExtension {
   readonly #state: State;
 
-  constructor (state: State) {
+  constructor(state: State) {
     super(state);
 
     this.#state = state;
   }
 
-  private polyAccountsSubscribe (id: string, port: chrome.runtime.Port): boolean {
+  private polyAccountsSubscribe(
+    id: string,
+    port: chrome.runtime.Port
+  ): boolean {
     const cb = createSubscription<'poly:pri(accounts.subscribe)'>(id, port);
 
     const reduxUnsub = subscribeIdentifiedAccounts(cb);
@@ -40,7 +85,7 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private polyNetworkSubscribe (id: string, port: chrome.runtime.Port): boolean {
+  private polyNetworkSubscribe(id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'poly:pri(network.subscribe)'>(id, port);
 
     const reduxUnsub = subscribeSelectedNetwork(cb);
@@ -53,7 +98,10 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private subscribeNetworkState (id: string, port: chrome.runtime.Port): boolean {
+  private subscribeNetworkState(
+    id: string,
+    port: chrome.runtime.Port
+  ): boolean {
     const cb = createSubscription<'poly:pri(networkState.subscribe)'>(id, port);
 
     const reduxUnsub = subscribeNetworkState(cb);
@@ -66,8 +114,14 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private polySelectedAccountSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'poly:pri(selectedAccount.subscribe)'>(id, port);
+  private polySelectedAccountSubscribe(
+    id: string,
+    port: chrome.runtime.Port
+  ): boolean {
+    const cb = createSubscription<'poly:pri(selectedAccount.subscribe)'>(
+      id,
+      port
+    );
 
     const reduxUnsub = subscribeSelectedAccount(cb);
 
@@ -79,7 +133,10 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private polyStoreStatusSubscribe (id: string, port: chrome.runtime.Port): boolean {
+  private polyStoreStatusSubscribe(
+    id: string,
+    port: chrome.runtime.Port
+  ): boolean {
     const cb = createSubscription<'poly:pri(status.subscribe)'>(id, port);
 
     const reduxUnsub = subscribeStatus(cb);
@@ -92,22 +149,16 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private proofRequestsSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'poly:pri(uid.proofRequests.subscribe)'>(id, port);
-    const subscription = this.#state.proofSubject.subscribe((requests: ProofingRequest[]): void => cb(requests));
-
-    port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      subscription.unsubscribe();
-    });
-
-    return true;
-  }
-
-  private uidProvideRequestsSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'poly:pri(uid.provideRequests.subscribe)'>(id, port);
-    const subscription = this.#state.provideUidRequestsSubject.subscribe((requests: ProvideUidRequest[]): void =>
-      cb(requests)
+  private proofRequestsSubscribe(
+    id: string,
+    port: chrome.runtime.Port
+  ): boolean {
+    const cb = createSubscription<'poly:pri(uid.proofRequests.subscribe)'>(
+      id,
+      port
+    );
+    const subscription = this.#state.proofSubject.subscribe(
+      (requests: ProofingRequest[]): void => cb(requests)
     );
 
     port.onDisconnect.addListener((): void => {
@@ -118,10 +169,16 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private uidReadRequestsSubscribe (id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'poly:pri(uid.readRequests.subscribe)'>(id, port);
-    const subscription = this.#state.readUidRequestsSubject.subscribe((requests: ReadUidRequest[]): void =>
-      cb(requests)
+  private uidProvideRequestsSubscribe(
+    id: string,
+    port: chrome.runtime.Port
+  ): boolean {
+    const cb = createSubscription<'poly:pri(uid.provideRequests.subscribe)'>(
+      id,
+      port
+    );
+    const subscription = this.#state.provideUidRequestsSubject.subscribe(
+      (requests: ProvideUidRequest[]): void => cb(requests)
     );
 
     port.onDisconnect.addListener((): void => {
@@ -132,9 +189,31 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private uidRecordsSubscribe (id: string, port: chrome.runtime.Port): boolean {
+  private uidReadRequestsSubscribe(
+    id: string,
+    port: chrome.runtime.Port
+  ): boolean {
+    const cb = createSubscription<'poly:pri(uid.readRequests.subscribe)'>(
+      id,
+      port
+    );
+    const subscription = this.#state.readUidRequestsSubject.subscribe(
+      (requests: ReadUidRequest[]): void => cb(requests)
+    );
+
+    port.onDisconnect.addListener((): void => {
+      unsubscribe(id);
+      subscription.unsubscribe();
+    });
+
+    return true;
+  }
+
+  private uidRecordsSubscribe(id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'poly:pri(uid.records.subscribe)'>(id, port);
-    const subscription = this.#state.uidsSubject.subscribe((records: UidRecord[]): void => cb(records));
+    const subscription = this.#state.uidsSubject.subscribe(
+      (records: UidRecord[]): void => cb(records)
+    );
 
     port.onDisconnect.addListener((): void => {
       unsubscribe(id);
@@ -144,37 +223,48 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private polyNetworkSet ({ network }: RequestPolyNetworkSet): boolean {
+  private polyNetworkSet({ network }: RequestPolyNetworkSet): boolean {
     setNetwork(network);
 
     return true;
   }
 
-  private polyIdentityRename ({ did, name, network }: RequestPolyIdentityRename): boolean {
+  private polyIdentityRename({
+    did,
+    name,
+    network,
+  }: RequestPolyIdentityRename): boolean {
     renameIdentity(network, did, name);
 
     return true;
   }
 
-  private polySelectedAccount ({ account }: RequestPolySelectedAccountSet): boolean {
+  private polySelectedAccount({
+    account,
+  }: RequestPolySelectedAccountSet): boolean {
     setSelectedAccount(account);
 
     return true;
   }
 
-  private polyCallDetailsGet ({ request }: RequestPolyCallDetails): Promise<ResponsePolyCallDetails> {
+  private polyCallDetailsGet({
+    request,
+  }: RequestPolyCallDetails): Promise<ResponsePolyCallDetails> {
     const network = getNetwork();
 
     return callDetails(request, network);
   }
 
-  private polyIsDevToggle (): boolean {
+  private polyIsDevToggle(): boolean {
     toggleIsDeveloper();
 
     return true;
   }
 
-  private async proofsApproveRequest ({ id, password }: RequestPolyApproveProof): Promise<boolean> {
+  private async proofsApproveRequest({
+    id,
+    password,
+  }: RequestPolyApproveProof): Promise<boolean> {
     const queued = this.#state.getProofRequest(id);
 
     assert(queued, 'Unable to find request');
@@ -220,13 +310,13 @@ export default class Extension extends DotExtension {
 
     resolve({
       id,
-      proof
+      proof,
     });
 
     return true;
   }
 
-  private proofsRejectRequest ({ id }: RequestPolyRejectProof): boolean {
+  private proofsRejectRequest({ id }: RequestPolyRejectProof): boolean {
     const queued = this.#state.getProofRequest(id);
 
     assert(queued, 'Unable to find request');
@@ -237,7 +327,10 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private uidProvideRequestsApprove ({ id, password }: RequestPolyProvideUidApprove): boolean {
+  private uidProvideRequestsApprove({
+    id,
+    password,
+  }: RequestPolyProvideUidApprove): boolean {
     const queued = this.#state.getProvideUidRequest(id);
 
     assert(queued, 'Unable to find request');
@@ -251,7 +344,9 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private uidProvideRequestsReject ({ id }: RequestPolyProvideUidReject): boolean {
+  private uidProvideRequestsReject({
+    id,
+  }: RequestPolyProvideUidReject): boolean {
     const queued = this.#state.getProvideUidRequest(id);
 
     assert(queued, 'Unable to find request');
@@ -262,7 +357,7 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private uidReadRequestsReject ({ id }: RequestPolyReadUidReject): boolean {
+  private uidReadRequestsReject({ id }: RequestPolyReadUidReject): boolean {
     const queued = this.#state.getReadUidRequest(id);
 
     console.log('allReadUidRequests', this.#state.allReadUidRequests);
@@ -275,7 +370,10 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private async uidReadRequestsApprove ({ id, password }: RequestPolyReadUidApprove): Promise<Promise<boolean>> {
+  private async uidReadRequestsApprove({
+    id,
+    password,
+  }: RequestPolyReadUidApprove): Promise<Promise<boolean>> {
     const queued = this.#state.getReadUidRequest(id);
 
     console.log('allReadUidRequests', this.#state.allReadUidRequests);
@@ -318,13 +416,16 @@ export default class Extension extends DotExtension {
 
     resolve({
       id,
-      uid
+      uid,
     });
 
     return true;
   }
 
-  private async uidChangePass ({ newPass, oldPass }: RequestPolyChangePass): Promise<boolean> {
+  private async uidChangePass({
+    newPass,
+    oldPass,
+  }: RequestPolyChangePass): Promise<boolean> {
     try {
       await this.#state.changeUidPassword(oldPass, newPass);
 
@@ -334,7 +435,11 @@ export default class Extension extends DotExtension {
     }
   }
 
-  private async getUid ({ did, network, password }: RequestPolyGetUid): Promise<string> {
+  private async getUid({
+    did,
+    network,
+    password,
+  }: RequestPolyGetUid): Promise<string> {
     let uid = null;
 
     try {
@@ -350,7 +455,11 @@ export default class Extension extends DotExtension {
     return uid;
   }
 
-  private _changePassword (pair: KeyringPair, oldPass: string, newPass: string): boolean {
+  private _changePassword(
+    pair: KeyringPair,
+    oldPass: string,
+    newPass: string
+  ): boolean {
     try {
       if (!pair.isLocked) {
         pair.lock();
@@ -366,8 +475,13 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private async globalChangePassword ({ newPass, oldPass }: RequestPolyGlobalChangePass): Promise<boolean> {
-    const pairs = keyring.getPairs().filter((account) => !account.meta.isHardware);
+  private async globalChangePassword({
+    newPass,
+    oldPass,
+  }: RequestPolyGlobalChangePass): Promise<boolean> {
+    const pairs = keyring
+      .getPairs()
+      .filter((account) => !account.meta.isHardware);
 
     let i = 0;
 
@@ -379,7 +493,11 @@ export default class Extension extends DotExtension {
       // for the remaining accounts.
 
       if (!ret) {
-        console.error('Changing password of account', recodeAddress(pairs[i].address, 12), 'has failed. Rolling back...');
+        console.error(
+          'Changing password of account',
+          recodeAddress(pairs[i].address, 12),
+          'has failed. Rolling back...'
+        );
         break;
       }
     }
@@ -398,7 +516,9 @@ export default class Extension extends DotExtension {
 
     // If uID password change failed, rollback.
     if (!ret) {
-      console.error('Changing password of uID storage has failed. Rolling back...');
+      console.error(
+        'Changing password of uID storage has failed. Rolling back...'
+      );
 
       for (let j = 0; j < pairs.length; j++) {
         this._changePassword(pairs[j], newPass, oldPass);
@@ -410,12 +530,13 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private async isPasswordSet (): Promise<boolean> {
+  private async isPasswordSet(): Promise<boolean> {
     // If there's at least one, non-ledger account, or
     // If there's at least one uid stored
     // Then, user has set password before
 
-    const nonLedgerPairs = keyring.getPairs().filter((pair) => !pair.meta.isHardware).length > 0;
+    const nonLedgerPairs =
+      keyring.getPairs().filter((pair) => !pair.meta.isHardware).length > 0;
 
     if (nonLedgerPairs) return true;
 
@@ -426,8 +547,12 @@ export default class Extension extends DotExtension {
     return false;
   }
 
-  private async validatePassword ({ password }: RequestPolyValidatePassword): Promise<boolean> {
-    const nonLedgerPair = keyring.getPairs().filter((pair) => !pair.meta.isHardware)[0];
+  private async validatePassword({
+    password,
+  }: RequestPolyValidatePassword): Promise<boolean> {
+    const nonLedgerPair = keyring
+      .getPairs()
+      .filter((pair) => !pair.meta.isHardware)[0];
 
     // Try to validate against an existing pair.
     if (nonLedgerPair) {
@@ -462,7 +587,7 @@ export default class Extension extends DotExtension {
     return false;
   }
 
-  private _windowOpen (path: AllowedPath): boolean {
+  private _windowOpen(path: AllowedPath): boolean {
     const url = `${chrome.extension.getURL('index.html')}#${path}`;
 
     if (!ALLOWED_PATH.includes(path)) {
@@ -476,7 +601,7 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  public async _handle<TMessageType extends PolyMessageTypes> (
+  public async _handle<TMessageType extends PolyMessageTypes>(
     id: string,
     type: TMessageType,
     request: PolyRequestTypes[TMessageType],
@@ -505,7 +630,9 @@ export default class Extension extends DotExtension {
         return this.polySelectedAccountSubscribe(id, port);
 
       case 'poly:pri(selectedAccount.set)':
-        return this.polySelectedAccount(request as RequestPolySelectedAccountSet);
+        return this.polySelectedAccount(
+          request as RequestPolySelectedAccountSet
+        );
 
       case 'poly:pri(callDetails.get)':
         return this.polyCallDetailsGet(request as RequestPolyCallDetails);
@@ -532,13 +659,17 @@ export default class Extension extends DotExtension {
         return this.uidProvideRequestsSubscribe(id, port);
 
       case 'poly:pri(uid.provideRequests.approve)':
-        return this.uidProvideRequestsApprove(request as RequestPolyProvideUidApprove);
+        return this.uidProvideRequestsApprove(
+          request as RequestPolyProvideUidApprove
+        );
 
       case 'poly:pri(uid.readRequests.subscribe)':
         return this.uidReadRequestsSubscribe(id, port);
 
       case 'poly:pri(uid.readRequests.approve)':
-        return this.uidReadRequestsApprove(request as RequestPolyReadUidApprove);
+        return this.uidReadRequestsApprove(
+          request as RequestPolyReadUidApprove
+        );
 
       case 'poly:pri(uid.readRequests.reject)':
         return this.uidReadRequestsReject(request as RequestPolyReadUidReject);
@@ -550,10 +681,14 @@ export default class Extension extends DotExtension {
         return this.uidRecordsSubscribe(id, port);
 
       case 'poly:pri(uid.provideRequests.reject)':
-        return this.uidProvideRequestsReject(request as RequestPolyProvideUidReject);
+        return this.uidProvideRequestsReject(
+          request as RequestPolyProvideUidReject
+        );
 
       case 'poly:pri(global.changePass)':
-        return this.globalChangePassword(request as RequestPolyGlobalChangePass);
+        return this.globalChangePassword(
+          request as RequestPolyGlobalChangePass
+        );
 
       case 'poly:pri(uid.getUid)':
         return this.getUid(request as RequestPolyGetUid);
@@ -562,7 +697,12 @@ export default class Extension extends DotExtension {
         return this._windowOpen(request as AllowedPath);
 
       default:
-        return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, port);
+        return super.handle(
+          id,
+          type as MessageTypes,
+          request as RequestRpcUnsubscribe,
+          port
+        );
     }
   }
 }

@@ -10,7 +10,7 @@ interface Props {
   className?: string;
 }
 
-function View ({ children, className }: Props): React.ReactElement<Props> {
+function View({ children, className }: Props): React.ReactElement<Props> {
   const [theme, setTheme] = useState(chooseTheme());
   const _theme = themes[theme];
 
@@ -47,7 +47,7 @@ const Main = styled.main`
   display: flex;
   flex-direction: column;
   height: 100%;
-  color: ${({ theme }: ThemeProps): string => theme.textColor};  
+  color: ${({ theme }: ThemeProps): string => theme.textColor};
 `;
 
 export default View;

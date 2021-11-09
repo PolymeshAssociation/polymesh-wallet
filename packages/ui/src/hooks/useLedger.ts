@@ -18,7 +18,7 @@ export enum Status {
   Error = 'Error',
   Pending = 'Pending',
   Busy = 'Busy',
-  Ok = 'Ok'
+  Ok = 'Ok',
 }
 interface State extends StateBase {
   address: string | null;
@@ -33,11 +33,11 @@ interface State extends StateBase {
   status: Status | null;
 }
 
-function getNetwork (genesis: string): Network | undefined {
+function getNetwork(genesis: string): Network | undefined {
   return ledgerChains.find(({ genesisHash }) => genesisHash[0] === genesis);
 }
 
-function retrieveLedger (genesis: string): Ledger {
+function retrieveLedger(genesis: string): Ledger {
   let ledger: Ledger | null = null;
 
   const { isLedgerCapable } = getState();
@@ -53,16 +53,21 @@ function retrieveLedger (genesis: string): Ledger {
   return ledger;
 }
 
-function getState (): StateBase {
+function getState(): StateBase {
   const isLedgerCapable = !!(window as unknown as { USB?: unknown }).USB;
 
   return {
     isLedgerCapable,
-    isLedgerEnabled: isLedgerCapable && uiSettings.ledgerConn !== 'none'
+    isLedgerEnabled: isLedgerCapable && uiSettings.ledgerConn !== 'none',
   };
 }
 
-export function useLedger (genesis?: string | null, accountIndex = 0, addressOffset = 0, noAddress = false): State {
+export function useLedger(
+  genesis?: string | null,
+  accountIndex = 0,
+  addressOffset = 0,
+  noAddress = false
+): State {
   const [isLoading, setIsLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [refreshLock, setRefreshLock] = useState(false);
@@ -77,11 +82,15 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
       return Status.Busy;
     } else if (error?.includes('AbortError: The transfer was cancelled')) {
       return Status.Error;
-    } else if (error?.includes('No device selected') ||
-    error?.includes("Failed to execute 'requestDevice' on 'USB': Must be handling a user gesture to show a permission request") ||
-    // Strangely enough this error is thrown even while importing an account.
-    // @FIXME distinguish it from actual tx rejection, once we're able to sign with ledger.
-    error?.includes('Ledger error: Transaction rejected')) {
+    } else if (
+      error?.includes('No device selected') ||
+      error?.includes(
+        "Failed to execute 'requestDevice' on 'USB': Must be handling a user gesture to show a permission request"
+      ) ||
+      // Strangely enough this error is thrown even while importing an account.
+      // @FIXME distinguish it from actual tx rejection, once we're able to sign with ledger.
+      error?.includes('Ledger error: Transaction rejected')
+    ) {
       return Status.Device;
     } else if (error) {
       return Status.Error;
@@ -99,7 +108,9 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
     setIsLocked(false);
     setRefreshLock(false);
 
-    if (noAddress) { return null; }
+    if (noAddress) {
+      return null;
+    }
 
     // this trick allows to refresh the ledger on demand
     // when it is shown as locked and the user has actually
@@ -134,14 +145,18 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
 
     // @FIXME sometimes ledger.getAddress neither resolves nor rejects.
     // Eg when another action is pending on ledger.
-    ledger.getAddress(false, accountIndex, addressOffset)
+    ledger
+      .getAddress(false, accountIndex, addressOffset)
       .then((res) => {
         setIsLoading(false);
         setAddress(res.address);
-      }).catch((e: Error) => {
+      })
+      .catch((e: Error) => {
         setIsLoading(false);
 
-        const { network } = getNetwork(genesis) || { network: 'unknown network' };
+        const { network } = getNetwork(genesis) || {
+          network: 'unknown network',
+        };
 
         const warningMessage = e.message.includes('Code: 26628')
           ? 'Is your ledger locked?'
@@ -165,5 +180,15 @@ export function useLedger (genesis?: string | null, accountIndex = 0, addressOff
     setWarning(null);
   }, []);
 
-  return ({ ...getState(), address, error, isLoading, isLocked, ledger, refresh, warning, status });
+  return {
+    ...getState(),
+    address,
+    error,
+    isLoading,
+    isLocked,
+    ledger,
+    refresh,
+    warning,
+    status,
+  };
 }

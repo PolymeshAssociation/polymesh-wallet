@@ -1,0 +1,4 @@
+packages/extension/build
+packages/*/LICENSE
+docs/*.pdf
+docs/*.png

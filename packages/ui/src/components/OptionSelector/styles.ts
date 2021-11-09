@@ -16,7 +16,8 @@ export const Options = styled(Box)<{ cssPosition: CssPosition }>`
   ${({ cssPosition }) => cssPosition}
 
   // Only show options once it is positioned in place
-  visibility: ${({ cssPosition }) => (Object.values(cssPosition).length ? 'visible' : 'hidden')};
+  visibility: ${({ cssPosition }) =>
+    Object.values(cssPosition).length ? 'visible' : 'hidden'};
 
   ul {
     margin: 0;
@@ -28,7 +29,6 @@ export const Options = styled(Box)<{ cssPosition: CssPosition }>`
 export const StyledOptionListItem = styled.li<{ disabled?: boolean }>`
   cursor: pointer;
   white-space: nowrap;
-
 
   ${({ disabled }) =>
     disabled &&

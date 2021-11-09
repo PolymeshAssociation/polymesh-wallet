@@ -14,11 +14,13 @@
     "default_title": "Polymesh",
     "default_popup": "index.html"
   },
-  "content_scripts": [{
-    "js": ["content.js"],
-    "matches": ["http://*/*", "https://*/*"],
-    "run_at": "document_start"
-  }],
+  "content_scripts": [
+    {
+      "js": ["content.js"],
+      "matches": ["http://*/*", "https://*/*"],
+      "run_at": "document_start"
+    }
+  ],
   "icons": {
     "16": "images/icon-16.png",
     "24": "images/icon-24.png",

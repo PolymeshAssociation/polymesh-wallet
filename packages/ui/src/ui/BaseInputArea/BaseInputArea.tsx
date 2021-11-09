@@ -4,14 +4,16 @@ import { BaseInputAreaProps } from './BaseInputAreaProps';
 import { Input, Wrapper } from './styles';
 
 export const BaseInputArea: FC<BaseInputAreaProps> = (props) => {
-  const { className,
+  const {
+    className,
     disabled,
     inputRef: inputRefFromProps,
     invalid,
     onBlur,
     onFocus,
     readOnly,
-    ...restProps } = props;
+    ...restProps
+  } = props;
 
   const inputRefInternal = useRef<HTMLTextAreaElement>(null);
   const inputRef = inputRefFromProps || inputRefInternal;
@@ -36,7 +38,7 @@ export const BaseInputArea: FC<BaseInputAreaProps> = (props) => {
   return (
     <Wrapper {...{ focused, disabled, invalid, readOnly, className }}>
       <Input
-        data-testid='base-input'
+        data-testid="base-input"
         disabled={disabled}
         onBlur={handleBlur}
         onFocus={handleFocus}

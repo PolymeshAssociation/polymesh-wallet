@@ -14,10 +14,26 @@ export interface Props {
   color: string;
   hoverColor?: string;
   textSize: number;
-  textVariant: 'b1m' | 'b1' | 'b2m' | 'b2' | 'b3m' | 'b3' | 'sh1' | 'c1' | 'c2' | 'c2m';
+  textVariant:
+    | 'b1m'
+    | 'b1'
+    | 'b2m'
+    | 'b2'
+    | 'b3m'
+    | 'b3'
+    | 'sh1'
+    | 'c1'
+    | 'c2'
+    | 'c2m';
 }
 
-export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, textVariant }) => {
+export const LabelWithCopy: FC<Props> = ({
+  color,
+  hoverColor,
+  text,
+  textSize,
+  textVariant,
+}) => {
   const [hover, setHover] = useState(false);
   const [copied, setCopied] = useState(false);
   const [timerRef, setTimerRef] = useState<ReturnType<typeof setTimeout>>();
@@ -45,39 +61,35 @@ export const LabelWithCopy: FC<Props> = ({ color, hoverColor, text, textSize, te
     );
   };
 
-  const foreColor = hover ? (hoverColor && hoverColor !== '' ? hoverColor : color) : color;
+  const foreColor = hover
+    ? hoverColor && hoverColor !== ''
+      ? hoverColor
+      : color
+    : color;
 
   return (
     <sc.StatusText copied={copied}>
-      <CopyToClipboard
-        onCopy={handleCopy}
-        text={text}
-      >
+      <CopyToClipboard onCopy={handleCopy} text={text}>
         <Flex
-          alignItems='center'
+          alignItems="center"
           onMouseOut={onMouseOut}
           onMouseOver={onMouseOver}
           style={{ cursor: 'pointer' }}
         >
-          <Flex>
-            <Text
-              color={foreColor}
-              variant={textVariant}
-            >
-              <TextEllipsis size={textSize}>{text}</TextEllipsis>
-            </Text>
+          <Text color={foreColor} variant={textVariant}>
+            <TextEllipsis size={textSize}>{text}</TextEllipsis>
+          </Text>
 
-            <Tooltip content='copy to clipboard'>
-              <Icon
-                Asset={SvgContentCopy}
-                color={foreColor}
-                height={14}
-                ml='xs'
-                style={{ cursor: 'pointer' }}
-                width={14}
-              />
-            </Tooltip>
-          </Flex>
+          <Tooltip content="copy to clipboard">
+            <Icon
+              Asset={SvgContentCopy}
+              color={foreColor}
+              height={14}
+              ml="xs"
+              style={{ cursor: 'pointer' }}
+              width={16}
+            />
+          </Tooltip>
         </Flex>
       </CopyToClipboard>
     </sc.StatusText>

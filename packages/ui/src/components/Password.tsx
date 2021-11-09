@@ -10,7 +10,12 @@ export interface Props {
   placeholder?: string;
 }
 
-export const Password: FC<Props> = ({ confirmLabel, label, placeholder, withConfirm }) => {
+export const Password: FC<Props> = ({
+  confirmLabel,
+  label,
+  placeholder,
+  withConfirm,
+}) => {
   const { errors, getValues, register } = useFormContext();
 
   const validatePassword = (value: string) => {
@@ -21,65 +26,59 @@ export const Password: FC<Props> = ({ confirmLabel, label, placeholder, withConf
 
   return (
     <>
-      <Box mt='m'>
+      <Box mt="m">
         <Box>
-          <Text
-            color='gray.1'
-            variant='b2m'
-          >
+          <Text color="gray.1" variant="b2m">
             {label}
           </Text>
         </Box>
         <Box>
           <TextInput
             inputRef={register({ required: true, minLength: 8 })}
-            name='password'
+            name="password"
             placeholder={placeholder || 'Enter 8 characters or more'}
-            type='password'
+            type="password"
           />
-          {errors.password &&
+          {errors.password && (
             <Box>
-              <Text
-                color='alert'
-                variant='b3'
-              >
+              <Text color="alert" variant="b3">
                 {errors.password?.type === 'minLength' && 'Password too short'}
                 {errors.password?.type === 'manual' && 'Invalid password'}
               </Text>
             </Box>
-          }
+          )}
         </Box>
       </Box>
-      {withConfirm &&
-        <Box mt='m'>
+      {withConfirm && (
+        <Box mt="m">
           <Box>
-            <Text
-              color='gray.1'
-              variant='b2m'
-            >
-              {confirmLabel && confirmLabel !== '' ? confirmLabel : 'Confirm password'}
+            <Text color="gray.1" variant="b2m">
+              {confirmLabel && confirmLabel !== ''
+                ? confirmLabel
+                : 'Confirm password'}
             </Text>
           </Box>
           <Box>
             <TextInput
-              inputRef={register({ required: true, minLength: 8, validate: validatePassword })}
-              name='confirmPassword'
-              placeholder='Confirm your password'
-              type='password'
+              inputRef={register({
+                required: true,
+                minLength: 8,
+                validate: validatePassword,
+              })}
+              name="confirmPassword"
+              placeholder="Confirm your password"
+              type="password"
             />
-            {errors.confirmPassword &&
+            {errors.confirmPassword && (
               <Box>
-                <Text
-                  color='alert'
-                  variant='b3'
-                >
+                <Text color="alert" variant="b3">
                   Passwords do not match
                 </Text>
               </Box>
-            }
+            )}
           </Box>
         </Box>
-      }
+      )}
     </>
   );
 };

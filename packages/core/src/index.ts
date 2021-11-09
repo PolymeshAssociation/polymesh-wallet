@@ -6,13 +6,20 @@ import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
 import apiPromise from './external/apiPromise';
-import { DidRecord, IdentityClaim, LinkedKeyInfo } from './external/apiPromise/types';
+import {
+  DidRecord,
+  IdentityClaim,
+  LinkedKeyInfo,
+} from './external/apiPromise/types';
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as networkActions } from './store/features/network';
 import { actions as statusActions } from './store/features/status';
 import { getAccountsList, getNetwork } from './store/getters';
-import { subscribeDidsList, subscribeSelectedNetwork } from './store/subscribers';
+import {
+  subscribeDidsList,
+  subscribeSelectedNetwork,
+} from './store/subscribers';
 import { populatedDelay } from './constants';
 import store from './store';
 import { AccountData, KeyringAccountData, UnsubCallback } from './types';
@@ -23,9 +30,9 @@ const unsubCallbacks: Record<string, UnsubCallback> = {};
 /**
  * Synchronize accounts between keyring and redux store.
  */
-export function accountsSynchronizer (): () => void {
+export function accountsSynchronizer(): () => void {
   const sub = observeAccounts((accountsData: KeyringAccountData[]) => {
-    function accountName (_address: string): string | undefined {
+    function accountName(_address: string): string | undefined {
       return accountsData.find(({ address }) => address === _address)?.name;
     }
 
@@ -45,7 +52,7 @@ export function accountsSynchronizer (): () => void {
     union(newAccounts, preExistingAccounts).forEach((account) => {
       const accountData: AccountData = {
         address: account,
-        name: accountName(account)
+        name: accountName(account),
       };
 
       store.dispatch(accountActions.setAccountGlobally(accountData));
@@ -76,7 +83,7 @@ const _didRecord = (did: string, didRecords: DidRecord) => {
   const identityData = {
     did,
     priKey: encodeAddress(didRecords.primary_key),
-    secKeys
+    secKeys,
   };
 
   return identityData;
@@ -87,18 +94,21 @@ const claims2Record = (didClaims: IdentityClaim[]) => {
   const didClaimsSorted = didClaims.sort(claimSorter);
 
   // Save CDD data
-  const cdd = didClaimsSorted && didClaimsSorted.length > 0
-    ? {
-      issuer: didClaimsSorted[0].claim_issuer.toString(),
-      expiry: !didClaimsSorted[0].expiry.isEmpty ? Number(didClaimsSorted[0].expiry.toString()) : undefined
-    }
-    : undefined;
+  const cdd =
+    didClaimsSorted && didClaimsSorted.length > 0
+      ? {
+          issuer: didClaimsSorted[0].claim_issuer.toString(),
+          expiry: !didClaimsSorted[0].expiry.isEmpty
+            ? Number(didClaimsSorted[0].expiry.toString())
+            : undefined,
+        }
+      : undefined;
 
   return cdd;
 };
 
-function subscribePolymesh (): () => void {
-  function unsubAll (): void {
+function subscribePolymesh(): () => void {
+  function unsubAll(): void {
     for (const key in unsubCallbacks) {
       if (unsubCallbacks[key]) {
         try {
@@ -136,68 +146,97 @@ function subscribePolymesh (): () => void {
           let prevDids: string[] = [];
           let activeIssuers: string[] = [];
 
-          api.query.cddServiceProviders.activeMembers().then(
-            (members) => {
-              activeIssuers = (members as unknown as string[]).map((member) => member.toString());
+          api.query.cddServiceProviders
+            .activeMembers()
+            .then((members) => {
+              activeIssuers = (members as unknown as string[]).map((member) =>
+                member.toString()
+              );
 
               /**
                * Accounts
                */
               console.log('Poly: Subscribing to accounts');
-              const accountsSub = observeAccounts((accountsData: KeyringAccountData[]) => {
-                if (network !== getNetwork()) { return; }
-
-                function accountName (_address: string): string | undefined {
-                  return accountsData.find(({ address }) => address === _address)?.name;
-                }
-
-                const accounts = accountsData.map(({ address }) => address);
-
-                // A) Clean subscriptions of previous accounts list
-                prevAccounts.forEach((account) => {
-                  if (unsubCallbacks[account]) {
-                    unsubCallbacks[account]();
-                    delete unsubCallbacks[account];
+              const accountsSub = observeAccounts(
+                (accountsData: KeyringAccountData[]) => {
+                  if (network !== getNetwork()) {
+                    return;
                   }
-                });
 
-                // B) Create new subscriptions to:
-                accounts.forEach((account) => {
-                  api.queryMulti([
-                    // 1) Account balance
-                    [api.query.system.account, account],
-                    // 2) Identities linked to account.
-                    [api.query.identity.keyToIdentityIds, account]
-                  ], ([accData, linkedKeyInfo]: [AccountInfo, Option<LinkedKeyInfo>]) => {
-                    // Store account metadata
-                    const { locked, total, transferrable } = accountBalances(accData.data);
+                  function accountName(_address: string): string | undefined {
+                    return accountsData.find(
+                      ({ address }) => address === _address
+                    )?.name;
+                  }
 
-                    store.dispatch(accountActions.setAccount({ data: {
-                      address: account,
-                      name: accountName(account),
-                      balance: { total, transferrable, locked }
-                    },
-                    network }));
+                  const accounts = accountsData.map(({ address }) => address);
 
-                    if (linkedKeyInfo.isEmpty) { return; }
+                  // A) Clean subscriptions of previous accounts list
+                  prevAccounts.forEach((account) => {
+                    if (unsubCallbacks[account]) {
+                      unsubCallbacks[account]();
+                      delete unsubCallbacks[account];
+                    }
+                  });
 
-                    const did = linkedKeyInfo.toString();
+                  // B) Create new subscriptions to:
+                  accounts.forEach((account) => {
+                    api
+                      .queryMulti(
+                        [
+                          // 1) Account balance
+                          [api.query.system.account, account],
+                          // 2) Identities linked to account.
+                          [api.query.identity.keyToIdentityIds, account],
+                        ],
+                        ([accData, linkedKeyInfo]: [
+                          AccountInfo,
+                          Option<LinkedKeyInfo>
+                        ]) => {
+                          // Store account metadata
+                          const { locked, total, transferrable } =
+                            accountBalances(accData.data);
 
-                    api.query.identity.didRecords<DidRecord>(did).then((didRecords) => {
-                      const data = _didRecord(did, didRecords);
-                      const params = { did, network, data };
+                          store.dispatch(
+                            accountActions.setAccount({
+                              data: {
+                                address: account,
+                                name: accountName(account),
+                                balance: { total, transferrable, locked },
+                              },
+                              network,
+                            })
+                          );
 
-                      // store.dispatch(identityActions.setIdentitySecKeys(params));
-                      store.dispatch(identityActions.setIdentity(params));
-                    }, apiErrorHandler)
+                          if (linkedKeyInfo.isEmpty) {
+                            return;
+                          }
+
+                          const did = linkedKeyInfo.toString();
+
+                          api.query.identity
+                            .didRecords<DidRecord>(did)
+                            .then((didRecords) => {
+                              const data = _didRecord(did, didRecords);
+                              const params = { did, network, data };
+
+                              // store.dispatch(identityActions.setIdentitySecKeys(params));
+                              store.dispatch(
+                                identityActions.setIdentity(params)
+                              );
+                            }, apiErrorHandler)
+                            .catch(apiErrorHandler);
+                        }
+                      )
+                      .then((unsub) => {
+                        unsubCallbacks[account] = unsub;
+                      }, apiErrorHandler)
                       .catch(apiErrorHandler);
-                  }).then((unsub) => {
-                    unsubCallbacks[account] = unsub;
-                  }, apiErrorHandler).catch(apiErrorHandler);
-                });
+                  });
 
-                prevAccounts = accounts;
-              });
+                  prevAccounts = accounts;
+                }
+              );
 
               unsubCallbacks.accounts && unsubCallbacks.accounts();
               unsubCallbacks.accounts = () => accountsSub.unsubscribe();
@@ -209,12 +248,16 @@ function subscribePolymesh (): () => void {
               console.log('Poly: Subscribing to dids');
 
               unsubCallbacks.dids = subscribeDidsList((dids: string[]) => {
-                if (network !== getNetwork()) { return; }
+                if (network !== getNetwork()) {
+                  return;
+                }
 
                 const removedDids = difference(prevDids, dids);
 
                 removedDids.forEach((did) => {
-                  store.dispatch(identityActions.removeIdentity({ network, did }));
+                  store.dispatch(
+                    identityActions.removeIdentity({ network, did })
+                  );
 
                   if (unsubCallbacks[did]) {
                     unsubCallbacks[did]();
@@ -228,14 +271,27 @@ function subscribePolymesh (): () => void {
                 });
 
                 const promises = dids.map((did) =>
-                  api.query.identity.claims.entries({ target: did, claim_type: 'CustomerDueDiligence' }));
+                  api.query.identity.claims.entries({
+                    target: did,
+                    claim_type: 'CustomerDueDiligence',
+                  })
+                );
 
                 Promise.all(promises)
                   .then((results) =>
-                    (results as [unknown, IdentityClaim][][]).map((result) => result.length
-                      ? result.map(([, claim]) => claim)
-                        .filter((claim) => activeIssuers.indexOf(claim.claim_issuer.toString()) !== -1)
-                      : undefined))
+                    (results as [unknown, IdentityClaim][][]).map((result) =>
+                      result.length
+                        ? result
+                            .map(([, claim]) => claim)
+                            .filter(
+                              (claim) =>
+                                activeIssuers.indexOf(
+                                  claim.claim_issuer.toString()
+                                ) !== -1
+                            )
+                        : undefined
+                    )
+                  )
                   .then((results) => {
                     dids.forEach((did, index) => {
                       const result = results[index];
@@ -243,7 +299,9 @@ function subscribePolymesh (): () => void {
                       if (result) {
                         const cdd = claims2Record(result);
 
-                        store.dispatch(identityActions.setIdentityCdd({ network, did, cdd }));
+                        store.dispatch(
+                          identityActions.setIdentityCdd({ network, did, cdd })
+                        );
                       }
                     });
                   }, apiErrorHandler)
@@ -251,11 +309,10 @@ function subscribePolymesh (): () => void {
 
                 prevDids = dids;
               });
-            },
-            apiErrorHandler
-          ).catch(apiErrorHandler);
-        }, apiErrorHandler
-        ).catch(apiErrorHandler);
+            }, apiErrorHandler)
+            .catch(apiErrorHandler);
+        }, apiErrorHandler)
+        .catch(apiErrorHandler);
     }
   });
 

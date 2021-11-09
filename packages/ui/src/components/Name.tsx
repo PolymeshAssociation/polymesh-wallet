@@ -12,7 +12,13 @@ interface Props {
   value?: string | null;
 }
 
-export default function Name ({ address, className, isFocused, label, onBlur, onChange, value }: Props): React.ReactElement<Props> {
+export default function Name({
+  address,
+  className,
+  onBlur,
+  onChange,
+  value,
+}: Props): React.ReactElement<Props> {
   const { accounts } = useContext(AccountContext);
 
   const account = accounts.find((account) => account.address === address);
@@ -29,7 +35,7 @@ export default function Name ({ address, className, isFocused, label, onBlur, on
 
         onChange(value);
       }}
-      type='text'
+      type="text"
     />
   );
 }

@@ -1,4 +1,4 @@
-import 'tippy.js/animations/shift-away-subtle.css'; // eslint-disable-line import/no-extraneous-dependencies
+import 'tippy.js/animations/shift-away-subtle.css';
 
 import Tippy from '@tippyjs/react';
 import React, { FC } from 'react';
@@ -18,4 +18,7 @@ export const TooltipComponent: FC<TooltipProps> = ({ children, ...props }) => (
 
 TooltipComponent.defaultProps = TooltipDefaultProps;
 
-export const Tooltip = styled(TooltipComponent)<TooltipProps>(tooltipStyles as any, getVariant);
+export const Tooltip = styled(TooltipComponent)<TooltipProps>(
+  tooltipStyles as any,
+  getVariant
+);

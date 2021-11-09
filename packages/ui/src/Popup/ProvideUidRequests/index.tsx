@@ -4,20 +4,22 @@ import styled from 'styled-components';
 import { ProvideUidReqContext } from '../../components';
 import Request from './Request';
 
-export default function ProvideUidRequests (): React.ReactElement {
+export default function ProvideUidRequests(): React.ReactElement {
   const requests = useContext(ProvideUidReqContext);
 
   return (
     <Container>
-      {requests.map(({ id, request, url }, index): React.ReactNode => (
-        <Request
-          isFirst={index === 0}
-          key={id}
-          reqId={id}
-          request={request}
-          url={url}
-        />
-      ))}
+      {requests.map(
+        ({ id, request, url }, index): React.ReactNode => (
+          <Request
+            isFirst={index === 0}
+            key={id}
+            reqId={id}
+            request={request}
+            url={url}
+          />
+        )
+      )}
     </Container>
   );
 }

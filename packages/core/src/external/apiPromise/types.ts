@@ -3,7 +3,15 @@
 
 import { ITuple } from '@polkadot/types/types';
 import { Enum, Option, Struct, U8aFixed, Vec } from '@polkadot/types/codec';
-import { Bytes, Text, bool, u16, u32, u64, u8 } from '@polkadot/types/primitive';
+import {
+  Bytes,
+  Text,
+  bool,
+  u16,
+  u32,
+  u64,
+  u8,
+} from '@polkadot/types/primitive';
 import { Signature } from '@polkadot/types/interfaces/extrinsics';
 import {
   AccountId,

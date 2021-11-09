@@ -6,7 +6,7 @@ import { Flex } from '../Flex';
 export const Wrapper = styled(Flex)<ThemeProps>`
   width: 24px;
   height: 24px;
-  padding: 0 30px 0  0;
+  padding: 0 30px 0 0;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
   color: ${({ theme }) => theme.colors.polyIndigo};
