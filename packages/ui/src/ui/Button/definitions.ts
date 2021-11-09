@@ -31,7 +31,8 @@ export type ButtonProps = HtmlButtonProps & {
 } & WidthProps;
 
 export const ButtonDefaultProps = {
-  onClick: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onClick: (): void => {},
   variant: 'primary' as variants,
   fluid: false,
   busy: false,

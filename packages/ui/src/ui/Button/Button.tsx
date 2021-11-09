@@ -10,19 +10,7 @@ const ButtonComponent: ForwardRefRenderFunction<
   HTMLButtonElement,
   React.PropsWithChildren<ButtonProps>
 > = (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  {
-    RouterLink,
-    busy,
-    children,
-    disabled,
-    fluid,
-    href,
-    iconPosition,
-    onClick,
-    variant,
-    ...otherProps
-  },
+  { RouterLink, busy, children, disabled, href, onClick, ...otherProps },
   ref
 ) => {
   if (RouterLink) {

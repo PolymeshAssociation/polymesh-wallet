@@ -1,16 +1,4 @@
 {
-  "editor.tabSize": 2,
-  "files.eol": "\n",
-  "npm.packageManager": "yarn",
-  "eslint.enable": true,
-  "eslint.validate": [
-    "javascript",
-    "typescript",
-    "typescriptreact"
-  ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true
-  },
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.formatOnSave": true
 }

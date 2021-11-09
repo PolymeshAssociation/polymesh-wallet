@@ -59,9 +59,7 @@ export const apiErrorHandler = (error: Error): void => {
 
 export function subscribeOnlineStatus(cb: (status: boolean) => void): void {
   cb(navigator.onLine);
-  // eslint-disable-next-line node/no-callback-literal
   window.addEventListener('offline', () => cb(false));
-  // eslint-disable-next-line node/no-callback-literal
   window.addEventListener('online', () => cb(true));
 }
 

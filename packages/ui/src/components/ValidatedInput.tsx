@@ -37,14 +37,12 @@ function ValidatedInput<T extends Record<string, unknown>>({
       setWasMounted(true);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     (async (): Promise<void> => {
       const result = await validator(value);
 
       setValidationResult(result);
       onValidatedChange(Result.isOk(result) ? value : null);
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, validator, onValidatedChange]);
 
   return (
