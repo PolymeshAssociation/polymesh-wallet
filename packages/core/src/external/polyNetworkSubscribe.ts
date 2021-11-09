@@ -10,7 +10,7 @@ export default function (cb: (networkMeta: NetworkMeta) => void): Unsubscribe {
     const networkMeta = {
       name: networkName,
       label: networkLabels[networkName],
-      wssUrl: networkURLs[networkName]
+      wssUrl: networkURLs[networkName],
     };
 
     cb(networkMeta);

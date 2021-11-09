@@ -21,45 +21,41 @@ export const Restore: FC = () => {
   const shouldRestoreWithJson = method === 'json';
 
   const restoreWithSeed = () => history.push('seed');
-  const restoreWithJson = () => isPopup ? windowOpen('/account/restore/json') : history.push('json');
+  const restoreWithJson = () =>
+    isPopup ? windowOpen('/account/restore/json') : history.push('json');
 
   return (
     <>
-      <Header
-        headerText='Restore account'
-        iconAsset={SvgAccountReactivate}
-      >
-        <Box pt='m'>
-          <Text
-            color='brandLightest'
-            variant='b2'
-          >
-            Restore your Polymesh Account and/or key by entering your recovery phrase or uploading the JSON file and JSON password.
+      <Header headerText="Restore account" iconAsset={SvgAccountReactivate}>
+        <Box pt="m">
+          <Text color="brandLightest" variant="b2">
+            Restore your Polymesh Account and/or key by entering your recovery
+            phrase or uploading the JSON file and JSON password.
           </Text>
         </Box>
-        <Flex mt='m'>
+        <Flex mt="m">
           <Flex
             flex={1}
-            justifyContent='center'
+            justifyContent="center"
             onClick={restoreWithSeed}
             style={{ cursor: 'pointer' }}
           >
             <Text
               color={shouldRestoreWithSeed ? 'brandLighter' : 'white'}
-              variant='b2m'
+              variant="b2m"
             >
               With recovery phrase
             </Text>
           </Flex>
           <Flex
             flex={1}
-            justifyContent='center'
+            justifyContent="center"
             onClick={restoreWithJson}
             style={{ cursor: 'pointer' }}
           >
             <Text
               color={shouldRestoreWithJson ? 'brandLighter' : 'white'}
-              variant='b2m'
+              variant="b2m"
             >
               With JSON file
             </Text>

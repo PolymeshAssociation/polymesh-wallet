@@ -1,18 +1,41 @@
 import { networkLinks } from '@polymathnetwork/extension-core/constants';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { SvgCheck, SvgDotsVertical, SvgPencilOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import {
+  SvgCheck,
+  SvgDotsVertical,
+  SvgPencilOutline,
+} from '@polymathnetwork/extension-ui/assets/images/icons';
 import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { AccountContext, AccountType, ActionContext, OptionSelector, PolymeshContext } from '../../components';
+import {
+  AccountContext,
+  AccountType,
+  ActionContext,
+  OptionSelector,
+  PolymeshContext,
+} from '../../components';
 import { editAccount, setPolySelectedAccount } from '../../messaging';
-import { Box, ButtonSmall, Flex, Icon, LabelWithCopy, Text, TextOverflowEllipsis } from '../../ui';
+import {
+  Box,
+  ButtonSmall,
+  Flex,
+  Icon,
+  LabelWithCopy,
+  Text,
+  TextOverflowEllipsis,
+} from '../../ui';
 import { formatAmount } from '../../util/formatters';
 import { NameEdit } from './NameEdit';
-import { AccountInfoGrid, AccountViewGrid, GridItem, UnassignedAccountHoverGrid } from './styles';
+import {
+  AccountInfoGrid,
+  AccountViewGrid,
+  GridItem,
+  UnassignedAccountHoverGrid,
+} from './styles';
 
 export interface Props {
   account: IdentifiedAccount;
@@ -31,17 +54,22 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   const [newName, setNewName] = useState(name);
   const [hover, setHover] = useState(false);
   const [nameHover, setNameHover] = useState(false);
-  const { networkState: { selected: network, ss58Format } } = useContext(PolymeshContext);
+  const {
+    networkState: { selected: network, ss58Format },
+  } = useContext(PolymeshContext);
 
   const getMenuItems = (address: string): Option[] => {
     const account = accounts.find((_account) => _account.address === address);
-    const isLedgerAccount = account?.isHardware && account.hardwareType === 'ledger';
+    const isLedgerAccount =
+      account?.isHardware && account.hardwareType === 'ledger';
     const menuItems = [{ label: 'Forget account', value: 'forget' }];
 
     return [
       {
-        menu: isLedgerAccount ? menuItems : [{ label: 'Export account', value: 'export' }, ...menuItems]
-      }
+        menu: isLedgerAccount
+          ? menuItems
+          : [{ label: 'Export account', value: 'export' }, ...menuItems],
+      },
     ];
   };
 
@@ -103,7 +131,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     return (
       <AccountInfoGrid>
         {isEditing && (
-          <GridItem area='name-edit'>
+          <GridItem area="name-edit">
             <NameEdit
               newName={newName}
               onCancel={cancelEditing}
@@ -113,20 +141,17 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           </GridItem>
         )}
         {!isEditing && (
-          <GridItem area='name'>
+          <GridItem area="name">
             <Flex
-              flexDirection='row'
-              minWidth='100px'
+              flexDirection="row"
+              minWidth="100px"
               onMouseEnter={nameMouseEnter}
               onMouseLeave={nameMouseLeave}
             >
-              <TextOverflowEllipsis
-                color='gray.1'
-                variant='b2m'
-              >
+              <TextOverflowEllipsis color="gray.1" variant="b2m">
                 {name}
               </TextOverflowEllipsis>
-              <Flex ml='xs'>
+              <Flex ml="xs">
                 <Icon
                   Asset={SvgPencilOutline}
                   color={nameHover ? 'gray.2' : 'gray.5'}
@@ -139,40 +164,33 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             </Flex>
           </GridItem>
         )}
-        <GridItem area='type'>
-          <Flex
-            height='100%'
-            justifyContent='flex-end'
-          >
+        <GridItem area="type">
+          <Flex height="100%" justifyContent="flex-end">
             {did && <AccountType keyType={keyType} />}
           </Flex>
         </GridItem>
-        <GridItem area='address'>
-          <Flex
-            alignItems='flex-end'
-            height='100%'
-          >
+        <GridItem area="address">
+          <Flex alignItems="flex-end" height="100%">
             <LabelWithCopy
-              color='gray.3'
+              color="gray.3"
               text={recodeAddress(address, ss58Format)}
               textSize={16}
-              textVariant='b3'
+              textVariant="b3"
             />
           </Flex>
         </GridItem>
-        <GridItem area='balance'>
-          <Flex
-            height='100%'
-            justifyContent='flex-end'
-          >
+        <GridItem area="balance">
+          <Flex height="100%" justifyContent="flex-end">
             <Text
-              color='gray.1'
+              color="gray.1"
               style={{ whiteSpace: 'nowrap' }}
-              title={balance?.locked && `${formatAmount(balance.locked)} POLYX is unavailable to use`}
-              variant='b3'
+              title={
+                balance?.locked &&
+                `${formatAmount(balance.locked)} POLYX is unavailable to use`
+              }
+              variant="b3"
             >
-              {formatAmount(balance?.transferrable || 0)}{' '}
-              POLYX
+              {formatAmount(balance?.transferrable || 0)} POLYX
             </Text>
           </Flex>
         </GridItem>
@@ -193,7 +211,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     return (
       <UnassignedAccountHoverGrid>
         {isEditing && (
-          <GridItem area='name-edit'>
+          <GridItem area="name-edit">
             <NameEdit
               newName={newName}
               onCancel={cancelEditing}
@@ -203,19 +221,16 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
           </GridItem>
         )}
         {!isEditing && (
-          <GridItem area='name'>
+          <GridItem area="name">
             <Flex
-              flexDirection='row'
+              flexDirection="row"
               onMouseEnter={nameMouseEnter}
               onMouseLeave={nameMouseLeave}
             >
-              <TextOverflowEllipsis
-                color='gray.1'
-                variant='b2m'
-              >
+              <TextOverflowEllipsis color="gray.1" variant="b2m">
                 {name}
               </TextOverflowEllipsis>
-              <Flex ml='xs'>
+              <Flex ml="xs">
                 <Icon
                   Asset={SvgPencilOutline}
                   color={nameHover ? 'gray.2' : 'gray.5'}
@@ -228,23 +243,17 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             </Flex>
           </GridItem>
         )}
-        <GridItem area='assign'>
-          <Flex
-            alignItems='center'
-            height='100%'
-            justifyContent='flex-end'
-          >
-            <ButtonSmall onClick={assign}>
-              Assign
-            </ButtonSmall>
+        <GridItem area="assign">
+          <Flex alignItems="center" height="100%" justifyContent="flex-end">
+            <ButtonSmall onClick={assign}>Assign</ButtonSmall>
           </Flex>
         </GridItem>
-        <GridItem area='address'>
+        <GridItem area="address">
           <LabelWithCopy
-            color='gray.3'
+            color="gray.3"
             text={recodeAddress(address, ss58Format)}
             textSize={16}
-            textVariant='b3'
+            textVariant="b3"
           />
         </GridItem>
       </UnassignedAccountHoverGrid>
@@ -254,55 +263,54 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
   return (
     <>
       <Box
-        bg={hover ? 'gray.5' : 'gray.0'}
-        mt='s'
+        bg={hover ? 'gray8' : isSelected ? '#F8F9FC' : 'white'}
+        mt="s"
         onClick={selectAccount}
         onMouseEnter={mouseEnter}
         onMouseLeave={mouseLeave}
-        px='s'
+        px="s"
         style={{ cursor: 'pointer' }}
       >
         <AccountViewGrid>
-          <GridItem area='avatar'>
+          <GridItem area="avatar">
             <InitialsAvatar name={name} />
           </GridItem>
-          <GridItem area='account-info'>
+          <GridItem area="account-info">
             <Box>
               {(!hover || did) && renderAccountInfo()}
               {hover && !did && renderHoverAccountInfo()}
             </Box>
           </GridItem>
-          <GridItem area='options'>
+          <GridItem area="options">
             <Flex
-              alignItems='flex-end'
-              flexDirection='column'
-              height='46px'
-              justifyContent='space-around'
+              alignItems="flex-end"
+              flexDirection="column"
+              height="46px"
+              justifyContent="space-around"
             >
               <Box width={24}>
                 {isSelected && (
                   <Icon
                     Asset={SvgCheck}
-                    color='polyPink'
+                    color="polyPink"
                     height={24}
                     width={24}
                   />
                 )}
               </Box>
-              <Box
-                mb='xs'
-                mt='auto'
-              >
+              <Box mb="xs" mt="auto">
                 <OptionSelector
                   onSelect={(value) => handleMenuClick(address, value)}
                   options={getMenuItems(address)}
-                  selector={<Icon
-                    Asset={SvgDotsVertical}
-                    color='gray.1'
-                    height={16}
-                    style={{ cursor: 'pointer' }}
-                    width={16}
-                  />}
+                  selector={
+                    <Icon
+                      Asset={SvgDotsVertical}
+                      color="gray.1"
+                      height={16}
+                      style={{ cursor: 'pointer' }}
+                      width={16}
+                    />
+                  }
                 />
               </Box>
             </Flex>

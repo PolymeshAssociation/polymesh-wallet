@@ -10,26 +10,30 @@ interface Props {
   value: string;
 }
 
-export function InputFilter ({ className, onChange, placeholder, value }: Props): JSX.Element {
-  const onChangeFilter = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.value);
-  }, [onChange]);
+export function InputFilter({
+  className,
+  onChange,
+  placeholder,
+  value,
+}: Props): JSX.Element {
+  const onChangeFilter = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.value);
+    },
+    [onChange]
+  );
 
   return (
     <div className={className}>
       <TextInput
-        autoCapitalize='off'
-        autoCorrect='off'
+        autoCapitalize="off"
+        autoCorrect="off"
         autoFocus
-        icon={<Icon
-          Asset={SvgSearch}
-          height={17.5}
-          width={17.5}
-        />}
+        icon={<Icon Asset={SvgSearch} height={17.5} width={17.5} />}
         onChange={onChangeFilter}
         placeholder={placeholder}
         spellCheck={false}
-        type='text'
+        type="text"
         value={value}
       />
     </div>

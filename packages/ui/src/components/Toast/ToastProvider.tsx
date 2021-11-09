@@ -9,11 +9,13 @@ interface ToastProviderProps {
 
 const TOAST_TIMEOUT = 1500;
 
-const ToastProvider = ({ children }: ToastProviderProps): React.ReactElement<ToastProviderProps> => {
+const ToastProvider = ({
+  children,
+}: ToastProviderProps): React.ReactElement<ToastProviderProps> => {
   const [content, setContent] = useState('');
   const [visible, setVisible] = useState(false);
 
-  const show = useCallback((message: string): () => void => {
+  const show = useCallback((message: string): (() => void) => {
     const timerId = setTimeout(() => setVisible(false), TOAST_TIMEOUT);
 
     setContent(message);
@@ -25,10 +27,7 @@ const ToastProvider = ({ children }: ToastProviderProps): React.ReactElement<Toa
   return (
     <ToastContext.Provider value={{ show }}>
       {children}
-      <Toast
-        content={content}
-        visible={visible}
-      />
+      <Toast content={content} visible={visible} />
     </ToastContext.Provider>
   );
 };

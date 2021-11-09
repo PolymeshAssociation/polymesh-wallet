@@ -6,18 +6,24 @@ import isEqual from 'lodash-es/isEqual';
 import { AccountData, NetworkName } from '../../types';
 import { initialFeatureState } from '../utils';
 
-type State = {selected?: string} & Record<NetworkName, Record<string, AccountData>>;
-const initialState: State = initialFeatureState() as Record<NetworkName, Record<string, AccountData>>;
+type State = { selected?: string } & Record<
+  NetworkName,
+  Record<string, AccountData>
+>;
+const initialState: State = initialFeatureState() as Record<
+  NetworkName,
+  Record<string, AccountData>
+>;
 
-type SetAccountPayload = { network: NetworkName, data: AccountData };
-type RemoveAccountPayload = { network: NetworkName, address: string };
+type SetAccountPayload = { network: NetworkName; data: AccountData };
+type RemoveAccountPayload = { network: NetworkName; address: string };
 type SelectAccountPayload = string;
 
 const accountsSlice = createSlice({
   name: 'accounts',
   initialState,
   reducers: {
-    setAccount (state, action: PayloadAction<SetAccountPayload>) {
+    setAccount(state, action: PayloadAction<SetAccountPayload>) {
       const { data, network } = action.payload;
       const prev = state[network][data.address];
       const next = merge(prev, data);
@@ -26,7 +32,7 @@ const accountsSlice = createSlice({
         state[network][data.address] = next;
       }
     },
-    removeAccount (state, action: PayloadAction<RemoveAccountPayload>) {
+    removeAccount(state, action: PayloadAction<RemoveAccountPayload>) {
       const { address, network } = action.payload;
 
       delete state[network][address];
@@ -35,10 +41,10 @@ const accountsSlice = createSlice({
         state.selected = undefined;
       }
     },
-    selectAccount (state, action: PayloadAction<SelectAccountPayload>) {
+    selectAccount(state, action: PayloadAction<SelectAccountPayload>) {
       state.selected = action.payload;
     },
-    setAccountGlobally (state, action: PayloadAction<AccountData>) {
+    setAccountGlobally(state, action: PayloadAction<AccountData>) {
       const data = action.payload;
 
       Object.keys(NetworkName).forEach((network: string) => {
@@ -50,7 +56,7 @@ const accountsSlice = createSlice({
         }
       });
     },
-    removeAccountGlobally (state, action: PayloadAction<string>) {
+    removeAccountGlobally(state, action: PayloadAction<string>) {
       const address = action.payload;
 
       Object.keys(NetworkName).forEach((network: string) => {
@@ -64,8 +70,8 @@ const accountsSlice = createSlice({
       if (state.selected === address) {
         state.selected = undefined;
       }
-    }
-  }
+    },
+  },
 });
 
 export const actions = accountsSlice.actions;

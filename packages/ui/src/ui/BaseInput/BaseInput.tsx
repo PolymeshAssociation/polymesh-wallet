@@ -4,7 +4,8 @@ import { BaseInputProps } from './BaseInputProps';
 import { Icon, Input, Unit, Wrapper } from './styles';
 
 export const BaseInput: FC<BaseInputProps> = (props) => {
-  const { blurOnEnterKeyPress,
+  const {
+    blurOnEnterKeyPress,
     className,
     disabled,
     icon,
@@ -14,7 +15,8 @@ export const BaseInput: FC<BaseInputProps> = (props) => {
     onFocus,
     readOnly,
     unit,
-    ...restProps } = props;
+    ...restProps
+  } = props;
 
   const inputRefInternal = useRef<HTMLInputElement>(null);
   const inputRef = inputRefFromProps || inputRefInternal;
@@ -38,21 +40,21 @@ export const BaseInput: FC<BaseInputProps> = (props) => {
 
   const handleKeyPress = blurOnEnterKeyPress
     ? (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
+        if (e.key === 'Enter') {
+          e.preventDefault();
 
-        if (typeof inputRef === 'object' && inputRef && inputRef.current) {
-          inputRef.current.blur();
+          if (typeof inputRef === 'object' && inputRef && inputRef.current) {
+            inputRef.current.blur();
+          }
         }
       }
-    }
     : undefined;
 
   return (
     <Wrapper {...{ focused, disabled, invalid, readOnly, className }}>
       {icon && <Icon>{icon}</Icon>}
       <Input
-        data-testid='base-input'
+        data-testid="base-input"
         disabled={disabled}
         onBlur={handleBlur}
         onFocus={handleFocus}

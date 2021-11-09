@@ -11,9 +11,16 @@ interface Props extends ThemeProps {
   className?: string;
 }
 
-function Switch ({ checked, checkedLabel, className, onChange, uncheckedLabel }: Props): React.ReactElement<Props> {
+function Switch({
+  checked,
+  checkedLabel,
+  className,
+  onChange,
+  uncheckedLabel,
+}: Props): React.ReactElement<Props> {
   const _onChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.checked),
+    (event: React.ChangeEvent<HTMLInputElement>) =>
+      onChange(event.target.checked),
     [onChange]
   );
 
@@ -22,18 +29,19 @@ function Switch ({ checked, checkedLabel, className, onChange, uncheckedLabel }:
       <label>
         <input
           checked={checked}
-          className='checkbox'
+          className="checkbox"
           onChange={_onChange}
-          type='checkbox'
+          type="checkbox"
         />
-        <span className='slider' />
+        <span className="slider" />
       </label>
       <span>{checked ? checkedLabel : uncheckedLabel}</span>
     </div>
   );
 }
 
-export default styled(Switch)(({ checked, theme }: Props) => `
+export default styled(Switch)(
+  ({ checked, theme }: Props) => `
   display: flex;
   align-items: center;
 
@@ -79,4 +87,5 @@ export default styled(Switch)(({ checked, theme }: Props) => `
       box-shadow: 0px 1px 3px rgba(21, 41, 53, 0.12), 0px 1px 2px rgba(21, 41, 53, 0.24);
     }
   }
-`);
+`
+);

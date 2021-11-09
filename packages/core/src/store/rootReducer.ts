@@ -9,7 +9,7 @@ const appReducer = combineReducers({
   accounts,
   identities,
   network,
-  status
+  status,
 });
 
 export type RootState = ReturnType<typeof appReducer>;

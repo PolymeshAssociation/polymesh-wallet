@@ -17,7 +17,7 @@ const schemas: Record<NetworkName, Schema> = {
   testnet,
   pmf,
   pme,
-  local
+  local,
 };
 
 export default schemas;

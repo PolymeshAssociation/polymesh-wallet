@@ -11,10 +11,5 @@ export interface Props extends BaseInputProps {
 export const TextInput: FC<Props> = (props) => {
   const { name, ...otherProps } = props;
 
-  return <BaseInput
-    id={name}
-    name={name}
-    type='text'
-    {...otherProps}
-  />;
+  return <BaseInput id={name} name={name} type="text" {...otherProps} />;
 };

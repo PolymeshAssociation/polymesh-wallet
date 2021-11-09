@@ -1,4 +1,7 @@
-import { SvgChevronDown, SvgChevronUp } from '@polymathnetwork/extension-ui/assets/images/icons';
+import {
+  SvgChevronDown,
+  SvgChevronUp,
+} from '@polymathnetwork/extension-ui/assets/images/icons';
 import React, { FC, useState } from 'react';
 
 import { Box } from '../Box';
@@ -18,17 +21,14 @@ export const ExpandableDetails: FC<Props> = ({ children, title }) => {
   return (
     <Box style={{ position: 'relative' }}>
       <Box style={{ position: 'absolute', overflowY: 'scroll' }}>
-        <Flex
-          justifyContent='space-between'
-          mx='s'
-        >
+        <Flex justifyContent="space-between" mx="s">
           <Box>
-            <Text variant='code'>{title}</Text>
+            <Text variant="code">{title}</Text>
           </Box>
           <Box>
             <Icon
               Asset={expanded ? SvgChevronUp : SvgChevronDown}
-              color='gray.3'
+              color="gray.3"
               height={24}
               onClick={toggle}
               style={{ cursor: 'pointer' }}
@@ -36,10 +36,7 @@ export const ExpandableDetails: FC<Props> = ({ children, title }) => {
             />
           </Box>
         </Flex>
-        {
-          expanded &&
-          <Box>{children}</Box>
-        }
+        {expanded && <Box>{children}</Box>}
       </Box>
     </Box>
   );

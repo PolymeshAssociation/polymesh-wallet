@@ -10,7 +10,7 @@ let currentNetwork: NetworkName;
 
 const metadata: Record<string, string> = {};
 
-async function apiPromise (network: NetworkName): Promise<ApiPromise> {
+async function apiPromise(network: NetworkName): Promise<ApiPromise> {
   const shouldReinitialize = currentNetwork !== network;
 
   if (!shouldReinitialize && api && provider?.isConnected) return api;
@@ -23,7 +23,9 @@ async function apiPromise (network: NetworkName): Promise<ApiPromise> {
 
   await provider.connect();
 
-  let unsubscribe: () => void = () => { /**/ };
+  let unsubscribe: () => void = () => {
+    /**/
+  };
 
   // Unfortunately, provider.connect() does NOT throw an error when connection fails,
   // so we have to handle that in the following awkward way.
@@ -49,7 +51,7 @@ async function apiPromise (network: NetworkName): Promise<ApiPromise> {
     provider,
     rpc,
     types,
-    metadata
+    metadata,
   });
 
   await api.isReadyOrError;
@@ -62,12 +64,14 @@ async function apiPromise (network: NetworkName): Promise<ApiPromise> {
   return api;
 }
 
-export async function disconnect (): Promise<void> {
+export async function disconnect(): Promise<void> {
   if (api) {
     try {
       await api.disconnect();
     } catch (error) {
-      console.error(`Failed to close websocket connection: ${JSON.stringify(error)}`);
+      console.error(
+        `Failed to close websocket connection: ${JSON.stringify(error)}`
+      );
     }
 
     api = null;

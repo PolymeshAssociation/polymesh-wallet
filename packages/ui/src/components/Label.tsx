@@ -9,7 +9,11 @@ interface Props {
   label: string;
 }
 
-function Label ({ children, className, label }: Props): React.ReactElement<Props> {
+function Label({
+  children,
+  className,
+  label,
+}: Props): React.ReactElement<Props> {
   return (
     <div className={className}>
       <label>{label}</label>
@@ -18,7 +22,8 @@ function Label ({ children, className, label }: Props): React.ReactElement<Props
   );
 }
 
-export default styled(Label)(({ theme }: ThemeProps) => `
+export default styled(Label)(
+  ({ theme }: ThemeProps) => `
   color: ${theme.textColor};
 
   label {
@@ -29,4 +34,5 @@ export default styled(Label)(({ theme }: ThemeProps) => `
     margin-bottom: 12px;
     text-transform: uppercase;
   }
-`);
+`
+);

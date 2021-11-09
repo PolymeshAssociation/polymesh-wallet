@@ -17,15 +17,21 @@ interface ArrowProps extends ThemeProps {
   isActive: boolean;
 }
 
-function TransactionIndex ({ className, index, onNextClick, onPreviousClick, totalItems }: Props): React.ReactElement<Props> {
+function TransactionIndex({
+  className,
+  index,
+  onNextClick,
+  onPreviousClick,
+  totalItems,
+}: Props): React.ReactElement<Props> {
   const previousClickActive = index !== 0;
   const nextClickActive = index < totalItems - 1;
 
   return (
     <div className={className}>
       <div>
-        <span className='currentStep'>{index + 1}</span>
-        <span className='totalSteps'>/{totalItems}</span>
+        <span className="currentStep">{index + 1}</span>
+        <span className="totalSteps">/{totalItems}</span>
       </div>
       <div>
         <ArrowLeft
@@ -41,10 +47,13 @@ function TransactionIndex ({ className, index, onNextClick, onPreviousClick, tot
   );
 }
 
-const ArrowLeft = styled(Svg).attrs(() => ({ src: ArrowLeftImage }))<ArrowProps>`
+const ArrowLeft = styled(Svg).attrs(() => ({
+  src: ArrowLeftImage,
+}))<ArrowProps>`
   display: inline-block;
-  background: ${({ isActive, theme }: ArrowProps): string => isActive ? theme.primaryColor : theme.iconNeutralColor};
-  cursor: ${({ isActive }): string => isActive ? 'pointer' : 'default'};
+  background: ${({ isActive, theme }: ArrowProps): string =>
+    isActive ? theme.primaryColor : theme.iconNeutralColor};
+  cursor: ${({ isActive }): string => (isActive ? 'pointer' : 'default')};
   width: 12px;
   height: 12px;
 `;
@@ -58,7 +67,8 @@ const ArrowRight = styled(ArrowLeft)`
 
 ArrowRight.displayName = 'ArrowRight';
 
-export default styled(TransactionIndex)(({ theme }: ThemeProps) => `
+export default styled(TransactionIndex)(
+  ({ theme }: ThemeProps) => `
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -79,4 +89,5 @@ export default styled(TransactionIndex)(({ theme }: ThemeProps) => `
     color: ${theme.textColor};
     font-weight: 600;
   }
-`);
+`
+);

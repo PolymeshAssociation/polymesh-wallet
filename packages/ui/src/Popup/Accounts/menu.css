@@ -19,7 +19,7 @@
 }
 
 .AriaMenuButton-trigger::after {
-  content: "";
+  content: '';
   display: inline-block;
   margin-left: 3px;
   position: relative;
@@ -119,7 +119,7 @@
 }
 
 .FancyMB-trigger::after {
-  content: "";
+  content: '';
   display: inline-block;
   margin-left: 20px;
   position: relative;
@@ -145,7 +145,7 @@
 
 .FancyMB-menu::before {
   border: inset 6px;
-  content: "";
+  content: '';
   display: block;
   height: 0;
   width: 0;
@@ -159,7 +159,7 @@
 
 .FancyMB-menu::after {
   border: inset 7px;
-  content: "";
+  content: '';
   display: block;
   height: 0;
   width: 0;
@@ -193,7 +193,7 @@
 }
 
 .FancyMB-menuItem::after {
-  content: "";
+  content: '';
   display: table;
   clear: both;
 }

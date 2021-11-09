@@ -13,7 +13,7 @@ export const StatusBadge = styled(Box)<StatusBadgeProps>`
   border-radius: 100px;
   margin: 0;
   padding: 0 8px;
-  height: ${({ large }) => large ? '24px' : '16px'};
+  height: ${({ large }) => (large ? '24px' : '16px')};
 
   ${({ theme }) => theme.texts.b3m}
 
@@ -21,26 +21,25 @@ export const StatusBadge = styled(Box)<StatusBadgeProps>`
     variant === 'green'
       ? theme.colors.green[2]
       : variant === 'red'
-        ? theme.colors.polyPinkLight
-        : variant === 'yellow'
-          ? theme.colors.yellow[1]
-          : variant === 'gray'
-            ? theme.colors.gray[4]
-            : variant === 'blue'
-              ? theme.colors.polyNavyBlueLight2
-              : theme.colors.gray[4]};
+      ? theme.colors.polyPinkLight
+      : variant === 'yellow'
+      ? theme.colors.yellow[1]
+      : variant === 'gray'
+      ? theme.colors.gray[4]
+      : variant === 'blue'
+      ? theme.colors.polyNavyBlueLight2
+      : theme.colors.gray[4]};
 
   color: ${({ theme, variant }) =>
     variant === 'green'
       ? theme.colors.green[0]
       : variant === 'red'
-        ? theme.colors.polyPink
-        : variant === 'yellow'
-          ? theme.colors.yellow[2]
-          : variant === 'gray'
-            ? theme.colors.gray[2]
-            : variant === 'blue'
-              ? theme.colors.polyNavyBlue
-              : theme.colors.gray[2]};
-
+      ? theme.colors.polyPink
+      : variant === 'yellow'
+      ? theme.colors.yellow[2]
+      : variant === 'gray'
+      ? theme.colors.gray[2]
+      : variant === 'blue'
+      ? theme.colors.polyNavyBlue
+      : theme.colors.gray[2]};
 `;
