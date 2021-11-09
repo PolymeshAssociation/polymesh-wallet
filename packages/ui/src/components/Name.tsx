@@ -15,8 +15,6 @@ interface Props {
 export default function Name({
   address,
   className,
-  isFocused,
-  label,
   onBlur,
   onChange,
   value,

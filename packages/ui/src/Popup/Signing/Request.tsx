@@ -44,7 +44,7 @@ function isRawPayload(
 }
 
 export default function Request({
-  account: { accountIndex, address, addressOffset, isExternal, isHardware },
+  account: { accountIndex, addressOffset, isExternal, isHardware },
   buttonText,
   isFirst,
   request,

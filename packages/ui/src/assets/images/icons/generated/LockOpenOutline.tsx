@@ -1,5 +1,5 @@
 import * as React from 'react';
-export const SvgLockOpenOutline = (props: React.SVGProps<SVGSVGElement>) => (
+export const SvgLockOpenOutline = (): JSX.Element => (
   <svg
     width="21"
     height="21"

@@ -2,6 +2,7 @@ import { AccountData } from '@polkadot/types/interfaces';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
+import { Subscription } from 'rxjs';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
 import { getDids, getNetwork } from './store/getters';
@@ -20,12 +21,14 @@ import {
 
 // Sort an array by prioritizing a certain element
 export function prioritize<P, T>(first: P, extractor: (a: T) => P) {
-  return function (a: T, b: T): number {
+  return function (a: T): number {
     return first !== undefined ? (extractor(a) === first ? -1 : 1) : 0;
   };
 }
 
-export function observeAccounts(cb: (accounts: KeyringAccountData[]) => void) {
+export function observeAccounts(
+  cb: (accounts: KeyringAccountData[]) => void
+): Subscription {
   return accountsObservable.subject.subscribe(
     (accountsSubject: SubjectInfo) => {
       const accounts = Object.values(accountsSubject).map(

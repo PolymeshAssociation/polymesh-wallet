@@ -33,7 +33,6 @@ export interface Props {
 export const AccountsContainer: FC<Props> = ({
   accounts,
   did,
-  headerColor,
   selectedAccount,
 }) => {
   const currentAccount = accounts.find((acc) => acc.did === did);
