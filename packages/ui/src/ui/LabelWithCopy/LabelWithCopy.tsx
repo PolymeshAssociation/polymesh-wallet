@@ -84,6 +84,7 @@ export const LabelWithCopy: FC<Props> = ({
             <Icon
               Asset={SvgContentCopy}
               color={foreColor}
+              opacity="0.6"
               height={14}
               ml="xs"
               style={{ cursor: 'pointer' }}
