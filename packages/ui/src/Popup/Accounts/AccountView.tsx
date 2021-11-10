@@ -82,7 +82,9 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     }
   };
 
-  const cancelEditing = (e: React.MouseEvent<HTMLElement>) => {
+  const cancelEditing = (
+    e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>
+  ) => {
     setNewName(name);
     setIsEditing(false);
     if (e.stopPropagation) e.stopPropagation();

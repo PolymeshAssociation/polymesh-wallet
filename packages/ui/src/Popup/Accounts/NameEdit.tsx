@@ -11,7 +11,7 @@ type NameEditProps = {
   onSave: (
     e: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>
   ) => Promise<void>;
-  onCancel: (e: MouseEvent<HTMLElement>) => void;
+  onCancel: (e: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>) => void;
 };
 
 export function NameEdit({
@@ -22,6 +22,7 @@ export function NameEdit({
 }: NameEditProps): JSX.Element {
   const handleKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     if (e.key === 'Enter') onSave(e);
+    else if (e.key === 'Escape') onCancel(e);
   };
 
   return (

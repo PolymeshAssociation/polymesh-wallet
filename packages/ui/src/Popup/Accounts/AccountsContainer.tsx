@@ -49,6 +49,7 @@ export const AccountsContainer: FC<Props> = ({
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') saveAlias();
+    else if (e.key === 'Escape') stopEditAlias();
   };
 
   const editAlias = () => {
