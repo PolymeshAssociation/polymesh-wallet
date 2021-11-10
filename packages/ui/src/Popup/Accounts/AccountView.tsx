@@ -97,7 +97,9 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     setNewName(e.target.value);
   };
 
-  const save = async (e: React.MouseEvent<HTMLElement>) => {
+  const save = async (
+    e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>
+  ) => {
     if (e.stopPropagation) e.stopPropagation();
     await editAccount(address || '', newName || '');
     onAction();
