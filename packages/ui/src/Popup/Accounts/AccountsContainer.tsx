@@ -83,6 +83,7 @@ export const AccountsContainer: FC<Props> = ({
           {isEditing && (
             <Flex py="xxs">
               <TextInput
+                autoFocus
                 defaultValue={currentAccount?.didAlias}
                 onChange={handleAliasChange}
                 onKeyDown={handleKeyDown}
