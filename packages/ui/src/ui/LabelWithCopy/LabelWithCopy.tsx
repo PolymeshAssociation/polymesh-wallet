@@ -39,7 +39,7 @@ export const LabelWithCopy: FC<Props> = ({
   text,
   textSize,
   textVariant,
-  placement = "bottom",
+  placement,
 }) => {
   const [hover, setHover] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -104,7 +104,7 @@ export const LabelWithCopy: FC<Props> = ({
             width={16}
           />
         </Flex>
-      </CopyToClipboard>{' '}
+      </CopyToClipboard>
     </Tooltip>
   );
 };
