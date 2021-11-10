@@ -13,7 +13,7 @@
     "@polkadot/react-qr": "^0.81.1",
     "@polkadot/util": "^6.6.1",
     "@polkadot/util-crypto": "^6.6.1",
-    "@tippyjs/react": "^4.2.0",
+    "@tippyjs/react": "^4.2.6",
     "@types/styled-system": "^5.1.10",
     "polished": "^3.6.5",
     "react": "^17.0.1",
