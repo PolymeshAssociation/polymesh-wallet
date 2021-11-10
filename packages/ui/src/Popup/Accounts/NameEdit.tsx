@@ -27,6 +27,7 @@ export function NameEdit({
   return (
     <Flex alignItems="center" flexDirection="row">
       <TextInput
+        autoFocus
         onChange={onChange}
         onKeyDown={handleKeyDown}
         style={{ height: '20px' }}
