@@ -128,6 +128,7 @@ export const AccountsContainer: FC<Props> = ({
                     text={did}
                     textSize={currentAccount?.didAlias ? 20 : 30}
                     textVariant="b3m"
+                    placement="top"
                   />
                 </Box>
               </Flex>

@@ -7,7 +7,7 @@ import { Icon } from '../Icon';
 import { Text } from '../Text';
 import { TextEllipsis } from '../TextEllipsis';
 import { Tooltip } from '../Tooltip';
-import * as sc from './styles';
+import 'tippy.js/animations/scale.css';
 
 export interface Props {
   text: string;
@@ -25,6 +25,12 @@ export interface Props {
     | 'c1'
     | 'c2'
     | 'c2m';
+  placement?: 'top' | 'bottom' | 'left' | 'right';
+}
+
+enum CopyMessage {
+  deafult = 'Copy to Clipboard',
+  copied = 'Copied!',
 }
 
 export const LabelWithCopy: FC<Props> = ({
@@ -33,6 +39,7 @@ export const LabelWithCopy: FC<Props> = ({
   text,
   textSize,
   textVariant,
+  placement = "bottom",
 }) => {
   const [hover, setHover] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -43,7 +50,7 @@ export const LabelWithCopy: FC<Props> = ({
   };
 
   const onMouseOut = () => {
-    setHover(false);
+    setHover(false); 
   };
 
   useEffect(() => {
@@ -68,7 +75,14 @@ export const LabelWithCopy: FC<Props> = ({
     : color;
 
   return (
-    <sc.StatusText copied={copied}>
+    <Tooltip 
+    content={copied ? CopyMessage.copied :CopyMessage.deafult} 
+    variant="primary" 
+    visible={hover}
+    animation="shift-away"
+    arrow={true}
+    placement={placement}
+    >
       <CopyToClipboard onCopy={handleCopy} text={text}>
         <Flex
           alignItems="center"
@@ -80,19 +94,17 @@ export const LabelWithCopy: FC<Props> = ({
             <TextEllipsis size={textSize}>{text}</TextEllipsis>
           </Text>
 
-          <Tooltip content="copy to clipboard">
-            <Icon
-              Asset={SvgContentCopy}
-              color={foreColor}
-              opacity="0.6"
-              height={14}
-              ml="xs"
-              style={{ cursor: 'pointer' }}
-              width={16}
-            />
-          </Tooltip>
+          <Icon
+            Asset={SvgContentCopy}
+            color={foreColor}
+            opacity="0.6"
+            height={14}
+            ml="xs"
+            style={{ cursor: 'pointer' }}
+            width={16}
+          />
         </Flex>
-      </CopyToClipboard>
-    </sc.StatusText>
+      </CopyToClipboard>{' '}
+    </Tooltip>
   );
 };

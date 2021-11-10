@@ -5,6 +5,7 @@ export type TooltipVariants = 'primary' | 'secondary' | 'raw';
 
 export interface TooltipProps extends TippyProps {
   variant?: TooltipVariants;
+  title?: string;
   role?: string;
   className?: string;
   ref?: Ref<any>;
@@ -13,7 +14,6 @@ export interface TooltipProps extends TippyProps {
 
 export const TooltipDefaultProps = {
   role: 'group',
-  placement: 'top' as any,
+  placement: 'bottom' as any,
   variant: 'primary' as TooltipVariants,
-  animation: 'shift-away-subtle',
 };
