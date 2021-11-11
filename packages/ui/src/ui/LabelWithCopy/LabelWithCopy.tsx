@@ -77,7 +77,7 @@ export const LabelWithCopy: FC<Props> = ({
     <Tooltip 
     content={copied ? CopyMessage.copied :CopyMessage.deafult} 
     variant="primary" 
-    visible={hover}
+    visible={true}
     arrow={true}
     placement={placement}
     >
