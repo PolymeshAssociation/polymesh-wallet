@@ -28,8 +28,8 @@ export interface Props {
 }
 
 enum CopyMessage {
-  deafult = 'Copy to Clipboard',
-  copied = 'Copied!',
+  deafult = 'Copy to clipboard',
+  copied = 'Copied',
 }
 
 export const LabelWithCopy: FC<Props> = ({
