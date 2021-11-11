@@ -76,7 +76,7 @@ const AppHeader = (props: Props): ReactElement<Props> => {
             ]
           : []),
         {
-          label: 'Open extension in a new tab',
+          label: 'Open in a new tab',
           value: 'newWindow',
           icon: (
             <Icon Asset={SvgOpenInNew} color="gray5" height={24} width={24} />
