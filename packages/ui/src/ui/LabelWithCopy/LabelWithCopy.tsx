@@ -7,7 +7,6 @@ import { Icon } from '../Icon';
 import { Text } from '../Text';
 import { TextEllipsis } from '../TextEllipsis';
 import { Tooltip } from '../Tooltip';
-import 'tippy.js/animations/scale.css';
 
 export interface Props {
   text: string;
@@ -79,7 +78,6 @@ export const LabelWithCopy: FC<Props> = ({
     content={copied ? CopyMessage.copied :CopyMessage.deafult} 
     variant="primary" 
     visible={hover}
-    animation="shift-away"
     arrow={true}
     placement={placement}
     >

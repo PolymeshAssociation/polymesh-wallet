@@ -16,4 +16,5 @@ export const TooltipDefaultProps = {
   role: 'group',
   placement: 'bottom' as any,
   variant: 'primary' as TooltipVariants,
+  animation: "shift-away"
 };
