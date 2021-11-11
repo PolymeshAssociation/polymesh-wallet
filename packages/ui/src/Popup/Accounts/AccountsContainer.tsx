@@ -1,3 +1,4 @@
+import React, { FC, useContext, useState, KeyboardEvent } from 'react';
 import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
 import {
   SvgCheck,
@@ -10,7 +11,6 @@ import {
 } from '@polymathnetwork/extension-ui/components';
 import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
 import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
-import React, { FC, useContext, useState } from 'react';
 
 import {
   Box,
@@ -47,6 +47,11 @@ export const AccountsContainer: FC<Props> = ({
     networkState: { selected: network },
   } = useContext(PolymeshContext);
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') saveAlias();
+    else if (e.key === 'Escape') stopEditAlias();
+  };
+
   const editAlias = () => {
     setHover(false);
     setIsEditing(true);
@@ -79,8 +84,10 @@ export const AccountsContainer: FC<Props> = ({
           {isEditing && (
             <Flex py="xxs">
               <TextInput
+                autoFocus
                 defaultValue={currentAccount?.didAlias}
                 onChange={handleAliasChange}
+                onKeyDown={handleKeyDown}
                 placeholder="Your Polymesh Account"
                 style={{ height: '18px' }}
                 tight
