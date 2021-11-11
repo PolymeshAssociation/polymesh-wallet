@@ -82,7 +82,7 @@ export const LabelWithCopy: FC<Props> = ({
       arrow={true}
       placement={placement}
     >
-      <Box onClick={(e: any) => e.stopPropagation()}>
+      <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}>
         <CopyToClipboard onCopy={handleCopy} text={text}>
           <Flex
             alignItems="center"
