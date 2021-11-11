@@ -53,8 +53,7 @@ export const TippyStyles = createGlobalStyle`
   .tippy-arrow {
       width: ${arrowSize * 2}px;
       height: ${arrowSize * 2}px;
-      color: currentColor;
-      filter: invert(1);
+      color: #1E1E1E; 
   }
   .tippy-arrow:before {
       content: "";
