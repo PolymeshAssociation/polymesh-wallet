@@ -14,16 +14,16 @@ export interface Props {
   hoverColor?: string;
   textSize: number;
   textVariant:
-    | 'b1m'
-    | 'b1'
-    | 'b2m'
-    | 'b2'
-    | 'b3m'
-    | 'b3'
-    | 'sh1'
-    | 'c1'
-    | 'c2'
-    | 'c2m';
+  | 'b1m'
+  | 'b1'
+  | 'b2m'
+  | 'b2'
+  | 'b3m'
+  | 'b3'
+  | 'sh1'
+  | 'c1'
+  | 'c2'
+  | 'c2m';
   placement?: 'top' | 'bottom' | 'left' | 'right';
 }
 
@@ -49,7 +49,7 @@ export const LabelWithCopy: FC<Props> = ({
   };
 
   const onMouseOut = () => {
-    setHover(false); 
+    setHover(false);
   };
 
   useEffect(() => {
@@ -74,12 +74,12 @@ export const LabelWithCopy: FC<Props> = ({
     : color;
 
   return (
-    <Tooltip 
-    content={copied ? CopyMessage.copied :CopyMessage.deafult} 
-    variant="primary" 
-    visible={true}
-    arrow={true}
-    placement={placement}
+    <Tooltip
+      content={copied ? CopyMessage.copied : CopyMessage.deafult}
+      variant="primary"
+      visible={hover}
+      arrow={true}
+      placement={placement}
     >
       <CopyToClipboard onCopy={handleCopy} text={text}>
         <Flex
