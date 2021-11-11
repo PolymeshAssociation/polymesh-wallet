@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.3.0...1.3.1) (2021-11-11)
+
+
+### Bug Fixes
+
+* update dependencies to correct version ([5de6100](https://github.com/PolymathNetwork/polymesh-wallet/commit/5de6100b776452630c32bc76cb1fa6d1b5b6e486))
+
 # [1.3.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.2.2...1.3.0) (2021-11-11)
 
 
