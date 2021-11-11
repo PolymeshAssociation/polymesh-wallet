@@ -14,16 +14,16 @@ export interface Props {
   hoverColor?: string;
   textSize: number;
   textVariant:
-  | 'b1m'
-  | 'b1'
-  | 'b2m'
-  | 'b2'
-  | 'b3m'
-  | 'b3'
-  | 'sh1'
-  | 'c1'
-  | 'c2'
-  | 'c2m';
+    | 'b1m'
+    | 'b1'
+    | 'b2m'
+    | 'b2'
+    | 'b3m'
+    | 'b3'
+    | 'sh1'
+    | 'c1'
+    | 'c2'
+    | 'c2m';
   placement?: 'top' | 'bottom' | 'left' | 'right';
 }
 
@@ -73,6 +73,8 @@ export const LabelWithCopy: FC<Props> = ({
       : color
     : color;
 
+  const stopPropagation = (e: React.MouseEvent) => e.stopPropagation();
+
   return (
     <Tooltip
       content={copied ? CopyMessage.copied : CopyMessage.deafult}
@@ -81,28 +83,30 @@ export const LabelWithCopy: FC<Props> = ({
       arrow={true}
       placement={placement}
     >
-      <CopyToClipboard onCopy={handleCopy} text={text}>
-        <Flex
-          alignItems="center"
-          onMouseOut={onMouseOut}
-          onMouseOver={onMouseOver}
-          style={{ cursor: 'pointer' }}
-        >
-          <Text color={foreColor} variant={textVariant}>
-            <TextEllipsis size={textSize}>{text}</TextEllipsis>
-          </Text>
-
-          <Icon
-            Asset={SvgContentCopy}
-            color={foreColor}
-            opacity="0.6"
-            height={14}
-            ml="xs"
+      <div onClick={stopPropagation}>
+        <CopyToClipboard onCopy={handleCopy} text={text}>
+          <Flex
+            alignItems="center"
+            onMouseOut={onMouseOut}
+            onMouseOver={onMouseOver}
             style={{ cursor: 'pointer' }}
-            width={16}
-          />
-        </Flex>
-      </CopyToClipboard>
+          >
+            <Text color={foreColor} variant={textVariant}>
+              <TextEllipsis size={textSize}>{text}</TextEllipsis>
+            </Text>
+
+            <Icon
+              Asset={SvgContentCopy}
+              color={foreColor}
+              opacity="0.6"
+              height={14}
+              ml="xs"
+              style={{ cursor: 'pointer' }}
+              width={16}
+            />
+          </Flex>
+        </CopyToClipboard>
+      </div>
     </Tooltip>
   );
 };
