@@ -74,8 +74,6 @@ export const LabelWithCopy: FC<Props> = ({
       : color
     : color;
 
-  const stopPropagation = (e: React.MouseEvent) => e.stopPropagation();
-
   return (
     <Tooltip
       content={copied ? CopyMessage.copied : CopyMessage.deafult}
@@ -84,7 +82,7 @@ export const LabelWithCopy: FC<Props> = ({
       arrow={true}
       placement={placement}
     >
-      <Box onClick={(e: any) => e.stopPropagation()}>
+      <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}>
         <CopyToClipboard onCopy={handleCopy} text={text}>
           <Flex
             alignItems="center"
