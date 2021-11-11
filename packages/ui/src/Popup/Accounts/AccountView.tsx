@@ -82,7 +82,9 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     }
   };
 
-  const cancelEditing = (e: React.MouseEvent<HTMLElement>) => {
+  const cancelEditing = (
+    e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>
+  ) => {
     setNewName(name);
     setIsEditing(false);
     if (e.stopPropagation) e.stopPropagation();
@@ -97,7 +99,9 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
     setNewName(e.target.value);
   };
 
-  const save = async (e: React.MouseEvent<HTMLElement>) => {
+  const save = async (
+    e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>
+  ) => {
     if (e.stopPropagation) e.stopPropagation();
     await editAccount(address || '', newName || '');
     onAction();
@@ -154,7 +158,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
               <Flex ml="xs">
                 <Icon
                   Asset={SvgPencilOutline}
-                  color={nameHover ? 'gray.2' : 'gray.5'}
+                  color={nameHover ? 'gray.2' : 'transparent'}
                   height={16}
                   onClick={editName}
                   style={{ cursor: 'pointer' }}

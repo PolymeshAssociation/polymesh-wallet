@@ -1,15 +1,17 @@
+import React, { MouseEvent, ChangeEvent, KeyboardEvent } from 'react';
 import {
   SvgCheck,
   SvgWindowClose,
 } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { Box, Flex, Icon, TextInput } from '@polymathnetwork/extension-ui/ui';
-import React from 'react';
 
 type NameEditProps = {
   newName?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSave: (e: React.MouseEvent<HTMLElement>) => Promise<void>;
-  onCancel: (e: React.MouseEvent<HTMLElement>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onSave: (
+    e: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>
+  ) => Promise<void>;
+  onCancel: (e: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>) => void;
 };
 
 export function NameEdit({
@@ -18,10 +20,17 @@ export function NameEdit({
   onChange,
   onSave,
 }: NameEditProps): JSX.Element {
+  const handleKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+    if (e.key === 'Enter') onSave(e);
+    else if (e.key === 'Escape') onCancel(e);
+  };
+
   return (
     <Flex alignItems="center" flexDirection="row">
       <TextInput
+        autoFocus
         onChange={onChange}
+        onKeyDown={handleKeyDown}
         style={{ height: '20px' }}
         tight
         value={newName}

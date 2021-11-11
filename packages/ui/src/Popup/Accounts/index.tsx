@@ -147,7 +147,7 @@ export default function Accounts(): React.ReactElement {
               />
             </Flex>
             {Object.keys(groupedAccounts)
-              .sort((a) => (a === 'unassigned' ? 1 : -1))
+              .sort((a) => (a === 'unassigned' ? -1 : 1))
               .map((did: string, index) => {
                 return (
                   <AccountsContainer
