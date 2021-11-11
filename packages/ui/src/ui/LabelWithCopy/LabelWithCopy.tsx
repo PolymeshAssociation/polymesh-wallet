@@ -74,6 +74,8 @@ export const LabelWithCopy: FC<Props> = ({
       : color
     : color;
 
+  const stopPropagation = (e: React.MouseEvent) => e.stopPropagation();
+
   return (
     <Tooltip
       content={copied ? CopyMessage.copied : CopyMessage.deafult}
