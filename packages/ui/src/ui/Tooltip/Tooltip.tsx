@@ -1,5 +1,3 @@
-import 'tippy.js/animations/shift-away-subtle.css';
-
 import Tippy from '@tippyjs/react';
 import React, { FC } from 'react';
 
