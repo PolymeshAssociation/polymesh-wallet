@@ -75,37 +75,39 @@ export const LabelWithCopy: FC<Props> = ({
     : color;
 
   return (
-    <Tooltip
-      content={copied ? CopyMessage.copied : CopyMessage.deafult}
-      variant="primary"
-      visible={hover}
-      arrow={true}
-      placement={placement}
-    >
-      <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-        <CopyToClipboard onCopy={handleCopy} text={text}>
-          <Flex
-            alignItems="center"
-            onMouseOut={onMouseOut}
-            onMouseOver={onMouseOver}
-            style={{ cursor: 'pointer' }}
-          >
-            <Text color={foreColor} variant={textVariant}>
-              <TextEllipsis size={textSize}>{text}</TextEllipsis>
-            </Text>
-
-            <Icon
-              Asset={SvgContentCopy}
-              color={foreColor}
-              opacity="0.6"
-              height={14}
-              ml="xs"
+    <Flex>
+      <Tooltip
+        content={copied ? CopyMessage.copied : CopyMessage.deafult}
+        variant="primary"
+        visible={hover}
+        arrow={true}
+        placement={placement}
+      >
+        <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+          <CopyToClipboard onCopy={handleCopy} text={text}>
+            <Flex
+              alignItems="center"
+              onMouseOut={onMouseOut}
+              onMouseOver={onMouseOver}
               style={{ cursor: 'pointer' }}
-              width={16}
-            />
-          </Flex>
-        </CopyToClipboard>
-      </Box>
-    </Tooltip>
+            >
+              <Text color={foreColor} variant={textVariant}>
+                <TextEllipsis size={textSize}>{text}</TextEllipsis>
+              </Text>
+
+              <Icon
+                Asset={SvgContentCopy}
+                color={foreColor}
+                opacity="0.6"
+                height={14}
+                ml="xs"
+                style={{ cursor: 'pointer' }}
+                width={16}
+              />
+            </Flex>
+          </CopyToClipboard>
+        </Box>
+      </Tooltip>
+    </Flex>
   );
 };
