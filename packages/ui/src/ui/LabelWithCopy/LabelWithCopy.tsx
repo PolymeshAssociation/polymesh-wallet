@@ -3,11 +3,11 @@ import React, { FC, useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { Flex } from '../Flex';
+import { Box } from '../Box';
 import { Icon } from '../Icon';
 import { Text } from '../Text';
 import { TextEllipsis } from '../TextEllipsis';
 import { Tooltip } from '../Tooltip';
-import * as sc from './styles';
 
 export interface Props {
   text: string;
@@ -25,6 +25,12 @@ export interface Props {
     | 'c1'
     | 'c2'
     | 'c2m';
+  placement?: 'top' | 'bottom' | 'left' | 'right';
+}
+
+enum CopyMessage {
+  deafult = 'Copy to clipboard',
+  copied = 'Copied',
 }
 
 export const LabelWithCopy: FC<Props> = ({
@@ -33,6 +39,7 @@ export const LabelWithCopy: FC<Props> = ({
   text,
   textSize,
   textVariant,
+  placement,
 }) => {
   const [hover, setHover] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -68,30 +75,39 @@ export const LabelWithCopy: FC<Props> = ({
     : color;
 
   return (
-    <sc.StatusText copied={copied}>
-      <CopyToClipboard onCopy={handleCopy} text={text}>
-        <Flex
-          alignItems="center"
-          onMouseOut={onMouseOut}
-          onMouseOver={onMouseOver}
-          style={{ cursor: 'pointer' }}
-        >
-          <Text color={foreColor} variant={textVariant}>
-            <TextEllipsis size={textSize}>{text}</TextEllipsis>
-          </Text>
-
-          <Tooltip content="copy to clipboard">
-            <Icon
-              Asset={SvgContentCopy}
-              color={foreColor}
-              height={14}
-              ml="xs"
+    <Flex>
+      <Tooltip
+        content={copied ? CopyMessage.copied : CopyMessage.deafult}
+        variant="primary"
+        visible={hover}
+        arrow={true}
+        placement={placement}
+      >
+        <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+          <CopyToClipboard onCopy={handleCopy} text={text}>
+            <Flex
+              alignItems="center"
+              onMouseOut={onMouseOut}
+              onMouseOver={onMouseOver}
               style={{ cursor: 'pointer' }}
-              width={16}
-            />
-          </Tooltip>
-        </Flex>
-      </CopyToClipboard>
-    </sc.StatusText>
+            >
+              <Text color={foreColor} variant={textVariant}>
+                <TextEllipsis size={textSize}>{text}</TextEllipsis>
+              </Text>
+
+              <Icon
+                Asset={SvgContentCopy}
+                color={foreColor}
+                opacity="0.6"
+                height={14}
+                ml="xs"
+                style={{ cursor: 'pointer' }}
+                width={16}
+              />
+            </Flex>
+          </CopyToClipboard>
+        </Box>
+      </Tooltip>
+    </Flex>
   );
 };
