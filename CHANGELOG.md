@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.3.2...1.4.0) (2021-11-12)
+
+
+### Features
+
+* UI & UX improvements ([#231](https://github.com/PolymathNetwork/polymesh-wallet/issues/231)) ([b878ddc](https://github.com/PolymathNetwork/polymesh-wallet/commit/b878ddcfb515e22e3b85bef5f78ae237787de189))
+
 ## [1.3.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.3.1...1.3.2) (2021-11-11)
 
 
