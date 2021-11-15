@@ -1,4 +1,7 @@
-import { AccountForm, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountForm';
+import {
+  AccountForm,
+  AccountInfo,
+} from '@polymathnetwork/extension-ui/components/AccountForm';
 import React, { FC, useContext, useState } from 'react';
 
 import { ActionContext } from '../../components';
@@ -31,18 +34,15 @@ export const RestoreFromSeed: FC = () => {
       case 1:
         return (
           <AccountForm
-            headerText='Restore your account with your recovery phrase'
+            headerText="Restore your account with your recovery phrase"
             noHeader={true}
             onBack={prevStep}
             onContinue={importAccount}
-            submitText='Restore'
+            submitText="Restore"
           />
         );
       default:
-        return <EnterSeed
-          onContinue={nextStep}
-          setPhrase={setSeedPhrase}
-        />;
+        return <EnterSeed onContinue={nextStep} setPhrase={setSeedPhrase} />;
     }
   };
 

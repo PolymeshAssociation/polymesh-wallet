@@ -6,9 +6,19 @@ import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
 import React, { useCallback, useContext, useState } from 'react';
 
 import { ActionContext } from '../../components';
-import { Box, Button, Checkbox, Flex, Header, Heading, Icon, Link, Text } from '../../ui';
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  Header,
+  Heading,
+  Icon,
+  Link,
+  Text,
+} from '../../ui';
 
-function AddAccount (): React.ReactElement {
+function AddAccount(): React.ReactElement {
   const onAction = useContext(ActionContext);
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -19,9 +29,15 @@ function AddAccount (): React.ReactElement {
     () => windowOpen('/account/import-ledger'),
     []
   );
-  const onCreateAccount = useCallback((): void => onAction('/account/create'), [onAction]);
+  const onCreateAccount = useCallback(
+    (): void => onAction('/account/create'),
+    [onAction]
+  );
 
-  const onImportAccount = useCallback((): void => onAction('/account/restore/seed'), [onAction]);
+  const onImportAccount = useCallback(
+    (): void => onAction('/account/restore/seed'),
+    [onAction]
+  );
 
   const onConnectLedger = useCallback((): void => {
     if (!isLedgerEnabled && isPopup) {
@@ -34,62 +50,40 @@ function AddAccount (): React.ReactElement {
   return (
     <>
       <Header>
-        <Box pt='m'>
-          <Icon
-            Asset={SvgWalletLogo}
-            height={80}
-            width={80}
-          />
-          <Box
-            pt='m'
-            width={220}
-          >
-            <Heading
-              color='white'
-              variant='h4'
-            >
+        <Box pt="m">
+          <Icon Asset={SvgWalletLogo} height={80} width={80} />
+          <Box pt="m" width={220}>
+            <Heading color="white" variant="h4">
               Welcome to the Polymesh Wallet!
             </Heading>
           </Box>
-          <Box mt='s'>
-            <Text
-              color='white'
-              variant='b2'
-            >
-              Manage your Polymesh digital assets by creating an account or using an existing account.
+          <Box mt="s">
+            <Text color="white" variant="b2">
+              Manage your Polymesh digital assets by creating an account or
+              using an existing account.
             </Text>
           </Box>
         </Box>
       </Header>
       <Flex
-        alignItems='stretch'
+        alignItems="stretch"
         flex={1}
-        flexDirection='column'
-        justifyContent='space-between'
-        px='m'
+        flexDirection="column"
+        justifyContent="space-between"
+        px="m"
       >
-        <Box
-          id='agreement-checkboxes'
-          mt='m'
-        >
-          <Flex
-            alignItems='flex-start'
-            justifyContent='flex-start'
-            mb='xs'
-          >
+        <Box id="agreement-checkboxes" mt="m">
+          <Flex alignItems="flex-start" justifyContent="flex-start" mb="xs">
             <Checkbox
               checked={policyAccepted}
               onClick={() => setPolicyAccepted(!policyAccepted)}
             />
-            <Flex ml='s'>
-              <Text
-                color='gray.3'
-                variant='b3'
-              >
+            <Flex ml="s">
+              <Text color="gray.3" variant="b3">
                 I have read and accept the Polymath{' '}
                 <Link
-                  href='https://polymath.network/privacy-policy'
-                  id='sign-up-privacy-link'
+                  href="https://polymath.network/privacy-policy"
+                  id="sign-up-privacy-link"
                 >
                   Privacy Policy
                 </Link>
@@ -98,24 +92,21 @@ function AddAccount (): React.ReactElement {
             </Flex>
           </Flex>
           <Flex
-            alignItems='flex-start'
-            justifyContent='flex-start'
-            mb='s'
-            mt='xs'
+            alignItems="flex-start"
+            justifyContent="flex-start"
+            mb="s"
+            mt="xs"
           >
             <Checkbox
               checked={termsAccepted}
               onClick={() => setTermsAccepted(!termsAccepted)}
             />
-            <Flex ml='s'>
-              <Text
-                color='gray.3'
-                variant='b3'
-              >
+            <Flex ml="s">
+              <Text color="gray.3" variant="b3">
                 I have read and accept the Polymath{' '}
                 <Link
-                  href='https://polymath.network/polymesh-testnet/wallet-terms'
-                  id='sign-up-privacy-link'
+                  href="https://polymath.network/polymesh-testnet/wallet-terms"
+                  id="sign-up-privacy-link"
                 >
                   Terms of Use
                 </Link>
@@ -124,8 +115,8 @@ function AddAccount (): React.ReactElement {
             </Flex>
           </Flex>
         </Box>
-        <Box mb='s'>
-          <Box mx='xs'>
+        <Box mb="s">
+          <Box mx="xs">
             <Button
               disabled={!(policyAccepted && termsAccepted)}
               fluid
@@ -134,35 +125,25 @@ function AddAccount (): React.ReactElement {
               Create new account
             </Button>
           </Box>
-          <Box
-            mt='s'
-            mx='xs'
-          >
+          <Box mt="s" mx="xs">
             <Button
               disabled={!(policyAccepted && termsAccepted)}
               fluid
               onClick={onImportAccount}
-              variant='secondary'
+              variant="secondary"
             >
               Restore account
             </Button>
           </Box>
-          <Box
-            mt='s'
-            mx='xs'
-          >
+          <Box mt="s" mx="xs">
             <Button
               disabled={!(policyAccepted && termsAccepted)}
               fluid
               onClick={onConnectLedger}
-              variant='secondary'
+              variant="secondary"
             >
-              <Box mr='s'>
-                <Icon
-                  Asset={SvgLedger}
-                  height={24}
-                  width={24}
-                />
+              <Box mr="s">
+                <Icon Asset={SvgLedger} height={24} width={24} />
               </Box>
               Connect your Ledger
             </Button>

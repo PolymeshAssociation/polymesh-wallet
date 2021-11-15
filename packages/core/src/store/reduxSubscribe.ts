@@ -9,10 +9,13 @@ import store from '.';
  * @param selector a selector function to select a state branch.
  * @param cb a callback that will be called once the selected state branch has changed.
  */
-function reduxSubscribe<P> (selector: (state: RootState) => P, cb: (data: P) => void): Unsubscribe {
+function reduxSubscribe<P>(
+  selector: (state: RootState) => P,
+  cb: (data: P) => void
+): Unsubscribe {
   let currentState: P;
 
-  function storeListener () {
+  function storeListener() {
     const nextState: P = selector(store.getState());
 
     if (!isEqual(nextState, currentState)) {

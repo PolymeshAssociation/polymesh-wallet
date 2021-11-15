@@ -7,17 +7,18 @@ import { InjectedNetwork, NetworkMeta } from '../types';
 let sendRequest: SendRequest;
 
 export default class Network implements InjectedNetwork {
-  constructor (_sendRequest: SendRequest) {
+  constructor(_sendRequest: SendRequest) {
     sendRequest = _sendRequest;
   }
 
-  public get (): Promise<NetworkMeta> {
+  public get(): Promise<NetworkMeta> {
     return sendRequest('poly:pub(network.get)');
   }
 
-  public subscribe (cb: (networkMeta: NetworkMeta) => unknown): Unsubcall {
-    sendRequest('poly:pub(network.subscribe)', null, cb)
-      .catch((error: Error) => console.error(error));
+  public subscribe(cb: (networkMeta: NetworkMeta) => unknown): Unsubcall {
+    sendRequest('poly:pub(network.subscribe)', null, cb).catch((error: Error) =>
+      console.error(error)
+    );
 
     return (): void => {
       // FIXME we need the ability to unsubscribe

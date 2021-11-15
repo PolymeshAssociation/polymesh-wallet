@@ -12,7 +12,7 @@ module.exports = (entry, isDev) => ({
   devtool: false,
   entry,
   experiments: {
-    syncWebAssembly: true
+    syncWebAssembly: true,
   },
   module: {
     rules: [
@@ -22,9 +22,9 @@ module.exports = (entry, isDev) => ({
         use: [
           {
             loader: require.resolve('babel-loader'),
-            options: require('@polkadot/dev/config/babel-config-webpack.cjs')
-          }
-        ]
+            options: require('@polkadot/dev/config/babel-config-webpack.cjs'),
+          },
+        ],
       },
       {
         test: [/\.svg$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.woff2?$/],
@@ -34,62 +34,65 @@ module.exports = (entry, isDev) => ({
             options: {
               esModule: false,
               limit: 10000,
-              name: 'static/[name].[ext]'
-            }
-          }
-        ]
+              name: 'static/[name].[ext]',
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
-        loader: 'raw-loader'
-      }
-    ]
+        loader: 'raw-loader',
+      },
+    ],
   },
   output: {
     chunkFilename: '[name].js',
     filename: '[name].js',
-    globalObject: '(typeof self !== \'undefined\' ? self : this)',
-    path: path.join(__dirname, 'build')
+    globalObject: "(typeof self !== 'undefined' ? self : this)",
+    path: path.join(__dirname, 'build'),
   },
   performance: {
-    hints: false
+    hints: false,
   },
   plugins: [
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
-      process: 'process/browser.js'
+      process: 'process/browser.js',
     }),
-    new webpack.IgnorePlugin({ contextRegExp: /^\.\/locale$/, resourceRegExp: /moment$/ }),
+    new webpack.IgnorePlugin({
+      contextRegExp: /^\.\/locale$/,
+      resourceRegExp: /moment$/,
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(isDev ? 'development' : 'production'),
         PKG_NAME: JSON.stringify(pkgJson.name),
-        PKG_VERSION: JSON.stringify(pkgJson.version)
-      }
+        PKG_VERSION: JSON.stringify(pkgJson.version),
+      },
     }),
     new CopyPlugin({ patterns: [{ from: 'public' }] }),
     new ManifestPlugin({
       config: {
         base: manifest,
         extend: {
-          version: pkgJson.version.split('-')[0] // remove possible -beta.xx
-        }
-      }
-    })
+          version: pkgJson.version.split('-')[0], // remove possible -beta.xx
+        },
+      },
+    }),
   ],
   resolve: {
     alias: {
       '@polymathnetwork/extension': path.resolve(__dirname, '../extension/src'),
       '@polymathnetwork/extension-ui': path.resolve(__dirname, '../ui/src'),
       '@polymathnetwork/extension-core': path.resolve(__dirname, '../core/src'),
-      'react/jsx-runtime': require.resolve('react/jsx-runtime')
+      'react/jsx-runtime': require.resolve('react/jsx-runtime'),
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.wasm'],
     fallback: {
       crypto: require.resolve('crypto-browserify'),
       path: require.resolve('path-browserify'),
-      stream: require.resolve('stream-browserify')
-    }
+      stream: require.resolve('stream-browserify'),
+    },
   },
-  watch: isDev
+  watch: isDev,
 });

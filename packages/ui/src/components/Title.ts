@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 import { ThemeProps } from '../types';
 
-export default styled.div(({ theme }: ThemeProps) => `
+export default styled.div(
+  ({ theme }: ThemeProps) => `
   width: 100%;
   margin-bottom: 8px;
   margin-top: 18px;
@@ -13,4 +14,5 @@ export default styled.div(({ theme }: ThemeProps) => `
   text-transform: uppercase;
   color: ${theme.textColor};
   opacity: 0.65;
-`);
+`
+);

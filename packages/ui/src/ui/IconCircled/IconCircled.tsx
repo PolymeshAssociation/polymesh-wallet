@@ -6,7 +6,7 @@ import { Icon } from '../Icon';
 type IconProps = React.ComponentProps<typeof Icon>;
 
 export const IconCircled = styled(Icon)<IconProps>({
-  borderRadius: '50%'
+  borderRadius: '50%',
 });
 
 IconCircled.defaultProps = {
@@ -14,5 +14,5 @@ IconCircled.defaultProps = {
   bg: 'brandLightest',
   scale: 0.9,
   width: 48,
-  height: 48
+  height: 48,
 };

@@ -1,5 +1,8 @@
 import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { AccountForm, AccountInfo } from '@polymathnetwork/extension-ui/components/AccountForm';
+import {
+  AccountForm,
+  AccountInfo,
+} from '@polymathnetwork/extension-ui/components/AccountForm';
 import React, { FC, useContext, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 
@@ -23,7 +26,11 @@ export const RestoreFromJson: FC = () => {
     step > 0 && setStep(step - 1);
   };
 
-  const setJsonData = (accountJson: KeyringPair$Json, jsonPassword: string, accountName: string) => {
+  const setJsonData = (
+    accountJson: KeyringPair$Json,
+    jsonPassword: string,
+    accountName: string
+  ) => {
     setAccountJson(accountJson);
     setJsonPassword(jsonPassword);
     setAccountName(accountName);
@@ -41,14 +48,20 @@ export const RestoreFromJson: FC = () => {
 
         // Change from the original JSON password, to the password user has just provided
         // by AccountForm.
-        await changePassword(accountJson.address, jsonPassword, newAccountInfo.password);
+        await changePassword(
+          accountJson.address,
+          jsonPassword,
+          newAccountInfo.password
+        );
 
         onAction('/');
       } catch (error) {
         errorHandler(error);
       }
     } else {
-      errorHandler(new Error('An unexpected error has occurred. Please try again.'));
+      errorHandler(
+        new Error('An unexpected error has occurred. Please try again.')
+      );
     }
   };
 
@@ -58,11 +71,11 @@ export const RestoreFromJson: FC = () => {
         return (
           <AccountForm
             defaultName={accountName}
-            headerText='Import account using JSON file'
+            headerText="Import account using JSON file"
             noHeader={true}
             onBack={prevStep}
             onContinue={restoreAccount}
-            submitText='Import'
+            submitText="Import"
           />
         );
       default:

@@ -6,5 +6,5 @@ export const ButtonSmall = styled(Button)({
   padding: '0.5rem 1rem',
   minWidth: '80px',
   maxHeight: '2rem',
-  lineHeight: '1rem'
+  lineHeight: '1rem',
 });

@@ -9,7 +9,11 @@ import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
-import { AccountContext, OptionSelector, PolymeshContext } from '../../components';
+import {
+  AccountContext,
+  OptionSelector,
+  PolymeshContext,
+} from '../../components';
 import { Flex, Icon, Text } from '../../ui';
 import { AppHeader } from '../AppHeader';
 import { AccountMain } from './AccountMain';
@@ -23,27 +27,45 @@ const newAccountPath = '/account/create';
 
 const _openWindow = (path: string) => windowOpen(path);
 
-export default function Accounts (): React.ReactElement {
+export default function Accounts(): React.ReactElement {
   const { hierarchy } = useContext(AccountContext);
-  const { currentAccount, polymeshAccounts, selectedAccount } = useContext(PolymeshContext);
+  const { currentAccount, polymeshAccounts, selectedAccount } =
+    useContext(PolymeshContext);
   const history = useHistory();
   const { isLedgerCapable, isLedgerEnabled } = useLedger();
 
   const isPopup = useIsPopup();
 
   const groupAccounts = () => (array: IdentifiedAccount[]) =>
-    array.reduce((groupedAccounts: Record<string, IdentifiedAccount[]>, account: IdentifiedAccount) => {
-      const value = account.did ? account.did : 'unassigned';
+    array.reduce(
+      (
+        groupedAccounts: Record<string, IdentifiedAccount[]>,
+        account: IdentifiedAccount
+      ) => {
+        const value = account.did ? account.did : 'unassigned';
 
-      groupedAccounts[value] = (groupedAccounts[value] || []).concat(account);
+        groupedAccounts[value] = (groupedAccounts[value] || []).concat(account);
 
-      return groupedAccounts;
-    }, {});
+        return groupedAccounts;
+      },
+      {}
+    );
 
-  const groupedAccounts = polymeshAccounts ? groupAccounts()(polymeshAccounts) : {};
+  const groupedAccounts = polymeshAccounts
+    ? groupAccounts()(polymeshAccounts)
+    : {};
 
   const getHeaderColor = (index: number) => {
-    const colors = ['#FFEBF1', '#E6FFFA', '#F2E6FF', '#F1FEE1', '#E6F9FE', '#FAF5FF', '#FFEAE1', '#EBF4FF'];
+    const colors = [
+      '#FFEBF1',
+      '#E6FFFA',
+      '#F2E6FF',
+      '#F1FEE1',
+      '#E6F9FE',
+      '#FAF5FF',
+      '#FFEAE1',
+      '#EBF4FF',
+    ];
 
     return colors[index % (colors.length - 1)];
   };
@@ -56,21 +78,25 @@ export default function Accounts (): React.ReactElement {
         { label: 'Import account with JSON file', value: 'fromJson' },
         ...(isLedgerEnabled
           ? [
-            {
-              label: isLedgerCapable ? 'Attach Ledger account' : 'Chrome browser is required to use Ledger',
-              value: 'fromLedger',
-              disabled: !isLedgerCapable
-            }
-          ]
-          : [{ label: 'Connect Ledger device', value: 'connectLedger' }])
-      ]
-    }
+              {
+                label: isLedgerCapable
+                  ? 'Attach Ledger account'
+                  : 'Chrome browser is required to use Ledger',
+                value: 'fromLedger',
+                disabled: !isLedgerCapable,
+              },
+            ]
+          : [{ label: 'Connect Ledger device', value: 'connectLedger' }]),
+      ],
+    },
   ];
 
   const handleAccountMenuClick = (value: string) => {
     switch (value) {
       case 'new':
-        return isPopup ? _openWindow(newAccountPath) : history.push(newAccountPath);
+        return isPopup
+          ? _openWindow(newAccountPath)
+          : history.push(newAccountPath);
       case 'fromSeed':
         return isPopup ? _openWindow(seedPath) : history.push(seedPath);
       case 'fromJson':
@@ -84,73 +110,60 @@ export default function Accounts (): React.ReactElement {
 
   return (
     <>
-      {hierarchy.length === 0
-        ? (
-          <AddAccount />
-        )
-        : (
-          <>
-            <AppHeader>{currentAccount && <AccountMain
-              account={currentAccount}
-              details={true}
-            />}</AppHeader>
-            <AccountsArea id='accounts-container'>
-              <Flex
-                justifyContent='space-between'
-                mb='-4px'
-                mt='m'
-                mx='m'
-              >
-                <Text
-                  color='gray.1'
-                  variant='c1'
-                >
+      {hierarchy.length === 0 ? (
+        <AddAccount />
+      ) : (
+        <>
+          <AppHeader>
+            {currentAccount && (
+              <AccountMain account={currentAccount} details={true} />
+            )}
+          </AppHeader>
+          <AccountsArea id="accounts-container">
+            <Flex justifyContent="space-between" mb="-4px" mt="m" mx="m">
+              <Text color="gray.1" variant="c1">
                 ACCOUNTS
-                </Text>
-                <OptionSelector
-                  className='add-key-menu'
-                  onSelect={handleAccountMenuClick}
-                  options={accountMenuItems}
-                  position='bottom-right'
-                  selector={
-                    <Flex
-                      justifyContent='center'
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <Flex mx='s'>
-                        <Icon
-                          Asset={SvgPlus}
-                          color='polyNavyBlue'
-                          height={14}
-                          width={14}
-                        />
-                      </Flex>
-                      <Text
-                        color='polyNavyBlue'
-                        variant='b2'
-                      >
-                      Add a key
-                      </Text>
+              </Text>
+              <OptionSelector
+                className="add-key-menu"
+                onSelect={handleAccountMenuClick}
+                options={accountMenuItems}
+                position="bottom-right"
+                selector={
+                  <Flex justifyContent="center" style={{ cursor: 'pointer' }}>
+                    <Flex mx="s">
+                      <Icon
+                        Asset={SvgPlus}
+                        color="polyNavyBlue"
+                        height={14}
+                        width={14}
+                      />
                     </Flex>
-                  }
-                />
-              </Flex>
-              {Object.keys(groupedAccounts)
-                .sort((a) => (a === 'unassigned' ? 1 : -1))
-                .map((did: string, index) => {
-                  return (
-                    <AccountsContainer
-                      accounts={hasKey(groupedAccounts, did) ? groupedAccounts[did] : []}
-                      did={did}
-                      headerColor={getHeaderColor(index)}
-                      key={index}
-                      selectedAccount={selectedAccount || ''}
-                    />
-                  );
-                })}
-            </AccountsArea>
-          </>
-        )}
+                    <Text color="polyNavyBlue" variant="b2">
+                      Add a key
+                    </Text>
+                  </Flex>
+                }
+              />
+            </Flex>
+            {Object.keys(groupedAccounts)
+              .sort((a) => (a === 'unassigned' ? -1 : 1))
+              .map((did: string, index) => {
+                return (
+                  <AccountsContainer
+                    accounts={
+                      hasKey(groupedAccounts, did) ? groupedAccounts[did] : []
+                    }
+                    did={did}
+                    headerColor={getHeaderColor(index)}
+                    key={index}
+                    selectedAccount={selectedAccount || ''}
+                  />
+                );
+              })}
+          </AccountsArea>
+        </>
+      )}
     </>
   );
 }

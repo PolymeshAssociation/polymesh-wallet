@@ -6,7 +6,10 @@ import { upperFirst } from 'lodash-es';
 import { NetworkName } from '../types';
 import apiPromise from './apiPromise';
 
-async function callDetails (request: SignerPayloadJSON, network: NetworkName): Promise<ResponsePolyCallDetails> {
+async function callDetails(
+  request: SignerPayloadJSON,
+  network: NetworkName
+): Promise<ResponsePolyCallDetails> {
   const api = await apiPromise(network);
   let protocolFee = '0';
   let networkFee = '0';
@@ -21,7 +24,10 @@ async function callDetails (request: SignerPayloadJSON, network: NetworkName): P
 
     protocolFee = (await api.query.protocolFee.baseFees(opName)).toString();
   } catch (error) {
-    console.log(`Error: Protocol fee retrieval for method ${section}:${method} has failed`, error);
+    console.log(
+      `Error: Protocol fee retrieval for method ${section}:${method} has failed`,
+      error
+    );
   }
 
   // Network fee
@@ -31,7 +37,10 @@ async function callDetails (request: SignerPayloadJSON, network: NetworkName): P
 
     networkFee = partialFee.toString();
   } catch (error) {
-    console.log(`Error: Network fee retrieval for method ${section}:${method} has failed`, error);
+    console.log(
+      `Error: Network fee retrieval for method ${section}:${method} has failed`,
+      error
+    );
   }
 
   return {
@@ -40,7 +49,7 @@ async function callDetails (request: SignerPayloadJSON, network: NetworkName): P
     method,
     section,
     meta,
-    args: humanArgs
+    args: humanArgs,
   };
 }
 

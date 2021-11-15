@@ -1,7 +1,16 @@
-import { networkIsDev, networkLabels } from '@polymathnetwork/extension-core/constants';
+import {
+  networkIsDev,
+  networkLabels,
+} from '@polymathnetwork/extension-core/constants';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
-import { SvgCheck, SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { OptionSelector, PolymeshContext } from '@polymathnetwork/extension-ui/components';
+import {
+  SvgCheck,
+  SvgChevron,
+} from '@polymathnetwork/extension-ui/assets/images/icons';
+import {
+  OptionSelector,
+  PolymeshContext,
+} from '@polymathnetwork/extension-ui/components';
 import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
 import { colors } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { styled } from '@polymathnetwork/extension-ui/styles';
@@ -10,39 +19,51 @@ import React, { useContext } from 'react';
 
 const DEV_NETWORK_COLORS = {
   backgrounds: ['#D7F4F2', '#60D3CB40'],
-  foreground: '#60D3CB'
+  foreground: '#60D3CB',
 };
 
-const NETWORK_COLORS: Record<NetworkName, { backgrounds: string[]; foreground: string }> = {
+const NETWORK_COLORS: Record<
+  NetworkName,
+  { backgrounds: string[]; foreground: string }
+> = {
   mainnet: {
     backgrounds: ['#FAD1DC', '#EC467340'],
-    foreground: '#43195B'
+    foreground: '#43195B',
   },
   testnet: {
     backgrounds: ['#DCEFFE', '#1348E440'],
-    foreground: '#1348E4'
+    foreground: '#1348E4',
   },
   pmf: DEV_NETWORK_COLORS,
   pme: DEV_NETWORK_COLORS,
-  local: DEV_NETWORK_COLORS
+  local: DEV_NETWORK_COLORS,
 };
 
 type NetworkSelectorProps = {
   onSelect: (network: NetworkName) => void;
 };
 
-export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.ReactElement {
-  const { networkState: { isDeveloper, selected: currentNetwork } } = useContext(PolymeshContext);
+export function NetworkSelector({
+  onSelect,
+}: NetworkSelectorProps): React.ReactElement {
+  const {
+    networkState: { isDeveloper, selected: currentNetwork },
+  } = useContext(PolymeshContext);
 
   const [background, backgroundLight] =
-    NETWORK_COLORS[currentNetwork]?.backgrounds || NETWORK_COLORS.testnet.backgrounds;
-  const foreground = NETWORK_COLORS[currentNetwork]?.foreground || NETWORK_COLORS.testnet.foreground;
+    NETWORK_COLORS[currentNetwork]?.backgrounds ||
+    NETWORK_COLORS.testnet.backgrounds;
+  const foreground =
+    NETWORK_COLORS[currentNetwork]?.foreground ||
+    NETWORK_COLORS.testnet.foreground;
 
   const { devNetworks, networks } = Object.entries(networkLabels).reduce(
     ({ devNetworks, networks }: Record<string, string[][]>, networkLabel) => {
       const [network, label] = networkLabel;
 
-      networkIsDev[network as NetworkName] ? devNetworks.push([network, label]) : networks.push([network, label]);
+      networkIsDev[network as NetworkName]
+        ? devNetworks.push([network, label])
+        : networks.push([network, label]);
 
       return { networks, devNetworks };
     },
@@ -56,30 +77,27 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
       return {
         label: (
           <Flex
-            className='network-item'
+            className="network-item"
             key={network}
-            px='16px'
-            py='8px'
+            px="16px"
+            py="8px"
             {...(isCurrentNetwork && { style: { background: colors.gray[5] } })}
           >
             <NetworkCircle
               background={NETWORK_COLORS[network as NetworkName].backgrounds[0]}
               color={NETWORK_COLORS[network as NetworkName].foreground}
-              size='24px'
-              thickness='4px'
+              size="24px"
+              thickness="4px"
             />
-            <Box
-              ml='8px'
-              mr='auto'
-            >
-              <Text variant='b2m'>{networkLabel}</Text>
+            <Box ml="8px" mr="auto">
+              <Text variant="b2m">{networkLabel}</Text>
             </Box>
 
             {isCurrentNetwork && (
-              <Box ml='auto'>
+              <Box ml="auto">
                 <Icon
                   Asset={SvgCheck}
-                  color='brandMain'
+                  color="brandMain"
                   height={24}
                   width={24}
                 />
@@ -87,56 +105,40 @@ export function NetworkSelector ({ onSelect }: NetworkSelectorProps): React.Reac
             )}
           </Flex>
         ),
-        value: network
+        value: network,
       };
     });
 
   const networkOptions: Option[] = [
     {
       category: 'Networks',
-      menu: networkMenuItems(networks)
-    }
+      menu: networkMenuItems(networks),
+    },
   ];
 
   if (isDeveloper) {
     networkOptions.push({
       category: 'Development',
-      menu: networkMenuItems(devNetworks)
+      menu: networkMenuItems(devNetworks),
     });
   }
 
   return (
     <OptionSelector
-      minWidth='368px'
+      minWidth="368px"
       onSelect={onSelect}
       options={networkOptions}
-      position='bottom-left'
+      position="bottom-left"
       selector={
-        <NetworkSelect
-          background={background}
-          id='network-selector'
-        >
-          <NetworkCircle
-            background={background}
-            color={foreground}
-          />
-          <Box
-            ml='4px'
-            mr='7px'
-          >
-            <Text
-              color={foreground}
-              variant='b3m'
-            >
+        <NetworkSelect background={background} id="network-selector">
+          <NetworkCircle background={background} color={foreground} />
+          <Box ml="4px" mr="7px">
+            <Text color={foreground} variant="b3m">
               {networkLabels[currentNetwork]}
             </Text>
           </Box>
           <DropdownIcon background={backgroundLight}>
-            <Icon
-              Asset={SvgChevron}
-              color={foreground}
-              rotate='180deg'
-            />
+            <Icon Asset={SvgChevron} color={foreground} rotate="180deg" />
           </DropdownIcon>
         </NetworkSelect>
       }
@@ -164,7 +166,12 @@ const DropdownIcon = styled.div<{ background: string }>`
   background-color: ${(props) => props.background};
 `;
 
-const NetworkCircle = styled.span<{ background: string; color: string; size?: string; thickness?: string }>`
+const NetworkCircle = styled.span<{
+  background: string;
+  color: string;
+  size?: string;
+  thickness?: string;
+}>`
   display: inline-box;
   width: ${(props) => props.size || '12px'};
   height: ${(props) => props.size || '12px'};

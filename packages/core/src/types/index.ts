@@ -1,12 +1,17 @@
 import { Unsubcall } from '@polkadot/extension-inject/types';
 import { Call } from '@polkadot/types/interfaces';
-import { AnyJson, DefinitionRpc, DefinitionRpcSub, RegistryTypes } from '@polkadot/types/types';
+import {
+  AnyJson,
+  DefinitionRpc,
+  DefinitionRpcSub,
+  RegistryTypes,
+} from '@polkadot/types/types';
 
 import { RequestPolyReadUid } from '../background/types';
 
 export enum DidType {
   primary = 'primary',
-  secondary = 'secondary'
+  secondary = 'secondary',
 }
 
 export type AccountBalances = {
@@ -19,8 +24,8 @@ export type AccountData = {
   address: string;
   didType?: DidType;
   name?: string;
-  balance?: AccountBalances
-}
+  balance?: AccountBalances;
+};
 
 export type IdentityData = {
   cdd?: CDD;
@@ -29,7 +34,7 @@ export type IdentityData = {
   priKey: string;
   secKeys?: string[];
   alias?: string;
-}
+};
 
 export type IdentifiedAccount = {
   name?: string;
@@ -45,44 +50,46 @@ export type IdentifiedAccount = {
     transferrable: string;
     locked: string;
   };
-}
+};
 
 export type UnsubCallback = () => void;
 
-export type ReversedDidList =
-  Record<string, {did: string, keyType: DidType, cdd?: CDD, didAlias: string}>;
+export type ReversedDidList = Record<
+  string,
+  { did: string; keyType: DidType; cdd?: CDD; didAlias: string }
+>;
 
 export enum NetworkName {
   mainnet = 'mainnet',
   testnet = 'testnet',
   pmf = 'pmf',
   pme = 'pme',
-  local = 'local'
+  local = 'local',
 }
 
 export enum LinkName {
   dashboard = 'dashboard',
-  explorer = 'explorer'
+  explorer = 'explorer',
 }
 
 export type CDD = null | {
-  issuer: string,
-  expiry?: number
-}
+  issuer: string;
+  expiry?: number;
+};
 
 export type UID = Uint8Array;
 
 export type NetworkState = {
-  selected: NetworkName,
-  ss58Format: number,
-  isDeveloper: boolean
-}
+  selected: NetworkName;
+  ss58Format: number;
+  isDeveloper: boolean;
+};
 
 export type NetworkMeta = {
-  name: NetworkName,
-  label?: string,
-  wssUrl: string
-}
+  name: NetworkName;
+  label?: string;
+  wssUrl: string;
+};
 
 export interface InjectedNetwork {
   get: () => Promise<NetworkMeta>;
@@ -99,7 +106,7 @@ export interface ProofRequestPayload {
 export interface RequestPolyProvideUid {
   did: string;
   uid: string;
-  network: NetworkName
+  network: NetworkName;
 }
 
 export interface ProofResult {
@@ -125,9 +132,9 @@ export interface InjectedUid {
 }
 
 export type KeyringAccountData = {
-  address: string,
-  name?: string,
-}
+  address: string;
+  name?: string;
+};
 
 export interface Decoded {
   args: AnyJson;
@@ -137,24 +144,26 @@ export interface Decoded {
 export enum ErrorCodes {
   FatalError = 'Fatal Error',
   NonFatalError = 'Non-fatal Error',
-  Offline = 'Offline'
+  Offline = 'Offline',
 }
 
 export type Error = {
-  code: ErrorCodes,
-  msg: string
-}
+  code: ErrorCodes;
+  msg: string;
+};
 
 export type StoreStatus = {
-  error: Error | null,
-  apiStatus: 'ready' | 'connecting' | 'error',
-  populated: Record<string, boolean>,
+  error: Error | null;
+  apiStatus: 'ready' | 'connecting' | 'error';
+  populated: Record<string, boolean>;
 };
 
 export interface UidRecord {
-  network: NetworkName,
-  did: string
+  network: NetworkName;
+  did: string;
 }
 
-export type Schema = { rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>,
-  types: RegistryTypes };
+export type Schema = {
+  rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>;
+  types: RegistryTypes;
+};

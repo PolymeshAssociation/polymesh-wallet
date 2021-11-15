@@ -22,13 +22,15 @@ export interface Props
   indeterminate?: boolean;
 }
 
-export const Checkbox: FC<Props> = ({ checked,
+export const Checkbox: FC<Props> = ({
+  checked,
   defaultChecked,
   indeterminate,
   label,
   name,
   onChange,
-  ...other }) => {
+  ...other
+}) => {
   let checkedProps;
 
   if (typeof checked !== 'undefined') {
@@ -52,31 +54,27 @@ export const Checkbox: FC<Props> = ({ checked,
           id={name}
           name={name}
           onChange={handleChange}
-          type='checkbox'
+          type="checkbox"
         />
         <sc.CheckboxInput
           {...(indeterminate ? { className: 'indeterminate' } : {})}
         >
           <sc.CheckStateIcon
             Asset={SvgMinusBox}
-            className='minusIcon'
-            color='brandMain'
-            height='1.3em'
-            width='1.3em'
+            className="minusIcon"
+            color="brandMain"
+            height="1.3em"
+            width="1.3em"
           />
           <sc.CheckStateIcon
             Asset={SvgCheckmark}
-            className='checkIcon'
-            color='white'
-            height='0.9em'
-            width='0.9em'
+            className="checkIcon"
+            color="white"
+            height="0.9em"
+            width="0.9em"
           />
         </sc.CheckboxInput>
-        {label && (
-          <InlineFlex ml={2}>
-            {label}
-          </InlineFlex>
-        )}
+        {label && <InlineFlex ml={2}>{label}</InlineFlex>}
       </InlineFlex>
     </Label>
   );

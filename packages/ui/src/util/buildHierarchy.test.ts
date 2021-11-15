@@ -1,20 +1,30 @@
-import { AccountJson, AccountWithChildren } from '@polkadot/extension-base/background/types';
+import {
+  AccountJson,
+  AccountWithChildren,
+} from '@polkadot/extension-base/background/types';
 
 import { buildHierarchy } from './buildHierarchy';
 
-const testHierarchy = (accounts: AccountJson[], expected: AccountWithChildren[]): void => {
+const testHierarchy = (
+  accounts: AccountJson[],
+  expected: AccountWithChildren[]
+): void => {
   expect(buildHierarchy(accounts)).toEqual(expected);
 };
 
 describe('Use Account Hierarchy', () => {
-  const acc = (address: string, parentAddress?: string, whenCreated?: number): {
+  const acc = (
+    address: string,
+    parentAddress?: string,
+    whenCreated?: number
+  ): {
     address: string;
     whenCreated?: number;
     parentAddress?: string;
   } => ({
     address,
     parentAddress,
-    whenCreated
+    whenCreated,
   });
 
   test('for empty account list, returns empty list', () => {
@@ -26,38 +36,59 @@ describe('Use Account Hierarchy', () => {
   });
 
   test('puts child account into children field of parent: single child', () => {
-    testHierarchy([acc('a'), acc('b', 'a')], [
-      { address: 'a', children: [acc('b', 'a')] }
-    ]);
+    testHierarchy(
+      [acc('a'), acc('b', 'a')],
+      [{ address: 'a', children: [acc('b', 'a')] }]
+    );
   });
 
   test('puts child account into children field of parent: more children', () => {
-    testHierarchy([acc('a'), acc('b', 'a'), acc('c', 'a')], [
-      { address: 'a', children: [acc('b', 'a'), acc('c', 'a')] }
-    ]);
+    testHierarchy(
+      [acc('a'), acc('b', 'a'), acc('c', 'a')],
+      [{ address: 'a', children: [acc('b', 'a'), acc('c', 'a')] }]
+    );
   });
 
   test('puts child account into children field of parent: 2 roots', () => {
-    testHierarchy([acc('a'), acc('b', 'a'), acc('c', 'a'), acc('d')], [
-      { address: 'a', children: [acc('b', 'a'), acc('c', 'a')] },
-      acc('d')
-    ]);
+    testHierarchy(
+      [acc('a'), acc('b', 'a'), acc('c', 'a'), acc('d')],
+      [{ address: 'a', children: [acc('b', 'a'), acc('c', 'a')] }, acc('d')]
+    );
   });
 
   test('handles grandchildren', () => {
-    testHierarchy([acc('a'), acc('b', 'a'), acc('c', 'b')], [{
-      address: 'a',
-      children: [{
-        ...acc('b', 'a'),
-        children: [acc('c', 'b')]
-      }]
-    }]);
+    testHierarchy(
+      [acc('a'), acc('b', 'a'), acc('c', 'b')],
+      [
+        {
+          address: 'a',
+          children: [
+            {
+              ...acc('b', 'a'),
+              children: [acc('c', 'b')],
+            },
+          ],
+        },
+      ]
+    );
   });
 
   test('sorts accounts by creation time', () => {
     testHierarchy(
-      [acc('a', undefined, 2), acc('b', 'a', 4), acc('c', 'a', 3), acc('d', undefined, 1)],
-      [acc('d', undefined, 1), { address: 'a', children: [acc('c', 'a', 3), acc('b', 'a', 4)], whenCreated: 2 }]
+      [
+        acc('a', undefined, 2),
+        acc('b', 'a', 4),
+        acc('c', 'a', 3),
+        acc('d', undefined, 1),
+      ],
+      [
+        acc('d', undefined, 1),
+        {
+          address: 'a',
+          children: [acc('c', 'a', 3), acc('b', 'a', 4)],
+          whenCreated: 2,
+        },
+      ]
     );
   });
 

@@ -4,7 +4,7 @@ The main ingredients are all under `packages/` directory:
 
 ## extension
 
-Glues the wallet extension together by providing Webpack config files, as well as 
+Glues the wallet extension together by providing Webpack config files, as well as
 entry points for each [chrome extension script](https://developer.chrome.com/docs/extensions/mv2/getstarted/)
 
 ```
@@ -14,7 +14,6 @@ entry points for each [chrome extension script](https://developer.chrome.com/doc
 ├── extension.ts    // Pop UI
 └── page.ts   // Message relayer
 ```
-
 
 ## core
 
@@ -32,19 +31,19 @@ Polymesh models and business logic.
 │   │   └── utils.ts
 │   └── types.ts
 ├── constants.ts
-├── external    // Data fetching data from chain  
+├── external    // Data fetching data from chain
 │   ├── apiPromise    // Api connection utilities
 │   │   ├── index.ts
 │   │   └── types.ts
-│   ├── callDetails.ts         
+│   ├── callDetails.ts
 │   ├── index.ts
 │   ├── polyNetworkGet.ts
 │   ├── polyNetworkSubscribe.ts
-│   └── schema    // Storage of chain schema as well as utilities to load schema from Github. 
+│   └── schema    // Storage of chain schema as well as utilities to load schema from Github.
 │       ├── fallback.ts
 │       └── index.ts
 ├── index.ts
-├── page    // API injected in browser page.                          
+├── page    // API injected in browser page.
 │   ├── Network.ts  // Network API methods
 │   ├── Uid.ts    // Confidential identity related methods.
 │   ├── index.ts

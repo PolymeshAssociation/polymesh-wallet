@@ -1,30 +1,74 @@
 import DotTabs from '@polkadot/extension-base/background/handlers/Tabs';
-import { MessageTypes, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
+import {
+  MessageTypes,
+  RequestRpcUnsubscribe,
+} from '@polkadot/extension-base/background/types';
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { assert } from '@polkadot/util';
 import { polyNetworkGet } from '@polymathnetwork/extension-core/external';
 import polyNetworkSubscribe from '@polymathnetwork/extension-core/external/polyNetworkSubscribe';
-import { getSelectedAccount, getSelectedIdentifiedAccount } from '@polymathnetwork/extension-core/store/getters';
+import {
+  getSelectedAccount,
+  getSelectedIdentifiedAccount,
+} from '@polymathnetwork/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
-import { NetworkMeta, ProofRequestPayload, RequestPolyProvideUid } from '@polymathnetwork/extension-core/types';
-import { prioritize, recodeAddress, validateNetwork, validateSelectedNetwork, validateTicker, validateUid } from '@polymathnetwork/extension-core/utils';
+import {
+  NetworkMeta,
+  ProofRequestPayload,
+  RequestPolyProvideUid,
+} from '@polymathnetwork/extension-core/types';
+import {
+  prioritize,
+  recodeAddress,
+  validateNetwork,
+  validateSelectedNetwork,
+  validateTicker,
+  validateUid,
+} from '@polymathnetwork/extension-core/utils';
 
-import { Errors, PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, ProofingResponse, ReadUidResponse, RequestPolyReadUid } from '../types';
+import {
+  Errors,
+  PolyMessageTypes,
+  PolyRequestTypes,
+  PolyResponseTypes,
+  ProofingResponse,
+  ReadUidResponse,
+  RequestPolyReadUid,
+} from '../types';
 import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
 
-function transformAccounts (accounts: SubjectInfo): InjectedAccount[] {
-  return Object
-    .values(accounts)
-    .filter(({ json: { meta: { isHidden } } }) => !isHidden)
-    .sort((a, b) => (a.json.meta.whenCreated || 0) - (b.json.meta.whenCreated || 0))
-    .map(({ json: { address, meta: { genesisHash, name } } }): InjectedAccount => ({
-      address, genesisHash, name
-    }))
-    // Prioritize selected account.
-    .sort(prioritize(getSelectedAccount(), (a) => a.address));
+function transformAccounts(accounts: SubjectInfo): InjectedAccount[] {
+  return (
+    Object.values(accounts)
+      .filter(
+        ({
+          json: {
+            meta: { isHidden },
+          },
+        }) => !isHidden
+      )
+      .sort(
+        (a, b) =>
+          (a.json.meta.whenCreated || 0) - (b.json.meta.whenCreated || 0)
+      )
+      .map(
+        ({
+          json: {
+            address,
+            meta: { genesisHash, name },
+          },
+        }): InjectedAccount => ({
+          address,
+          genesisHash,
+          name,
+        })
+      )
+      // Prioritize selected account.
+      .sort(prioritize(getSelectedAccount(), (a) => a.address))
+  );
 }
 
 /**
@@ -33,17 +77,17 @@ function transformAccounts (accounts: SubjectInfo): InjectedAccount[] {
 export default class Tabs extends DotTabs {
   readonly #state: State;
 
-  constructor (state: State) {
+  constructor(state: State) {
     super(state);
 
     this.#state = state;
   }
 
-  private polyNetworkGet (): NetworkMeta {
+  private polyNetworkGet(): NetworkMeta {
     return polyNetworkGet();
   }
 
-  private polyNetworkSubscribe (id: string, port: chrome.runtime.Port): boolean {
+  private polyNetworkSubscribe(id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'poly:pub(network.subscribe)'>(id, port);
     let initialCall = true;
 
@@ -66,11 +110,11 @@ export default class Tabs extends DotTabs {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _accountsList (): InjectedAccount[] {
+  private _accountsList(): InjectedAccount[] {
     return transformAccounts(accountsObservable.subject.getValue());
   }
 
-  private _accountsSubscribe (id: string, port: chrome.runtime.Port): boolean {
+  private _accountsSubscribe(id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
     let calls = 0;
 
@@ -89,9 +133,11 @@ export default class Tabs extends DotTabs {
       innerCb(transformAccounts(accountsObservable.subject.getValue()));
     });
 
-    const subscription = accountsObservable.subject.subscribe((accounts: SubjectInfo): void => {
-      innerCb(transformAccounts(accounts));
-    });
+    const subscription = accountsObservable.subject.subscribe(
+      (accounts: SubjectInfo): void => {
+        innerCb(transformAccounts(accounts));
+      }
+    );
 
     port.onDisconnect.addListener((): void => {
       unsubscribe(id);
@@ -102,7 +148,10 @@ export default class Tabs extends DotTabs {
     return true;
   }
 
-  private requestProof (url: string, request: ProofRequestPayload): Promise<ProofingResponse> {
+  private requestProof(
+    url: string,
+    request: ProofRequestPayload
+  ): Promise<ProofingResponse> {
     const account = getSelectedIdentifiedAccount();
 
     assert(validateTicker(request.ticker), Errors.INVALID_TICKER);
@@ -116,15 +165,26 @@ export default class Tabs extends DotTabs {
     return this.#state.generateProof(url, request, { address });
   }
 
-  private provideUid (url: string, request: RequestPolyProvideUid): Promise<boolean> {
+  private provideUid(
+    url: string,
+    request: RequestPolyProvideUid
+  ): Promise<boolean> {
     // XXX: felt unnecessary, might delete later
     // assert(allowedUidProvider(url), `App ${url} is not allowed to provide uid`);
 
     const { network, uid } = request;
 
-    assert(validateNetwork(network), `Invalid network ${JSON.stringify(network)}`);
+    assert(
+      validateNetwork(network),
+      `Invalid network ${JSON.stringify(network)}`
+    );
 
-    assert(validateSelectedNetwork(network), `Network ${JSON.stringify(network)} doesn't match the selected network in Polymesh Wallet`);
+    assert(
+      validateSelectedNetwork(network),
+      `Network ${JSON.stringify(
+        network
+      )} doesn't match the selected network in Polymesh Wallet`
+    );
 
     // FIXME we're disabling this check temporarily.
     // The problem is, CDD providers will create DID and attempt to push uid in on go.
@@ -138,7 +198,10 @@ export default class Tabs extends DotTabs {
     return this.#state.provideUid(url, request);
   }
 
-  private readUid (url: string, request: RequestPolyReadUid): Promise<ReadUidResponse> {
+  private readUid(
+    url: string,
+    request: RequestPolyReadUid
+  ): Promise<ReadUidResponse> {
     // XXX: felt unnecessary, might delete later
     // assert(allowedUidReader(url), `App ${url} is not allowed access uid`);
 
@@ -151,20 +214,28 @@ export default class Tabs extends DotTabs {
     return this.#state.readUid(url, request);
   }
 
-  private async uidIsSet (): Promise<boolean> {
+  private async uidIsSet(): Promise<boolean> {
     const uidRecords = await this.#state.allUidRecords();
 
     const account = getSelectedIdentifiedAccount();
 
     assert(account, 'No account is present or no account selected');
 
-    if (!account.did) { return false; }
+    if (!account.did) {
+      return false;
+    }
 
     return uidRecords.some(({ did }) => did === account.did);
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await
-  public async _handle<TMessageType extends PolyMessageTypes> (id: string, type: TMessageType, request: PolyRequestTypes[TMessageType], url: string, port: chrome.runtime.Port): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
+  public async _handle<TMessageType extends PolyMessageTypes>(
+    id: string,
+    type: TMessageType,
+    request: PolyRequestTypes[TMessageType],
+    url: string,
+    port: chrome.runtime.Port
+  ): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
     if (type !== 'pub(authorize.tab)') {
       this.#state.ensureUrlAuthorized(url);
     }
@@ -209,7 +280,13 @@ export default class Tabs extends DotTabs {
         return this.readUid(url, request as RequestPolyReadUid);
 
       default:
-        return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, url, port);
+        return super.handle(
+          id,
+          type as MessageTypes,
+          request as RequestRpcUnsubscribe,
+          url,
+          port
+        );
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "polymesh-wallet",
-  "version": "1.2.2",
+  "version": "1.4.0",
   "description": "A Wallet extension for Polymesh blockchain",
   "private": true,
   "workspaces": [
@@ -14,7 +14,8 @@
     "build:zip": "yarn build:zip:dst && yarn build:zip:src",
     "build:zip:dst": "rm -rf ./master-build.zip && cd packages/extension/build && zip -r -FS ../../../master-build.zip .",
     "build:zip:src": "rm -rf ./master-src.zip && zip -r -x '*build/*' -x '*node_modules*' -FS ./master-src.zip packages .babelrc.js .editorconfig .eslintignore .eslintrc.js babel.config.js jest.config.js lerna.json package.json tsconfig.json yarn.lock",
-    "lint": "polkadot-dev-run-lint",
+    "lint": "eslint .",
+    "format": "prettier --write ./**/*",
     "lint:css": "stylelint './packages/**/src/**/*.tsx'",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
@@ -33,7 +34,7 @@
     "@polkadot/x-fetch": "^6.6.1",
     "babel-core": "^7.0.0-bridge.0",
     "safe-buffer": "^5.2.1",
-    "typescript": "^4.3.2"
+    "typescript": "^4.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
@@ -42,12 +43,19 @@
     "@semantic-release/git": "^10.0.0",
     "@types/jest": "^26.0.15",
     "@types/puppeteer": "^5.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
     "cz-conventional-changelog": "3.3.0",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-react": "^7.26.1",
     "git-commit-msg-linter": "^3.2.8",
     "jest": "^26.6.3",
+    "prettier": "^2.4.1",
     "puppeteer": "^5.5.0",
     "sinon-chrome": "^3.0.1",
-    "ts-jest": "^26.5.3"
+    "ts-jest": "^26.5.3",
+    "typescript": "^4.4.4"
   },
   "author": "Remon Nashid <remon.sherin@gmail.com>",
   "license": "Apache-2",

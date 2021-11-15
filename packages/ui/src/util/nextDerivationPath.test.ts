@@ -1,12 +1,15 @@
 import { nextDerivationPath } from './nextDerivationPath';
 
 describe('Generate Derivation Path', () => {
-  const acc = (address: string, parentAddress?: string): {
+  const acc = (
+    address: string,
+    parentAddress?: string
+  ): {
     address: string;
     parentAddress?: string;
   } => ({
     address,
-    parentAddress
+    parentAddress,
   });
 
   test('generates path for first masters child', () => {
@@ -14,14 +17,26 @@ describe('Generate Derivation Path', () => {
   });
 
   test('generates path for third masters child', () => {
-    expect(nextDerivationPath([acc('a'), acc('b', 'a'), acc('c', 'a')], 'a')).toEqual('//2');
+    expect(
+      nextDerivationPath([acc('a'), acc('b', 'a'), acc('c', 'a')], 'a')
+    ).toEqual('//2');
   });
 
   test('generates path for masters child when another root exists', () => {
-    expect(nextDerivationPath([acc('a'), acc('b', 'a'), acc('c', 'a'), acc('d')], 'a')).toEqual('//2');
+    expect(
+      nextDerivationPath(
+        [acc('a'), acc('b', 'a'), acc('c', 'a'), acc('d')],
+        'a'
+      )
+    ).toEqual('//2');
   });
 
   test('generates path for masters grandchild', () => {
-    expect(nextDerivationPath([acc('a'), acc('b', 'a'), acc('c', 'b'), acc('d', 'b')], 'b')).toEqual('//2');
+    expect(
+      nextDerivationPath(
+        [acc('a'), acc('b', 'a'), acc('c', 'b'), acc('d', 'b')],
+        'b'
+      )
+    ).toEqual('//2');
   });
 });

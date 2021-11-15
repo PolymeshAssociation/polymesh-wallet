@@ -6,34 +6,43 @@ import { NetworkName, UidRecord } from '../../types';
 const PREFIX = 'did';
 
 export default class AuxStore extends BaseStore<string> {
-  constructor () {
+  constructor() {
     super(PREFIX);
   }
 
-  private _allKeys (): Promise<string[]> {
+  private _allKeys(): Promise<string[]> {
     return new Promise((resolve) => {
-      chrome.storage.local.get(null, (result: Record<string, unknown>): void => {
-        const keys = Object
-          .entries(result)
-          .filter(([key]) => key.startsWith(`${PREFIX}:`))
-          .map(([key]) => key.replace(`${PREFIX}:`, ''));
+      chrome.storage.local.get(
+        null,
+        (result: Record<string, unknown>): void => {
+          const keys = Object.entries(result)
+            .filter(([key]) => key.startsWith(`${PREFIX}:`))
+            .map(([key]) => key.replace(`${PREFIX}:`, ''));
 
-        resolve(keys);
-      });
+          resolve(keys);
+        }
+      );
     });
   }
 
-  private _setn (key: string, value: string, password: string, update?: () => void): void {
+  private _setn(
+    key: string,
+    value: string,
+    password: string,
+    update?: () => void
+  ): void {
     const cipherText = CryptoJS.AES.encrypt(value, password).toString();
 
     super.set(key, cipherText, update);
   }
 
-  private _getn (key: string, password: string) : Promise<string> {
+  private _getn(key: string, password: string): Promise<string> {
     return new Promise((resolve, reject) => {
       super.get(key, (ciphertext) => {
         if (ciphertext && ciphertext.length) {
-          const value = CryptoJS.AES.decrypt(ciphertext, password).toString(CryptoJS.enc.Utf8);
+          const value = CryptoJS.AES.decrypt(ciphertext, password).toString(
+            CryptoJS.enc.Utf8
+          );
 
           if (!value.length) {
             reject(new Error('Password invalid'));
@@ -47,15 +56,30 @@ export default class AuxStore extends BaseStore<string> {
     });
   }
 
-  public getn (did: string, network: NetworkName, password: string): Promise<string> {
+  public getn(
+    did: string,
+    network: NetworkName,
+    password: string
+  ): Promise<string> {
     return this._getn(`${network.toLowerCase()}:${did}`, password);
   }
 
-  public setn (did: string, network: NetworkName, value: string, password: string, update?: () => void): void {
-    return this._setn(`${network.toLowerCase()}:${did}`, value, password, update);
+  public setn(
+    did: string,
+    network: NetworkName,
+    value: string,
+    password: string,
+    update?: () => void
+  ): void {
+    return this._setn(
+      `${network.toLowerCase()}:${did}`,
+      value,
+      password,
+      update
+    );
   }
 
-  public async allRecords (): Promise<UidRecord[]> {
+  public async allRecords(): Promise<UidRecord[]> {
     const keys = await this._allKeys();
 
     return keys.map((key) => {
@@ -65,7 +89,7 @@ export default class AuxStore extends BaseStore<string> {
     });
   }
 
-  public async changePassword (oldPass: string, newPass: string): Promise<void> {
+  public async changePassword(oldPass: string, newPass: string): Promise<void> {
     const keys = await this._allKeys();
 
     let i = 0;
@@ -84,7 +108,9 @@ export default class AuxStore extends BaseStore<string> {
       }
 
       // Escalate error
-      throw new Error('Password change failed: Some or all items cannot be decrypted with the provided password.');
+      throw new Error(
+        'Password change failed: Some or all items cannot be decrypted with the provided password.'
+      );
     }
   }
 }

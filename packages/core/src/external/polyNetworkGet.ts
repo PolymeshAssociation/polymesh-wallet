@@ -8,6 +8,6 @@ export default function (): NetworkMeta {
   return {
     name: network,
     label: networkLabels[network],
-    wssUrl: networkURLs[network]
+    wssUrl: networkURLs[network],
   };
 }

@@ -18,7 +18,7 @@ interface Props {
   request: SignerPayloadJSON;
 }
 
-function Extrinsic ({ request }: Props): React.ReactElement<Props> {
+function Extrinsic({ request }: Props): React.ReactElement<Props> {
   // const { networkState: { selected: selectedNetwork } } = useContext(PolymeshContext);
   const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
   const [loading, setLoading] = useState(false);
@@ -84,11 +84,7 @@ function Extrinsic ({ request }: Props): React.ReactElement<Props> {
   return (
     <>
       {loading && (
-        <Flex
-          alignItems='center'
-          justifyContent='center'
-          my='l'
-        >
+        <Flex alignItems="center" justifyContent="center" my="l">
           <Loading />
         </Flex>
       )}

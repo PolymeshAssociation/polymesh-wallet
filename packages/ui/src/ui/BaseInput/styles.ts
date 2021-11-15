@@ -4,15 +4,17 @@ import { Styles } from '../../styles/types';
 import { Flex } from '../Flex';
 import { BaseInputProps } from './BaseInputProps';
 
-const getInputStyles: Styles<BaseInputProps & { focused?: boolean }> = ({ disabled,
+const getInputStyles: Styles<BaseInputProps & { focused?: boolean }> = ({
+  disabled,
   focused,
   invalid,
   readOnly,
-  theme }) => {
+  theme,
+}) => {
   if (disabled) {
     return {
       borderColor: theme.colors.disabled,
-      backgroundColor: theme.colors.disabled
+      backgroundColor: theme.colors.disabled,
     };
   }
 
@@ -20,25 +22,25 @@ const getInputStyles: Styles<BaseInputProps & { focused?: boolean }> = ({ disabl
     return {
       borderColor: theme.colors.disabled,
       backgroundColor: theme.colors.disabled,
-      color: theme.colors.baseText
+      color: theme.colors.baseText,
     };
   }
 
   if (invalid) {
     if (focused) {
       return {
-        borderColor: theme.colors.alert
+        borderColor: theme.colors.alert,
       };
     }
 
     return {
-      borderColor: theme.colors.alert
+      borderColor: theme.colors.alert,
     };
   }
 
   if (focused) {
     return {
-      borderColor: theme.colors.brandMain
+      borderColor: theme.colors.brandMain,
     };
   }
 
@@ -52,12 +54,17 @@ export const Wrapper = styled.label<StyledProps<BaseInputProps>>((props) => ({
     border: `1px solid ${props.theme.colors.gray5}`,
     borderRadius: props.theme.radii[3],
     color: props.theme.colors.highlightText,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
-  ...getInputStyles(props)
+  ...getInputStyles(props),
 }));
 
-export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, tight, unit }) => ({
+export const BaseInputStyle: Styles<BaseInputProps> = ({
+  icon,
+  theme,
+  tight,
+  unit,
+}) => ({
   display: 'block',
   width: '100%',
   flexGrow: 1,
@@ -84,8 +91,8 @@ export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, tight, uni
   [`@media screen and (min-width: ${theme.breakpoints.sm})`]: {
     '-moz-appearance': 'textfield',
     '::-webkit-inner-spin-button, ::-webkit-outer-spin-button': {
-      '-webkit-appearance': 'none'
-    }
+      '-webkit-appearance': 'none',
+    },
   },
 
   '::placeholder': {
@@ -96,7 +103,7 @@ export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, tight, uni
     fontStyle: 'normal',
     fontWeight: theme.fontWeights.normal,
     fontSize: '14px',
-    lineHeight: '23px'
+    lineHeight: '23px',
   },
 
   ':-ms-input-placeholder': {
@@ -106,7 +113,7 @@ export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, tight, uni
     fontStyle: 'normal',
     fontWeight: theme.fontWeights.normal,
     fontSize: '14px',
-    lineHeight: '23px'
+    lineHeight: '23px',
   },
 
   '::-ms-input-placeholder': {
@@ -116,21 +123,21 @@ export const BaseInputStyle: Styles<BaseInputProps> = ({ icon, theme, tight, uni
     fontStyle: 'normal',
     fontWeight: theme.fontWeights.normal,
     fontSize: '14px',
-    lineHeight: '23px'
+    lineHeight: '23px',
   },
 
   ':-webkit-autofill': {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   ':-webkit-autofill:hover': {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   ':-webkit-autofill:focus': {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   ':-webkit-autofill:active': {
-    backgroundColor: 'transparent'
-  }
+    backgroundColor: 'transparent',
+  },
 });
 
 export const Input = styled.input(BaseInputStyle);
@@ -141,7 +148,7 @@ export const Unit = styled(Flex)(({ theme }) => ({
   fontSize: theme.fontSizes.baseText,
   fontFamily: theme.fontFamilies.baseText,
   flexShrink: 0,
-  marginRight: '1rem'
+  marginRight: '1rem',
 }));
 
 export const Icon = styled(Flex)(({ theme }) => ({
@@ -150,5 +157,5 @@ export const Icon = styled(Flex)(({ theme }) => ({
   fontSize: theme.fontSizes.baseText,
   fontFamily: theme.fontFamilies.baseText,
   flexShrink: 0,
-  marginLeft: '1rem'
+  marginLeft: '1rem',
 }));
