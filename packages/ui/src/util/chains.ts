@@ -18,6 +18,14 @@ const testnetTmp: Network = {
 };
 
 const polyGenesisHashes = [
+  // Mainnet
+  {
+    genesisHash: [
+      '0x6fbd74e5e1d0a61d52ccfe9d4adaed16dd3a7caa37c6bc4d0c2fa12e8b2f4063',
+    ],
+    displayName: 'Polymesh - Mainnet',
+    networkName: NetworkName.mainnet,
+  },
   // Testnet
   {
     genesisHash: [
