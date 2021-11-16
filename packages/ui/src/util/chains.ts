@@ -37,7 +37,7 @@ const polyGenesisHashes = [
   // Tooling
   {
     genesisHash: [
-      '0x56fb854a431370af86de89a0003ca3eb500066ee66eb01a92810369b3dc435c3',
+      '0xfb92247afaebe9bc0ca7f49913391467adc5d1c469bd44fb3c91973e37fe7714',
     ],
     displayName: 'Polymesh - Tooling testnet',
     networkName: NetworkName.pme,
