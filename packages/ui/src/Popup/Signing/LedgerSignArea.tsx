@@ -111,7 +111,11 @@ function LedgerSignArea({
               {'Refresh'}
             </Button>
           ) : (
-            <Button busy={isBusy || ledgerLoading} onClick={_onSignLedger}>
+            <Button
+              fluid
+              busy={isBusy || ledgerLoading}
+              onClick={_onSignLedger}
+            >
               {'Sign on Ledger'}
             </Button>
           )}
