@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.4.0...1.4.1) (2021-11-17)
+
+
+### Bug Fixes
+
+* genesis hash issues with Ledger devices ([#232](https://github.com/PolymathNetwork/polymesh-wallet/issues/232)) ([9890e1e](https://github.com/PolymathNetwork/polymesh-wallet/commit/9890e1e6317d88bc2cbb45b48d35eebd52ea0d42))
+
 # [1.4.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.3.2...1.4.0) (2021-11-12)
 
 
