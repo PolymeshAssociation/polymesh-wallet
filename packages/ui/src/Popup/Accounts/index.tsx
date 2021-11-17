@@ -102,7 +102,6 @@ export default function Accounts(): React.ReactElement {
       case 'fromJson':
         return isPopup ? _openWindow(jsonPath) : history.push(jsonPath);
       case 'fromLedger':
-        return history.push(ledgerPath);
       case 'connectLedger':
         return _openWindow(ledgerPath);
     }
