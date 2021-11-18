@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.4.1...1.4.2) (2021-11-18)
+
+
+### Bug Fixes
+
+* issues in Import Ledger account popup ([#233](https://github.com/PolymathNetwork/polymesh-wallet/issues/233)) ([8e83755](https://github.com/PolymathNetwork/polymesh-wallet/commit/8e8375521c3118a2c1857a4c34156592a3df3d2a))
+
 ## [1.4.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.4.0...1.4.1) (2021-11-17)
 
 
