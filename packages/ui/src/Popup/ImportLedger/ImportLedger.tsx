@@ -11,6 +11,7 @@ import {
   AccountContext,
   ActionContext,
   ActivityContext,
+  PolymeshContext,
 } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
 import {
@@ -63,6 +64,7 @@ function ImportLedger(): React.ReactElement {
   const { accounts } = useContext(AccountContext);
   const onAction = useContext(ActionContext);
   const isBusy = useContext(ActivityContext);
+  const { networkState } = useContext(PolymeshContext);
 
   const ledgerData = useLedger(genesis, accountIndex, addressOffset);
 
@@ -72,11 +74,12 @@ function ImportLedger(): React.ReactElement {
     refresh,
     status,
   } = ledgerData;
+
   const address: string | null = useMemo(() => {
     if (ledgerAddress) {
       settings.set({ ledgerConn: 'webusb' });
 
-      return recodeAddress(ledgerAddress);
+      return recodeAddress(ledgerAddress, networkState.ss58Format);
     } else {
       return null;
     }
