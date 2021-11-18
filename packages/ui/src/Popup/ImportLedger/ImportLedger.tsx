@@ -11,8 +11,10 @@ import {
   AccountContext,
   ActionContext,
   ActivityContext,
+  PolymeshContext,
 } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
+import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
 import {
   Status,
   useLedger,
@@ -63,6 +65,7 @@ function ImportLedger(): React.ReactElement {
   const { accounts } = useContext(AccountContext);
   const onAction = useContext(ActionContext);
   const isBusy = useContext(ActivityContext);
+  const { networkState } = useContext(PolymeshContext);
 
   const ledgerData = useLedger(genesis, accountIndex, addressOffset);
 
@@ -72,11 +75,12 @@ function ImportLedger(): React.ReactElement {
     refresh,
     status,
   } = ledgerData;
+
   const address: string | null = useMemo(() => {
     if (ledgerAddress) {
       settings.set({ ledgerConn: 'webusb' });
 
-      return recodeAddress(ledgerAddress);
+      return recodeAddress(ledgerAddress, networkState.ss58Format);
     } else {
       return null;
     }
@@ -171,14 +175,6 @@ function ImportLedger(): React.ReactElement {
     saveAccount();
   };
 
-  const getInitials = (fullName: string) => {
-    if (!fullName) return '';
-
-    const [name1, name2] = fullName.split(' ');
-
-    return `${name1[0]}${name2 ? name2[0] : ''}`.toUpperCase();
-  };
-
   const toggleShowingSettings = () => {
     setIsShowingSettings(!isShowingSettings);
   };
@@ -208,7 +204,7 @@ function ImportLedger(): React.ReactElement {
               alignItems="flex-start"
               flexDirection="column"
               height="100%"
-              p="8px"
+              p="m"
               style={{ overflowY: 'scroll ' }}
             >
               <Flex width="100%">
@@ -219,9 +215,7 @@ function ImportLedger(): React.ReactElement {
                   height={40}
                   justifyContent="center"
                 >
-                  <Text color="brandMain" fontSize={1}>
-                    {getInitials(name)}
-                  </Text>
+                  <InitialsAvatar name={name} />
                 </Flex>
                 <Flex alignItems="flex-start" flexDirection="column" ml="8px">
                   <Text color="gray.1" variant="b2m">
@@ -295,25 +289,29 @@ function ImportLedger(): React.ReactElement {
                       <Text color="gray.1" variant="b2m">
                         Account type
                       </Text>
-                      <Dropdown
-                        className="accountType"
-                        disabled={ledgerLoading}
-                        onChange={updateAccountIndex}
-                        options={accOps.current}
-                        value={accountIndex}
-                      />
+                      <Box mb="3px">
+                        <Dropdown
+                          className="accountType"
+                          disabled={ledgerLoading}
+                          onChange={updateAccountIndex}
+                          options={accOps.current}
+                          value={accountIndex}
+                        />
+                      </Box>
                     </Box>
                     <Box mb="m">
                       <Text color="gray.1" variant="b2m">
                         Address index
                       </Text>
-                      <Dropdown
-                        className="accountIndex"
-                        disabled={ledgerLoading}
-                        onChange={updateAddressOffset}
-                        options={addOps.current}
-                        value={addressOffset}
-                      />
+                      <Box mb="3px">
+                        <Dropdown
+                          className="accountIndex"
+                          disabled={ledgerLoading}
+                          onChange={updateAddressOffset}
+                          options={addOps.current}
+                          value={addressOffset}
+                        />
+                      </Box>
                     </Box>
                   </>
                 )}
