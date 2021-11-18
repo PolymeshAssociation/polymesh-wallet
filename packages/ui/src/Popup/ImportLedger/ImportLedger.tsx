@@ -14,6 +14,7 @@ import {
   PolymeshContext,
 } from '@polymathnetwork/extension-ui/components/contexts';
 import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
+import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
 import {
   Status,
   useLedger,
@@ -174,14 +175,6 @@ function ImportLedger(): React.ReactElement {
     saveAccount();
   };
 
-  const getInitials = (fullName: string) => {
-    if (!fullName) return '';
-
-    const [name1, name2] = fullName.split(' ');
-
-    return `${name1[0]}${name2 ? name2[0] : ''}`.toUpperCase();
-  };
-
   const toggleShowingSettings = () => {
     setIsShowingSettings(!isShowingSettings);
   };
@@ -222,9 +215,7 @@ function ImportLedger(): React.ReactElement {
                   height={40}
                   justifyContent="center"
                 >
-                  <Text color="brandMain" fontSize={1}>
-                    {getInitials(name)}
-                  </Text>
+                  <InitialsAvatar name={name} />
                 </Flex>
                 <Flex alignItems="flex-start" flexDirection="column" ml="8px">
                   <Text color="gray.1" variant="b2m">
