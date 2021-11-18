@@ -75,8 +75,8 @@ export default React.memo(
     -moz-appearance: none;
     appearance: none;
     background: ${theme.readonlyInputBackground};
-    border-color: ${isError ? theme.errorBorderColor : theme.colors.gray[3]};
-    border-radius: ${theme.radii[1]};
+    border-color: ${isError ? theme.errorBorderColor : theme.colors.gray5};
+    border-radius: ${theme.radii[3]};
     border-style: solid;
     border-width: 1px;
     box-sizing: border-box;
