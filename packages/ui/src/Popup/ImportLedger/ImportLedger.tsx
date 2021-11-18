@@ -204,7 +204,7 @@ function ImportLedger(): React.ReactElement {
               alignItems="flex-start"
               flexDirection="column"
               height="100%"
-              p="8px"
+              p="m"
               style={{ overflowY: 'scroll ' }}
             >
               <Flex width="100%">
