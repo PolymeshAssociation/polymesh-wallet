@@ -289,25 +289,29 @@ function ImportLedger(): React.ReactElement {
                       <Text color="gray.1" variant="b2m">
                         Account type
                       </Text>
-                      <Dropdown
-                        className="accountType"
-                        disabled={ledgerLoading}
-                        onChange={updateAccountIndex}
-                        options={accOps.current}
-                        value={accountIndex}
-                      />
+                      <Box mb="3px">
+                        <Dropdown
+                          className="accountType"
+                          disabled={ledgerLoading}
+                          onChange={updateAccountIndex}
+                          options={accOps.current}
+                          value={accountIndex}
+                        />
+                      </Box>
                     </Box>
                     <Box mb="m">
                       <Text color="gray.1" variant="b2m">
                         Address index
                       </Text>
-                      <Dropdown
-                        className="accountIndex"
-                        disabled={ledgerLoading}
-                        onChange={updateAddressOffset}
-                        options={addOps.current}
-                        value={addressOffset}
-                      />
+                      <Box mb="3px">
+                        <Dropdown
+                          className="accountIndex"
+                          disabled={ledgerLoading}
+                          onChange={updateAddressOffset}
+                          options={addOps.current}
+                          value={addressOffset}
+                        />
+                      </Box>
                     </Box>
                   </>
                 )}
