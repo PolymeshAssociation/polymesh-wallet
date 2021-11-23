@@ -59,8 +59,7 @@ export const defaultNetwork: NetworkName = NetworkName.mainnet;
 
 export const messagePrefix = 'poly:';
 
-// Testnet genesis hash.
-export const genesisHash =
+export const testnetGenesisHash =
   '0x2ace05e703aa50b48c0ccccfc8b424f7aab9a1e2c424ed12e45d20b1e8ffd0d6';
 
 export const messages = [
