@@ -1,8 +1,10 @@
+import React, { useContext } from 'react';
 import {
   networkIsDev,
   networkLabels,
 } from '@polymathnetwork/extension-core/constants';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
+import mainnetCircleSvg from '@polymathnetwork/extension-ui/assets/mainnet-circle.svg';
 import {
   SvgCheck,
   SvgChevron,
@@ -15,7 +17,6 @@ import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/
 import { colors } from '@polymathnetwork/extension-ui/components/themeDefinitions';
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
-import React, { useContext } from 'react';
 
 const DEV_NETWORK_COLORS = {
   backgrounds: ['#D7F4F2', '#60D3CB40'],
@@ -24,9 +25,14 @@ const DEV_NETWORK_COLORS = {
 
 const NETWORK_COLORS: Record<
   NetworkName,
-  { backgrounds: string[]; foreground: string }
+  {
+    image?: string;
+    backgrounds: string[];
+    foreground: string;
+  }
 > = {
   mainnet: {
+    image: mainnetCircleSvg,
     backgrounds: ['#FAD1DC', '#EC467340'],
     foreground: '#43195B',
   },
@@ -86,6 +92,7 @@ export function NetworkSelector({
             <NetworkCircle
               background={NETWORK_COLORS[network as NetworkName].backgrounds[0]}
               color={NETWORK_COLORS[network as NetworkName].foreground}
+              image={NETWORK_COLORS[network as NetworkName].image}
               size="24px"
               thickness="4px"
             />
@@ -131,7 +138,11 @@ export function NetworkSelector({
       position="bottom-left"
       selector={
         <NetworkSelect background={background} id="network-selector">
-          <NetworkCircle background={background} color={foreground} />
+          <NetworkCircle
+            background={background}
+            color={foreground}
+            image={NETWORK_COLORS[currentNetwork as NetworkName].image}
+          />
           <Box ml="4px" mr="7px">
             <Text color={foreground} variant="b3m">
               {networkLabels[currentNetwork]}
@@ -169,15 +180,20 @@ const DropdownIcon = styled.div<{ background: string }>`
 const NetworkCircle = styled.span<{
   background: string;
   color: string;
+  image?: string;
   size?: string;
   thickness?: string;
 }>`
   display: inline-box;
   width: ${(props) => props.size || '12px'};
   height: ${(props) => props.size || '12px'};
-  background: ${(props) => props.background};
+  background: ${(props) =>
+    props.image ? `url(${props.image})` : props.background};
+  border: ${(props) => (props.image ? 'none' : props.thickness || '2px')} solid
+    ${(props) => props.color};
+  background-repeat: no-repeat;
+  background-size: cover;
   box-sizing: border-box;
-  border: ${(props) => props.thickness || '2px'} solid ${(props) => props.color};
   border-radius: 50%;
   flex-shrink: 0;
 `;
