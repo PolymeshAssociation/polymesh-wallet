@@ -55,7 +55,7 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   },
 };
 
-export const defaultNetwork: NetworkName = NetworkName.testnet;
+export const defaultNetwork: NetworkName = NetworkName.mainnet;
 
 export const messagePrefix = 'poly:';
 
