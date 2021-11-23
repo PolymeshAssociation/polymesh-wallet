@@ -18,19 +18,37 @@ import { colors } from '@polymathnetwork/extension-ui/components/themeDefinition
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 
+const { devNetworks, networks } = Object.entries(networkLabels).reduce(
+  ({ devNetworks, networks }: Record<string, string[][]>, networkLabel) => {
+    const [network, label] = networkLabel;
+
+    networkIsDev[network as NetworkName]
+      ? devNetworks.push([network, label])
+      : networks.push([network, label]);
+
+    return {
+      networks,
+      devNetworks,
+    };
+  },
+  {
+    networks: [],
+    devNetworks: [],
+  }
+);
+
 const DEV_NETWORK_COLORS = {
   backgrounds: ['#D7F4F2', '#60D3CB40'],
   foreground: '#60D3CB',
 };
 
-const NETWORK_COLORS: Record<
-  NetworkName,
-  {
-    image?: string;
-    backgrounds: string[];
-    foreground: string;
-  }
-> = {
+type NetworkColors = {
+  image?: string;
+  backgrounds: string[];
+  foreground: string;
+};
+
+const NETWORK_COLORS: Record<string, NetworkColors> = {
   mainnet: {
     image: mainnetCircleSvg,
     backgrounds: ['#FAD1DC', '#EC467340'],
@@ -44,6 +62,41 @@ const NETWORK_COLORS: Record<
   pme: DEV_NETWORK_COLORS,
   local: DEV_NETWORK_COLORS,
 };
+
+const getNetworkItems = (networks: string[][], currentNetwork: string) =>
+  networks.map(([network, networkLabel]) => {
+    const isCurrentNetwork = currentNetwork === network;
+
+    return {
+      label: (
+        <Flex
+          className="network-item"
+          key={network}
+          px="16px"
+          py="8px"
+          {...(isCurrentNetwork && { style: { background: colors.gray[5] } })}
+        >
+          <NetworkCircle
+            background={NETWORK_COLORS[network].backgrounds[0]}
+            color={NETWORK_COLORS[network].foreground}
+            image={NETWORK_COLORS[network].image}
+            size="24px"
+            thickness="4px"
+          />
+          <Box ml="8px" mr="auto">
+            <Text variant="b2m">{networkLabel}</Text>
+          </Box>
+
+          {isCurrentNetwork && (
+            <Box ml="auto">
+              <Icon Asset={SvgCheck} color="brandMain" height={24} width={24} />
+            </Box>
+          )}
+        </Flex>
+      ),
+      value: network,
+    };
+  });
 
 type NetworkSelectorProps = {
   onSelect: (network: NetworkName) => void;
@@ -63,72 +116,20 @@ export function NetworkSelector({
     NETWORK_COLORS[currentNetwork]?.foreground ||
     NETWORK_COLORS.testnet.foreground;
 
-  const { devNetworks, networks } = Object.entries(networkLabels).reduce(
-    ({ devNetworks, networks }: Record<string, string[][]>, networkLabel) => {
-      const [network, label] = networkLabel;
-
-      networkIsDev[network as NetworkName]
-        ? devNetworks.push([network, label])
-        : networks.push([network, label]);
-
-      return { networks, devNetworks };
-    },
-    { networks: [], devNetworks: [] }
-  );
-
-  const networkMenuItems = (networks: string[][]) =>
-    networks.map(([network, networkLabel]) => {
-      const isCurrentNetwork = currentNetwork === network;
-
-      return {
-        label: (
-          <Flex
-            className="network-item"
-            key={network}
-            px="16px"
-            py="8px"
-            {...(isCurrentNetwork && { style: { background: colors.gray[5] } })}
-          >
-            <NetworkCircle
-              background={NETWORK_COLORS[network as NetworkName].backgrounds[0]}
-              color={NETWORK_COLORS[network as NetworkName].foreground}
-              image={NETWORK_COLORS[network as NetworkName].image}
-              size="24px"
-              thickness="4px"
-            />
-            <Box ml="8px" mr="auto">
-              <Text variant="b2m">{networkLabel}</Text>
-            </Box>
-
-            {isCurrentNetwork && (
-              <Box ml="auto">
-                <Icon
-                  Asset={SvgCheck}
-                  color="brandMain"
-                  height={24}
-                  width={24}
-                />
-              </Box>
-            )}
-          </Flex>
-        ),
-        value: network,
-      };
-    });
-
   const networkOptions: Option[] = [
     {
       category: 'Networks',
-      menu: networkMenuItems(networks),
+      menu: getNetworkItems(networks, currentNetwork),
     },
+    ...(isDeveloper
+      ? [
+          {
+            category: 'Development',
+            menu: getNetworkItems(devNetworks, currentNetwork),
+          },
+        ]
+      : []),
   ];
-
-  if (isDeveloper) {
-    networkOptions.push({
-      category: 'Development',
-      menu: networkMenuItems(devNetworks),
-    });
-  }
 
   return (
     <OptionSelector
@@ -141,7 +142,7 @@ export function NetworkSelector({
           <NetworkCircle
             background={background}
             color={foreground}
-            image={NETWORK_COLORS[currentNetwork as NetworkName].image}
+            image={NETWORK_COLORS[currentNetwork].image}
           />
           <Box ml="4px" mr="7px">
             <Text color={foreground} variant="b3m">
