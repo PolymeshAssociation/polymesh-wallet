@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.4.2...1.5.0) (2021-11-23)
+
+
+### Features
+
+* connect to Mainnet by default on wallet installation ([#234](https://github.com/PolymathNetwork/polymesh-wallet/issues/234)) ([75bbb2b](https://github.com/PolymathNetwork/polymesh-wallet/commit/75bbb2b6138e4c322d0cb83af8fbcce610960e0d))
+
 ## [1.4.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.4.1...1.4.2) (2021-11-18)
 
 

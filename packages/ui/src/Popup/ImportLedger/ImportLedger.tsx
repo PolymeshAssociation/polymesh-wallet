@@ -1,6 +1,6 @@
 import { ErrorMessage } from '@hookform/error-message';
 import settings from '@polkadot/ui-settings';
-import { genesisHash } from '@polymathnetwork/extension-core/constants';
+import { testnetGenesisHash } from '@polymathnetwork/extension-core/constants';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import {
   SvgChevronDown,
@@ -50,8 +50,7 @@ const AVAIL: number[] = [
 ];
 
 function ImportLedger(): React.ReactElement {
-  // @TODO hard-coding the latest test chain genesisHash. Currently Alcyone's.
-  const genesis = genesisHash;
+  const genesis = testnetGenesisHash;
 
   const methods = useForm<FormInputs>();
   const { errors, handleSubmit, register } = methods;

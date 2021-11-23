@@ -30,13 +30,12 @@ export default React.memo(
   styled(Warning)(
     ({ isDanger, theme }: Props) => `
   display: flex;
+  align-items: center;
   flex-direction: row;
-  padding-left: ${isDanger ? '18px' : ''};
+  padding-left: ${isDanger ? '16px' : '20px'};
   color: ${theme.subTextColor};
-  margin-right: 20px;
-  border-left: ${
-    isDanger ? `0.25rem solid ${theme.buttonBackgroundDanger}` : ''
-  };
+  border-left: ${isDanger ? `4px solid ${theme.buttonBackgroundDanger}` : ''};
+  width: 100%;
 
   .warningImage {
     width: 16px;
