@@ -15,13 +15,13 @@ import Method from './Method';
 // const toastId = 'network-mismatch';
 
 interface Props {
-  request: SignerPayloadJSON;
+  callDetails?: ResponsePolyCallDetails;
+  loading: boolean;
 }
 
-function Extrinsic({ request }: Props): React.ReactElement<Props> {
+function Extrinsic({ callDetails, loading }: Props): React.ReactElement<Props> {
   // const { networkState: { selected: selectedNetwork } } = useContext(PolymeshContext);
-  const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
-  const [loading, setLoading] = useState(false);
+  // const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
 
   // @TODO: determine how to detect network mismatch differently. Since genesis hash can be the same for different networks.
   // useEffect(() => {
@@ -68,18 +68,18 @@ function Extrinsic({ request }: Props): React.ReactElement<Props> {
   //   }
   // }, [request, selectedNetwork]);
 
-  useEffect(() => {
-    setLoading(true);
-    getPolyCallDetails(request)
-      .then((callDetails) => {
-        setCallDetails(callDetails);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [request]);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   getPolyCallDetails(request)
+  //     .then((callDetails) => {
+  //       setCallDetails(callDetails);
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       setLoading(false);
+  //     });
+  // }, [request]);
 
   return (
     <>

@@ -14,11 +14,12 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { ActionContext, VerticalSpace } from '../../components';
-import { approveSignSignature } from '../../messaging';
+import { approveSignSignature, getPolyCallDetails } from '../../messaging';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
 import LedgerSignArea from './LedgerSignArea';
 import SignArea from './SignArea';
+import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 
 interface Props {
   account: AccountJson;
@@ -56,6 +57,8 @@ export default function Request({
     hexBytes: null,
     payload: null,
   });
+  const [loading, setLoading] = useState(false);
+  const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
   const [error, setError] = useState<string | null>(null);
 
   useEffect((): void => {
@@ -98,6 +101,20 @@ export default function Request({
     return null;
   }
 
+  useEffect(() => {
+    setLoading(true);
+    getPolyCallDetails(request.payload as SignerPayloadJSON)
+      .then((callDetails) => {
+        console.log({ callDetails });
+        setCallDetails(callDetails);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, [request]);
+
   if (payload !== null) {
     const json = request.payload as SignerPayloadJSON;
 
@@ -107,7 +124,7 @@ export default function Request({
           <Box mt="xs" mx="s">
             <Heading variant="h5">Signing Request</Heading>
           </Box>
-          <Extrinsic request={json} />
+          <Extrinsic callDetails={callDetails} loading={loading} />
         </RequestContent>
         {isHardware ? (
           <LedgerSignArea
