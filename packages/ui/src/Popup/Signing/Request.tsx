@@ -192,6 +192,7 @@ export default function Request({
           rejectOnly={!!isHardware}
           setError={setError}
           signId={signId}
+          isAbleToPay={isAbleToPay}
         />
       </>
     );
