@@ -25,7 +25,7 @@ import LedgerSignArea from './LedgerSignArea';
 import SignArea from './SignArea';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
 import BN from 'bn.js';
-import { formatAmount } from '@polymathnetwork/extension-ui/util/formatters';
+// import { formatAmount } from '@polymathnetwork/extension-ui/util/formatters';
 
 interface Props {
   account: AccountJson;
