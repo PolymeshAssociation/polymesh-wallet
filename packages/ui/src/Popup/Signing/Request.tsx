@@ -67,7 +67,7 @@ export default function Request({
   });
   const [loading, setLoading] = useState(false);
   const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
-  const [isAbleToPay, setIsAbleToPay] = useState(false);
+  const [isAbleToPayFees, setIsAbleToPayFees] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect((): void => {
@@ -123,7 +123,7 @@ export default function Request({
       });
   }, [request]);
 
-  // Calculate total cost before signing
+  // Calculate if able to pay fees
   useEffect(() => {
     if (!callDetails) return;
 
@@ -133,13 +133,7 @@ export default function Request({
       polymeshContext.currentAccount?.balance?.transferrable || 0
     );
 
-    setIsAbleToPay(transferrableBalance.gte(totalFees));
-
-    console.log({
-      totalFees: formatAmount(totalFees.toString()),
-      transferrableBalance: formatAmount(transferrableBalance.toString()),
-      isAbleToPay,
-    });
+    setIsAbleToPayFees(transferrableBalance.gte(totalFees));
   }, [callDetails]);
 
   if (payload !== null) {
@@ -172,7 +166,7 @@ export default function Request({
             isFirst={isFirst}
             setError={setError}
             signId={signId}
-            isAbleToPay={isAbleToPay}
+            isAbleToPayFees={isAbleToPayFees}
           />
         )}
       </>
@@ -192,7 +186,7 @@ export default function Request({
           rejectOnly={!!isHardware}
           setError={setError}
           signId={signId}
-          isAbleToPay={isAbleToPay}
+          isAbleToPayFees={isAbleToPayFees}
         />
       </>
     );

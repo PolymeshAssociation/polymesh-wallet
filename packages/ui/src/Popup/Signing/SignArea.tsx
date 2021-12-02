@@ -19,7 +19,7 @@ interface Props {
   setError: (value: string | null) => void;
   signId: string;
   rejectOnly?: boolean;
-  isAbleToPay: boolean;
+  isAbleToPayFees: boolean;
 }
 
 function SignArea({
@@ -30,7 +30,7 @@ function SignArea({
   rejectOnly = false,
   setError,
   signId,
-  isAbleToPay,
+  isAbleToPayFees,
 }: Props): JSX.Element {
   const [savePass, setSavePass] = useState(false);
   const [isLocked, setIsLocked] = useState<boolean | null>(null);
@@ -124,13 +124,13 @@ function SignArea({
                 <Button
                   busy={isBusy}
                   disabled={
-                    (!!isLocked && !password) || !!error || !isAbleToPay
+                    (!!isLocked && !password) || !!error || !isAbleToPayFees
                   }
                   fluid
                   onClick={_onSign}
                   type="submit"
                 >
-                  {isAbleToPay ? buttonText : 'Insufficient funds'}
+                  {isAbleToPayFees ? buttonText : 'Insufficient funds'}
                 </Button>
               </Flex>
             )}
