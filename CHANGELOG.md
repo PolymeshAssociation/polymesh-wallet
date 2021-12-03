@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.0...1.5.1) (2021-12-03)
+
+
+### Bug Fixes
+
+* disable signing if insufficient balance [GTN-2297] [GTN-2162] ([#236](https://github.com/PolymathNetwork/polymesh-wallet/issues/236)) ([2adb2eb](https://github.com/PolymathNetwork/polymesh-wallet/commit/2adb2ebdcf01147d4f9afa7a7ee9baaf078dd09d))
+
 # [1.5.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.4.2...1.5.0) (2021-11-23)
 
 
