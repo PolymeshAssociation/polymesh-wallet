@@ -132,8 +132,6 @@ export default function Request({
       polymeshContext.currentAccount?.balance?.transferrable || 0
     );
 
-    console.log({ totalFees });
-
     setIsAbleToPayFees(transferrableBalance.gte(totalFees));
   }, [callDetails]);
 
