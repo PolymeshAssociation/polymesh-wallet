@@ -66,7 +66,7 @@ export default function Request({
   });
   const [loading, setLoading] = useState(false);
   const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
-  const [isAbleToPayFees, setIsAbleToPayFees] = useState(false);
+  const [isAbleToPayFees, setIsAbleToPayFees] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect((): void => {
@@ -131,6 +131,8 @@ export default function Request({
     const transferrableBalance = new BN(
       polymeshContext.currentAccount?.balance?.transferrable || 0
     );
+
+    console.log({ totalFees });
 
     setIsAbleToPayFees(transferrableBalance.gte(totalFees));
   }, [callDetails]);
