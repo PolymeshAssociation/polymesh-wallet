@@ -13,12 +13,18 @@ import { Box, Heading } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { ActionContext, VerticalSpace } from '../../components';
-import { approveSignSignature } from '../../messaging';
+import {
+  ActionContext,
+  PolymeshContext,
+  VerticalSpace,
+} from '../../components';
+import { approveSignSignature, getPolyCallDetails } from '../../messaging';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
 import LedgerSignArea from './LedgerSignArea';
 import SignArea from './SignArea';
+import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import BN from 'bn.js';
 
 interface Props {
   account: AccountJson;
@@ -52,10 +58,15 @@ export default function Request({
   url,
 }: Props): React.ReactElement<Props> | null {
   const onAction = useContext(ActionContext);
+  const polymeshContext = useContext(PolymeshContext);
+
   const [{ hexBytes, payload }, setData] = useState<Data>({
     hexBytes: null,
     payload: null,
   });
+  const [loading, setLoading] = useState(false);
+  const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
+  const [isAbleToPayFees, setIsAbleToPayFees] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect((): void => {
@@ -98,6 +109,32 @@ export default function Request({
     return null;
   }
 
+  useEffect(() => {
+    setLoading(true);
+    getPolyCallDetails(request.payload as SignerPayloadJSON)
+      .then((callDetails) => {
+        setCallDetails(callDetails);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, [request]);
+
+  // Calculate if able to pay fees
+  useEffect(() => {
+    if (!callDetails) return;
+
+    const { networkFee, protocolFee } = callDetails;
+    const totalFees = new BN(networkFee).add(new BN(protocolFee));
+    const transferrableBalance = new BN(
+      polymeshContext.currentAccount?.balance?.transferrable || 0
+    );
+
+    setIsAbleToPayFees(transferrableBalance.gte(totalFees));
+  }, [callDetails]);
+
   if (payload !== null) {
     const json = request.payload as SignerPayloadJSON;
 
@@ -107,7 +144,7 @@ export default function Request({
           <Box mt="xs" mx="s">
             <Heading variant="h5">Signing Request</Heading>
           </Box>
-          <Extrinsic request={json} />
+          <Extrinsic callDetails={callDetails} loading={loading} />
         </RequestContent>
         {isHardware ? (
           <LedgerSignArea
@@ -128,6 +165,7 @@ export default function Request({
             isFirst={isFirst}
             setError={setError}
             signId={signId}
+            isAbleToPayFees={isAbleToPayFees}
           />
         )}
       </>
@@ -147,6 +185,7 @@ export default function Request({
           rejectOnly={!!isHardware}
           setError={setError}
           signId={signId}
+          isAbleToPayFees={isAbleToPayFees}
         />
       </>
     );

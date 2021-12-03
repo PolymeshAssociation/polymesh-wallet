@@ -1,28 +1,13 @@
-import { SignerPayloadJSON } from '@polkadot/types/types';
+import React from 'react';
 import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
-// import { networkLabels } from '@polymathnetwork/extension-core/constants';
-// import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
-// import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
-import { getPolyCallDetails } from '@polymathnetwork/extension-ui/messaging';
-// import { Box, Flex, Icon, Loading, Text } from '@polymathnetwork/extension-ui/ui';
 import { Flex, Loading } from '@polymathnetwork/extension-ui/ui';
-// import { genesisToNetworkName } from '@polymathnetwork/extension-ui/util/chains';
-import React, { useEffect, useState } from 'react';
-
-// import { toast } from 'react-toastify';
 import Method from './Method';
-
-// const toastId = 'network-mismatch';
-
 interface Props {
-  request: SignerPayloadJSON;
+  callDetails?: ResponsePolyCallDetails;
+  loading: boolean;
 }
 
-function Extrinsic({ request }: Props): React.ReactElement<Props> {
-  // const { networkState: { selected: selectedNetwork } } = useContext(PolymeshContext);
-  const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
-  const [loading, setLoading] = useState(false);
-
+function Extrinsic({ callDetails, loading }: Props): React.ReactElement<Props> {
   // @TODO: determine how to detect network mismatch differently. Since genesis hash can be the same for different networks.
   // useEffect(() => {
   //   const targetNetwork = genesisToNetworkName(request.genesisHash);
@@ -67,19 +52,6 @@ function Extrinsic({ request }: Props): React.ReactElement<Props> {
   //     toast.dismiss(toastId);
   //   }
   // }, [request, selectedNetwork]);
-
-  useEffect(() => {
-    setLoading(true);
-    getPolyCallDetails(request)
-      .then((callDetails) => {
-        setCallDetails(callDetails);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [request]);
 
   return (
     <>
