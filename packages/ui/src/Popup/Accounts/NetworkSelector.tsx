@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   networkIsDev,
   networkLabels,
@@ -107,7 +107,7 @@ type NetworkSelectorProps = {
 
 export function NetworkSelector({
   onSelect,
-}: NetworkSelectorProps): React.ReactElement {
+}: NetworkSelectorProps): React.ReactElement | null {
   const {
     networkState: { isDeveloper, selected: currentNetwork },
   } = useContext(PolymeshContext);
@@ -134,7 +134,13 @@ export function NetworkSelector({
       : []),
   ];
 
-  return (
+  // Automatically switch to 'Mainnet' network if current network doesn't exist.
+  // This is necessary to prevent errors and UI bugs, as sometimes networks have to be modified, or removed.
+  useEffect(() => {
+    if (!networkLabels[currentNetwork]) onSelect(NetworkName.mainnet);
+  }, [currentNetwork]);
+
+  return networkLabels[currentNetwork] ? (
     <OptionSelector
       minWidth="368px"
       onSelect={onSelect}
@@ -158,7 +164,7 @@ export function NetworkSelector({
         </NetworkSelect>
       }
     />
-  );
+  ) : null;
 }
 
 const NetworkSelect = styled.div<{ background: string }>`
