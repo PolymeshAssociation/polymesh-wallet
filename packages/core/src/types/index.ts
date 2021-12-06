@@ -62,8 +62,8 @@ export type ReversedDidList = Record<
 export enum NetworkName {
   mainnet = 'mainnet',
   testnet = 'testnet',
-  pmf = 'pmf',
-  pme = 'pme',
+  // pmf = 'pmf',
+  // pme = 'pme',
   local = 'local',
 }
 

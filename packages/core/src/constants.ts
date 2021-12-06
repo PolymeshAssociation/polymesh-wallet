@@ -3,32 +3,32 @@ import { LinkName, NetworkName, NetworkState } from './types';
 export const networkURLs: Record<NetworkName, string> = {
   mainnet: 'wss://mainnet-rpc.polymesh.network',
   testnet: 'wss://testnet-rpc.polymesh.live',
-  pmf: 'wss://pmf.polymath.network',
-  pme: 'wss://pme.polymath.network',
+  // pmf: 'wss://pmf.polymath.network',
+  // pme: 'wss://pme.polymath.network',
   local: 'ws://localhost:9944',
 };
 
 export const networkLabels: Record<NetworkName, string> = {
   mainnet: 'Mainnet',
   testnet: 'Testnet',
-  pmf: 'Staging',
-  pme: 'Tooling',
+  // pmf: 'Staging',
+  // pme: 'Tooling',
   local: 'Local node',
 };
 
 export const networkIsDev: Record<NetworkName, boolean> = {
   mainnet: false,
   testnet: false,
-  pmf: true,
-  pme: true,
+  // pmf: true,
+  // pme: true,
   local: true,
 };
 
 export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
   mainnet: true,
   testnet: true,
-  pmf: true,
-  pme: true,
+  // pmf: true,
+  // pme: true,
   local: false,
 };
 
@@ -41,14 +41,14 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
     dashboard: 'https://testnet-dashboard.polymath.network/',
     explorer: 'https://polymesh-testnet.subscan.io/',
   },
-  pmf: {
-    dashboard: 'https://polymesh-dashboard-beta.herokuapp.com/',
-    explorer: 'http://18.224.67.149/',
-  },
-  pme: {
-    dashboard: 'https://polymesh-dashboard-dev.herokuapp.com/',
-    explorer: 'https://tooling-app.polymesh.live/',
-  },
+  // pmf: {
+  //   dashboard: 'https://polymesh-dashboard-beta.herokuapp.com/',
+  //   explorer: 'http://18.224.67.149/',
+  // },
+  // pme: {
+  //   dashboard: 'https://polymesh-dashboard-dev.herokuapp.com/',
+  //   explorer: 'https://tooling-app.polymesh.live/',
+  // },
   local: {
     dashboard: 'unknown',
     explorer: 'unknown',
