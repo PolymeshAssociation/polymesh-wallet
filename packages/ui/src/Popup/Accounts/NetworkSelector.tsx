@@ -37,11 +37,6 @@ const { devNetworks, networks } = Object.entries(networkLabels).reduce(
   }
 );
 
-const DEV_NETWORK_COLORS = {
-  backgrounds: ['#D7F4F2', '#60D3CB40'],
-  foreground: '#60D3CB',
-};
-
 type NetworkColors = {
   image?: string;
   backgrounds: string[];
@@ -58,8 +53,6 @@ const NETWORK_COLORS: Record<string, NetworkColors> = {
     backgrounds: ['#DCEFFE', '#1348E440'],
     foreground: '#1348E4',
   },
-  // pmf: DEV_NETWORK_COLORS,
-  // pme: DEV_NETWORK_COLORS,
   local: {
     backgrounds: ['#D7F4F2', '#60D3CB40'],
     foreground: '#60D3CB',
