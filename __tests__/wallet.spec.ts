@@ -155,7 +155,7 @@ describe('Wallet', () => {
   });
 
   describe('Network & Account selection', () => {
-    it('Select "Tooling"', async () => {
+    it('Select "Testnet"', async () => {
       await (await page.waitForSelector('div.settings-menu')).click();
       await (
         await page.waitForXPath("//span[text()='Display development networks']")
@@ -163,7 +163,7 @@ describe('Wallet', () => {
 
       await (await page.waitForSelector('div#network-selector')).click();
 
-      await (await page.waitForXPath("//span[text()='Tooling']")).click();
+      await (await page.waitForXPath("//span[text()='Testnet']")).click();
 
       // Wait for page loading.
       await page.waitForTimeout(3000);
