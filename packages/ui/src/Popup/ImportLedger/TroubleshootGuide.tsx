@@ -159,19 +159,19 @@ export function TroubleshootGuide({
       <Box mb="l">
         <StepList>
           <StepItem
-            description="Connect your Ledger Wallet to your computer."
+            description="Connect your Ledger hardware device to your computer."
             image={SvgPlugInLedger}
             title="Plug-in Ledger"
           />
           <StepItem
-            description="Install the Polymesh app on your Ledger through the Ledger app."
+            description="Install Polymesh app on your Ledger through the Ledger Live app."
             image={SvgInstallLedgerApp}
             title="Install Polymesh app"
           />
           <StepItem
             description="Click on the Connect your Ledger button below to connect."
             image={SvgConnectLedger}
-            title="Connect your Ledger to wallet"
+            title="Connect your Ledger to Polymesh wallet"
           />
         </StepList>
       </Box>
