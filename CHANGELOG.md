@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.2...1.5.3) (2021-12-07)
+
+
+### Bug Fixes
+
+* more detailed wording ([#235](https://github.com/PolymathNetwork/polymesh-wallet/issues/235)) ([a4ab75a](https://github.com/PolymathNetwork/polymesh-wallet/commit/a4ab75a5517ae2cba213c6cec1f28dbd92ec617d))
+
 ## [1.5.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.1...1.5.2) (2021-12-03)
 
 
