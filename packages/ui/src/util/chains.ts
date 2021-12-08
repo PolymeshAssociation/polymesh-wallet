@@ -34,22 +34,6 @@ const polyGenesisHashes = [
     displayName: 'Polymesh - Testnet',
     networkName: NetworkName.testnet,
   },
-  // Tooling
-  {
-    genesisHash: [
-      '0xfb92247afaebe9bc0ca7f49913391467adc5d1c469bd44fb3c91973e37fe7714',
-    ],
-    displayName: 'Polymesh - Tooling testnet',
-    networkName: NetworkName.pme,
-  },
-  // Staging
-  {
-    genesisHash: [
-      '0xdeaafc11dcd5f779321e493b2a3f16ebee3725ffd398c0cb908e4b86e1b16245',
-    ],
-    displayName: 'Polymesh - Staging testnet',
-    networkName: NetworkName.pmf,
-  },
 ];
 
 const polymeshNetworks = polyGenesisHashes

@@ -8,15 +8,11 @@ import v4_0_0 from './v4.0.0';
 
 const mainnet = v4_0_0;
 const testnet = v4_0_0;
-const pmf = v4_0_0;
-const pme = v4_0_0;
 const local = v4_0_0;
 
 const schemas: Record<NetworkName, Schema> = {
   mainnet,
   testnet,
-  pmf,
-  pme,
   local,
 };
 
