@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.3...1.5.4) (2021-12-08)
+
+
+### Bug Fixes
+
+* remove tooling and staging networks [GTN-2317] ([#237](https://github.com/PolymathNetwork/polymesh-wallet/issues/237)) ([29d33de](https://github.com/PolymathNetwork/polymesh-wallet/commit/29d33dea5f23a25410c1b1e63dc055806ee2c2d8))
+
 ## [1.5.3](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.2...1.5.3) (2021-12-07)
 
 
