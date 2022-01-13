@@ -18,6 +18,8 @@ const loadSchema = () => {
 
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
+console.log(chrome.browserAction.setBadgeText({ text: '' }));
+
 
 // This listener is invoked every time the extension is installed, updated, or reloaded.
 chrome.runtime.onInstalled.addListener(() => {
