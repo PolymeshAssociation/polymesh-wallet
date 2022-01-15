@@ -1,3 +1,10 @@
+## [1.5.5](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.4...1.5.5) (2022-01-15)
+
+
+### Bug Fixes
+
+* reset badge on instantiation ([#239](https://github.com/PolymathNetwork/polymesh-wallet/issues/239)) ([b8a6df4](https://github.com/PolymathNetwork/polymesh-wallet/commit/b8a6df4a9bf53860ff399f6ec1d5d8dd473dcb31))
+
 ## [1.5.4](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.3...1.5.4) (2021-12-08)
 
 
