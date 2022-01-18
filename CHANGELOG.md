@@ -1,3 +1,38 @@
+## [1.5.5](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.4...1.5.5) (2022-01-15)
+
+
+### Bug Fixes
+
+* reset badge on instantiation ([#239](https://github.com/PolymathNetwork/polymesh-wallet/issues/239)) ([b8a6df4](https://github.com/PolymathNetwork/polymesh-wallet/commit/b8a6df4a9bf53860ff399f6ec1d5d8dd473dcb31))
+
+## [1.5.4](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.3...1.5.4) (2021-12-08)
+
+
+### Bug Fixes
+
+* remove tooling and staging networks [GTN-2317] ([#237](https://github.com/PolymathNetwork/polymesh-wallet/issues/237)) ([29d33de](https://github.com/PolymathNetwork/polymesh-wallet/commit/29d33dea5f23a25410c1b1e63dc055806ee2c2d8))
+
+## [1.5.3](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.2...1.5.3) (2021-12-07)
+
+
+### Bug Fixes
+
+* more detailed wording ([#235](https://github.com/PolymathNetwork/polymesh-wallet/issues/235)) ([a4ab75a](https://github.com/PolymathNetwork/polymesh-wallet/commit/a4ab75a5517ae2cba213c6cec1f28dbd92ec617d))
+
+## [1.5.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.1...1.5.2) (2021-12-03)
+
+
+### Bug Fixes
+
+* revert "disable signing if insufficient balance [GTN-2297] [GTN-2162] ([#236](https://github.com/PolymathNetwork/polymesh-wallet/issues/236))" ([374e254](https://github.com/PolymathNetwork/polymesh-wallet/commit/374e254ce6e7d27e398de25d55a57e1ce6ba1088))
+
+## [1.5.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.0...1.5.1) (2021-12-03)
+
+
+### Bug Fixes
+
+* disable signing if insufficient balance [GTN-2297] [GTN-2162] ([#236](https://github.com/PolymathNetwork/polymesh-wallet/issues/236)) ([2adb2eb](https://github.com/PolymathNetwork/polymesh-wallet/commit/2adb2ebdcf01147d4f9afa7a7ee9baaf078dd09d))
+
 # [1.5.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.4.2...1.5.0) (2021-11-23)
 
 

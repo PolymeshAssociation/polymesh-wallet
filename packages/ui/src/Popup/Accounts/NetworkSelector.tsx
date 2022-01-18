@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   networkIsDev,
   networkLabels,
@@ -37,11 +37,6 @@ const { devNetworks, networks } = Object.entries(networkLabels).reduce(
   }
 );
 
-const DEV_NETWORK_COLORS = {
-  backgrounds: ['#D7F4F2', '#60D3CB40'],
-  foreground: '#60D3CB',
-};
-
 type NetworkColors = {
   image?: string;
   backgrounds: string[];
@@ -58,9 +53,10 @@ const NETWORK_COLORS: Record<string, NetworkColors> = {
     backgrounds: ['#DCEFFE', '#1348E440'],
     foreground: '#1348E4',
   },
-  pmf: DEV_NETWORK_COLORS,
-  pme: DEV_NETWORK_COLORS,
-  local: DEV_NETWORK_COLORS,
+  local: {
+    backgrounds: ['#D7F4F2', '#60D3CB40'],
+    foreground: '#60D3CB',
+  },
 };
 
 const getNetworkItems = (networks: string[][], currentNetwork: string) =>
@@ -104,7 +100,7 @@ type NetworkSelectorProps = {
 
 export function NetworkSelector({
   onSelect,
-}: NetworkSelectorProps): React.ReactElement {
+}: NetworkSelectorProps): React.ReactElement | null {
   const {
     networkState: { isDeveloper, selected: currentNetwork },
   } = useContext(PolymeshContext);
@@ -131,7 +127,13 @@ export function NetworkSelector({
       : []),
   ];
 
-  return (
+  // Automatically switch to 'Mainnet' network if current network doesn't exist.
+  // This is necessary to prevent errors and UI bugs, as sometimes networks have to be modified, or removed.
+  useEffect(() => {
+    if (!networkLabels[currentNetwork]) onSelect(NetworkName.mainnet);
+  }, [currentNetwork]);
+
+  return networkLabels[currentNetwork] ? (
     <OptionSelector
       minWidth="368px"
       onSelect={onSelect}
@@ -155,7 +157,7 @@ export function NetworkSelector({
         </NetworkSelect>
       }
     />
-  );
+  ) : null;
 }
 
 const NetworkSelect = styled.div<{ background: string }>`
