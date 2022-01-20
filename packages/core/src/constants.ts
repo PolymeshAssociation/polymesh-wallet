@@ -34,8 +34,8 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
     explorer: 'https://polymesh-testnet.subscan.io/',
   },
   local: {
-    dashboard: 'unknown',
-    explorer: 'unknown',
+    dashboard: 'http://localhost:3000',
+    explorer: '',
   },
 };
 
