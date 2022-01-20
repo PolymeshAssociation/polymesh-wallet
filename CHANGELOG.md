@@ -1,3 +1,10 @@
+## [1.5.6](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.5...1.5.6) (2022-01-20)
+
+
+### Bug Fixes
+
+* use localhost link for dashboard for local network [GTN-2372] ([#240](https://github.com/PolymathNetwork/polymesh-wallet/issues/240)) ([456df20](https://github.com/PolymathNetwork/polymesh-wallet/commit/456df2098216ef1ff129738622416002b9b9a8bf))
+
 ## [1.5.5](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.4...1.5.5) (2022-01-15)
 
 
