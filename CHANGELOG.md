@@ -1,3 +1,10 @@
+## [1.5.7](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.6...1.5.7) (2022-03-07)
+
+
+### Bug Fixes
+
+* switch to appropriate genesis hash ([#244](https://github.com/PolymathNetwork/polymesh-wallet/issues/244)) ([6653fe0](https://github.com/PolymathNetwork/polymesh-wallet/commit/6653fe01f2bbfb3d9901ce319f6794644fac008c))
+
 ## [1.5.6](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.5...1.5.6) (2022-01-20)
 
 
