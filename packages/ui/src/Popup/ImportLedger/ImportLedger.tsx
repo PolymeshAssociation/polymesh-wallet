@@ -1,6 +1,6 @@
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import settings from '@polkadot/ui-settings';
-import { testnetGenesisHash } from '@polymathnetwork/extension-core/constants';
 import { recodeAddress } from '@polymathnetwork/extension-core/utils';
 import {
   SvgChevronDown,
@@ -30,11 +30,11 @@ import {
   TextInput,
 } from '@polymathnetwork/extension-ui/ui';
 import { formatters } from '@polymathnetwork/extension-ui/util';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
 import { TroubleshootGuide } from './TroubleshootGuide';
+import { NetworkName } from '@polymathnetwork/extension-core/types';
 
 interface AccOption {
   text: string;
@@ -49,9 +49,12 @@ const AVAIL: number[] = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
 ];
 
-function ImportLedger(): React.ReactElement {
-  const genesis = testnetGenesisHash;
+const GENESIS_HASHES: Partial<Record<NetworkName, string>> = {
+  mainnet: '0x6fbd74e5e1d0a61d52ccfe9d4adaed16dd3a7caa37c6bc4d0c2fa12e8b2f4063',
+  testnet: '0x2ace05e703aa50b48c0ccccfc8b424f7aab9a1e2c424ed12e45d20b1e8ffd0d6',
+};
 
+function ImportLedger(): React.ReactElement {
   const methods = useForm<FormInputs>();
   const { errors, handleSubmit, register } = methods;
 
@@ -65,6 +68,8 @@ function ImportLedger(): React.ReactElement {
   const onAction = useContext(ActionContext);
   const isBusy = useContext(ActivityContext);
   const { networkState } = useContext(PolymeshContext);
+
+  const genesis = GENESIS_HASHES[networkState.selected];
 
   const ledgerData = useLedger(genesis, accountIndex, addressOffset);
 
