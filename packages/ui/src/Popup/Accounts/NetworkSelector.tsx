@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, ReactElement } from 'react';
 import {
   networkIsDev,
   networkLabels,
@@ -18,24 +18,15 @@ import { colors } from '@polymathnetwork/extension-ui/components/themeDefinition
 import { styled } from '@polymathnetwork/extension-ui/styles';
 import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
 
-const { devNetworks, networks } = Object.entries(networkLabels).reduce(
-  ({ devNetworks, networks }: Record<string, string[][]>, networkLabel) => {
-    const [network, label] = networkLabel;
+type NetworkItem = {
+  network: NetworkName;
+  label: string;
+};
 
-    networkIsDev[network as NetworkName]
-      ? devNetworks.push([network, label])
-      : networks.push([network, label]);
-
-    return {
-      networks,
-      devNetworks,
-    };
-  },
-  {
-    networks: [],
-    devNetworks: [],
-  }
-);
+type NetworkGroups = {
+  prodNetworks: NetworkItem[];
+  devNetworks: NetworkItem[];
+};
 
 type NetworkColors = {
   image?: string;
@@ -63,8 +54,23 @@ const NETWORK_COLORS: Record<NetworkName, NetworkColors> = {
   },
 };
 
-const getNetworkItems = (networks: string[][], currentNetwork: string) =>
-  networks.map(([network, networkLabel]) => {
+// Separate production and development networks from `networkLabels` as `NetworkItem` arrays
+const networkGroups: NetworkGroups = Object.entries(networkLabels).reduce(
+  ({ prodNetworks, devNetworks }: NetworkGroups, networkLabel) => {
+    const [network, label] = networkLabel as [NetworkName, string];
+    const isDevNetwork = networkIsDev[network];
+
+    if (isDevNetwork) devNetworks.push({ network, label });
+    else prodNetworks.push({ network, label });
+
+    return { prodNetworks, devNetworks };
+  },
+  { prodNetworks: [], devNetworks: [] }
+);
+
+// TODO: rename to `makeNetworkOptionItems`
+const getNetworkItems = (networks: NetworkItem[], currentNetwork: string) =>
+  networks.map(({ network, label }) => {
     const isCurrentNetwork = currentNetwork === network;
 
     return {
@@ -77,14 +83,14 @@ const getNetworkItems = (networks: string[][], currentNetwork: string) =>
           {...(isCurrentNetwork && { style: { background: colors.gray[5] } })}
         >
           <NetworkCircle
-            background={NETWORK_COLORS[network as NetworkName].backgrounds[0]}
-            color={NETWORK_COLORS[network as NetworkName].foreground}
-            image={NETWORK_COLORS[network as NetworkName].image}
+            background={NETWORK_COLORS[network].backgrounds[0]}
+            color={NETWORK_COLORS[network].foreground}
+            image={NETWORK_COLORS[network].image}
             size="24px"
             thickness="4px"
           />
           <Box ml="8px" mr="auto">
-            <Text variant="b2m">{networkLabel}</Text>
+            <Text variant="b2m">{label}</Text>
           </Box>
 
           {isCurrentNetwork && (
@@ -102,12 +108,9 @@ type NetworkSelectorProps = {
   onSelect: (network: NetworkName) => void;
 };
 
-export function NetworkSelector({
-  onSelect,
-}: NetworkSelectorProps): React.ReactElement | null {
-  const {
-    networkState: { isDeveloper, selected: currentNetwork },
-  } = useContext(PolymeshContext);
+export function NetworkSelector({ onSelect }: NetworkSelectorProps) {
+  const { networkState } = useContext(PolymeshContext);
+  const { isDeveloper, selected: currentNetwork } = networkState;
 
   const [background, backgroundLight] =
     NETWORK_COLORS[currentNetwork]?.backgrounds ||
@@ -119,13 +122,13 @@ export function NetworkSelector({
   const networkOptions: Option[] = [
     {
       category: 'Networks',
-      menu: getNetworkItems(networks, currentNetwork),
+      menu: getNetworkItems(networkGroups.prodNetworks, currentNetwork),
     },
     ...(isDeveloper
       ? [
           {
             category: 'Development',
-            menu: getNetworkItems(devNetworks, currentNetwork),
+            menu: getNetworkItems(networkGroups.devNetworks, currentNetwork),
           },
         ]
       : []),
