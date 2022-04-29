@@ -3,24 +3,28 @@ import { LinkName, NetworkName, NetworkState } from './types';
 export const networkURLs: Record<NetworkName, string> = {
   mainnet: 'wss://mainnet-rpc.polymesh.network',
   testnet: 'wss://testnet-rpc.polymesh.live',
+  staging: 'wss://staging-rpc.polymesh.live',
   local: 'ws://localhost:9944',
 };
 
 export const networkLabels: Record<NetworkName, string> = {
   mainnet: 'Mainnet',
   testnet: 'Testnet',
+  staging: 'Staging',
   local: 'Local node',
 };
 
 export const networkIsDev: Record<NetworkName, boolean> = {
   mainnet: false,
   testnet: false,
+  staging: true,
   local: true,
 };
 
 export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
   mainnet: true,
   testnet: true,
+  staging: true,
   local: false,
 };
 
@@ -32,6 +36,10 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
   testnet: {
     dashboard: 'https://testnet-dashboard.polymath.network/',
     explorer: 'https://polymesh-testnet.subscan.io/',
+  },
+  staging: {
+    dashboard: 'https://staging-dashboard.polymath.network/',
+    explorer: 'https://polymesh-staging.subscan.io/',
   },
   local: {
     dashboard: 'http://localhost:3000',

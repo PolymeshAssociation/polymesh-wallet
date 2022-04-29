@@ -43,7 +43,7 @@ type NetworkColors = {
   foreground: string;
 };
 
-const NETWORK_COLORS: Record<string, NetworkColors> = {
+const NETWORK_COLORS: Record<NetworkName, NetworkColors> = {
   mainnet: {
     image: mainnetCircleSvg,
     backgrounds: ['#FAD1DC', '#EC467340'],
@@ -52,6 +52,10 @@ const NETWORK_COLORS: Record<string, NetworkColors> = {
   testnet: {
     backgrounds: ['#DCEFFE', '#1348E440'],
     foreground: '#1348E4',
+  },
+  staging: {
+    backgrounds: ['#D7F4F2', '#60D3CB40'],
+    foreground: '#60D3CB',
   },
   local: {
     backgrounds: ['#D7F4F2', '#60D3CB40'],
@@ -73,9 +77,9 @@ const getNetworkItems = (networks: string[][], currentNetwork: string) =>
           {...(isCurrentNetwork && { style: { background: colors.gray[5] } })}
         >
           <NetworkCircle
-            background={NETWORK_COLORS[network].backgrounds[0]}
-            color={NETWORK_COLORS[network].foreground}
-            image={NETWORK_COLORS[network].image}
+            background={NETWORK_COLORS[network as NetworkName].backgrounds[0]}
+            color={NETWORK_COLORS[network as NetworkName].foreground}
+            image={NETWORK_COLORS[network as NetworkName].image}
             size="24px"
             thickness="4px"
           />
