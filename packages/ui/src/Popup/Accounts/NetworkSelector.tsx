@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, ReactElement } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   networkIsDev,
   networkLabels,
@@ -32,6 +32,10 @@ type NetworkColors = {
   image?: string;
   backgrounds: string[];
   foreground: string;
+};
+
+type NetworkSelectorProps = {
+  onSelect: (network: NetworkName) => void;
 };
 
 const NETWORK_COLORS: Record<NetworkName, NetworkColors> = {
@@ -68,9 +72,8 @@ const networkGroups: NetworkGroups = Object.entries(networkLabels).reduce(
   { prodNetworks: [], devNetworks: [] }
 );
 
-// TODO: rename to `makeNetworkOptionItems`
-const getNetworkItems = (networks: NetworkItem[], currentNetwork: string) =>
-  networks.map(({ network, label }) => {
+function makeNetworkMenu(networks: NetworkItem[], currentNetwork: string) {
+  return networks.map(({ network, label }) => {
     const isCurrentNetwork = currentNetwork === network;
 
     return {
@@ -103,36 +106,32 @@ const getNetworkItems = (networks: NetworkItem[], currentNetwork: string) =>
       value: network,
     };
   });
-
-type NetworkSelectorProps = {
-  onSelect: (network: NetworkName) => void;
-};
+}
 
 export function NetworkSelector({ onSelect }: NetworkSelectorProps) {
   const { networkState } = useContext(PolymeshContext);
-  const { isDeveloper, selected: currentNetwork } = networkState;
 
+  const { isDeveloper, selected: currentNetwork } = networkState;
+  const networkOptions: Option[] = [
+    {
+      category: 'Networks',
+      menu: makeNetworkMenu(networkGroups.prodNetworks, currentNetwork),
+    },
+    ...(isDeveloper
+      ? [
+          {
+            category: 'Development',
+            menu: makeNetworkMenu(networkGroups.devNetworks, currentNetwork),
+          },
+        ]
+      : []),
+  ];
   const [background, backgroundLight] =
     NETWORK_COLORS[currentNetwork]?.backgrounds ||
     NETWORK_COLORS.testnet.backgrounds;
   const foreground =
     NETWORK_COLORS[currentNetwork]?.foreground ||
     NETWORK_COLORS.testnet.foreground;
-
-  const networkOptions: Option[] = [
-    {
-      category: 'Networks',
-      menu: getNetworkItems(networkGroups.prodNetworks, currentNetwork),
-    },
-    ...(isDeveloper
-      ? [
-          {
-            category: 'Development',
-            menu: getNetworkItems(networkGroups.devNetworks, currentNetwork),
-          },
-        ]
-      : []),
-  ];
 
   // Automatically switch to 'Mainnet' network if current network doesn't exist.
   // This is necessary to prevent errors and UI bugs, as sometimes networks have to be modified, or removed.
