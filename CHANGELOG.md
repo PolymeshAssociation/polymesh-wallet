@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.7...1.6.0) (2022-05-02)
+
+
+### Features
+
+* add staging network ([#245](https://github.com/PolymathNetwork/polymesh-wallet/issues/245)) ([1ef218c](https://github.com/PolymathNetwork/polymesh-wallet/commit/1ef218cb29d556a757061868792c3671fdec4f24))
+
 ## [1.5.7](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.6...1.5.7) (2022-03-07)
 
 
