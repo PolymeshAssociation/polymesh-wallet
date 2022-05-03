@@ -53,7 +53,9 @@ const AppHeader = (props: Props): ReactElement<Props> => {
   };
 
   const openDashboard = useCallback(() => {
-    chrome.tabs.create({ url: networkLinks[selectedNetwork].dashboard });
+    const url = networkLinks[selectedNetwork].dashboard;
+
+    if (url) chrome.tabs.create({ url });
   }, [selectedNetwork]);
 
   const topMenuOptions: Option[] = [

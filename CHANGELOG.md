@@ -1,3 +1,24 @@
+# [1.6.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.7...1.6.0) (2022-05-02)
+
+
+### Features
+
+* add staging network ([#245](https://github.com/PolymathNetwork/polymesh-wallet/issues/245)) ([1ef218c](https://github.com/PolymathNetwork/polymesh-wallet/commit/1ef218cb29d556a757061868792c3671fdec4f24))
+
+## [1.5.7](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.6...1.5.7) (2022-03-07)
+
+
+### Bug Fixes
+
+* switch to appropriate genesis hash ([#244](https://github.com/PolymathNetwork/polymesh-wallet/issues/244)) ([6653fe0](https://github.com/PolymathNetwork/polymesh-wallet/commit/6653fe01f2bbfb3d9901ce319f6794644fac008c))
+
+## [1.5.6](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.5...1.5.6) (2022-01-20)
+
+
+### Bug Fixes
+
+* use localhost link for dashboard for local network [GTN-2372] ([#240](https://github.com/PolymathNetwork/polymesh-wallet/issues/240)) ([456df20](https://github.com/PolymathNetwork/polymesh-wallet/commit/456df2098216ef1ff129738622416002b9b9a8bf))
+
 ## [1.5.5](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.4...1.5.5) (2022-01-15)
 
 
