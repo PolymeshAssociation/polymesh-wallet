@@ -1,6 +1,6 @@
 // Runs in the extension background, handling all keyring access
 import { AccountsStore } from '@polkadot/extension-base/stores';
-import chrome from '@polkadot/extension-inject/chrome';
+import { chrome } from '@polkadot/extension-inject/chrome';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
@@ -19,7 +19,6 @@ const loadSchema = () => {
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
 chrome.browserAction.setBadgeText({ text: '' });
-
 
 // This listener is invoked every time the extension is installed, updated, or reloaded.
 chrome.runtime.onInstalled.addListener(() => {

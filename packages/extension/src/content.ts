@@ -1,5 +1,5 @@
 import { Message } from '@polkadot/extension-base/types';
-import chrome from '@polkadot/extension-inject/chrome';
+import { chrome } from '@polkadot/extension-inject/chrome';
 import { ORIGINS, PORTS } from '@polymathnetwork/extension-core/constants';
 
 // connect to the extension
