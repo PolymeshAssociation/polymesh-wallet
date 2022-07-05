@@ -17,7 +17,7 @@ import {
   SubscriptionMessageTypes,
 } from '@polkadot/extension-base/background/types';
 import { Message } from '@polkadot/extension-base/types';
-import chrome from '@polkadot/extension-inject/chrome';
+import { chrome } from '@polkadot/extension-inject/chrome';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { KeypairType } from '@polkadot/util-crypto/types';

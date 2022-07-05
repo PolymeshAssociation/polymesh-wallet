@@ -1,4 +1,4 @@
-import polkadotNetworks from '@polkadot/networks';
+import { allNetworks as polkadotNetworks } from '@polkadot/networks';
 import { Network } from '@polkadot/networks/types';
 import { NetworkName } from '@polymathnetwork/extension-core/types';
 
@@ -15,6 +15,7 @@ const testnetTmp: Network = {
   website: 'https://polymath.network/',
   icon: 'substrate',
   isIgnored: false,
+  isTestnet: true,
 };
 
 const polyGenesisHashes = [
