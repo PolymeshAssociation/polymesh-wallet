@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.6.0...1.6.1) (2022-07-05)
+
+
+### Bug Fixes
+
+* update packages to enable api init ([#246](https://github.com/PolymathNetwork/polymesh-wallet/issues/246)) ([1c6fd20](https://github.com/PolymathNetwork/polymesh-wallet/commit/1c6fd20e3e33fa958bd1acf24d127fb2a0cc63cf))
+
 # [1.6.0](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.5.7...1.6.0) (2022-05-02)
 
 
