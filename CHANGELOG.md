@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.6.1...1.6.2) (2022-07-06)
+
+
+### Bug Fixes
+
+* tsc build issues ([#247](https://github.com/PolymathNetwork/polymesh-wallet/issues/247)) ([cebe2c2](https://github.com/PolymathNetwork/polymesh-wallet/commit/cebe2c2744e6f29f5949567528e0ee1556491a50))
+
 ## [1.6.1](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.6.0...1.6.1) (2022-07-05)
 
 
