@@ -37,7 +37,7 @@ jobs:
       - name: Build
         run: yarn build
       - name: Run headful puppeteer tests
-        uses: mujo-code/puppeteer-headful@latest
+        uses: mujo-code/puppeteer-headful@16.6.0
         with:
           args: yarn e2e
       - name: Upload artifact
