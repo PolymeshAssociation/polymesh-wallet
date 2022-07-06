@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: 14
       - name: Install dependencies
-        run: yarn install --immutable | grep -v 'YN0013'
+        run: yarn install
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
       - name: Lint
@@ -31,13 +31,13 @@ jobs:
         with:
           node-version: 14
       - name: Install dependencies
-        run: yarn install --immutable | grep -v 'YN0013'
+        run: yarn install
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
       - name: Build
         run: yarn build
       - name: Run headful puppeteer tests
-        uses: djp3/puppeteer-headful@master
+        uses: mujo-code/puppeteer-headful@latest
         with:
           args: yarn e2e
       - name: Upload artifact
