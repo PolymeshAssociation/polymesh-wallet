@@ -2,18 +2,18 @@ import {
   SvgChevronDown,
   SvgChevronUp,
 } from '@polymathnetwork/extension-ui/assets/images/icons';
-import React, { FC, useState } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 
 import { Box } from '../Box';
 import { Flex } from '../Flex';
 import { Icon } from '../Icon';
 import { Text } from '../Text';
 
-export interface Props {
+export type Props = PropsWithChildren<{
   title: string;
-}
+}>;
 
-export const ExpandableDetails: FC<Props> = ({ children, title }) => {
+export function ExpandableDetails({ children, title }: Props) {
   const [expanded, setExpanded] = useState(false);
 
   const toggle = () => setExpanded(!expanded);
@@ -40,4 +40,4 @@ export const ExpandableDetails: FC<Props> = ({ children, title }) => {
       </Box>
     </Box>
   );
-};
+}

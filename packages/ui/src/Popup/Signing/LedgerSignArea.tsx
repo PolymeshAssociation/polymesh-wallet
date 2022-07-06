@@ -16,7 +16,7 @@ interface Props {
   className?: string;
   error: string | null;
   genesisHash?: string;
-  onSignature?: ({ signature }: { signature: string }) => void;
+  onSignature?: ({ signature }: { signature: `0x${string}` }) => void;
   payload?: ExtrinsicPayload;
   setError: (value: string | null) => void;
   signId: string;

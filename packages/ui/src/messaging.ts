@@ -255,7 +255,7 @@ export async function approveSignPassword(
 
 export async function approveSignSignature(
   id: string,
-  signature: string
+  signature: `0x${string}`
 ): Promise<boolean> {
   return sendMessage('pri(signing.approve.signature)', { id, signature });
 }
