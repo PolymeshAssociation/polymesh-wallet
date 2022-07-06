@@ -17,7 +17,7 @@ import {
   SubscriptionMessageTypes,
 } from '@polkadot/extension-base/background/types';
 import { Message } from '@polkadot/extension-base/types';
-import chrome from '@polkadot/extension-inject/chrome';
+import { chrome } from '@polkadot/extension-inject/chrome';
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
@@ -255,7 +255,7 @@ export async function approveSignPassword(
 
 export async function approveSignSignature(
   id: string,
-  signature: string
+  signature: `0x${string}`
 ): Promise<boolean> {
   return sendMessage('pri(signing.approve.signature)', { id, signature });
 }

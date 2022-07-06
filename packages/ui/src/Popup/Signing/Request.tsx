@@ -83,7 +83,7 @@ export default function Request({
   }, [request]);
 
   const _onSignature = useCallback(
-    ({ signature }: { signature: string }): Promise<void> =>
+    ({ signature }: { signature: `0x${string}` }): Promise<void> =>
       approveSignSignature(signId, signature)
         .then(() => onAction())
         .catch((error: Error): void => {

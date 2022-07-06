@@ -1,6 +1,6 @@
 import DotState from '@polkadot/extension-base/background/handlers/State';
 import { AccountJson } from '@polkadot/extension-base/background/types';
-import chrome from '@polkadot/extension-inject/chrome';
+import { chrome } from '@polkadot/extension-inject/chrome';
 import { BehaviorSubject } from 'rxjs';
 
 import {

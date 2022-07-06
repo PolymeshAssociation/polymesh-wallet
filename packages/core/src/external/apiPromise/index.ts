@@ -8,7 +8,7 @@ let api: ApiPromise | null = null;
 let provider: WsProvider;
 let currentNetwork: NetworkName;
 
-const metadata: Record<string, string> = {};
+const metadata: Record<string, `0x${string}`> = {};
 
 async function apiPromise(network: NetworkName): Promise<ApiPromise> {
   const shouldReinitialize = currentNetwork !== network;

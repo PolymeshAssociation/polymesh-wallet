@@ -1,6 +1,6 @@
 import '../../../__mocks__/chrome';
 
-import chrome from '@polkadot/extension-inject/chrome';
+import { chrome } from '@polkadot/extension-inject/chrome';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 

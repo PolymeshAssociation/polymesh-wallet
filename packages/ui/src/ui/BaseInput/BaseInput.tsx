@@ -23,7 +23,7 @@ export const BaseInput: FC<BaseInputProps> = (props) => {
 
   const [focused, setFocusedState] = useState(false);
   const handleBlur = useCallback(
-    (e) => {
+    (e: any) => {
       if (onBlur) onBlur(e);
       setFocusedState(false);
     },
@@ -31,7 +31,7 @@ export const BaseInput: FC<BaseInputProps> = (props) => {
   );
 
   const handleFocus = useCallback(
-    (e) => {
+    (e: any) => {
       if (onFocus) onFocus(e);
       setFocusedState(true);
     },
