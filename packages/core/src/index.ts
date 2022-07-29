@@ -1,4 +1,4 @@
-import { Option } from '@polkadot/types/codec';
+import { Option, CodecSet } from '@polkadot/types/codec';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { union } from 'lodash-es';
@@ -73,20 +73,35 @@ const claimSorter = (a: IdentityClaim, b: IdentityClaim) => {
   }
 };
 
-const _didRecord = (did: string, didRecords: DidRecord) => {
-  const secKeys = didRecords.secondary_keys.toArray().reduce((keys, item) => {
-    return item.signer.isAccount
-      ? keys.concat(encodeAddress(item.signer.asAccount))
-      : keys;
-  }, [] as string[]);
+const _didRecord = (did: string, didRecords: Option<CodecSet>) => {
+  console.log(
+    '%c---------------------------------',
+    'background: red; color: white;'
+  );
+  console.log({ didRecords });
+  console.log(
+    '%c---------------------------------',
+    'background: red; color: white;'
+  );
 
-  const identityData = {
+  // const secKeys = didRecords
+  const secKeys: string[] = [
+    ...((didRecords as any).toJSON().secondaryKeys || []),
+  ];
+
+  // const secKeys = didRecords.secondary_keys.toArray().reduce((keys, item) => {
+  //   return item.signer.isAccount
+  //     ? keys.concat(encodeAddress(item.signer.asAccount))
+  //     : keys;
+  // }, [] as string[]);
+
+  const primaryKey: string = (didRecords as any).toJSON().primaryKey;
+
+  return {
     did,
-    priKey: encodeAddress(didRecords.primary_key),
+    priKey: encodeAddress(primaryKey),
     secKeys,
   };
-
-  return identityData;
 };
 
 const claims2Record = (didClaims: IdentityClaim[]) => {
@@ -94,17 +109,14 @@ const claims2Record = (didClaims: IdentityClaim[]) => {
   const didClaimsSorted = didClaims.sort(claimSorter);
 
   // Save CDD data
-  const cdd =
-    didClaimsSorted && didClaimsSorted.length > 0
-      ? {
-          issuer: didClaimsSorted[0].claim_issuer.toString(),
-          expiry: !didClaimsSorted[0].expiry.isEmpty
-            ? Number(didClaimsSorted[0].expiry.toString())
-            : undefined,
-        }
-      : undefined;
-
-  return cdd;
+  return didClaimsSorted && didClaimsSorted.length > 0
+    ? {
+        issuer: didClaimsSorted[0].claimIssuer.toString(),
+        expiry: !didClaimsSorted[0].expiry.isEmpty
+          ? Number(didClaimsSorted[0].expiry.toString())
+          : undefined,
+      }
+    : undefined;
 };
 
 function subscribePolymesh(): () => void {
@@ -179,6 +191,23 @@ function subscribePolymesh(): () => void {
                     }
                   });
 
+                  // accounts.forEach((account) => {
+                  //   console.log(api.query.identity);
+                  //   console.log(
+                  //     '%c---------------------------------',
+                  //     'background: red; color: white;'
+                  //   );
+                  //   console.log(
+                  //     [api.query.system.account, account],
+                  //     // 2) Identities linked to account.
+                  //     [api.query.identity.keyToIdentityIds, account]
+                  //   );
+                  //   console.log(
+                  //     '%c---------------------------------',
+                  //     'background: red; color: white;'
+                  //   );
+                  // });
+
                   // B) Create new subscriptions to:
                   accounts.forEach((account) => {
                     api
@@ -187,7 +216,7 @@ function subscribePolymesh(): () => void {
                           // 1) Account balance
                           [api.query.system.account, account],
                           // 2) Identities linked to account.
-                          [api.query.identity.keyToIdentityIds, account],
+                          [api.query.identity.keyRecords, account],
                         ],
                         ([accData, linkedKeyInfo]: [
                           AccountInfo,
@@ -196,6 +225,17 @@ function subscribePolymesh(): () => void {
                           // Store account metadata
                           const { locked, total, transferrable } =
                             accountBalances(accData.data);
+
+                          console.log(
+                            '%c---------------------------------',
+                            'background: red; color: white;'
+                          );
+                          console.log({ accData, linkedKeyInfo });
+                          console.log({ locked, total, transferrable });
+                          console.log(
+                            '%c---------------------------------',
+                            'background: red; color: white;'
+                          );
 
                           store.dispatch(
                             accountActions.setAccount({
@@ -208,17 +248,38 @@ function subscribePolymesh(): () => void {
                             })
                           );
 
-                          if (linkedKeyInfo.isEmpty) {
-                            return;
-                          }
+                          if (linkedKeyInfo && linkedKeyInfo.isEmpty)
+                            throw new Error('linkedKeyInfo is missing');
 
-                          const did = linkedKeyInfo.toString();
+                          // const did = linkedKeyInfo.toString();
+                          const did = (linkedKeyInfo as any).toJSON()
+                            .primaryKey;
+
+                          console.log(
+                            '%c---------------------------------',
+                            'background: red; color: white;'
+                          );
+                          console.log({ did });
+                          console.log(
+                            '%c---------------------------------',
+                            'background: red; color: white;'
+                          );
 
                           api.query.identity
                             .didRecords<DidRecord>(did)
                             .then((didRecords) => {
                               const data = _didRecord(did, didRecords);
                               const params = { did, network, data };
+
+                              console.log(
+                                '%c---------------------------------',
+                                'background: red; color: white;'
+                              );
+                              console.log({ did, network, data });
+                              console.log(
+                                '%c---------------------------------',
+                                'background: red; color: white;'
+                              );
 
                               // store.dispatch(identityActions.setIdentitySecKeys(params));
                               store.dispatch(
@@ -283,12 +344,23 @@ function subscribePolymesh(): () => void {
                       result.length
                         ? result
                             .map(([, claim]) => claim)
-                            .filter(
-                              (claim) =>
+                            .filter((claim) => {
+                              console.log(
+                                '%c---------------------------------',
+                                'background: red; color: white;'
+                              );
+                              console.log({ claim });
+                              console.log();
+                              console.log(
+                                '%c---------------------------------',
+                                'background: red; color: white;'
+                              );
+                              return (
                                 activeIssuers.indexOf(
-                                  claim.claim_issuer.toString()
+                                  claim.claimIssuer.toString()
                                 ) !== -1
-                            )
+                              );
+                            })
                         : undefined
                     )
                   )

@@ -49,6 +49,15 @@ export const fatalErrorHandler = (error: Error): void =>
   error && setError({ code: ErrorCodes.FatalError, msg: error.message });
 
 export const apiErrorHandler = (error: Error): void => {
+  console.log(
+    '%c---------------------------------',
+    'background: red; color: white;'
+  );
+  console.log(error);
+  console.log(
+    '%c---------------------------------',
+    'background: red; color: white;'
+  );
   if (
     error &&
     !!error.message &&
