@@ -74,16 +74,6 @@ const claimSorter = (a: IdentityClaim, b: IdentityClaim) => {
 };
 
 const _didRecord = (did: string, didRecords: Option<CodecSet>) => {
-  console.log(
-    '%c---------------------------------',
-    'background: red; color: white;'
-  );
-  console.log({ didRecords });
-  console.log(
-    '%c---------------------------------',
-    'background: red; color: white;'
-  );
-
   // const secKeys = didRecords
   const secKeys: string[] = [
     ...((didRecords as any).toJSON().secondaryKeys || []),
@@ -191,22 +181,9 @@ function subscribePolymesh(): () => void {
                     }
                   });
 
-                  // accounts.forEach((account) => {
-                  //   console.log(api.query.identity);
-                  //   console.log(
-                  //     '%c---------------------------------',
-                  //     'background: red; color: white;'
-                  //   );
-                  //   console.log(
-                  //     [api.query.system.account, account],
-                  //     // 2) Identities linked to account.
-                  //     [api.query.identity.keyToIdentityIds, account]
-                  //   );
-                  //   console.log(
-                  //     '%c---------------------------------',
-                  //     'background: red; color: white;'
-                  //   );
-                  // });
+                  const identityStateData: any = {
+                    [network]: {},
+                  };
 
                   // B) Create new subscriptions to:
                   accounts.forEach((account) => {
@@ -226,17 +203,6 @@ function subscribePolymesh(): () => void {
                           const { locked, total, transferrable } =
                             accountBalances(accData.data);
 
-                          console.log(
-                            '%c---------------------------------',
-                            'background: red; color: white;'
-                          );
-                          console.log({ accData, linkedKeyInfo });
-                          console.log({ locked, total, transferrable });
-                          console.log(
-                            '%c---------------------------------',
-                            'background: red; color: white;'
-                          );
-
                           store.dispatch(
                             accountActions.setAccount({
                               data: {
@@ -251,42 +217,54 @@ function subscribePolymesh(): () => void {
                           if (linkedKeyInfo && linkedKeyInfo.isEmpty)
                             throw new Error('linkedKeyInfo is missing');
 
-                          // const did = linkedKeyInfo.toString();
-                          const did = (linkedKeyInfo as any).toJSON()
-                            .primaryKey;
+                          const linkedKeyInfoObj: any = linkedKeyInfo.toJSON();
 
-                          console.log(
-                            '%c---------------------------------',
-                            'background: red; color: white;'
+                          const did =
+                            linkedKeyInfoObj.primaryKey ||
+                            linkedKeyInfoObj.secondaryKey[0];
+
+                          if (!identityStateData[network][did])
+                            identityStateData[network][did] = {};
+
+                          const priKey =
+                            identityStateData[network][did].priKey ||
+                            linkedKeyInfoObj.primaryKey
+                              ? encodeAddress(account)
+                              : undefined;
+
+                          const secKeys = [
+                            ...(identityStateData[network][did].secKeys || []),
+                            ...(linkedKeyInfoObj.secondaryKey
+                              ? [encodeAddress(account)]
+                              : []),
+                          ];
+
+                          identityStateData[network][did] = {
+                            did,
+                            priKey,
+                            secKeys,
+                          };
+
+                          store.dispatch(
+                            identityActions.setIdentity({
+                              did,
+                              network,
+                              data: identityStateData[network][did],
+                            })
                           );
-                          console.log({ did });
-                          console.log(
-                            '%c---------------------------------',
-                            'background: red; color: white;'
-                          );
 
-                          api.query.identity
-                            .didRecords<DidRecord>(did)
-                            .then((didRecords) => {
-                              const data = _didRecord(did, didRecords);
-                              const params = { did, network, data };
+                          // api.query.identity
+                          //   .didRecords<DidRecord>(did)
+                          //   .then((didRecords) => {
+                          //     const data = _didRecord(did, didRecords);
+                          //     const params = { did, network, data };
 
-                              console.log(
-                                '%c---------------------------------',
-                                'background: red; color: white;'
-                              );
-                              console.log({ did, network, data });
-                              console.log(
-                                '%c---------------------------------',
-                                'background: red; color: white;'
-                              );
-
-                              // store.dispatch(identityActions.setIdentitySecKeys(params));
-                              store.dispatch(
-                                identityActions.setIdentity(params)
-                              );
-                            }, apiErrorHandler)
-                            .catch(apiErrorHandler);
+                          //     // store.dispatch(identityActions.setIdentitySecKeys(params));
+                          //     store.dispatch(
+                          //       identityActions.setIdentity(params)
+                          //     );
+                          //   }, apiErrorHandler)
+                          //   .catch(apiErrorHandler);
                         }
                       )
                       .then((unsub) => {
@@ -345,16 +323,6 @@ function subscribePolymesh(): () => void {
                         ? result
                             .map(([, claim]) => claim)
                             .filter((claim) => {
-                              console.log(
-                                '%c---------------------------------',
-                                'background: red; color: white;'
-                              );
-                              console.log({ claim });
-                              console.log();
-                              console.log(
-                                '%c---------------------------------',
-                                'background: red; color: white;'
-                              );
                               return (
                                 activeIssuers.indexOf(
                                   claim.claimIssuer.toString()

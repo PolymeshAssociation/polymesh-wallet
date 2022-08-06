@@ -35,6 +35,8 @@ const identitiesSlice = createSlice({
     setIdentity(state, action: PayloadAction<SetIdentityPayload>) {
       const { data, did, network } = action.payload;
 
+      console.log({ data, did, network });
+
       state[network][did] = state[network][did] || {};
 
       state[network][did] = Object.assign(state[network][did], data);
