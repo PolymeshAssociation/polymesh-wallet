@@ -157,7 +157,7 @@ function subscribePolymesh(): () => void {
                     }
                   });
 
-                  // Used for setting redux state. This is as a re-work of previous (v4) mechanism.
+                  // Used for setting redux state. This is as a re-work of previous (v4) mechanism
                   const identityStateData: any = { [network]: {} };
 
                   // B) Create new subscriptions to:
@@ -198,17 +198,27 @@ function subscribePolymesh(): () => void {
                             linkedKeyInfoObj.primaryKey ||
                             linkedKeyInfoObj.secondaryKey[0];
 
+                          // Init identity state
                           if (!identityStateData[network][did])
                             identityStateData[network][did] = {
                               did,
                               secKeys: [],
                             };
 
-                          if (linkedKeyInfoObj.primaryKey)
-                            identityStateData[network][did].priKey =
+                          const currentIdentityState =
+                            identityStateData[network][did];
+                          const isPrimary = !!linkedKeyInfoObj.primaryKey;
+                          const isSecondary = !!linkedKeyInfoObj.secondaryKey;
+                          const isSecKeyAdded =
+                            currentIdentityState.secKeys.includes(
+                              encodeAddress(account)
+                            );
+
+                          if (isPrimary)
+                            currentIdentityState.priKey =
                               encodeAddress(account);
-                          else if (linkedKeyInfoObj.secondaryKey)
-                            identityStateData[network][did].secKeys.push(
+                          else if (isSecondary && !isSecKeyAdded)
+                            currentIdentityState.secKeys.push(
                               encodeAddress(account)
                             );
 
@@ -216,7 +226,7 @@ function subscribePolymesh(): () => void {
                             identityActions.setIdentity({
                               did,
                               network,
-                              data: identityStateData[network][did],
+                              data: currentIdentityState,
                             })
                           );
                         }
