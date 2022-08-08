@@ -71,14 +71,14 @@ const claimSorter = (a: IdentityClaim, b: IdentityClaim) => {
 
 const claims2Record = (didClaims: IdentityClaim[]) => {
   // Sort claims array by expiry (non-expiring first)
-  const didClaimsSorted = didClaims.sort(claimSorter);
+  didClaims.sort(claimSorter);
 
   // Save CDD data
-  return didClaimsSorted && didClaimsSorted.length > 0
+  return didClaims && didClaims.length > 0
     ? {
-        issuer: didClaimsSorted[0].claimIssuer.toString(),
-        expiry: !didClaimsSorted[0].expiry.isEmpty
-          ? Number(didClaimsSorted[0].expiry.toString())
+        issuer: didClaims[0].claimIssuer.toString(),
+        expiry: !didClaims[0].expiry.isEmpty
+          ? Number(didClaims[0].expiry.toString())
           : undefined,
       }
     : undefined;
@@ -266,7 +266,7 @@ function subscribePolymesh(): () => void {
                 const promises = dids.map((did) =>
                   api.query.identity.claims.entries({
                     target: did,
-                    claim_type: 'CustomerDueDiligence',
+                    claimType: 'CustomerDueDiligence',
                   })
                 );
 
