@@ -1,4 +1,4 @@
-import { Option, CodecSet } from '@polkadot/types/codec';
+import { Option } from '@polkadot/types/codec';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { union } from 'lodash-es';
@@ -6,11 +6,7 @@ import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
 import apiPromise from './external/apiPromise';
-import {
-  DidRecord,
-  IdentityClaim,
-  LinkedKeyInfo,
-} from './external/apiPromise/types';
+import { IdentityClaim, LinkedKeyInfo } from './external/apiPromise/types';
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as networkActions } from './store/features/network';
@@ -71,27 +67,6 @@ const claimSorter = (a: IdentityClaim, b: IdentityClaim) => {
     // The last CDD to expire should come first.
     return a.expiry.unwrapOrDefault() > b.expiry.unwrapOrDefault() ? -1 : 1;
   }
-};
-
-const _didRecord = (did: string, didRecords: Option<CodecSet>) => {
-  // const secKeys = didRecords
-  const secKeys: string[] = [
-    ...((didRecords as any).toJSON().secondaryKeys || []),
-  ];
-
-  // const secKeys = didRecords.secondary_keys.toArray().reduce((keys, item) => {
-  //   return item.signer.isAccount
-  //     ? keys.concat(encodeAddress(item.signer.asAccount))
-  //     : keys;
-  // }, [] as string[]);
-
-  const primaryKey: string = (didRecords as any).toJSON().primaryKey;
-
-  return {
-    did,
-    priKey: encodeAddress(primaryKey),
-    secKeys,
-  };
 };
 
 const claims2Record = (didClaims: IdentityClaim[]) => {
@@ -159,6 +134,7 @@ function subscribePolymesh(): () => void {
                * Accounts
                */
               console.log('Poly: Subscribing to accounts');
+
               const accountsSub = observeAccounts(
                 (accountsData: KeyringAccountData[]) => {
                   if (network !== getNetwork()) {
@@ -181,9 +157,8 @@ function subscribePolymesh(): () => void {
                     }
                   });
 
-                  const identityStateData: any = {
-                    [network]: {},
-                  };
+                  // Used for setting redux state. This is as a re-work of previous (v4) mechanism.
+                  const identityStateData: any = { [network]: {} };
 
                   // B) Create new subscriptions to:
                   accounts.forEach((account) => {
@@ -224,26 +199,18 @@ function subscribePolymesh(): () => void {
                             linkedKeyInfoObj.secondaryKey[0];
 
                           if (!identityStateData[network][did])
-                            identityStateData[network][did] = {};
+                            identityStateData[network][did] = {
+                              did,
+                              secKeys: [],
+                            };
 
-                          const priKey =
-                            identityStateData[network][did].priKey ||
-                            linkedKeyInfoObj.primaryKey
-                              ? encodeAddress(account)
-                              : undefined;
-
-                          const secKeys = [
-                            ...(identityStateData[network][did].secKeys || []),
-                            ...(linkedKeyInfoObj.secondaryKey
-                              ? [encodeAddress(account)]
-                              : []),
-                          ];
-
-                          identityStateData[network][did] = {
-                            did,
-                            priKey,
-                            secKeys,
-                          };
+                          if (linkedKeyInfoObj.primaryKey)
+                            identityStateData[network][did].priKey =
+                              encodeAddress(account);
+                          else if (linkedKeyInfoObj.secondaryKey)
+                            identityStateData[network][did].secKeys.push(
+                              encodeAddress(account)
+                            );
 
                           store.dispatch(
                             identityActions.setIdentity({
@@ -252,19 +219,6 @@ function subscribePolymesh(): () => void {
                               data: identityStateData[network][did],
                             })
                           );
-
-                          // api.query.identity
-                          //   .didRecords<DidRecord>(did)
-                          //   .then((didRecords) => {
-                          //     const data = _didRecord(did, didRecords);
-                          //     const params = { did, network, data };
-
-                          //     // store.dispatch(identityActions.setIdentitySecKeys(params));
-                          //     store.dispatch(
-                          //       identityActions.setIdentity(params)
-                          //     );
-                          //   }, apiErrorHandler)
-                          //   .catch(apiErrorHandler);
                         }
                       )
                       .then((unsub) => {
