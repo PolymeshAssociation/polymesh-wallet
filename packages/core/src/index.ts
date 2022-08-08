@@ -198,7 +198,7 @@ function subscribePolymesh(): () => void {
                             linkedKeyInfoObj.primaryKey ||
                             linkedKeyInfoObj.secondaryKey[0];
 
-                          // Init identity state
+                          // Initialize identity state for network:did pair
                           if (!identityStateData[network][did])
                             identityStateData[network][did] = {
                               did,
