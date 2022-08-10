@@ -24,7 +24,7 @@ export function AuthManagement(): JSX.Element {
     setFilter(filter);
   }, []);
 
-  const toggleAuth = useCallback((url: string) => {
+  const removeAuth = useCallback((url: string) => {
     removeAuthorization(url)
       .then(({ list }) => setAuthList(list))
       .catch(console.error);
@@ -63,7 +63,7 @@ export function AuthManagement(): JSX.Element {
                 <WebsiteEntry
                   info={info}
                   key={url}
-                  toggleAuth={toggleAuth}
+                  removeAuth={removeAuth}
                   url={url}
                 />
                 <Hr />
