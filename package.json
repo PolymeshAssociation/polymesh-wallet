@@ -1,8 +1,29 @@
 {
-  "name": "polymesh-wallet",
-  "version": "1.6.2",
+  "author": "Remon Nashid <remon.sherin@gmail.com>",
+  "bugs": "https://github.com/PolymathNetwork/polymesh-wallet/issues",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "description": "A Wallet extension for Polymesh blockchain",
+  "homepage": "https://github.com/PolymathNetwork/polymesh-wallet#readme",
+  "keywords": [
+    "polymesh",
+    "polkadot",
+    "substrate",
+    "keyring",
+    "signing"
+  ],
+  "license": "Apache-2.0",
+  "name": "polymesh-wallet",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PolymathNetwork/polymesh-wallet.git"
+  },
+  "sideEffects": false,
+  "version": "1.6.2",
   "workspaces": [
     "packages/*"
   ],
@@ -14,27 +35,18 @@
     "build:zip": "yarn build:zip:dst && yarn build:zip:src",
     "build:zip:dst": "rm -rf ./master-build.zip && cd packages/extension/build && zip -r -FS ../../../master-build.zip .",
     "build:zip:src": "rm -rf ./master-src.zip && zip -r -x '*build/*' -x '*node_modules*' -FS ./master-src.zip packages .babelrc.js .editorconfig .eslintignore .eslintrc.js babel.config.js jest.config.js lerna.json package.json tsconfig.json yarn.lock",
-    "lint": "eslint .",
-    "format": "prettier --write ./**/*",
-    "lint:css": "stylelint './packages/**/src/**/*.tsx'",
     "clean": "polkadot-dev-clean-build",
+    "e2e": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --config jest.e2e.config.js",
+    "format": "prettier --write ./**/*",
+    "lint": "eslint .",
+    "lint:css": "stylelint './packages/**/src/**/*.tsx'",
     "postinstall": "polkadot-dev-yarn-only",
     "start": "yarn watch",
     "test": "polkadot-dev-run-test",
-    "watch": "cd packages/extension && NODE_ENV=development yarn polkadot-exec-webpack --config webpack.watch.cjs --mode development --watch",
-    "e2e": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --config jest.e2e.config.js"
+    "watch": "cd packages/extension && NODE_ENV=development yarn polkadot-exec-webpack --config webpack.watch.cjs --mode development --watch"
   },
-  "resolutions": {
-    "@polkadot/api": "^8.14.1",
-    "@polkadot/keyring": "^10.1.1",
-    "@polkadot/networks": "^10.1.1",
-    "@polkadot/types": "^8.14.1",
-    "@polkadot/util": "^10.1.1",
-    "@polkadot/util-crypto": "^10.1.1",
-    "@polkadot/x-fetch": "^10.1.1",
-    "babel-core": "^7.0.0-bridge.0",
-    "safe-buffer": "^5.2.1",
-    "typescript": "^4.4.4"
+  "dependencies": {
+    "@polkadot/dev": "^0.67.90"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
@@ -57,26 +69,16 @@
     "ts-jest": "^26.5.3",
     "typescript": "^4.4.4"
   },
-  "author": "Remon Nashid <remon.sherin@gmail.com>",
-  "license": "Apache-2",
-  "bugs": {
-    "url": "https://github.com/PolymathNetwork/polymesh-wallet/issues"
-  },
-  "homepage": "https://github.com/PolymathNetwork/polymesh-wallet#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PolymathNetwork/polymesh-wallet.git"
-  },
-  "keywords": [
-    "polymesh",
-    "polkadot",
-    "substrate",
-    "keyring",
-    "signing"
-  ],
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
+  "resolutions": {
+    "@polkadot/api": "^8.14.1",
+    "@polkadot/keyring": "^10.1.1",
+    "@polkadot/networks": "^10.1.1",
+    "@polkadot/types": "^8.14.1",
+    "@polkadot/util": "^10.1.1",
+    "@polkadot/util-crypto": "^10.1.1",
+    "@polkadot/x-fetch": "^10.1.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "safe-buffer": "^5.2.1",
+    "typescript": "^4.4.4"
   }
 }
