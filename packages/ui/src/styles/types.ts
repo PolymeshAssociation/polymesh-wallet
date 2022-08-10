@@ -2,7 +2,7 @@ import { CSSObject, ThemedStyledProps } from 'styled-components';
 
 import { Theme } from '../types';
 
-export { StyledProps } from 'styled-components';
+export type { StyledProps } from 'styled-components';
 
 export type Style<P = Record<string, unknown>> = (
   props: ThemedStyledProps<P, Theme>
