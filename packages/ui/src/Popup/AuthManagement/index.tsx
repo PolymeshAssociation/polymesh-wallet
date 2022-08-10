@@ -7,7 +7,7 @@ import { Box, Flex, Header, Hr, Text } from '@polymathnetwork/extension-ui/ui';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { InputFilter } from '../../components';
-import { getAuthList, toggleAuthorization } from '../../messaging';
+import { getAuthList, removeAuthorization } from '../../messaging';
 import WebsiteEntry from './WebsiteEntry';
 
 export function AuthManagement(): JSX.Element {
@@ -25,7 +25,7 @@ export function AuthManagement(): JSX.Element {
   }, []);
 
   const toggleAuth = useCallback((url: string) => {
-    toggleAuthorization(url)
+    removeAuthorization(url)
       .then(({ list }) => setAuthList(list))
       .catch(console.error);
   }, []);

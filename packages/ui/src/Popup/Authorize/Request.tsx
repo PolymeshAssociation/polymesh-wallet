@@ -1,11 +1,15 @@
 import { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
 import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
 import { truncateString } from '@polymathnetwork/extension-ui/util/formatters';
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { ActionContext, PolymeshContext } from '../../components';
-import { approveAuthRequest, rejectAuthRequest } from '../../messaging';
+import {
+  ActionContext,
+  PolymeshContext,
+  AccountContext,
+} from '../../components';
+import { approveAuthRequest, deleteAuthRequest } from '../../messaging';
 import { ThemeProps } from '../../types';
 import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
 import { AccountMain } from '../Accounts/AccountMain';
@@ -24,20 +28,26 @@ function Request({
   request: { origin },
   url,
 }: Props): React.ReactElement<Props> {
+  const { selectedAccounts = [], setSelectedAccounts } =
+    useContext(AccountContext);
   const onAction = useContext(ActionContext);
   const { currentAccount } = useContext(PolymeshContext);
 
+  useEffect(() => {
+    setSelectedAccounts && setSelectedAccounts([]);
+  }, [setSelectedAccounts]);
+
   const _onApprove = useCallback(
     () =>
-      approveAuthRequest(authId)
+      approveAuthRequest(authId, selectedAccounts)
         .then(() => onAction())
         .catch((error: Error) => console.error(error)),
-    [authId, onAction]
+    [authId, onAction, selectedAccounts]
   );
 
   const _onReject = useCallback(
     () =>
-      rejectAuthRequest(authId)
+      deleteAuthRequest(authId)
         .then(() => onAction())
         .catch((error: Error) => console.error(error)),
     [authId, onAction]
