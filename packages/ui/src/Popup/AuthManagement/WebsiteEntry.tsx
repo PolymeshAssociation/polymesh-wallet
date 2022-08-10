@@ -32,7 +32,7 @@ function WebsiteEntry({
         </Text>
         <Box width="108px">
           <Switch
-            checked={info.isAllowed}
+            checked={!!info.isAllowed}
             checkedLabel={'Allowed'}
             className="info"
             onChange={switchAccess}
