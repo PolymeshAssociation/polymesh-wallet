@@ -205,28 +205,26 @@ function subscribePolymesh(): () => void {
                               secKeys: [],
                             };
 
-                          const currentIdentityState =
-                            identityStateData[network][did];
                           const isPrimary = !!linkedKeyInfoObj.primaryKey;
                           const isSecondary = !!linkedKeyInfoObj.secondaryKey;
-                          const isSecKeyAdded =
-                            currentIdentityState.secKeys.includes(
-                              encodeAddress(account)
-                            );
+                          const isSecKeyAdded = identityStateData[network][
+                            did
+                          ].secKeys.includes(encodeAddress(account));
 
                           if (isPrimary)
-                            currentIdentityState.priKey =
+                            identityStateData[network][did].priKey =
                               encodeAddress(account);
                           else if (isSecondary && !isSecKeyAdded)
-                            currentIdentityState.secKeys.push(
-                              encodeAddress(account)
-                            );
+                            identityStateData[network][did].secKeys = [
+                              ...identityStateData[network][did].secKeys,
+                              encodeAddress(account),
+                            ];
 
                           store.dispatch(
                             identityActions.setIdentity({
                               did,
                               network,
-                              data: currentIdentityState,
+                              data: identityStateData[network][did],
                             })
                           );
                         }
