@@ -5,7 +5,7 @@ import {
 
 import { Theme } from './components/themes';
 
-export { Theme };
+export type { Theme };
 
 export interface ThemeProps {
   theme: Theme;

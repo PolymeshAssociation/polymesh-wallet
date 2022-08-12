@@ -345,6 +345,7 @@ export interface IdentifierType extends Enum {
 /** @name IdentityClaim */
 export interface IdentityClaim extends Struct {
   readonly claim_issuer: IdentityId;
+  readonly claimIssuer: IdentityId;
   readonly issuance_date: Moment;
   readonly last_update_date: Moment;
   readonly expiry: Option<Moment>;

@@ -213,18 +213,21 @@ export async function forgetAccount(address: string): Promise<boolean> {
   return sendMessage('pri(accounts.forget)', { address });
 }
 
-export async function approveAuthRequest(id: string): Promise<boolean> {
-  return sendMessage('pri(authorize.approve)', { id });
+export async function approveAuthRequest(
+  id: string,
+  authorizedAccounts: string[]
+): Promise<boolean> {
+  return sendMessage('pri(authorize.approve)', { authorizedAccounts, id });
 }
 
 export async function getAuthList(): Promise<ResponseAuthorizeList> {
   return sendMessage('pri(authorize.list)');
 }
 
-export async function toggleAuthorization(
+export async function removeAuthorization(
   url: string
 ): Promise<ResponseAuthorizeList> {
-  return sendMessage('pri(authorize.toggle)', url);
+  return sendMessage('pri(authorize.remove)', url);
 }
 
 export async function approveMetaRequest(id: string): Promise<boolean> {
@@ -356,8 +359,8 @@ export async function subscribeNetworkState(
   return polyMessage('poly:pri(networkState.subscribe)', null, cb);
 }
 
-export async function rejectAuthRequest(id: string): Promise<boolean> {
-  return sendMessage('pri(authorize.reject)', { id });
+export async function deleteAuthRequest(requestId: string): Promise<void> {
+  return sendMessage('pri(authorize.delete.request)', requestId);
 }
 
 export async function rejectMetaRequest(id: string): Promise<boolean> {

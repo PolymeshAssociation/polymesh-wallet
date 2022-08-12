@@ -6,11 +6,7 @@ import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
 import apiPromise from './external/apiPromise';
-import {
-  DidRecord,
-  IdentityClaim,
-  LinkedKeyInfo,
-} from './external/apiPromise/types';
+import { IdentityClaim, LinkedKeyInfo } from './external/apiPromise/types';
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as networkActions } from './store/features/network';
@@ -73,38 +69,19 @@ const claimSorter = (a: IdentityClaim, b: IdentityClaim) => {
   }
 };
 
-const _didRecord = (did: string, didRecords: DidRecord) => {
-  const secKeys = didRecords.secondary_keys.toArray().reduce((keys, item) => {
-    return item.signer.isAccount
-      ? keys.concat(encodeAddress(item.signer.asAccount))
-      : keys;
-  }, [] as string[]);
-
-  const identityData = {
-    did,
-    priKey: encodeAddress(didRecords.primary_key),
-    secKeys,
-  };
-
-  return identityData;
-};
-
 const claims2Record = (didClaims: IdentityClaim[]) => {
   // Sort claims array by expiry (non-expiring first)
-  const didClaimsSorted = didClaims.sort(claimSorter);
+  didClaims.sort(claimSorter);
 
   // Save CDD data
-  const cdd =
-    didClaimsSorted && didClaimsSorted.length > 0
-      ? {
-          issuer: didClaimsSorted[0].claim_issuer.toString(),
-          expiry: !didClaimsSorted[0].expiry.isEmpty
-            ? Number(didClaimsSorted[0].expiry.toString())
-            : undefined,
-        }
-      : undefined;
-
-  return cdd;
+  return didClaims && didClaims.length > 0
+    ? {
+        issuer: didClaims[0].claimIssuer.toString(),
+        expiry: !didClaims[0].expiry.isEmpty
+          ? Number(didClaims[0].expiry.toString())
+          : undefined,
+      }
+    : undefined;
 };
 
 function subscribePolymesh(): () => void {
@@ -157,6 +134,7 @@ function subscribePolymesh(): () => void {
                * Accounts
                */
               console.log('Poly: Subscribing to accounts');
+
               const accountsSub = observeAccounts(
                 (accountsData: KeyringAccountData[]) => {
                   if (network !== getNetwork()) {
@@ -179,6 +157,9 @@ function subscribePolymesh(): () => void {
                     }
                   });
 
+                  // Used for setting redux state. This is as a re-work of previous (v4) mechanism
+                  const identityStateData: any = { [network]: {} };
+
                   // B) Create new subscriptions to:
                   accounts.forEach((account) => {
                     api
@@ -187,7 +168,7 @@ function subscribePolymesh(): () => void {
                           // 1) Account balance
                           [api.query.system.account, account],
                           // 2) Identities linked to account.
-                          [api.query.identity.keyToIdentityIds, account],
+                          [api.query.identity.keyRecords, account],
                         ],
                         ([accData, linkedKeyInfo]: [
                           AccountInfo,
@@ -208,24 +189,44 @@ function subscribePolymesh(): () => void {
                             })
                           );
 
-                          if (linkedKeyInfo.isEmpty) {
-                            return;
-                          }
+                          if (linkedKeyInfo && linkedKeyInfo.isEmpty)
+                            throw new Error('linkedKeyInfo is missing');
 
-                          const did = linkedKeyInfo.toString();
+                          const linkedKeyInfoObj: any = linkedKeyInfo.toJSON();
 
-                          api.query.identity
-                            .didRecords<DidRecord>(did)
-                            .then((didRecords) => {
-                              const data = _didRecord(did, didRecords);
-                              const params = { did, network, data };
+                          const did =
+                            linkedKeyInfoObj.primaryKey ||
+                            linkedKeyInfoObj.secondaryKey[0];
 
-                              // store.dispatch(identityActions.setIdentitySecKeys(params));
-                              store.dispatch(
-                                identityActions.setIdentity(params)
-                              );
-                            }, apiErrorHandler)
-                            .catch(apiErrorHandler);
+                          // Initialize identity state for network:did pair
+                          if (!identityStateData[network][did])
+                            identityStateData[network][did] = {
+                              did,
+                              secKeys: [],
+                            };
+
+                          const isPrimary = !!linkedKeyInfoObj.primaryKey;
+                          const isSecondary = !!linkedKeyInfoObj.secondaryKey;
+                          const isSecKeyAdded = identityStateData[network][
+                            did
+                          ].secKeys.includes(encodeAddress(account));
+
+                          if (isPrimary)
+                            identityStateData[network][did].priKey =
+                              encodeAddress(account);
+                          else if (isSecondary && !isSecKeyAdded)
+                            identityStateData[network][did].secKeys = [
+                              ...identityStateData[network][did].secKeys,
+                              encodeAddress(account),
+                            ];
+
+                          store.dispatch(
+                            identityActions.setIdentity({
+                              did,
+                              network,
+                              data: identityStateData[network][did],
+                            })
+                          );
                         }
                       )
                       .then((unsub) => {
@@ -273,7 +274,7 @@ function subscribePolymesh(): () => void {
                 const promises = dids.map((did) =>
                   api.query.identity.claims.entries({
                     target: did,
-                    claim_type: 'CustomerDueDiligence',
+                    claimType: 'CustomerDueDiligence',
                   })
                 );
 
@@ -283,12 +284,13 @@ function subscribePolymesh(): () => void {
                       result.length
                         ? result
                             .map(([, claim]) => claim)
-                            .filter(
-                              (claim) =>
+                            .filter((claim) => {
+                              return (
                                 activeIssuers.indexOf(
-                                  claim.claim_issuer.toString()
+                                  claim.claimIssuer.toString()
                                 ) !== -1
-                            )
+                              );
+                            })
                         : undefined
                     )
                   )

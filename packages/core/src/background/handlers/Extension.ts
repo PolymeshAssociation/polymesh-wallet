@@ -1,5 +1,6 @@
 import DotExtension from '@polkadot/extension-base/background/handlers/Extension';
 import {
+  ResponseType,
   MessageTypes,
   RequestRpcUnsubscribe,
 } from '@polkadot/extension-base/background/types';
@@ -606,7 +607,7 @@ export default class Extension extends DotExtension {
     type: TMessageType,
     request: PolyRequestTypes[TMessageType],
     port: chrome.runtime.Port
-  ): Promise<PolyResponseType<TMessageType>> {
+  ): Promise<PolyResponseType<TMessageType> | ResponseType<MessageTypes>> {
     switch (type) {
       case 'poly:pri(accounts.subscribe)':
         return this.polyAccountsSubscribe(id, port);
