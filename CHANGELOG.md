@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.6.2...1.6.3) (2022-08-12)
+
+
+### Bug Fixes
+
+* updates for chain v5 [ACORN-554] ([#248](https://github.com/PolymathNetwork/polymesh-wallet/issues/248)) ([e27f857](https://github.com/PolymathNetwork/polymesh-wallet/commit/e27f8575841d8197fceaaf5c197ba5baf938f785))
+
 ## [1.6.2](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.6.1...1.6.2) (2022-07-06)
 
 
