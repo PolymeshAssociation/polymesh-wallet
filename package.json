@@ -23,7 +23,7 @@
     "url": "https://github.com/PolymathNetwork/polymesh-wallet.git"
   },
   "sideEffects": false,
-  "version": "1.6.2",
+  "version": "1.6.3",
   "workspaces": [
     "packages/*"
   ],
