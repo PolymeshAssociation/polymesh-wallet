@@ -1,10 +1,10 @@
-import { CDD } from '@polymathnetwork/extension-core/types';
+import { CDD } from '@polymeshassociation/extension-core/types';
 import {
   SvgAlertCircle,
   SvgCheckboxMarkedCircle,
   SvgProgressClock,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
+import { Flex, Icon, Text } from '@polymeshassociation/extension-ui/ui';
 import React, { FC } from 'react';
 
 type Props = {

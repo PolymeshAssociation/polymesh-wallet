@@ -1,5 +1,5 @@
-import { ProofRequestPayload } from '@polymathnetwork/extension-core/types';
-import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { ProofRequestPayload } from '@polymeshassociation/extension-core/types';
+import { SvgAlertCircle } from '@polymeshassociation/extension-ui/assets/images/icons';
 import React, { useCallback, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';

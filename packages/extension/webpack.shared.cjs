@@ -82,9 +82,9 @@ module.exports = (entry, isDev) => ({
   ],
   resolve: {
     alias: {
-      '@polymathnetwork/extension': path.resolve(__dirname, '../extension/src'),
-      '@polymathnetwork/extension-ui': path.resolve(__dirname, '../ui/src'),
-      '@polymathnetwork/extension-core': path.resolve(__dirname, '../core/src'),
+      '@polymeshassociation/extension': path.resolve(__dirname, '../extension/src'),
+      '@polymeshassociation/extension-ui': path.resolve(__dirname, '../ui/src'),
+      '@polymeshassociation/extension-core': path.resolve(__dirname, '../core/src'),
       'react/jsx-runtime': require.resolve('react/jsx-runtime'),
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.wasm'],

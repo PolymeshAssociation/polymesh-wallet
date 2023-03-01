@@ -1,3 +1,3 @@
-import { createView, Popup } from '@polymathnetwork/extension-ui';
+import { createView, Popup } from '@polymeshassociation/extension-ui';
 
 createView(Popup);

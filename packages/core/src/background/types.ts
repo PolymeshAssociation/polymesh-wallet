@@ -4,7 +4,7 @@ import {
 } from '@polkadot/extension-base/background/types';
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
-import { ORIGINS } from '@polymathnetwork/extension-core/constants';
+import { ORIGINS } from '@polymeshassociation/extension-core/constants';
 
 import {
   IdentifiedAccount,

@@ -1,5 +1,5 @@
 {
-  "name": "@polymathnetwork/extension-ui",
+  "name": "@polymeshassociation/extension-ui",
   "description": "A sample signer extension for the @polkadot/api",
   "version": "1.6.3",
   "license": "Apache-2",

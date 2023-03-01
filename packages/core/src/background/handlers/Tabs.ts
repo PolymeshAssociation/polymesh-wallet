@@ -7,18 +7,18 @@ import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { assert } from '@polkadot/util';
-import { polyNetworkGet } from '@polymathnetwork/extension-core/external';
-import polyNetworkSubscribe from '@polymathnetwork/extension-core/external/polyNetworkSubscribe';
+import { polyNetworkGet } from '@polymeshassociation/extension-core/external';
+import polyNetworkSubscribe from '@polymeshassociation/extension-core/external/polyNetworkSubscribe';
 import {
   getSelectedAccount,
   getSelectedIdentifiedAccount,
-} from '@polymathnetwork/extension-core/store/getters';
-import { subscribeSelectedAccount } from '@polymathnetwork/extension-core/store/subscribers';
+} from '@polymeshassociation/extension-core/store/getters';
+import { subscribeSelectedAccount } from '@polymeshassociation/extension-core/store/subscribers';
 import {
   NetworkMeta,
   ProofRequestPayload,
   RequestPolyProvideUid,
-} from '@polymathnetwork/extension-core/types';
+} from '@polymeshassociation/extension-core/types';
 import {
   prioritize,
   recodeAddress,
@@ -26,7 +26,7 @@ import {
   validateSelectedNetwork,
   validateTicker,
   validateUid,
-} from '@polymathnetwork/extension-core/utils';
+} from '@polymeshassociation/extension-core/utils';
 
 import {
   Errors,

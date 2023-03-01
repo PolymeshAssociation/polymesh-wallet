@@ -4,7 +4,7 @@ import {
   Flex,
   Text,
   TextArea,
-} from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/ui';
 import React, { ChangeEvent, FC, useState } from 'react';
 
 import { validateSeed } from '../../../messaging';

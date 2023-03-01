@@ -1,6 +1,6 @@
 import { allNetworks as polkadotNetworks } from '@polkadot/networks';
 import { Network } from '@polkadot/networks/types';
-import { NetworkName } from '@polymathnetwork/extension-core/types';
+import { NetworkName } from '@polymeshassociation/extension-core/types';
 
 const testnetTmp: Network = {
   decimals: [6],

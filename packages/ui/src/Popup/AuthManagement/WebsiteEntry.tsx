@@ -2,8 +2,8 @@ import { AuthUrlInfo } from '@polkadot/extension-base/background/handlers/State'
 import {
   SvgWeb,
   SvgDelete,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Flex, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
+import { Box, Flex, Icon, Text } from '@polymeshassociation/extension-ui/ui';
 import React, { useCallback } from 'react';
 
 import { fontSizes } from '../../components/themeDefinitions';

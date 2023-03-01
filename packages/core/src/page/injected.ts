@@ -1,5 +1,5 @@
 import Injected from '@polkadot/extension-base/page/Injected';
-import { SendRequest } from '@polymathnetwork/extension-core/page/types';
+import { SendRequest } from '@polymeshassociation/extension-core/page/types';
 
 import Network from './Network';
 import Uid from './Uid';

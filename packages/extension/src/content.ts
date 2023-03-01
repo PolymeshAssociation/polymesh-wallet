@@ -1,6 +1,6 @@
 import { Message } from '@polkadot/extension-base/types';
 import { chrome } from '@polkadot/extension-inject/chrome';
-import { ORIGINS, PORTS } from '@polymathnetwork/extension-core/constants';
+import { ORIGINS, PORTS } from '@polymeshassociation/extension-core/constants';
 
 // connect to the extension
 const port = chrome.runtime.connect({ name: PORTS.CONTENT });

@@ -2,7 +2,7 @@ import { KeyringPair$Json } from '@polkadot/keyring/types';
 import {
   AccountForm,
   AccountInfo,
-} from '@polymathnetwork/extension-ui/components/AccountForm';
+} from '@polymeshassociation/extension-ui/components/AccountForm';
 import React, { FC, useContext, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 

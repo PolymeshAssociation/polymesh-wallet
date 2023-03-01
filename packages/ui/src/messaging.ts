@@ -34,15 +34,15 @@ import {
   ProvideUidRequest,
   ReadUidRequest,
   ResponsePolyCallDetails,
-} from '@polymathnetwork/extension-core/background/types';
-import { PORTS } from '@polymathnetwork/extension-core/constants';
+} from '@polymeshassociation/extension-core/background/types';
+import { PORTS } from '@polymeshassociation/extension-core/constants';
 import {
   IdentifiedAccount,
   NetworkName,
   NetworkState,
   StoreStatus,
   UidRecord,
-} from '@polymathnetwork/extension-core/types';
+} from '@polymeshassociation/extension-core/types';
 
 interface Handler {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

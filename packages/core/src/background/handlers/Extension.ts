@@ -7,26 +7,26 @@ import {
 import { KeyringPair } from '@polkadot/keyring/types';
 import keyring from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
-import { callDetails } from '@polymathnetwork/extension-core/external';
+import { callDetails } from '@polymeshassociation/extension-core/external';
 import {
   getNetwork,
   getSelectedIdentifiedAccount,
-} from '@polymathnetwork/extension-core/store/getters';
+} from '@polymeshassociation/extension-core/store/getters';
 import {
   renameIdentity,
   setNetwork,
   setSelectedAccount,
   toggleIsDeveloper,
-} from '@polymathnetwork/extension-core/store/setters';
+} from '@polymeshassociation/extension-core/store/setters';
 import {
   subscribeIdentifiedAccounts,
   subscribeNetworkState,
   subscribeSelectedAccount,
   subscribeSelectedNetwork,
   subscribeStatus,
-} from '@polymathnetwork/extension-core/store/subscribers';
-import { UidRecord } from '@polymathnetwork/extension-core/types';
-import { recodeAddress } from '@polymathnetwork/extension-core/utils';
+} from '@polymeshassociation/extension-core/store/subscribers';
+import { UidRecord } from '@polymeshassociation/extension-core/types';
+import { recodeAddress } from '@polymeshassociation/extension-core/utils';
 
 import {
   ALLOWED_PATH,

@@ -1,7 +1,7 @@
 import {
   SvgAlertCircle,
   SvgFileLockOutline,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
 import {
   Box,
   Button,
@@ -10,7 +10,7 @@ import {
   Icon,
   Text,
   TextInput,
-} from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/ui';
 import React, { FC, useContext } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 import { useForm } from 'react-hook-form';

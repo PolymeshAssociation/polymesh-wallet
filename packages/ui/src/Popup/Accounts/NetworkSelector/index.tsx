@@ -1,13 +1,13 @@
 import React, { useContext, useEffect } from 'react';
-import { networkLabels } from '@polymathnetwork/extension-core/constants';
-import { NetworkName } from '@polymathnetwork/extension-core/types';
-import { SvgChevron } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { networkLabels } from '@polymeshassociation/extension-core/constants';
+import { NetworkName } from '@polymeshassociation/extension-core/types';
+import { SvgChevron } from '@polymeshassociation/extension-ui/assets/images/icons';
 import {
   OptionSelector,
   PolymeshContext,
-} from '@polymathnetwork/extension-ui/components';
-import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
-import { Box, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/components';
+import { Option } from '@polymeshassociation/extension-ui/components/OptionSelector/types';
+import { Box, Icon, Text } from '@polymeshassociation/extension-ui/ui';
 import { makeNetworkMenu, networkGroups, NETWORK_COLORS } from './utils';
 import { NetworkSelect, NetworkCircle, DropdownIcon } from './styles';
 

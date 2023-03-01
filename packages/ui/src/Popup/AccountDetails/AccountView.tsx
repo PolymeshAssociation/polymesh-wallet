@@ -1,9 +1,9 @@
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
-import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
-import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
-import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
+import { IdentifiedAccount } from '@polymeshassociation/extension-core/types';
+import { recodeAddress } from '@polymeshassociation/extension-core/utils';
+import { SvgClose } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { PolymeshContext } from '@polymeshassociation/extension-ui/components';
+import { CddStatus } from '@polymeshassociation/extension-ui/components/CddStatus';
+import { InitialsAvatar } from '@polymeshassociation/extension-ui/components/InitialsAvatar';
 import {
   Box,
   Flex,
@@ -14,7 +14,7 @@ import {
   Text,
   TextEllipsis,
   TextOverflowEllipsis,
-} from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/ui';
 import React, { FC, useContext } from 'react';
 
 import { formatAmount } from '../../util/formatters';

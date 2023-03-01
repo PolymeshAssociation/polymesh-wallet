@@ -1,7 +1,7 @@
-import { SvgAccountReactivate } from '@polymathnetwork/extension-ui/assets/images/icons';
-import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
-import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
-import { Box, Flex, Header, Text } from '@polymathnetwork/extension-ui/ui';
+import { SvgAccountReactivate } from '@polymeshassociation/extension-ui/assets/images/icons';
+import useIsPopup from '@polymeshassociation/extension-ui/hooks/useIsPopup';
+import { windowOpen } from '@polymeshassociation/extension-ui/messaging';
+import { Box, Flex, Header, Text } from '@polymeshassociation/extension-ui/ui';
 import React, { FC } from 'react';
 import { useHistory, useParams } from 'react-router';
 

@@ -1,6 +1,6 @@
 import { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
-import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { truncateString } from '@polymathnetwork/extension-ui/util/formatters';
+import { SvgAlertCircle } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { truncateString } from '@polymeshassociation/extension-ui/util/formatters';
 import React, { useCallback, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 

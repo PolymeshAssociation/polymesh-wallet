@@ -6,11 +6,11 @@ import { assert } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import subscribePolymesh, {
   accountsSynchronizer,
-} from '@polymathnetwork/extension-core';
-import handlers from '@polymathnetwork/extension-core/background/handlers';
-import { PORTS } from '@polymathnetwork/extension-core/constants';
-import SchemaService from '@polymathnetwork/extension-core/external/schema';
-import { fatalErrorHandler } from '@polymathnetwork/extension-core/utils';
+} from '@polymeshassociation/extension-core';
+import handlers from '@polymeshassociation/extension-core/background/handlers';
+import { PORTS } from '@polymeshassociation/extension-core/constants';
+import SchemaService from '@polymeshassociation/extension-core/external/schema';
+import { fatalErrorHandler } from '@polymeshassociation/extension-core/utils';
 
 const loadSchema = () => {
   SchemaService.load().catch(console.error);

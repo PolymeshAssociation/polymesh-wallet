@@ -2,7 +2,7 @@ import {
   Error,
   NetworkName,
   StoreStatus,
-} from '@polymathnetwork/extension-core/types';
+} from '@polymeshassociation/extension-core/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: StoreStatus = {

@@ -3,7 +3,7 @@ import {
   SvgCheckboxMarkedCircle,
   SvgCheckOutline,
   SvgCloseCircle,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
 import {
   Box,
   Button,
@@ -12,7 +12,7 @@ import {
   Header,
   Icon,
   Text,
-} from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/ui';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 
 import { SeedWord } from './components/SeedWord';

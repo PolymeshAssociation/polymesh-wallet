@@ -1,4 +1,4 @@
-import { ThemeProps } from '@polymathnetwork/extension-ui/types';
+import { ThemeProps } from '@polymeshassociation/extension-ui/types';
 import React, { FC } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import styled from 'styled-components';

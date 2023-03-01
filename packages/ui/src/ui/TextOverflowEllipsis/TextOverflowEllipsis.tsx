@@ -1,4 +1,4 @@
-import { Text } from '@polymathnetwork/extension-ui/ui';
+import { Text } from '@polymeshassociation/extension-ui/ui';
 import React, { ComponentProps, FC } from 'react';
 import styled from 'styled-components';
 

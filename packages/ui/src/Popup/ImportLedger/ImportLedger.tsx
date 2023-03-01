@@ -1,25 +1,25 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import settings from '@polkadot/ui-settings';
-import { recodeAddress } from '@polymathnetwork/extension-core/utils';
+import { recodeAddress } from '@polymeshassociation/extension-core/utils';
 import {
   SvgChevronDown,
   SvgLedgerLogo,
   SvgSettingsOutline,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
 import {
   AccountContext,
   ActionContext,
   ActivityContext,
   PolymeshContext,
-} from '@polymathnetwork/extension-ui/components/contexts';
-import Dropdown from '@polymathnetwork/extension-ui/components/Dropdown';
-import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
+} from '@polymeshassociation/extension-ui/components/contexts';
+import Dropdown from '@polymeshassociation/extension-ui/components/Dropdown';
+import { InitialsAvatar } from '@polymeshassociation/extension-ui/components/InitialsAvatar';
 import {
   Status,
   useLedger,
-} from '@polymathnetwork/extension-ui/hooks/useLedger';
-import { createAccountHardware } from '@polymathnetwork/extension-ui/messaging';
+} from '@polymeshassociation/extension-ui/hooks/useLedger';
+import { createAccountHardware } from '@polymeshassociation/extension-ui/messaging';
 import {
   Box,
   Button,
@@ -28,13 +28,13 @@ import {
   Icon,
   Text,
   TextInput,
-} from '@polymathnetwork/extension-ui/ui';
-import { formatters } from '@polymathnetwork/extension-ui/util';
+} from '@polymeshassociation/extension-ui/ui';
+import { formatters } from '@polymeshassociation/extension-ui/util';
 import { FormProvider, useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
 import { TroubleshootGuide } from './TroubleshootGuide';
-import { NetworkName } from '@polymathnetwork/extension-core/types';
+import { NetworkName } from '@polymeshassociation/extension-core/types';
 
 interface AccOption {
   text: string;

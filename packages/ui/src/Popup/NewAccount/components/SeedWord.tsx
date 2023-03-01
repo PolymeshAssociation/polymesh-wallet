@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@polymathnetwork/extension-ui/ui';
+import { Box, Flex, Text } from '@polymeshassociation/extension-ui/ui';
 import React, { FC } from 'react';
 
 export interface Props {

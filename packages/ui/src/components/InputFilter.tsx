@@ -1,4 +1,4 @@
-import { Icon, TextInput } from '@polymathnetwork/extension-ui/ui';
+import { Icon, TextInput } from '@polymeshassociation/extension-ui/ui';
 import React, { useCallback } from 'react';
 
 import { SvgSearch } from '../assets/images/icons';

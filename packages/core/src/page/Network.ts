@@ -1,5 +1,5 @@
 import { Unsubcall } from '@polkadot/extension-inject/types';
-import { SendRequest } from '@polymathnetwork/extension-core/page/types';
+import { SendRequest } from '@polymeshassociation/extension-core/page/types';
 
 import { InjectedNetwork, NetworkMeta } from '../types';
 

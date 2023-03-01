@@ -1,4 +1,4 @@
-import { styled } from '@polymathnetwork/extension-ui/styles';
+import { styled } from '@polymeshassociation/extension-ui/styles';
 
 export const AccountViewGrid = styled.div`
   display: grid;

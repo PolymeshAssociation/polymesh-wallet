@@ -1,4 +1,4 @@
-import { SvgContentCopy } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgContentCopy } from '@polymeshassociation/extension-ui/assets/images/icons';
 import React, { FC, useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 

@@ -1,12 +1,12 @@
-import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { ResponsePolyCallDetails } from '@polymeshassociation/extension-core/background/types';
 import {
   Box,
   ExpandableDetails,
   Flex,
   Hr,
   Text,
-} from '@polymathnetwork/extension-ui/ui';
-import { formatAmount } from '@polymathnetwork/extension-ui/util/formatters';
+} from '@polymeshassociation/extension-ui/ui';
+import { formatAmount } from '@polymeshassociation/extension-ui/util/formatters';
 import BN from 'bn.js';
 import React, { FC } from 'react';
 

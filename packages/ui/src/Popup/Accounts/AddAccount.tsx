@@ -1,8 +1,8 @@
-import { SvgLedger } from '@polymathnetwork/extension-ui/assets/images/icons';
-import SvgWalletLogo from '@polymathnetwork/extension-ui/assets/images/SvgWalletLogo';
-import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
-import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
-import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
+import { SvgLedger } from '@polymeshassociation/extension-ui/assets/images/icons';
+import SvgWalletLogo from '@polymeshassociation/extension-ui/assets/images/SvgWalletLogo';
+import useIsPopup from '@polymeshassociation/extension-ui/hooks/useIsPopup';
+import { useLedger } from '@polymeshassociation/extension-ui/hooks/useLedger';
+import { windowOpen } from '@polymeshassociation/extension-ui/messaging';
 import React, { useCallback, useContext, useState } from 'react';
 
 import { ActionContext } from '../../components';
