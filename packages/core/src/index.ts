@@ -1,3 +1,4 @@
+import "@polkadot/api-augment";
 import { Option } from '@polkadot/types/codec';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
@@ -169,7 +170,7 @@ function subscribePolymesh(): () => void {
                           // 2) Identities linked to account.
                           [api.query.identity.keyRecords, account],
                         ],
-                        ([accData, linkedKeyInfo]: [
+                        async ([accData, linkedKeyInfo]: [
                           AccountInfo,
                           Option<LinkedKeyInfo>
                         ]) => {
@@ -197,77 +198,52 @@ function subscribePolymesh(): () => void {
                           const isSecondary = !!linkedKeyInfoObj.secondaryKey;
                           const isMultiSig = !!linkedKeyInfoObj.multiSigSignerKey;
 
+                          let did;
                           // MultiSigs require one additional query to get their DIDs
                           if (isMultiSig) {         
-                            console.log("IS MS")
-                            api.query.identity.keyRecords(
-                              linkedKeyInfoObj.multiSigSignerKey,
-                              (msLinkedKeyInfo: Option<LinkedKeyInfo>) => {
-                                if (msLinkedKeyInfo && msLinkedKeyInfo.isEmpty)
-                                  throw new Error('msLinkedKeyInfo is missing');
-                                const msLinkedKeyInfoObj: any = msLinkedKeyInfo.toJSON();
-                                console.log(msLinkedKeyInfoObj);
-                                const isMsPrimaryKey = !!msLinkedKeyInfoObj.primaryKey;
-                                const did = isMsPrimaryKey ? msLinkedKeyInfoObj.primaryKey : msLinkedKeyInfoObj.secondaryKey[0];
-
-                                // Initialize identity state for network:did pair
-                                if (!identityStateData[network][did])
-                                  identityStateData[network][did] = {
-                                    did,
-                                    secKeys: [],
-                                    msKeys: [],
-                                  };
-
-                                const isMsKeyAdded = identityStateData[network][
-                                  did
-                                ].msKeys.includes(encodeAddress(account));
-
-                                if (!isMsKeyAdded)
-                                  identityStateData[network][did].msKeys = [
-                                    ...identityStateData[network][did].msKeys,
-                                    encodeAddress(account),
-                                  ];
-
-                                store.dispatch(
-                                  identityActions.setIdentity({
-                                    did,
-                                    network,
-                                    data: identityStateData[network][did],
-                                  })
-                                );      
-                              }
-                            )                 
+                            const msLinkedKeyInfo = await api.query.identity.keyRecords(linkedKeyInfoObj.multiSigSignerKey);
+                            if (msLinkedKeyInfo && msLinkedKeyInfo.isEmpty)
+                              throw new Error('msLinkedKeyInfo is missing');
+                            const msLinkedKeyInfoObj: any = msLinkedKeyInfo.toJSON();
+                            const isMsPrimaryKey = !!msLinkedKeyInfoObj.primaryKey;
+                            did = isMsPrimaryKey ? msLinkedKeyInfoObj.primaryKey : msLinkedKeyInfoObj.secondaryKey[0];
                           } else {
-                            const did = isPrimary ? linkedKeyInfoObj.primaryKey : linkedKeyInfoObj.secondaryKey[0];
-                            // Initialize identity state for network:did pair
-                            if (!identityStateData[network][did])
-                              identityStateData[network][did] = {
-                                did,
-                                secKeys: [],
-                                msKeys: [],
-                              };
+                            did = isPrimary ? linkedKeyInfoObj.primaryKey : linkedKeyInfoObj.secondaryKey[0];
+                          }
+                          // Initialize identity state for network:did pair
+                          if (!identityStateData[network][did])
+                            identityStateData[network][did] = {
+                              did,
+                              secKeys: [],
+                              msKeys: [],
+                            };
+                          const isSecKeyAdded = identityStateData[network][
+                            did
+                          ].secKeys.includes(encodeAddress(account));
+                          const isMsKeyAdded = identityStateData[network][
+                            did
+                          ].msKeys.includes(encodeAddress(account));
+                          if (isPrimary)
+                            identityStateData[network][did].priKey =
+                              encodeAddress(account);
+                          else if (isSecondary && !isSecKeyAdded)
+                            identityStateData[network][did].secKeys = [
+                              ...identityStateData[network][did].secKeys,
+                              encodeAddress(account),
+                            ];
+                          else if (isMultiSig && !isMsKeyAdded)
+                            identityStateData[network][did].msKeys = [
+                              ...identityStateData[network][did].msKeys,
+                              encodeAddress(account),
+                            ];
 
-                            const isSecKeyAdded = identityStateData[network][
-                              did
-                            ].secKeys.includes(encodeAddress(account));
-  
-                            if (isPrimary)
-                              identityStateData[network][did].priKey =
-                                encodeAddress(account);
-                            else if (isSecondary && !isSecKeyAdded)
-                              identityStateData[network][did].secKeys = [
-                                ...identityStateData[network][did].secKeys,
-                                encodeAddress(account),
-                              ];
-
-                            store.dispatch(
-                              identityActions.setIdentity({
-                                did,
-                                network,
-                                data: identityStateData[network][did],
-                              })
-                            );
-                          }   
+                          store.dispatch(
+                            identityActions.setIdentity({
+                              did,
+                              network,
+                              data: identityStateData[network][did],
+                            })
+                          );      
                         }
                       )
                       .then((unsub) => {
@@ -310,14 +286,15 @@ function subscribePolymesh(): () => void {
                     delete unsubCallbacks[`${did}:cdd`];
                   }
                 });
-
                 const promises = dids.map((did) =>
-                  api.query.identity.claims.entries({
+                  {console.log("GETTING CDD", did);
+                  return api.query.identity.claims.entries({
                     target: did,
                     claimType: 'CustomerDueDiligence',
-                  })
+                  })}
                 );
-
+                console.log("ISSUERS");
+                console.log(activeIssuers);
                 Promise.all(promises)
                   .then((results) =>
                     (results as [unknown, IdentityClaim][][]).map((result) =>
@@ -335,6 +312,9 @@ function subscribePolymesh(): () => void {
                     )
                   )
                   .then((results) => {
+                    console.log("RESULTS")
+                    console.log(dids);
+                    console.log(results);
                     dids.forEach((did, index) => {
                       const result = results[index];
 
