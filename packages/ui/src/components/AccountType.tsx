@@ -9,7 +9,7 @@ export interface Props {
 
 export const AccountType: FC<Props> = ({ keyType, large }) => {
   const color = keyType === 'primary' ? 'red' : 'blue';
-  const text = keyType === 'primary' ? 'Primary' : 'Secondary';
+  const text = keyType === 'primary' ? 'Primary' : keyType === 'secondary' ? 'Secondary' : 'MultiSigSigner';
 
   return (
     <StatusBadge large={large} variant={color}>

@@ -17,6 +17,7 @@ type SetIdentityPayload = {
     did: string;
     priKey: string;
     secKeys: string[];
+    msKeys: string[];
   };
 };
 type SetIdentityCddPayload = { network: NetworkName; did: string; cdd?: CDD };

@@ -140,7 +140,6 @@ function subscribePolymesh(): () => void {
                   if (network !== getNetwork()) {
                     return;
                   }
-
                   function accountName(_address: string): string | undefined {
                     return accountsData.find(
                       ({ address }) => address === _address
@@ -194,39 +193,80 @@ function subscribePolymesh(): () => void {
 
                           const linkedKeyInfoObj: any = linkedKeyInfo.toJSON();
 
-                          const did =
-                            linkedKeyInfoObj.primaryKey ||
-                            linkedKeyInfoObj.secondaryKey[0];
-
-                          // Initialize identity state for network:did pair
-                          if (!identityStateData[network][did])
-                            identityStateData[network][did] = {
-                              did,
-                              secKeys: [],
-                            };
-
                           const isPrimary = !!linkedKeyInfoObj.primaryKey;
                           const isSecondary = !!linkedKeyInfoObj.secondaryKey;
-                          const isSecKeyAdded = identityStateData[network][
-                            did
-                          ].secKeys.includes(encodeAddress(account));
+                          const isMultiSig = !!linkedKeyInfoObj.multiSigSignerKey;
 
-                          if (isPrimary)
-                            identityStateData[network][did].priKey =
-                              encodeAddress(account);
-                          else if (isSecondary && !isSecKeyAdded)
-                            identityStateData[network][did].secKeys = [
-                              ...identityStateData[network][did].secKeys,
-                              encodeAddress(account),
-                            ];
+                          // MultiSigs require one additional query to get their DIDs
+                          if (isMultiSig) {         
+                            console.log("IS MS")
+                            api.query.identity.keyRecords(
+                              linkedKeyInfoObj.multiSigSignerKey,
+                              (msLinkedKeyInfo: Option<LinkedKeyInfo>) => {
+                                if (msLinkedKeyInfo && msLinkedKeyInfo.isEmpty)
+                                  throw new Error('msLinkedKeyInfo is missing');
+                                const msLinkedKeyInfoObj: any = msLinkedKeyInfo.toJSON();
+                                console.log(msLinkedKeyInfoObj);
+                                const did = !!msLinkedKeyInfoObj.primaryKey ? msLinkedKeyInfoObj.primaryKey : msLinkedKeyInfoObj.secondaryKey[0];
 
-                          store.dispatch(
-                            identityActions.setIdentity({
-                              did,
-                              network,
-                              data: identityStateData[network][did],
-                            })
-                          );
+                                // Initialize identity state for network:did pair
+                                if (!identityStateData[network][did])
+                                  identityStateData[network][did] = {
+                                    did,
+                                    secKeys: [],
+                                    msKeys: [],
+                                  };
+
+                                const isMsKeyAdded = identityStateData[network][
+                                  did
+                                ].msKeys.includes(encodeAddress(account));
+
+                                if (!isMsKeyAdded)
+                                  identityStateData[network][did].msKeys = [
+                                    ...identityStateData[network][did].msKeys,
+                                    encodeAddress(account),
+                                  ];
+
+                                store.dispatch(
+                                  identityActions.setIdentity({
+                                    did,
+                                    network,
+                                    data: identityStateData[network][did],
+                                  })
+                                );      
+                              }
+                            )                 
+                          } else {
+                            const did = isPrimary ? linkedKeyInfoObj.primaryKey : linkedKeyInfoObj.secondaryKey[0];
+                            // Initialize identity state for network:did pair
+                            if (!identityStateData[network][did])
+                              identityStateData[network][did] = {
+                                did,
+                                secKeys: [],
+                                msKeys: [],
+                              };
+
+                            const isSecKeyAdded = identityStateData[network][
+                              did
+                            ].secKeys.includes(encodeAddress(account));
+  
+                            if (isPrimary)
+                              identityStateData[network][did].priKey =
+                                encodeAddress(account);
+                            else if (isSecondary && !isSecKeyAdded)
+                              identityStateData[network][did].secKeys = [
+                                ...identityStateData[network][did].secKeys,
+                                encodeAddress(account),
+                              ];
+
+                            store.dispatch(
+                              identityActions.setIdentity({
+                                did,
+                                network,
+                                data: identityStateData[network][did],
+                              })
+                            );
+                          }   
                         }
                       )
                       .then((unsub) => {
@@ -252,7 +292,6 @@ function subscribePolymesh(): () => void {
                 if (network !== getNetwork()) {
                   return;
                 }
-
                 const removedDids = difference(prevDids, dids);
 
                 removedDids.forEach((did) => {
