@@ -207,7 +207,8 @@ function subscribePolymesh(): () => void {
                                   throw new Error('msLinkedKeyInfo is missing');
                                 const msLinkedKeyInfoObj: any = msLinkedKeyInfo.toJSON();
                                 console.log(msLinkedKeyInfoObj);
-                                const did = !!msLinkedKeyInfoObj.primaryKey ? msLinkedKeyInfoObj.primaryKey : msLinkedKeyInfoObj.secondaryKey[0];
+                                const isMsPrimaryKey = !!msLinkedKeyInfoObj.primaryKey;
+                                const did = isMsPrimaryKey ? msLinkedKeyInfoObj.primaryKey : msLinkedKeyInfoObj.secondaryKey[0];
 
                                 // Initialize identity state for network:did pair
                                 if (!identityStateData[network][did])
