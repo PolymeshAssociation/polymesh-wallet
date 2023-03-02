@@ -130,7 +130,9 @@ function subscribePolymesh(): () => void {
               activeIssuers = (members as unknown as string[]).map((member) =>
                 member.toString()
               );
-
+              // Add the CDDProvider & Committee systematic CDD providers
+              activeIssuers.push("0x73797374656d3a637573746f6d65725f6475655f64696c6967656e6365000000");
+              activeIssuers.push("0x73797374656d3a676f7665726e616e63655f636f6d6d69747465650000000000");
               /**
                * Accounts
                */
