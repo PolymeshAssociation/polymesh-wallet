@@ -128,7 +128,7 @@ export const AccountView: FC<Props> = ({
               {selectedAccount?.cdd?.issuer ? (
                 <LabelWithCopy
                   color="gray.1"
-                  text={recodeAddress(selectedAccount.cdd.issuer, ss58Format)}
+                  text={selectedAccount.cdd.issuer}
                   textSize={18}
                   textVariant="b2m"
                 />

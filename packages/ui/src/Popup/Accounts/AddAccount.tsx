@@ -80,9 +80,9 @@ function AddAccount(): React.ReactElement {
             />
             <Flex ml="s">
               <Text color="gray.3" variant="b3">
-                I have read and accept the Polymath{' '}
+                I have read and accept the Polymesh Association{' '}
                 <Link
-                  href="https://polymath.network/privacy-policy"
+                  href="https://polymesh.network/privacy-policy"
                   id="sign-up-privacy-link"
                 >
                   Privacy Policy
@@ -103,9 +103,9 @@ function AddAccount(): React.ReactElement {
             />
             <Flex ml="s">
               <Text color="gray.3" variant="b3">
-                I have read and accept the Polymath{' '}
+                I have read and accept the Polymesh Association{' '}
                 <Link
-                  href="https://polymath.network/polymesh-testnet/wallet-terms"
+                  href="https://polymesh.network/terms-of-service"
                   id="sign-up-privacy-link"
                 >
                   Terms of Use

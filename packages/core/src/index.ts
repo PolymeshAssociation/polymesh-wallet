@@ -287,14 +287,11 @@ function subscribePolymesh(): () => void {
                   }
                 });
                 const promises = dids.map((did) =>
-                  {console.log("GETTING CDD", did);
-                  return api.query.identity.claims.entries({
+                  api.query.identity.claims.entries({
                     target: did,
                     claimType: 'CustomerDueDiligence',
-                  })}
+                  })
                 );
-                console.log("ISSUERS");
-                console.log(activeIssuers);
                 Promise.all(promises)
                   .then((results) =>
                     (results as [unknown, IdentityClaim][][]).map((result) =>
@@ -312,9 +309,6 @@ function subscribePolymesh(): () => void {
                     )
                   )
                   .then((results) => {
-                    console.log("RESULTS")
-                    console.log(dids);
-                    console.log(results);
                     dids.forEach((did, index) => {
                       const result = results[index];
 
