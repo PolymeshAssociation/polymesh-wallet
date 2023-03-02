@@ -1,13 +1,13 @@
 {
-  "author": "Remon Nashid <remon.sherin@gmail.com>",
-  "bugs": "https://github.com/PolymathNetwork/polymesh-wallet/issues",
+  "author": "Polymesh Association",
+  "bugs": "https://github.com/PolymeshAssociation/polymesh-wallet/issues",
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
   "description": "A Wallet extension for Polymesh blockchain",
-  "homepage": "https://github.com/PolymathNetwork/polymesh-wallet#readme",
+  "homepage": "https://github.com/PolymeshAssociation/polymesh-wallet#readme",
   "keywords": [
     "polymesh",
     "polkadot",
@@ -20,7 +20,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/PolymathNetwork/polymesh-wallet.git"
+    "url": "https://github.com/PolymeshAssociation/polymesh-wallet.git"
   },
   "sideEffects": false,
   "version": "1.6.3",
