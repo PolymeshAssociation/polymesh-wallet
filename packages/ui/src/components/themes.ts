@@ -20,7 +20,7 @@ import {
   zIndexes,
 } from './themeDefinitions';
 
-const polymathTheme = {
+const polymeshTheme = {
   breakpoints,
   fontSizes,
   fontFamilies,
@@ -43,7 +43,7 @@ const polymathTheme = {
 };
 
 const darkTheme = {
-  ...polymathTheme,
+  ...polymeshTheme,
   accountBackground: '#1A1B20',
   accountDotsIconColor: '#8E8E8E',
   addAccountImageBackground: '#1A1B20',

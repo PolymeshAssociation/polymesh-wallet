@@ -12,7 +12,7 @@ const testnetTmp: Network = {
   slip44: 0x00000253,
   standardAccount: '*25519',
   symbols: ['POLYX'],
-  website: 'https://polymath.network/',
+  website: 'https://polymesh.network/',
   icon: 'substrate',
   isIgnored: false,
   isTestnet: true,

@@ -144,7 +144,7 @@ export const ChangePassword: FC = () => {
                   {errors.confirmPassword.type === 'manual' &&
                     'Passwords do not match'}
                   {errors.confirmPassword.type === 'failed' &&
-                    'Password change failed - Please contact Polymath support.'}
+                    'Password change failed - Please contact support.'}
                 </ValidationError>
               )}
             </Box>
