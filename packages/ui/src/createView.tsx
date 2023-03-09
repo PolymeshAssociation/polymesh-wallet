@@ -20,12 +20,12 @@ export default function createView(
     window.innerWidth !== targetInnerWidth ||
     window.innerHeight !== targetInnerHeight
   ) {
-    const targetOuterWidth =
+    const newOuterWidth =
       targetInnerWidth + (window.outerWidth - window.innerWidth);
-    const targetOuterHeight =
+    const newOuterHeight =
       targetInnerHeight + (window.outerHeight - window.innerHeight);
 
-    window.resizeTo(targetOuterWidth, targetOuterHeight);
+    window.resizeTo(newOuterWidth, newOuterHeight);
   }
 
   const rootElement = document.getElementById(rootId);
