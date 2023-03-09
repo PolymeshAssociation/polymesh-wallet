@@ -21,7 +21,7 @@ Additionally, the wallet enables importing user's confidential identity from KYC
 
 Steps to build the extension and view your changes in a browser:
 
-1. Clone repository `git clone git@github.com:PolymathNetwork/polymesh-wallet.git`
+1. Clone repository `git clone git@github.com:PolymeshAssociation/polymesh-wallet.git`
 1. Build via `yarn build` or `yarn watch`
 2. Install the extension
   - Chrome:

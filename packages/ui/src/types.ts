@@ -1,7 +1,7 @@
 import {
   IdentifiedAccount,
   NetworkState,
-} from '@polymathnetwork/extension-core/types';
+} from '@polymeshassociation/extension-core/types';
 
 import { Theme } from './components/themes';
 

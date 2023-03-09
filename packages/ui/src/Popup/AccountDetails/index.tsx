@@ -1,8 +1,8 @@
 import {
   PolymeshContext,
   UidContext,
-} from '@polymathnetwork/extension-ui/components';
-import { getUid } from '@polymathnetwork/extension-ui/messaging';
+} from '@polymeshassociation/extension-ui/components';
+import { getUid } from '@polymeshassociation/extension-ui/messaging';
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 

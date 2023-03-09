@@ -1,4 +1,4 @@
-import { SvgCrossOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgCrossOutline } from '@polymeshassociation/extension-ui/assets/images/icons';
 import React, { FC } from 'react';
 import { FallbackProps } from 'react-error-boundary';
 

@@ -1,4 +1,4 @@
-import { SendRequest } from '@polymathnetwork/extension-core/page/types';
+import { SendRequest } from '@polymeshassociation/extension-core/page/types';
 
 import {
   InjectedUid,

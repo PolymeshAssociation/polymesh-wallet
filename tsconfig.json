@@ -4,12 +4,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@polymathnetwork/extension": ["packages/extension/src"],
-      "@polymathnetwork/extension/*": ["packages/extension/src/*"],
-      "@polymathnetwork/extension-ui": ["packages/ui/src"],
-      "@polymathnetwork/extension-ui/*": ["packages/ui/src/*"],
-      "@polymathnetwork/extension-core": ["packages/core/src"],
-      "@polymathnetwork/extension-core/*": ["packages/core/src/*"]
+      "@polymeshassociation/extension": ["packages/extension/src"],
+      "@polymeshassociation/extension/*": ["packages/extension/src/*"],
+      "@polymeshassociation/extension-ui": ["packages/ui/src"],
+      "@polymeshassociation/extension-ui/*": ["packages/ui/src/*"],
+      "@polymeshassociation/extension-core": ["packages/core/src"],
+      "@polymeshassociation/extension-core/*": ["packages/core/src/*"]
     },
     "skipLibCheck": true
   }

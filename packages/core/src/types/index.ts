@@ -12,6 +12,7 @@ import { RequestPolyReadUid } from '../background/types';
 export enum DidType {
   primary = 'primary',
   secondary = 'secondary',
+  multisig = 'multisig'
 }
 
 export type AccountBalances = {
@@ -33,6 +34,7 @@ export type IdentityData = {
   did: string;
   priKey: string;
   secKeys?: string[];
+  msKeys?: string[];
   alias?: string;
 };
 

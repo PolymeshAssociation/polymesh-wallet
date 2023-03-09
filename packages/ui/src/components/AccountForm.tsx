@@ -2,15 +2,15 @@ import {
   SvgAccountCardDetailsOutline,
   SvgAlertCircle,
   SvgArrowLeft,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
 import {
   ActivityContext,
   Password,
-} from '@polymathnetwork/extension-ui/components';
+} from '@polymeshassociation/extension-ui/components';
 import {
   isPasswordSet,
   validatePassword,
-} from '@polymathnetwork/extension-ui/messaging';
+} from '@polymeshassociation/extension-ui/messaging';
 import {
   Box,
   Button,
@@ -19,7 +19,7 @@ import {
   Icon,
   Text,
   TextInput,
-} from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/ui';
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 

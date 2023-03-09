@@ -1,4 +1,4 @@
-import { SvgAlertCircle } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgAlertCircle } from '@polymeshassociation/extension-ui/assets/images/icons';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import styled from 'styled-components';

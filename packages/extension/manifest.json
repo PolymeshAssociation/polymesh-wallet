@@ -1,7 +1,7 @@
 {
-  "author": "Polymath",
+  "author": "Polymesh Association",
   "description": "Manage your Polymesh accounts outside of dapps. Injects the accounts and allows signing transactions for a specific account.",
-  "homepage_url": "https://github.com/PolymathNetwork/polymesh-wallet",
+  "homepage_url": "https://github.com/PolymeshAssociation/polymesh-wallet",
   "name": "Polymesh Wallet",
   "short_name": "Polymesh",
   "manifest_version": 2,

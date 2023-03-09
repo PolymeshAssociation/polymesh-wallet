@@ -2,12 +2,12 @@ import React from 'react';
 import {
   networkLabels,
   networkIsDev,
-} from '@polymathnetwork/extension-core/constants';
-import mainnetCircleSvg from '@polymathnetwork/extension-ui/assets/mainnet-circle.svg';
-import { NetworkName } from '@polymathnetwork/extension-core/types';
-import { SvgCheck } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { colors } from '@polymathnetwork/extension-ui/components/themeDefinitions';
-import { Flex, Box, Icon, Text } from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-core/constants';
+import mainnetCircleSvg from '@polymeshassociation/extension-ui/assets/mainnet-circle.svg';
+import { NetworkName } from '@polymeshassociation/extension-core/types';
+import { SvgCheck } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { colors } from '@polymeshassociation/extension-ui/components/themeDefinitions';
+import { Flex, Box, Icon, Text } from '@polymeshassociation/extension-ui/ui';
 import { NetworkCircle } from './styles';
 
 type NetworkItem = {

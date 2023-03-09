@@ -1,5 +1,5 @@
-import { Box, Text } from '@polymathnetwork/extension-ui/ui';
-import { BoxProps } from '@polymathnetwork/extension-ui/ui/Box';
+import { Box, Text } from '@polymeshassociation/extension-ui/ui';
+import { BoxProps } from '@polymeshassociation/extension-ui/ui/Box';
 import React, {
   CSSProperties,
   Fragment,

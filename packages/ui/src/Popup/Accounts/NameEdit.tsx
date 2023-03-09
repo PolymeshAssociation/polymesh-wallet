@@ -2,8 +2,8 @@ import React, { MouseEvent, ChangeEvent, KeyboardEvent } from 'react';
 import {
   SvgCheck,
   SvgWindowClose,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Box, Flex, Icon, TextInput } from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
+import { Box, Flex, Icon, TextInput } from '@polymeshassociation/extension-ui/ui';
 
 type NameEditProps = {
   newName?: string;

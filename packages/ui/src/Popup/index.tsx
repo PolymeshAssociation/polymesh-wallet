@@ -12,16 +12,16 @@ import {
   ProofingRequest,
   ProvideUidRequest,
   ReadUidRequest,
-} from '@polymathnetwork/extension-core/background/types';
-import { defaultNetworkState } from '@polymathnetwork/extension-core/constants';
+} from '@polymeshassociation/extension-core/background/types';
+import { defaultNetworkState } from '@polymeshassociation/extension-core/constants';
 import {
   ErrorCodes,
   IdentifiedAccount,
   NetworkState,
   StoreStatus,
   UidRecord,
-} from '@polymathnetwork/extension-core/types';
-import { subscribeOnlineStatus } from '@polymathnetwork/extension-core/utils';
+} from '@polymeshassociation/extension-core/types';
+import { subscribeOnlineStatus } from '@polymeshassociation/extension-core/utils';
 import React, { useEffect, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 import { Route, Switch } from 'react-router';

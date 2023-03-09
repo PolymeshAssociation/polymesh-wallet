@@ -1,16 +1,16 @@
 import React, { FC, useContext, useState, KeyboardEvent } from 'react';
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
+import { IdentifiedAccount } from '@polymeshassociation/extension-core/types';
 import {
   SvgCheck,
   SvgPencilOutline,
   SvgWindowClose,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
 import {
   ActionContext,
   PolymeshContext,
-} from '@polymathnetwork/extension-ui/components';
-import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
-import { renameIdentity } from '@polymathnetwork/extension-ui/messaging';
+} from '@polymeshassociation/extension-ui/components';
+import { CddStatus } from '@polymeshassociation/extension-ui/components/CddStatus';
+import { renameIdentity } from '@polymeshassociation/extension-ui/messaging';
 
 import {
   Box,

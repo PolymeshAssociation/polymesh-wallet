@@ -1,10 +1,10 @@
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
-import { SvgPlus } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
-import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
-import { useLedger } from '@polymathnetwork/extension-ui/hooks/useLedger';
-import { windowOpen } from '@polymathnetwork/extension-ui/messaging';
-import { hasKey } from '@polymathnetwork/extension-ui/styles/utils';
+import { IdentifiedAccount } from '@polymeshassociation/extension-core/types';
+import { SvgPlus } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { Option } from '@polymeshassociation/extension-ui/components/OptionSelector/types';
+import useIsPopup from '@polymeshassociation/extension-ui/hooks/useIsPopup';
+import { useLedger } from '@polymeshassociation/extension-ui/hooks/useLedger';
+import { windowOpen } from '@polymeshassociation/extension-ui/messaging';
+import { hasKey } from '@polymeshassociation/extension-ui/styles/utils';
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';

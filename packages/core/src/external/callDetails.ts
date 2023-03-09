@@ -1,6 +1,6 @@
 import { Call } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
-import { ResponsePolyCallDetails } from '@polymathnetwork/extension-core/background/types';
+import { ResponsePolyCallDetails } from '@polymeshassociation/extension-core/background/types';
 import { upperFirst } from 'lodash-es';
 
 import { NetworkName } from '../types';

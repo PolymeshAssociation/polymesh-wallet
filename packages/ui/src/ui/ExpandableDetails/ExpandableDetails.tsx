@@ -1,7 +1,7 @@
 import {
   SvgChevronDown,
   SvgChevronUp,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
 import React, { PropsWithChildren, useState } from 'react';
 
 import { Box } from '../Box';

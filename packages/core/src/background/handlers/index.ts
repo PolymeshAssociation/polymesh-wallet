@@ -1,5 +1,5 @@
 import { assert } from '@polkadot/util';
-import { PORTS } from '@polymathnetwork/extension-core/constants';
+import { PORTS } from '@polymeshassociation/extension-core/constants';
 
 import { PolyMessageTypes, PolyTransportRequestMessage } from '../types';
 import Extension from './Extension';

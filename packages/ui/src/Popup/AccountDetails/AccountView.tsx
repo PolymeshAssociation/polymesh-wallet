@@ -1,9 +1,9 @@
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
-import { recodeAddress } from '@polymathnetwork/extension-core/utils';
-import { SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
-import { PolymeshContext } from '@polymathnetwork/extension-ui/components';
-import { CddStatus } from '@polymathnetwork/extension-ui/components/CddStatus';
-import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
+import { IdentifiedAccount } from '@polymeshassociation/extension-core/types';
+import { recodeAddress } from '@polymeshassociation/extension-core/utils';
+import { SvgClose } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { PolymeshContext } from '@polymeshassociation/extension-ui/components';
+import { CddStatus } from '@polymeshassociation/extension-ui/components/CddStatus';
+import { InitialsAvatar } from '@polymeshassociation/extension-ui/components/InitialsAvatar';
 import {
   Box,
   Flex,
@@ -14,7 +14,7 @@ import {
   Text,
   TextEllipsis,
   TextOverflowEllipsis,
-} from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/ui';
 import React, { FC, useContext } from 'react';
 
 import { formatAmount } from '../../util/formatters';
@@ -51,7 +51,7 @@ export const AccountView: FC<Props> = ({
 
   const renderType = (keyType: string) => {
     const color = keyType === 'primary' ? 'red' : 'blue';
-    const text = keyType === 'primary' ? 'Primary' : 'Secondary';
+    const text = keyType === 'primary' ? 'Primary' : keyType === 'secondary' ? 'Secondary' : 'MultiSigSigner';
 
     return (
       selectedAccount?.did && <StatusBadge variant={color}>{text}</StatusBadge>
@@ -128,7 +128,7 @@ export const AccountView: FC<Props> = ({
               {selectedAccount?.cdd?.issuer ? (
                 <LabelWithCopy
                   color="gray.1"
-                  text={recodeAddress(selectedAccount.cdd.issuer, ss58Format)}
+                  text={selectedAccount.cdd.issuer}
                   textSize={18}
                   textVariant="b2m"
                 />

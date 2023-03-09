@@ -1,4 +1,4 @@
-import { styled } from '@polymathnetwork/extension-ui/styles';
+import { styled } from '@polymeshassociation/extension-ui/styles';
 
 import { Box } from '../Box';
 

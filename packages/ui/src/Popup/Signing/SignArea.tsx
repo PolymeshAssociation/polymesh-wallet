@@ -1,6 +1,6 @@
-import { PASSWORD_EXPIRY_MIN } from '@polymathnetwork/extension-core/constants';
-import { ActionContext } from '@polymathnetwork/extension-ui/components';
-import { Box, Button, Checkbox, Flex } from '@polymathnetwork/extension-ui/ui';
+import { PASSWORD_EXPIRY_MIN } from '@polymeshassociation/extension-core/constants';
+import { ActionContext } from '@polymeshassociation/extension-ui/components';
+import { Box, Button, Checkbox, Flex } from '@polymeshassociation/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import {

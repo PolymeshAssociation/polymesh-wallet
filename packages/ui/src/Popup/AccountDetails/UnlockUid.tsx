@@ -1,4 +1,4 @@
-import { SvgClose } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgClose } from '@polymeshassociation/extension-ui/assets/images/icons';
 import {
   Box,
   Button,
@@ -6,7 +6,7 @@ import {
   Icon,
   Text,
   TextInput,
-} from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/ui';
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 

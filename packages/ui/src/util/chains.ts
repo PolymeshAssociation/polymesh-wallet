@@ -1,6 +1,6 @@
 import { allNetworks as polkadotNetworks } from '@polkadot/networks';
 import { Network } from '@polkadot/networks/types';
-import { NetworkName } from '@polymathnetwork/extension-core/types';
+import { NetworkName } from '@polymeshassociation/extension-core/types';
 
 const testnetTmp: Network = {
   decimals: [6],
@@ -12,7 +12,7 @@ const testnetTmp: Network = {
   slip44: 0x00000253,
   standardAccount: '*25519',
   symbols: ['POLYX'],
-  website: 'https://polymath.network/',
+  website: 'https://polymesh.network/',
   icon: 'substrate',
   isIgnored: false,
   isTestnet: true,

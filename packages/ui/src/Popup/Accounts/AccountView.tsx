@@ -1,13 +1,13 @@
-import { networkLinks } from '@polymathnetwork/extension-core/constants';
-import { IdentifiedAccount } from '@polymathnetwork/extension-core/types';
-import { recodeAddress } from '@polymathnetwork/extension-core/utils';
+import { networkLinks } from '@polymeshassociation/extension-core/constants';
+import { IdentifiedAccount } from '@polymeshassociation/extension-core/types';
+import { recodeAddress } from '@polymeshassociation/extension-core/utils';
 import {
   SvgCheck,
   SvgDotsVertical,
   SvgPencilOutline,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
-import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
-import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
+import { InitialsAvatar } from '@polymeshassociation/extension-ui/components/InitialsAvatar';
+import { Option } from '@polymeshassociation/extension-ui/components/OptionSelector/types';
 import React, { FC, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 

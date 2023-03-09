@@ -10,9 +10,9 @@ import {
   ProofingRequest,
   ProvideUidRequest,
   ReadUidRequest,
-} from '@polymathnetwork/extension-core/background/types';
-import { defaultNetworkState } from '@polymathnetwork/extension-core/constants';
-import { UidRecord } from '@polymathnetwork/extension-core/types';
+} from '@polymeshassociation/extension-core/background/types';
+import { defaultNetworkState } from '@polymeshassociation/extension-core/constants';
+import { UidRecord } from '@polymeshassociation/extension-core/types';
 import React from 'react';
 
 import { PolymeshContext as PolymeshContextType } from '../types';

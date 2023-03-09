@@ -9,7 +9,7 @@ import type {
 } from '@polkadot/types/types';
 
 import { TypeRegistry } from '@polkadot/types';
-import { Box, Heading } from '@polymathnetwork/extension-ui/ui';
+import { Box, Heading } from '@polymeshassociation/extension-ui/ui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 

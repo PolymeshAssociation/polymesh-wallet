@@ -1,8 +1,8 @@
 import {
   dynamicSchemaEnabled,
   polySchemaUrl,
-} from '@polymathnetwork/extension-core/constants';
-import { NetworkName, Schema } from '@polymathnetwork/extension-core/types';
+} from '@polymeshassociation/extension-core/constants';
+import { NetworkName, Schema } from '@polymeshassociation/extension-core/types';
 
 import fallback from './fallback';
 

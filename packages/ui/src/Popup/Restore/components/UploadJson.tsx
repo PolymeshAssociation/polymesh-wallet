@@ -1,11 +1,11 @@
 import { KeyringPair$Json } from '@polkadot/keyring/types';
 import { hexToU8a, isHex, u8aToString } from '@polkadot/util';
-import { recodeAddress } from '@polymathnetwork/extension-core/utils';
+import { recodeAddress } from '@polymeshassociation/extension-core/utils';
 import {
   SvgDeleteOutline,
   SvgFileLockOutline,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
-import { InitialsAvatar } from '@polymathnetwork/extension-ui/components/InitialsAvatar';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
+import { InitialsAvatar } from '@polymeshassociation/extension-ui/components/InitialsAvatar';
 import {
   Box,
   Button,
@@ -16,8 +16,8 @@ import {
   Text,
   TextEllipsis,
   TextInput,
-} from '@polymathnetwork/extension-ui/ui';
-import verifyJsonPassword from '@polymathnetwork/extension-ui/util/verifyJsonPassword';
+} from '@polymeshassociation/extension-ui/ui';
+import verifyJsonPassword from '@polymeshassociation/extension-ui/util/verifyJsonPassword';
 import React, { FC, useContext, useRef, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 import { FormProvider, useForm } from 'react-hook-form';

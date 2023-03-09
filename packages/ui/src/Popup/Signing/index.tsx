@@ -1,7 +1,7 @@
 import type { SignerPayloadJSON } from '@polkadot/types/types';
 
-import { getIdentifiedAccounts } from '@polymathnetwork/extension-core/store/getters';
-import { recodeAddress } from '@polymathnetwork/extension-core/utils';
+import { getIdentifiedAccounts } from '@polymeshassociation/extension-core/store/getters';
+import { recodeAddress } from '@polymeshassociation/extension-core/utils';
 import React, {
   useCallback,
   useContext,

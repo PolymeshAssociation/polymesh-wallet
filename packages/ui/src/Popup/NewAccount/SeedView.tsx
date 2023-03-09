@@ -1,4 +1,4 @@
-import { SvgClipboardListOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgClipboardListOutline } from '@polymeshassociation/extension-ui/assets/images/icons';
 import {
   Box,
   Button,
@@ -6,7 +6,7 @@ import {
   Flex,
   Header,
   Text,
-} from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/ui';
 import React, { FC, useState } from 'react';
 
 import { SeedPhrase } from './components/SeedPhrase';

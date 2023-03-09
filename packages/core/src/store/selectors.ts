@@ -40,6 +40,10 @@ export const reversedDidList = createSelector(
           reversedList[secKey] = { ...data, keyType: DidType.secondary };
         });
 
+        identity.msKeys?.forEach((msKey) => {
+          reversedList[msKey] = { ...data, keyType: DidType.multisig };
+        });
+
         return reversedList;
       },
       {} as ReversedDidList

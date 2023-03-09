@@ -1,3 +1,4 @@
+import "@polkadot/api-augment";
 import { Option } from '@polkadot/types/codec';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
@@ -129,7 +130,9 @@ function subscribePolymesh(): () => void {
               activeIssuers = (members as unknown as string[]).map((member) =>
                 member.toString()
               );
-
+              // Add the CDDProvider & Committee systematic CDD providers
+              activeIssuers.push("0x73797374656d3a637573746f6d65725f6475655f64696c6967656e6365000000");
+              activeIssuers.push("0x73797374656d3a676f7665726e616e63655f636f6d6d69747465650000000000");
               /**
                * Accounts
                */
@@ -140,7 +143,6 @@ function subscribePolymesh(): () => void {
                   if (network !== getNetwork()) {
                     return;
                   }
-
                   function accountName(_address: string): string | undefined {
                     return accountsData.find(
                       ({ address }) => address === _address
@@ -170,7 +172,7 @@ function subscribePolymesh(): () => void {
                           // 2) Identities linked to account.
                           [api.query.identity.keyRecords, account],
                         ],
-                        ([accData, linkedKeyInfo]: [
+                        async ([accData, linkedKeyInfo]: [
                           AccountInfo,
                           Option<LinkedKeyInfo>
                         ]) => {
@@ -194,29 +196,46 @@ function subscribePolymesh(): () => void {
 
                           const linkedKeyInfoObj: any = linkedKeyInfo.toJSON();
 
-                          const did =
-                            linkedKeyInfoObj.primaryKey ||
-                            linkedKeyInfoObj.secondaryKey[0];
+                          const isPrimary = !!linkedKeyInfoObj.primaryKey;
+                          const isSecondary = !!linkedKeyInfoObj.secondaryKey;
+                          const isMultiSig = !!linkedKeyInfoObj.multiSigSignerKey;
 
+                          let did;
+                          // MultiSigs require one additional query to get their DIDs
+                          if (isMultiSig) {         
+                            const msLinkedKeyInfo = await api.query.identity.keyRecords(linkedKeyInfoObj.multiSigSignerKey);
+                            if (msLinkedKeyInfo && msLinkedKeyInfo.isEmpty)
+                              throw new Error('msLinkedKeyInfo is missing');
+                            const msLinkedKeyInfoObj: any = msLinkedKeyInfo.toJSON();
+                            const isMsPrimaryKey = !!msLinkedKeyInfoObj.primaryKey;
+                            did = isMsPrimaryKey ? msLinkedKeyInfoObj.primaryKey : msLinkedKeyInfoObj.secondaryKey[0];
+                          } else {
+                            did = isPrimary ? linkedKeyInfoObj.primaryKey : linkedKeyInfoObj.secondaryKey[0];
+                          }
                           // Initialize identity state for network:did pair
                           if (!identityStateData[network][did])
                             identityStateData[network][did] = {
                               did,
                               secKeys: [],
+                              msKeys: [],
                             };
-
-                          const isPrimary = !!linkedKeyInfoObj.primaryKey;
-                          const isSecondary = !!linkedKeyInfoObj.secondaryKey;
                           const isSecKeyAdded = identityStateData[network][
                             did
                           ].secKeys.includes(encodeAddress(account));
-
+                          const isMsKeyAdded = identityStateData[network][
+                            did
+                          ].msKeys.includes(encodeAddress(account));
                           if (isPrimary)
                             identityStateData[network][did].priKey =
                               encodeAddress(account);
                           else if (isSecondary && !isSecKeyAdded)
                             identityStateData[network][did].secKeys = [
                               ...identityStateData[network][did].secKeys,
+                              encodeAddress(account),
+                            ];
+                          else if (isMultiSig && !isMsKeyAdded)
+                            identityStateData[network][did].msKeys = [
+                              ...identityStateData[network][did].msKeys,
                               encodeAddress(account),
                             ];
 
@@ -226,7 +245,7 @@ function subscribePolymesh(): () => void {
                               network,
                               data: identityStateData[network][did],
                             })
-                          );
+                          );      
                         }
                       )
                       .then((unsub) => {
@@ -252,7 +271,6 @@ function subscribePolymesh(): () => void {
                 if (network !== getNetwork()) {
                   return;
                 }
-
                 const removedDids = difference(prevDids, dids);
 
                 removedDids.forEach((did) => {
@@ -270,14 +288,12 @@ function subscribePolymesh(): () => void {
                     delete unsubCallbacks[`${did}:cdd`];
                   }
                 });
-
                 const promises = dids.map((did) =>
                   api.query.identity.claims.entries({
                     target: did,
                     claimType: 'CustomerDueDiligence',
                   })
                 );
-
                 Promise.all(promises)
                   .then((results) =>
                     (results as [unknown, IdentityClaim][][]).map((result) =>

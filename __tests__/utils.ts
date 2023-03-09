@@ -1,5 +1,5 @@
 import { SignerPayloadJSON } from '@polkadot/types/types';
-import { ORIGINS } from '@polymathnetwork/extension-core/constants';
+import { ORIGINS } from '@polymeshassociation/extension-core/constants';
 import puppeteer, { JSONObject } from 'puppeteer';
 
 export async function refillTextInput(

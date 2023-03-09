@@ -2,7 +2,7 @@
 /* eslint-disable quote-props */
 /* eslint-disable quotes */
 
-import { NetworkName, Schema } from '@polymathnetwork/extension-core/types';
+import { NetworkName, Schema } from '@polymeshassociation/extension-core/types';
 
 import v4_0_0 from './v4.0.0';
 

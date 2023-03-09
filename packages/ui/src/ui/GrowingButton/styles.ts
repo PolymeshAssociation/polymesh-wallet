@@ -1,5 +1,5 @@
-import { styled } from '@polymathnetwork/extension-ui/styles';
-import { ThemeProps } from '@polymathnetwork/extension-ui/types';
+import { styled } from '@polymeshassociation/extension-ui/styles';
+import { ThemeProps } from '@polymeshassociation/extension-ui/types';
 
 import { Flex } from '../Flex';
 

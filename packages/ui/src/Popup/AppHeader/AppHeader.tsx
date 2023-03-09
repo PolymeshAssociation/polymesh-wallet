@@ -1,34 +1,34 @@
-import { networkLinks } from '@polymathnetwork/extension-core/constants';
-import { NetworkName } from '@polymathnetwork/extension-core/types';
+import { networkLinks } from '@polymeshassociation/extension-core/constants';
+import { NetworkName } from '@polymeshassociation/extension-core/types';
 import {
   SvgDotsVertical,
   SvgLockOutline,
   SvgOpenInNew,
   SvgSettingsOutline,
   SvgViewDashboard,
-} from '@polymathnetwork/extension-ui/assets/images/icons';
+} from '@polymeshassociation/extension-ui/assets/images/icons';
 import {
   AccountContext,
   OptionSelector,
   PolymeshContext,
-} from '@polymathnetwork/extension-ui/components';
-import { Option } from '@polymathnetwork/extension-ui/components/OptionSelector/types';
-import useIsPopup from '@polymathnetwork/extension-ui/hooks/useIsPopup';
+} from '@polymeshassociation/extension-ui/components';
+import { Option } from '@polymeshassociation/extension-ui/components/OptionSelector/types';
+import useIsPopup from '@polymeshassociation/extension-ui/hooks/useIsPopup';
 import {
   setPolyNetwork,
   togglePolyIsDev,
   windowOpen,
-} from '@polymathnetwork/extension-ui/messaging';
+} from '@polymeshassociation/extension-ui/messaging';
 import {
   Checkbox,
   Flex,
   GrowingButton,
   Icon,
-} from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/ui';
 import {
   Header,
   HeaderProps,
-} from '@polymathnetwork/extension-ui/ui/Header/Header';
+} from '@polymeshassociation/extension-ui/ui/Header/Header';
 import React, { ReactElement, useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 

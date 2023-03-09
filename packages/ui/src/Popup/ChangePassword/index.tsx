@@ -1,8 +1,8 @@
-import { SvgFileLockOutline } from '@polymathnetwork/extension-ui/assets/images/icons';
+import { SvgFileLockOutline } from '@polymeshassociation/extension-ui/assets/images/icons';
 import {
   globalChangePass,
   validatePassword,
-} from '@polymathnetwork/extension-ui/messaging';
+} from '@polymeshassociation/extension-ui/messaging';
 import {
   Box,
   Button,
@@ -10,7 +10,7 @@ import {
   Header,
   Text,
   TextInput,
-} from '@polymathnetwork/extension-ui/ui';
+} from '@polymeshassociation/extension-ui/ui';
 import React, { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -144,7 +144,7 @@ export const ChangePassword: FC = () => {
                   {errors.confirmPassword.type === 'manual' &&
                     'Passwords do not match'}
                   {errors.confirmPassword.type === 'failed' &&
-                    'Password change failed - Please contact Polymath support.'}
+                    'Password change failed - Please contact support.'}
                 </ValidationError>
               )}
             </Box>
