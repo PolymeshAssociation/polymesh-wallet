@@ -1,7 +1,7 @@
 {
   "name": "@polymeshassociation/extension",
   "description": "A Wallet extension for Polymesh blockchain",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "license": "Apache-2",
   "type": "module",
   "dependencies": {
