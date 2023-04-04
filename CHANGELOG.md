@@ -1,3 +1,23 @@
+# [1.7.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.6.3...1.7.0) (2023-04-04)
+
+
+### Bug Fixes
+
+* add systematic cdd issuers ([21a2990](https://github.com/PolymeshAssociation/polymesh-wallet/commit/21a29900bf01d4782fbed7fce3c03a524258dfb8))
+* adjust window to desired inner dimensions ([7767afa](https://github.com/PolymeshAssociation/polymesh-wallet/commit/7767afaa47f17684616eb1d0ddc8e83e81acde6d))
+* allow root div fill height when full screen ([d70f172](https://github.com/PolymeshAssociation/polymesh-wallet/commit/d70f172f730532840f97e5ec25bf40cbdc369c79))
+* fixes privacy and toc links and verifier DID formatting ([3265cc5](https://github.com/PolymeshAssociation/polymesh-wallet/commit/3265cc5323391ddf57ab278aa51b7a9a9c0e72cf))
+* improve variable name ([903fec1](https://github.com/PolymeshAssociation/polymesh-wallet/commit/903fec1722cb065bfee65efc8fe20759647de68d))
+* linting ([abc893a](https://github.com/PolymeshAssociation/polymesh-wallet/commit/abc893af6dbfb56c500b36f70f8255f3647a28d9))
+* more polymesh association updates ([9d8c070](https://github.com/PolymeshAssociation/polymesh-wallet/commit/9d8c070c5ff75d8681a7e5ba6e829b5084e247de))
+* update more polymath refs ([31f7fa8](https://github.com/PolymeshAssociation/polymesh-wallet/commit/31f7fa83840566dfef4f932f741d7365ee08b1c6))
+* update to [@polymeshassociation](https://github.com/polymeshassociation) ([955aad8](https://github.com/PolymeshAssociation/polymesh-wallet/commit/955aad8afe37002e35c61d8e561dfe600a5bfd57))
+
+
+### Features
+
+* add multisig signers ([6ca56a6](https://github.com/PolymeshAssociation/polymesh-wallet/commit/6ca56a605184bf3aad5da60bf0f14865d8612121))
+
 ## [1.6.3](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.6.2...1.6.3) (2022-08-12)
 
 
