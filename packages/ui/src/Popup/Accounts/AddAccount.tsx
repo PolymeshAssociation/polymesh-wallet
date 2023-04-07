@@ -4,6 +4,7 @@ import useIsPopup from '@polymeshassociation/extension-ui/hooks/useIsPopup';
 import { useLedger } from '@polymeshassociation/extension-ui/hooks/useLedger';
 import { windowOpen } from '@polymeshassociation/extension-ui/messaging';
 import React, { useCallback, useContext, useState } from 'react';
+import { useHistory } from 'react-router';
 
 import { ActionContext } from '../../components';
 import {
@@ -24,28 +25,35 @@ function AddAccount(): React.ReactElement {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const isPopup = useIsPopup();
   const { isLedgerEnabled } = useLedger();
+  const history = useHistory();
 
-  const _onOpenLedgerConnect = useCallback(
-    () => windowOpen('/account/import-ledger'),
-    []
+  const _openWindow = useCallback((path: string) => windowOpen(path), []);
+
+  const onCreateOrImportAccount = useCallback(
+    (path: string) => {
+      isPopup ? _openWindow(path) : history.push(path);
+    },
+    [isPopup, _openWindow, history]
   );
+
   const onCreateAccount = useCallback(
-    (): void => onAction('/account/create'),
-    [onAction]
+    () => onCreateOrImportAccount('/account/create'),
+    [onCreateOrImportAccount]
   );
-
   const onImportAccount = useCallback(
-    (): void => onAction('/account/restore/seed'),
-    [onAction]
+    () => onCreateOrImportAccount('/account/restore/seed'),
+    [onCreateOrImportAccount]
   );
 
   const onConnectLedger = useCallback((): void => {
     if (!isLedgerEnabled && isPopup) {
-      _onOpenLedgerConnect().then(console.log).catch(console.error);
+      _openWindow('/account/import-ledger')
+        .then(console.log)
+        .catch(console.error);
     } else {
       onAction('/account/import-ledger');
     }
-  }, [_onOpenLedgerConnect, isLedgerEnabled, isPopup, onAction]);
+  }, [_openWindow, isLedgerEnabled, isPopup, onAction]);
 
   return (
     <>
