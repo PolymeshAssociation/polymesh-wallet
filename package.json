@@ -23,7 +23,7 @@
     "url": "https://github.com/PolymeshAssociation/polymesh-wallet.git"
   },
   "sideEffects": false,
-  "version": "1.7.1",
+  "version": "1.7.2",
   "workspaces": [
     "packages/*"
   ],
