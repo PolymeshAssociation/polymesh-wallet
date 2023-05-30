@@ -1,3 +1,10 @@
+## [1.7.4](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.3...1.7.4) (2023-05-30)
+
+
+### Bug Fixes
+
+* update yarn.lock for semantic release ([a3dcc17](https://github.com/PolymeshAssociation/polymesh-wallet/commit/a3dcc1773a773f77e09b16926e6ef5d3edb4420e))
+
 ## [1.7.3](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.2...1.7.3) (2023-05-30)
 
 
