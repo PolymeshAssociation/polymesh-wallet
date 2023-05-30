@@ -76,15 +76,8 @@ export const defaultNetworkState: NetworkState = {
 };
 
 export const uidProvidersWhitelist = [
-  'https://polymathnetwork.github.io',
-  'https://itn-polymesh.fractal.id',
-  'https://staging.itn-polymesh.fractal.id',
-  'https://alcyone-tokenstudio.polymesh.live',
-  'https://alcyone-dashboard.polymesh.live',
-  'https://itn-onboarding.polymesh.live',
   'https://testnet-onboarding.polymesh.network',
   'https://onboarding.polymesh.network',
-  'https://testnet-dashboard.polymath.network',
   'http://localhost:3000',
 ];
 
