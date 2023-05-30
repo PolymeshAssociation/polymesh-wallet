@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.1...1.7.2) (2023-05-30)
+
+
+### Bug Fixes
+
+* update whitelist ([914774c](https://github.com/PolymeshAssociation/polymesh-wallet/commit/914774c13baabe8e97d04e89ee2fd7209fe98bf1))
+
 ## [1.7.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.0...1.7.1) (2023-05-30)
 
 
