@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.0...1.7.1) (2023-05-30)
+
+
+### Bug Fixes
+
+* fix fees for Polymesh 5.4 ([ecffd1b](https://github.com/PolymeshAssociation/polymesh-wallet/commit/ecffd1ba3bd2a98e2e08f4e95e242f31ad977fa2))
+
 # [1.7.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.6.3...1.7.0) (2023-04-04)
 
 
