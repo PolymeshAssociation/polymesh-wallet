@@ -1,3 +1,10 @@
+## [1.7.5](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.4...1.7.5) (2023-05-31)
+
+
+### Bug Fixes
+
+* update extension dependencies ([4075919](https://github.com/PolymeshAssociation/polymesh-wallet/commit/407591964a9647203fd066d7aa2d315eefb98c8f))
+
 ## [1.7.4](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.3...1.7.4) (2023-05-30)
 
 
