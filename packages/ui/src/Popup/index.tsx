@@ -66,6 +66,7 @@ import ImportLedger from './ImportLedger/ImportLedger';
 import { AccountDetails } from './AccountDetails';
 import Accounts from './Accounts';
 import { AuthManagement } from './AuthManagement';
+import { CustomRPC } from './CustomRPC';
 import Authorize from './Authorize';
 import { ChangePassword } from './ChangePassword';
 import { ExportAccount } from './ExportAccount';
@@ -316,6 +317,9 @@ export default function Popup(): React.ReactElement {
                                     </Route>
                                     <Route path="/settings/url-auth">
                                       <AuthManagement />
+                                    </Route>
+                                    <Route path="/settings/custom-rpc">
+                                      <CustomRPC />
                                     </Route>
                                     <Route exact path="/">
                                       <Root />

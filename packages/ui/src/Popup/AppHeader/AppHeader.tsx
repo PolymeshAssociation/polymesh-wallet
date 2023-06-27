@@ -105,6 +105,18 @@ const AppHeader = (props: Props): ReactElement<Props> => {
             </Flex>
           ),
         },
+        {
+          label: 'Set Custom RPC',
+          value: 'setCustomRPC',
+          icon: (
+            <Icon
+              Asset={SvgSettingsOutline}
+              color="gray5"
+              height={24}
+              width={24}
+            />
+          ),
+        },
       ],
     },
   ];
@@ -121,7 +133,9 @@ const AppHeader = (props: Props): ReactElement<Props> => {
         return togglePolyIsDev();
       case 'manageUrlAuth':
         return history.push('/settings/url-auth');
-    }
+      case 'setCustomRPC':
+        return history.push('/settings/custom-rpc');
+      }
   };
 
   return (

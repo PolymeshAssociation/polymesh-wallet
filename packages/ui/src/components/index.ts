@@ -9,6 +9,7 @@ export { Password } from './Password';
 export { AccountType } from './AccountType';
 export { default as Switch } from './Switch';
 export { InputFilter } from './InputFilter';
+export { RpcInput } from './RpcInput';
 export { OptionSelector } from './OptionSelector';
 export { default as ValidationError } from './ValidationError';
 export * from './contexts';
