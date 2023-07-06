@@ -19,6 +19,6 @@ export const Wrapper = styled(Flex)<ThemeProps>`
     width: 150px;
   }
   &:hover:after {
-    content: 'Go to dashboard';
+    content: 'Go to portal';
   }
 `;
