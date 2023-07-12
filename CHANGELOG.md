@@ -1,3 +1,58 @@
+## [1.7.5](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.4...1.7.5) (2023-05-31)
+
+
+### Bug Fixes
+
+* update extension dependencies ([4075919](https://github.com/PolymeshAssociation/polymesh-wallet/commit/407591964a9647203fd066d7aa2d315eefb98c8f))
+
+## [1.7.4](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.3...1.7.4) (2023-05-30)
+
+
+### Bug Fixes
+
+* update yarn.lock for semantic release ([a3dcc17](https://github.com/PolymeshAssociation/polymesh-wallet/commit/a3dcc1773a773f77e09b16926e6ef5d3edb4420e))
+
+## [1.7.3](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.2...1.7.3) (2023-05-30)
+
+
+### Bug Fixes
+
+* remove old dependencies ([71e8fc0](https://github.com/PolymeshAssociation/polymesh-wallet/commit/71e8fc07c0556fbc66619f9a96d47454e65e6dd4))
+
+## [1.7.2](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.1...1.7.2) (2023-05-30)
+
+
+### Bug Fixes
+
+* update whitelist ([914774c](https://github.com/PolymeshAssociation/polymesh-wallet/commit/914774c13baabe8e97d04e89ee2fd7209fe98bf1))
+
+## [1.7.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.0...1.7.1) (2023-05-30)
+
+
+### Bug Fixes
+
+* fix fees for Polymesh 5.4 ([ecffd1b](https://github.com/PolymeshAssociation/polymesh-wallet/commit/ecffd1ba3bd2a98e2e08f4e95e242f31ad977fa2))
+
+# [1.7.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.6.3...1.7.0) (2023-04-04)
+
+
+### Bug Fixes
+
+* add systematic cdd issuers ([21a2990](https://github.com/PolymeshAssociation/polymesh-wallet/commit/21a29900bf01d4782fbed7fce3c03a524258dfb8))
+* adjust window to desired inner dimensions ([7767afa](https://github.com/PolymeshAssociation/polymesh-wallet/commit/7767afaa47f17684616eb1d0ddc8e83e81acde6d))
+* allow root div fill height when full screen ([d70f172](https://github.com/PolymeshAssociation/polymesh-wallet/commit/d70f172f730532840f97e5ec25bf40cbdc369c79))
+* fixes privacy and toc links and verifier DID formatting ([3265cc5](https://github.com/PolymeshAssociation/polymesh-wallet/commit/3265cc5323391ddf57ab278aa51b7a9a9c0e72cf))
+* improve variable name ([903fec1](https://github.com/PolymeshAssociation/polymesh-wallet/commit/903fec1722cb065bfee65efc8fe20759647de68d))
+* linting ([abc893a](https://github.com/PolymeshAssociation/polymesh-wallet/commit/abc893af6dbfb56c500b36f70f8255f3647a28d9))
+* more polymesh association updates ([9d8c070](https://github.com/PolymeshAssociation/polymesh-wallet/commit/9d8c070c5ff75d8681a7e5ba6e829b5084e247de))
+* update more polymath refs ([31f7fa8](https://github.com/PolymeshAssociation/polymesh-wallet/commit/31f7fa83840566dfef4f932f741d7365ee08b1c6))
+* update to [@polymeshassociation](https://github.com/polymeshassociation) ([955aad8](https://github.com/PolymeshAssociation/polymesh-wallet/commit/955aad8afe37002e35c61d8e561dfe600a5bfd57))
+
+
+### Features
+
+* add multisig signers ([6ca56a6](https://github.com/PolymeshAssociation/polymesh-wallet/commit/6ca56a605184bf3aad5da60bf0f14865d8612121))
+
 ## [1.6.3](https://github.com/PolymathNetwork/polymesh-wallet/compare/1.6.2...1.6.3) (2022-08-12)
 
 
