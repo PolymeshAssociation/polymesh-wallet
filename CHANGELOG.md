@@ -1,3 +1,10 @@
+## [1.7.6](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.5...1.7.6) (2023-07-13)
+
+
+### Bug Fixes
+
+* open initial create/import account screens as ([8a9e0c9](https://github.com/PolymeshAssociation/polymesh-wallet/commit/8a9e0c9c15bcb2b7f577baefc48ac071605977e8))
+
 ## [1.7.5](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.4...1.7.5) (2023-05-31)
 
 
