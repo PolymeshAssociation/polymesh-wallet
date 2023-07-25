@@ -208,7 +208,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
 
   const assign = (e: React.MouseEvent<HTMLElement>) => {
     if (e.stopPropagation) e.stopPropagation();
-    chrome.tabs.create({ url: `${getNetworkDashboardLink()}overview` });
+    chrome.tabs.create({ url: `${getNetworkDashboardLink()}/overview` });
   };
 
   const renderHoverAccountInfo = () => {
