@@ -72,8 +72,7 @@ const claimSorter = (a: IdentityClaim, b: IdentityClaim) => {
 
 const claims2Record = (didClaims: IdentityClaim[]) => {
   // Sort claims array by expiry (non-expiring first)
-  didClaims.sort(claimSorter);
-
+  didClaims.sort(claimSorter);  
   // Save CDD data
   return didClaims && didClaims.length > 0
     ? {
@@ -296,11 +295,14 @@ function subscribePolymesh(): () => void {
                 );
                 Promise.all(promises)
                   .then((results) =>
-                    (results as [unknown, IdentityClaim][][]).map((result) =>
+                    (results as [unknown, Option<IdentityClaim>][][]).map((result) =>
                       result.length
                         ? result
                             .map(([, claim]) => claim)
-                            .filter((claim) => {
+                            .filter(claim => !claim.isEmpty)
+                            // TODO: can clean up once all chains are upgraded to v6
+                            .map(claim => claim.unwrapOrDefault?.() ?? claim)
+                            .filter((claim) => {                              
                               return (
                                 activeIssuers.indexOf(
                                   claim.claimIssuer.toString()
