@@ -191,7 +191,8 @@ function subscribePolymesh(): () => void {
                           );
 
                           if (linkedKeyInfo && linkedKeyInfo.isEmpty)
-                            throw new Error('linkedKeyInfo is missing');
+                            //No more data to update
+                            return;
 
                           const linkedKeyInfoObj: any = linkedKeyInfo.toJSON();
 
