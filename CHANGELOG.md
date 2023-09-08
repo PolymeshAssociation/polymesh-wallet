@@ -1,3 +1,10 @@
+## [1.7.9](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.8...1.7.9) (2023-09-08)
+
+
+### Bug Fixes
+
+* update README ([7d17ea0](https://github.com/PolymeshAssociation/polymesh-wallet/commit/7d17ea0bb60b1edc5a538b0a6c88b1f1a1cbd712))
+
 ## [1.7.8](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.7...1.7.8) (2023-09-08)
 
 
