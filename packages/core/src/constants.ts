@@ -42,7 +42,7 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
     explorer: 'https://staging-app.polymesh.dev/#/explorer',
   },
   local: {
-    dashboard: 'http://localhost:3000',
+    dashboard: 'http://localhost:3000/',
     explorer: '',
   },
 };
