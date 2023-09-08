@@ -1,3 +1,11 @@
+## [1.7.8](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.7...1.7.8) (2023-09-08)
+
+
+### Bug Fixes
+
+* add trailing slash to local dashboard link ([a96552e](https://github.com/PolymeshAssociation/polymesh-wallet/commit/a96552e1b80a7dbe18b94a68327e14cac8c442ce))
+* identityClaim is now optional - remain backwards compatible ([038622b](https://github.com/PolymeshAssociation/polymesh-wallet/commit/038622beadb077eae96ffcdd40c0d3109bab19a3))
+
 ## [1.7.7](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.6...1.7.7) (2023-07-13)
 
 
