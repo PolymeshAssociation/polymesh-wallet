@@ -1,4 +1,4 @@
-import "@polkadot/api-augment";
+import '@polkadot/api-augment';
 import { Option } from '@polkadot/types/codec';
 import { AccountInfo } from '@polkadot/types/interfaces/system';
 import { encodeAddress } from '@polkadot/util-crypto';
@@ -72,7 +72,7 @@ const claimSorter = (a: IdentityClaim, b: IdentityClaim) => {
 
 const claims2Record = (didClaims: IdentityClaim[]) => {
   // Sort claims array by expiry (non-expiring first)
-  didClaims.sort(claimSorter);  
+  didClaims.sort(claimSorter);
   // Save CDD data
   return didClaims && didClaims.length > 0
     ? {
@@ -130,8 +130,12 @@ function subscribePolymesh(): () => void {
                 member.toString()
               );
               // Add the CDDProvider & Committee systematic CDD providers
-              activeIssuers.push("0x73797374656d3a637573746f6d65725f6475655f64696c6967656e6365000000");
-              activeIssuers.push("0x73797374656d3a676f7665726e616e63655f636f6d6d69747465650000000000");
+              activeIssuers.push(
+                '0x73797374656d3a637573746f6d65725f6475655f64696c6967656e6365000000'
+              );
+              activeIssuers.push(
+                '0x73797374656d3a676f7665726e616e63655f636f6d6d69747465650000000000'
+              );
               /**
                * Accounts
                */
@@ -198,19 +202,29 @@ function subscribePolymesh(): () => void {
 
                           const isPrimary = !!linkedKeyInfoObj.primaryKey;
                           const isSecondary = !!linkedKeyInfoObj.secondaryKey;
-                          const isMultiSig = !!linkedKeyInfoObj.multiSigSignerKey;
+                          const isMultiSig =
+                            !!linkedKeyInfoObj.multiSigSignerKey;
 
                           let did;
                           // MultiSigs require one additional query to get their DIDs
-                          if (isMultiSig) {         
-                            const msLinkedKeyInfo = await api.query.identity.keyRecords(linkedKeyInfoObj.multiSigSignerKey);
+                          if (isMultiSig) {
+                            const msLinkedKeyInfo =
+                              await api.query.identity.keyRecords(
+                                linkedKeyInfoObj.multiSigSignerKey
+                              );
                             if (msLinkedKeyInfo && msLinkedKeyInfo.isEmpty)
                               throw new Error('msLinkedKeyInfo is missing');
-                            const msLinkedKeyInfoObj: any = msLinkedKeyInfo.toJSON();
-                            const isMsPrimaryKey = !!msLinkedKeyInfoObj.primaryKey;
-                            did = isMsPrimaryKey ? msLinkedKeyInfoObj.primaryKey : msLinkedKeyInfoObj.secondaryKey[0];
+                            const msLinkedKeyInfoObj: any =
+                              msLinkedKeyInfo.toJSON();
+                            const isMsPrimaryKey =
+                              !!msLinkedKeyInfoObj.primaryKey;
+                            did = isMsPrimaryKey
+                              ? msLinkedKeyInfoObj.primaryKey
+                              : msLinkedKeyInfoObj.secondaryKey[0];
                           } else {
-                            did = isPrimary ? linkedKeyInfoObj.primaryKey : linkedKeyInfoObj.secondaryKey[0];
+                            did = isPrimary
+                              ? linkedKeyInfoObj.primaryKey
+                              : linkedKeyInfoObj.secondaryKey[0];
                           }
                           // Initialize identity state for network:did pair
                           if (!identityStateData[network][did])
@@ -245,7 +259,7 @@ function subscribePolymesh(): () => void {
                               network,
                               data: identityStateData[network][did],
                             })
-                          );      
+                          );
                         }
                       )
                       .then((unsub) => {
@@ -296,21 +310,24 @@ function subscribePolymesh(): () => void {
                 );
                 Promise.all(promises)
                   .then((results) =>
-                    (results as [unknown, Option<IdentityClaim>][][]).map((result) =>
-                      result.length
-                        ? result
-                            .map(([, claim]) => claim)
-                            .filter(claim => !claim.isEmpty)
-                            // TODO: can clean up once all chains are upgraded to v6
-                            .map(claim => claim.unwrapOrDefault?.() ?? claim)
-                            .filter((claim) => {                              
-                              return (
-                                activeIssuers.indexOf(
-                                  claim.claimIssuer.toString()
-                                ) !== -1
-                              );
-                            })
-                        : undefined
+                    (results as [unknown, Option<IdentityClaim>][][]).map(
+                      (result) =>
+                        result.length
+                          ? result
+                              .map(([, claim]) => claim)
+                              .filter((claim) => !claim.isEmpty)
+                              // TODO: can clean up once all chains are upgraded to v6
+                              .map(
+                                (claim) => claim.unwrapOrDefault?.() ?? claim
+                              )
+                              .filter((claim) => {
+                                return (
+                                  activeIssuers.indexOf(
+                                    claim.claimIssuer.toString()
+                                  ) !== -1
+                                );
+                              })
+                          : undefined
                     )
                   )
                   .then((results) => {
