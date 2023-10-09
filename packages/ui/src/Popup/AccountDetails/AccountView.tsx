@@ -18,26 +18,17 @@ import {
 import React, { FC, useContext } from 'react';
 
 import { formatAmount } from '../../util/formatters';
-import { UidView } from './UidView';
 
 export interface Props {
   address: string;
-  hasUid: boolean;
-  isUidHidden: boolean;
-  uid: string;
   selectedAccount: IdentifiedAccount | undefined;
   onClose: () => void;
-  showHideUid: () => void;
 }
 
 export const AccountView: FC<Props> = ({
   address,
-  hasUid,
-  isUidHidden,
   onClose,
   selectedAccount,
-  showHideUid,
-  uid,
 }) => {
   const {
     networkState: { ss58Format },
@@ -77,10 +68,6 @@ export const AccountView: FC<Props> = ({
           />
         </Box>
       </Flex>
-
-      {hasUid && (
-        <UidView isHidden={isUidHidden} showHideUid={showHideUid} uid={uid} />
-      )}
 
       <Box bg="brandLightest" borderRadius="2" m="m" px="xs">
         <Text color="brandMain" variant="b2">

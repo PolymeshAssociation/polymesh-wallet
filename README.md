@@ -67,12 +67,6 @@ type NetworkMeta = {
   wssUrl: string
 }
 
-// An interface providing a confidential ID or requesting a uniqueness proof.
-interface InjectedUid {
-  requestProof: (req: ProofRequestPayload) => Promise<ProofResult>;
-  provide: (req: RequestPolyProvideUid) => Promise<boolean>;
-}
-
 // An interface that exposes the currently selected network
 interface InjectedNetwork {
   get: () => Promise<NetworkMeta>;
@@ -80,7 +74,6 @@ interface InjectedNetwork {
 }
 
 interface PolymeshInjected extends Injected {
-  readonly uid: InjectedUid;
   readonly network: InjectedNetwork;
 }
 ```
@@ -110,19 +103,6 @@ wallet.network.get().then((network: NetworkMeta) => {
 wallet.network.subscribe((network) => {
   window.location.reload();
 });
-```
-
-Provide a confidential ID or request uniqueness proof. Check out this [demo app](https://polymathnetwork.github.io/mock-uid-provider/) to learn more about utilizing uId features [code]( https://github.com/PolymathNetwork/mock-uid-provider/blob/master/src/App.tsx#L134).
-
-```js
-wallet.uid.provide({
-  '8c7cfa4f-f81d-49d5-881f-g6b91cd0380f', // v4 uuid
-  '0x5c62a0b1d68aa3e2026fi337b877466751c9fbe33a7723bcb779f736893f032a4',
-  'alcyone'
-}).then(console.log).catch(console.error);
-
-wallet.uid.requestProof({ ticker: 'AMZN' })
-  .then(console.log).catch(console.error)
 ```
 
 ## Security audit

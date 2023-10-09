@@ -7,8 +7,6 @@ import {
   RegistryTypes,
 } from '@polkadot/types/types';
 
-import { RequestPolyReadUid } from '../background/types';
-
 export enum DidType {
   primary = 'primary',
   secondary = 'secondary',
@@ -30,7 +28,6 @@ export type AccountData = {
 
 export type IdentityData = {
   cdd?: CDD;
-  uid?: UID;
   did: string;
   priKey: string;
   secKeys?: string[];
@@ -43,7 +40,6 @@ export type IdentifiedAccount = {
   did?: string;
   keyType?: DidType;
   cdd?: CDD;
-  uid?: UID;
   address: string;
   didType?: DidType;
   didAlias: string;
@@ -78,8 +74,6 @@ export type CDD = null | {
   expiry?: number;
 };
 
-export type UID = Uint8Array;
-
 export type NetworkState = {
   selected: NetworkName;
   ss58Format: number;
@@ -95,41 +89,6 @@ export type NetworkMeta = {
 export interface InjectedNetwork {
   get: () => Promise<NetworkMeta>;
   subscribe: (cb: (network: NetworkMeta) => void) => Unsubcall;
-}
-
-export interface ProofRequestPayload {
-  /**
-   * @description The ticker
-   */
-  ticker: string;
-}
-
-export interface RequestPolyProvideUid {
-  did: string;
-  uid: string;
-  network: NetworkName;
-}
-
-export interface ProofResult {
-  /**
-   * @description The id for this request
-   */
-  id: number;
-  /**
-   * @description The resulting proof string
-   */
-  proof: string;
-}
-
-export interface ReadUidResult {
-  id: number;
-  uid: string;
-}
-
-export interface InjectedUid {
-  requestProof: (req: ProofRequestPayload) => Promise<ProofResult>;
-  provide: (req: RequestPolyProvideUid) => Promise<boolean>;
-  read: (req: RequestPolyReadUid) => Promise<ReadUidResult>;
 }
 
 export type KeyringAccountData = {
@@ -158,11 +117,6 @@ export type StoreStatus = {
   apiStatus: 'ready' | 'connecting' | 'error';
   populated: Record<string, boolean>;
 };
-
-export interface UidRecord {
-  network: NetworkName;
-  did: string;
-}
 
 export type Schema = {
   rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>;

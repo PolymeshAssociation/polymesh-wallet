@@ -6,13 +6,7 @@ import {
 } from '@polkadot/extension-base/background/types';
 import settings from '@polkadot/ui-settings';
 import { SettingsStruct } from '@polkadot/ui-settings/types';
-import {
-  ProofingRequest,
-  ProvideUidRequest,
-  ReadUidRequest,
-} from '@polymeshassociation/extension-core/background/types';
 import { defaultNetworkState } from '@polymeshassociation/extension-core/constants';
-import { UidRecord } from '@polymeshassociation/extension-core/types';
 import React from 'react';
 
 import { PolymeshContext as PolymeshContextType } from '../types';
@@ -32,9 +26,6 @@ const MediaContext = React.createContext<boolean>(false);
 const MetadataReqContext = React.createContext<MetadataRequest[]>([]);
 const SettingsContext = React.createContext<SettingsStruct>(settings.get());
 const SigningReqContext = React.createContext<SigningRequest[]>([]);
-const ProofReqContext = React.createContext<ProofingRequest[]>([]);
-const ProvideUidReqContext = React.createContext<ProvideUidRequest[]>([]);
-const ReadUidReqContext = React.createContext<ReadUidRequest[]>([]);
 const ThemeSwitchContext =
   React.createContext<(theme: AvailableThemes) => void>(noop);
 const ToastContext = React.createContext<{ show: (message: string) => void }>({
@@ -45,7 +36,6 @@ const PolymeshContext = React.createContext<PolymeshContextType>({
   polymeshAccounts: [],
 });
 const ActivityContext = React.createContext<boolean>(false);
-const UidContext = React.createContext<UidRecord[] | null>([]);
 
 export {
   AccountContext,
@@ -59,8 +49,4 @@ export {
   ThemeSwitchContext,
   ToastContext,
   PolymeshContext,
-  ProofReqContext,
-  ProvideUidReqContext,
-  UidContext,
-  ReadUidReqContext,
 };

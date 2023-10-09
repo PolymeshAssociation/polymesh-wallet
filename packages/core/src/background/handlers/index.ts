@@ -1,12 +1,12 @@
 import { assert } from '@polkadot/util';
 import { PORTS } from '@polymeshassociation/extension-core/constants';
+import DotState from '@polkadot/extension-base/background/handlers/State';
 
 import { PolyMessageTypes, PolyTransportRequestMessage } from '../types';
 import Extension from './Extension';
-import State from './State';
 import Tabs from './Tabs';
 
-const state = new State();
+const state = new DotState();
 const extension = new Extension(state); // handles messages coming from the extension popup
 const tabs = new Tabs(state); // handles messages coming from the app running in the currently open tab
 
