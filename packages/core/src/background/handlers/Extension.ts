@@ -10,11 +10,13 @@ import { assert } from '@polkadot/util';
 import { callDetails } from '@polymeshassociation/extension-core/external';
 import {
   getNetwork,
+  getCustomNetworkUrl,
   getSelectedIdentifiedAccount,
 } from '@polymeshassociation/extension-core/store/getters';
 import {
   renameIdentity,
   setNetwork,
+  setCustomRpc,
   setSelectedAccount,
   toggleIsDeveloper,
 } from '@polymeshassociation/extension-core/store/setters';
@@ -45,6 +47,7 @@ import {
   RequestPolyGlobalChangePass,
   RequestPolyIdentityRename,
   RequestPolyNetworkSet,
+  RequestPolyCustomRpcSet,
   RequestPolyProvideUidApprove,
   RequestPolyProvideUidReject,
   RequestPolyReadUidApprove,
@@ -230,6 +233,12 @@ export default class Extension extends DotExtension {
     return true;
   }
 
+  private polyCustomRpcSet({ rpcUrl }: RequestPolyCustomRpcSet): boolean {
+    setCustomRpc(rpcUrl);
+
+    return true;
+  }
+
   private polyIdentityRename({
     did,
     name,
@@ -251,9 +260,9 @@ export default class Extension extends DotExtension {
   private polyCallDetailsGet({
     request,
   }: RequestPolyCallDetails): Promise<ResponsePolyCallDetails> {
-    const network = getNetwork();
+    const rpcUrl = getCustomNetworkUrl();
 
-    return callDetails(request, network);
+    return callDetails(request, rpcUrl);
   }
 
   private polyIsDevToggle(): boolean {
@@ -626,6 +635,9 @@ export default class Extension extends DotExtension {
 
       case 'poly:pri(network.set)':
         return this.polyNetworkSet(request as RequestPolyNetworkSet);
+
+      case 'poly:pri(network.setCustomRpc)':
+        return this.polyCustomRpcSet(request as RequestPolyCustomRpcSet);
 
       case 'poly:pri(selectedAccount.subscribe)':
         return this.polySelectedAccountSubscribe(id, port);

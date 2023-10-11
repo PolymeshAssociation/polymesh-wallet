@@ -389,6 +389,10 @@ export async function setPolyNetwork(network: NetworkName): Promise<boolean> {
   return polyMessage('poly:pri(network.set)', { network });
 }
 
+export async function setPolyCustomRpc(rpcUrl: string): Promise<boolean> {
+  return polyMessage('poly:pri(network.setCustomRpc)', { rpcUrl });
+}
+
 export async function isPasswordSet(): Promise<boolean> {
   return polyMessage('poly:pri(password.isSet)', null);
 }

@@ -3002,6 +3002,11 @@
   resolved "https://registry.yarnpkg.com/@polymathnetwork/confidential-identity/-/confidential-identity-1.0.1.tgz#00ebd7895d1bcda946414239c2275adf56eb9ffd"
   integrity sha512-XOsKwalb8eWgNI63/KOl5ge/VXX42FrOG0Ary2Fw8/C7XMqIdGsI23Gq0Q6Pt8OBwxibSY0ao+hg7SrBanR1/A==
 
+"@polymeshassociation/polymesh-types@^5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@polymeshassociation/polymesh-types/-/polymesh-types-5.6.0.tgz#849a38d6795a5b6ad41e2fe057cdd158aa06e7b3"
+  integrity sha512-E9nTj+C2MUYIciue9LYX6T3m98AK/QW1PqQGl6ooMOfcUshzMtySsleaaagdu5yM0iawIMmpXrysx6aL9fd+uQ==
+
 "@popperjs/core@^2.9.0":
   version "2.11.5"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.5.tgz#db5a11bf66bdab39569719555b0f76e138d7bd64"
@@ -3564,7 +3569,14 @@
   dependencies:
     "@types/node" "*"
 
-"@types/bn.js@^5.1.0", "@types/bn.js@^5.1.1":
+"@types/bn.js@^5.1.0":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-5.1.2.tgz#162f5238c46f4bcbac07a98561724eca1fcf0c5e"
+  integrity sha512-dkpZu0szUtn9UXTmw+e0AJFd4D2XAxDnsCLdc05SfqpqzPEBft8eQr8uaFitfo/dUUOZERaLec2hHMG87A4Dxg==
+  dependencies:
+    "@types/node" "*"
+
+"@types/bn.js@^5.1.1":
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-5.1.1.tgz#b51e1b55920a4ca26e9285ff79936bbdec910682"
   integrity sha512-qNrYbZqMx0uJAfKnKclPh+dTwK33KfLHYqtyODwd5HnXOjnkhc4qgn3BrK6RWyGZm5+sIFE7Q7Vz6QQtJB7w7g==

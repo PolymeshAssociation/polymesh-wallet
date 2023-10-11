@@ -14,9 +14,9 @@ export const selectedNetwork = createSelector(
   (network) => network.selected
 );
 
-export const networkUrl = createSelector(
-  selectedNetwork,
-  (network) => networkURLs[network]
+export const customNetworkUrl = createSelector(
+  network,
+  ({ selected, customRpcUrl }) => selected === 'custom' ? customRpcUrl : networkURLs[selected]
 );
 
 export const didsList = createSelector(

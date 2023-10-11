@@ -1,4 +1,6 @@
 import { styled } from '@polymeshassociation/extension-ui/styles';
+import { Flex, Box, Icon, Text, TextInput } from "@polymeshassociation/extension-ui/ui"
+
 
 export const NetworkSelect = styled.div<{ background: string }>`
   display: flex;
@@ -40,3 +42,19 @@ export const NetworkCircle = styled.span<{
   border-radius: 50%;
   flex-shrink: 0;
 `;
+
+export const NetworkLabelContainer = styled.label`
+  margin-right: 8px;
+  display: block;
+  width: 100%;
+`
+export const NetworkLabel = styled.span`
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: 0.04em;
+  opacity: 0.65;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+`

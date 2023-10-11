@@ -5,6 +5,7 @@ export const networkURLs: Record<NetworkName, string> = {
   testnet: 'wss://testnet-rpc.polymesh.live',
   staging: 'wss://staging-rpc.polymesh.live',
   local: 'ws://localhost:9944',
+  custom: ''
 };
 
 export const networkLabels: Record<NetworkName, string> = {
@@ -12,6 +13,7 @@ export const networkLabels: Record<NetworkName, string> = {
   testnet: 'Testnet',
   staging: 'Staging',
   local: 'Local node',
+  custom: 'Custom',
 };
 
 export const networkIsDev: Record<NetworkName, boolean> = {
@@ -19,13 +21,7 @@ export const networkIsDev: Record<NetworkName, boolean> = {
   testnet: false,
   staging: true,
   local: true,
-};
-
-export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
-  mainnet: true,
-  testnet: true,
-  staging: true,
-  local: false,
+  custom: false,
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
@@ -45,6 +41,10 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
     dashboard: 'http://localhost:3000/',
     explorer: '',
   },
+  custom: {
+    dashboard: 'https://portal.polymesh.live/',
+    explorer: '',
+  },
 };
 
 export const defaultNetwork: NetworkName = NetworkName.mainnet;
@@ -61,8 +61,6 @@ export const messages = [
   'pub(metadata.list)',
 ];
 
-export const polySchemaUrl = 'https://schema.polymesh.live/';
-
 export const populatedDelay = 1000;
 
 export const apiConnTimeout = 3500;
@@ -73,6 +71,7 @@ export const defaultNetworkState: NetworkState = {
   selected: defaultNetwork,
   ss58Format: defaultSs58Format,
   isDeveloper: false,
+  customRpcUrl: '',
 };
 
 export const uidProvidersWhitelist = [

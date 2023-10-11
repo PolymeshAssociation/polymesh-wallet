@@ -68,6 +68,10 @@ export interface RequestPolyNetworkSet {
   network: NetworkName;
 }
 
+export interface RequestPolyCustomRpcSet {
+  rpcUrl: string;
+}
+
 export interface RequestPolyValidatePassword {
   password: string;
 }
@@ -183,6 +187,7 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
     StoreStatus
   ];
   'poly:pri(network.set)': [RequestPolyNetworkSet, boolean];
+  'poly:pri(network.setCustomRpc)': [RequestPolyCustomRpcSet, boolean],
   'poly:pri(isDev.toggle)': [RequestPolyIsDevToggle, boolean];
   'poly:pri(selectedAccount.set)': [RequestPolySelectedAccountSet, boolean];
   'poly:pri(callDetails.get)': [

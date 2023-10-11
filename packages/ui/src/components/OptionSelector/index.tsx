@@ -186,6 +186,7 @@ export function OptionSelector(props: OptionSelectorProps): JSX.Element {
                     />
                   ))}
                 </ul>
+                {option.submenu}
               </Fragment>
             ))}
           </Options>,

@@ -1,11 +1,6 @@
 import { Unsubcall } from '@polkadot/extension-inject/types';
 import { Call } from '@polkadot/types/interfaces';
-import {
-  AnyJson,
-  DefinitionRpc,
-  DefinitionRpcSub,
-  RegistryTypes,
-} from '@polkadot/types/types';
+import { AnyJson } from '@polkadot/types/types';
 
 import { RequestPolyReadUid } from '../background/types';
 
@@ -66,6 +61,7 @@ export enum NetworkName {
   testnet = 'testnet',
   staging = 'staging',
   local = 'local',
+  custom = 'custom'
 }
 
 export enum LinkName {
@@ -84,6 +80,7 @@ export type NetworkState = {
   selected: NetworkName;
   ss58Format: number;
   isDeveloper: boolean;
+  customRpcUrl: string;
 };
 
 export type NetworkMeta = {
@@ -163,8 +160,3 @@ export interface UidRecord {
   network: NetworkName;
   did: string;
 }
-
-export type Schema = {
-  rpc: Record<string, Record<string, DefinitionRpc | DefinitionRpcSub>>;
-  types: RegistryTypes;
-};

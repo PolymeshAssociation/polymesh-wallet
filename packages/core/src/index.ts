@@ -12,7 +12,7 @@ import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as networkActions } from './store/features/network';
 import { actions as statusActions } from './store/features/status';
-import { getAccountsList, getNetwork } from './store/getters';
+import { getAccountsList, getNetwork, getCustomNetworkUrl } from './store/getters';
 import {
   subscribeDidsList,
   subscribeSelectedNetwork,
@@ -76,11 +76,11 @@ const claims2Record = (didClaims: IdentityClaim[]) => {
   // Save CDD data
   return didClaims && didClaims.length > 0
     ? {
-        issuer: didClaims[0].claimIssuer.toString(),
-        expiry: !didClaims[0].expiry.isEmpty
-          ? Number(didClaims[0].expiry.toString())
-          : undefined,
-      }
+      issuer: didClaims[0].claimIssuer.toString(),
+      expiry: !didClaims[0].expiry.isEmpty
+        ? Number(didClaims[0].expiry.toString())
+        : undefined,
+    }
     : undefined;
 };
 
@@ -106,12 +106,11 @@ function subscribePolymesh(): () => void {
     if (network) {
       console.log('Poly: Selected network', network);
       store.dispatch(statusActions.init());
-
-      apiPromise(network)
+      const rpcUrl = getCustomNetworkUrl()
+      apiPromise(rpcUrl)
         .then((api) => {
           // Clear errors
           store.dispatch(statusActions.apiReady());
-
           // Set the ss58Format that'll be used for address rendering.
           store.dispatch(networkActions.setFormat(api.registry.chainSS58));
 
@@ -314,19 +313,19 @@ function subscribePolymesh(): () => void {
                       (result) =>
                         result.length
                           ? result
-                              .map(([, claim]) => claim)
-                              .filter((claim) => !claim.isEmpty)
-                              // TODO: can clean up once all chains are upgraded to v6
-                              .map(
-                                (claim) => claim.unwrapOrDefault?.() ?? claim
-                              )
-                              .filter((claim) => {
-                                return (
-                                  activeIssuers.indexOf(
-                                    claim.claimIssuer.toString()
-                                  ) !== -1
-                                );
-                              })
+                            .map(([, claim]) => claim)
+                            .filter((claim) => !claim.isEmpty)
+                            // TODO: can clean up once all chains are upgraded to v6
+                            .map(
+                              (claim) => claim.unwrapOrDefault?.() ?? claim
+                            )
+                            .filter((claim) => {
+                              return (
+                                activeIssuers.indexOf(
+                                  claim.claimIssuer.toString()
+                                ) !== -1
+                              );
+                            })
                           : undefined
                     )
                   )

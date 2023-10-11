@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import {
   networkLabels,
   networkIsDev,
 } from '@polymeshassociation/extension-core/constants';
 import mainnetCircleSvg from '@polymeshassociation/extension-ui/assets/mainnet-circle.svg';
 import { NetworkName } from '@polymeshassociation/extension-core/types';
-import { SvgCheck } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { SvgCheck, SvgPencilOutline } from '@polymeshassociation/extension-ui/assets/images/icons';
 import { colors } from '@polymeshassociation/extension-ui/components/themeDefinitions';
 import { Flex, Box, Icon, Text } from '@polymeshassociation/extension-ui/ui';
 import { NetworkCircle } from './styles';
@@ -44,6 +44,10 @@ export const NETWORK_COLORS: Record<NetworkName, NetworkColors> = {
     backgrounds: ['#D7F4F2', '#60D3CB40'],
     foreground: '#60D3CB',
   },
+  custom: {
+    backgrounds: ['#FAD1DC', '#EC467340'],
+    foreground: '#43195B',
+  },
 };
 
 // Separate production and development networks from `networkLabels` as `NetworkItem` arrays
@@ -64,10 +68,12 @@ export const networkGroups: NetworkGroups = Object.entries(
 
 export function makeNetworkMenu(
   networks: NetworkItem[],
-  currentNetwork: string
+  currentNetwork: string,
+  openEditMode?: (e: MouseEvent<HTMLDivElement>) => void,
 ) {
   return networks.map(({ network, label }) => {
     const isCurrentNetwork = currentNetwork === network;
+    const canEdit = !!openEditMode && network === 'custom';
 
     return {
       label: (
@@ -90,9 +96,22 @@ export function makeNetworkMenu(
           </Box>
 
           {isCurrentNetwork && (
-            <Box ml="auto">
-              <Icon Asset={SvgCheck} color="brandMain" height={24} width={24} />
-            </Box>
+            <Flex>
+              {canEdit && (
+                <Box mr="4px">
+                  <Icon Asset={SvgPencilOutline}
+                    color={'gray.2'}
+                    height={16}
+                    onClick={openEditMode}
+                    style={{ cursor: 'pointer' }}
+                    width={16}
+                  />
+                </Box>
+              )}
+              <Box ml="auto">
+                <Icon Asset={SvgCheck} color="brandMain" height={24} width={24} />
+              </Box>
+            </Flex>
           )}
         </Flex>
       ),

@@ -1,5 +1,4 @@
 import { networkLinks } from '@polymeshassociation/extension-core/constants';
-import { NetworkName } from '@polymeshassociation/extension-core/types';
 import {
   SvgDotsVertical,
   SvgLockOutline,
@@ -15,7 +14,6 @@ import {
 import { Option } from '@polymeshassociation/extension-ui/components/OptionSelector/types';
 import useIsPopup from '@polymeshassociation/extension-ui/hooks/useIsPopup';
 import {
-  setPolyNetwork,
   togglePolyIsDev,
   windowOpen,
 } from '@polymeshassociation/extension-ui/messaging';
@@ -46,11 +44,6 @@ const AppHeader = (props: Props): ReactElement<Props> => {
   const history = useHistory();
   const isPopup = useIsPopup();
 
-  const setNetwork = async (_network: NetworkName) => {
-    if (_network !== selectedNetwork) {
-      await setPolyNetwork(_network);
-    }
-  };
 
   const openDashboard = useCallback(() => {
     const url = networkLinks[selectedNetwork].dashboard;
@@ -63,19 +56,19 @@ const AppHeader = (props: Props): ReactElement<Props> => {
       menu: [
         ...(hasNonHardwareAccount
           ? [
-              {
-                label: 'Change password',
-                value: 'changePassword',
-                icon: (
-                  <Icon
-                    Asset={SvgLockOutline}
-                    color="gray5"
-                    height={24}
-                    width={24}
-                  />
-                ),
-              },
-            ]
+            {
+              label: 'Change password',
+              value: 'changePassword',
+              icon: (
+                <Icon
+                  Asset={SvgLockOutline}
+                  color="gray5"
+                  height={24}
+                  width={24}
+                />
+              ),
+            },
+          ]
           : []),
         {
           label: 'Open in a new tab',
@@ -132,7 +125,7 @@ const AppHeader = (props: Props): ReactElement<Props> => {
         justifyContent="space-between"
         mb="m"
       >
-        <NetworkSelector onSelect={setNetwork} />
+        <NetworkSelector />
         <Flex flexDirection="row" justifyContent="center">
           <GrowingButton icon={SvgViewDashboard} onClick={openDashboard} />
           <OptionSelector

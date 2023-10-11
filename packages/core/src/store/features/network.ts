@@ -7,6 +7,7 @@ const initialState: NetworkState = {
   selected: defaultNetwork,
   ss58Format: defaultSs58Format,
   isDeveloper: false,
+  customRpcUrl: ''
 };
 
 const networkSlice = createSlice({
@@ -22,6 +23,9 @@ const networkSlice = createSlice({
     toggleIsDeveloper(state) {
       state.isDeveloper = !state.isDeveloper;
     },
+    setCustomRpc(state, action: PayloadAction<string>) {
+      state.customRpcUrl = action.payload;
+    }
   },
 });
 
