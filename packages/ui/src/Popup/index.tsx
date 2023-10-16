@@ -223,8 +223,8 @@ export default function Popup(): React.ReactElement {
     const currentAccount =
       selectedAccountAddress && polymeshAccounts
         ? polymeshAccounts.find(
-            (account) => account.address === selectedAccountAddress
-          )
+          (account) => account.address === selectedAccountAddress
+        )
         : undefined;
 
     setAccountCtx(initAccountContext(accounts || []));

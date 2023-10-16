@@ -24,9 +24,9 @@ export function NetworkSelector() {
   const { isDeveloper, selected: currentNetwork, customRpcUrl } = networkState;
 
   const setNetwork = async (_network: NetworkName) => {
-    // if (_network !== currentNetwork) {
-    await setPolyNetwork(_network);
-    // };
+    if (_network !== currentNetwork) {
+      await setPolyNetwork(_network);
+    };
   };
 
   const handleSelectNetwork = (network: NetworkName) => {
@@ -45,15 +45,15 @@ export function NetworkSelector() {
     setIsEditMode(false);
   }
 
-  const openEditMode = (e: MouseEvent<HTMLDivElement>): void => {
+  const toggleEditMode = (e: MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
-    setIsEditMode(true);
+    setIsEditMode(prev => !prev);
   };
 
   const networkOptions: Option[] = [
     {
       category: 'Networks',
-      menu: makeNetworkMenu(networkGroups.prodNetworks, currentNetwork, openEditMode),
+      menu: makeNetworkMenu(networkGroups.prodNetworks, currentNetwork, toggleEditMode),
       submenu: isEditMode
         ? <NetworkEdit defaultValue={customRpcUrl} setUrlValue={handleCustomRpcChange} />
         : null,

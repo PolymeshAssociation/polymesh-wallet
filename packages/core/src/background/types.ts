@@ -38,6 +38,8 @@ export type RequestPolyAccountsSubscribe = null;
 
 export type RequestPolyNetworkSubscribe = null;
 
+export type RequestPolyCustomNetworkUrlCubscribe = null;
+
 export type RequestPolySelectedAccountSubscribe = null;
 
 export type RequestPolyStatusSubscribe = null;
@@ -176,6 +178,11 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
     boolean,
     NetworkName
   ];
+  'poly:pri(customNetworkUrl.subscribe)': [
+    RequestPolyCustomNetworkUrlCubscribe,
+    boolean,
+    string
+  ];
   'poly:pri(selectedAccount.subscribe)': [
     RequestPolySelectedAccountSubscribe,
     boolean,
@@ -244,6 +251,11 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
     RequestPolyNetworkMetaSubscribe,
     boolean,
     NetworkMeta
+  ];
+  'poly:pub(customNetworkUrl.subscribe)': [
+    RequestPolyCustomNetworkUrlCubscribe,
+    boolean,
+    string
   ];
   'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];
   'poly:pub(uid.provide)': [RequestPolyProvideUid, boolean];

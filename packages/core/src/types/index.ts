@@ -91,7 +91,7 @@ export type NetworkMeta = {
 
 export interface InjectedNetwork {
   get: () => Promise<NetworkMeta>;
-  subscribe: (cb: (network: NetworkMeta) => void) => Unsubcall;
+  subscribe: (cb: (network: NetworkMeta | string) => void) => Unsubcall;
 }
 
 export interface ProofRequestPayload {

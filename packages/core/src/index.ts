@@ -16,10 +16,11 @@ import { getAccountsList, getNetwork, getCustomNetworkUrl } from './store/getter
 import {
   subscribeDidsList,
   subscribeSelectedNetwork,
+  subscribeCustomRpc,
 } from './store/subscribers';
 import { populatedDelay } from './constants';
 import store from './store';
-import { AccountData, KeyringAccountData, UnsubCallback } from './types';
+import { AccountData, KeyringAccountData, NetworkName, UnsubCallback } from './types';
 import { accountBalances, apiErrorHandler, observeAccounts } from './utils';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
@@ -84,6 +85,250 @@ const claims2Record = (didClaims: IdentityClaim[]) => {
     : undefined;
 };
 
+const initApiPromise = (network: NetworkName, rpcUrl: string) => apiPromise(rpcUrl)
+  .then((api) => {
+    // Clear errors
+    store.dispatch(statusActions.apiReady());
+    // Set the ss58Format that'll be used for address rendering.
+    store.dispatch(networkActions.setFormat(api.registry.chainSS58));
+
+    setTimeout(() => {
+      store.dispatch(statusActions.populated(network));
+    }, populatedDelay);
+
+    let prevAccounts: string[] = [];
+    let prevDids: string[] = [];
+    let activeIssuers: string[] = [];
+
+    api.query.cddServiceProviders
+      .activeMembers()
+      .then((members) => {
+        activeIssuers = (members as unknown as string[]).map((member) =>
+          member.toString()
+        );
+        // Add the CDDProvider & Committee systematic CDD providers
+        activeIssuers.push(
+          '0x73797374656d3a637573746f6d65725f6475655f64696c6967656e6365000000'
+        );
+        activeIssuers.push(
+          '0x73797374656d3a676f7665726e616e63655f636f6d6d69747465650000000000'
+        );
+        /**
+         * Accounts
+         */
+        console.log('Poly: Subscribing to accounts');
+
+        const accountsSub = observeAccounts(
+          (accountsData: KeyringAccountData[]) => {
+            if (network !== getNetwork()) {
+              return;
+            }
+            function accountName(_address: string): string | undefined {
+              return accountsData.find(
+                ({ address }) => address === _address
+              )?.name;
+            }
+
+            const accounts = accountsData.map(({ address }) => address);
+
+            // A) Clean subscriptions of previous accounts list
+            prevAccounts.forEach((account) => {
+              if (unsubCallbacks[account]) {
+                unsubCallbacks[account]();
+                delete unsubCallbacks[account];
+              }
+            });
+
+            // Used for setting redux state. This is as a re-work of previous (v4) mechanism
+            const identityStateData: any = { [network]: {} };
+
+            // B) Create new subscriptions to:
+            accounts.forEach((account) => {
+              api
+                .queryMulti(
+                  [
+                    // 1) Account balance
+                    [api.query.system.account, account],
+                    // 2) Identities linked to account.
+                    [api.query.identity.keyRecords, account],
+                  ],
+                  async ([accData, linkedKeyInfo]: [
+                    AccountInfo,
+                    Option<LinkedKeyInfo>
+                  ]) => {
+                    // Store account metadata
+                    const { locked, total, transferrable } =
+                      accountBalances(accData.data);
+
+                    store.dispatch(
+                      accountActions.setAccount({
+                        data: {
+                          address: account,
+                          name: accountName(account),
+                          balance: { total, transferrable, locked },
+                        },
+                        network,
+                      })
+                    );
+
+                    if (linkedKeyInfo && linkedKeyInfo.isEmpty)
+                      //No more data to update
+                      return;
+
+                    const linkedKeyInfoObj: any = linkedKeyInfo.toJSON();
+
+                    const isPrimary = !!linkedKeyInfoObj.primaryKey;
+                    const isSecondary = !!linkedKeyInfoObj.secondaryKey;
+                    const isMultiSig =
+                      !!linkedKeyInfoObj.multiSigSignerKey;
+
+                    let did;
+                    // MultiSigs require one additional query to get their DIDs
+                    if (isMultiSig) {
+                      const msLinkedKeyInfo =
+                        await api.query.identity.keyRecords(
+                          linkedKeyInfoObj.multiSigSignerKey
+                        );
+                      if (msLinkedKeyInfo && msLinkedKeyInfo.isEmpty)
+                        throw new Error('msLinkedKeyInfo is missing');
+                      const msLinkedKeyInfoObj: any =
+                        msLinkedKeyInfo.toJSON();
+                      const isMsPrimaryKey =
+                        !!msLinkedKeyInfoObj.primaryKey;
+                      did = isMsPrimaryKey
+                        ? msLinkedKeyInfoObj.primaryKey
+                        : msLinkedKeyInfoObj.secondaryKey[0];
+                    } else {
+                      did = isPrimary
+                        ? linkedKeyInfoObj.primaryKey
+                        : linkedKeyInfoObj.secondaryKey[0];
+                    }
+                    // Initialize identity state for network:did pair
+                    if (!identityStateData[network][did])
+                      identityStateData[network][did] = {
+                        did,
+                        secKeys: [],
+                        msKeys: [],
+                      };
+                    const isSecKeyAdded = identityStateData[network][
+                      did
+                    ].secKeys.includes(encodeAddress(account));
+                    const isMsKeyAdded = identityStateData[network][
+                      did
+                    ].msKeys.includes(encodeAddress(account));
+                    if (isPrimary)
+                      identityStateData[network][did].priKey =
+                        encodeAddress(account);
+                    else if (isSecondary && !isSecKeyAdded)
+                      identityStateData[network][did].secKeys = [
+                        ...identityStateData[network][did].secKeys,
+                        encodeAddress(account),
+                      ];
+                    else if (isMultiSig && !isMsKeyAdded)
+                      identityStateData[network][did].msKeys = [
+                        ...identityStateData[network][did].msKeys,
+                        encodeAddress(account),
+                      ];
+
+                    store.dispatch(
+                      identityActions.setIdentity({
+                        did,
+                        network,
+                        data: identityStateData[network][did],
+                      })
+                    );
+                  }
+                )
+                .then((unsub) => {
+                  unsubCallbacks[account] = unsub;
+                }, apiErrorHandler)
+                .catch(apiErrorHandler);
+            });
+
+            prevAccounts = accounts;
+          }
+        );
+
+        unsubCallbacks.accounts && unsubCallbacks.accounts();
+        unsubCallbacks.accounts = () => accountsSub.unsubscribe();
+
+        /**
+         * Identities
+         */
+        unsubCallbacks.dids && unsubCallbacks.dids();
+        console.log('Poly: Subscribing to dids');
+
+        unsubCallbacks.dids = subscribeDidsList((dids: string[]) => {
+          if (network !== getNetwork()) {
+            return;
+          }
+          const removedDids = difference(prevDids, dids);
+
+          removedDids.forEach((did) => {
+            store.dispatch(
+              identityActions.removeIdentity({ network, did })
+            );
+
+            if (unsubCallbacks[did]) {
+              unsubCallbacks[did]();
+              delete unsubCallbacks[did];
+            }
+
+            if (unsubCallbacks[`${did}:cdd`]) {
+              unsubCallbacks[`${did}:cdd`]();
+              delete unsubCallbacks[`${did}:cdd`];
+            }
+          });
+          const promises = dids.map((did) =>
+            api.query.identity.claims.entries({
+              target: did,
+              claimType: 'CustomerDueDiligence',
+            })
+          );
+          Promise.all(promises)
+            .then((results) =>
+              (results as [unknown, Option<IdentityClaim>][][]).map(
+                (result) =>
+                  result.length
+                    ? result
+                      .map(([, claim]) => claim)
+                      .filter((claim) => !claim.isEmpty)
+                      // TODO: can clean up once all chains are upgraded to v6
+                      .map(
+                        (claim) => claim.unwrapOrDefault?.() ?? claim
+                      )
+                      .filter((claim) => {
+                        return (
+                          activeIssuers.indexOf(
+                            claim.claimIssuer.toString()
+                          ) !== -1
+                        );
+                      })
+                    : undefined
+              )
+            )
+            .then((results) => {
+              dids.forEach((did, index) => {
+                const result = results[index];
+
+                if (result) {
+                  const cdd = claims2Record(result);
+
+                  store.dispatch(
+                    identityActions.setIdentityCdd({ network, did, cdd })
+                  );
+                }
+              });
+            }, apiErrorHandler)
+            .catch(apiErrorHandler);
+
+          prevDids = dids;
+        });
+      }, apiErrorHandler)
+      .catch(apiErrorHandler);
+  }, apiErrorHandler)
+  .catch(apiErrorHandler);
+
 function subscribePolymesh(): () => void {
   function unsubAll(): void {
     for (const key in unsubCallbacks) {
@@ -107,249 +352,18 @@ function subscribePolymesh(): () => void {
       console.log('Poly: Selected network', network);
       store.dispatch(statusActions.init());
       const rpcUrl = getCustomNetworkUrl()
-      apiPromise(rpcUrl)
-        .then((api) => {
-          // Clear errors
-          store.dispatch(statusActions.apiReady());
-          // Set the ss58Format that'll be used for address rendering.
-          store.dispatch(networkActions.setFormat(api.registry.chainSS58));
+      initApiPromise(network, rpcUrl);
+    }
+  });
 
-          setTimeout(() => {
-            store.dispatch(statusActions.populated(network));
-          }, populatedDelay);
+  !!unsubCallbacks.customNetworkUrl && unsubCallbacks.customNetworkUrl();
 
-          let prevAccounts: string[] = [];
-          let prevDids: string[] = [];
-          let activeIssuers: string[] = [];
-
-          api.query.cddServiceProviders
-            .activeMembers()
-            .then((members) => {
-              activeIssuers = (members as unknown as string[]).map((member) =>
-                member.toString()
-              );
-              // Add the CDDProvider & Committee systematic CDD providers
-              activeIssuers.push(
-                '0x73797374656d3a637573746f6d65725f6475655f64696c6967656e6365000000'
-              );
-              activeIssuers.push(
-                '0x73797374656d3a676f7665726e616e63655f636f6d6d69747465650000000000'
-              );
-              /**
-               * Accounts
-               */
-              console.log('Poly: Subscribing to accounts');
-
-              const accountsSub = observeAccounts(
-                (accountsData: KeyringAccountData[]) => {
-                  if (network !== getNetwork()) {
-                    return;
-                  }
-                  function accountName(_address: string): string | undefined {
-                    return accountsData.find(
-                      ({ address }) => address === _address
-                    )?.name;
-                  }
-
-                  const accounts = accountsData.map(({ address }) => address);
-
-                  // A) Clean subscriptions of previous accounts list
-                  prevAccounts.forEach((account) => {
-                    if (unsubCallbacks[account]) {
-                      unsubCallbacks[account]();
-                      delete unsubCallbacks[account];
-                    }
-                  });
-
-                  // Used for setting redux state. This is as a re-work of previous (v4) mechanism
-                  const identityStateData: any = { [network]: {} };
-
-                  // B) Create new subscriptions to:
-                  accounts.forEach((account) => {
-                    api
-                      .queryMulti(
-                        [
-                          // 1) Account balance
-                          [api.query.system.account, account],
-                          // 2) Identities linked to account.
-                          [api.query.identity.keyRecords, account],
-                        ],
-                        async ([accData, linkedKeyInfo]: [
-                          AccountInfo,
-                          Option<LinkedKeyInfo>
-                        ]) => {
-                          // Store account metadata
-                          const { locked, total, transferrable } =
-                            accountBalances(accData.data);
-
-                          store.dispatch(
-                            accountActions.setAccount({
-                              data: {
-                                address: account,
-                                name: accountName(account),
-                                balance: { total, transferrable, locked },
-                              },
-                              network,
-                            })
-                          );
-
-                          if (linkedKeyInfo && linkedKeyInfo.isEmpty)
-                            //No more data to update
-                            return;
-
-                          const linkedKeyInfoObj: any = linkedKeyInfo.toJSON();
-
-                          const isPrimary = !!linkedKeyInfoObj.primaryKey;
-                          const isSecondary = !!linkedKeyInfoObj.secondaryKey;
-                          const isMultiSig =
-                            !!linkedKeyInfoObj.multiSigSignerKey;
-
-                          let did;
-                          // MultiSigs require one additional query to get their DIDs
-                          if (isMultiSig) {
-                            const msLinkedKeyInfo =
-                              await api.query.identity.keyRecords(
-                                linkedKeyInfoObj.multiSigSignerKey
-                              );
-                            if (msLinkedKeyInfo && msLinkedKeyInfo.isEmpty)
-                              throw new Error('msLinkedKeyInfo is missing');
-                            const msLinkedKeyInfoObj: any =
-                              msLinkedKeyInfo.toJSON();
-                            const isMsPrimaryKey =
-                              !!msLinkedKeyInfoObj.primaryKey;
-                            did = isMsPrimaryKey
-                              ? msLinkedKeyInfoObj.primaryKey
-                              : msLinkedKeyInfoObj.secondaryKey[0];
-                          } else {
-                            did = isPrimary
-                              ? linkedKeyInfoObj.primaryKey
-                              : linkedKeyInfoObj.secondaryKey[0];
-                          }
-                          // Initialize identity state for network:did pair
-                          if (!identityStateData[network][did])
-                            identityStateData[network][did] = {
-                              did,
-                              secKeys: [],
-                              msKeys: [],
-                            };
-                          const isSecKeyAdded = identityStateData[network][
-                            did
-                          ].secKeys.includes(encodeAddress(account));
-                          const isMsKeyAdded = identityStateData[network][
-                            did
-                          ].msKeys.includes(encodeAddress(account));
-                          if (isPrimary)
-                            identityStateData[network][did].priKey =
-                              encodeAddress(account);
-                          else if (isSecondary && !isSecKeyAdded)
-                            identityStateData[network][did].secKeys = [
-                              ...identityStateData[network][did].secKeys,
-                              encodeAddress(account),
-                            ];
-                          else if (isMultiSig && !isMsKeyAdded)
-                            identityStateData[network][did].msKeys = [
-                              ...identityStateData[network][did].msKeys,
-                              encodeAddress(account),
-                            ];
-
-                          store.dispatch(
-                            identityActions.setIdentity({
-                              did,
-                              network,
-                              data: identityStateData[network][did],
-                            })
-                          );
-                        }
-                      )
-                      .then((unsub) => {
-                        unsubCallbacks[account] = unsub;
-                      }, apiErrorHandler)
-                      .catch(apiErrorHandler);
-                  });
-
-                  prevAccounts = accounts;
-                }
-              );
-
-              unsubCallbacks.accounts && unsubCallbacks.accounts();
-              unsubCallbacks.accounts = () => accountsSub.unsubscribe();
-
-              /**
-               * Identities
-               */
-              unsubCallbacks.dids && unsubCallbacks.dids();
-              console.log('Poly: Subscribing to dids');
-
-              unsubCallbacks.dids = subscribeDidsList((dids: string[]) => {
-                if (network !== getNetwork()) {
-                  return;
-                }
-                const removedDids = difference(prevDids, dids);
-
-                removedDids.forEach((did) => {
-                  store.dispatch(
-                    identityActions.removeIdentity({ network, did })
-                  );
-
-                  if (unsubCallbacks[did]) {
-                    unsubCallbacks[did]();
-                    delete unsubCallbacks[did];
-                  }
-
-                  if (unsubCallbacks[`${did}:cdd`]) {
-                    unsubCallbacks[`${did}:cdd`]();
-                    delete unsubCallbacks[`${did}:cdd`];
-                  }
-                });
-                const promises = dids.map((did) =>
-                  api.query.identity.claims.entries({
-                    target: did,
-                    claimType: 'CustomerDueDiligence',
-                  })
-                );
-                Promise.all(promises)
-                  .then((results) =>
-                    (results as [unknown, Option<IdentityClaim>][][]).map(
-                      (result) =>
-                        result.length
-                          ? result
-                            .map(([, claim]) => claim)
-                            .filter((claim) => !claim.isEmpty)
-                            // TODO: can clean up once all chains are upgraded to v6
-                            .map(
-                              (claim) => claim.unwrapOrDefault?.() ?? claim
-                            )
-                            .filter((claim) => {
-                              return (
-                                activeIssuers.indexOf(
-                                  claim.claimIssuer.toString()
-                                ) !== -1
-                              );
-                            })
-                          : undefined
-                    )
-                  )
-                  .then((results) => {
-                    dids.forEach((did, index) => {
-                      const result = results[index];
-
-                      if (result) {
-                        const cdd = claims2Record(result);
-
-                        store.dispatch(
-                          identityActions.setIdentityCdd({ network, did, cdd })
-                        );
-                      }
-                    });
-                  }, apiErrorHandler)
-                  .catch(apiErrorHandler);
-
-                prevDids = dids;
-              });
-            }, apiErrorHandler)
-            .catch(apiErrorHandler);
-        }, apiErrorHandler)
-        .catch(apiErrorHandler);
+  unsubCallbacks.customNetworkUrl = subscribeCustomRpc((rpcUrl: string) => {
+    if (rpcUrl) {
+      console.log('Poly: Custom rpc url', rpcUrl);
+      store.dispatch(statusActions.init());
+      const network = getNetwork()
+      initApiPromise(network, rpcUrl);
     }
   });
 

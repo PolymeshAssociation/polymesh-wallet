@@ -38,7 +38,7 @@ export const NetworkEdit: FC<Props> = ({
           />
           <Box ml="10px">
             <Text color="white" variant="b3m">
-              {`${rpcUrl} is not a valid RPC Url!`}
+              {`${value} is not a valid url!`}
             </Text>
           </Box>
         </Flex>
@@ -46,7 +46,7 @@ export const NetworkEdit: FC<Props> = ({
       return;
     }
 
-    setUrlValue(value);
+    setUrlValue(rpcUrl);
   };
 
   return (

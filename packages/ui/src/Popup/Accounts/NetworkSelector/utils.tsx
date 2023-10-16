@@ -69,11 +69,10 @@ export const networkGroups: NetworkGroups = Object.entries(
 export function makeNetworkMenu(
   networks: NetworkItem[],
   currentNetwork: string,
-  openEditMode?: (e: MouseEvent<HTMLDivElement>) => void,
+  toggleEditMode?: (e: MouseEvent<HTMLDivElement>) => void,
 ) {
   return networks.map(({ network, label }) => {
     const isCurrentNetwork = currentNetwork === network;
-    const canEdit = !!openEditMode && network === 'custom';
 
     return {
       label: (
@@ -97,12 +96,12 @@ export function makeNetworkMenu(
 
           {isCurrentNetwork && (
             <Flex>
-              {canEdit && (
+              {network === 'custom' && (
                 <Box mr="4px">
                   <Icon Asset={SvgPencilOutline}
                     color={'gray.2'}
                     height={16}
-                    onClick={openEditMode}
+                    onClick={toggleEditMode}
                     style={{ cursor: 'pointer' }}
                     width={16}
                   />
