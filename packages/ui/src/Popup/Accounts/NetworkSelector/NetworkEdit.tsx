@@ -6,7 +6,7 @@ import { NetworkLabelContainer, NetworkLabel } from './styles';
 
 interface Props {
   defaultValue: string;
-  setUrlValue: (rpcUrl: string) => void;
+  setUrlValue: (customNetworkUrl: string) => void;
 }
 
 const rpcUrlRegex =
@@ -24,8 +24,8 @@ export const NetworkEdit: FC<Props> = ({
   };
 
   const handleSetValue = () => {
-    const rpcUrl = value[value.length - 1] === '/' ? value : `${value}/`
-    const isValidRpcUrl = rpcUrlRegex.test(rpcUrl);
+    const networkUrl = value[value.length - 1] === '/' ? value : `${value}/`
+    const isValidRpcUrl = rpcUrlRegex.test(networkUrl);
 
     if (!isValidRpcUrl) {
       toast.error(
@@ -46,7 +46,7 @@ export const NetworkEdit: FC<Props> = ({
       return;
     }
 
-    setUrlValue(rpcUrl);
+    setUrlValue(networkUrl);
   };
 
   return (

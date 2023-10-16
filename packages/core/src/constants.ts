@@ -71,7 +71,7 @@ export const defaultNetworkState: NetworkState = {
   selected: defaultNetwork,
   ss58Format: defaultSs58Format,
   isDeveloper: false,
-  customRpcUrl: '',
+  customNetworkUrl: '',
 };
 
 export const uidProvidersWhitelist = [

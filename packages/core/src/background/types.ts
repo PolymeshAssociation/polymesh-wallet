@@ -38,7 +38,7 @@ export type RequestPolyAccountsSubscribe = null;
 
 export type RequestPolyNetworkSubscribe = null;
 
-export type RequestPolyCustomNetworkUrlCubscribe = null;
+export type RequestPolyCustomNetworkUrlSubscribe = null;
 
 export type RequestPolySelectedAccountSubscribe = null;
 
@@ -70,8 +70,8 @@ export interface RequestPolyNetworkSet {
   network: NetworkName;
 }
 
-export interface RequestPolyCustomRpcSet {
-  rpcUrl: string;
+export interface RequestPolyCustomNetworkUrlSet {
+  customNetworkUrl: string;
 }
 
 export interface RequestPolyValidatePassword {
@@ -179,7 +179,7 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
     NetworkName
   ];
   'poly:pri(customNetworkUrl.subscribe)': [
-    RequestPolyCustomNetworkUrlCubscribe,
+    RequestPolyCustomNetworkUrlSubscribe,
     boolean,
     string
   ];
@@ -194,7 +194,7 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
     StoreStatus
   ];
   'poly:pri(network.set)': [RequestPolyNetworkSet, boolean];
-  'poly:pri(network.setCustomRpc)': [RequestPolyCustomRpcSet, boolean],
+  'poly:pri(network.setCustomNetworkUrl)': [RequestPolyCustomNetworkUrlSet, boolean],
   'poly:pri(isDev.toggle)': [RequestPolyIsDevToggle, boolean];
   'poly:pri(selectedAccount.set)': [RequestPolySelectedAccountSet, boolean];
   'poly:pri(callDetails.get)': [
@@ -253,7 +253,7 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
     NetworkMeta
   ];
   'poly:pub(customNetworkUrl.subscribe)': [
-    RequestPolyCustomNetworkUrlCubscribe,
+    RequestPolyCustomNetworkUrlSubscribe,
     boolean,
     string
   ];

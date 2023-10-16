@@ -9,8 +9,8 @@ function setNetwork(network: NetworkName): void {
   store.dispatch(networkActions.setNetwork(network));
 }
 
-function setCustomRpc(url: string): void {
-  store.dispatch(networkActions.setCustomRpc(url));
+function setCustomNetworkUrl(url: string): void {
+  store.dispatch(networkActions.setCustomNetworkUrl(url));
 }
 
 function toggleIsDeveloper() {
@@ -39,7 +39,7 @@ export function apiError() {
 
 export {
   setNetwork,
-  setCustomRpc,
+  setCustomNetworkUrl,
   setSelectedAccount,
   renameIdentity,
   resetState,

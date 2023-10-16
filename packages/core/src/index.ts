@@ -85,7 +85,7 @@ const claims2Record = (didClaims: IdentityClaim[]) => {
     : undefined;
 };
 
-const initApiPromise = (network: NetworkName, rpcUrl: string) => apiPromise(rpcUrl)
+const initApiPromise = (network: NetworkName, customNetworkUrl: string) => apiPromise(customNetworkUrl)
   .then((api) => {
     // Clear errors
     store.dispatch(statusActions.apiReady());
@@ -351,19 +351,19 @@ function subscribePolymesh(): () => void {
     if (network) {
       console.log('Poly: Selected network', network);
       store.dispatch(statusActions.init());
-      const rpcUrl = getCustomNetworkUrl()
-      initApiPromise(network, rpcUrl);
+      const customNetworkUrl = getCustomNetworkUrl()
+      initApiPromise(network, customNetworkUrl);
     }
   });
 
   !!unsubCallbacks.customNetworkUrl && unsubCallbacks.customNetworkUrl();
 
-  unsubCallbacks.customNetworkUrl = subscribeCustomRpc((rpcUrl: string) => {
-    if (rpcUrl) {
-      console.log('Poly: Custom rpc url', rpcUrl);
+  unsubCallbacks.customNetworkUrl = subscribeCustomRpc((customNetworkUrl: string) => {
+    if (customNetworkUrl) {
+      console.log('Poly: Custom rpc url', customNetworkUrl);
       store.dispatch(statusActions.init());
       const network = getNetwork()
-      initApiPromise(network, rpcUrl);
+      initApiPromise(network, customNetworkUrl);
     }
   });
 

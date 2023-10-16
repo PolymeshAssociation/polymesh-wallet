@@ -35,7 +35,7 @@ export function subscribeSelectedNetwork(
 }
 
 export function subscribeCustomRpc(
-  cb: (rpcUrl: string) => void
+  cb: (customNetworkUrl: string) => void
 ): Unsubscribe {
   return reduxSubscribe(customNetworkUrl, cb);
 }

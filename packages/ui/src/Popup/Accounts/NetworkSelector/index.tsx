@@ -21,7 +21,11 @@ export function NetworkSelector() {
   const [isEditMode, setIsEditMode] = useState(false);
   const { networkState } = useContext(PolymeshContext);
 
-  const { isDeveloper, selected: currentNetwork, customRpcUrl } = networkState;
+  const {
+    isDeveloper,
+    selected: currentNetwork,
+    customNetworkUrl: currentCustomNetworkUrl
+  } = networkState;
 
   const setNetwork = async (_network: NetworkName) => {
     if (_network !== currentNetwork) {
@@ -30,16 +34,16 @@ export function NetworkSelector() {
   };
 
   const handleSelectNetwork = (network: NetworkName) => {
-    if (network === 'custom' && !customRpcUrl) {
+    if (network === 'custom' && !currentCustomNetworkUrl) {
       return setIsEditMode(true);
     };
     setNetwork(network);
   };
 
-  const handleCustomRpcChange = async (rpcUrl: string) => {
-    if (rpcUrl === customRpcUrl) return;
+  const handleCustomRpcChange = async (customNetworkUrl: string) => {
+    if (customNetworkUrl === currentCustomNetworkUrl) return;
 
-    await setPolyCustomRpc(rpcUrl);
+    await setPolyCustomRpc(customNetworkUrl);
     setNetwork(NetworkName.custom);
 
     setIsEditMode(false);
@@ -55,7 +59,7 @@ export function NetworkSelector() {
       category: 'Networks',
       menu: makeNetworkMenu(networkGroups.prodNetworks, currentNetwork, toggleEditMode),
       submenu: isEditMode
-        ? <NetworkEdit defaultValue={customRpcUrl} setUrlValue={handleCustomRpcChange} />
+        ? <NetworkEdit defaultValue={currentCustomNetworkUrl} setUrlValue={handleCustomRpcChange} />
         : null,
     },
     ...(isDeveloper
