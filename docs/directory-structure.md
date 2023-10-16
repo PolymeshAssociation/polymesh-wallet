@@ -50,7 +50,7 @@ Polymesh models and business logic.
 ├── store   // Redux store of account transient data.
 │   ├── features
 │   │   ├── accounts.ts   // Accounts metadata
-│   │   ├── identities.ts   // Polymesh identities assoqciated with accounts
+│   │   ├── identities.ts   // Polymesh identities associated with accounts
 │   │   ├── network.ts    // The currently selected network
 │   │   └── status.ts   // Application readiness and loading state
 │   ├── getters.ts    // Utilities to read data from Redux store.
