@@ -37,9 +37,6 @@ Polymesh models and business logic.
 │   ├── polyNetworkGet.ts
 │   ├── polyNetworkSubscribe.ts
 │   ├── polyCustomNetworkUrlSubscribe.ts
-│   └── schema    // Storage of chain schema as well as utilities to load schema from Github.
-│       ├── fallback.ts
-│       └── index.ts
 ├── index.ts
 ├── page    // API injected in browser page.
 │   ├── Network.ts  // Network API methods

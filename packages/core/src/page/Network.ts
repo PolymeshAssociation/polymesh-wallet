@@ -24,11 +24,4 @@ export default class Network implements InjectedNetwork {
       // FIXME we need the ability to unsubscribe
     };
   }
-  public subscribeNetworkUrl(cb: (networkUrl: string) => unknown): Unsubcall {
-    sendRequest('poly:pub(customNetworkUrl.subscribe)', null, cb).catch((error: Error) =>
-      console.error(error)
-    );
-
-    return (): void => { };
-  }
 }
