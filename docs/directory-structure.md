@@ -22,7 +22,6 @@ Polymesh models and business logic.
 ```
 ├── background
 │   ├── handlers:
-│   │   ├── AuxStore.ts   // Stores encrypted confidential data
 │   │   ├── Extension.ts    // Handles requests from extension popup such as: account data queries, currently selected network and user, request approval or rejection...etc.
 │   │   ├── State.ts    // In memory queue of dapp requests such as data provision requests.
 │   │   ├── Tabs.ts   // Handlers for dapp requests.
@@ -45,14 +44,13 @@ Polymesh models and business logic.
 ├── index.ts
 ├── page    // API injected in browser page.
 │   ├── Network.ts  // Network API methods
-│   ├── Uid.ts    // Confidential identity related methods.
 │   ├── index.ts
 │   ├── injected.ts
 │   └── types.ts
 ├── store   // Redux store of account transient data.
 │   ├── features
 │   │   ├── accounts.ts   // Accounts metadata
-│   │   ├── identities.ts   // Polymesh identities associated with accounts
+│   │   ├── identities.ts   // Polymesh identities assoqciated with accounts
 │   │   ├── network.ts    // The currently selected network
 │   │   └── status.ts   // Application readiness and loading state
 │   ├── getters.ts    // Utilities to read data from Redux store.

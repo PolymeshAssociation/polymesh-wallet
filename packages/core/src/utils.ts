@@ -4,14 +4,13 @@ import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { Subscription } from 'rxjs';
 
-import { getDids, getNetwork } from './store/getters';
+import { getDids } from './store/getters';
 import { apiError, setError } from './store/setters';
 import { defaultSs58Format } from './constants';
 import {
   AccountBalances,
   ErrorCodes,
   KeyringAccountData,
-  NetworkName,
 } from './types';
 
 // Sort an array by prioritizing a certain element
@@ -83,16 +82,6 @@ export const isWhitelisted = (whitelist: string[]) => {
 
     return false;
   };
-};
-
-export const validateNetwork = (network: string): boolean => {
-  return !!network && Object.keys(NetworkName).indexOf(network) > -1;
-};
-
-export const validateSelectedNetwork = (network: NetworkName): boolean => {
-  const selectedNetwork = getNetwork();
-
-  return network === selectedNetwork;
 };
 
 export const validateDid = (did: string): boolean => {
