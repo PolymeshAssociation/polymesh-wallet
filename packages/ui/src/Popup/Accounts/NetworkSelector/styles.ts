@@ -1,6 +1,4 @@
 import { styled } from '@polymeshassociation/extension-ui/styles';
-import { Flex, Box, Icon, Text, TextInput } from "@polymeshassociation/extension-ui/ui"
-
 
 export const NetworkSelect = styled.div<{ background: string }>`
   display: flex;
