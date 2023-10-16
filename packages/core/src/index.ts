@@ -16,7 +16,7 @@ import { getAccountsList, getNetwork, getNetworkUrl } from './store/getters';
 import {
   subscribeDidsList,
   subscribeSelectedNetwork,
-  subscribeCustomRpc,
+  subscribeCustomNetworkUrl,
 } from './store/subscribers';
 import { populatedDelay } from './constants';
 import store from './store';
@@ -358,7 +358,7 @@ function subscribePolymesh(): () => void {
 
   !!unsubCallbacks.customNetworkUrl && unsubCallbacks.customNetworkUrl();
 
-  unsubCallbacks.customNetworkUrl = subscribeCustomRpc((customNetworkUrl: string) => {
+  unsubCallbacks.customNetworkUrl = subscribeCustomNetworkUrl((customNetworkUrl: string) => {
     if (customNetworkUrl) {
       console.log('Poly: Custom rpc url', customNetworkUrl);
       store.dispatch(statusActions.init());
