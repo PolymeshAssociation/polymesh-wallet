@@ -7,7 +7,6 @@ import {
   networkUrl,
   customNetworkUrl,
   selectedAccount,
-  selectedAccountIdentified,
   selectedNetwork,
 } from './selectors';
 import store from '.';
@@ -44,10 +43,6 @@ function getIdentifiedAccounts(): IdentifiedAccount[] {
   return identifiedAccounts(store.getState());
 }
 
-function getSelectedIdentifiedAccount(): IdentifiedAccount | undefined {
-  return selectedAccountIdentified(store.getState());
-}
-
 export {
   getNetwork,
   getNetworkUrl,
@@ -57,5 +52,4 @@ export {
   getDids,
   getAccountsList,
   getIdentifiedAccounts,
-  getSelectedIdentifiedAccount,
 };

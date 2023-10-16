@@ -3,20 +3,14 @@ import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { Subscription } from 'rxjs';
-import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
-import { getDids, getNetwork } from './store/getters';
+import { getDids } from './store/getters';
 import { apiError, setError } from './store/setters';
-import {
-  defaultSs58Format,
-  uidProvidersWhitelist,
-  uidReadersWhitelist,
-} from './constants';
+import { defaultSs58Format } from './constants';
 import {
   AccountBalances,
   ErrorCodes,
   KeyringAccountData,
-  NetworkName,
 } from './types';
 
 // Sort an array by prioritizing a certain element
@@ -90,30 +84,6 @@ export const isWhitelisted = (whitelist: string[]) => {
   };
 };
 
-export const validateTicker = (ticker: string): boolean => {
-  return (
-    !!ticker &&
-    typeof ticker === 'string' &&
-    ticker.length > 0 &&
-    ticker.length <= 12 &&
-    !!/^[a-zA-Z0-9\-:]*$/.exec(ticker)
-  );
-};
-
-export const allowedUidProvider = isWhitelisted(uidProvidersWhitelist);
-
-export const allowedUidReader = isWhitelisted(uidReadersWhitelist);
-
-export const validateNetwork = (network: string): boolean => {
-  return !!network && Object.keys(NetworkName).indexOf(network) > -1;
-};
-
-export const validateSelectedNetwork = (network: NetworkName): boolean => {
-  const selectedNetwork = getNetwork();
-
-  return network === selectedNetwork;
-};
-
 export const validateDid = (did: string): boolean => {
   const dids = getDids();
 
@@ -122,10 +92,6 @@ export const validateDid = (did: string): boolean => {
   }
 
   return true;
-};
-
-export const validateUid = (uid: string): boolean => {
-  return uuidValidate(uid) && uuidVersion(uid) === 4;
 };
 
 export const recodeAddress = (

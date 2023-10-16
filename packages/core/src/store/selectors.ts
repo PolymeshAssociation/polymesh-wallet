@@ -96,20 +96,6 @@ export const selectedAccount = createSelector(
   }
 );
 
-export const selectedAccountIdentified = createSelector(
-  selectedAccount,
-  identifiedAccounts,
-  (selectedAccount, identifiedAccounts) => {
-    if (selectedAccount) {
-      return identifiedAccounts.filter(
-        (account) => account.address === selectedAccount
-      )[0];
-    }
-
-    return undefined;
-  }
-);
-
 export const selectStatus = createSelector(
   (state: RootState) => state.status,
   (status) => status
