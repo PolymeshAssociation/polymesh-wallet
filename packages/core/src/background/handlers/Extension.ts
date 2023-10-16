@@ -10,7 +10,7 @@ import { assert } from '@polkadot/util';
 import { callDetails } from '@polymeshassociation/extension-core/external';
 import {
   getNetwork,
-  getCustomNetworkUrl,
+  getNetworkUrl,
   getSelectedIdentifiedAccount,
 } from '@polymeshassociation/extension-core/store/getters';
 import {
@@ -260,9 +260,9 @@ export default class Extension extends DotExtension {
   private polyCallDetailsGet({
     request,
   }: RequestPolyCallDetails): Promise<ResponsePolyCallDetails> {
-    const customNetworkUrl = getCustomNetworkUrl();
+    const networkUrl = getNetworkUrl();
 
-    return callDetails(request, customNetworkUrl);
+    return callDetails(request, networkUrl);
   }
 
   private polyIsDevToggle(): boolean {

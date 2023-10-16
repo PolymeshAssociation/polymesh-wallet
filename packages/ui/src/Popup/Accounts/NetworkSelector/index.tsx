@@ -41,7 +41,10 @@ export function NetworkSelector() {
   };
 
   const handleCustomRpcChange = async (customNetworkUrl: string) => {
-    if (customNetworkUrl === currentCustomNetworkUrl) return;
+    if (customNetworkUrl === currentCustomNetworkUrl) {
+      setIsEditMode(false);
+      return;
+    }
 
     await setPolyCustomRpc(customNetworkUrl);
     setNetwork(NetworkName.custom);

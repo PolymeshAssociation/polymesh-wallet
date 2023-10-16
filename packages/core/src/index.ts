@@ -12,7 +12,7 @@ import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as networkActions } from './store/features/network';
 import { actions as statusActions } from './store/features/status';
-import { getAccountsList, getNetwork, getCustomNetworkUrl } from './store/getters';
+import { getAccountsList, getNetwork, getNetworkUrl } from './store/getters';
 import {
   subscribeDidsList,
   subscribeSelectedNetwork,
@@ -85,7 +85,7 @@ const claims2Record = (didClaims: IdentityClaim[]) => {
     : undefined;
 };
 
-const initApiPromise = (network: NetworkName, customNetworkUrl: string) => apiPromise(customNetworkUrl)
+const initApiPromise = (network: NetworkName, networkUrl: string) => apiPromise(networkUrl)
   .then((api) => {
     // Clear errors
     store.dispatch(statusActions.apiReady());
@@ -351,8 +351,8 @@ function subscribePolymesh(): () => void {
     if (network) {
       console.log('Poly: Selected network', network);
       store.dispatch(statusActions.init());
-      const customNetworkUrl = getCustomNetworkUrl()
-      initApiPromise(network, customNetworkUrl);
+      const networkUrl = getNetworkUrl()
+      initApiPromise(network, networkUrl);
     }
   });
 

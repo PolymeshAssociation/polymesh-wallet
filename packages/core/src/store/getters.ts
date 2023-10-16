@@ -4,6 +4,7 @@ import {
   accountsCount,
   didsList,
   identifiedAccounts,
+  networkUrl,
   customNetworkUrl,
   selectedAccount,
   selectedAccountIdentified,
@@ -13,6 +14,10 @@ import store from '.';
 
 function getNetwork(): NetworkName {
   return selectedNetwork(store.getState());
+}
+
+function getNetworkUrl(): string {
+  return networkUrl(store.getState());
 }
 
 function getCustomNetworkUrl(): string {
@@ -45,6 +50,7 @@ function getSelectedIdentifiedAccount(): IdentifiedAccount | undefined {
 
 export {
   getNetwork,
+  getNetworkUrl,
   getCustomNetworkUrl,
   getSelectedAccount,
   getAccountsCount,

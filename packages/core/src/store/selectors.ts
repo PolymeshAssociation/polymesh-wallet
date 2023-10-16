@@ -14,9 +14,14 @@ export const selectedNetwork = createSelector(
   (network) => network.selected
 );
 
-export const customNetworkUrl = createSelector(
+export const networkUrl = createSelector(
   network,
   ({ selected, customNetworkUrl }) => selected === 'custom' ? customNetworkUrl : networkURLs[selected]
+);
+
+export const customNetworkUrl = createSelector(
+  network,
+  ({ customNetworkUrl }) => customNetworkUrl
 );
 
 export const didsList = createSelector(
