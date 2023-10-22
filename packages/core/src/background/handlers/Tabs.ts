@@ -20,6 +20,7 @@ import {
   PolyRequestTypes,
   PolyResponseTypes,
   RequestPolyAccountUnsubscribe,
+  RequestPolyNetworkUnsubscribe,
 } from '../types';
 import { createSubscription, unsubscribe } from './subscriptions';
 
@@ -27,6 +28,10 @@ interface AccountSub {
   subscription: Subscription;
   url: string;
   selectedAccUnsub: () => void;
+}
+
+interface NetworkSub {
+  reduxUnsub: () => void;
 }
 
 function transformAccounts(accounts: SubjectInfo): InjectedAccount[] {
@@ -66,6 +71,7 @@ function transformAccounts(accounts: SubjectInfo): InjectedAccount[] {
 export default class Tabs extends DotTabs {
   readonly #state: DotState;
   readonly #accountSubs: Record<string, AccountSub> = {};
+  readonly #networkSubs: Record<string, NetworkSub> = {};
 
   constructor(state: DotState) {
     super(state);
@@ -77,24 +83,33 @@ export default class Tabs extends DotTabs {
     return polyNetworkGet();
   }
 
-  private polyNetworkSubscribe(id: string, port: chrome.runtime.Port): boolean {
+  private polyNetworkSubscribe(id: string, port: chrome.runtime.Port): string {
     const cb = createSubscription<'poly:pub(network.subscribe)'>(id, port);
-    let initialCall = true;
 
-    const innerCb = (networkMeta: NetworkMeta) => {
-      if (initialCall) {
-        initialCall = false;
-      } else {
-        cb(networkMeta);
-      }
-    };
+    const reduxUnsub = polyNetworkSubscribe(cb);
 
-    const reduxUnsub = polyNetworkSubscribe(innerCb);
+    this.#networkSubs[id] = { reduxUnsub };
 
     port.onDisconnect.addListener((): void => {
-      reduxUnsub();
-      unsubscribe(id);
+      this.polyNetworkUnsubscribe({ id });
     });
+
+    return id;
+  }
+
+  private polyNetworkUnsubscribe({
+    id,
+  }: RequestPolyNetworkUnsubscribe): boolean {
+    const sub = this.#networkSubs[id];
+
+    if (!sub) {
+      return false;
+    }
+
+    delete this.#networkSubs[id];
+
+    unsubscribe(id);
+    sub.reduxUnsub();
 
     return true;
   }
@@ -179,6 +194,11 @@ export default class Tabs extends DotTabs {
 
       case 'poly:pub(network.subscribe)':
         return this.polyNetworkSubscribe(id, port);
+
+      case 'poly:pub(network.unsubscribe)':
+        return this.polyNetworkUnsubscribe(
+          request as RequestPolyNetworkUnsubscribe
+        );
 
       case 'pub(accounts.list)':
         return this._accountsList();

@@ -42,6 +42,10 @@ export interface RequestPolyAccountUnsubscribe {
   id: string;
 }
 
+export interface RequestPolyNetworkUnsubscribe {
+  id: string;
+}
+
 export interface RequestPolyNetworkSet {
   network: NetworkName;
 }
@@ -119,9 +123,10 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
   'poly:pub(network.subscribe)': [
     RequestPolyNetworkMetaSubscribe,
-    boolean,
+    string,
     NetworkMeta
   ];
+  'poly:pub(network.unsubscribe)': [RequestPolyNetworkUnsubscribe, boolean];
 }
 
 declare type IsNull<T, K extends keyof T> = {
