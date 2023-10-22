@@ -73,6 +73,9 @@ export const visuallyHidden: Styles = () => ({
   border: 0,
 });
 
-export function hasKey<O>(obj: O, key: keyof any): key is keyof O {
+export function hasKey<O extends object>(
+  obj: O,
+  key: keyof any
+): key is keyof O {
   return key in obj;
 }
