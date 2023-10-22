@@ -38,6 +38,10 @@ export type RequestPolyIsDevSubscribe = null;
 
 export type RequestPolyIsPasswordSet = null;
 
+export interface RequestPolyAccountUnsubscribe {
+  id: string;
+}
+
 export interface RequestPolyNetworkSet {
   network: NetworkName;
 }

@@ -1,3 +1,4 @@
+import type { Subscription } from 'rxjs';
 import DotTabs from '@polkadot/extension-base/background/handlers/Tabs';
 import DotState from '@polkadot/extension-base/background/handlers/State';
 import {
@@ -18,8 +19,15 @@ import {
   PolyMessageTypes,
   PolyRequestTypes,
   PolyResponseTypes,
+  RequestPolyAccountUnsubscribe,
 } from '../types';
 import { createSubscription, unsubscribe } from './subscriptions';
+
+interface AccountSub {
+  subscription: Subscription;
+  url: string;
+  selectedAccUnsub: () => void;
+}
 
 function transformAccounts(accounts: SubjectInfo): InjectedAccount[] {
   return (
@@ -57,6 +65,7 @@ function transformAccounts(accounts: SubjectInfo): InjectedAccount[] {
  */
 export default class Tabs extends DotTabs {
   readonly #state: DotState;
+  readonly #accountSubs: Record<string, AccountSub> = {};
 
   constructor(state: DotState) {
     super(state);
@@ -95,36 +104,59 @@ export default class Tabs extends DotTabs {
     return transformAccounts(accountsObservable.subject.getValue());
   }
 
-  private _accountsSubscribe(id: string, port: chrome.runtime.Port): boolean {
+  private _accountsSubscribe(
+    url: string,
+    id: string,
+    port: chrome.runtime.Port
+  ): string {
     const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
-    let calls = 0;
-
-    const innerCb = (accounts: InjectedAccount[]) => {
-      // Callback will be called twice initially, we need to skip those two calls.
-      if (calls < 2) {
-        calls++;
-      } else {
-        cb(accounts);
-      }
-    };
+    let firstCall = true;
 
     // Call the callback every time the selected account changes, so that we return
     // that account first.
     const selectedAccUnsub = subscribeSelectedAccount(() => {
-      innerCb(transformAccounts(accountsObservable.subject.getValue()));
+      // Skip the first callback so it doesn't return twice initially.
+      if (firstCall) {
+        firstCall = false;
+      } else {
+        cb(this._accountsList());
+      }
     });
 
     const subscription = accountsObservable.subject.subscribe(
       (accounts: SubjectInfo): void => {
-        innerCb(transformAccounts(accounts));
+        cb(transformAccounts(accounts));
       }
     );
 
+    this.#accountSubs[id] = {
+      subscription,
+      url,
+      selectedAccUnsub,
+    };
+
     port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      selectedAccUnsub();
-      subscription.unsubscribe();
+      this._accountsUnsubscribe(url, { id });
     });
+
+    return id;
+  }
+
+  private _accountsUnsubscribe(
+    url: string,
+    { id }: RequestPolyAccountUnsubscribe
+  ): boolean {
+    const sub = this.#accountSubs[id];
+
+    if (!sub || sub.url !== url) {
+      return false;
+    }
+
+    delete this.#accountSubs[id];
+
+    unsubscribe(id);
+    sub.selectedAccUnsub();
+    sub.subscription.unsubscribe();
 
     return true;
   }
@@ -152,7 +184,13 @@ export default class Tabs extends DotTabs {
         return this._accountsList();
 
       case 'pub(accounts.subscribe)':
-        return this._accountsSubscribe(id, port);
+        return this._accountsSubscribe(url, id, port);
+
+      case 'pub(accounts.unsubscribe)':
+        return this._accountsUnsubscribe(
+          url,
+          request as RequestPolyAccountUnsubscribe
+        );
 
       case 'pub(metadata.list)': {
         // Deny app's request to provide metadata because Polymesh wallet
