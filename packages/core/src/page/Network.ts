@@ -16,12 +16,19 @@ export default class Network implements InjectedNetwork {
   }
 
   public subscribe(cb: (networkMeta: NetworkMeta) => unknown): Unsubcall {
-    sendRequest('poly:pub(network.subscribe)', null, cb).catch((error: Error) =>
-      console.error(error)
-    );
+    let id: string | null = null;
+
+    sendRequest('poly:pub(network.subscribe)', null, cb)
+      .then((subId): void => {
+        id = subId;
+      })
+      .catch(console.error);
 
     return (): void => {
-      // FIXME we need the ability to unsubscribe
+      id &&
+        sendRequest('poly:pub(network.unsubscribe)', { id }).catch(
+          console.error
+        );
     };
   }
 }
