@@ -1,14 +1,10 @@
-import { networkLabels, networkURLs } from '../constants';
-import { getNetwork, getCustomNetworkUrl } from '../store/getters';
-import { NetworkMeta, NetworkName } from '../types';
+import { networkLabels } from '../constants';
+import { getNetwork, getNetworkUrl } from '../store/getters';
+import { NetworkMeta } from '../types';
 
 export default function (): NetworkMeta {
   const network = getNetwork();
-  let wssUrl = networkURLs[network];
-
-  if (network === NetworkName.custom) {
-    wssUrl = getCustomNetworkUrl();
-  }
+  const wssUrl = getNetworkUrl();
 
   return {
     name: network,

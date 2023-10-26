@@ -4,17 +4,13 @@ import { networkLabels, networkURLs } from '../constants';
 import reduxSubscribe from '../store/reduxSubscribe';
 import { customNetworkUrl, selectedNetwork } from '../store/selectors';
 import { NetworkMeta, NetworkName } from '../types';
-import { getCustomNetworkUrl, getNetwork } from '../store/getters';
+import { getNetwork, getNetworkUrl } from '../store/getters';
 
 export default function (cb: (networkMeta: NetworkMeta) => void): Unsubscribe {
   let firstCall = true;
 
   const onNetworkNameUpdate = (networkName: NetworkName) => {
-    let wssUrl = networkURLs[networkName];
-
-    if (networkName === NetworkName.custom) {
-      wssUrl = getCustomNetworkUrl();
-    }
+    const wssUrl = getNetworkUrl();
 
     const networkMeta = {
       name: networkName,
@@ -25,17 +21,14 @@ export default function (cb: (networkMeta: NetworkMeta) => void): Unsubscribe {
     cb(networkMeta);
   };
 
-  const onCustomUrlUpdate = (customUrl: string) => {
+  const onCustomUrlUpdate = () => {
     // Skip the first callback so the subscription doesn't return twice initially.
     if (firstCall) {
       firstCall = false;
       return;
     }
     const networkName = getNetwork();
-    let wssUrl = networkURLs[networkName];
-    if (networkName === NetworkName.custom) {
-      wssUrl = customUrl;
-    }
+    const wssUrl = getNetworkUrl();
 
     const networkMeta = {
       name: networkName,

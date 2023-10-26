@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import { networkURLs } from '../constants';
-import { DidType, ReversedDidList } from '../types';
+import { DidType, ReversedDidList, NetworkName } from '../types';
 import { RootState } from './rootReducer';
 
 export const network = createSelector(
@@ -16,7 +16,8 @@ export const selectedNetwork = createSelector(
 
 export const networkUrl = createSelector(
   network,
-  ({ selected, customNetworkUrl }) => selected === 'custom' ? customNetworkUrl : networkURLs[selected]
+  ({ selected, customNetworkUrl }) =>
+    selected === NetworkName.custom ? customNetworkUrl : networkURLs[selected]
 );
 
 export const customNetworkUrl = createSelector(
