@@ -22,7 +22,7 @@ export const NetworkEdit: FC<Props> = ({
   };
 
   const handleSetValue = () => {
-    const networkUrl = value[value.length - 1] === '/' ? value : `${value}/`
+    const networkUrl = value;
     const isValidRpcUrl = rpcUrlRegex.test(networkUrl);
 
     if (!isValidRpcUrl) {
