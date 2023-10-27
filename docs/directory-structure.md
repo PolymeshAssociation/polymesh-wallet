@@ -36,7 +36,6 @@ Polymesh models and business logic.
 │   ├── index.ts
 │   ├── polyNetworkGet.ts
 │   ├── polyNetworkSubscribe.ts
-│   ├── polyCustomNetworkUrlSubscribe.ts
 ├── index.ts
 ├── page    // API injected in browser page.
 │   ├── Network.ts  // Network API methods

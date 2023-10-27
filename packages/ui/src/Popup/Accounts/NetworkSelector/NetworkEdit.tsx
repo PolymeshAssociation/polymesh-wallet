@@ -9,9 +9,7 @@ interface Props {
   setUrlValue: (customNetworkUrl: string) => void;
 }
 
-const rpcUrlRegex =
-  /(http|ws)s?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{2,63}\b([-a-zA-Z0-9()@:%_+.~#?&=]*)/;
-
+const rpcUrlRegex = /^(wss?):\/\/(www\.)?([-a-zA-Z0-9@:%._+~#=]+|\[[a-fA-F0-9:]+\])(:\d+)?([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
 
 export const NetworkEdit: FC<Props> = ({
   defaultValue,

@@ -60,16 +60,16 @@ export function NetworkSelector() {
   const networkOptions: Option[] = [
     {
       category: 'Networks',
-      menu: makeNetworkMenu(networkGroups.prodNetworks, currentNetwork, toggleEditMode),
-      submenu: isEditMode
-        ? <NetworkEdit defaultValue={currentCustomNetworkUrl} setUrlValue={handleCustomRpcChange} />
-        : null,
+      menu: makeNetworkMenu(networkGroups.prodNetworks, currentNetwork),
     },
     ...(isDeveloper
       ? [
         {
           category: 'Development',
-          menu: makeNetworkMenu(networkGroups.devNetworks, currentNetwork),
+          menu: makeNetworkMenu(networkGroups.devNetworks, currentNetwork, toggleEditMode),
+          submenu: isEditMode
+            ? <NetworkEdit defaultValue={currentCustomNetworkUrl} setUrlValue={handleCustomRpcChange} />
+            : null,
         },
       ]
       : []),
@@ -84,7 +84,6 @@ export function NetworkSelector() {
   // Automatically switch to 'Mainnet' network if current network doesn't exist.
   // This is necessary to prevent errors and UI bugs, as sometimes networks have to be modified, or removed.
   useEffect(() => {
-    // TODO: add logic for custom
     if (!networkLabels[currentNetwork]) setNetwork(NetworkName.mainnet);
   }, [currentNetwork]);
 

@@ -138,11 +138,6 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
     string,
     NetworkMeta
   ];
-  'poly:pub(customNetworkUrl.subscribe)': [
-    RequestPolyCustomNetworkUrlSubscribe,
-    boolean,
-    string
-  ];
   'poly:pub(network.unsubscribe)': [RequestPolyNetworkUnsubscribe, boolean];
 }
 

@@ -1,10 +1,10 @@
 import { LinkName, NetworkName, NetworkState } from './types';
 
 export const networkURLs: Record<NetworkName, string> = {
-  mainnet: 'wss://mainnet-rpc.polymesh.network',
-  testnet: 'wss://testnet-rpc.polymesh.live',
-  staging: 'wss://staging-rpc.polymesh.live',
-  local: 'ws://localhost:9944',
+  mainnet: 'wss://mainnet-rpc.polymesh.network/',
+  testnet: 'wss://testnet-rpc.polymesh.live/',
+  staging: 'wss://staging-rpc.polymesh.live/',
+  local: 'ws://localhost:9944/',
   custom: ''
 };
 
@@ -21,7 +21,7 @@ export const networkIsDev: Record<NetworkName, boolean> = {
   testnet: false,
   staging: true,
   local: true,
-  custom: false,
+  custom: true,
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {

@@ -10,7 +10,6 @@ import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { polyNetworkGet } from '@polymeshassociation/extension-core/external';
 import polyNetworkSubscribe from '@polymeshassociation/extension-core/external/polyNetworkSubscribe';
-import polyCustomNetworkUrlSubscribe from '@polymeshassociation/extension-core/external/polyCustomNetworkUrlSubscribe';
 import { getSelectedAccount } from '@polymeshassociation/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymeshassociation/extension-core/store/subscribers';
 import { NetworkMeta } from '@polymeshassociation/extension-core/types';
@@ -115,19 +114,6 @@ export default class Tabs extends DotTabs {
     return true;
   }
 
-  private polyCustomNetworkUrlSubscribe(id: string, port: chrome.runtime.Port): boolean {
-    const cb = createSubscription<'poly:pub(customNetworkUrl.subscribe)'>(id, port);
-    const reduxUnsub = polyCustomNetworkUrlSubscribe(cb);
-
-    port.onDisconnect.addListener((): void => {
-      reduxUnsub();
-      unsubscribe(id);
-    });
-
-    return true;
-  }
-
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private _accountsList(): InjectedAccount[] {
     return transformAccounts(accountsObservable.subject.getValue());
@@ -208,9 +194,6 @@ export default class Tabs extends DotTabs {
 
       case 'poly:pub(network.subscribe)':
         return this.polyNetworkSubscribe(id, port);
-
-      case 'poly:pub(customNetworkUrl.subscribe)':
-        return this.polyCustomNetworkUrlSubscribe(id, port);
 
       case 'poly:pub(network.unsubscribe)':
         return this.polyNetworkUnsubscribe(
