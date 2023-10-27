@@ -1,3 +1,30 @@
+# [1.8.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.9...1.8.0) (2023-10-27)
+
+
+### Bug Fixes
+
+* ability to unsubscribe from network ([75162b7](https://github.com/PolymeshAssociation/polymesh-wallet/commit/75162b7890aaa543de1ecfd8865a79ef561ac227))
+* add trailing slash to local dashboard link ([072d3e7](https://github.com/PolymeshAssociation/polymesh-wallet/commit/072d3e750522af9032b98d92598a40a84bbe4170))
+* do not modify custom endpoint url ([0242f19](https://github.com/PolymeshAssociation/polymesh-wallet/commit/0242f19bf21d00e19bebe366363858c691ca250f))
+* identityClaim is now optional - remain backwards compatible ([1c8a197](https://github.com/PolymeshAssociation/polymesh-wallet/commit/1c8a197561e4d41c7f85491143cbb87a10ff4d1c))
+* merged develop + fixed conflicts ([faf782c](https://github.com/PolymeshAssociation/polymesh-wallet/commit/faf782c9c33ef1f4bb93741b524d86226c92a77a))
+* merged develop + fixed conflicts ([bdf212c](https://github.com/PolymeshAssociation/polymesh-wallet/commit/bdf212cf2766e47a485bd5b9bef9bdb5d763aa48))
+* open initial create/import account screens as ([5b52070](https://github.com/PolymeshAssociation/polymesh-wallet/commit/5b52070dfb59551713af915b8c0713f29c677fc6))
+* removed unused code ([f4e947f](https://github.com/PolymeshAssociation/polymesh-wallet/commit/f4e947fab03b1588ebf551b351b5ad110b67aebf))
+* removed unused code ([f0b182f](https://github.com/PolymeshAssociation/polymesh-wallet/commit/f0b182f5d192a15847f2dfd0d52e4b3b3007f817))
+* requested changes ([875a4b6](https://github.com/PolymeshAssociation/polymesh-wallet/commit/875a4b6f06cff322feef62cf511607793edb5691))
+* resolve tsc error ([20ed11e](https://github.com/PolymeshAssociation/polymesh-wallet/commit/20ed11ec613dbcd4e12fc93482ea8a80c440f491))
+* unsubscribing from keys ([0b5e100](https://github.com/PolymeshAssociation/polymesh-wallet/commit/0b5e1005a668b0e676bdf36e74f048400932b05e))
+* update links ([b0198d9](https://github.com/PolymeshAssociation/polymesh-wallet/commit/b0198d97d2ffab515225c21a6a7025768ec0cc23))
+* updated networkUrl selector for apiPromis ([02b04cd](https://github.com/PolymeshAssociation/polymesh-wallet/commit/02b04cddaf730b4900edbc81422869f8a0f36e0e))
+
+
+### Features
+
+* added api promise reload after custom url change ([67c6156](https://github.com/PolymeshAssociation/polymesh-wallet/commit/67c6156f7c6cd882134fb995fe1f8f2cf819bccb))
+* added custom rpc functionality ([928127d](https://github.com/PolymeshAssociation/polymesh-wallet/commit/928127d4de7e6d9128bf8144acccec044862013f))
+* return wssUrl for custom networks ([17c1503](https://github.com/PolymeshAssociation/polymesh-wallet/commit/17c150372a8f96ad1da87e8e12f898b227ca881a))
+
 ## [1.7.9](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.8...1.7.9) (2023-09-08)
 
 
