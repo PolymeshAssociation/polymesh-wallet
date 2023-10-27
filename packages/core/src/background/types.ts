@@ -71,8 +71,7 @@ export interface RequestPolyCallDetails {
 }
 
 export interface RequestPolyIdentityRename {
-  network: NetworkName;
-  did: string;
+  address: string;
   name: string;
 }
 

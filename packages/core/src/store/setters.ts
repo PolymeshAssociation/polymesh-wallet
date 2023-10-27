@@ -21,8 +21,8 @@ function setSelectedAccount(account: string): void {
   store.dispatch(accountActions.selectAccount(account));
 }
 
-function renameIdentity(network: NetworkName, did: string, name: string) {
-  store.dispatch(identityActions.renameIdentity({ network, did, name }));
+function renameIdentity(account: string, name: string) {
+  store.dispatch(identityActions.renameIdentity({ account, name }));
 }
 
 function resetState() {

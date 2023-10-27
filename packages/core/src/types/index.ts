@@ -37,7 +37,7 @@ export type IdentifiedAccount = {
   cdd?: CDD;
   address: string;
   didType?: DidType;
-  didAlias: string;
+  didAlias?: string;
   balance?: {
     total: string;
     transferrable: string;
