@@ -78,14 +78,14 @@ export default function Accounts(): React.ReactElement {
         { label: 'Import account with JSON file', value: 'fromJson' },
         ...(isLedgerEnabled
           ? [
-              {
-                label: isLedgerCapable
-                  ? 'Attach Ledger account'
-                  : 'Chrome browser is required to use Ledger',
-                value: 'fromLedger',
-                disabled: !isLedgerCapable,
-              },
-            ]
+            {
+              label: isLedgerCapable
+                ? 'Attach Ledger account'
+                : 'Chrome browser is required to use Ledger',
+              value: 'fromLedger',
+              disabled: !isLedgerCapable,
+            },
+          ]
           : [{ label: 'Connect Ledger device', value: 'connectLedger' }]),
       ],
     },

@@ -9,7 +9,6 @@ import {
 import reduxSubscribe from './reduxSubscribe';
 import {
   accountsCount,
-  didsList,
   identifiedAccounts,
   network,
   selectedAccount,
@@ -17,10 +16,6 @@ import {
   customNetworkUrl,
   selectStatus,
 } from './selectors';
-
-export function subscribeDidsList(cb: (dids: string[]) => void): Unsubscribe {
-  return reduxSubscribe(didsList, cb);
-}
 
 export function subscribeIdentifiedAccounts(
   cb: (accounts: IdentifiedAccount[]) => void

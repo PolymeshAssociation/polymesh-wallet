@@ -14,7 +14,6 @@ import { actions as networkActions } from './store/features/network';
 import { actions as statusActions } from './store/features/status';
 import { getAccountsList, getNetwork, getNetworkUrl } from './store/getters';
 import {
-  subscribeDidsList,
   subscribeSelectedNetwork,
   subscribeCustomNetworkUrl,
 } from './store/subscribers';
@@ -97,7 +96,6 @@ const initApiPromise = (network: NetworkName, networkUrl: string) => apiPromise(
     }, populatedDelay);
 
     let prevAccounts: string[] = [];
-    let prevDids: string[] = [];
     let activeIssuers: string[] = [];
 
     api.query.cddServiceProviders
@@ -140,7 +138,7 @@ const initApiPromise = (network: NetworkName, networkUrl: string) => apiPromise(
             });
 
             // Used for setting redux state. This is as a re-work of previous (v4) mechanism
-            const identityStateData: any = { [network]: {} };
+            const identityStateData: any = {};
 
             // B) Create new subscriptions to:
             accounts.forEach((account) => {
@@ -171,9 +169,10 @@ const initApiPromise = (network: NetworkName, networkUrl: string) => apiPromise(
                       })
                     );
 
-                    if (linkedKeyInfo && linkedKeyInfo.isEmpty)
-                      //No more data to update
+                    if (linkedKeyInfo && linkedKeyInfo.isEmpty) {
+                      store.dispatch(identityActions.removeCurrentIdentity(account));
                       return;
+                    }
 
                     const linkedKeyInfoObj: any = linkedKeyInfo.toJSON();
 
@@ -203,38 +202,61 @@ const initApiPromise = (network: NetworkName, networkUrl: string) => apiPromise(
                         ? linkedKeyInfoObj.primaryKey
                         : linkedKeyInfoObj.secondaryKey[0];
                     }
+
                     // Initialize identity state for network:did pair
-                    if (!identityStateData[network][did])
-                      identityStateData[network][did] = {
+                    if (!identityStateData[did])
+                      identityStateData[did] = {
                         did,
                         secKeys: [],
                         msKeys: [],
                       };
-                    const isSecKeyAdded = identityStateData[network][
+                    const isSecKeyAdded = identityStateData[
                       did
                     ].secKeys.includes(encodeAddress(account));
-                    const isMsKeyAdded = identityStateData[network][
+                    const isMsKeyAdded = identityStateData[
                       did
                     ].msKeys.includes(encodeAddress(account));
                     if (isPrimary)
-                      identityStateData[network][did].priKey =
+                      identityStateData[did].priKey =
                         encodeAddress(account);
                     else if (isSecondary && !isSecKeyAdded)
-                      identityStateData[network][did].secKeys = [
-                        ...identityStateData[network][did].secKeys,
+                      identityStateData[did].secKeys = [
+                        ...identityStateData[did].secKeys,
                         encodeAddress(account),
                       ];
                     else if (isMultiSig && !isMsKeyAdded)
-                      identityStateData[network][did].msKeys = [
-                        ...identityStateData[network][did].msKeys,
+                      identityStateData[did].msKeys = [
+                        ...identityStateData[did].msKeys,
                         encodeAddress(account),
                       ];
 
+                    const claimData = await api.query.identity.claims.entries({
+                      target: did,
+                      claimType: 'CustomerDueDiligence',
+                    })
+                    const cddData = (claimData as [unknown, Option<IdentityClaim>][])
+                      .map(([, claim]) => claim)
+                      .filter((claim) => !claim.isEmpty)
+                      .map(
+                        (claim) => claim.unwrapOrDefault?.() ?? claim
+                      )
+                      .filter((claim) => {
+                        return (
+                          activeIssuers.indexOf(
+                            claim.claimIssuer.toString()
+                          ) !== -1
+                        );
+                      })
+
+                    const cdd = claims2Record(cddData);
+                    if (cdd) {
+                      identityStateData[did].cdd = cdd;
+                    }
+
                     store.dispatch(
                       identityActions.setIdentity({
-                        did,
-                        network,
-                        data: identityStateData[network][did],
+                        account,
+                        data: identityStateData[did],
                       })
                     );
                   }
@@ -251,79 +273,6 @@ const initApiPromise = (network: NetworkName, networkUrl: string) => apiPromise(
 
         unsubCallbacks.accounts && unsubCallbacks.accounts();
         unsubCallbacks.accounts = () => accountsSub.unsubscribe();
-
-        /**
-         * Identities
-         */
-        unsubCallbacks.dids && unsubCallbacks.dids();
-        console.log('Poly: Subscribing to dids');
-
-        unsubCallbacks.dids = subscribeDidsList((dids: string[]) => {
-          if (network !== getNetwork()) {
-            return;
-          }
-          const removedDids = difference(prevDids, dids);
-
-          removedDids.forEach((did) => {
-            store.dispatch(
-              identityActions.removeIdentity({ network, did })
-            );
-
-            if (unsubCallbacks[did]) {
-              unsubCallbacks[did]();
-              delete unsubCallbacks[did];
-            }
-
-            if (unsubCallbacks[`${did}:cdd`]) {
-              unsubCallbacks[`${did}:cdd`]();
-              delete unsubCallbacks[`${did}:cdd`];
-            }
-          });
-          const promises = dids.map((did) =>
-            api.query.identity.claims.entries({
-              target: did,
-              claimType: 'CustomerDueDiligence',
-            })
-          );
-          Promise.all(promises)
-            .then((results) =>
-              (results as [unknown, Option<IdentityClaim>][][]).map(
-                (result) =>
-                  result.length
-                    ? result
-                      .map(([, claim]) => claim)
-                      .filter((claim) => !claim.isEmpty)
-                      // TODO: can clean up once all chains are upgraded to v6
-                      .map(
-                        (claim) => claim.unwrapOrDefault?.() ?? claim
-                      )
-                      .filter((claim) => {
-                        return (
-                          activeIssuers.indexOf(
-                            claim.claimIssuer.toString()
-                          ) !== -1
-                        );
-                      })
-                    : undefined
-              )
-            )
-            .then((results) => {
-              dids.forEach((did, index) => {
-                const result = results[index];
-
-                if (result) {
-                  const cdd = claims2Record(result);
-
-                  store.dispatch(
-                    identityActions.setIdentityCdd({ network, did, cdd })
-                  );
-                }
-              });
-            }, apiErrorHandler)
-            .catch(apiErrorHandler);
-
-          prevDids = dids;
-        });
       }, apiErrorHandler)
       .catch(apiErrorHandler);
   }, apiErrorHandler)
