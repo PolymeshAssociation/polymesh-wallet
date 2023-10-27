@@ -14,6 +14,7 @@ import {
   network,
   selectedAccount,
   selectedNetwork,
+  customNetworkUrl,
   selectStatus,
 } from './selectors';
 
@@ -31,6 +32,12 @@ export function subscribeSelectedNetwork(
   cb: (network: NetworkName) => void
 ): Unsubscribe {
   return reduxSubscribe(selectedNetwork, cb);
+}
+
+export function subscribeCustomNetworkUrl(
+  cb: (customNetworkUrl: string) => void
+): Unsubscribe {
+  return reduxSubscribe(customNetworkUrl, cb);
 }
 
 export function subscribeNetworkState(

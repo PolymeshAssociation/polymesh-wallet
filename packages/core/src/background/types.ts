@@ -1,7 +1,4 @@
-import {
-  AccountJson,
-  RequestSignatures as DotRequestSignatures,
-} from '@polkadot/extension-base/background/types';
+import { RequestSignatures as DotRequestSignatures } from '@polkadot/extension-base/background/types';
 import { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 import { ORIGINS } from '@polymeshassociation/extension-core/constants';
@@ -11,20 +8,9 @@ import {
   NetworkMeta,
   NetworkName,
   NetworkState,
-  ProofRequestPayload,
-  RequestPolyProvideUid,
   StoreStatus,
-  UidRecord,
 } from '../types';
 
-export enum Errors {
-  NO_ACCOUNT = 'No accounts found.',
-  NO_DID = 'Selected user account is not verified.',
-  NO_UID = 'No uID associated with the selected account or chain.',
-  DID_NOT_MATCH = 'Request does not match any existing account in the wallet.',
-  INVALID_TICKER = 'Invalid ticker.',
-  INVALID_UID = 'Provided uID string is not a valid v4 uuid.',
-}
 export interface ResponsePolyCallDetails {
   networkFee: string;
   protocolFee: string;
@@ -38,6 +24,8 @@ export type RequestPolyAccountsSubscribe = null;
 
 export type RequestPolyNetworkSubscribe = null;
 
+export type RequestPolyCustomNetworkUrlSubscribe = null;
+
 export type RequestPolySelectedAccountSubscribe = null;
 
 export type RequestPolyStatusSubscribe = null;
@@ -50,22 +38,22 @@ export type RequestSubscribeNetworkState = null;
 
 export type RequestPolyIsDevSubscribe = null;
 
-export type RequestProofingSubscribe = null;
-
-export type RequestPolyProvideUidSubscribe = null;
-
-export type RequestPolyReadUidSubscribe = null;
-
-export type RequestPolyUidRecordsSubscribe = null;
-
-export type RequestPolyReadUid = null;
-
-export type RequestPolyIsUidSet = null;
-
 export type RequestPolyIsPasswordSet = null;
+
+export interface RequestPolyAccountUnsubscribe {
+  id: string;
+}
+
+export interface RequestPolyNetworkUnsubscribe {
+  id: string;
+}
 
 export interface RequestPolyNetworkSet {
   network: NetworkName;
+}
+
+export interface RequestPolyCustomNetworkUrlSet {
+  customNetworkUrl: string;
 }
 
 export interface RequestPolyValidatePassword {
@@ -88,54 +76,6 @@ export interface RequestPolyIdentityRename {
   name: string;
 }
 
-export interface ProofingResponse {
-  id: string;
-  proof: string;
-}
-
-export interface ReadUidResponse {
-  id: string;
-  uid: string;
-}
-
-export interface ProofingRequest {
-  account: AccountJson;
-  id: string;
-  request: ProofRequestPayload;
-  url: string;
-}
-
-export interface ProvideUidRequest {
-  id: string;
-  request: RequestPolyProvideUid;
-  url: string;
-}
-
-export interface ReadUidRequest {
-  id: string;
-  request: RequestPolyReadUid;
-  url: string;
-}
-
-export interface RequestPolyApproveProof {
-  id: string;
-  password: string;
-}
-
-export interface RequestPolyRejectProof {
-  id: string;
-}
-
-export interface RequestPolyProvideUidApprove {
-  id: string;
-  password: string;
-}
-
-export interface RequestPolyReadUidApprove {
-  id: string;
-  password: string;
-}
-
 export interface RequestPolyChangePass {
   oldPass: string;
   newPass: string;
@@ -144,20 +84,6 @@ export interface RequestPolyChangePass {
 export interface RequestPolyGlobalChangePass {
   oldPass: string;
   newPass: string;
-}
-
-export interface RequestPolyProvideUidReject {
-  id: string;
-}
-
-export interface RequestPolyReadUidReject {
-  id: string;
-}
-
-export interface RequestPolyGetUid {
-  did: string;
-  password: string;
-  network: NetworkName;
 }
 
 export interface PolyRequestSignatures extends DotRequestSignatures {
@@ -172,6 +98,11 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
     boolean,
     NetworkName
   ];
+  'poly:pri(customNetworkUrl.subscribe)': [
+    RequestPolyCustomNetworkUrlSubscribe,
+    boolean,
+    string
+  ];
   'poly:pri(selectedAccount.subscribe)': [
     RequestPolySelectedAccountSubscribe,
     boolean,
@@ -183,6 +114,7 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
     StoreStatus
   ];
   'poly:pri(network.set)': [RequestPolyNetworkSet, boolean];
+  'poly:pri(network.setCustomNetworkUrl)': [RequestPolyCustomNetworkUrlSet, boolean],
   'poly:pri(isDev.toggle)': [RequestPolyIsDevToggle, boolean];
   'poly:pri(selectedAccount.set)': [RequestPolySelectedAccountSet, boolean];
   'poly:pri(callDetails.get)': [
@@ -195,40 +127,6 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
     boolean,
     NetworkState
   ];
-  'poly:pri(uid.proofRequests.subscribe)': [
-    RequestProofingSubscribe,
-    boolean,
-    ProofingRequest[]
-  ];
-  'poly:pri(uid.proofRequests.approve)': [RequestPolyApproveProof, boolean];
-  'poly:pri(uid.proofRequests.reject)': [RequestPolyRejectProof, boolean];
-  'poly:pri(uid.provideRequests.subscribe)': [
-    RequestPolyProvideUidSubscribe,
-    boolean,
-    ProvideUidRequest[]
-  ];
-  'poly:pri(uid.provideRequests.approve)': [
-    RequestPolyProvideUidApprove,
-    boolean
-  ];
-  'poly:pri(uid.provideRequests.reject)': [
-    RequestPolyProvideUidReject,
-    boolean
-  ];
-  'poly:pri(uid.readRequests.subscribe)': [
-    RequestPolyReadUidSubscribe,
-    boolean,
-    ReadUidRequest[]
-  ];
-  'poly:pri(uid.readRequests.approve)': [RequestPolyReadUidApprove, boolean];
-  'poly:pri(uid.readRequests.reject)': [RequestPolyReadUidReject, boolean];
-  'poly:pri(uid.changePass)': [RequestPolyChangePass, boolean];
-  'poly:pri(uid.records.subscribe)': [
-    RequestPolyUidRecordsSubscribe,
-    boolean,
-    UidRecord[]
-  ];
-  'poly:pri(uid.getUid)': [RequestPolyGetUid, string];
   'poly:pri(global.changePass)': [RequestPolyGlobalChangePass, boolean];
   'poly:pri(password.isSet)': [RequestPolyIsPasswordSet, boolean];
   'poly:pri(password.validate)': [RequestPolyValidatePassword, boolean];
@@ -237,13 +135,10 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
   'poly:pub(network.subscribe)': [
     RequestPolyNetworkMetaSubscribe,
-    boolean,
+    string,
     NetworkMeta
   ];
-  'poly:pub(uid.requestProof)': [ProofRequestPayload, ProofingResponse];
-  'poly:pub(uid.provide)': [RequestPolyProvideUid, boolean];
-  'poly:pub(uid.read)': [RequestPolyReadUid, ReadUidResponse];
-  'poly:pub(uid.isSet)': [RequestPolyIsUidSet, boolean];
+  'poly:pub(network.unsubscribe)': [RequestPolyNetworkUnsubscribe, boolean];
 }
 
 declare type IsNull<T, K extends keyof T> = {

@@ -22,13 +22,10 @@ Polymesh models and business logic.
 ```
 ├── background
 │   ├── handlers:
-│   │   ├── AuxStore.ts   // Stores encrypted confidential data
 │   │   ├── Extension.ts    // Handles requests from extension popup such as: account data queries, currently selected network and user, request approval or rejection...etc.
-│   │   ├── State.ts    // In memory queue of dapp requests such as data provision requests.
 │   │   ├── Tabs.ts   // Handlers for dapp requests.
 │   │   ├── index.ts
 │   │   ├── subscriptions.ts
-│   │   └── utils.ts
 │   └── types.ts
 ├── constants.ts
 ├── external    // Data fetching data from chain
@@ -39,13 +36,9 @@ Polymesh models and business logic.
 │   ├── index.ts
 │   ├── polyNetworkGet.ts
 │   ├── polyNetworkSubscribe.ts
-│   └── schema    // Storage of chain schema as well as utilities to load schema from Github.
-│       ├── fallback.ts
-│       └── index.ts
 ├── index.ts
 ├── page    // API injected in browser page.
 │   ├── Network.ts  // Network API methods
-│   ├── Uid.ts    // Confidential identity related methods.
 │   ├── index.ts
 │   ├── injected.ts
 │   └── types.ts

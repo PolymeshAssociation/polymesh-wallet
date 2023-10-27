@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { CDD, IdentityData, NetworkName, UID } from '../../types';
+import { CDD, IdentityData, NetworkName } from '../../types';
 import { initialFeatureState } from '../utils';
 
 type State = Record<NetworkName, Record<string, IdentityData>>;
@@ -27,7 +27,6 @@ type RenameIdentityPayload = {
   did: string;
   name: string;
 };
-type SetIdentityUidPayload = { network: NetworkName; did: string; uid?: UID };
 
 const identitiesSlice = createSlice({
   name: 'identities',
@@ -55,12 +54,6 @@ const identitiesSlice = createSlice({
       { payload: { cdd, did, network } }: PayloadAction<SetIdentityCddPayload>
     ) {
       state[network][did].cdd = cdd;
-    },
-    setIdentityUid(
-      state,
-      { payload: { did, network, uid } }: PayloadAction<SetIdentityUidPayload>
-    ) {
-      state[network][did].uid = uid;
     },
   },
 });

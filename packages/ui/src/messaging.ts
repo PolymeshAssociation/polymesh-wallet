@@ -30,9 +30,6 @@ import {
   PolyRequestTypes,
   PolyResponseTypes,
   PolySubscriptionMessageTypes,
-  ProofingRequest,
-  ProvideUidRequest,
-  ReadUidRequest,
   ResponsePolyCallDetails,
 } from '@polymeshassociation/extension-core/background/types';
 import { PORTS } from '@polymeshassociation/extension-core/constants';
@@ -41,7 +38,6 @@ import {
   NetworkName,
   NetworkState,
   StoreStatus,
-  UidRecord,
 } from '@polymeshassociation/extension-core/types';
 
 interface Handler {
@@ -263,39 +259,6 @@ export async function approveSignSignature(
   return sendMessage('pri(signing.approve.signature)', { id, signature });
 }
 
-export async function approveProofRequest(
-  id: string,
-  password: string
-): Promise<boolean> {
-  return polyMessage('poly:pri(uid.proofRequests.approve)', { id, password });
-}
-
-export async function rejectProofRequest(id: string): Promise<boolean> {
-  return polyMessage('poly:pri(uid.proofRequests.reject)', { id });
-}
-
-export async function approveUidProvideRequest(
-  id: string,
-  password: string
-): Promise<boolean> {
-  return polyMessage('poly:pri(uid.provideRequests.approve)', { id, password });
-}
-
-export async function rejectUidProvideRequest(id: string): Promise<boolean> {
-  return polyMessage('poly:pri(uid.provideRequests.reject)', { id });
-}
-
-export async function approveUidReadRequest(
-  id: string,
-  password: string
-): Promise<boolean> {
-  return polyMessage('poly:pri(uid.readRequests.approve)', { id, password });
-}
-
-export async function rejectUidReadRequest(id: string): Promise<boolean> {
-  return polyMessage('poly:pri(uid.readRequests.reject)', { id });
-}
-
 export async function createAccountExternal(
   name: string,
   address: string,
@@ -389,6 +352,10 @@ export async function setPolyNetwork(network: NetworkName): Promise<boolean> {
   return polyMessage('poly:pri(network.set)', { network });
 }
 
+export async function setPolyCustomRpc(customNetworkUrl: string): Promise<boolean> {
+  return polyMessage('poly:pri(network.setCustomNetworkUrl)', { customNetworkUrl });
+}
+
 export async function isPasswordSet(): Promise<boolean> {
   return polyMessage('poly:pri(password.isSet)', null);
 }
@@ -407,24 +374,6 @@ export async function subscribePolyStatus(
   return polyMessage('poly:pri(status.subscribe)', null, cb);
 }
 
-export async function subscribeProofingRequests(
-  cb: (requests: ProofingRequest[]) => void
-): Promise<boolean> {
-  return polyMessage('poly:pri(uid.proofRequests.subscribe)', null, cb);
-}
-
-export async function subscribeProvideUidRequests(
-  cb: (requests: ProvideUidRequest[]) => void
-): Promise<boolean> {
-  return polyMessage('poly:pri(uid.provideRequests.subscribe)', null, cb);
-}
-
-export async function subscribeReadUidRequests(
-  cb: (requests: ReadUidRequest[]) => void
-): Promise<boolean> {
-  return polyMessage('poly:pri(uid.readRequests.subscribe)', null, cb);
-}
-
 export async function renameIdentity(
   network: NetworkName,
   did: string,
@@ -437,19 +386,6 @@ export async function getPolyCallDetails(
   request: SignerPayloadJSON
 ): Promise<ResponsePolyCallDetails> {
   return polyMessage('poly:pri(callDetails.get)', { request });
-}
-
-export async function uidChangePass(
-  oldPass: string,
-  newPass: string
-): Promise<boolean> {
-  return polyMessage('poly:pri(uid.changePass)', { oldPass, newPass });
-}
-
-export async function subscribeUidRecords(
-  cb: (records: UidRecord[]) => void
-): Promise<boolean> {
-  return polyMessage('poly:pri(uid.records.subscribe)', null, cb);
 }
 
 export async function subscribeAuthorizeRequests(
@@ -541,12 +477,4 @@ export async function globalChangePass(
   newPass: string
 ): Promise<boolean> {
   return polyMessage('poly:pri(global.changePass)', { oldPass, newPass });
-}
-
-export async function getUid(
-  did: string,
-  network: NetworkName,
-  password: string
-): Promise<string> {
-  return polyMessage('poly:pri(uid.getUid)', { did, network, password });
 }

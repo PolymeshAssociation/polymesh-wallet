@@ -67,12 +67,6 @@ type NetworkMeta = {
   wssUrl: string
 }
 
-// An interface providing a confidential ID or requesting a uniqueness proof.
-interface InjectedUid {
-  requestProof: (req: ProofRequestPayload) => Promise<ProofResult>;
-  provide: (req: RequestPolyProvideUid) => Promise<boolean>;
-}
-
 // An interface that exposes the currently selected network
 interface InjectedNetwork {
   get: () => Promise<NetworkMeta>;
@@ -80,7 +74,6 @@ interface InjectedNetwork {
 }
 
 interface PolymeshInjected extends Injected {
-  readonly uid: InjectedUid;
   readonly network: InjectedNetwork;
 }
 ```

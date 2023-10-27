@@ -9,12 +9,7 @@ import subscribePolymesh, {
 } from '@polymeshassociation/extension-core';
 import handlers from '@polymeshassociation/extension-core/background/handlers';
 import { PORTS } from '@polymeshassociation/extension-core/constants';
-import SchemaService from '@polymeshassociation/extension-core/external/schema';
 import { fatalErrorHandler } from '@polymeshassociation/extension-core/utils';
-
-const loadSchema = () => {
-  SchemaService.load().catch(console.error);
-};
 
 // setup the notification (same a FF default background, white text)
 chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
@@ -22,7 +17,6 @@ chrome.browserAction.setBadgeText({ text: '' });
 
 // This listener is invoked every time the extension is installed, updated, or reloaded.
 chrome.runtime.onInstalled.addListener(() => {
-  loadSchema();
   subscribePolymesh();
 });
 
@@ -38,7 +32,6 @@ chrome.runtime.onConnect.addListener((port): void => {
 
   if (port.name === PORTS.EXTENSION) {
     polyUnsub = subscribePolymesh();
-    loadSchema();
 
     port.onDisconnect.addListener((): void => {
       console.log(`Disconnected from ${port.name}`);

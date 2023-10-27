@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import { networkURLs } from '../constants';
-import { DidType, ReversedDidList } from '../types';
+import { DidType, ReversedDidList, NetworkName } from '../types';
 import { RootState } from './rootReducer';
 
 export const network = createSelector(
@@ -15,8 +15,14 @@ export const selectedNetwork = createSelector(
 );
 
 export const networkUrl = createSelector(
-  selectedNetwork,
-  (network) => networkURLs[network]
+  network,
+  ({ selected, customNetworkUrl }) =>
+    selected === NetworkName.custom ? customNetworkUrl : networkURLs[selected]
+);
+
+export const customNetworkUrl = createSelector(
+  network,
+  ({ customNetworkUrl }) => customNetworkUrl
 );
 
 export const didsList = createSelector(
@@ -85,20 +91,6 @@ export const selectedAccount = createSelector(
       return account;
     } else if (Object.keys(accounts).length) {
       return Object.values(accounts)[0].address;
-    }
-
-    return undefined;
-  }
-);
-
-export const selectedAccountIdentified = createSelector(
-  selectedAccount,
-  identifiedAccounts,
-  (selectedAccount, identifiedAccounts) => {
-    if (selectedAccount) {
-      return identifiedAccounts.filter(
-        (account) => account.address === selectedAccount
-      )[0];
     }
 
     return undefined;

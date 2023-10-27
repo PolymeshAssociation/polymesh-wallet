@@ -1,6 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState, MouseEvent } from 'react';
 import { networkLabels } from '@polymeshassociation/extension-core/constants';
 import { NetworkName } from '@polymeshassociation/extension-core/types';
+import {
+  setPolyCustomRpc,
+  setPolyNetwork,
+} from '@polymeshassociation/extension-ui/messaging';
 import { SvgChevron } from '@polymeshassociation/extension-ui/assets/images/icons';
 import {
   OptionSelector,
@@ -9,16 +13,50 @@ import {
 import { Option } from '@polymeshassociation/extension-ui/components/OptionSelector/types';
 import { Box, Icon, Text } from '@polymeshassociation/extension-ui/ui';
 import { makeNetworkMenu, networkGroups, NETWORK_COLORS } from './utils';
+import { NetworkEdit } from './NetworkEdit';
 import { NetworkSelect, NetworkCircle, DropdownIcon } from './styles';
 
-type NetworkSelectorProps = {
-  onSelect: (network: NetworkName) => void;
-};
 
-export function NetworkSelector({ onSelect }: NetworkSelectorProps) {
+export function NetworkSelector() {
+  const [isEditMode, setIsEditMode] = useState(false);
   const { networkState } = useContext(PolymeshContext);
 
-  const { isDeveloper, selected: currentNetwork } = networkState;
+  const {
+    isDeveloper,
+    selected: currentNetwork,
+    customNetworkUrl: currentCustomNetworkUrl
+  } = networkState;
+
+  const setNetwork = async (_network: NetworkName) => {
+    if (_network !== currentNetwork) {
+      await setPolyNetwork(_network);
+    };
+  };
+
+  const handleSelectNetwork = (network: NetworkName) => {
+    if (network === 'custom' && !currentCustomNetworkUrl) {
+      return setIsEditMode(true);
+    };
+    setNetwork(network);
+  };
+
+  const handleCustomRpcChange = async (customNetworkUrl: string) => {
+    if (customNetworkUrl === currentCustomNetworkUrl) {
+      setIsEditMode(false);
+      return;
+    }
+
+    await setPolyCustomRpc(customNetworkUrl);
+    setNetwork(NetworkName.custom);
+
+    setIsEditMode(false);
+  }
+
+  const toggleEditMode = (e: MouseEvent<HTMLDivElement>): void => {
+    e.stopPropagation();
+    setIsEditMode(prev => !prev);
+  };
+
   const networkOptions: Option[] = [
     {
       category: 'Networks',
@@ -26,11 +64,14 @@ export function NetworkSelector({ onSelect }: NetworkSelectorProps) {
     },
     ...(isDeveloper
       ? [
-          {
-            category: 'Development',
-            menu: makeNetworkMenu(networkGroups.devNetworks, currentNetwork),
-          },
-        ]
+        {
+          category: 'Development',
+          menu: makeNetworkMenu(networkGroups.devNetworks, currentNetwork, toggleEditMode),
+          submenu: isEditMode
+            ? <NetworkEdit defaultValue={currentCustomNetworkUrl} setUrlValue={handleCustomRpcChange} />
+            : null,
+        },
+      ]
       : []),
   ];
   const [background, backgroundLight] =
@@ -43,13 +84,14 @@ export function NetworkSelector({ onSelect }: NetworkSelectorProps) {
   // Automatically switch to 'Mainnet' network if current network doesn't exist.
   // This is necessary to prevent errors and UI bugs, as sometimes networks have to be modified, or removed.
   useEffect(() => {
-    if (!networkLabels[currentNetwork]) onSelect(NetworkName.mainnet);
+    if (!networkLabels[currentNetwork]) setNetwork(NetworkName.mainnet);
   }, [currentNetwork]);
+
 
   return networkLabels[currentNetwork] ? (
     <OptionSelector
       minWidth="368px"
-      onSelect={onSelect}
+      onSelect={handleSelectNetwork}
       options={networkOptions}
       position="bottom-left"
       selector={

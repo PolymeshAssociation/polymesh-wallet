@@ -11,6 +11,7 @@ export type OptionItem = {
 export type Option = {
   category?: string;
   menu: OptionItem[];
+  submenu?: React.ReactNode;
 };
 
 export type PositionType = 'context' | 'bottom-left' | 'bottom-right';
