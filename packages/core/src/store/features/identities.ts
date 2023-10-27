@@ -24,7 +24,7 @@ type SetIdentityPayload = {
   };
 };
 type RenameIdentityPayload = {
-  account: string;
+  did: string;
   name: string;
 };
 
@@ -42,10 +42,8 @@ const identitiesSlice = createSlice({
       state.currentDids[account] = currentDid;
     },
     renameIdentity(state, action: PayloadAction<RenameIdentityPayload>) {
-      const { account, name } = action.payload;
-      const currentDid = state.currentDids[account];
-
-      state.dids[currentDid].alias = name;
+      const { did, name } = action.payload;
+      state.dids[did].alias = name;
     },
     removeCurrentIdentity(state, action: PayloadAction<string>) {
       delete state.currentDids[action.payload];

@@ -375,10 +375,10 @@ export async function subscribePolyStatus(
 }
 
 export async function renameIdentity(
-  address: string,
+  did: string,
   name: string
 ): Promise<boolean> {
-  return polyMessage('poly:pri(identity.rename)', { address, name });
+  return polyMessage('poly:pri(identity.rename)', { did, name });
 }
 
 export async function getPolyCallDetails(
