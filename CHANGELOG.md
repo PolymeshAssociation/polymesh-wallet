@@ -1,3 +1,32 @@
+## [1.7.9](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.8...1.7.9) (2023-09-08)
+
+
+### Bug Fixes
+
+* update README ([7d17ea0](https://github.com/PolymeshAssociation/polymesh-wallet/commit/7d17ea0bb60b1edc5a538b0a6c88b1f1a1cbd712))
+
+## [1.7.8](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.7...1.7.8) (2023-09-08)
+
+
+### Bug Fixes
+
+* add trailing slash to local dashboard link ([a96552e](https://github.com/PolymeshAssociation/polymesh-wallet/commit/a96552e1b80a7dbe18b94a68327e14cac8c442ce))
+* identityClaim is now optional - remain backwards compatible ([038622b](https://github.com/PolymeshAssociation/polymesh-wallet/commit/038622beadb077eae96ffcdd40c0d3109bab19a3))
+
+## [1.7.7](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.6...1.7.7) (2023-07-13)
+
+
+### Bug Fixes
+
+* update links ([4d2e8e6](https://github.com/PolymeshAssociation/polymesh-wallet/commit/4d2e8e6e6643cb95402e16b2d7f27f0bb97491a1))
+
+## [1.7.6](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.5...1.7.6) (2023-07-13)
+
+
+### Bug Fixes
+
+* open initial create/import account screens as ([8a9e0c9](https://github.com/PolymeshAssociation/polymesh-wallet/commit/8a9e0c9c15bcb2b7f577baefc48ac071605977e8))
+
 ## [1.7.5](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.4...1.7.5) (2023-05-31)
 
 

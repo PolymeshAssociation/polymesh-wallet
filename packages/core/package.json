@@ -1,6 +1,6 @@
 {
   "name": "@polymeshassociation/extension-core",
-  "version": "1.7.5",
+  "version": "1.7.9",
   "description": "",
   "main": "index.js",
   "type": "module",
