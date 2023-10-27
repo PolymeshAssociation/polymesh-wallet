@@ -1,4 +1,6 @@
+import type { Subscription } from 'rxjs';
 import DotTabs from '@polkadot/extension-base/background/handlers/Tabs';
+import DotState from '@polkadot/extension-base/background/handlers/State';
 import {
   MessageTypes,
   RequestRpcUnsubscribe,
@@ -6,39 +8,31 @@ import {
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
 import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
-import { assert } from '@polkadot/util';
 import { polyNetworkGet } from '@polymeshassociation/extension-core/external';
 import polyNetworkSubscribe from '@polymeshassociation/extension-core/external/polyNetworkSubscribe';
-import {
-  getSelectedAccount,
-  getSelectedIdentifiedAccount,
-} from '@polymeshassociation/extension-core/store/getters';
+import { getSelectedAccount } from '@polymeshassociation/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymeshassociation/extension-core/store/subscribers';
-import {
-  NetworkMeta,
-  ProofRequestPayload,
-  RequestPolyProvideUid,
-} from '@polymeshassociation/extension-core/types';
-import {
-  prioritize,
-  recodeAddress,
-  validateNetwork,
-  validateSelectedNetwork,
-  validateTicker,
-  validateUid,
-} from '@polymeshassociation/extension-core/utils';
+import { NetworkMeta } from '@polymeshassociation/extension-core/types';
+import { prioritize } from '@polymeshassociation/extension-core/utils';
 
 import {
-  Errors,
   PolyMessageTypes,
   PolyRequestTypes,
   PolyResponseTypes,
-  ProofingResponse,
-  ReadUidResponse,
-  RequestPolyReadUid,
+  RequestPolyAccountUnsubscribe,
+  RequestPolyNetworkUnsubscribe,
 } from '../types';
-import State from './State';
 import { createSubscription, unsubscribe } from './subscriptions';
+
+interface AccountSub {
+  subscription: Subscription;
+  url: string;
+  selectedAccUnsub: () => void;
+}
+
+interface NetworkSub {
+  reduxUnsub: () => void;
+}
 
 function transformAccounts(accounts: SubjectInfo): InjectedAccount[] {
   return (
@@ -75,9 +69,11 @@ function transformAccounts(accounts: SubjectInfo): InjectedAccount[] {
  * Tabs handles messages coming from the web app running in the currently open browser tabs
  */
 export default class Tabs extends DotTabs {
-  readonly #state: State;
+  readonly #state: DotState;
+  readonly #accountSubs: Record<string, AccountSub> = {};
+  readonly #networkSubs: Record<string, NetworkSub> = {};
 
-  constructor(state: State) {
+  constructor(state: DotState) {
     super(state);
 
     this.#state = state;
@@ -87,24 +83,33 @@ export default class Tabs extends DotTabs {
     return polyNetworkGet();
   }
 
-  private polyNetworkSubscribe(id: string, port: chrome.runtime.Port): boolean {
+  private polyNetworkSubscribe(id: string, port: chrome.runtime.Port): string {
     const cb = createSubscription<'poly:pub(network.subscribe)'>(id, port);
-    let initialCall = true;
 
-    const innerCb = (networkMeta: NetworkMeta) => {
-      if (initialCall) {
-        initialCall = false;
-      } else {
-        cb(networkMeta);
-      }
-    };
+    const reduxUnsub = polyNetworkSubscribe(cb);
 
-    const reduxUnsub = polyNetworkSubscribe(innerCb);
+    this.#networkSubs[id] = { reduxUnsub };
 
     port.onDisconnect.addListener((): void => {
-      reduxUnsub();
-      unsubscribe(id);
+      this.polyNetworkUnsubscribe({ id });
     });
+
+    return id;
+  }
+
+  private polyNetworkUnsubscribe({
+    id,
+  }: RequestPolyNetworkUnsubscribe): boolean {
+    const sub = this.#networkSubs[id];
+
+    if (!sub) {
+      return false;
+    }
+
+    delete this.#networkSubs[id];
+
+    unsubscribe(id);
+    sub.reduxUnsub();
 
     return true;
   }
@@ -114,118 +119,61 @@ export default class Tabs extends DotTabs {
     return transformAccounts(accountsObservable.subject.getValue());
   }
 
-  private _accountsSubscribe(id: string, port: chrome.runtime.Port): boolean {
+  private _accountsSubscribe(
+    url: string,
+    id: string,
+    port: chrome.runtime.Port
+  ): string {
     const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
-    let calls = 0;
-
-    const innerCb = (accounts: InjectedAccount[]) => {
-      // Callback will be called twice initially, we need to skip those two calls.
-      if (calls < 2) {
-        calls++;
-      } else {
-        cb(accounts);
-      }
-    };
+    let firstCall = true;
 
     // Call the callback every time the selected account changes, so that we return
     // that account first.
     const selectedAccUnsub = subscribeSelectedAccount(() => {
-      innerCb(transformAccounts(accountsObservable.subject.getValue()));
+      // Skip the first callback so it doesn't return twice initially.
+      if (firstCall) {
+        firstCall = false;
+      } else {
+        cb(this._accountsList());
+      }
     });
 
     const subscription = accountsObservable.subject.subscribe(
       (accounts: SubjectInfo): void => {
-        innerCb(transformAccounts(accounts));
+        cb(transformAccounts(accounts));
       }
     );
 
+    this.#accountSubs[id] = {
+      subscription,
+      url,
+      selectedAccUnsub,
+    };
+
     port.onDisconnect.addListener((): void => {
-      unsubscribe(id);
-      selectedAccUnsub();
-      subscription.unsubscribe();
+      this._accountsUnsubscribe(url, { id });
     });
 
-    return true;
+    return id;
   }
 
-  private requestProof(
+  private _accountsUnsubscribe(
     url: string,
-    request: ProofRequestPayload
-  ): Promise<ProofingResponse> {
-    const account = getSelectedIdentifiedAccount();
+    { id }: RequestPolyAccountUnsubscribe
+  ): boolean {
+    const sub = this.#accountSubs[id];
 
-    assert(validateTicker(request.ticker), Errors.INVALID_TICKER);
-
-    assert(account, Errors.NO_ACCOUNT);
-
-    assert(account.did, Errors.NO_DID);
-
-    const address = recodeAddress(account.address);
-
-    return this.#state.generateProof(url, request, { address });
-  }
-
-  private provideUid(
-    url: string,
-    request: RequestPolyProvideUid
-  ): Promise<boolean> {
-    // XXX: felt unnecessary, might delete later
-    // assert(allowedUidProvider(url), `App ${url} is not allowed to provide uid`);
-
-    const { network, uid } = request;
-
-    assert(
-      validateNetwork(network),
-      `Invalid network ${JSON.stringify(network)}`
-    );
-
-    assert(
-      validateSelectedNetwork(network),
-      `Network ${JSON.stringify(
-        network
-      )} doesn't match the selected network in Polymesh Wallet`
-    );
-
-    // FIXME we're disabling this check temporarily.
-    // The problem is, CDD providers will create DID and attempt to push uid in on go.
-    // Until user opens wallet popup, it would have no awareness of the newly created DID,
-    // and will ultimately reject the uid provision request.
-
-    // assert(validateDid(did), Errors.DID_NOT_MATCH);
-
-    assert(validateUid(uid), Errors.INVALID_UID);
-
-    return this.#state.provideUid(url, request);
-  }
-
-  private readUid(
-    url: string,
-    request: RequestPolyReadUid
-  ): Promise<ReadUidResponse> {
-    // XXX: felt unnecessary, might delete later
-    // assert(allowedUidReader(url), `App ${url} is not allowed access uid`);
-
-    const account = getSelectedIdentifiedAccount();
-
-    assert(account, Errors.NO_ACCOUNT);
-
-    assert(account.did, Errors.NO_DID);
-
-    return this.#state.readUid(url, request);
-  }
-
-  private async uidIsSet(): Promise<boolean> {
-    const uidRecords = await this.#state.allUidRecords();
-
-    const account = getSelectedIdentifiedAccount();
-
-    assert(account, 'No account is present or no account selected');
-
-    if (!account.did) {
+    if (!sub || sub.url !== url) {
       return false;
     }
 
-    return uidRecords.some(({ did }) => did === account.did);
+    delete this.#accountSubs[id];
+
+    unsubscribe(id);
+    sub.selectedAccUnsub();
+    sub.subscription.unsubscribe();
+
+    return true;
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await
@@ -247,11 +195,22 @@ export default class Tabs extends DotTabs {
       case 'poly:pub(network.subscribe)':
         return this.polyNetworkSubscribe(id, port);
 
+      case 'poly:pub(network.unsubscribe)':
+        return this.polyNetworkUnsubscribe(
+          request as RequestPolyNetworkUnsubscribe
+        );
+
       case 'pub(accounts.list)':
         return this._accountsList();
 
       case 'pub(accounts.subscribe)':
-        return this._accountsSubscribe(id, port);
+        return this._accountsSubscribe(url, id, port);
+
+      case 'pub(accounts.unsubscribe)':
+        return this._accountsUnsubscribe(
+          url,
+          request as RequestPolyAccountUnsubscribe
+        );
 
       case 'pub(metadata.list)': {
         // Deny app's request to provide metadata because Polymesh wallet
@@ -266,18 +225,6 @@ export default class Tabs extends DotTabs {
 
         return false;
       }
-
-      case 'poly:pub(uid.requestProof)':
-        return this.requestProof(url, request as ProofRequestPayload);
-
-      case 'poly:pub(uid.provide)':
-        return this.provideUid(url, request as RequestPolyProvideUid);
-
-      case 'poly:pub(uid.isSet)':
-        return this.uidIsSet();
-
-      case 'poly:pub(uid.read)':
-        return this.readUid(url, request as RequestPolyReadUid);
 
       default:
         return super.handle(

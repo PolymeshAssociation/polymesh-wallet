@@ -1,10 +1,11 @@
 import { LinkName, NetworkName, NetworkState } from './types';
 
 export const networkURLs: Record<NetworkName, string> = {
-  mainnet: 'wss://mainnet-rpc.polymesh.network',
-  testnet: 'wss://testnet-rpc.polymesh.live',
-  staging: 'wss://staging-rpc.polymesh.live',
-  local: 'ws://localhost:9944',
+  mainnet: 'wss://mainnet-rpc.polymesh.network/',
+  testnet: 'wss://testnet-rpc.polymesh.live/',
+  staging: 'wss://staging-rpc.polymesh.live/',
+  local: 'ws://localhost:9944/',
+  custom: ''
 };
 
 export const networkLabels: Record<NetworkName, string> = {
@@ -12,6 +13,7 @@ export const networkLabels: Record<NetworkName, string> = {
   testnet: 'Testnet',
   staging: 'Staging',
   local: 'Local node',
+  custom: 'Custom',
 };
 
 export const networkIsDev: Record<NetworkName, boolean> = {
@@ -19,13 +21,7 @@ export const networkIsDev: Record<NetworkName, boolean> = {
   testnet: false,
   staging: true,
   local: true,
-};
-
-export const dynamicSchemaEnabled: Record<NetworkName, boolean> = {
-  mainnet: true,
-  testnet: true,
-  staging: true,
-  local: false,
+  custom: true,
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
@@ -45,6 +41,10 @@ export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
     dashboard: 'http://localhost:3000/',
     explorer: '',
   },
+  custom: {
+    dashboard: 'https://portal.polymesh.live/',
+    explorer: '',
+  },
 };
 
 export const defaultNetwork: NetworkName = NetworkName.mainnet;
@@ -61,8 +61,6 @@ export const messages = [
   'pub(metadata.list)',
 ];
 
-export const polySchemaUrl = 'https://schema.polymesh.live/';
-
 export const populatedDelay = 1000;
 
 export const apiConnTimeout = 3500;
@@ -73,18 +71,8 @@ export const defaultNetworkState: NetworkState = {
   selected: defaultNetwork,
   ss58Format: defaultSs58Format,
   isDeveloper: false,
+  customNetworkUrl: '',
 };
-
-export const uidProvidersWhitelist = [
-  'https://testnet-onboarding.polymesh.network',
-  'https://onboarding.polymesh.network',
-  'http://localhost:3000',
-];
-
-export const uidReadersWhitelist = [
-  'http://localhost:3000',
-  'https://polymathnetwork.github.io/mock-uid-provider',
-];
 
 export const PORTS = {
   EXTENSION: 'polywallet_extension',

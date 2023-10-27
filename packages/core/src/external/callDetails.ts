@@ -3,14 +3,13 @@ import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 import { ResponsePolyCallDetails } from '@polymeshassociation/extension-core/background/types';
 import { upperFirst } from 'lodash-es';
 
-import { NetworkName } from '../types';
 import apiPromise from './apiPromise';
 
 async function callDetails(
   request: SignerPayloadJSON,
-  network: NetworkName
+  networkUrl: string
 ): Promise<ResponsePolyCallDetails> {
-  const api = await apiPromise(network);
+  const api = await apiPromise(networkUrl);
   let protocolFee = '0';
   let networkFee = '0';
 

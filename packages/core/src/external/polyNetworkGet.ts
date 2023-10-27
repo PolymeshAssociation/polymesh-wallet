@@ -1,13 +1,14 @@
-import { networkLabels, networkURLs } from '../constants';
-import { getNetwork } from '../store/getters';
+import { networkLabels } from '../constants';
+import { getNetwork, getNetworkUrl } from '../store/getters';
 import { NetworkMeta } from '../types';
 
 export default function (): NetworkMeta {
   const network = getNetwork();
+  const wssUrl = getNetworkUrl();
 
   return {
     name: network,
     label: networkLabels[network],
-    wssUrl: networkURLs[network],
+    wssUrl,
   };
 }

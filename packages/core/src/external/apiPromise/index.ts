@@ -1,25 +1,24 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
+import { typesBundle } from '@polymeshassociation/polymesh-types';
 
-import { apiConnTimeout, networkURLs } from '../../constants';
-import { NetworkName } from '../../types';
-import SchemaService from '../schema';
+import { apiConnTimeout } from '../../constants';
 
 let api: ApiPromise | null = null;
 let provider: WsProvider;
-let currentNetwork: NetworkName;
+let currentNetworkUrl: string;
 
 const metadata: Record<string, `0x${string}`> = {};
 
-async function apiPromise(network: NetworkName): Promise<ApiPromise> {
-  const shouldReinitialize = currentNetwork !== network;
+async function apiPromise(networkUrl: string): Promise<ApiPromise> {
+  const shouldReinitialize = currentNetworkUrl !== networkUrl;
 
   if (!shouldReinitialize && api && provider?.isConnected) return api;
 
-  currentNetwork = network;
+  currentNetworkUrl = networkUrl;
 
   // 'false' means to not retry connection if it fails. We need to report
   // connection issues to the user instead of retrying connection for minutes.
-  provider = new WsProvider(networkURLs[network], false);
+  provider = new WsProvider(networkUrl, false);
 
   await provider.connect();
 
@@ -34,7 +33,7 @@ async function apiPromise(network: NetworkName): Promise<ApiPromise> {
   // B) A second later, if connection is not up, we throw an error.
   await new Promise<void>((resolve, reject) => {
     const handle = setTimeout(() => {
-      reject(new Error(`Failed to connect to ${networkURLs[network]}`));
+      reject(new Error(`Failed to connect to ${networkUrl}`));
     }, apiConnTimeout);
 
     unsubscribe = provider.on('connected', () => {
@@ -45,13 +44,11 @@ async function apiPromise(network: NetworkName): Promise<ApiPromise> {
 
   unsubscribe();
 
-  const { rpc, types } = SchemaService.get(network);
-
   api = await ApiPromise.create({
     provider,
-    rpc,
-    types,
+    typesBundle,
     metadata,
+    noInitWarn: true,
   });
 
   await api.isReadyOrError;

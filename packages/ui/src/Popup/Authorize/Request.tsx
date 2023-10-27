@@ -137,7 +137,7 @@ function Request({
 export default styled(Request)`
   .icon {
     background: ${({ theme }: ThemeProps): string =>
-      theme.buttonBackgroundDanger};
+    theme.buttonBackgroundDanger};
     color: white;
     min-width: 18px;
     width: 14px;
