@@ -68,7 +68,7 @@ export const AccountsContainer: FC<Props> = ({
       return;
     }
 
-    await renameIdentity(network, currentAccount?.did, newAlias);
+    await renameIdentity(currentAccount?.address, newAlias);
     stopEditAlias();
     onAction();
   };

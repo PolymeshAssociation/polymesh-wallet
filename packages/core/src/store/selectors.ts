@@ -27,20 +27,23 @@ export const customNetworkUrl = createSelector(
 
 export const didsList = createSelector(
   (state: RootState) => state.identities,
-  selectedNetwork,
-  (identities, network) => Object.keys(identities[network])
+  (identities) => Object.values(identities.currentDids)
 );
 
 export const reversedDidList = createSelector(
   (state: RootState) => state.identities,
-  selectedNetwork,
-  (identities, network): ReversedDidList => {
-    return Object.keys(identities[network]).reduce(
-      (reversedList: ReversedDidList, did) => {
-        const identity = identities[network][did];
-        const data = { cdd: identity.cdd, did, didAlias: identity.alias || '' };
+  ({ dids, currentDids }): ReversedDidList => {
+    return Object.keys(currentDids).reduce(
+      (reversedList: ReversedDidList, account) => {
+        const did = currentDids[account];
+        const identity = dids[did];
 
-        reversedList[identity.priKey] = { ...data, keyType: DidType.primary };
+        if (!identity) {
+          return {}
+        }
+        const data = { cdd: identity.cdd, did: identity.did, didAlias: identity.alias || '' };
+
+        reversedList[account] = { ...data, keyType: DidType.primary };
 
         identity.secKeys?.forEach((secKey) => {
           reversedList[secKey] = { ...data, keyType: DidType.secondary };
@@ -75,12 +78,10 @@ export const accountsCount = createSelector(
 export const identifiedAccounts = createSelector(
   accounts,
   reversedDidList,
-  (accounts, reversedDidList: ReversedDidList) => {
-    return Object.values(accounts).map((account) => ({
-      ...account,
-      ...reversedDidList[account.address],
-    }));
-  }
+  (accounts, reversedDidList: ReversedDidList) => Object.values(accounts).map((account) => ({
+    ...account,
+    ...reversedDidList[account.address]
+  }))
 );
 
 export const selectedAccount = createSelector(

@@ -143,11 +143,10 @@ export default class Extension extends DotExtension {
   }
 
   private polyIdentityRename({
-    did,
+    address,
     name,
-    network,
   }: RequestPolyIdentityRename): boolean {
-    renameIdentity(network, did, name);
+    renameIdentity(address, name);
 
     return true;
   }
