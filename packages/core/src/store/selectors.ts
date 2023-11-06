@@ -65,9 +65,8 @@ export const reversedDidList = createSelector(
 );
 
 export const accounts = createSelector(
-  selectedNetwork,
   (state: RootState) => state.accounts,
-  (network, accounts) => accounts[network]
+  (accounts) => accounts.keys
 );
 
 export const accountsAddresses = createSelector(accounts, (accounts) =>

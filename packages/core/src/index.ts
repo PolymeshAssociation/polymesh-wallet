@@ -47,7 +47,7 @@ export function accountsSynchronizer(): () => void {
 
     // A) If account is removed, clean up any associated subscriptions
     removedAccounts.forEach((account) => {
-      store.dispatch(accountActions.removeAccountGlobally(account));
+      store.dispatch(accountActions.removeAccount(account));
     });
 
     // B) Insert or update remaining accounts
@@ -57,7 +57,7 @@ export function accountsSynchronizer(): () => void {
         name: accountName(account),
       };
 
-      store.dispatch(accountActions.setAccountGlobally(accountData));
+      store.dispatch(accountActions.setAccount(accountData));
     });
   });
 
@@ -170,12 +170,9 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
 
                       store.dispatch(
                         accountActions.setAccount({
-                          data: {
-                            address: account,
-                            name: accountName(account),
-                            balance: { total, transferrable, locked },
-                          },
-                          network,
+                          address: account,
+                          name: accountName(account),
+                          balance: { total, transferrable, locked },
                         })
                       );
 
