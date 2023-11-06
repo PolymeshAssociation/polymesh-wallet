@@ -28,7 +28,6 @@ type RenameIdentityPayload = {
   name: string;
 };
 
-
 const identitiesSlice = createSlice({
   name: 'identities',
   initialState,
@@ -47,6 +46,9 @@ const identitiesSlice = createSlice({
     },
     removeCurrentIdentity(state, action: PayloadAction<string>) {
       delete state.currentDids[action.payload];
+    },
+    clearCurrentIdentities(state) {
+      state.currentDids = {};
     },
   },
 });
