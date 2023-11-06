@@ -39,11 +39,15 @@ export const reversedDidList = createSelector(
         const identity = dids[did];
 
         if (!identity) {
-          return {}
+          return {};
         }
-        const data = { cdd: identity.cdd, did: identity.did, didAlias: identity.alias || '' };
+        const data = {
+          cdd: identity.cdd,
+          did: identity.did,
+          didAlias: identity.alias || '',
+        };
 
-        reversedList[account] = { ...data, keyType: DidType.primary };
+        reversedList[identity.priKey] = { ...data, keyType: DidType.primary };
 
         identity.secKeys?.forEach((secKey) => {
           reversedList[secKey] = { ...data, keyType: DidType.secondary };
@@ -78,10 +82,11 @@ export const accountsCount = createSelector(
 export const identifiedAccounts = createSelector(
   accounts,
   reversedDidList,
-  (accounts, reversedDidList: ReversedDidList) => Object.values(accounts).map((account) => ({
-    ...account,
-    ...reversedDidList[account.address]
-  }))
+  (accounts, reversedDidList: ReversedDidList) =>
+    Object.values(accounts).map((account) => ({
+      ...account,
+      ...reversedDidList[account.address],
+    }))
 );
 
 export const selectedAccount = createSelector(
