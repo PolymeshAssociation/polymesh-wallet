@@ -1,3 +1,13 @@
+## [1.8.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.8.0...1.8.1) (2024-01-02)
+
+
+### Bug Fixes
+
+* fixed identity rename props ([2139d02](https://github.com/PolymeshAssociation/polymesh-wallet/commit/2139d02a261729bb4fc28aaa63d8ac200f74aa8b))
+* fixed identity state slice for store identities by account and did ([76d7a6f](https://github.com/PolymeshAssociation/polymesh-wallet/commit/76d7a6f6f4a9b94023a063cccc72b5c71ee7a818))
+* multiple fixes ([4b29316](https://github.com/PolymeshAssociation/polymesh-wallet/commit/4b29316bcd6316942cf63aed109d6e9819f0f7ab))
+* remove network specific account states ([2969fb1](https://github.com/PolymeshAssociation/polymesh-wallet/commit/2969fb155cbe861f6515bf4125725b6e819b72b9))
+
 # [1.8.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.7.9...1.8.0) (2023-10-27)
 
 
