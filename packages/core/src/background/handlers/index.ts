@@ -18,7 +18,7 @@ export default function handler<TMessageType extends PolyMessageTypes>(
   const sender = port.sender as chrome.runtime.MessageSender;
   const from = isExtension
     ? PORTS.EXTENSION
-    : (sender.tab && sender.tab.url) || sender.url || '<unknown>';
+    : sender.url || sender.tab?.url || '<unknown>';
   const source = `${from}: ${id}: ${message}`;
 
   console.log(` [in] ${source}`); // :: ${JSON.stringify(request)}`);
