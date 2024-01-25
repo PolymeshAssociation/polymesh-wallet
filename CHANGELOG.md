@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.8.1...1.8.2) (2024-01-25)
+
+
+### Bug Fixes
+
+* prevent authorization requests from incorrect url when pages are pre-rendered ([75a42ed](https://github.com/PolymeshAssociation/polymesh-wallet/commit/75a42edb97a80b7ed8c5c5eda2875ccf72935afe))
+
 ## [1.8.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.8.0...1.8.1) (2024-01-02)
 
 
