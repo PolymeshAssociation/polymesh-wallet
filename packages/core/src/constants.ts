@@ -3,7 +3,7 @@ import { LinkName, NetworkName, NetworkState } from './types';
 export const networkURLs: Record<NetworkName, string> = {
   mainnet: 'wss://mainnet-rpc.polymesh.network/',
   testnet: 'wss://testnet-rpc.polymesh.live/',
-  staging: 'wss://staging-rpc.polymesh.live/',
+  staging: 'wss://staging-rpc.polymesh.dev/',
   local: 'ws://localhost:9944/',
   custom: ''
 };
