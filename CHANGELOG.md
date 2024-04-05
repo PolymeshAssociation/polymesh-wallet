@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.8.2...1.8.3) (2024-04-05)
+
+
+### Bug Fixes
+
+* update to correct staging endpoint ([e44bd78](https://github.com/PolymeshAssociation/polymesh-wallet/commit/e44bd78b675e555d5030d0b3604070df8286bc34))
+
 ## [1.8.2](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.8.1...1.8.2) (2024-01-25)
 
 
