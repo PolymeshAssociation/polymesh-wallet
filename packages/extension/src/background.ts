@@ -12,8 +12,8 @@ import { PORTS } from '@polymeshassociation/extension-core/constants';
 import { fatalErrorHandler } from '@polymeshassociation/extension-core/utils';
 
 // setup the notification (same a FF default background, white text)
-chrome.browserAction.setBadgeBackgroundColor({ color: '#d90000' });
-chrome.browserAction.setBadgeText({ text: '' });
+chrome.action.setBadgeBackgroundColor({ color: '#d90000' });
+chrome.action.setBadgeText({ text: '' });
 
 // This listener is invoked every time the extension is installed, updated, or reloaded.
 chrome.runtime.onInstalled.addListener(() => {

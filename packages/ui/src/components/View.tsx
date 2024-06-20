@@ -15,7 +15,8 @@ function View({ children, className }: Props): React.ReactElement<Props> {
   const _theme = themes[theme];
 
   const switchTheme = (theme: AvailableThemes): void => {
-    localStorage.setItem('theme', theme);
+    // move to chrome.storage if needed
+    // localStorage.setItem('theme', theme);
     setTheme(theme);
   };
 
