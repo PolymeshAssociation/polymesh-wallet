@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { AuthorizeReqContext } from '../../components';
 import Request from './Request';
 
-export default function Authorize(): React.ReactElement {
+export default function Authorize (): React.ReactElement {
   const requests = useContext(AuthorizeReqContext);
 
   return (

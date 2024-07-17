@@ -1,11 +1,12 @@
-import { styled } from '@polymeshassociation/extension-ui/styles';
-import { ThemeProps } from '@polymeshassociation/extension-ui/types';
-import { Box } from '@polymeshassociation/extension-ui/ui';
+import type { ThemeProps } from '@polymeshassociation/extension-ui/types';
+import type { CssPosition } from './types';
+
 import { css } from 'styled-components';
 
-import { CssPosition } from './types';
+import { styled } from '@polymeshassociation/extension-ui/styles';
+import { Box } from '@polymeshassociation/extension-ui/ui';
 
-export const Options = styled(Box)<{ cssPosition: CssPosition }>`
+export const Options = styled(Box)<{cssPosition: CssPosition}>`
   position: absolute;
   background: white;
   box-shadow: ${({ theme }: ThemeProps) => theme.shadows[3]};
@@ -13,7 +14,12 @@ export const Options = styled(Box)<{ cssPosition: CssPosition }>`
   padding: 8px 0;
   z-index: 1000;
 
-  ${({ cssPosition }) => cssPosition}
+  ${({ cssPosition }) => `
+    ${cssPosition.top !== undefined ? `top: ${cssPosition.top}px;` : ''}
+    ${cssPosition.right !== undefined ? `right: ${cssPosition.right}px;` : ''}
+    ${cssPosition.bottom !== undefined ? `bottom: ${cssPosition.bottom}px;` : ''}
+    ${cssPosition.left !== undefined ? `left: ${cssPosition.left}px;` : ''}
+  `}
 
   // Only show options once it is positioned in place
   visibility: ${({ cssPosition }) =>

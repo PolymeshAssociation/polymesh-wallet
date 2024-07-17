@@ -1,40 +1,45 @@
 import '@polkadot/api-augment';
-import { Option } from '@polkadot/types/codec';
-import { AccountInfo } from '@polkadot/types/interfaces/system';
+
+import type { StorageKey } from '@polkadot/types';
+import type { Option, Vec } from '@polkadot/types/codec';
+import type { FrameSystemAccountInfo, PalletIdentityClaim1stKey, PalletIdentityClaim2ndKey, PolymeshPrimitivesIdentityClaim, PolymeshPrimitivesIdentityId, PolymeshPrimitivesSecondaryKeyKeyRecord } from '@polymeshassociation/polymesh-sdk/polkadot/types-lookup';
+import type { AccountData, KeyringAccountData, NetworkName, UnsubCallback } from './types';
+
 import { encodeAddress } from '@polkadot/util-crypto';
 import { union } from 'lodash-es';
 import difference from 'lodash-es/difference';
 import intersection from 'lodash-es/intersection';
 
 import apiPromise, { disconnect } from './external/apiPromise';
-import { IdentityClaim, LinkedKeyInfo } from './external/apiPromise/types';
 import { actions as accountActions } from './store/features/accounts';
 import { actions as identityActions } from './store/features/identities';
 import { actions as networkActions } from './store/features/network';
 import { actions as statusActions } from './store/features/status';
 import { getAccountsList, getNetwork, getNetworkUrl } from './store/getters';
-import {
-  subscribeSelectedNetwork,
-  subscribeCustomNetworkUrl,
-} from './store/subscribers';
+import { subscribeCustomNetworkUrl, subscribeSelectedNetwork } from './store/subscribers';
 import { populatedDelay } from './constants';
 import store from './store';
-import {
-  AccountData,
-  KeyringAccountData,
-  NetworkName,
-  UnsubCallback,
-} from './types';
 import { accountBalances, apiErrorHandler, observeAccounts } from './utils';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
 
+interface IdentityState {
+  did: string;
+  msKeys: string[];
+  priKey: string;
+  secKeys: string[];
+  cdd?: {
+    expiry: number | undefined;
+    issuer: string;
+  };
+}
+
 /**
  * Synchronize accounts between keyring and redux store.
  */
-export function accountsSynchronizer(): () => void {
+export function accountsSynchronizer (): () => void {
   const sub = observeAccounts((accountsData: KeyringAccountData[]) => {
-    function accountName(_address: string): string | undefined {
+    function accountName (_address: string): string | undefined {
       return accountsData.find(({ address }) => address === _address)?.name;
     }
 
@@ -54,7 +59,7 @@ export function accountsSynchronizer(): () => void {
     union(newAccounts, preExistingAccounts).forEach((account) => {
       const accountData: AccountData = {
         address: account,
-        name: accountName(account),
+        name: accountName(account)
       };
 
       store.dispatch(accountActions.setAccount(accountData));
@@ -64,7 +69,7 @@ export function accountsSynchronizer(): () => void {
   return () => sub.unsubscribe();
 }
 
-const claimSorter = (a: IdentityClaim, b: IdentityClaim) => {
+const claimSorter = (a: PolymeshPrimitivesIdentityClaim, b: PolymeshPrimitivesIdentityClaim) => {
   if (a.expiry.isEmpty) {
     return -1;
   } else if (b.expiry.isEmpty) {
@@ -75,17 +80,16 @@ const claimSorter = (a: IdentityClaim, b: IdentityClaim) => {
   }
 };
 
-const claims2Record = (didClaims: IdentityClaim[]) => {
+const claims2Record = (didClaims: PolymeshPrimitivesIdentityClaim[]) => {
   // Sort claims array by expiry (non-expiring first)
   didClaims.sort(claimSorter);
+
   // Save CDD data
   return didClaims && didClaims.length > 0
     ? {
-        issuer: didClaims[0].claimIssuer.toString(),
-        expiry: !didClaims[0].expiry.isEmpty
-          ? Number(didClaims[0].expiry.toString())
-          : undefined,
-      }
+      expiry: !didClaims[0].expiry.isEmpty ? Number(didClaims[0].expiry.toString()) : undefined,
+      issuer: didClaims[0].claimIssuer.toString()
+    }
     : undefined;
 };
 
@@ -108,7 +112,7 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
       api.query.cddServiceProviders
         .activeMembers()
         .then((members) => {
-          activeIssuers = (members as unknown as string[]).map((member) =>
+          activeIssuers = (members as Vec<PolymeshPrimitivesIdentityId>).map((member) =>
             member.toString()
           );
           // Add the CDDProvider & Committee systematic CDD providers
@@ -128,7 +132,8 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
               if (network !== getNetwork()) {
                 return;
               }
-              function accountName(_address: string): string | undefined {
+
+              function accountName (_address: string): string | undefined {
                 return accountsData.find(({ address }) => address === _address)
                   ?.name;
               }
@@ -147,7 +152,7 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
               store.dispatch(identityActions.clearCurrentIdentities());
 
               // Used for setting redux state.
-              const identityStateData: any = {};
+              const identityStateData: Record<string, IdentityState> = {};
 
               // C) Create new subscriptions to:
               accounts.forEach((account) => {
@@ -157,11 +162,11 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
                       // 1) Account balance
                       [api.query.system.account, account],
                       // 2) Identities linked to account.
-                      [api.query.identity.keyRecords, account],
+                      [api.query.identity.keyRecords, account]
                     ],
                     async ([accData, linkedKeyInfo]: [
-                      AccountInfo,
-                      Option<LinkedKeyInfo>
+                      FrameSystemAccountInfo,
+                      Option<PolymeshPrimitivesSecondaryKeyKeyRecord>
                     ]) => {
                       // Store account metadata
                       const { locked, total, transferrable } = accountBalances(
@@ -171,36 +176,45 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
                       store.dispatch(
                         accountActions.setAccount({
                           address: account,
-                          name: accountName(account),
-                          balance: { total, transferrable, locked },
+                          balance: {
+                            locked,
+                            total,
+                            transferrable
+                          },
+                          name: accountName(account)
                         })
                       );
 
-                      if (linkedKeyInfo && linkedKeyInfo.isEmpty) {
+                      if (linkedKeyInfo?.isEmpty) {
                         store.dispatch(
                           identityActions.removeCurrentIdentity(account)
                         );
+
                         return;
                       }
 
-                      const linkedKeyInfoObj: any = linkedKeyInfo.unwrap();
+                      const linkedKeyInfoObj = linkedKeyInfo.unwrap();
 
                       const isPrimary = linkedKeyInfoObj.isPrimaryKey;
                       const isSecondary = linkedKeyInfoObj.isSecondaryKey;
                       const isMultiSig = linkedKeyInfoObj.isMultiSigSignerKey;
 
-                      let did;
+                      let did: string;
+
                       // MultiSigs require one additional query to get their DIDs
                       if (isMultiSig) {
                         const msLinkedKeyInfo =
                           (await api.query.identity.keyRecords(
                             linkedKeyInfoObj.asMultiSigSignerKey
-                          )) as Option<LinkedKeyInfo>;
-                        if (msLinkedKeyInfo && msLinkedKeyInfo.isEmpty)
+                          )) as Option<PolymeshPrimitivesSecondaryKeyKeyRecord>;
+
+                        if (msLinkedKeyInfo?.isEmpty) {
                           throw new Error('msLinkedKeyInfo is missing');
-                        const msLinkedKeyInfoObj: any =
-                          msLinkedKeyInfo.unwrap();
+                        }
+
+                        const msLinkedKeyInfoObj = msLinkedKeyInfo.unwrap();
                         const isMsPrimaryKey = msLinkedKeyInfoObj.isPrimaryKey;
+
                         did = isMsPrimaryKey
                           ? msLinkedKeyInfoObj.asPrimaryKey.toString()
                           : msLinkedKeyInfoObj.asSecondaryKey[0].toString();
@@ -211,53 +225,48 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
                       }
 
                       // Initialize identity state for network:did pair
-                      if (!identityStateData[did])
+                      if (!identityStateData[did]) {
                         identityStateData[did] = {
                           did,
-                          priKey: '',
-                          secKeys: [],
                           msKeys: [],
+                          priKey: '',
+                          secKeys: []
                         };
-                      const isSecKeyAdded = identityStateData[
-                        did
-                      ].secKeys.includes(encodeAddress(account));
-                      const isMsKeyAdded = identityStateData[
-                        did
-                      ].msKeys.includes(encodeAddress(account));
-                      if (isPrimary)
-                        identityStateData[did].priKey = encodeAddress(account);
-                      else if (isSecondary && !isSecKeyAdded)
-                        identityStateData[did].secKeys = [
-                          ...identityStateData[did].secKeys,
-                          encodeAddress(account),
-                        ];
-                      else if (isMultiSig && !isMsKeyAdded)
-                        identityStateData[did].msKeys = [
-                          ...identityStateData[did].msKeys,
-                          encodeAddress(account),
-                        ];
+                      }
+
+                      const isSecKeyAdded = identityStateData[did].secKeys.includes(encodeAddress(account, api.registry.chainSS58));
+                      const isMsKeyAdded = identityStateData[did].msKeys.includes(encodeAddress(account, api.registry.chainSS58));
+
+                      if (isPrimary) {
+                        identityStateData[did].priKey = encodeAddress(account, api.registry.chainSS58);
+                      } else if (isSecondary && !isSecKeyAdded) {
+                        identityStateData[did].secKeys = [...identityStateData[did].secKeys, encodeAddress(account, api.registry.chainSS58)];
+                      } else if (isMultiSig && !isMsKeyAdded) {
+                        identityStateData[did].msKeys = [...identityStateData[did].msKeys, encodeAddress(account, api.registry.chainSS58)];
+                      }
 
                       const claimData = await api.query.identity.claims.entries(
                         {
-                          target: did,
                           claimType: 'CustomerDueDiligence',
+                          target: did
                         }
                       );
                       const cddData = (
-                        claimData as [unknown, Option<IdentityClaim>][]
+                        claimData as [StorageKey<[PalletIdentityClaim1stKey, PalletIdentityClaim2ndKey]>, Option<PolymeshPrimitivesIdentityClaim>][]
                       )
                         .map(([, claim]) => claim)
                         .filter((claim) => !claim.isEmpty)
                         .map((claim) => claim.unwrapOrDefault?.() ?? claim)
-                        .filter((claim) => {
+                        .filter((claim): claim is PolymeshPrimitivesIdentityClaim => {
                           return (
-                            activeIssuers.indexOf(
+                            activeIssuers.includes(
                               claim.claimIssuer.toString()
-                            ) !== -1
+                            )
                           );
                         });
 
                       const cdd = claims2Record(cddData);
+
                       if (cdd) {
                         identityStateData[did].cdd = cdd;
                       }
@@ -265,7 +274,7 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
                       store.dispatch(
                         identityActions.setIdentity({
                           account,
-                          data: identityStateData[did],
+                          data: identityStateData[did]
                         })
                       );
                     }
@@ -287,50 +296,72 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
     }, apiErrorHandler)
     .catch(apiErrorHandler);
 
-function subscribePolymesh(): () => void {
-  async function unsubAll(): Promise<void> {
-    for (const key in unsubCallbacks) {
-      if (unsubCallbacks[key]) {
-        try {
-          unsubCallbacks[key]();
-          delete unsubCallbacks[key];
-        } catch (error) {
-          console.error(error);
+function subscribePolymesh (): () => void {
+  function unsubAll (): void {
+    (async () => {
+      for (const key in unsubCallbacks) {
+        if (unsubCallbacks[key]) {
+          try {
+            unsubCallbacks[key]();
+            delete unsubCallbacks[key];
+          } catch (error) {
+            console.error(error);
+          }
         }
       }
-    }
-    await disconnect();
+
+      await disconnect();
+    })().catch((error) => {
+      console.log(error);
+    });
   }
 
   console.log('Poly: fetching data from chain');
 
   !!unsubCallbacks.network && unsubCallbacks.network();
 
-  unsubCallbacks.network = subscribeSelectedNetwork(async (network) => {
-    await disconnect();
-    if (network) {
-      console.log('Poly: Selected network', network);
-      store.dispatch(statusActions.init());
-      const networkUrl = getNetworkUrl();
-      initApiPromise(network, networkUrl);
-    }
+  unsubCallbacks.network = subscribeSelectedNetwork((network) => {
+    (async () => {
+      try {
+        await disconnect();
+
+        if (network) {
+          console.log('Poly: Selected network', network);
+          store.dispatch(statusActions.init());
+          const networkUrl = getNetworkUrl();
+
+          await initApiPromise(network, networkUrl);
+        }
+      } catch (error) {
+        console.error('Error during network subscription:', error);
+      }
+    })().catch((error) => {
+      console.log(error);
+    });
   });
 
   !!unsubCallbacks.customNetworkUrl && unsubCallbacks.customNetworkUrl();
 
   let firstCall = true;
-  unsubCallbacks.customNetworkUrl = subscribeCustomNetworkUrl(
-    async (customNetworkUrl: string) => {
+
+  unsubCallbacks.customNetworkUrl = subscribeCustomNetworkUrl((customNetworkUrl: string) => {
+    (async () => {
       await disconnect();
+
       if (customNetworkUrl && !firstCall) {
         console.log('Poly: Custom rpc url', customNetworkUrl);
         store.dispatch(statusActions.init());
         const network = getNetwork();
-        initApiPromise(network, customNetworkUrl);
+
+        await initApiPromise(network, customNetworkUrl);
       }
+
       firstCall = false;
     }
-  );
+    )().catch((error) => {
+      console.error('Error during custom network URL subscription:', error);
+    });
+  });
 
   return unsubAll;
 }

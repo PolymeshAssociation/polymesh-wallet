@@ -1,45 +1,25 @@
-import {
-  borderWidths,
-  breakpoints,
-  colors,
-  fontFamilies,
-  fontSizes,
-  fontWeights,
-  footer,
-  header,
-  headings,
-  lineHeights,
-  links,
-  maxWidth,
-  radii,
-  shadows,
-  sidebar,
-  space,
-  texts,
-  transitions,
-  zIndexes,
-} from './themeDefinitions';
+import { borderWidths, breakpoints, colors, fontFamilies, fontSizes, fontWeights, footer, header, headings, lineHeights, links, maxWidth, radii, shadows, sidebar, space, texts, transitions, zIndexes } from './themeDefinitions';
 
 const polymeshTheme = {
-  breakpoints,
-  fontSizes,
-  fontFamilies,
-  lineHeights,
-  fontWeights,
-  space,
-  zIndexes,
-  colors,
-  shadows,
-  radii,
-  headings,
-  texts,
-  links,
-  transitions,
-  maxWidth,
-  header,
-  sidebar,
-  footer,
   borderWidths,
+  breakpoints,
+  colors,
+  fontFamilies,
+  fontSizes,
+  fontWeights,
+  footer,
+  header,
+  headings,
+  lineHeights,
+  links,
+  maxWidth,
+  radii,
+  shadows,
+  sidebar,
+  space,
+  texts,
+  transitions,
+  zIndexes
 };
 
 const darkTheme = {
@@ -83,7 +63,7 @@ const darkTheme = {
   readonlyInputBackground: '#1A1B20',
   subTextColor: '#DDD',
   textColor: '#FFFFFF',
-  textColorDanger: '#FF8686',
+  textColorDanger: '#FF8686'
 };
 
 const lightTheme: Theme = {
@@ -110,10 +90,10 @@ const lightTheme: Theme = {
   readonlyInputBackground: '#FFF',
   subTextColor: '#454545',
   textColor: '#242529',
-  textColorDanger: '#F24A4A',
+  textColorDanger: '#F24A4A'
 };
 
-export function chooseTheme(): AvailableThemes {
+export function chooseTheme (): AvailableThemes {
   // const preferredTheme = localStorage.getItem('theme');
 
   // if (preferredTheme) {
@@ -132,7 +112,7 @@ export declare type Theme = typeof darkTheme;
 
 export const themes = {
   dark: darkTheme,
-  light: lightTheme,
+  light: lightTheme
 };
 
 export declare type AvailableThemes = keyof typeof themes;

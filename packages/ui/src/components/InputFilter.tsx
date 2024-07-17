@@ -1,5 +1,6 @@
-import { Icon, TextInput } from '@polymeshassociation/extension-ui/ui';
 import React, { useCallback } from 'react';
+
+import { Icon, TextInput } from '@polymeshassociation/extension-ui/ui';
 
 import { SvgSearch } from '../assets/images/icons';
 
@@ -10,12 +11,10 @@ interface Props {
   value: string;
 }
 
-export function InputFilter({
-  className,
+export function InputFilter ({ className,
   onChange,
   placeholder,
-  value,
-}: Props): JSX.Element {
+  value }: Props): React.ReactElement {
   const onChangeFilter = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       onChange(event.target.value);
@@ -26,14 +25,20 @@ export function InputFilter({
   return (
     <div className={className}>
       <TextInput
-        autoCapitalize="off"
-        autoCorrect="off"
+        autoCapitalize='off'
+        autoCorrect='off'
         autoFocus
-        icon={<Icon Asset={SvgSearch} height={17.5} width={17.5} />}
+        icon = {
+          <Icon
+            Asset={SvgSearch}
+            height={17.5}
+            width={17.5}
+          />
+        }
         onChange={onChangeFilter}
         placeholder={placeholder}
         spellCheck={false}
-        type="text"
+        type='text'
         value={value}
       />
     </div>

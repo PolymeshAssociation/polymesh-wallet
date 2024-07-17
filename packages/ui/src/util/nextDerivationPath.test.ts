@@ -9,7 +9,7 @@ describe('Generate Derivation Path', () => {
     parentAddress?: string;
   } => ({
     address,
-    parentAddress,
+    parentAddress
   });
 
   test('generates path for first masters child', () => {

@@ -1,14 +1,11 @@
-import { createPair } from '@polkadot/keyring/pair';
-import { KeyringPair$Json } from '@polkadot/keyring/types';
-import { hexToU8a, isHex } from '@polkadot/util';
-import {
-  base64Decode,
-  decodeAddress,
-  encodeAddress,
-} from '@polkadot/util-crypto';
-import { KeypairType } from '@polkadot/util-crypto/types';
+import type { KeyringPair$Json } from '@polkadot/keyring/types';
+import type { KeypairType } from '@polkadot/util-crypto/types';
 
-function verifyJsonPassword(json: KeyringPair$Json, password: string): boolean {
+import { createPair } from '@polkadot/keyring/pair';
+import { hexToU8a, isHex } from '@polkadot/util';
+import { base64Decode, decodeAddress, encodeAddress } from '@polkadot/util-crypto';
+
+function verifyJsonPassword (json: KeyringPair$Json, password: string): boolean {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     const cryptoType = Array.isArray(json.encoding.content)

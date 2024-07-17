@@ -1,5 +1,7 @@
+/* eslint-disable deprecation/deprecation */
+import type { Network } from '@polkadot/networks/types';
+
 import { Ledger } from '@polkadot/hw-ledger';
-import { Network } from '@polkadot/networks/types';
 import uiSettings from '@polkadot/ui-settings';
 import { assert } from '@polkadot/util';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -33,11 +35,11 @@ interface State extends StateBase {
   status: Status | null;
 }
 
-function getNetwork(genesis: string): Network | undefined {
+function getNetwork (genesis: string): Network | undefined {
   return ledgerChains.find(({ genesisHash }) => genesisHash[0] === genesis);
 }
 
-function retrieveLedger(genesis: string): Ledger {
+function retrieveLedger (genesis: string): Ledger {
   let ledger: Ledger | null = null;
 
   const { isLedgerCapable } = getState();
@@ -53,16 +55,16 @@ function retrieveLedger(genesis: string): Ledger {
   return ledger;
 }
 
-function getState(): StateBase {
+function getState (): StateBase {
   const isLedgerCapable = !!(window as unknown as { USB?: unknown }).USB;
 
   return {
     isLedgerCapable,
-    isLedgerEnabled: isLedgerCapable && uiSettings.ledgerConn !== 'none',
+    isLedgerEnabled: isLedgerCapable && uiSettings.ledgerConn !== 'none'
   };
 }
 
-export function useLedger(
+export function useLedger (
   genesis?: string | null,
   accountIndex = 0,
   addressOffset = 0,
@@ -155,7 +157,7 @@ export function useLedger(
         setIsLoading(false);
 
         const { network } = getNetwork(genesis) || {
-          network: 'unknown network',
+          network: 'unknown network'
         };
 
         const warningMessage = e.message.includes('Code: 26628')
@@ -188,7 +190,7 @@ export function useLedger(
     isLocked,
     ledger,
     refresh,
-    warning,
     status,
+    warning
   };
 }

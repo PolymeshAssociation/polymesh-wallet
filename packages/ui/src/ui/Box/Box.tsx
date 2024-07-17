@@ -1,64 +1,31 @@
-import { StyledComponentProps } from 'styled-components';
-import {
-  border,
-  borderBottom,
-  BorderBottomProps,
-  borderColor,
-  BorderColorProps,
-  borderLeft,
-  BorderLeftProps,
-  BorderProps,
-  borderRadius,
-  BorderRadiusProps,
-  borderRight,
-  BorderRightProps,
-  borderStyle,
-  borderTop,
-  BorderTopProps,
-  borderWidth,
-  BorderWidthProps,
-  boxShadow,
-  BoxShadowProps,
-  color,
-  ColorProps,
-  height,
-  HeightProps,
-  lineHeight,
-  LineHeightProps,
-  MaxWidthProps,
-  minWidth,
-  MinWidthProps,
-  space,
-  SpaceProps,
-  textAlign,
-  TextAlignProps,
-  width,
-  WidthProps,
-} from 'styled-system';
+import type { StyledComponentProps } from 'styled-components';
+import type { BorderBottomProps, BorderColorProps, BorderLeftProps, BorderProps, BorderRadiusProps, BorderRightProps, BorderTopProps, BorderWidthProps, BoxShadowProps, ColorProps, HeightProps, LineHeightProps, MaxWidthProps, MinWidthProps, SpaceProps, TextAlignProps, WidthProps } from 'styled-system';
+import type { ScaleProps } from '../../styles/themeTypes';
+import type { Theme } from '../../types';
+
+import { border, borderBottom, borderColor, borderLeft, borderRadius, borderRight, borderStyle, borderTop, borderWidth, boxShadow, color, height, lineHeight, minWidth, space, textAlign, width } from 'styled-system';
 
 import { styled } from '../../styles';
-import { ScaleProps } from '../../styles/themeTypes';
 import { MaxWidthScale } from '../../styles/utils';
-import { Theme } from '../../types';
 
 export type BoxThemeProps = MinWidthProps &
-  MaxWidthProps &
-  WidthProps &
-  HeightProps &
-  LineHeightProps &
-  SpaceProps &
-  ColorProps &
-  BorderProps &
-  BorderTopProps &
-  BorderRightProps &
-  BorderBottomProps &
-  BorderLeftProps &
-  BorderColorProps &
-  BorderWidthProps &
-  BorderRadiusProps &
-  TextAlignProps &
-  BoxShadowProps &
-  ScaleProps;
+MaxWidthProps &
+WidthProps &
+HeightProps &
+LineHeightProps &
+SpaceProps &
+ColorProps &
+BorderProps &
+BorderTopProps &
+BorderRightProps &
+BorderBottomProps &
+BorderLeftProps &
+BorderColorProps &
+BorderWidthProps &
+BorderRadiusProps &
+TextAlignProps &
+BoxShadowProps &
+ScaleProps;
 
 export const Box = styled.div<BoxThemeProps>(
   minWidth,
@@ -80,13 +47,14 @@ export const Box = styled.div<BoxThemeProps>(
   color,
   boxShadow,
   {
-    boxSizing: 'border-box',
+    boxSizing: 'border-box'
   }
 );
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type BoxProps = StyledComponentProps<
   typeof Box,
-  Theme,
-  Record<string, any>,
-  any
+Theme,
+Record<string, any>,
+any
 >;

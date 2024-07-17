@@ -1,13 +1,9 @@
+import type { FC } from 'react';
+
+import React, { useCallback, useState } from 'react';
+
 import { SvgClipboardListOutline } from '@polymeshassociation/extension-ui/assets/images/icons';
-import {
-  Box,
-  Button,
-  Checkbox,
-  Flex,
-  Header,
-  Text,
-} from '@polymeshassociation/extension-ui/ui';
-import React, { FC, useState } from 'react';
+import { Box, Button, Checkbox, Flex, Header, Text } from '@polymeshassociation/extension-ui/ui';
 
 import { SeedPhrase } from './components/SeedPhrase';
 
@@ -19,49 +15,61 @@ export interface Props {
 export const SeedView: FC<Props> = ({ onContinue, seedPhrase }) => {
   const [isCopied, setCopied] = useState(false);
 
+  const handleClick = useCallback(() => setCopied(!isCopied), [isCopied]);
+
   return (
     <>
       <Header
-        headerText="Your recovery phrase"
+        headerText='Your recovery phrase'
         iconAsset={SvgClipboardListOutline}
       >
-        <Box mt="s">
-          <Text color="white" variant="b2">
+        <Box mt='s'>
+          <Text
+            color='white'
+            variant='b2'
+          >
             These 12 words in order will recover your account should you lose or
             forget your password. It is recommended you store a hard copy in a
             secure place.
           </Text>
         </Box>
       </Header>
-      <Box mx="m">
+      <Box mx='m'>
         <SeedPhrase seedPhrase={seedPhrase} />
       </Box>
       <Flex
         flex={1}
-        flexDirection="column"
-        justifyContent="flex-end"
-        mx="m"
-        my="m"
+        flexDirection='column'
+        justifyContent='flex-end'
+        mx='m'
+        my='m'
       >
         <Box>
-          <Flex justifyContent="flex-start" mb="s">
+          <Flex
+            justifyContent='flex-start'
+            mb='s'
+          >
             <Checkbox
               checked={isCopied}
               label={
                 <Text
-                  color="gray.3"
-                  fontSize="0"
-                  lineHeight="extraTight"
-                  variant="b3"
+                  color='gray.3'
+                  fontSize='0'
+                  lineHeight='extraTight'
+                  variant='b3'
                 >
                   I confirm that I copied and stored the recovery phrase in a
                   secure place.
                 </Text>
               }
-              onClick={() => setCopied(!isCopied)}
+              onClick={handleClick}
             />
           </Flex>
-          <Button disabled={!isCopied} fluid onClick={onContinue}>
+          <Button
+            disabled={!isCopied}
+            fluid
+            onClick={onContinue}
+          >
             Continue
           </Button>
         </Box>

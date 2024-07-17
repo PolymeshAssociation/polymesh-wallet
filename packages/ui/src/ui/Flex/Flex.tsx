@@ -1,29 +1,19 @@
+import type { AlignItemsProps, AlignSelfProps, FlexDirectionProps, FlexProps as CSSFlexProps, FlexWrapProps, JustifyContentProps } from 'styled-system';
+import type { BoxProps } from '../Box';
+
 import React from 'react';
 import styled from 'styled-components';
-import {
-  alignItems,
-  AlignItemsProps,
-  alignSelf,
-  AlignSelfProps,
-  flex,
-  flexDirection,
-  FlexDirectionProps,
-  FlexProps as CSSFlexProps,
-  flexWrap,
-  FlexWrapProps,
-  justifyContent,
-  JustifyContentProps,
-} from 'styled-system';
+import { alignItems, alignSelf, flex, flexDirection, flexWrap, justifyContent } from 'styled-system';
 
-import { Box, BoxProps } from '../Box';
+import { Box } from '../Box';
 
 export type FlexProps = BoxProps &
-  AlignItemsProps &
-  AlignSelfProps &
-  JustifyContentProps &
-  CSSFlexProps &
-  FlexDirectionProps &
-  FlexWrapProps;
+AlignItemsProps &
+AlignSelfProps &
+JustifyContentProps &
+CSSFlexProps &
+FlexDirectionProps &
+FlexWrapProps;
 
 export const Flex = styled(Box)<FlexProps>(
   flex,
@@ -33,7 +23,7 @@ export const Flex = styled(Box)<FlexProps>(
   flexDirection,
   justifyContent,
   {
-    display: 'flex',
+    display: 'flex'
   }
 );
 
@@ -43,5 +33,5 @@ export const FlexDocz = (props: FlexProps) => {
 };
 
 Flex.defaultProps = {
-  alignItems: 'center',
+  alignItems: 'center'
 };

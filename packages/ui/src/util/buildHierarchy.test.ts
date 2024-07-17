@@ -1,7 +1,4 @@
-import {
-  AccountJson,
-  AccountWithChildren,
-} from '@polkadot/extension-base/background/types';
+import type { AccountJson, AccountWithChildren } from '@polkadot/extension-base/background/types';
 
 import { buildHierarchy } from './buildHierarchy';
 
@@ -24,7 +21,7 @@ describe('Use Account Hierarchy', () => {
   } => ({
     address,
     parentAddress,
-    whenCreated,
+    whenCreated
   });
 
   test('for empty account list, returns empty list', () => {
@@ -65,10 +62,10 @@ describe('Use Account Hierarchy', () => {
           children: [
             {
               ...acc('b', 'a'),
-              children: [acc('c', 'b')],
-            },
-          ],
-        },
+              children: [acc('c', 'b')]
+            }
+          ]
+        }
       ]
     );
   });
@@ -79,15 +76,15 @@ describe('Use Account Hierarchy', () => {
         acc('a', undefined, 2),
         acc('b', 'a', 4),
         acc('c', 'a', 3),
-        acc('d', undefined, 1),
+        acc('d', undefined, 1)
       ],
       [
         acc('d', undefined, 1),
         {
           address: 'a',
           children: [acc('c', 'a', 3), acc('b', 'a', 4)],
-          whenCreated: 2,
-        },
+          whenCreated: 2
+        }
       ]
     );
   });

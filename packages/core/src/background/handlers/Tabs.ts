@@ -1,27 +1,23 @@
+/* global chrome */
+
+import type DotState from '@polkadot/extension-base/background/handlers/State';
+import type { MessageTypes, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
+import type { InjectedAccount } from '@polkadot/extension-inject/types';
+import type { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import type { Subscription } from 'rxjs';
+import type { NetworkMeta } from '@polymeshassociation/extension-core/types';
+import type { PolyMessageTypes, PolyRequestTypes, PolyResponseTypes, RequestPolyAccountUnsubscribe, RequestPolyNetworkUnsubscribe } from '../types';
+
 import DotTabs from '@polkadot/extension-base/background/handlers/Tabs';
-import DotState from '@polkadot/extension-base/background/handlers/State';
-import {
-  MessageTypes,
-  RequestRpcUnsubscribe,
-} from '@polkadot/extension-base/background/types';
-import { InjectedAccount } from '@polkadot/extension-inject/types';
+import { canDerive } from '@polkadot/extension-base/utils';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
-import { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
+
 import { polyNetworkGet } from '@polymeshassociation/extension-core/external';
 import polyNetworkSubscribe from '@polymeshassociation/extension-core/external/polyNetworkSubscribe';
 import { getSelectedAccount } from '@polymeshassociation/extension-core/store/getters';
 import { subscribeSelectedAccount } from '@polymeshassociation/extension-core/store/subscribers';
-import { NetworkMeta } from '@polymeshassociation/extension-core/types';
 import { prioritize } from '@polymeshassociation/extension-core/utils';
 
-import {
-  PolyMessageTypes,
-  PolyRequestTypes,
-  PolyResponseTypes,
-  RequestPolyAccountUnsubscribe,
-  RequestPolyNetworkUnsubscribe,
-} from '../types';
 import { createSubscription, unsubscribe } from './subscriptions';
 
 interface AccountSub {
@@ -34,35 +30,21 @@ interface NetworkSub {
   reduxUnsub: () => void;
 }
 
-function transformAccounts(accounts: SubjectInfo): InjectedAccount[] {
-  return (
-    Object.values(accounts)
-      .filter(
-        ({
-          json: {
-            meta: { isHidden },
-          },
-        }) => !isHidden
-      )
-      .sort(
-        (a, b) =>
-          (a.json.meta.whenCreated || 0) - (b.json.meta.whenCreated || 0)
-      )
-      .map(
-        ({
-          json: {
-            address,
-            meta: { genesisHash, name },
-          },
-        }): InjectedAccount => ({
-          address,
-          genesisHash,
-          name,
-        })
-      )
-      // Prioritize selected account.
-      .sort(prioritize(getSelectedAccount(), (a) => a.address))
-  );
+function transformAccounts (accounts: SubjectInfo, anyType = false): InjectedAccount[] {
+  return Object
+    .values(accounts)
+    .filter(({ json: { meta: { isHidden } } }) => !isHidden)
+    .filter(({ type }) => anyType ? true : canDerive(type))
+    .sort((a, b) => (a.json.meta.whenCreated || 0) - (b.json.meta.whenCreated || 0))
+    .map(({ json: { address, meta: { genesisHash, name } }, type }): InjectedAccount => ({
+      address,
+      genesisHash,
+      name,
+      type
+    }))
+  // Prioritize selected account.
+    .sort(prioritize(getSelectedAccount(), (a) => a.address))
+  ;
 }
 
 /**
@@ -73,17 +55,17 @@ export default class Tabs extends DotTabs {
   readonly #accountSubs: Record<string, AccountSub> = {};
   readonly #networkSubs: Record<string, NetworkSub> = {};
 
-  constructor(state: DotState) {
+  constructor (state: DotState) {
     super(state);
 
     this.#state = state;
   }
 
-  private polyNetworkGet(): NetworkMeta {
+  private polyNetworkGet (): NetworkMeta {
     return polyNetworkGet();
   }
 
-  private polyNetworkSubscribe(id: string, port: chrome.runtime.Port): string {
+  private polyNetworkSubscribe (id: string, port: chrome.runtime.Port): string {
     const cb = createSubscription<'poly:pub(network.subscribe)'>(id, port);
 
     const reduxUnsub = polyNetworkSubscribe(cb);
@@ -97,9 +79,7 @@ export default class Tabs extends DotTabs {
     return id;
   }
 
-  private polyNetworkUnsubscribe({
-    id,
-  }: RequestPolyNetworkUnsubscribe): boolean {
+  private polyNetworkUnsubscribe ({ id }: RequestPolyNetworkUnsubscribe): boolean {
     const sub = this.#networkSubs[id];
 
     if (!sub) {
@@ -114,12 +94,11 @@ export default class Tabs extends DotTabs {
     return true;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _accountsList(): InjectedAccount[] {
+  private _accountsList (): InjectedAccount[] {
     return transformAccounts(accountsObservable.subject.getValue());
   }
 
-  private _accountsSubscribe(
+  private _accountsSubscribe (
     url: string,
     id: string,
     port: chrome.runtime.Port
@@ -127,27 +106,28 @@ export default class Tabs extends DotTabs {
     const cb = createSubscription<'pub(accounts.subscribe)'>(id, port);
     let firstCall = true;
 
-    // Call the callback every time the selected account changes, so that we return
-    // that account first.
-    const selectedAccUnsub = subscribeSelectedAccount(() => {
-      // Skip the first callback so it doesn't return twice initially.
+    const handleSubscription = () => {
+      // Skip the first call to avoid double invocation
       if (firstCall) {
         firstCall = false;
       } else {
         cb(this._accountsList());
       }
+    };
+
+    // Subscribe to both the accountsObservable and the selected account changes
+    const accountsSubscription = accountsObservable.subject.subscribe(() => {
+      handleSubscription();
     });
 
-    const subscription = accountsObservable.subject.subscribe(
-      (accounts: SubjectInfo): void => {
-        cb(transformAccounts(accounts));
-      }
-    );
+    const selectedAccUnsub = subscribeSelectedAccount(() => {
+      handleSubscription();
+    });
 
     this.#accountSubs[id] = {
-      subscription,
-      url,
       selectedAccUnsub,
+      subscription: accountsSubscription,
+      url
     };
 
     port.onDisconnect.addListener((): void => {
@@ -157,7 +137,7 @@ export default class Tabs extends DotTabs {
     return id;
   }
 
-  private _accountsUnsubscribe(
+  private _accountsUnsubscribe (
     url: string,
     { id }: RequestPolyAccountUnsubscribe
   ): boolean {
@@ -177,13 +157,23 @@ export default class Tabs extends DotTabs {
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await
-  public async _handle<TMessageType extends PolyMessageTypes>(
+  public async _handle<TMessageType extends PolyMessageTypes> (
     id: string,
     type: TMessageType,
     request: PolyRequestTypes[TMessageType],
     url: string,
     port: chrome.runtime.Port
   ): Promise<PolyResponseTypes[keyof PolyResponseTypes]> {
+    if (type === 'pub(phishing.redirectIfDenied)') {
+      return super.handle(
+        id,
+        type as MessageTypes,
+        request as RequestRpcUnsubscribe,
+        url,
+        port
+      );
+    }
+
     if (type !== 'pub(authorize.tab)') {
       this.#state.ensureUrlAuthorized(url);
     }

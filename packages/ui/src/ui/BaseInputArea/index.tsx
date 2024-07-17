@@ -1,2 +1,2 @@
-export * from './BaseInputAreaProps';
 export * from './BaseInputArea';
+export * from './BaseInputAreaProps';

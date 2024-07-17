@@ -1,104 +1,111 @@
-import React, { MouseEvent } from 'react';
-import {
-  networkLabels,
-  networkIsDev,
-} from '@polymeshassociation/extension-core/constants';
-import mainnetCircleSvg from '@polymeshassociation/extension-ui/assets/mainnet-circle.svg';
+import type { MouseEvent } from 'react';
+
+import React from 'react';
+
+import { networkIsDev, networkLabels } from '@polymeshassociation/extension-core/constants';
 import { NetworkName } from '@polymeshassociation/extension-core/types';
 import { SvgCheck, SvgPencilOutline } from '@polymeshassociation/extension-ui/assets/images/icons';
+import mainnetCircleSvg from '@polymeshassociation/extension-ui/assets/mainnet-circle.svg';
 import { colors } from '@polymeshassociation/extension-ui/components/themeDefinitions';
-import { Flex, Box, Icon, Text } from '@polymeshassociation/extension-ui/ui';
+import { Box, Flex, Icon, Text } from '@polymeshassociation/extension-ui/ui';
+
 import { NetworkCircle } from './styles';
 
-type NetworkItem = {
+interface NetworkItem {
   network: NetworkName;
   label: string;
-};
+}
 
-type NetworkGroups = {
+interface NetworkGroups {
   prodNetworks: NetworkItem[];
   devNetworks: NetworkItem[];
-};
+}
 
-type NetworkColors = {
+interface NetworkColors {
   image?: string;
   backgrounds: string[];
   foreground: string;
-};
+}
 
 export const NETWORK_COLORS: Record<NetworkName, NetworkColors> = {
-  mainnet: {
-    image: mainnetCircleSvg,
+  custom: {
     backgrounds: ['#FAD1DC', '#EC467340'],
-    foreground: '#43195B',
-  },
-  testnet: {
-    backgrounds: ['#DCEFFE', '#1348E440'],
-    foreground: '#1348E4',
-  },
-  staging: {
-    backgrounds: ['#D7F4F2', '#60D3CB40'],
-    foreground: '#60D3CB',
+    foreground: '#43195B'
   },
   local: {
     backgrounds: ['#D7F4F2', '#60D3CB40'],
-    foreground: '#60D3CB',
+    foreground: '#60D3CB'
   },
-  custom: {
+  mainnet: {
     backgrounds: ['#FAD1DC', '#EC467340'],
     foreground: '#43195B',
+    image: mainnetCircleSvg
   },
+  staging: {
+    backgrounds: ['#D7F4F2', '#60D3CB40'],
+    foreground: '#60D3CB'
+  },
+  testnet: {
+    backgrounds: ['#DCEFFE', '#1348E440'],
+    foreground: '#1348E4'
+  }
 };
 
 // Separate production and development networks from `networkLabels` as `NetworkItem` arrays
 export const networkGroups: NetworkGroups = Object.entries(
   networkLabels
 ).reduce(
-  ({ prodNetworks, devNetworks }: NetworkGroups, networkLabel) => {
+  ({ devNetworks, prodNetworks }: NetworkGroups, networkLabel) => {
     const [network, label] = networkLabel as [NetworkName, string];
     const isDevNetwork = networkIsDev[network];
 
-    if (isDevNetwork) devNetworks.push({ network, label });
-    else prodNetworks.push({ network, label });
+    if (isDevNetwork) {
+      devNetworks.push({ label, network });
+    } else {
+      prodNetworks.push({ label, network });
+    }
 
-    return { prodNetworks, devNetworks };
+    return { devNetworks, prodNetworks };
   },
-  { prodNetworks: [], devNetworks: [] }
+  { devNetworks: [], prodNetworks: [] }
 );
 
-export function makeNetworkMenu(
+export function makeNetworkMenu (
   networks: NetworkItem[],
-  currentNetwork: string,
-  toggleEditMode?: (e: MouseEvent<HTMLDivElement>) => void,
+  currentNetwork: NetworkName,
+  toggleEditMode?: (e: MouseEvent<HTMLDivElement>) => void
 ) {
-  return networks.map(({ network, label }) => {
+  return networks.map(({ label, network }) => {
     const isCurrentNetwork = currentNetwork === network;
 
     return {
       label: (
         <Flex
-          className="network-item"
+          className='network-item'
           key={network}
-          px="16px"
-          py="8px"
+          px='16px'
+          py='8px'
           {...(isCurrentNetwork && { style: { background: colors.gray[5] } })}
         >
           <NetworkCircle
             background={NETWORK_COLORS[network].backgrounds[0]}
             color={NETWORK_COLORS[network].foreground}
             image={NETWORK_COLORS[network].image}
-            size="24px"
-            thickness="4px"
+            size='24px'
+            thickness='4px'
           />
-          <Box ml="8px" mr="auto">
-            <Text variant="b2m">{label}</Text>
+          <Box
+            ml='8px'
+            mr='auto'
+          >
+            <Text variant='b2m'>{label}</Text>
           </Box>
-
           {isCurrentNetwork && (
             <Flex>
-              {network === 'custom' && (
-                <Box mr="4px">
-                  <Icon Asset={SvgPencilOutline}
+              {network === NetworkName.custom && (
+                <Box mr='4px'>
+                  <Icon
+                    Asset={SvgPencilOutline}
                     color={'gray.2'}
                     height={16}
                     onClick={toggleEditMode}
@@ -107,14 +114,19 @@ export function makeNetworkMenu(
                   />
                 </Box>
               )}
-              <Box ml="auto">
-                <Icon Asset={SvgCheck} color="brandMain" height={24} width={24} />
+              <Box ml='auto'>
+                <Icon
+                  Asset={SvgCheck}
+                  color='brandMain'
+                  height={24}
+                  width={24}
+                />
               </Box>
             </Flex>
           )}
         </Flex>
       ),
-      value: network,
+      value: network
     };
   });
 }

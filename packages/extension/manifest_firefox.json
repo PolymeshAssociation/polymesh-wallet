@@ -1,0 +1,43 @@
+{
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Polymesh"
+  },
+  "author": "Polymesh Association",
+  "background": {
+    "scripts": ["background.js"],
+    "type": "module"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{2986e330-6825-49b5-b8d3-79aa874f03f6}",
+      "strict_min_version": "108.0.2"
+    }
+  },
+  "content_scripts": [{
+    "js": ["content.js"],
+    "matches": ["http://*/*", "https://*/*"],
+    "run_at": "document_start"
+  }],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "description": "Manage your Polymesh accounts outside of dapps. Injects the accounts and allows signing transactions for a specific account.",
+  "homepage_url": "https://github.com/PolymeshAssociation/polymesh-wallet",
+  "icons": {
+    "16": "images/icon-16.png",
+    "24": "images/icon-24.png",
+    "32": "images/icon-32.png",
+    "48": "images/icon-48.png",
+    "64": "images/icon-64.png",
+    "128": "images/icon-128.png"
+  },
+  "manifest_version": 3,
+  "name": "Polymesh Wallet",
+  "permissions": ["storage", "tabs"],
+  "short_name": "Polymesh",
+  "web_accessible_resources": [{
+    "matches": ["*://*/*"],
+    "resources": ["page.js"]
+  }]
+}

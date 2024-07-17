@@ -1,50 +1,22 @@
-import {
-  AccountJson,
-  AccountsContext,
-  AuthorizeRequest,
-  MetadataRequest,
-  SigningRequest,
-} from '@polkadot/extension-base/background/types';
+import type { AccountJson, AccountsContext, AuthorizeRequest, MetadataRequest, SigningRequest } from '@polkadot/extension-base/background/types';
+import type { SettingsStruct } from '@polkadot/ui-settings/types';
+import type { IdentifiedAccount, NetworkState, StoreStatus } from '@polymeshassociation/extension-core/types';
+import type { PolymeshContext as PolymeshContextType } from '../types';
+
 import uiSettings from '@polkadot/ui-settings';
-import { SettingsStruct } from '@polkadot/ui-settings/types';
-import { setSS58Format } from '@polkadot/util-crypto';
-import { defaultNetworkState } from '@polymeshassociation/extension-core/constants';
-import {
-  ErrorCodes,
-  IdentifiedAccount,
-  NetworkState,
-  StoreStatus,
-} from '@polymeshassociation/extension-core/types';
-import { subscribeOnlineStatus } from '@polymeshassociation/extension-core/utils';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
-import { Route, Switch } from 'react-router';
+import { Route, Switch, useHistory } from 'react-router';
 import { toast } from 'react-toastify';
+
+import { defaultNetworkState } from '@polymeshassociation/extension-core/constants';
+import { ErrorCodes } from '@polymeshassociation/extension-core/types';
+import { subscribeOnlineStatus } from '@polymeshassociation/extension-core/utils';
 
 import { SvgCloseCircle } from '../assets/images/icons';
 import { Loading } from '../components';
-import {
-  AccountContext,
-  ActionContext,
-  ActivityContext,
-  AuthorizeReqContext,
-  MetadataReqContext,
-  PolymeshContext,
-  SettingsContext,
-  SigningReqContext,
-} from '../components/contexts';
-import {
-  busySubscriber,
-  subscribeAccounts,
-  subscribeAuthorizeRequests,
-  subscribeMetadataRequests,
-  subscribeNetworkState,
-  subscribePolyAccounts,
-  subscribePolySelectedAccount,
-  subscribePolyStatus,
-  subscribeSigningRequests,
-} from '../messaging';
-import { PolymeshContext as PolymeshContextType } from '../types';
+import { AccountContext, ActionContext, ActivityContext, AuthorizeReqContext, MetadataReqContext, PolymeshContext, SettingsContext, SigningReqContext } from '../components/contexts';
+import { busySubscriber, ping, subscribeAccounts, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeNetworkState, subscribePolyAccounts, subscribePolySelectedAccount, subscribePolyStatus, subscribeSigningRequests } from '../messaging';
 import { Box, Flex, Icon } from '../ui';
 import { Toast } from '../ui/Toast';
 import { buildHierarchy } from '../util/buildHierarchy';
@@ -62,40 +34,40 @@ import Signing from './Signing';
 
 const startSettings = uiSettings.get();
 
-function initAccountContext(accounts: AccountJson[]): AccountsContext {
+function initAccountContext (accounts: AccountJson[]): AccountsContext {
   const hierarchy = buildHierarchy(accounts);
   const master = hierarchy.find((account) => !account.isExternal);
 
   return {
     accounts,
     hierarchy,
-    master,
+    master
   };
 }
 
-function initPolymeshContext(
+function initPolymeshContext (
   networkState: NetworkState,
   polymeshAccounts: IdentifiedAccount[],
   selectedAccount: string,
   currentAccount?: IdentifiedAccount
 ): PolymeshContextType {
   return {
+    currentAccount,
     networkState,
     polymeshAccounts,
-    selectedAccount,
-    currentAccount,
+    selectedAccount
   };
 }
 
-export default function Popup(): React.ReactElement {
+export default function Popup (): React.ReactElement {
   const [accounts, setAccounts] = useState<null | AccountJson[]>(null);
   const [accountCtx, setAccountCtx] = useState<AccountsContext>({
     accounts: [],
-    hierarchy: [],
+    hierarchy: []
   });
   const [polymeshCtx, setPolymeshCtx] = useState<PolymeshContextType>({
     networkState: defaultNetworkState,
-    polymeshAccounts: [],
+    polymeshAccounts: []
   });
   const [authRequests, setAuthRequests] = useState<null | AuthorizeRequest[]>(
     null
@@ -117,6 +89,7 @@ export default function Popup(): React.ReactElement {
   const [networkState, setNetworkState] =
     useState<NetworkState>(defaultNetworkState);
   const handleError = useErrorHandler();
+  const history = useHistory();
 
   useEffect(() => {
     if (status?.error) {
@@ -129,10 +102,15 @@ export default function Popup(): React.ReactElement {
         // Otherwise, we just inform the user via a Toast component.
         toast.error(
           <Flex>
-            <Icon Asset={SvgCloseCircle} color="red.0" height={20} width={20} />
-            <Box ml="s">{status.error.msg}</Box>
+            <Icon
+              Asset={SvgCloseCircle}
+              color='red.0'
+              height={20}
+              width={20}
+            />
+            <Box ml='s'>{status.error.msg}</Box>
           </Flex>,
-          { autoClose: false, toastId: 'error', closeButton: true }
+          { autoClose: false, closeButton: true, toastId: 'error' }
         );
       }
     } else {
@@ -149,44 +127,62 @@ export default function Popup(): React.ReactElement {
         // Show an alert about lack of connectivity.
         toast.error(
           <Flex>
-            <Icon Asset={SvgCloseCircle} color="red.0" height={20} width={20} />
-            <Box ml="s">No internet connection</Box>
+            <Icon
+              Asset={SvgCloseCircle}
+              color='red.0'
+              height={20}
+              width={20}
+            />
+            <Box ml='s'>No internet connection</Box>
           </Flex>,
-          { toastId: 'offline', autoClose: false, closeButton: true }
+          { autoClose: false, closeButton: true, toastId: 'offline' }
         );
       }
     });
   }, []);
 
-  const _onAction = (to?: string): void => {
-    if (to) {
-      window.location.hash = to;
-    }
-  };
+  const _onAction = useCallback(
+    (to?: string): void => {
+      if (!to) {
+        return;
+      }
+
+      to === '../index.js'
+        // if we can't go back from there, go to the home
+        ? history.length === 1
+          ? history.push('/')
+          : history.goBack()
+        : window.location.hash = to;
+    },
+    [history]
+  );
 
   useEffect((): void => {
-    // @ts-ignore
-    Promise.all([
-      subscribePolyStatus(setStatus),
-      subscribePolyAccounts(setPolymeshAccounts),
-      subscribePolySelectedAccount(setSelectedAccountAddress),
-      subscribeNetworkState(setNetworkState),
-      subscribeAccounts(setAccounts),
-      subscribeAuthorizeRequests(setAuthRequests),
-      subscribeMetadataRequests(setMetaRequests),
-      subscribeSigningRequests(setSignRequests),
-      busySubscriber.addListener(setIsBusy),
-    ])
+    // initially send a ping message to create a port that will be reused for subsequent
+    // messages. This ensure onConnect event is fired only once
+    ping()
+      .then(() =>
+        Promise.all([
+          subscribePolyStatus(setStatus),
+          subscribePolyAccounts(setPolymeshAccounts),
+          subscribePolySelectedAccount(setSelectedAccountAddress),
+          subscribeNetworkState(setNetworkState),
+          subscribeAccounts(setAccounts),
+          subscribeAuthorizeRequests(setAuthRequests),
+          subscribeMetadataRequests(setMetaRequests),
+          subscribeSigningRequests(setSignRequests),
+          busySubscriber.addListener(setIsBusy)
+        ])
+      )
       .then(() => undefined, handleError)
       .catch(handleError);
 
     uiSettings.on('change', (settings): void => {
       setSettingsCtx(settings);
-      setSS58Format(settings.prefix === -1 ? 42 : settings.prefix);
     });
 
     _onAction();
-  }, [handleError]);
+  }, [_onAction, handleError]);
 
   useEffect((): void => {
     const currentAccount =
@@ -208,11 +204,12 @@ export default function Popup(): React.ReactElement {
   }, [accounts, networkState, polymeshAccounts, selectedAccountAddress]);
 
   const Root = (() => {
-    if (authRequests && authRequests.length) {
+    if (authRequests?.length) {
       return Authorize;
-    } else if (signRequests && signRequests.length) {
+    } else if (signRequests?.length) {
       return Signing;
     }
+
     return Accounts;
   })();
 
@@ -234,53 +231,56 @@ export default function Popup(): React.ReactElement {
         metaRequests &&
         signRequests &&
         isReady && (
-          <ActivityContext.Provider value={isBusy}>
-            <ActionContext.Provider value={_onAction}>
-              <SettingsContext.Provider value={settingsCtx}>
-                <AccountContext.Provider value={accountCtx}>
-                  <AuthorizeReqContext.Provider value={authRequests}>
-                    <MetadataReqContext.Provider value={metaRequests}>
-                      <SigningReqContext.Provider value={signRequests}>
-                        <PolymeshContext.Provider value={polymeshCtx}>
-                          <Switch>
-                            <Route path="/account/create">
-                              <NewAccount />
-                            </Route>
-                            <Route path="/account/forget/:address">
-                              <ForgetAccount />
-                            </Route>
-                            <Route path="/account/export/:address">
-                              <ExportAccount />
-                            </Route>
-                            <Route path="/account/restore/:method">
-                              <Restore />
-                            </Route>
-                            <Route path="/account/import-ledger">
-                              <ImportLedger />
-                            </Route>
-                            <Route path="/account/change-password">
-                              <ChangePassword />
-                            </Route>
-                            <Route path="/account/details/:address">
-                              <AccountDetails />
-                            </Route>
-                            <Route path="/settings/url-auth">
-                              <AuthManagement />
-                            </Route>
-                            <Route exact path="/">
-                              <Root />
-                            </Route>
-                          </Switch>
-                          <Toast />
-                        </PolymeshContext.Provider>
-                      </SigningReqContext.Provider>
-                    </MetadataReqContext.Provider>
-                  </AuthorizeReqContext.Provider>
-                </AccountContext.Provider>
-              </SettingsContext.Provider>
-            </ActionContext.Provider>
-          </ActivityContext.Provider>
-        )}
+        <ActivityContext.Provider value={isBusy}>
+          <ActionContext.Provider value={_onAction}>
+            <SettingsContext.Provider value={settingsCtx}>
+              <AccountContext.Provider value={accountCtx}>
+                <AuthorizeReqContext.Provider value={authRequests}>
+                  <MetadataReqContext.Provider value={metaRequests}>
+                    <SigningReqContext.Provider value={signRequests}>
+                      <PolymeshContext.Provider value={polymeshCtx}>
+                        <Switch>
+                          <Route path='/account/create'>
+                            <NewAccount />
+                          </Route>
+                          <Route path='/account/forget/:address'>
+                            <ForgetAccount />
+                          </Route>
+                          <Route path='/account/export/:address'>
+                            <ExportAccount />
+                          </Route>
+                          <Route path='/account/restore/:method'>
+                            <Restore />
+                          </Route>
+                          <Route path='/account/import-ledger'>
+                            <ImportLedger />
+                          </Route>
+                          <Route path='/account/change-password'>
+                            <ChangePassword />
+                          </Route>
+                          <Route path='/account/details/:address'>
+                            <AccountDetails />
+                          </Route>
+                          <Route path='/settings/url-auth'>
+                            <AuthManagement />
+                          </Route>
+                          <Route
+                            exact
+                            path='/'
+                          >
+                            <Root />
+                          </Route>
+                        </Switch>
+                        <Toast />
+                      </PolymeshContext.Provider>
+                    </SigningReqContext.Provider>
+                  </MetadataReqContext.Provider>
+                </AuthorizeReqContext.Provider>
+              </AccountContext.Provider>
+            </SettingsContext.Provider>
+          </ActionContext.Provider>
+        </ActivityContext.Provider>
+      )}
     </Loading>
   );
 }

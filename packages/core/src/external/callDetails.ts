@@ -1,11 +1,12 @@
-import { Call } from '@polkadot/types/interfaces';
-import { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
-import { ResponsePolyCallDetails } from '@polymeshassociation/extension-core/background/types';
+import type { Call } from '@polkadot/types/interfaces';
+import type { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
+import type { ResponsePolyCallDetails } from '@polymeshassociation/extension-core/background/types';
+
 import { upperFirst } from 'lodash-es';
 
 import apiPromise from './apiPromise';
 
-async function callDetails(
+async function callDetails (
   request: SignerPayloadJSON,
   networkUrl: string
 ): Promise<ResponsePolyCallDetails> {
@@ -43,12 +44,12 @@ async function callDetails(
   }
 
   return {
-    protocolFee,
-    networkFee,
-    method,
-    section,
-    meta,
     args: humanArgs,
+    meta,
+    method,
+    networkFee,
+    protocolFee,
+    section
   };
 }
 

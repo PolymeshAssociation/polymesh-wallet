@@ -1,16 +1,16 @@
+/* eslint-disable sort-keys */
+import type { ThemeProps } from '@polymeshassociation/extension-ui/types';
+import type { Styles } from '../../styles/types';
+import type { ButtonIconPosition, ButtonProps } from './definitions';
+
 import { darken, transparentize } from 'polished';
 
-import { Styles } from '../../styles/types';
-import {
-  ButtonDefaultProps,
-  ButtonIconPosition,
-  ButtonProps,
-} from './definitions';
+import { ButtonDefaultProps } from './definitions';
 
-export const getVariant: Styles<ButtonProps> = ({
-  theme,
-  variant = ButtonDefaultProps.variant,
-}) =>
+interface Props extends ThemeProps, ButtonProps{}
+
+export const getVariant: Styles<Props> = ({ theme,
+  variant = ButtonDefaultProps.variant }: Props) =>
   ({
     primary: {
       backgroundColor: theme.colors.polyNavyBlue,
@@ -19,12 +19,12 @@ export const getVariant: Styles<ButtonProps> = ({
       height: '48px',
       '&:hover': {
         backgroundColor: theme.colors.polyNavyBlueDark,
-        boxShadow: theme.shadows[3],
+        boxShadow: theme.shadows[3]
       },
       '&:active': {
         backgroundColor: transparentize(0.2, theme.colors.polyNavyBlueDark),
-        boxShadow: theme.shadows[3],
-      },
+        boxShadow: theme.shadows[3]
+      }
     },
     secondary: {
       backgroundColor: theme.colors.white,
@@ -33,26 +33,26 @@ export const getVariant: Styles<ButtonProps> = ({
       height: '48px',
       '&:hover': {
         color: theme.colors.polyNavyBlue,
-        backgroundColor: theme.colors.polyNavyBlueLight1,
+        backgroundColor: theme.colors.polyNavyBlueLight1
       },
       '&:active': {
-        backgroundColor: darken(0.1, theme.colors.polyNavyBlueLight2),
+        backgroundColor: darken(0.1, theme.colors.polyNavyBlueLight2)
       },
       '&:disabled': {
         border: `1px solid ${theme.colors.gray7}`,
-        background: theme.colors.white,
-      },
+        background: theme.colors.white
+      }
     },
     ghost: {
       backgroundColor: 'transparent',
       color: theme.colors.highlightText,
       '&:hover': {
         color: theme.colors.highlightText,
-        backgroundColor: theme.colors.disabled,
+        backgroundColor: theme.colors.disabled
       },
       '&:disabled': {
-        backgroundColor: 'transparent',
-      },
+        backgroundColor: 'transparent'
+      }
     },
     ghostSecondary: {
       backgroundColor: 'transparent',
@@ -62,42 +62,42 @@ export const getVariant: Styles<ButtonProps> = ({
       '&:hover': {
         backgroundColor: 'transparent',
         color: 'currentColor',
-        opacity: 0.5,
+        opacity: 0.5
       },
       '&:disabled': {
-        opacity: 1,
-      },
+        opacity: 1
+      }
     },
     gray: {
       backgroundColor: theme.colors.gray[4],
       color: theme.colors.gray[1],
       '&:hover': {
         color: theme.colors.brandMain,
-        backgroundColor: theme.colors.brandLightest,
+        backgroundColor: theme.colors.brandLightest
       },
       '&:active': {
-        backgroundColor: darken(0.1, theme.colors.brandLightest),
-      },
+        backgroundColor: darken(0.1, theme.colors.brandLightest)
+      }
     },
     light: {
       backgroundColor: '#fff',
       color: theme.colors.gray[1],
       boxShadow: theme.shadows[2],
       '&:hover': {
-        backgroundColor: theme.colors.gray[4],
-      },
+        backgroundColor: theme.colors.gray[4]
+      }
     },
     transparent: {
-      backgroundColor: 'transparent',
+      backgroundColor: 'transparent'
     },
     outline: {
       backgroundColor: 'transparent',
       color: theme.colors.gray[0],
       borderColor: theme.colors.gray[0],
       borderStyle: 'solid',
-      borderRadius: 8,
+      borderRadius: 8
     },
-    raw: {},
+    raw: {}
   }[variant]);
 
 export const getIconStyle = (position: ButtonIconPosition) =>
@@ -105,5 +105,5 @@ export const getIconStyle = (position: ButtonIconPosition) =>
     top: 'Bottom',
     bottom: 'Top',
     left: 'Right',
-    right: 'Left',
+    right: 'Left'
   }[position]);

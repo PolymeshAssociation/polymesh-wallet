@@ -1,8 +1,9 @@
+import type { ThemeProps } from '../types';
+
 import React from 'react';
 import styled from 'styled-components';
 
 import warningImageSrc from '../assets/warning.svg';
-import { ThemeProps } from '../types';
 import Svg from './Svg';
 
 interface Props extends ThemeProps {
@@ -11,15 +12,19 @@ interface Props extends ThemeProps {
   isDanger?: boolean;
 }
 
-function Warning({
-  children,
+function Warning ({ children,
   className,
-  ...props
-}: Props): React.ReactElement<Props> {
+  ...props }: Props): React.ReactElement<Props> {
   return (
-    <div className={className} {...props}>
+    <div
+      className={className}
+      {...props}
+    >
       <div>
-        <Svg className="warningImage" src={warningImageSrc} />
+        <Svg
+          className='warningImage'
+          src={warningImageSrc}
+        />
       </div>
       <div>{children}</div>
     </div>

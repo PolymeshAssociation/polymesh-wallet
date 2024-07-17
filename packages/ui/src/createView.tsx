@@ -1,11 +1,15 @@
 import React, { Suspense } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HashRouter } from 'react-router-dom';
 
 import { ErrorFallback, View } from './components';
 
-export default function createView(
+const onReset = () => {
+  window.location.hash = '/';
+};
+
+export default function createView (
   Entry: React.ComponentType,
   rootId = 'root'
 ): void {
@@ -34,21 +38,18 @@ export default function createView(
     throw new Error(`Unable to find element with id '${rootId}'`);
   }
 
-  ReactDOM.render(
-    <Suspense fallback="...">
+  createRoot(rootElement).render(
+    <Suspense fallback='...'>
       <View>
         <HashRouter>
           <ErrorBoundary
             FallbackComponent={ErrorFallback}
-            onReset={() => {
-              window.location.hash = '/';
-            }}
+            onReset={onReset}
           >
             <Entry />
           </ErrorBoundary>
         </HashRouter>
       </View>
-    </Suspense>,
-    rootElement
+    </Suspense>
   );
 }

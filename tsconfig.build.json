@@ -1,6 +1,14 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "declaration": false
-  }
+    "composite": true
+  },
+  "files": [],
+  "references": [
+    { "path": "./packages/extension/tsconfig.build.json" },
+    { "path": "./packages/extension/tsconfig.spec.json" },
+    { "path": "./packages/core/tsconfig.build.json" },
+    { "path": "./packages/core/tsconfig.spec.json" },
+    { "path": "./packages/ui/tsconfig.build.json" },
+    { "path": "./packages/ui/tsconfig.spec.json" }
+  ]
 }

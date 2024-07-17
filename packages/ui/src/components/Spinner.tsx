@@ -1,19 +1,24 @@
+import type { ThemeProps } from '../types';
+
 import React from 'react';
 import styled from 'styled-components';
 
 import spinnerSrc from '../assets/spinner.png';
-import { ThemeProps } from '../types';
 
 interface Props extends ThemeProps {
   className?: string;
   size?: 'normal';
 }
 
-function Spinner({
-  className = '',
-  size = 'normal',
-}: Props): React.ReactElement<Props> {
-  return <img className={`${className} ${size}Size`} src={spinnerSrc} />;
+function Spinner ({ className = '',
+  size = 'normal' }: Props): React.ReactElement<Props> {
+  return (
+    <img
+      className={`${className} ${size}Size`}
+      src={spinnerSrc}
+    />
+  )
+  ;
 }
 
 export default React.memo(styled(Spinner)`
@@ -22,5 +27,4 @@ export default React.memo(styled(Spinner)`
   position: absolute;
   right: 0.75rem;
   width: 3rem;
-  z-index: ;
 `);

@@ -1,25 +1,17 @@
 // @TODO: remove commented out lines as part of clean up; once alias editing is no longer missed as a feature in the header.
-import { IdentifiedAccount } from '@polymeshassociation/extension-core/types';
-import { recodeAddress } from '@polymeshassociation/extension-core/utils';
-// import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymeshassociation/extension-ui/assets/images/icons';
-import {
-  AccountType,
-  PolymeshContext,
-} from '@polymeshassociation/extension-ui/components';
-import { CddStatus } from '@polymeshassociation/extension-ui/components/CddStatus';
 // import { renameIdentity } from '@polymeshassociation/extension-ui/messaging';
-import React, { FC, useContext } from 'react';
+import type { FC } from 'react';
+import type { IdentifiedAccount } from '@polymeshassociation/extension-core/types';
+
+import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 
-import {
-  Box,
-  Flex,
-  Heading,
-  LabelWithCopy,
-  Text,
-  TextEllipsis,
-  TextOverflowEllipsis,
-} from '../../ui';
+import { recodeAddress } from '@polymeshassociation/extension-core/utils';
+// import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { AccountType, PolymeshContext } from '@polymeshassociation/extension-ui/components';
+import { CddStatus } from '@polymeshassociation/extension-ui/components/CddStatus';
+
+import { Box, Flex, Heading, LabelWithCopy, Text, TextEllipsis, TextOverflowEllipsis } from '../../ui';
 import { formatAmount } from '../../util/formatters';
 
 export interface Props {
@@ -32,14 +24,12 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
   // const [editing, setEditing] = useState(false);
   // const [newAlias, setNewAlias] = useState('');
   // const [hover, setHover] = useState(false);
-  const {
-    networkState: { ss58Format },
-  } = useContext(PolymeshContext);
+  const { networkState: { ss58Format } } = useContext(PolymeshContext);
   // const onAction = useContext(ActionContext);
 
-  const showAccountDetails = () => {
+  const showAccountDetails = useCallback(() => {
     history.push(`/account/details/${account?.address}`);
-  };
+  }, [account?.address, history]);
 
   // const startEdit = () => {
   //   setHover(false);
@@ -113,86 +103,134 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
               </Box>
             </Flex>
           )} */}
-          <Box bg="polyPinkLight" borderRadius="2" py="xs">
+          <Box
+            bg='polyPinkLight'
+            borderRadius='2'
+            py='xs'
+          >
             {account && (
-              <Flex flexDirection="row" justifyContent="space-between" mx="1">
+              <Flex
+                flexDirection='row'
+                justifyContent='space-between'
+                mx='1'
+              >
                 <Flex>
-                  <Text color="polyIndigo" variant="b3m">
+                  <Text
+                    color='polyIndigo'
+                    variant='b3m'
+                  >
                     <TextEllipsis size={29}>{account?.did}</TextEllipsis>
                   </Text>
                 </Flex>
-                <CddStatus cdd={account.cdd} withText />
+                <CddStatus
+                  cdd={account.cdd}
+                  withText
+                />
               </Flex>
             )}
           </Box>
         </>
       )}
       {!account?.did && (
-        <Text color="brandLighter" variant="b2m">
+        <Text
+          color='brandLighter'
+          variant='b2m'
+        >
           Unassigned key
         </Text>
       )}
-      <Flex alignItems="flexStart" mt="s">
+      <Flex
+        alignItems='flexStart'
+        mt='s'
+      >
         <Box>
-          <TextOverflowEllipsis color="gray.0" maxWidth="206px" variant="b1m">
+          <TextOverflowEllipsis
+            color='gray.0'
+            maxWidth='206px'
+            variant='b1m'
+          >
             {account?.name}
           </TextOverflowEllipsis>
         </Box>
-        <Box ml="s">
+        <Box ml='s'>
           {account?.did && (
-            <AccountType keyType={account?.keyType} large={true} />
+            <AccountType
+              keyType={account?.keyType}
+              large={true}
+            />
           )}
         </Box>
       </Flex>
       <Flex>
         <LabelWithCopy
-          color="brandLightest"
-          hoverColor="brandLighter"
+          color='brandLightest'
+          hoverColor='brandLighter'
           text={
             account?.address ? recodeAddress(account.address, ss58Format) : ''
           }
           textSize={30}
-          textVariant="b3"
+          textVariant='b3'
         />
       </Flex>
-      <Flex alignItems="baseline" mt="m">
-        <Heading color="white" variant="h4">
+      <Flex
+        alignItems='baseline'
+        mt='m'
+      >
+        <Heading
+          color='white'
+          variant='h4'
+        >
           {formatAmount(account?.balance?.transferrable || 0)}
         </Heading>
-        <Box ml="8px">
-          <Heading color="white" variant="h5">
+        <Box ml='8px'>
+          <Heading
+            color='white'
+            variant='h5'
+          >
             POLYX
           </Heading>
         </Box>
       </Flex>
       <Flex>
-        <Text color="white" variant="b1">
+        <Text
+          color='white'
+          variant='b1'
+        >
           {formatAmount(account?.balance?.locked || 0)}
         </Text>
-        <Box ml="4px">
-          <Text color="white" variant="b1">
+        <Box ml='4px'>
+          <Text
+            color='white'
+            variant='b1'
+          >
             POLYX
           </Text>
         </Box>
-        <Box ml="8px">
-          <Text color="white" variant="b1">
+        <Box ml='8px'>
+          <Text
+            color='white'
+            variant='b1'
+          >
             locked
           </Text>
         </Box>
       </Flex>
       {details && (
-        <Box mt="m">
+        <Box mt='m'>
           <Flex
-            borderColor="gray.0"
-            borderRadius="100px"
-            borderStyle="solid"
+            borderColor='gray.0'
+            borderRadius='100px'
+            borderStyle='solid'
             borderWidth={1}
-            height="32px"
-            justifyContent="center"
+            height='32px'
+            justifyContent='center'
             onClick={showAccountDetails}
             style={{ cursor: 'pointer' }}
           >
-            <Text color="white" variant="b2m">
+            <Text
+              color='white'
+              variant='b2m'
+            >
               View details
             </Text>
           </Flex>

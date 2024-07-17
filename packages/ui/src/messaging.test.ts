@@ -23,8 +23,8 @@ describe('messaging sends message to background via extension port for', () => {
         message: 'pri(accounts.export)',
         request: {
           address: 'HjoBp62cvsWDA3vtNMWxz6c9q13ReEHi9UGHK7JbZweH5g5',
-          password: 'passw0rd',
-        },
+          password: 'passw0rd'
+        }
       })
     );
   });

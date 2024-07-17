@@ -1,40 +1,27 @@
-import styled, { DefaultTheme, StyledComponentProps } from 'styled-components';
-import {
-  color,
-  ColorProps,
-  fontFamily,
-  FontFamilyProps,
-  fontSize,
-  FontSizeProps,
-  fontWeight,
-  FontWeightProps,
-  letterSpacing,
-  LetterSpacingProps,
-  lineHeight,
-  LineHeightProps,
-  variant,
-} from 'styled-system';
+import type { CSSObject, DefaultTheme, StyledComponentProps } from 'styled-components';
+import type { ColorProps, FontFamilyProps, FontSizeProps, FontWeightProps, LetterSpacingProps, LineHeightProps } from 'styled-system';
+import type { TTextVariant } from '../../components/themeDefinitions';
+import type { BoxThemeProps } from '../Box';
 
-import {
-  TFontWeightCustom,
-  TTextVariant,
-} from '../../components/themeDefinitions';
-import { Box, BoxThemeProps } from '../Box';
+import styled from 'styled-components';
+import { color, fontFamily, fontSize, fontWeight, letterSpacing, lineHeight, variant } from 'styled-system';
+
+import { Box } from '../Box';
 
 const textStyle = variant({
-  key: 'texts',
+  key: 'texts'
 });
 
 export type Props = {
   variant?: TTextVariant;
-  fontWeight?: FontWeightProps['fontWeight'] | TFontWeightCustom;
+  fontWeight?: FontWeightProps['fontWeight'];
   bold?: boolean;
 } & BoxThemeProps &
-  ColorProps &
-  FontFamilyProps &
-  FontSizeProps &
-  LineHeightProps &
-  LetterSpacingProps;
+ColorProps &
+FontFamilyProps &
+FontSizeProps &
+LineHeightProps &
+LetterSpacingProps;
 
 export const TextComponent = styled(Box)<Props>(
   textStyle,
@@ -45,23 +32,28 @@ export const TextComponent = styled(Box)<Props>(
   fontSize,
   letterSpacing,
   (props) => ({
-    ...(props.bold && fontWeight({ ...props, fontWeight: 'bold' })),
-    overflowWrap: 'break-word',
+    ...(props.bold && fontWeight({ ...props, fontWeight: 'bold' }) as CSSObject),
+    overflowWrap: 'break-word'
   })
 );
 
+interface DefaultProps {
+  as: string;
+  variant: TTextVariant;
+}
+
 TextComponent.defaultProps = {
   as: 'span',
-  variant: 'b1',
-} as any;
+  variant: 'b1'
+} as DefaultProps;
 
 export const Text = Object.assign(TextComponent, {
-  defaultProps: TextComponent.defaultProps,
+  defaultProps: TextComponent.defaultProps
 });
 
 export type TextProps = StyledComponentProps<
-  typeof Text,
-  DefaultTheme,
-  Record<string, any>,
-  any
+  typeof TextComponent,
+DefaultTheme,
+Props,
+keyof DefaultProps
 >;

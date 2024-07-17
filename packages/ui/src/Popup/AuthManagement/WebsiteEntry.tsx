@@ -1,10 +1,9 @@
-import { AuthUrlInfo } from '@polkadot/extension-base/background/handlers/State';
-import {
-  SvgWeb,
-  SvgDelete,
-} from '@polymeshassociation/extension-ui/assets/images/icons';
-import { Box, Flex, Icon, Text } from '@polymeshassociation/extension-ui/ui';
+import type { AuthUrlInfo } from '@polkadot/extension-base/background/types';
+
 import React, { useCallback } from 'react';
+
+import { SvgDelete, SvgWeb } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { Box, Flex, Icon, Text } from '@polymeshassociation/extension-ui/ui';
 
 import { fontSizes } from '../../components/themeDefinitions';
 
@@ -14,21 +13,33 @@ interface Props {
   url: string;
 }
 
-function WebsiteEntry({ removeAuth, url }: Props): React.ReactElement<Props> {
+function WebsiteEntry ({ removeAuth, url }: Props): React.ReactElement<Props> {
   const remove = useCallback(() => {
     removeAuth(url);
   }, [removeAuth, url]);
 
   return (
-    <Box px="s">
-      <Flex direction="row">
+    <Box px='s'>
+      <Flex direction='row'>
         <Box pr={10}>
-          <Icon Asset={SvgWeb} color="primary" height={20} width={20} />
+          <Icon
+            Asset={SvgWeb}
+            color='primary'
+            height={20}
+            width={20}
+          />
         </Box>
-        <Text lineHeight={fontSizes[4]} style={{ flex: '1 1' }} variant="b2m">
+        <Text
+          lineHeight={fontSizes[4]}
+          style={{ flex: '1 1' }}
+          variant='b2m'
+        >
           {url}
         </Text>
-        <Box width="108px" style={{ textAlign: 'right' }}>
+        <Box
+          style={{ textAlign: 'right' }}
+          width='108px'
+        >
           <Icon
             Asset={SvgDelete}
             onClick={remove}

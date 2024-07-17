@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 
 import { AccountContext } from './';
 
@@ -12,17 +12,21 @@ interface Props {
   value?: string | null;
 }
 
-export default function Name({
-  address,
+export default function Name ({ address,
   className,
   onBlur,
   onChange,
-  value,
-}: Props): React.ReactElement<Props> {
+  value }: Props): React.ReactElement<Props> {
   const { accounts } = useContext(AccountContext);
 
   const account = accounts.find((account) => account.address === address);
   const startValue = value || account?.name;
+
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+
+    onChange(value);
+  }, [onChange]);
 
   return (
     <input
@@ -30,12 +34,8 @@ export default function Name({
       data-input-name
       defaultValue={startValue}
       onBlur={onBlur}
-      onChange={(event) => {
-        const value = event.target.value;
-
-        onChange(value);
-      }}
-      type="text"
+      onChange={handleChange}
+      type='text'
     />
   );
 }

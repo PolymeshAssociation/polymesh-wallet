@@ -1,9 +1,10 @@
-import React from 'react';
+import type { ThemeProps } from '../../types';
+
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 import ArrowLeftImage from '../../assets/arrowLeft.svg';
 import { Svg } from '../../components';
-import { ThemeProps } from '../../types';
 
 interface Props {
   className?: string;
@@ -17,30 +18,31 @@ interface ArrowProps extends ThemeProps {
   isActive: boolean;
 }
 
-function TransactionIndex({
-  className,
+function TransactionIndex ({ className,
   index,
   onNextClick,
   onPreviousClick,
-  totalItems,
-}: Props): React.ReactElement<Props> {
+  totalItems }: Props): React.ReactElement<Props> {
   const previousClickActive = index !== 0;
   const nextClickActive = index < totalItems - 1;
+
+  const handleLeftCLick = useCallback(() => previousClickActive && onPreviousClick(), [onPreviousClick, previousClickActive]);
+  const handleRightCLick = useCallback(() => nextClickActive && onNextClick(), [nextClickActive, onNextClick]);
 
   return (
     <div className={className}>
       <div>
-        <span className="currentStep">{index + 1}</span>
-        <span className="totalSteps">/{totalItems}</span>
+        <span className='currentStep'>{index + 1}</span>
+        <span className='totalSteps'>/{totalItems}</span>
       </div>
       <div>
         <ArrowLeft
           isActive={previousClickActive}
-          onClick={(): unknown => previousClickActive && onPreviousClick()}
+          onClick={handleLeftCLick}
         />
         <ArrowRight
           isActive={nextClickActive}
-          onClick={(): unknown => nextClickActive && onNextClick()}
+          onClick={handleRightCLick}
         />
       </div>
     </div>
@@ -48,7 +50,7 @@ function TransactionIndex({
 }
 
 const ArrowLeft = styled(Svg).attrs(() => ({
-  src: ArrowLeftImage,
+  src: ArrowLeftImage
 }))<ArrowProps>`
   display: inline-block;
   background: ${({ isActive, theme }: ArrowProps): string =>

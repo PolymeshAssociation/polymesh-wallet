@@ -1,16 +1,15 @@
-import { CDD } from '@polymeshassociation/extension-core/types';
-import {
-  SvgAlertCircle,
-  SvgCheckboxMarkedCircle,
-  SvgProgressClock,
-} from '@polymeshassociation/extension-ui/assets/images/icons';
-import { Flex, Icon, Text } from '@polymeshassociation/extension-ui/ui';
-import React, { FC } from 'react';
+import type { FC } from 'react';
+import type { CDD } from '@polymeshassociation/extension-core/types';
 
-type Props = {
+import React from 'react';
+
+import { SvgAlertCircle, SvgCheckboxMarkedCircle, SvgProgressClock } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { Flex, Icon, Text } from '@polymeshassociation/extension-ui/ui';
+
+interface Props {
   cdd?: CDD;
   withText?: boolean;
-};
+}
 
 type Status = 'checking' | 'unverified' | 'expired' | 'verified';
 
@@ -18,24 +17,24 @@ const statusText: Record<Status, string> = {
   checking: 'Checking...',
   expired: 'Expired',
   unverified: 'Not verified',
-  verified: 'Verified',
+  verified: 'Verified'
 };
 
 const statusColor: Record<Status, string> = {
   checking: 'warning',
   expired: 'alert',
   unverified: 'alert',
-  verified: 'success',
+  verified: 'success'
 };
 
 const statusIcon: Record<
-  Status,
-  React.ComponentType<React.SVGAttributes<SVGElement>>
+Status,
+React.ComponentType<React.SVGAttributes<SVGElement>>
 > = {
   checking: SvgProgressClock,
   expired: SvgAlertCircle,
   unverified: SvgAlertCircle,
-  verified: SvgCheckboxMarkedCircle,
+  verified: SvgCheckboxMarkedCircle
 };
 
 export const CddStatus: FC<Props> = ({ cdd, withText = false }) => {
@@ -43,14 +42,14 @@ export const CddStatus: FC<Props> = ({ cdd, withText = false }) => {
     cdd === undefined
       ? 'checking'
       : cdd === null
-      ? 'unverified'
-      : cdd.expiry && new Date(cdd.expiry) < new Date()
-      ? 'expired'
-      : 'verified';
+        ? 'unverified'
+        : cdd.expiry && new Date(cdd.expiry) < new Date()
+          ? 'expired'
+          : 'verified';
 
   return (
-    <Flex flexDirection="row">
-      <Flex mr="1">
+    <Flex flexDirection='row'>
+      <Flex mr='1'>
         <Icon
           Asset={statusIcon[status]}
           color={statusColor[status]}
@@ -60,7 +59,10 @@ export const CddStatus: FC<Props> = ({ cdd, withText = false }) => {
       </Flex>
       {withText && (
         <Flex>
-          <Text color={statusColor[status]} variant="b3m">
+          <Text
+            color={statusColor[status]}
+            variant='b3m'
+          >
             {statusText[status]}
           </Text>
         </Flex>

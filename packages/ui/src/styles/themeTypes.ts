@@ -1,6 +1,5 @@
-import { CSSObject, ThemedStyledProps } from 'styled-components';
-
-import { Theme } from '../types';
+import type { CSSObject, ThemedStyledProps } from 'styled-components';
+import type { Theme } from '../types';
 
 export type { StyledProps } from 'styled-components';
 
@@ -12,9 +11,7 @@ export type Styles<P = Record<string, unknown>> = (
   props: ThemedStyledProps<P, Theme>
 ) => CSSObject;
 
-export interface Scale<TValue> {
-  [id: string]: TValue;
-}
+export type Scale<TValue> = Record<string, TValue>;
 
 export interface Breakpoints<T> {
   sm?: T;
@@ -23,6 +20,6 @@ export interface Breakpoints<T> {
   xl?: T;
 }
 
-export type ResponsiveValue<T> = T | Array<T | null> | Breakpoints<T>;
+export type ResponsiveValue<T> = T | (T | null)[] | Breakpoints<T>;
 
-export type ScaleProps = { scale?: number };
+export interface ScaleProps { scale?: number }

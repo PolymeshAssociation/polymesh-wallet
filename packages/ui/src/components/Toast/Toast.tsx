@@ -1,17 +1,17 @@
+import type { ThemeProps } from '../../types';
+
 import React from 'react';
 import styled from 'styled-components';
 
-import { ThemeProps } from '../../types';
-
 interface Props {
-  content: React.ReactChild;
+  content: string;
   className?: string;
 }
 
-function Toast({ className, content }: Props): React.ReactElement<Props> {
+function Toast ({ className, content }: Props): React.ReactElement<Props> {
   return (
     <div className={className}>
-      <p className="snackbar-content">{content}</p>
+      <p className='snackbar-content'>{content}</p>
     </div>
   );
 }
@@ -30,6 +30,6 @@ export default styled(Toast)<{ visible: boolean }>`
     margin: auto;
     border-radius: 25px;
     background: ${({ theme }: ThemeProps): string =>
-      theme.highlightedAreaBackground};
+    theme.highlightedAreaBackground};
   }
 `;

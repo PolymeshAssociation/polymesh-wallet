@@ -1,4 +1,5 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
+
 import { typesBundle } from '@polymeshassociation/polymesh-types';
 
 import { apiConnTimeout } from '../../constants';
@@ -9,10 +10,12 @@ let currentNetworkUrl: string;
 
 const metadata: Record<string, `0x${string}`> = {};
 
-async function apiPromise(networkUrl: string): Promise<ApiPromise> {
+async function apiPromise (networkUrl: string): Promise<ApiPromise> {
   const shouldReinitialize = currentNetworkUrl !== networkUrl;
 
-  if (!shouldReinitialize && api && provider?.isConnected) return api;
+  if (!shouldReinitialize && api && provider?.isConnected) {
+    return api;
+  }
 
   currentNetworkUrl = networkUrl;
 
@@ -45,10 +48,10 @@ async function apiPromise(networkUrl: string): Promise<ApiPromise> {
   unsubscribe();
 
   api = await ApiPromise.create({
-    provider,
-    typesBundle,
     metadata,
     noInitWarn: true,
+    provider,
+    typesBundle
   });
 
   await api.isReadyOrError;
@@ -61,7 +64,7 @@ async function apiPromise(networkUrl: string): Promise<ApiPromise> {
   return api;
 }
 
-export async function disconnect(): Promise<void> {
+export async function disconnect (): Promise<void> {
   if (api) {
     try {
       await api.disconnect();

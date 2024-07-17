@@ -1,11 +1,12 @@
-import React, { FC, useCallback, useRef, useState } from 'react';
+import type { FC } from 'react';
+import type { BaseInputProps } from './BaseInputProps';
 
-import { BaseInputProps } from './BaseInputProps';
+import React, { useCallback, useRef, useState } from 'react';
+
 import { Icon, Input, Unit, Wrapper } from './styles';
 
 export const BaseInput: FC<BaseInputProps> = (props) => {
-  const {
-    blurOnEnterKeyPress,
+  const { blurOnEnterKeyPress,
     className,
     disabled,
     icon,
@@ -15,46 +16,51 @@ export const BaseInput: FC<BaseInputProps> = (props) => {
     onFocus,
     readOnly,
     unit,
-    ...restProps
-  } = props;
+    ...restProps } = props;
 
   const inputRefInternal = useRef<HTMLInputElement>(null);
   const inputRef = inputRefFromProps || inputRefInternal;
 
   const [focused, setFocusedState] = useState(false);
   const handleBlur = useCallback(
-    (e: any) => {
-      if (onBlur) onBlur(e);
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      if (onBlur) {
+        onBlur(e);
+      }
+
       setFocusedState(false);
     },
     [onBlur, setFocusedState]
   );
 
   const handleFocus = useCallback(
-    (e: any) => {
-      if (onFocus) onFocus(e);
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      if (onFocus) {
+        onFocus(e);
+      }
+
       setFocusedState(true);
     },
     [onFocus, setFocusedState]
   );
 
-  const handleKeyPress = blurOnEnterKeyPress
+  const handleKeyPress = useCallback(() => blurOnEnterKeyPress
     ? (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
+      if (e.key === 'Enter') {
+        e.preventDefault();
 
-          if (typeof inputRef === 'object' && inputRef && inputRef.current) {
-            inputRef.current.blur();
-          }
+        if (typeof inputRef === 'object' && inputRef?.current) {
+          inputRef.current.blur();
         }
       }
-    : undefined;
+    }
+    : undefined, [blurOnEnterKeyPress, inputRef]);
 
   return (
-    <Wrapper {...{ focused, disabled, invalid, readOnly, className }}>
+    <Wrapper {...{ className, disabled, focused, invalid, readOnly }}>
       {icon && <Icon>{icon}</Icon>}
       <Input
-        data-testid="base-input"
+        data-testid='base-input'
         disabled={disabled}
         onBlur={handleBlur}
         onFocus={handleFocus}

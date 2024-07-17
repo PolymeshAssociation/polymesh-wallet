@@ -32,8 +32,8 @@ describe('Wallet', () => {
       args: [
         '--no-sandbox', // to get around this issue https://github.com/puppeteer/puppeteer/issues/3698
         `--disable-extensions-except=${pathToExtension}`,
-        `--load-extension=${pathToExtension}`,
-      ],
+        `--load-extension=${pathToExtension}`
+      ]
     });
 
     const targets = await browser.targets();
@@ -63,7 +63,7 @@ describe('Wallet', () => {
     describe('Import an unverified key using seed phrase', () => {
       it('Accept agreement checkboxes', async () => {
         await page.waitForSelector('div#agreement-checkboxes', {
-          visible: true,
+          visible: true
         });
 
         await page.evaluate(() => {
@@ -102,7 +102,7 @@ describe('Wallet', () => {
 
         await Promise.all([
           page.waitForNavigation(),
-          (await page.waitForXPath("//button[contains(., 'Restore')]")).click(),
+          (await page.waitForXPath("//button[contains(., 'Restore')]")).click()
         ]);
       });
 
@@ -122,7 +122,7 @@ describe('Wallet', () => {
               '//*[@id="option-selector-portal"]/div/ul/li[2]'
             )
           ).click(),
-          page.waitForNavigation(),
+          page.waitForNavigation()
         ]);
 
         expectHashToEqual(page, importSeedHash);
@@ -144,7 +144,7 @@ describe('Wallet', () => {
 
         await Promise.all([
           page.waitForNavigation(),
-          (await page.waitForXPath("//button[contains(., 'Restore')]")).click(),
+          (await page.waitForXPath("//button[contains(., 'Restore')]")).click()
         ]);
       });
 
@@ -277,7 +277,7 @@ describe('Wallet', () => {
         (
           await page.waitForXPath("//span[contains(., 'Change password')]")
         ).click(),
-        page.waitForNavigation(),
+        page.waitForNavigation()
       ]);
 
       expectHashToEqual(page, passChangePath);

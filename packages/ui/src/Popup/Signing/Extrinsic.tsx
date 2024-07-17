@@ -1,13 +1,15 @@
-import { SignerPayloadJSON } from '@polkadot/types/types';
-import { ResponsePolyCallDetails } from '@polymeshassociation/extension-core/background/types';
+import type { SignerPayloadJSON } from '@polkadot/types/types';
+import type { ResponsePolyCallDetails } from '@polymeshassociation/extension-core/background/types';
+
+// import { genesisToNetworkName } from '@polymeshassociation/extension-ui/util/chains';
+import React, { useEffect, useState } from 'react';
+
 // import { networkLabels } from '@polymeshassociation/extension-core/constants';
 // import { SvgAlertCircle } from '@polymeshassociation/extension-ui/assets/images/icons';
 // import { PolymeshContext } from '@polymeshassociation/extension-ui/components';
 import { getPolyCallDetails } from '@polymeshassociation/extension-ui/messaging';
 // import { Box, Flex, Icon, Loading, Text } from '@polymeshassociation/extension-ui/ui';
 import { Flex, Loading } from '@polymeshassociation/extension-ui/ui';
-// import { genesisToNetworkName } from '@polymeshassociation/extension-ui/util/chains';
-import React, { useEffect, useState } from 'react';
 
 // import { toast } from 'react-toastify';
 import Method from './Method';
@@ -18,7 +20,7 @@ interface Props {
   request: SignerPayloadJSON;
 }
 
-function Extrinsic({ request }: Props): React.ReactElement<Props> {
+function Extrinsic ({ request }: Props): React.ReactElement<Props> {
   // const { networkState: { selected: selectedNetwork } } = useContext(PolymeshContext);
   const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
   const [loading, setLoading] = useState(false);
@@ -84,7 +86,11 @@ function Extrinsic({ request }: Props): React.ReactElement<Props> {
   return (
     <>
       {loading && (
-        <Flex alignItems="center" justifyContent="center" my="l">
+        <Flex
+          alignItems='center'
+          justifyContent='center'
+          my='l'
+        >
           <Loading />
         </Flex>
       )}

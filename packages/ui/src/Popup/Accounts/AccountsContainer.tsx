@@ -1,26 +1,14 @@
-import React, { FC, useContext, useState, KeyboardEvent } from 'react';
-import { IdentifiedAccount } from '@polymeshassociation/extension-core/types';
-import {
-  SvgCheck,
-  SvgPencilOutline,
-  SvgWindowClose,
-} from '@polymeshassociation/extension-ui/assets/images/icons';
-import {
-  ActionContext,
-  PolymeshContext,
-} from '@polymeshassociation/extension-ui/components';
+import type { FC, KeyboardEvent } from 'react';
+
+import React, { useCallback, useContext, useState } from 'react';
+
+import { DidType, type IdentifiedAccount } from '@polymeshassociation/extension-core/types';
+import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { ActionContext, PolymeshContext } from '@polymeshassociation/extension-ui/components';
 import { CddStatus } from '@polymeshassociation/extension-ui/components/CddStatus';
 import { renameIdentity } from '@polymeshassociation/extension-ui/messaging';
 
-import {
-  Box,
-  Flex,
-  Icon,
-  LabelWithCopy,
-  Text,
-  TextInput,
-  TextOverflowEllipsis,
-} from '../../ui';
+import { Box, Flex, Icon, LabelWithCopy, Text, TextInput, TextOverflowEllipsis } from '../../ui';
 import { AccountView } from './AccountView';
 
 export interface Props {
@@ -30,11 +18,9 @@ export interface Props {
   headerColor: string;
 }
 
-export const AccountsContainer: FC<Props> = ({
-  accounts,
+export const AccountsContainer: FC<Props> = ({ accounts,
   did,
-  selectedAccount,
-}) => {
+  selectedAccount }) => {
   const currentAccount = accounts.find((acc) => acc.did === did);
 
   const [hover, setHover] = useState(false);
@@ -43,27 +29,11 @@ export const AccountsContainer: FC<Props> = ({
     currentAccount?.didAlias ? currentAccount.didAlias : ''
   );
   const onAction = useContext(ActionContext);
-  const {
-    networkState: { selected: network },
-  } = useContext(PolymeshContext);
+  const { networkState: { selected: network } } = useContext(PolymeshContext);
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') saveAlias();
-    else if (e.key === 'Escape') stopEditAlias();
-  };
+  const stopEditAlias = useCallback(() => setIsEditing(false), []);
 
-  const editAlias = () => {
-    setHover(false);
-    setIsEditing(true);
-  };
-
-  const stopEditAlias = () => setIsEditing(false);
-
-  const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewAlias(e.target.value);
-  };
-
-  const saveAlias = async () => {
+  const saveAlias = useCallback(async () => {
     if (!currentAccount?.did || !network) {
       return;
     }
@@ -71,31 +41,54 @@ export const AccountsContainer: FC<Props> = ({
     await renameIdentity(currentAccount?.did, newAlias);
     stopEditAlias();
     onAction();
-  };
+  }, [currentAccount?.did, network, newAlias, onAction, stopEditAlias]);
 
-  const mouseEnter = () => setHover(true);
+  const handleKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      saveAlias().catch((err) => console.error('Error saving alias: ', err));
+    } else if (e.key === 'Escape') {
+      stopEditAlias();
+    }
+  }, [saveAlias, stopEditAlias]);
 
-  const mouseLeave = () => setHover(false);
+  const editAlias = useCallback(() => {
+    setHover(false);
+    setIsEditing(true);
+  }, []);
+
+  const handleAliasChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewAlias(e.target.value);
+  }, []);
+
+  const mouseEnter = useCallback(() => setHover(true), []);
+
+  const mouseLeave = useCallback(() => setHover(false), []);
 
   const renderContainerHeader = (isAssigned: boolean) => {
     if (isAssigned) {
       return (
-        <Box bg="polyPinkLight" borderRadius="2" mt="xs" mx="s" px="s">
+        <Box
+          bg='polyPinkLight'
+          borderRadius='2'
+          mt='xs'
+          mx='s'
+          px='s'
+        >
           {isEditing && (
-            <Flex py="xxs">
+            <Flex py='xxs'>
               <TextInput
                 autoFocus
                 defaultValue={currentAccount?.didAlias}
                 onChange={handleAliasChange}
                 onKeyDown={handleKeyDown}
-                placeholder="Your Polymesh Account"
+                placeholder='Your Polymesh Account'
                 style={{ height: '18px' }}
                 tight
                 value={newAlias}
               />
               <Icon
                 Asset={SvgCheck}
-                color="polyPink"
+                color='polyPink'
                 height={20}
                 onClick={saveAlias}
                 style={{ cursor: 'pointer' }}
@@ -103,7 +96,7 @@ export const AccountsContainer: FC<Props> = ({
               />
               <Icon
                 Asset={SvgWindowClose}
-                color="polyPink"
+                color='polyPink'
                 height={20}
                 onClick={stopEditAlias}
                 style={{ cursor: 'pointer' }}
@@ -113,34 +106,34 @@ export const AccountsContainer: FC<Props> = ({
           )}
           {!isEditing && (
             <Flex
-              alignItems="center"
-              flexDirection="row"
-              justifyContent="space-between"
+              alignItems='center'
+              flexDirection='row'
+              justifyContent='space-between'
               onMouseEnter={mouseEnter}
               onMouseLeave={mouseLeave}
             >
-              <Flex alignItems="center">
+              <Flex alignItems='center'>
                 {!!currentAccount?.didAlias && (
                   <TextOverflowEllipsis
-                    color="polyIndigo"
-                    maxWidth="140px"
-                    variant="b3m"
+                    color='polyIndigo'
+                    maxWidth='140px'
+                    variant='b3m'
                   >
                     {currentAccount.didAlias}
                   </TextOverflowEllipsis>
                 )}
                 <Box {...(!!currentAccount?.didAlias && { ml: 's' })}>
                   <LabelWithCopy
-                    color="polyIndigo"
+                    color='polyIndigo'
+                    placement='top'
                     text={did}
                     textSize={currentAccount?.didAlias ? 20 : 30}
-                    textVariant="b3m"
-                    placement="top"
+                    textVariant='b3m'
                   />
                 </Box>
               </Flex>
               <Flex>
-                <Flex mr="xs">
+                <Flex mr='xs'>
                   <Icon
                     Asset={SvgPencilOutline}
                     color={hover ? 'polyPink' : 'polyPinkLight'}
@@ -158,8 +151,11 @@ export const AccountsContainer: FC<Props> = ({
       );
     } else {
       return (
-        <Box mx="s">
-          <Text color="gray1" variant="b2m">
+        <Box mx='s'>
+          <Text
+            color='gray1'
+            variant='b2m'
+          >
             Unassigned keys
           </Text>
         </Box>
@@ -171,7 +167,7 @@ export const AccountsContainer: FC<Props> = ({
     return (
       <>
         {accounts
-          .sort((a) => (a.keyType === 'primary' ? -1 : 1))
+          .sort((a) => (a.keyType === DidType.primary ? -1 : 1))
           .map((account: IdentifiedAccount, index) => {
             return (
               <AccountView
@@ -186,7 +182,14 @@ export const AccountsContainer: FC<Props> = ({
   };
 
   return (
-    <Box bg="white" borderRadius="3" boxShadow="3" m="m" pb="xs" pt="xs">
+    <Box
+      bg='white'
+      borderRadius='3'
+      boxShadow='3'
+      m='m'
+      pb='xs'
+      pt='xs'
+    >
       {renderContainerHeader(accounts[0].did !== undefined)}
       {renderAccounts()}
     </Box>

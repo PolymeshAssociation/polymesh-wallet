@@ -1,6 +1,8 @@
-import { RefObject, useCallback, useEffect } from 'react';
+import type { RefObject } from 'react';
 
-export default function useOutsideClick(
+import { useCallback, useEffect } from 'react';
+
+export default function useOutsideClick (
   ref: RefObject<HTMLDivElement>,
   callback: () => void
 ): void {

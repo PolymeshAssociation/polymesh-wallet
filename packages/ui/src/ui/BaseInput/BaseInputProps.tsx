@@ -1,4 +1,5 @@
-import { InputHTMLAttributes } from 'react';
+import type React from 'react';
+import type { InputHTMLAttributes } from 'react';
 
 export interface BaseInputProps extends InputHTMLAttributes<HTMLInputElement> {
   unit?: React.ReactNode;

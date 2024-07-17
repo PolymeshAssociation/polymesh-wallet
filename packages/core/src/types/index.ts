@@ -1,6 +1,6 @@
-import { Unsubcall } from '@polkadot/extension-inject/types';
-import { Call } from '@polkadot/types/interfaces';
-import { AnyJson } from '@polkadot/types/types';
+import type { Unsubcall } from '@polkadot/extension-inject/types';
+import type { Call } from '@polkadot/types/interfaces';
+import type { AnyJson } from '@polkadot/types/types';
 
 export enum DidType {
   primary = 'primary',
@@ -8,29 +8,29 @@ export enum DidType {
   multisig = 'multisig'
 }
 
-export type AccountBalances = {
+export interface AccountBalances {
   total: string;
   transferrable: string;
   locked: string;
-};
+}
 
-export type AccountData = {
+export interface AccountData {
   address: string;
   didType?: DidType;
   name?: string;
   balance?: AccountBalances;
-};
+}
 
-export type IdentityData = {
+export interface IdentityData {
   cdd?: CDD;
   did: string;
   priKey: string;
   secKeys?: string[];
   msKeys?: string[];
   alias?: string;
-};
+}
 
-export type IdentifiedAccount = {
+export interface IdentifiedAccount {
   name?: string;
   did?: string;
   keyType?: DidType;
@@ -43,13 +43,13 @@ export type IdentifiedAccount = {
     transferrable: string;
     locked: string;
   };
-};
+}
 
 export type UnsubCallback = () => void;
 
 export type ReversedDidList = Record<
-  string,
-  { did: string; keyType: DidType; cdd?: CDD; didAlias: string }
+string,
+{ did: string; keyType: DidType; cdd?: CDD; didAlias: string }
 >;
 
 export enum NetworkName {
@@ -70,28 +70,28 @@ export type CDD = null | {
   expiry?: number;
 };
 
-export type NetworkState = {
+export interface NetworkState {
   selected: NetworkName;
   ss58Format: number;
   isDeveloper: boolean;
   customNetworkUrl: string;
-};
+}
 
-export type NetworkMeta = {
+export interface NetworkMeta {
   name: NetworkName;
   label?: string;
   wssUrl: string;
-};
+}
 
 export interface InjectedNetwork {
   get: () => Promise<NetworkMeta>;
   subscribe: (cb: (network: NetworkMeta) => void) => Unsubcall;
 }
 
-export type KeyringAccountData = {
+export interface KeyringAccountData {
   address: string;
   name?: string;
-};
+}
 
 export interface Decoded {
   args: AnyJson;
@@ -104,13 +104,13 @@ export enum ErrorCodes {
   Offline = 'Offline',
 }
 
-export type Error = {
+export interface Error {
   code: ErrorCodes;
   msg: string;
-};
+}
 
-export type StoreStatus = {
+export interface StoreStatus {
   error: Error | null;
   apiStatus: 'ready' | 'connecting' | 'error';
   populated: Record<string, boolean>;
-};
+}

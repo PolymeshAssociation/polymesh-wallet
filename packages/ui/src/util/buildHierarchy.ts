@@ -1,15 +1,12 @@
-import {
-  AccountJson,
-  AccountWithChildren,
-} from '@polkadot/extension-base/background/types';
+import type { AccountJson, AccountWithChildren } from '@polkadot/extension-base/background/types';
 
 type ChildFilter = (account: AccountJson) => AccountWithChildren;
 
-function compareByCreationTime(a: AccountJson, b: AccountJson): number {
+function compareByCreationTime (a: AccountJson, b: AccountJson): number {
   return (a.whenCreated || Infinity) - (b.whenCreated || Infinity);
 }
 
-export function accountWithChildren(accounts: AccountJson[]): ChildFilter {
+export function accountWithChildren (accounts: AccountJson[]): ChildFilter {
   return (account: AccountJson): AccountWithChildren => {
     const children = accounts
       .filter(({ parentAddress }) => account.address === parentAddress)
@@ -20,7 +17,7 @@ export function accountWithChildren(accounts: AccountJson[]): ChildFilter {
   };
 }
 
-export function buildHierarchy(accounts: AccountJson[]): AccountWithChildren[] {
+export function buildHierarchy (accounts: AccountJson[]): AccountWithChildren[] {
   return accounts
     .filter(
       ({ parentAddress }) =>

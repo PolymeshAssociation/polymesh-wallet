@@ -1,6 +1,9 @@
-import { Text } from '@polymeshassociation/extension-ui/ui';
-import React, { ComponentProps, FC } from 'react';
+import type { ComponentProps, FC } from 'react';
+
+import React from 'react';
 import styled from 'styled-components';
+
+import { Text } from '@polymeshassociation/extension-ui/ui';
 
 export const EllipsiedText = styled(Text)`
   display: inline-block;

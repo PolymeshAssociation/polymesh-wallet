@@ -1,8 +1,10 @@
+import type { ThemeProps } from '../types';
+import type { ResultType, Validator } from '../util/validators';
+
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { ThemeProps } from '../types';
-import { Result, Validator } from '../util/validators';
+import { Result } from '../util/validators';
 
 interface BasicProps {
   isError?: boolean;
@@ -18,31 +20,24 @@ type Props<T extends BasicProps> = T & {
   defaultValue?: string;
 };
 
-function ValidatedInput<T extends Record<string, unknown>>({
-  className,
+function ValidatedInput<T extends Record<string, unknown>> ({ className,
   component: Input,
   defaultValue,
   onValidatedChange,
   validator,
-  ...props
-}: Props<T>): React.ReactElement<Props<T>> {
+  ...props }: Props<T>): React.ReactElement<Props<T>> {
   const [value, setValue] = useState(defaultValue || '');
-  const [wasMounted, setWasMounted] = useState(false);
-  const [validationResult, setValidationResult] = useState<Result<string>>(
+  const [validationResult, setValidationResult] = useState<ResultType<string>>(
     Result.ok('')
   );
 
   useEffect(() => {
-    if (!wasMounted) {
-      setWasMounted(true);
-    }
-
     (async (): Promise<void> => {
       const result = await validator(value);
 
       setValidationResult(result);
       onValidatedChange(Result.isOk(result) ? value : null);
-    })();
+    })().catch(console.error);
   }, [value, validator, onValidatedChange]);
 
   return (

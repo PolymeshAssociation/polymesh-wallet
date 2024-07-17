@@ -1,6 +1,7 @@
-import styled, { keyframes } from 'styled-components';
+import type { ThemeProps } from '@polymeshassociation/extension-ui/types';
+import type { LoadingProps } from './types';
 
-import { LoadingProps } from './types';
+import styled, { keyframes } from 'styled-components';
 
 const spin = keyframes`
   0% {
@@ -50,7 +51,7 @@ export const Wrapper = styled.div<LoadingProps>`
   span:before {
     content: '';
     border-width: ${({ small }) => (small ? '2px' : '5px')};
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme }: ThemeProps) => theme.colors.primary};
     border-style: solid;
     border-right-color: transparent;
     animation: 4s ${mask} infinite linear;

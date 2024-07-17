@@ -1,16 +1,14 @@
-import { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
-import { SvgAlertCircle } from '@polymeshassociation/extension-ui/assets/images/icons';
-import { truncateString } from '@polymeshassociation/extension-ui/util/formatters';
+import type { RequestAuthorizeTab } from '@polkadot/extension-base/background/types';
+import type { ThemeProps } from '../../types';
+
 import React, { useCallback, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 
-import {
-  ActionContext,
-  PolymeshContext,
-  AccountContext,
-} from '../../components';
+import { SvgAlertCircle } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { truncateString } from '@polymeshassociation/extension-ui/util/formatters';
+
+import { AccountContext, ActionContext, PolymeshContext } from '../../components';
 import { approveAuthRequest, deleteAuthRequest } from '../../messaging';
-import { ThemeProps } from '../../types';
 import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
 import { AccountMain } from '../Accounts/AccountMain';
 
@@ -22,12 +20,10 @@ interface Props {
   url: string;
 }
 
-function Request({
-  authId,
+function Request ({ authId,
   isFirst,
   request: { origin },
-  url,
-}: Props): React.ReactElement<Props> {
+  url }: Props): React.ReactElement<Props> {
   const { selectedAccounts = [], setSelectedAccounts } =
     useContext(AccountContext);
   const onAction = useContext(ActionContext);
@@ -38,75 +34,95 @@ function Request({
   }, [setSelectedAccounts]);
 
   const _onApprove = useCallback(
-    () =>
+    () => {
       approveAuthRequest(authId, selectedAccounts)
         .then(() => onAction())
-        .catch((error: Error) => console.error(error)),
+        .catch((error: Error) => console.error(error));
+    },
     [authId, onAction, selectedAccounts]
   );
 
   const _onReject = useCallback(
-    () =>
+    () => {
       deleteAuthRequest(authId)
         .then(() => onAction())
-        .catch((error: Error) => console.error(error)),
-    [authId, onAction]
-  );
+        .catch((error: Error) => console.error(error));
+    }, [authId, onAction]);
 
   return (
     <>
       <Flex
         flex={1}
-        flexDirection="column"
-        justifyContent="space-between"
+        flexDirection='column'
+        justifyContent='space-between'
         style={{ height: '100%', ...(isFirst ? {} : { display: 'none' }) }}
       >
         <Box>
           <Header>
             {currentAccount && (
-              <AccountMain account={currentAccount} details={false} />
+              <AccountMain
+                account={currentAccount}
+                details={false}
+              />
             )}
           </Header>
-
           <Box>
-            <Box mt="m" mx="s">
-              <Heading mb={1} variant="h5">
+            <Box
+              mt='m'
+              mx='s'
+            >
+              <Heading
+                mb={1}
+                variant='h5'
+              >
                 {'An application is requesting access'}
               </Heading>
-              <Text color="gray.2" variant="b2">
+              <Text
+                color='gray.2'
+                variant='b2'
+              >
                 An application, self-identifying as{' '}
                 <strong>{truncateString(origin, 40)}</strong> is requesting
                 access from{' '}
-                <a href={url} rel="noopener noreferrer" target="_blank">
-                  <span className="tab-url">{new URL(url).hostname}</span>
+                <a
+                  href={url}
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
+                  <span className='tab-url'>{new URL(url).hostname}</span>
                 </a>
                 .
               </Text>
             </Box>
-
-            <Box pt="m">
+            <Box pt='m'>
               <Box
-                borderColor="gray.4"
+                borderColor='gray.4'
                 borderRadius={3}
-                borderStyle="solid"
+                borderStyle='solid'
                 borderWidth={2}
-                m="xs"
-                p="s"
+                m='xs'
+                p='s'
               >
                 <Flex>
                   <Icon
                     Asset={SvgAlertCircle}
-                    color="warning"
+                    color='warning'
                     height={20}
                     width={20}
                   />
-                  <Box ml="s">
-                    <Text color="warning" variant="b3m">
+                  <Box ml='s'>
+                    <Text
+                      color='warning'
+                      variant='b3m'
+                    >
                       Attention
                     </Text>
                   </Box>
                 </Flex>
-                <Text color="gray.1" variant="b2m">
+                <Text
+                  color='gray.1'
+                  variant='b2m'
+                >
                   Only approve this request if you trust the application. By
                   approving this connection, you may give the application access
                   to the key addresses of your accounts.
@@ -115,15 +131,30 @@ function Request({
             </Box>
           </Box>
         </Box>
-        <Flex mb="s" px="s" style={{ width: '100%' }}>
+        <Flex
+          mb='s'
+          px='s'
+          style={{ width: '100%' }}
+        >
           <Flex flex={1}>
-            <Button fluid onClick={_onReject} variant="secondary">
+            <Button
+              fluid
+              onClick={_onReject}
+              variant='secondary'
+            >
               Reject
             </Button>
           </Flex>
           {isFirst && (
-            <Flex flex={1} ml="xs">
-              <Button fluid onClick={_onApprove} type="submit">
+            <Flex
+              flex={1}
+              ml='xs'
+            >
+              <Button
+                fluid
+                onClick={_onApprove}
+                type='submit'
+              >
                 Authorize
               </Button>
             </Flex>

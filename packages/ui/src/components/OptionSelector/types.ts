@@ -1,29 +1,31 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export type OptionLabel = string | JSX.Element;
+import type React from 'react';
 
-export type OptionItem = {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type OptionLabel = string | React.ReactElement;
+
+export interface OptionItem {
   label: OptionLabel;
   value: any;
-  icon?: JSX.Element;
+  icon?: React.ReactElement;
   disabled?: boolean;
-};
+}
 
-export type Option = {
+export interface Option {
   category?: string;
   menu: OptionItem[];
   submenu?: React.ReactNode;
-};
+}
 
 export type PositionType = 'context' | 'bottom-left' | 'bottom-right';
 
-export type CssPosition = {
+export interface CssPosition {
   top?: number;
   right?: number;
   bottom?: number;
   left?: number;
-};
+}
 
-export type Coordinates = {
+export interface Coordinates {
   x: number;
   y: number;
-};
+}

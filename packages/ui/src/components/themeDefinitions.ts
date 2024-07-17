@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 /* eslint-disable prefer-destructuring */
 import { darken } from 'polished';
 
@@ -5,7 +6,7 @@ export const breakpoints = {
   sm: 0,
   md: '42.5em', // 680px
   lg: '64em', // 1024px
-  xl: '80em', // 1280px
+  xl: '80em' // 1280px
 };
 
 export const fontSizes = {
@@ -20,17 +21,17 @@ export const fontSizes = {
   8: '2.625rem', // 42px
   9: '3rem', // 48px
   10: '3.75rem', // 60px,
-  baseText: '1rem',
+  baseText: '1rem'
 };
 
 export const borderWidths = {
   0: '0px',
-  1: '1px',
+  1: '1px'
 };
 
 export const fontFamilies = {
   baseText: 'Poppins',
-  code: 'CodeFont, monospace, sans-serif',
+  code: 'CodeFont, monospace, sans-serif'
 };
 
 export const lineHeights = {
@@ -43,7 +44,7 @@ export const lineHeights = {
   loose: '1.75rem', // 28px
   medium: '2.1rem', // 33.6px
   large: '2.975', // 47.6px
-  xlarge: '4.2rem', // 67.2px
+  xlarge: '4.2rem' // 67.2px
 };
 
 export type TFontWeightCustom =
@@ -58,7 +59,7 @@ export const fontWeights = {
   normal: 400,
   semiBold: 500,
   bold: 600,
-  strong: 700,
+  strong: 700
 };
 
 export const space = {
@@ -101,7 +102,7 @@ export const space = {
   '-xxl': '-80px',
   '-xxxl': '-120px',
   '-formGap': '-21px',
-  '-gridGap': '-24px',
+  '-gridGap': '-24px'
 };
 
 export const zIndexes = {
@@ -109,7 +110,7 @@ export const zIndexes = {
   sidebar: 100,
   modals: 120,
   selects: 140,
-  tooltips: 9999,
+  tooltips: 9999
 };
 
 const _colors = {
@@ -152,11 +153,11 @@ const _colors = {
   info: '#2574B5',
   green: ['#00AA5E', '#0B6B40', '#D4F7E7'],
   yellow: ['#EFC100', '#FBF3D0', '#E3A30C'],
-  red: ['#DB2C3E', '#FAE6E8'],
+  red: ['#DB2C3E', '#FAE6E8']
 };
 
 const gradients = {
-  gradient1: 'linear-gradient(193.19deg, #FF2E72 5.7%, #4A125E 91.16%)',
+  gradient1: 'linear-gradient(193.19deg, #FF2E72 5.7%, #4A125E 91.16%)'
 };
 
 export const colors = {
@@ -172,7 +173,7 @@ export const colors = {
   alert: _colors.danger1,
   warning: _colors.warning1,
   success: _colors.success1,
-  gradient: gradients.gradient1,
+  gradient: gradients.gradient1
 };
 
 export const shadows = {
@@ -181,7 +182,7 @@ export const shadows = {
   2: '0px 2px 4px rgba(30, 30, 30, 0.16), 0px 3px 6px rgba(30, 30, 30, 0.12);',
   3: '0px 10px 20px rgba(30, 30, 30, 0.15), 0px 3px 6px rgba(30, 30, 30, 0.1);',
   4: '0px 15px 25px rgba(30, 30, 30, 0.15), 0px 5px 10px rgba(30, 30, 30, 0.05);',
-  5: '0px 20px 40px rgba(30, 30, 30, 0.1);',
+  5: '0px 20px 40px rgba(30, 30, 30, 0.1);'
 };
 
 export const radii = {
@@ -189,7 +190,7 @@ export const radii = {
   1: '2px',
   2: '4px',
   3: '8px',
-  4: '16px',
+  4: '16px'
 };
 
 export type TTextVariant =
@@ -211,49 +212,49 @@ export const texts = {
     color: colors.gray1,
     fontSize: fontSizes[2],
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
+    lineHeight: lineHeights.normal
   },
   b1m: {
     fontFamily: fontFamilies.baseText,
     color: colors.gray1,
     fontSize: fontSizes[2],
     fontWeight: fontWeights.semiBold,
-    lineHeight: lineHeights.normal,
+    lineHeight: lineHeights.normal
   },
   b2: {
     fontFamily: fontFamilies.baseText,
     color: colors.gray1,
     fontSize: fontSizes[1],
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.tight,
+    lineHeight: lineHeights.tight
   },
   b2m: {
     fontFamily: fontFamilies.baseText,
     color: colors.gray1,
     fontSize: fontSizes[1],
     fontWeight: fontWeights.semiBold,
-    lineHeight: lineHeights.tight,
+    lineHeight: lineHeights.tight
   },
   b3: {
     fontFamily: fontFamilies.baseText,
     color: colors.gray1,
     fontSize: fontSizes[0],
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.extraTight,
+    lineHeight: lineHeights.extraTight
   },
   b3m: {
     fontFamily: fontFamilies.baseText,
     color: colors.gray1,
     fontSize: fontSizes[0],
     fontWeight: fontWeights.semiBold,
-    lineHeight: lineHeights.extraTight,
+    lineHeight: lineHeights.extraTight
   },
   sh1: {
     fontFamily: fontFamilies.baseText,
     color: colors.gray3,
     fontSize: fontSizes[3],
     lineHeight: lineHeights.normal,
-    fontWeight: fontWeights.normal,
+    fontWeight: fontWeights.normal
   },
   c1: {
     fontFamily: fontFamilies.baseText,
@@ -261,7 +262,7 @@ export const texts = {
     fontSize: fontSizes[1],
     lineHeight: lineHeights.tight,
     fontWeight: fontWeights.semiBold,
-    letterSpacing: '4%',
+    letterSpacing: '4%'
   },
   c2: {
     fontFamily: fontFamilies.baseText,
@@ -269,7 +270,7 @@ export const texts = {
     fontSize: fontSizes[0],
     lineHeight: lineHeights.none,
     fontWeight: fontWeights.normal,
-    letterSpacing: '4%',
+    letterSpacing: '4%'
   },
   c2m: {
     fontFamily: fontFamilies.baseText,
@@ -277,7 +278,7 @@ export const texts = {
     fontSize: fontSizes[0],
     lineHeight: lineHeights.none,
     fontWeight: fontWeights.semiBold,
-    letterSpacing: '4%',
+    letterSpacing: '4%'
   },
   code: {
     fontFamily: fontFamilies.code,
@@ -285,8 +286,8 @@ export const texts = {
     fontSize: fontSizes[0],
     lineHeight: lineHeights.tighter,
     fontWeight: fontWeights.normal,
-    letterSpacing: '4%',
-  },
+    letterSpacing: '4%'
+  }
 };
 
 export const headings = {
@@ -295,57 +296,57 @@ export const headings = {
     fontSize: fontSizes[9],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.xlarge,
-    letterSpacing: -1,
+    letterSpacing: -1
   },
   h2: {
     color: colors.gray1,
     fontSize: fontSizes[7],
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.large,
-    letterSpacing: -0.5,
+    letterSpacing: -0.5
   },
   h3: {
     color: colors.gray1,
     fontSize: fontSizes[5],
     fontWeight: fontWeights.semiBold,
     lineHeight: lineHeights.medium,
-    letterSpacing: -0.25,
+    letterSpacing: -0.25
   },
   h4: {
     color: colors.gray1,
     fontSize: fontSizes[4],
     fontWeight: fontWeights.semiBold,
-    lineHeight: lineHeights.loose,
+    lineHeight: lineHeights.loose
   },
   h5: {
     color: colors.gray1,
     fontSize: fontSizes[3],
     fontWeight: fontWeights.semiBold,
     letterSpacing: 0.15,
-    lineHeight: lineHeights.loose,
+    lineHeight: lineHeights.loose
   },
   h6: {
     color: colors.gray1,
     fontSize: fontSizes.baseText,
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
-  },
+    lineHeight: lineHeights.normal
+  }
 };
 
 export const links = {
   color: colors.polyPink,
   '&:hover, &:focus': {
-    color: darken(0.2, colors.polyPinkLight),
-  },
+    color: darken(0.2, colors.polyPinkLight)
+  }
 };
 
 export const transitions = {
   hover: {
-    ms: 150,
+    ms: 150
   },
   modal: {
-    ms: 200,
-  },
+    ms: 200
+  }
 };
 
 const _maxWidth = {
@@ -353,7 +354,7 @@ const _maxWidth = {
   1: '700px',
   2: '850px',
   3: '1000px',
-  4: '1600px',
+  4: '1600px'
 };
 
 export const maxWidth = {
@@ -362,17 +363,17 @@ export const maxWidth = {
   s: _maxWidth[1],
   m: _maxWidth[2],
   l: _maxWidth[3],
-  xl: _maxWidth[4],
+  xl: _maxWidth[4]
 };
 
 export const header = {
-  height: '48px',
+  height: '48px'
 };
 
 export const sidebar = {
-  width: '124px',
+  width: '124px'
 };
 
 export const footer = {
-  height: header.height,
+  height: header.height
 };

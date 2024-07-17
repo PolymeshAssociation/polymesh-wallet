@@ -9,11 +9,9 @@ interface Props {
   label: string;
 }
 
-function Label({
-  children,
+function Label ({ children,
   className,
-  label,
-}: Props): React.ReactElement<Props> {
+  label }: Props): React.ReactElement<Props> {
   return (
     <div className={className}>
       <label>{label}</label>

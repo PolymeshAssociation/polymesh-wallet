@@ -1,8 +1,9 @@
-import {
-  AccountForm,
-  AccountInfo,
-} from '@polymeshassociation/extension-ui/components/AccountForm';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import type { AccountInfo } from '@polymeshassociation/extension-ui/components/AccountForm';
+
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+
+import { AccountForm } from '@polymeshassociation/extension-ui/components/AccountForm';
 
 import { ActionContext } from '../../components';
 import { createAccountSuri, createSeed } from '../../messaging';
@@ -23,7 +24,7 @@ export const NewAccount: FC = () => {
       .catch((error: Error) => console.error(error));
   }, []);
 
-  const createAccount = (accountInfo: AccountInfo) => {
+  const createAccount = useCallback((accountInfo: AccountInfo) => {
     account &&
       createAccountSuri(
         accountInfo.accountName,
@@ -34,18 +35,23 @@ export const NewAccount: FC = () => {
         .catch((error: Error): void => {
           console.error(error);
         });
-  };
+  }, [account, onAction]);
 
-  const nextStep = () => setStep(step + 1);
+  const nextStep = useCallback(() => setStep(step + 1), [step]);
 
-  const prevStep = () => {
+  const prevStep = useCallback(() => {
     step > 0 && setStep(step - 1);
-  };
+  }, [step]);
 
   const renderStep = (currentStep: number) => {
     switch (currentStep) {
       case 0:
-        return <SeedView onContinue={nextStep} seedPhrase={account?.seed} />;
+        return (
+          <SeedView
+            onContinue={nextStep}
+            seedPhrase={account?.seed}
+          />
+        );
       case 1:
         return (
           <ConfirmSeed
@@ -57,10 +63,10 @@ export const NewAccount: FC = () => {
       case 2:
         return (
           <AccountForm
-            headerText="Create and confirm your account name and wallet password"
+            headerText='Create and confirm your account name and wallet password'
             onBack={prevStep}
             onContinue={createAccount}
-            submitText="Create account"
+            submitText='Create account'
           />
         );
       default:

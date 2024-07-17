@@ -1,7 +1,8 @@
+import type { LoadingProps } from './types';
+
 import React from 'react';
 
 import * as sc from './styles';
-import { LoadingProps } from './types';
 
 export const Loading = (props: LoadingProps) => {
   return (
