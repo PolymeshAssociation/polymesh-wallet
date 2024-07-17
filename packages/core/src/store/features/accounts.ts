@@ -1,28 +1,20 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { AccountData } from '../../types';
+
+import { createSlice } from '@reduxjs/toolkit';
 import merge from 'lodash/merge';
 import isEqual from 'lodash-es/isEqual';
 
-import { AccountData } from '../../types';
-
-type AccountsState = { selected?: string; keys: Record<string, AccountData> };
+export interface AccountsState { selected?: string; keys: Record<string, AccountData> }
 const initialState: AccountsState = {
-  keys: {},
+  keys: {}
 } as AccountsState;
 
 const accountsSlice = createSlice({
-  name: 'accounts',
   initialState,
+  name: 'accounts',
   reducers: {
-    setAccount(state, action: PayloadAction<AccountData>) {
-      const data = action.payload;
-      const prev = state.keys[data.address];
-      const next = merge(prev, data);
-
-      if (!isEqual(next, prev)) {
-        state.keys[data.address] = next;
-      }
-    },
-    removeAccount(state, action: PayloadAction<string>) {
+    removeAccount (state, action: PayloadAction<string>) {
       const address = action.payload;
 
       delete state.keys[address];
@@ -31,10 +23,19 @@ const accountsSlice = createSlice({
         state.selected = undefined;
       }
     },
-    selectAccount(state, action: PayloadAction<string>) {
+    selectAccount (state, action: PayloadAction<string>) {
       state.selected = action.payload;
     },
-  },
+    setAccount (state, action: PayloadAction<AccountData>) {
+      const data = action.payload;
+      const prev = state.keys[data.address];
+      const next = merge(prev, data);
+
+      if (!isEqual(next, prev)) {
+        state.keys[data.address] = next;
+      }
+    }
+  }
 });
 
 export const actions = accountsSlice.actions;

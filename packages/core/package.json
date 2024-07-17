@@ -10,22 +10,25 @@
   "author": "",
   "license": "Apache-2",
   "dependencies": {
-    "@babel/runtime": "^7.14.6",
-    "@polymathnetwork/confidential-identity": "1.0.1",
-    "@polymeshassociation/polymesh-types": "^5.6.0",
-    "@reduxjs/toolkit": "^1.5.1",
-    "@types/crypto-js": "^4.0.1",
-    "@types/lodash-es": "^4.17.3",
-    "@types/redux-logger": "^3.0.8",
-    "@types/redux-persist": "^4.3.1",
-    "@types/uuid": "^8.3.0",
-    "crypto-js": "^4.0.0",
-    "lodash-es": "^4.17.15",
+    "@polkadot/api-augment": "^12.3.1",
+    "@polkadot/ui-keyring": "^3.8.3",
+    "@polymeshassociation/polymesh-types": "^5.11.1",
+    "@reduxjs/toolkit": "^1.9.7",
+    "crypto-js": "^4.2.0",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "redux-persist": "^6.0.0",
     "redux-persist-webextension-storage": "^1.0.2",
+    "tslib": "^2.6.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/lodash-es": "^4.17.12",
+    "@types/redux-logger": "^3.0.13",
+    "@types/redux-persist": "^4.3.1",
+    "@types/uuid": "^8.3.4",
+    "@types/webpack-env": "^1.18.5",
     "redux-logger": "^3.0.6"
   }
 }

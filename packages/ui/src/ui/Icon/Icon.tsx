@@ -1,10 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-shadow */
-import React, { CSSProperties, FC } from 'react';
-import { color, height, TLengthStyledSystem, width } from 'styled-system';
+import type { CSSProperties, FC } from 'react';
+import type { TLengthStyledSystem } from 'styled-system';
+import type { BoxThemeProps } from '../Box';
+
+import React from 'react';
+import { color, height, width } from 'styled-system';
 
 import { styled } from '../../styles';
-import { Box, BoxThemeProps } from '../Box';
+import { Box } from '../Box';
 
 export interface IconProps extends BoxThemeProps {
   Asset: React.ComponentType<React.SVGAttributes<SVGElement>>;
@@ -20,8 +25,7 @@ export interface IconProps extends BoxThemeProps {
   id?: string;
 }
 
-const IconComponent: FC<IconProps> = ({
-  Asset,
+const IconComponent: FC<IconProps> = ({ Asset,
   ariaLabel,
   bg,
   className,
@@ -30,11 +34,17 @@ const IconComponent: FC<IconProps> = ({
   rotate, // Filter out prop coming from IconCircled component
   scale,
   width,
-  ...props
-}) => {
+  ...props }) => {
   return (
-    <Box as="span" className={className} {...props}>
-      <Asset aria-label={ariaLabel} role="img" />
+    <Box
+      as='span'
+      className={className}
+      {...props}
+    >
+      <Asset
+        aria-label={ariaLabel}
+        role='img'
+      />
     </Box>
   );
 };
@@ -45,19 +55,20 @@ export const Icon = styled(IconComponent)<IconProps>(
   height,
   ({ rotate, scale }) => ({
     display: 'inline-block',
-    verticalAlign: 'middle',
 
     svg: {
       display: 'block',
-      width: '100%',
       height: '100%',
+      width: '100%',
       ...(scale && { padding: `${(1 - scale) * 100}%` }),
-      ...(rotate && { transform: `rotateZ(${rotate})` }),
+      ...(rotate && { transform: `rotateZ(${rotate})` })
     },
+    verticalAlign: 'middle'
+
   })
 );
 
 Icon.defaultProps = {
-  width: '1em',
   height: '1em',
+  width: '1em'
 };

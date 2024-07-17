@@ -1,24 +1,37 @@
-import { Message } from '@polkadot/extension-base/types';
+import type { Message } from '@polkadot/extension-base/types';
+import type { PolyRequestSignatures, PolyTransportRequestMessage } from '@polymeshassociation/extension-core/background/types';
+
+import { MESSAGE_ORIGIN_CONTENT } from '@polkadot/extension-base/defaults';
 import { injectExtension } from '@polkadot/extension-inject';
-import { PORTS } from '@polymeshassociation/extension-core/constants';
-import { enable, handleResponse } from '@polymeshassociation/extension-core/page';
+
+import { enable, handleResponse, redirectIfPhishing } from '@polymeshassociation/extension-core/page';
+
+function inject () {
+  injectExtension(enable, {
+    name: 'polywallet',
+    version: process.env.PKG_VERSION || 'unknown'
+  });
+}
 
 // setup a response listener (events created by the loader for extension responses)
 window.addEventListener('message', ({ data, source }: Message): void => {
   // only allow messages from our window, by the loader
-  if (source !== window || data.origin !== PORTS.CONTENT) {
+  if (source !== window || data.origin !== MESSAGE_ORIGIN_CONTENT) {
     return;
   }
 
   if (data.id) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    handleResponse(data as any);
+    handleResponse(data as PolyTransportRequestMessage<keyof PolyRequestSignatures>);
   } else {
     console.error('Missing id for response.');
   }
 });
 
-injectExtension(enable, {
-  name: 'polywallet',
-  version: process.env.PKG_VERSION as string,
+redirectIfPhishing().then((gotRedirected) => {
+  if (!gotRedirected) {
+    inject();
+  }
+}).catch((e) => {
+  console.warn(`Unable to determine if the site is in the phishing list: ${(e as Error).message}`);
+  inject();
 });

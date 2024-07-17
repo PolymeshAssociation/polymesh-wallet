@@ -1,50 +1,52 @@
-import { LinkName, NetworkName, NetworkState } from './types';
+import type { LinkName, NetworkState } from './types';
+
+import { NetworkName } from './types';
 
 export const networkURLs: Record<NetworkName, string> = {
-  mainnet: 'wss://mainnet-rpc.polymesh.network/',
-  testnet: 'wss://testnet-rpc.polymesh.live/',
-  staging: 'wss://staging-rpc.polymesh.dev/',
+  custom: '',
   local: 'ws://localhost:9944/',
-  custom: ''
+  mainnet: 'wss://mainnet-rpc.polymesh.network/',
+  staging: 'wss://staging-rpc.polymesh.dev/',
+  testnet: 'wss://testnet-rpc.polymesh.live/'
 };
 
 export const networkLabels: Record<NetworkName, string> = {
-  mainnet: 'Mainnet',
-  testnet: 'Testnet',
-  staging: 'Staging',
-  local: 'Local node',
   custom: 'Custom',
+  local: 'Local node',
+  mainnet: 'Mainnet',
+  staging: 'Staging',
+  testnet: 'Testnet'
 };
 
 export const networkIsDev: Record<NetworkName, boolean> = {
-  mainnet: false,
-  testnet: false,
-  staging: true,
-  local: true,
   custom: true,
+  local: true,
+  mainnet: false,
+  staging: true,
+  testnet: false
 };
 
 export const networkLinks: Record<NetworkName, Record<LinkName, string>> = {
-  mainnet: {
-    dashboard: 'https://portal.polymesh.network/',
-    explorer: 'https://polymesh.subscan.io/',
-  },
-  testnet: {
+  custom: {
     dashboard: 'https://portal.polymesh.live/',
-    explorer: 'https://polymesh-testnet.subscan.io/',
-  },
-  staging: {
-    dashboard: 'https://portal.polymesh.dev/',
-    explorer: 'https://staging-app.polymesh.dev/#/explorer',
+    explorer: ''
   },
   local: {
     dashboard: 'http://localhost:3000/',
-    explorer: '',
+    explorer: ''
   },
-  custom: {
+  mainnet: {
+    dashboard: 'https://portal.polymesh.network/',
+    explorer: 'https://polymesh.subscan.io/'
+  },
+  staging: {
+    dashboard: 'https://portal.polymesh.dev/',
+    explorer: 'https://staging-app.polymesh.dev/#/explorer'
+  },
+  testnet: {
     dashboard: 'https://portal.polymesh.live/',
-    explorer: '',
-  },
+    explorer: 'https://polymesh-testnet.subscan.io/'
+  }
 };
 
 export const defaultNetwork: NetworkName = NetworkName.mainnet;
@@ -58,7 +60,7 @@ export const messages = [
   'pub(accounts.list)',
   'pub(accounts.subscribe)',
   'pub(metadata.provide)',
-  'pub(metadata.list)',
+  'pub(metadata.list)'
 ];
 
 export const populatedDelay = 1000;
@@ -68,20 +70,8 @@ export const apiConnTimeout = 3500;
 export const defaultSs58Format = 42;
 
 export const defaultNetworkState: NetworkState = {
-  selected: defaultNetwork,
-  ss58Format: defaultSs58Format,
-  isDeveloper: false,
   customNetworkUrl: '',
+  isDeveloper: false,
+  selected: defaultNetwork,
+  ss58Format: defaultSs58Format
 };
-
-export const PORTS = {
-  EXTENSION: 'polywallet_extension',
-  CONTENT: 'polywallet_content',
-};
-
-export enum ORIGINS {
-  EXTENSION = 'polywallet_extension',
-  PAGE = 'polywallet_page',
-}
-
-export const PASSWORD_EXPIRY_MIN = 15;

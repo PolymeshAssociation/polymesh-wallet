@@ -1,13 +1,10 @@
-import { PASSWORD_EXPIRY_MIN } from '@polymeshassociation/extension-core/constants';
-import { ActionContext } from '@polymeshassociation/extension-ui/components';
-import { Box, Button, Checkbox, Flex } from '@polymeshassociation/extension-ui/ui';
+import { PASSWORD_EXPIRY_MIN } from '@polkadot/extension-base/defaults';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
-import {
-  approveSignPassword,
-  cancelSignRequest,
-  isSignLocked,
-} from '../../messaging';
+import { ActionContext } from '@polymeshassociation/extension-ui/components';
+import { Box, Button, Checkbox, Flex } from '@polymeshassociation/extension-ui/ui';
+
+import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
 import Unlock from './Unlock';
 
 interface Props {
@@ -21,15 +18,13 @@ interface Props {
   rejectOnly?: boolean;
 }
 
-function SignArea({
-  buttonText,
+function SignArea ({ buttonText,
   error,
   isExternal,
   isFirst,
   rejectOnly = false,
   setError,
-  signId,
-}: Props): JSX.Element {
+  signId }: Props): React.ReactElement {
   const [savePass, setSavePass] = useState(false);
   const [isLocked, setIsLocked] = useState<boolean | null>(null);
   const [password, setPassword] = useState('');
@@ -38,47 +33,49 @@ function SignArea({
 
   useEffect(() => {
     setIsLocked(null);
-    let timeout: NodeJS.Timeout;
+    let timeout: ReturnType<typeof setTimeout>;
 
-    !isExternal &&
-      isSignLocked(signId)
-        .then(({ isLocked, remainingTime }) => {
-          setIsLocked(isLocked);
-          timeout = setTimeout(() => {
-            setIsLocked(true);
-          }, remainingTime);
+    !isExternal && isSignLocked(signId)
+      .then(({ isLocked, remainingTime }) => {
+        setIsLocked(isLocked);
+        timeout = setTimeout(() => {
+          setIsLocked(true);
+        }, remainingTime);
 
-          // if the account was unlocked check the remember me
-          // automatically to prolong the unlock period
-          !isLocked && setSavePass(true);
-        })
-        .catch((error: Error) => console.error(error));
+        // if the account was unlocked check the remember me
+        // automatically to prolong the unlock period
+        !isLocked && setSavePass(true);
+      })
+      .catch((error: Error) => console.error(error));
 
     return () => {
       !!timeout && clearTimeout(timeout);
     };
   }, [isExternal, signId]);
 
-  const _onSign = useCallback((): Promise<void> => {
-    setIsBusy(true);
-
-    return approveSignPassword(signId, savePass, password)
-      .then((): void => {
-        setIsBusy(false);
-        onAction();
-      })
-      .catch((error: Error): void => {
-        setIsBusy(false);
-        setError(error.message);
-        console.error(error);
-      });
-  }, [onAction, password, savePass, setError, setIsBusy, signId]);
+  const _onSign = useCallback(
+    (): void => {
+      setIsBusy(true);
+      approveSignPassword(signId, savePass, password)
+        .then((): void => {
+          setIsBusy(false);
+          onAction();
+        })
+        .catch((error: Error): void => {
+          setIsBusy(false);
+          setError(error.message);
+          console.error(error);
+        });
+    },
+    [onAction, password, savePass, setError, setIsBusy, signId]
+  );
 
   const _onCancel = useCallback(
-    (): Promise<void> =>
+    (): void => {
       cancelSignRequest(signId)
         .then(() => onAction())
-        .catch((error: Error) => console.error(error)),
+        .catch((error: Error) => console.error(error));
+    },
     [onAction, signId]
   );
 
@@ -97,7 +94,10 @@ function SignArea({
   return (
     <>
       {isFirst && !isExternal && (
-        <Flex flexDirection="column" p="s">
+        <Flex
+          flexDirection='column'
+          p='s'
+        >
           {isLocked && (
             <Unlock
               error={error}
@@ -108,23 +108,34 @@ function SignArea({
               setPassword={setPassword}
             />
           )}
-          <Box mb="s">
+          <Box mb='s'>
             <RememberPasswordCheckbox />
           </Box>
-          <Flex alignItems="stretch" flexDirection="row" width="100%">
+          <Flex
+            alignItems='stretch'
+            flexDirection='row'
+            width='100%'
+          >
             <Flex flex={1}>
-              <Button fluid onClick={_onCancel} variant="secondary">
+              <Button
+                fluid
+                onClick={_onCancel}
+                variant='secondary'
+              >
                 Reject
               </Button>
             </Flex>
             {!rejectOnly && (
-              <Flex flex={1} ml="xs">
+              <Flex
+                flex={1}
+                ml='xs'
+              >
                 <Button
                   busy={isBusy}
                   disabled={(!!isLocked && !password) || !!error}
                   fluid
                   onClick={_onSign}
-                  type="submit"
+                  type='submit'
                 >
                   {buttonText}
                 </Button>

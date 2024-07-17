@@ -1,4 +1,4 @@
-import BN from 'bn.js';
+import { BN } from '@polkadot/util';
 
 /**
  * Shortens an address for display purposes

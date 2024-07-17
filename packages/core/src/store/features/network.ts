@@ -1,27 +1,29 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { NetworkName } from '../../types';
 
-import { defaultSs58Format, defaultNetworkState } from '../../constants';
-import { NetworkName } from '../../types';
+import { createSlice } from '@reduxjs/toolkit';
+
+import { defaultNetworkState, defaultSs58Format } from '../../constants';
 
 const initialState = defaultNetworkState;
 
 const networkSlice = createSlice({
-  name: 'network',
   initialState,
+  name: 'network',
   reducers: {
-    setNetwork(state, action: PayloadAction<NetworkName>) {
-      state.selected = action.payload;
+    setCustomNetworkUrl (state, action: PayloadAction<string>) {
+      state.customNetworkUrl = action.payload;
     },
-    setFormat(state, action: PayloadAction<number | undefined>) {
+    setFormat (state, action: PayloadAction<number | undefined>) {
       state.ss58Format = action.payload || defaultSs58Format;
     },
-    toggleIsDeveloper(state) {
-      state.isDeveloper = !state.isDeveloper;
+    setNetwork (state, action: PayloadAction<NetworkName>) {
+      state.selected = action.payload;
     },
-    setCustomNetworkUrl(state, action: PayloadAction<string>) {
-      state.customNetworkUrl = action.payload;
+    toggleIsDeveloper (state) {
+      state.isDeveloper = !state.isDeveloper;
     }
-  },
+  }
 });
 
 export const actions = networkSlice.actions;

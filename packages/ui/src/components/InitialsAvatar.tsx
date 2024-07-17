@@ -2,13 +2,15 @@ import React, { useMemo } from 'react';
 
 import { Flex, Text } from '../ui';
 
-type InitialAvatarProps = {
+interface InitialAvatarProps {
   name?: string;
-};
+}
 
-export function InitialsAvatar({ name }: InitialAvatarProps): JSX.Element {
+export function InitialsAvatar ({ name }: InitialAvatarProps): React.ReactElement {
   const initials = useMemo(() => {
-    if (!name) return '';
+    if (!name) {
+      return '';
+    }
 
     const nameArray = name.toUpperCase().split(' ');
 
@@ -17,15 +19,18 @@ export function InitialsAvatar({ name }: InitialAvatarProps): JSX.Element {
 
   return (
     <Flex
-      alignItems="center"
-      backgroundColor="gray7"
-      borderRadius="50%"
+      alignItems='center'
+      backgroundColor='gray7'
+      borderRadius='50%'
       height={40}
-      justifyContent="center"
+      justifyContent='center'
       style={{ flexShrink: 0 }}
       width={40}
     >
-      <Text color="gray1" variant="b2m">
+      <Text
+        color='gray1'
+        variant='b2m'
+      >
         {initials}
       </Text>
     </Flex>

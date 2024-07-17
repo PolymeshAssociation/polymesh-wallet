@@ -1,56 +1,27 @@
+/* global chrome */
+
+import type { MessageTypes, RequestRpcUnsubscribe, ResponseType } from '@polkadot/extension-base/background/types';
+import type { KeyringPair } from '@polkadot/keyring/types';
+import type { AllowedPath, PolyMessageTypes, PolyRequestTypes, PolyResponseType, RequestPolyCallDetails, RequestPolyCustomNetworkUrlSet, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolySelectedAccountSet, RequestPolyValidatePassword, ResponsePolyCallDetails } from '../types';
+
+import { withErrorLog } from '@polkadot/extension-base/background';
 import DotExtension from '@polkadot/extension-base/background/handlers/Extension';
-import DotState from '@polkadot/extension-base/background/handlers/State';
-import {
-  ResponseType,
-  MessageTypes,
-  RequestRpcUnsubscribe,
-} from '@polkadot/extension-base/background/types';
-import { KeyringPair } from '@polkadot/keyring/types';
 import keyring from '@polkadot/ui-keyring';
+
 import { callDetails } from '@polymeshassociation/extension-core/external';
 import { getNetworkUrl } from '@polymeshassociation/extension-core/store/getters';
-import {
-  renameIdentity,
-  setNetwork,
-  setCustomNetworkUrl,
-  setSelectedAccount,
-  toggleIsDeveloper,
-} from '@polymeshassociation/extension-core/store/setters';
-import {
-  subscribeIdentifiedAccounts,
-  subscribeNetworkState,
-  subscribeSelectedAccount,
-  subscribeSelectedNetwork,
-  subscribeStatus,
-} from '@polymeshassociation/extension-core/store/subscribers';
+import { renameIdentity, setCustomNetworkUrl, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymeshassociation/extension-core/store/setters';
+import { subscribeIdentifiedAccounts, subscribeNetworkState, subscribeSelectedAccount, subscribeSelectedNetwork, subscribeStatus } from '@polymeshassociation/extension-core/store/subscribers';
 import { recodeAddress } from '@polymeshassociation/extension-core/utils';
 
-import {
-  ALLOWED_PATH,
-  AllowedPath,
-  PolyMessageTypes,
-  PolyRequestTypes,
-  PolyResponseType,
-  RequestPolyCallDetails,
-  RequestPolyGlobalChangePass,
-  RequestPolyIdentityRename,
-  RequestPolyNetworkSet,
-  RequestPolyCustomNetworkUrlSet,
-  RequestPolySelectedAccountSet,
-  RequestPolyValidatePassword,
-  ResponsePolyCallDetails,
-} from '../types';
+import { ALLOWED_PATH } from '../types';
 import { createSubscription, unsubscribe } from './subscriptions';
 
 /**
  * Extension handles messages coming from the extension popup UI (i.e packages/ui)
  */
 export default class Extension extends DotExtension {
-  constructor(state: DotState) {
-    super(state);
-  }
-
-  private polyAccountsSubscribe(
+  private polyAccountsSubscribe (
     id: string,
     port: chrome.runtime.Port
   ): boolean {
@@ -66,7 +37,7 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private polyNetworkSubscribe(id: string, port: chrome.runtime.Port): boolean {
+  private polyNetworkSubscribe (id: string, port: chrome.runtime.Port): boolean {
     const cb = createSubscription<'poly:pri(network.subscribe)'>(id, port);
 
     const reduxUnsub = subscribeSelectedNetwork(cb);
@@ -79,7 +50,7 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private subscribeNetworkState(
+  private subscribeNetworkState (
     id: string,
     port: chrome.runtime.Port
   ): boolean {
@@ -95,7 +66,7 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private polySelectedAccountSubscribe(
+  private polySelectedAccountSubscribe (
     id: string,
     port: chrome.runtime.Port
   ): boolean {
@@ -114,7 +85,7 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private polyStoreStatusSubscribe(
+  private polyStoreStatusSubscribe (
     id: string,
     port: chrome.runtime.Port
   ): boolean {
@@ -130,50 +101,44 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private polyNetworkSet({ network }: RequestPolyNetworkSet): boolean {
+  private polyNetworkSet ({ network }: RequestPolyNetworkSet): boolean {
     setNetwork(network);
 
     return true;
   }
 
-  private polyCustomNetworkUrlSet({ customNetworkUrl }: RequestPolyCustomNetworkUrlSet): boolean {
+  private polyCustomNetworkUrlSet ({ customNetworkUrl }: RequestPolyCustomNetworkUrlSet): boolean {
     setCustomNetworkUrl(customNetworkUrl);
 
     return true;
   }
 
-  private polyIdentityRename({
-    did,
-    name,
-  }: RequestPolyIdentityRename): boolean {
+  private polyIdentityRename ({ did,
+    name }: RequestPolyIdentityRename): boolean {
     renameIdentity(did, name);
 
     return true;
   }
 
-  private polySelectedAccount({
-    account,
-  }: RequestPolySelectedAccountSet): boolean {
+  private polySelectedAccount ({ account }: RequestPolySelectedAccountSet): boolean {
     setSelectedAccount(account);
 
     return true;
   }
 
-  private polyCallDetailsGet({
-    request,
-  }: RequestPolyCallDetails): Promise<ResponsePolyCallDetails> {
+  private polyCallDetailsGet ({ request }: RequestPolyCallDetails): Promise<ResponsePolyCallDetails> {
     const networkUrl = getNetworkUrl();
 
     return callDetails(request, networkUrl);
   }
 
-  private polyIsDevToggle(): boolean {
+  private polyIsDevToggle (): boolean {
     toggleIsDeveloper();
 
     return true;
   }
 
-  private _changePassword(
+  private _changePassword (
     pair: KeyringPair,
     oldPass: string,
     newPass: string
@@ -184,7 +149,7 @@ export default class Extension extends DotExtension {
       }
 
       pair.decodePkcs8(oldPass);
-    } catch (error) {
+    } catch (_error) {
       return false;
     }
 
@@ -193,10 +158,8 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private async globalChangePassword({
-    newPass,
-    oldPass,
-  }: RequestPolyGlobalChangePass): Promise<boolean> {
+  private globalChangePassword ({ newPass,
+    oldPass }: RequestPolyGlobalChangePass): boolean {
     const pairs = keyring
       .getPairs()
       .filter((account) => !account.meta.isHardware);
@@ -233,7 +196,7 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private async isPasswordSet(): Promise<boolean> {
+  private isPasswordSet (): boolean {
     // If there's at least one, non-ledger account, or
     // If there's at least one uid stored
     // Then, user has set password before
@@ -241,14 +204,14 @@ export default class Extension extends DotExtension {
     const nonLedgerPairs =
       keyring.getPairs().filter((pair) => !pair.meta.isHardware).length > 0;
 
-    if (nonLedgerPairs) return true;
+    if (nonLedgerPairs) {
+      return true;
+    }
 
     return false;
   }
 
-  private async validatePassword({
-    password,
-  }: RequestPolyValidatePassword): Promise<boolean> {
+  private validatePassword ({ password }: RequestPolyValidatePassword): boolean {
     const nonLedgerPair = keyring
       .getPairs()
       .filter((pair) => !pair.meta.isHardware)[0];
@@ -263,7 +226,7 @@ export default class Extension extends DotExtension {
         nonLedgerPair.decodePkcs8(password);
 
         return true;
-      } catch (error) {
+      } catch (_error) {
         return false;
       }
     }
@@ -271,8 +234,8 @@ export default class Extension extends DotExtension {
     return false;
   }
 
-  private _windowOpen(path: AllowedPath): boolean {
-    const url = `${chrome.extension.getURL('index.html')}#${path}`;
+  private _windowOpen (path: AllowedPath): boolean {
+    const url = `${chrome.runtime.getURL('index.html')}#${path}`;
 
     if (!ALLOWED_PATH.includes(path)) {
       console.error('Not allowed to open the url:', url);
@@ -280,20 +243,20 @@ export default class Extension extends DotExtension {
       return false;
     }
 
-    chrome.tabs.create({ url });
+    withErrorLog(() => chrome.tabs.create({ url }));
 
     return true;
   }
 
-  public async _handle<TMessageType extends PolyMessageTypes>(
+  public async _handle<TMessageType extends PolyMessageTypes> (
     id: string,
     type: TMessageType,
     request: PolyRequestTypes[TMessageType],
-    port: chrome.runtime.Port
+    port?: chrome.runtime.Port
   ): Promise<PolyResponseType<TMessageType> | ResponseType<MessageTypes>> {
     switch (type) {
       case 'poly:pri(accounts.subscribe)':
-        return this.polyAccountsSubscribe(id, port);
+        return port && this.polyAccountsSubscribe(id, port);
 
       case 'poly:pri(password.isSet)':
         return this.isPasswordSet();
@@ -302,10 +265,10 @@ export default class Extension extends DotExtension {
         return this.validatePassword(request as RequestPolyValidatePassword);
 
       case 'poly:pri(network.subscribe)':
-        return this.polyNetworkSubscribe(id, port);
+        return port && this.polyNetworkSubscribe(id, port);
 
       case 'poly:pri(networkState.subscribe)':
-        return this.subscribeNetworkState(id, port);
+        return port && this.subscribeNetworkState(id, port);
 
       case 'poly:pri(network.set)':
         return this.polyNetworkSet(request as RequestPolyNetworkSet);
@@ -314,7 +277,7 @@ export default class Extension extends DotExtension {
         return this.polyCustomNetworkUrlSet(request as RequestPolyCustomNetworkUrlSet);
 
       case 'poly:pri(selectedAccount.subscribe)':
-        return this.polySelectedAccountSubscribe(id, port);
+        return port && this.polySelectedAccountSubscribe(id, port);
 
       case 'poly:pri(selectedAccount.set)':
         return this.polySelectedAccount(
@@ -325,7 +288,7 @@ export default class Extension extends DotExtension {
         return this.polyCallDetailsGet(request as RequestPolyCallDetails);
 
       case 'poly:pri(status.subscribe)':
-        return this.polyStoreStatusSubscribe(id, port);
+        return port && this.polyStoreStatusSubscribe(id, port);
 
       case 'poly:pri(identity.rename)':
         return this.polyIdentityRename(request as RequestPolyIdentityRename);

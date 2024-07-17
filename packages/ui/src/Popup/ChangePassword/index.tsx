@@ -1,37 +1,27 @@
-import { SvgFileLockOutline } from '@polymeshassociation/extension-ui/assets/images/icons';
-import {
-  globalChangePass,
-  validatePassword,
-} from '@polymeshassociation/extension-ui/messaging';
-import {
-  Box,
-  Button,
-  Flex,
-  Header,
-  Text,
-  TextInput,
-} from '@polymeshassociation/extension-ui/ui';
-import React, { FC, useContext } from 'react';
+import type { FC } from 'react';
+
+import React, { useCallback, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-  ActionContext,
-  ActivityContext,
-  ValidationError,
-} from '../../components';
+import { SvgFileLockOutline } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { globalChangePass, validatePassword } from '@polymeshassociation/extension-ui/messaging';
+import { Box, Button, Flex, Header, Text, TextInput } from '@polymeshassociation/extension-ui/ui';
+
+import { ActionContext, ActivityContext, ValidationError } from '../../components';
 
 export const ChangePassword: FC = () => {
   const onAction = useContext(ActionContext);
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, handleSubmit, register, setError } = useForm({
     defaultValues: {
-      currentPassword: '',
-      newPassword: '',
       confirmPassword: '',
-    },
+      currentPassword: '',
+      newPassword: ''
+    }
   });
   const isBusy = useContext(ActivityContext);
 
-  const onSubmit = async (data: { [x: string]: string }) => {
+  const onSubmit = useCallback(async (data: Record<string, string>) => {
     const isValidPassword = await validatePassword(data.currentPassword);
 
     if (!isValidPassword) {
@@ -62,28 +52,38 @@ export const ChangePassword: FC = () => {
     } else {
       setError('confirmPassword', { type: 'failed' });
     }
-  };
+  }, [onAction, setError]);
+
+  const handleFormSubmit = useCallback((e: React.FormEvent) => {
+    handleSubmit(onSubmit)(e).catch(console.error);
+  }, [handleSubmit, onSubmit]);
 
   return (
     <>
       <Header
-        headerText="Change password"
+        headerText='Change password'
         iconAsset={SvgFileLockOutline}
       ></Header>
-      <Box mx="s">
-        <form id="passwordForm" onSubmit={handleSubmit(onSubmit)}>
-          <Box mt="m">
+      <Box mx='s'>
+        <form
+          id='passwordForm'
+          onSubmit={handleFormSubmit}
+        >
+          <Box mt='m'>
             <Box>
-              <Text color="gray.1" variant="b2m">
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 Current password
               </Text>
             </Box>
-            <Box className="currentPassword">
+            <Box className='currentPassword'>
               <TextInput
-                inputRef={register({ required: true, minLength: 8 })}
-                name="currentPassword"
-                placeholder="Enter 8 characters or more"
-                type="password"
+                inputRef={register({ minLength: 8, required: true })}
+                name='currentPassword'
+                placeholder='Enter 8 characters or more'
+                type='password'
               />
               {errors.currentPassword && (
                 <ValidationError>
@@ -97,18 +97,21 @@ export const ChangePassword: FC = () => {
               )}
             </Box>
           </Box>
-          <Box mt="m">
+          <Box mt='m'>
             <Box>
-              <Text color="gray.1" variant="b2m">
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 New password
               </Text>
             </Box>
-            <Box className="newPassword">
+            <Box className='newPassword'>
               <TextInput
-                inputRef={register({ required: true, minLength: 8 })}
-                name="newPassword"
-                placeholder="Enter 8 characters or more"
-                type="password"
+                inputRef={register({ minLength: 8, required: true })}
+                name='newPassword'
+                placeholder='Enter 8 characters or more'
+                type='password'
               />
               {errors.newPassword && (
                 <ValidationError>
@@ -122,18 +125,21 @@ export const ChangePassword: FC = () => {
               )}
             </Box>
           </Box>
-          <Box mt="m">
+          <Box mt='m'>
             <Box>
-              <Text color="gray.1" variant="b2m">
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 Confirm password
               </Text>
             </Box>
-            <Box className="confirmPassword">
+            <Box className='confirmPassword'>
               <TextInput
-                inputRef={register({ required: true, minLength: 8 })}
-                name="confirmPassword"
-                placeholder="Enter 8 characters or more"
-                type="password"
+                inputRef={register({ minLength: 8, required: true })}
+                name='confirmPassword'
+                placeholder='Enter 8 characters or more'
+                type='password'
               />
               {errors.confirmPassword && (
                 <ValidationError>
@@ -153,12 +159,17 @@ export const ChangePassword: FC = () => {
       </Box>
       <Flex
         flex={1}
-        flexDirection="column"
-        justifyContent="flex-end"
-        mb="s"
-        mx="s"
+        flexDirection='column'
+        justifyContent='flex-end'
+        mb='s'
+        mx='s'
       >
-        <Button busy={isBusy} fluid form="passwordForm" type="submit">
+        <Button
+          busy={isBusy}
+          fluid
+          form='passwordForm'
+          type='submit'
+        >
           Change password
         </Button>
       </Flex>

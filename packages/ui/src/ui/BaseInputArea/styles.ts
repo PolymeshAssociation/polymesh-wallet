@@ -1,46 +1,48 @@
-import styled, { StyledProps } from 'styled-components';
+/* eslint-disable sort-keys */
+import type { StyledProps } from 'styled-components';
+import type { ThemeProps } from '@polymeshassociation/extension-ui/types';
+import type { Styles } from '../../styles/types';
+import type { BaseInputAreaProps } from './BaseInputAreaProps';
 
-import { Styles } from '../../styles/types';
+import styled from 'styled-components';
+
 import { Flex } from '../Flex';
-import { BaseInputAreaProps } from './BaseInputAreaProps';
 
-const getInputStyles: Styles<BaseInputAreaProps & { focused?: boolean }> = ({
-  disabled,
+const getInputStyles: Styles<BaseInputAreaProps & { focused?: boolean }> = ({ disabled,
   focused,
   invalid,
   readOnly,
-  theme,
-}) => {
+  theme }) => {
   if (disabled) {
     return {
-      borderColor: theme.colors.disabled,
       backgroundColor: theme.colors.disabled,
+      borderColor: theme.colors.disabled
     };
   }
 
   if (readOnly) {
     return {
-      borderColor: theme.colors.disabled,
       backgroundColor: theme.colors.disabled,
-      color: theme.colors.baseText,
+      borderColor: theme.colors.disabled,
+      color: theme.colors.baseText
     };
   }
 
   if (invalid) {
     if (focused) {
       return {
-        borderColor: theme.colors.alert,
+        borderColor: theme.colors.alert
       };
     }
 
     return {
-      borderColor: theme.colors.alert,
+      borderColor: theme.colors.alert
     };
   }
 
   if (focused) {
     return {
-      borderColor: theme.colors.brandMain,
+      borderColor: theme.colors.brandMain
     };
   }
 
@@ -48,28 +50,26 @@ const getInputStyles: Styles<BaseInputAreaProps & { focused?: boolean }> = ({
 };
 
 export const Wrapper = styled.label<StyledProps<BaseInputAreaProps>>(
-  (props) => ({
+  (props: ThemeProps) => ({
     ...{
-      display: 'flex',
       alignItems: 'center',
+      backgroundColor: 'white',
       border: `1px solid ${props.theme.colors.placeholder}`,
       borderRadius: props.theme.radii[1],
       color: props.theme.colors.highlightText,
-      backgroundColor: 'white',
+      display: 'flex'
     },
-    ...getInputStyles(props),
+    ...getInputStyles(props)
   })
 );
 
-export const BaseInputStyle: Styles<BaseInputAreaProps> = ({
-  height,
-  theme,
-}) => ({
+export const BaseInputStyle: Styles<BaseInputAreaProps> = ({ height,
+  theme }) => ({
   display: 'block',
   width: '100%',
   flexGrow: 1,
   boxSizing: 'border-box',
-  height: height,
+  height,
   padding: '8px 8px 8px 8px',
   marginLeft: '2px',
   marginRight: '2px',
@@ -89,8 +89,8 @@ export const BaseInputStyle: Styles<BaseInputAreaProps> = ({
   [`@media screen and (min-width: ${theme.breakpoints.sm})`]: {
     '-moz-appearance': 'textfield',
     '::-webkit-inner-spin-button, ::-webkit-outer-spin-button': {
-      '-webkit-appearance': 'none',
-    },
+      '-webkit-appearance': 'none'
+    }
   },
 
   '::placeholder': {
@@ -101,7 +101,7 @@ export const BaseInputStyle: Styles<BaseInputAreaProps> = ({
     fontStyle: 'normal',
     fontWeight: theme.fontWeights.normal,
     fontSize: '14px',
-    lineHeight: '23px',
+    lineHeight: '23px'
   },
 
   ':-ms-input-placeholder': {
@@ -111,7 +111,7 @@ export const BaseInputStyle: Styles<BaseInputAreaProps> = ({
     fontStyle: 'normal',
     fontWeight: theme.fontWeights.normal,
     fontSize: '14px',
-    lineHeight: '23px',
+    lineHeight: '23px'
   },
 
   '::-ms-input-placeholder': {
@@ -121,39 +121,39 @@ export const BaseInputStyle: Styles<BaseInputAreaProps> = ({
     fontStyle: 'normal',
     fontWeight: theme.fontWeights.normal,
     fontSize: '14px',
-    lineHeight: '23px',
+    lineHeight: '23px'
   },
 
   ':-webkit-autofill': {
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
   ':-webkit-autofill:hover': {
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
   ':-webkit-autofill:focus': {
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
   ':-webkit-autofill:active': {
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: 'transparent'
+  }
 });
 
 export const Input = styled.textarea(BaseInputStyle);
 
-export const Unit = styled(Flex)(({ theme }) => ({
+export const Unit = styled(Flex)(({ theme }: ThemeProps) => ({
   alignItems: 'center',
   color: theme.colors.placeholder,
-  fontSize: theme.fontSizes.baseText,
-  fontFamily: theme.fontFamilies.baseText,
   flexShrink: 0,
-  marginRight: '1rem',
+  fontFamily: theme.fontFamilies.baseText,
+  fontSize: theme.fontSizes.baseText,
+  marginRight: '1rem'
 }));
 
-export const Icon = styled(Flex)(({ theme }) => ({
+export const Icon = styled(Flex)(({ theme }: ThemeProps) => ({
   alignItems: 'center',
   color: theme.colors.placeholder,
-  fontSize: theme.fontSizes.baseText,
-  fontFamily: theme.fontFamilies.baseText,
   flexShrink: 0,
-  marginLeft: '1rem',
+  fontFamily: theme.fontFamilies.baseText,
+  fontSize: theme.fontSizes.baseText,
+  marginLeft: '1rem'
 }));

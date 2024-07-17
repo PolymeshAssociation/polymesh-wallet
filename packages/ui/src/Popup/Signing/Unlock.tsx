@@ -1,24 +1,23 @@
-import { Box, Text, TextInput } from '@polymeshassociation/extension-ui/ui';
 import React, { useCallback } from 'react';
+
+import { Box, Text, TextInput } from '@polymeshassociation/extension-ui/ui';
 
 interface Props {
   className?: string;
   error?: string | null;
   isBusy: boolean;
-  onSign: () => Promise<void>;
+  onSign: () => void;
   password: string;
   setError: (error: string | null) => void;
   setPassword: (password: string) => void;
 }
 
-function Unlock({
-  className,
+function Unlock ({ className,
   error,
   isBusy,
   password,
   setError,
-  setPassword,
-}: Props): React.ReactElement<Props> {
+  setPassword }: Props): React.ReactElement<Props> {
   const _onChangePassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
       setPassword(e.target.value);
@@ -28,26 +27,35 @@ function Unlock({
   );
 
   return (
-    <div className={className} style={{ width: '100%' }}>
+    <div
+      className={className}
+      style={{ width: '100%' }}
+    >
       <Box>
-        <Text color="gray.1" variant="b2m">
+        <Text
+          color='gray.1'
+          variant='b2m'
+        >
           Wallet password
         </Text>
       </Box>
-      <Box mb="s">
+      <Box mb='s'>
         <TextInput
           autoFocus={true}
           disabled={isBusy}
           invalid={!password || !!error}
-          name="currentPassword"
+          name='currentPassword'
           onChange={_onChangePassword}
-          placeholder="Enter wallet password"
-          type="password"
+          placeholder='Enter wallet password'
+          type='password'
           value={password}
         />
         {error && (
           <Box>
-            <Text color="alert" variant="b3">
+            <Text
+              color='alert'
+              variant='b3'
+            >
               {'Invalid password'}
             </Text>
           </Box>

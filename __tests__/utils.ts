@@ -1,8 +1,10 @@
-import { SignerPayloadJSON } from '@polkadot/types/types';
-import { ORIGINS } from '@polymeshassociation/extension-core/constants';
-import puppeteer, { JSONObject } from 'puppeteer';
+import type { SignerPayloadJSON } from '@polkadot/types/types';
+import type { JSONObject } from 'puppeteer';
+import type puppeteer from 'puppeteer';
 
-export async function refillTextInput(
+import { MESSAGE_ORIGIN_PAGE } from '@polkadot/extension-base/defaults';
+
+export async function refillTextInput (
   handle: puppeteer.ElementHandle<Element>,
   text: string
 ): Promise<puppeteer.ElementHandle<Element>> {
@@ -13,11 +15,11 @@ export async function refillTextInput(
   return handle;
 }
 
-export function expectHashToEqual(page: puppeteer.Page, hash: string): void {
+export function expectHashToEqual (page: puppeteer.Page, hash: string): void {
   return expect(new URL(page.url()).hash).toEqual(hash);
 }
 
-export async function requestSigning(
+export async function requestSigning (
   page: puppeteer.Page,
   address: string
 ): Promise<void> {
@@ -41,19 +43,19 @@ export async function requestSigning(
       'CheckNonce',
       'CheckWeight',
       'ChargeTransactionPayment',
-      'StoreCallMetadata',
+      'StoreCallMetadata'
     ],
     specVersion: '0x000007e3',
     tip: '0x00000000000000000000000000000000',
     transactionVersion: '0x00000007',
-    version: 4,
+    version: 4
   };
 
   const msg = {
     id: '0.1',
     message: 'pub(extrinsic.sign)',
-    origin: ORIGINS.PAGE,
-    request: request,
+    origin: MESSAGE_ORIGIN_PAGE,
+    request
   };
 
   // Send singing request to extension, via extension's content script.
@@ -62,12 +64,12 @@ export async function requestSigning(
   }, msg as unknown as JSONObject);
 }
 
-export function requestAuthorization(): void {
+export function requestAuthorization (): void {
   const msg = {
     id: '0.1',
     message: '',
-    origin: ORIGINS.PAGE,
-    request: { origin: '0x01' },
+    origin: MESSAGE_ORIGIN_PAGE,
+    request: { origin: '0x01' }
   };
 
   msg.message = 'pub(authorize.tab)';

@@ -1,26 +1,16 @@
-import { KeyringPair$Json } from '@polkadot/keyring/types';
+import type { KeyringPair$Json } from '@polkadot/keyring/types';
+import type { FC } from 'react';
+
 import { hexToU8a, isHex, u8aToString } from '@polkadot/util';
-import { recodeAddress } from '@polymeshassociation/extension-core/utils';
-import {
-  SvgDeleteOutline,
-  SvgFileLockOutline,
-} from '@polymeshassociation/extension-ui/assets/images/icons';
-import { InitialsAvatar } from '@polymeshassociation/extension-ui/components/InitialsAvatar';
-import {
-  Box,
-  Button,
-  ButtonSmall,
-  Flex,
-  Icon,
-  LabelWithCopy,
-  Text,
-  TextEllipsis,
-  TextInput,
-} from '@polymeshassociation/extension-ui/ui';
-import verifyJsonPassword from '@polymeshassociation/extension-ui/util/verifyJsonPassword';
-import React, { FC, useContext, useRef, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 import { FormProvider, useForm } from 'react-hook-form';
+
+import { recodeAddress } from '@polymeshassociation/extension-core/utils';
+import { SvgDeleteOutline, SvgFileLockOutline } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { InitialsAvatar } from '@polymeshassociation/extension-ui/components/InitialsAvatar';
+import { Box, Button, ButtonSmall, Flex, Icon, LabelWithCopy, Text, TextEllipsis, TextInput } from '@polymeshassociation/extension-ui/ui';
+import verifyJsonPassword from '@polymeshassociation/extension-ui/util/verifyJsonPassword';
 
 import { ActivityContext, PolymeshContext } from '../../../components';
 import { jsonGetAccountInfo } from '../../../messaging';
@@ -39,22 +29,21 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
 
   const [accountName, setAccountName] = useState('');
   const [accountJson, setAccountJson] = useState<
-    KeyringPair$Json | undefined
+  KeyringPair$Json | undefined
   >();
   const methods = useForm({
     defaultValues: {
-      jsonPassword: '',
       jsonFile: null,
-    },
+      jsonPassword: ''
+    }
   });
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { clearErrors, errors, handleSubmit, register, setError } = methods;
   const isBusy = useContext(ActivityContext);
   const handleError = useErrorHandler();
-  const {
-    networkState: { ss58Format },
-  } = useContext(PolymeshContext);
+  const { networkState: { ss58Format } } = useContext(PolymeshContext);
 
-  const onSubmit = (data: { [x: string]: string }) => {
+  const onSubmit = useCallback((data: Record<string, string>) => {
     if (accountJson) {
       try {
         const password = data.jsonPassword;
@@ -69,13 +58,13 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
         handleError(e);
       }
     }
-  };
+  }, [accountJson, accountName, handleError, onContinue, setError]);
 
   const BYTE_STR_0 = '0'.charCodeAt(0);
   const BYTE_STR_X = 'x'.charCodeAt(0);
   const NOOP = (): void => undefined;
 
-  const convertResult = (
+  const convertResult = useCallback((
     result: ArrayBuffer,
     convertHex?: boolean
   ): Uint8Array => {
@@ -91,24 +80,20 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
     }
 
     return data;
-  };
+  }, [BYTE_STR_0, BYTE_STR_X]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target?.files?.[0] && readFile(e.target?.files?.[0]);
-  };
-
-  const showUpload = () => {
+  const showUpload = useCallback(() => {
     fileRef.current.click();
-  };
+  }, []);
 
-  const readFile = (file: File) => {
+  const readFile = useCallback((file: File) => {
     const reader = new FileReader();
 
     reader.onabort = NOOP;
     reader.onerror = NOOP;
 
     reader.onload = async ({ target }: ProgressEvent<FileReader>) => {
-      if (target && target.result) {
+      if (target?.result) {
         try {
           const name = file.name;
           const data = convertResult(target.result as ArrayBuffer, false);
@@ -122,45 +107,63 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
           setAccountJson(json);
 
           clearErrors('jsonFile');
-        } catch (error) {
+        } catch (_error) {
           setError('jsonFile', { type: 'invalid' });
         }
       }
     };
 
     reader.readAsArrayBuffer(file);
-  };
+  }, [clearErrors, convertResult, setError]);
 
-  const clearUploadedFile = () => {
+  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    e.target?.files?.[0] && readFile(e.target?.files?.[0]);
+  }, [readFile]);
+
+  const clearUploadedFile = useCallback(() => {
     setAccountJson(undefined);
     setFilename('');
     setAccountName('');
-  };
+  }, []);
+
+  const handleFormSubmit = useCallback((e: React.FormEvent) => {
+    handleSubmit(onSubmit)(e).catch(console.error);
+  }, [handleSubmit, onSubmit]);
 
   return (
     <>
-      <Box mx="s">
-        <Box pt="s">
-          <Text color="gray.1" variant="b2m">
+      <Box mx='s'>
+        <Box pt='s'>
+          <Text
+            color='gray.1'
+            variant='b2m'
+          >
             JSON file
           </Text>
         </Box>
         <>
           <input
-            accept=".json"
+            accept='.json'
             hidden={true}
-            name="jsonFile"
+            name='jsonFile'
             onChange={handleFileChange}
             ref={fileRef}
-            type="file"
+            type='file'
           />
-          <Box mt="s">
-            <ButtonSmall fluid onClick={showUpload} variant="secondary">
+          <Box mt='s'>
+            <ButtonSmall
+              fluid
+              onClick={showUpload}
+              variant='secondary'
+            >
               Choose file
             </ButtonSmall>
             {errors.jsonFile && (
-              <Box mt="s">
-                <Text color="alert" variant="b3">
+              <Box mt='s'>
+                <Text
+                  color='alert'
+                  variant='b3'
+                >
                   {errors.jsonFile.type === 'required' &&
                     'Json file is require'}
                   {errors.jsonFile.type === 'invalid' &&
@@ -172,79 +175,103 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
         </>
         {accountJson && (
           <>
-            <Flex mt="s">
-              <Box mr="s">
+            <Flex mt='s'>
+              <Box mr='s'>
                 <Flex
-                  backgroundColor="gray7"
-                  borderRadius="50%"
-                  height="24px"
-                  justifyContent="center"
-                  width="24px"
+                  backgroundColor='gray7'
+                  borderRadius='50%'
+                  height='24px'
+                  justifyContent='center'
+                  width='24px'
                 >
                   <Icon
                     Asset={SvgFileLockOutline}
-                    color="gray4"
+                    color='gray4'
                     height={14}
                     width={14}
                   />
                 </Flex>
               </Box>
-              <Box mr="s">
-                <Text color="gray1" variant="b2">
+              <Box mr='s'>
+                <Text
+                  color='gray1'
+                  variant='b2'
+                >
                   <TextEllipsis size={32}>{filename}</TextEllipsis>
                 </Text>
               </Box>
-              <Box onClick={clearUploadedFile} style={{ cursor: 'pointer' }}>
+              <Box
+                onClick={clearUploadedFile}
+                style={{ cursor: 'pointer' }}
+              >
                 <Icon
                   Asset={SvgDeleteOutline}
-                  color="gray4"
+                  color='gray4'
                   height={18}
                   width={18}
                 />
               </Box>
             </Flex>
-            <Box mt="m">
-              <Flex justifyContent="space-between">
+            <Box mt='m'>
+              <Flex justifyContent='space-between'>
                 <InitialsAvatar name={accountName} />
-                <Box ml="s" width="100%">
-                  <Flex flexDirection="row" justifyContent="space-between">
-                    <Flex flexDirection="row">
-                      <Text color="gray.1" variant="b2m">
+                <Box
+                  ml='s'
+                  width='100%'
+                >
+                  <Flex
+                    flexDirection='row'
+                    justifyContent='space-between'
+                  >
+                    <Flex flexDirection='row'>
+                      <Text
+                        color='gray.1'
+                        variant='b2m'
+                      >
                         {accountName}
                       </Text>
                     </Flex>
                   </Flex>
                   <LabelWithCopy
-                    color="gray.3"
+                    color='gray.3'
                     text={
                       accountJson?.address
                         ? recodeAddress(accountJson.address, ss58Format)
                         : ''
                     }
                     textSize={30}
-                    textVariant="b3"
+                    textVariant='b3'
                   />
                 </Box>
               </Flex>
             </Box>
             <FormProvider {...methods}>
-              <form id="accountForm" onSubmit={handleSubmit(onSubmit)}>
-                <Box mt="s">
+              <form
+                id='accountForm'
+                onSubmit={handleFormSubmit}
+              >
+                <Box mt='s'>
                   <Box>
-                    <Text color="gray.1" variant="b2m">
+                    <Text
+                      color='gray.1'
+                      variant='b2m'
+                    >
                       JSON Password
                     </Text>
                   </Box>
                   <Box>
                     <TextInput
                       inputRef={register({ required: true })}
-                      name="jsonPassword"
-                      placeholder="Enter JSON file password"
-                      type="password"
+                      name='jsonPassword'
+                      placeholder='Enter JSON file password'
+                      type='password'
                     />
                     {errors.jsonPassword && (
                       <Box>
-                        <Text color="alert" variant="b3">
+                        <Text
+                          color='alert'
+                          variant='b3'
+                        >
                           {errors.jsonPassword.type === 'required' &&
                             'Required field'}
                           {errors.jsonPassword.type === 'manual' &&
@@ -261,17 +288,17 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
       </Box>
       <Flex
         flex={1}
-        flexDirection="column"
-        justifyContent="flex-end"
-        mb="s"
-        mx="s"
+        flexDirection='column'
+        justifyContent='flex-end'
+        mb='s'
+        mx='s'
       >
         <Button
           busy={isBusy}
           disabled={!accountJson}
           fluid
-          form="accountForm"
-          type="submit"
+          form='accountForm'
+          type='submit'
         >
           Verify
         </Button>

@@ -1,30 +1,31 @@
 const path = require('path');
 const webpack = require('webpack');
-
 const CopyPlugin = require('copy-webpack-plugin');
 const ManifestPlugin = require('webpack-extension-manifest-plugin');
+
+const { blake2AsHex } = require('@polkadot/util-crypto');
 
 const pkgJson = require('./package.json');
 const manifest = require('./manifest.json');
 
-module.exports = (entry, isDev) => ({
+module.exports = (entry) => ({
   context: __dirname,
   devtool: false,
   entry,
-  experiments: {
-    syncWebAssembly: true,
-  },
   module: {
     rules: [
       {
         exclude: /(node_modules)/,
-        test: /\.(js|mjs|ts|tsx)$/,
+        test: /\.(ts|tsx)$/,
         use: [
           {
-            loader: require.resolve('babel-loader'),
-            options: require('@polkadot/dev/config/babel-config-webpack.cjs'),
-          },
-        ],
+            loader: require.resolve('ts-loader'),
+            options: {
+              configFile: 'tsconfig.webpack.json',
+              transpileOnly: true
+            }
+          }
+        ]
       },
       {
         test: [/\.svg$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.woff2?$/],
@@ -34,65 +35,64 @@ module.exports = (entry, isDev) => ({
             options: {
               esModule: false,
               limit: 10000,
-              name: 'static/[name].[ext]',
-            },
-          },
-        ],
-      },
-      {
-        test: /\.css$/,
-        loader: 'raw-loader',
-      },
-    ],
+              name: 'static/[name].[ext]'
+            }
+          }
+        ]
+      }
+    ]
   },
   output: {
     chunkFilename: '[name].js',
     filename: '[name].js',
-    globalObject: "(typeof self !== 'undefined' ? self : this)",
-    path: path.join(__dirname, 'build'),
+    globalObject: '(typeof self !== \'undefined\' ? self : this)',
+    path: path.join(__dirname, 'build')
   },
   performance: {
-    hints: false,
+    hints: false
   },
   plugins: [
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
-      process: 'process/browser.js',
+      process: 'process/browser.js'
     }),
     new webpack.IgnorePlugin({
-      contextRegExp: /^\.\/locale$/,
-      resourceRegExp: /moment$/,
+      contextRegExp: /moment$/,
+      resourceRegExp: /^\.\/locale$/
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(isDev ? 'development' : 'production'),
-        PKG_NAME: JSON.stringify(pkgJson.name),
+        EXTENSION_PREFIX: JSON.stringify(process.env.EXTENSION_PREFIX || 'polywallet'),
+        NODE_ENV: JSON.stringify('production'),
         PKG_VERSION: JSON.stringify(pkgJson.version),
-      },
+        PORT_PREFIX: JSON.stringify(blake2AsHex(JSON.stringify(manifest), 64))
+      }
     }),
     new CopyPlugin({ patterns: [{ from: 'public' }] }),
     new ManifestPlugin({
       config: {
         base: manifest,
         extend: {
-          version: pkgJson.version.split('-')[0], // remove possible -beta.xx
-        },
-      },
-    }),
+          version: pkgJson.version.split('-')[0] // remove possible -beta.xx
+        }
+      }
+    })
   ],
   resolve: {
     alias: {
       '@polymeshassociation/extension': path.resolve(__dirname, '../extension/src'),
-      '@polymeshassociation/extension-ui': path.resolve(__dirname, '../ui/src'),
       '@polymeshassociation/extension-core': path.resolve(__dirname, '../core/src'),
-      'react/jsx-runtime': require.resolve('react/jsx-runtime'),
+      '@polymeshassociation/extension-ui': path.resolve(__dirname, '../ui/src')
     },
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.wasm'],
+    extensionAlias: {
+      '.js': ['.ts', '.tsx', '.js']
+    },
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     fallback: {
       crypto: require.resolve('crypto-browserify'),
       path: require.resolve('path-browserify'),
-      stream: require.resolve('stream-browserify'),
-    },
+      stream: require.resolve('stream-browserify')
+    }
   },
-  watch: isDev,
+  watch: false
 });

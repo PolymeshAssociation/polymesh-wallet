@@ -1,5 +1,6 @@
+import type { ThemeProps } from '@polymeshassociation/extension-ui/types';
+
 import { styled } from '@polymeshassociation/extension-ui/styles';
-import { ThemeProps } from '@polymeshassociation/extension-ui/types';
 
 import { Flex } from '../Flex';
 
@@ -9,7 +10,7 @@ export const Wrapper = styled(Flex)<ThemeProps>`
   padding: 0 30px 0 0;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.polyIndigo};
+  color: ${({ theme }: ThemeProps) => theme.colors.polyIndigo};
   font-style: normal;
   font-weight: 500;
   font-size: 14px;

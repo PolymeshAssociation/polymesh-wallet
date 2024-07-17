@@ -1,13 +1,16 @@
+import type { CSSObject } from 'styled-components';
+import type { Styles } from '../../styles/types';
+import type { TooltipProps } from './definitions';
+
 import { createGlobalStyle } from 'styled-components';
 
-import { Styles } from '../../styles/types';
-import { TooltipDefaultProps, TooltipProps } from './definitions';
+import { TooltipDefaultProps } from './definitions';
 
 const arrowSize = 8;
 
 export const TippyStyles = createGlobalStyle`
   .tippy-box {
-    z-index: 9999;   
+    z-index: 9999;
   }
   .tippy-box[data-placement^="top"] > .tippy-arrow {
       bottom: 0;
@@ -53,7 +56,7 @@ export const TippyStyles = createGlobalStyle`
   .tippy-arrow {
       width: ${arrowSize * 2}px;
       height: ${arrowSize * 2}px;
-      color: #1E1E1E; 
+      color: #1E1E1E;
   }
   .tippy-arrow:before {
       content: "";
@@ -69,36 +72,34 @@ export const TippyStyles = createGlobalStyle`
   .tippy-box[data-animation=shift-away][data-state=hidden]{opacity:0}.tippy-box[data-animation=shift-away][data-state=hidden][data-placement^=top]{transform:translateY(10px)}.tippy-box[data-animation=shift-away][data-state=hidden][data-placement^=bottom]{transform:translateY(-10px)}.tippy-box[data-animation=shift-away][data-state=hidden][data-placement^=left]{transform:translateX(10px)}.tippy-box[data-animation=shift-away][data-state=hidden][data-placement^=right]{transform:translateX(-10px)}
 `;
 
-export const tooltipStyles: Styles = () => ({
-  userSelect: 'auto',
+export const tooltipStyles: CSSObject = {
   cursor: 'auto',
-});
+  userSelect: 'auto'
+};
 
-export const getVariant: Styles<TooltipProps> = ({
-  theme,
-  variant = TooltipDefaultProps.variant,
-}) =>
-({
-  primary: {
-    boxShadow: theme.shadows[1],
-    maxWidth: '15rem',
-    borderRadius: theme.radii[3],
-    backgroundColor: theme.colors.gray[1],
-    color: 'white',
-    padding: `${theme.space[0]} ${theme.space[0]}`,
-    fontSize: theme.fontSizes[0],
-  },
-  secondary: {
-    boxShadow: theme.shadows[3],
-    maxWidth: '15rem',
-    backgroundColor: 'white',
-    color: 'black',
-    padding: `${theme.space[1]} ${theme.space[3]}`,
-    border: '1px solid #EBF0F7',
-    wordWrap: 'break-word' as const,
-    fontWeight: 'normal' as const,
-    lineHeight: theme.lineHeights.normal,
-    fontSize: theme.fontSizes.baseText,
-  },
-  raw: {},
-}[variant]);
+export const getVariant: Styles<TooltipProps> = ({ theme,
+  variant = TooltipDefaultProps.variant }) =>
+  ({
+    primary: {
+      backgroundColor: theme.colors.gray[1],
+      borderRadius: theme.radii[3],
+      boxShadow: theme.shadows[1],
+      color: 'white',
+      fontSize: theme.fontSizes[0],
+      maxWidth: '15rem',
+      padding: `${theme.space[0]} ${theme.space[0]}`
+    },
+    raw: {},
+    secondary: {
+      backgroundColor: 'white',
+      border: '1px solid #EBF0F7',
+      boxShadow: theme.shadows[3],
+      color: 'black',
+      fontSize: theme.fontSizes.baseText,
+      fontWeight: 'normal' as const,
+      lineHeight: theme.lineHeights.normal,
+      maxWidth: '15rem',
+      padding: `${theme.space[1]} ${theme.space[3]}`,
+      wordWrap: 'break-word' as const
+    }
+  }[variant]);

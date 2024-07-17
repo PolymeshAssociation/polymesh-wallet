@@ -6,10 +6,14 @@ interface Props {
   children: React.ReactNode;
 }
 
-function ValidationError({ children }: Props): React.ReactElement<Props> {
+function ValidationError ({ children }: Props): React.ReactElement<Props> {
   return (
     <Box>
-      <Text className="validation-error" color="alert" variant="b3">
+      <Text
+        className='validation-error'
+        color='alert'
+        variant='b3'
+      >
         {children}
       </Text>
     </Box>

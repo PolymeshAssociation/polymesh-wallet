@@ -1,4 +1,6 @@
-import React, { FC } from 'react';
+import type { FC } from 'react';
+
+import React from 'react';
 
 import { StatusBadge } from '../ui';
 
@@ -12,7 +14,10 @@ export const AccountType: FC<Props> = ({ keyType, large }) => {
   const text = keyType === 'primary' ? 'Primary' : keyType === 'secondary' ? 'Secondary' : 'MultiSigSigner';
 
   return (
-    <StatusBadge large={large} variant={color}>
+    <StatusBadge
+      large={large}
+      variant={color}
+    >
       {text}
     </StatusBadge>
   );

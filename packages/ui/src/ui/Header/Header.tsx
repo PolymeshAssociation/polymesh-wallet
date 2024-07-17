@@ -1,9 +1,12 @@
-import { ThemeProps } from '@polymeshassociation/extension-ui/types';
-import React, { FC } from 'react';
+import type { FC } from 'react';
+import type { ThemeProps } from '@polymeshassociation/extension-ui/types';
+import type { BoxProps } from '../Box';
+
+import React, { useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import styled from 'styled-components';
 
-import { Box, BoxProps } from '../Box';
+import { Box } from '../Box';
 import { Flex } from '../Flex';
 import { Heading } from '../Heading';
 import { Icon } from '../Icon';
@@ -16,9 +19,9 @@ export interface HeaderProps extends BoxProps {
 }
 
 const HeaderBox = styled(Box)(({ theme }: ThemeProps) => ({
-  padding: theme.space.m,
   background: theme.colors.gradient,
-  zIndex: 500,
+  padding: theme.space.m,
+  zIndex: 500
 }));
 
 export const Header: FC<HeaderProps> = (props) => {
@@ -27,27 +30,30 @@ export const Header: FC<HeaderProps> = (props) => {
   const { pathname } = useLocation();
   const history = useHistory();
 
-  const onCancel = () => {
+  const onCancel = useCallback(() => {
     history.push('/');
-  };
+  }, [history]);
 
   return (
     <HeaderBox {...otherProps}>
       {iconAsset && (
         <>
-          <Flex alignItems="flex-start" justifyContent="space-between">
+          <Flex
+            alignItems='flex-start'
+            justifyContent='space-between'
+          >
             <Flex
-              backgroundColor="white"
-              borderRadius="50%"
+              backgroundColor='white'
+              borderRadius='50%'
               height={48}
-              justifyContent="center"
+              justifyContent='center'
               px={12}
               py={12}
               width={48}
             >
               <Icon
                 Asset={iconAsset}
-                color="brandMain"
+                color='brandMain'
                 height={20}
                 width={20}
               />
@@ -55,15 +61,21 @@ export const Header: FC<HeaderProps> = (props) => {
             {pathname !== '/' && (
               <Box style={{ cursor: 'pointer' }}>
                 <Link onClick={onCancel}>
-                  <Text color="polyNavyBlue" variant="b2">
+                  <Text
+                    color='polyNavyBlue'
+                    variant='b2'
+                  >
                     Cancel
                   </Text>
                 </Link>
               </Box>
             )}
           </Flex>
-          <Box pt="m">
-            <Heading color="white" variant="h4">
+          <Box pt='m'>
+            <Heading
+              color='white'
+              variant='h4'
+            >
               {headerText}
             </Heading>
           </Box>

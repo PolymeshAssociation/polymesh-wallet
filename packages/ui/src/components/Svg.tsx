@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import type { ThemeProps } from '../types';
 
-import { ThemeProps } from '../types';
+import styled from 'styled-components';
 
 interface Props {
   src: string;

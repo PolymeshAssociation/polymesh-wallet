@@ -1,6 +1,9 @@
-import { PolymeshContext } from '@polymeshassociation/extension-ui/components';
-import React, { FC, useContext } from 'react';
+import type { FC } from 'react';
+
+import React, { useContext } from 'react';
 import { useParams } from 'react-router';
+
+import { PolymeshContext } from '@polymeshassociation/extension-ui/components';
 
 import { AccountView } from './AccountView';
 

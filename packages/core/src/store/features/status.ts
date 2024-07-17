@@ -1,38 +1,36 @@
-import {
-  Error,
-  NetworkName,
-  StoreStatus,
-} from '@polymeshassociation/extension-core/types';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { Error, NetworkName, StoreStatus } from '@polymeshassociation/extension-core/types';
+
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: StoreStatus = {
-  error: null,
   apiStatus: 'connecting',
-  populated: {},
+  error: null,
+  populated: {}
 };
 
 const statusSlice = createSlice({
-  name: 'status',
   initialState,
+  name: 'status',
   reducers: {
-    init(state) {
-      state.error = null;
-      state.apiStatus = 'connecting';
+    apiError (state) {
+      state.apiStatus = 'error';
     },
-    apiReady(state) {
+    apiReady (state) {
       state.error = null;
       state.apiStatus = 'ready';
     },
-    apiError(state) {
-      state.apiStatus = 'error';
-    },
-    populated(state, action: PayloadAction<NetworkName>) {
-      state.populated[action.payload] = true;
-    },
-    error(state, action: PayloadAction<Error | null>) {
+    error (state, action: PayloadAction<Error | null>) {
       state.error = action.payload ? action.payload : null;
     },
-  },
+    init (state) {
+      state.error = null;
+      state.apiStatus = 'connecting';
+    },
+    populated (state, action: PayloadAction<NetworkName>) {
+      state.populated[action.payload] = true;
+    }
+  }
 });
 
 export const actions = statusSlice.actions;

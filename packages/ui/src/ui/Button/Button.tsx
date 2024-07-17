@@ -1,14 +1,19 @@
-import React, { ForwardRefRenderFunction } from 'react';
+/* eslint-disable sort-keys */
+import type { ForwardRefRenderFunction } from 'react';
+import type { ThemeProps } from '@polymeshassociation/extension-ui/types';
+import type { ButtonProps } from './definitions';
+
+import React from 'react';
 
 import { styled } from '../../styles';
 import { Icon } from '../Icon';
 import { Loading } from '../Loading';
-import { ButtonDefaultProps, ButtonProps } from './definitions';
+import { ButtonDefaultProps } from './definitions';
 import { getIconStyle, getVariant } from './styles';
 
 const ButtonComponent: ForwardRefRenderFunction<
-  HTMLButtonElement,
-  React.PropsWithChildren<ButtonProps>
+HTMLButtonElement,
+React.PropsWithChildren<ButtonProps>
 > = (
   { RouterLink, busy, children, disabled, href, onClick, ...otherProps },
   ref
@@ -34,8 +39,10 @@ const ButtonComponent: ForwardRefRenderFunction<
 
 const ButtonWithRef = React.forwardRef(ButtonComponent);
 
+interface Props extends ThemeProps, ButtonProps{}
+
 export const Button = styled(ButtonWithRef)<ButtonProps>(
-  ({ fluid, iconPosition, minsize, theme, tight }) => ({
+  ({ fluid, iconPosition, minsize, theme, tight }: Props) => ({
     whiteSpace: 'nowrap',
     position: 'relative',
     display: 'inline-flex',
@@ -60,14 +67,14 @@ export const Button = styled(ButtonWithRef)<ButtonProps>(
       backgroundColor: theme.colors.disabled,
       color: theme.colors.inactive,
       boxShadow: 'none',
-      cursor: 'not-allowed',
+      cursor: 'not-allowed'
     },
 
     [Icon]: {
       ...(iconPosition && {
-        [`margin${getIconStyle(iconPosition)}`]: theme.space.s,
-      }),
-    },
+        [`margin${getIconStyle(iconPosition)}`]: theme.space.s
+      })
+    }
   }),
   getVariant
 );

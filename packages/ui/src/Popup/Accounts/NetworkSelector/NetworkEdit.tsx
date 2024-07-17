@@ -1,8 +1,12 @@
-import React, { FC, ChangeEvent, useState } from 'react';
+import type { ChangeEvent, FC } from 'react';
+
+import React, { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Text, Flex, Box, Icon, TextInput } from "@polymeshassociation/extension-ui/ui"
-import { SvgChecklistFilled, SvgAlertCircle } from '@polymeshassociation/extension-ui/assets/images/icons';
-import { NetworkLabelContainer, NetworkLabel } from './styles';
+
+import { SvgAlertCircle, SvgChecklistFilled } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { Box, Flex, Icon, Text, TextInput } from '@polymeshassociation/extension-ui/ui';
+
+import { NetworkLabel, NetworkLabelContainer } from './styles';
 
 interface Props {
   defaultValue: string;
@@ -11,17 +15,15 @@ interface Props {
 
 const rpcUrlRegex = /^(wss?):\/\/(www\.)?([-a-zA-Z0-9@:%._+~#=]+|\[[a-fA-F0-9:]+\])(:\d+)?([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
 
-export const NetworkEdit: FC<Props> = ({
-  defaultValue,
-  setUrlValue,
-}) => {
+export const NetworkEdit: FC<Props> = ({ defaultValue,
+  setUrlValue }) => {
   const [value, setValue] = useState(defaultValue);
 
-  const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeValue = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value.trim());
-  };
+  }, []);
 
-  const handleSetValue = () => {
+  const handleSetValue = useCallback(() => {
     const networkUrl = value;
     const isValidRpcUrl = rpcUrlRegex.test(networkUrl);
 
@@ -30,38 +32,47 @@ export const NetworkEdit: FC<Props> = ({
         <Flex>
           <Icon
             Asset={SvgAlertCircle}
-            color="warning1"
+            color='warning1'
             height={20}
             width={20}
           />
-          <Box ml="10px">
-            <Text color="white" variant="b3m">
+          <Box ml='10px'>
+            <Text
+              color='white'
+              variant='b3m'
+            >
               {`${value} is not a valid url!`}
             </Text>
           </Box>
         </Flex>
       );
+
       return;
     }
 
     setUrlValue(networkUrl);
-  };
+  }, [setUrlValue, value]);
 
   return (
-    <Box px="16px" mb="8px">
+    <Box
+      mb='8px'
+      px='16px'
+    >
       <Flex>
         <NetworkLabelContainer>
           <NetworkLabel>Enter rpc url</NetworkLabel>
-          <TextInput value={value} onChange={handleChangeValue} />
+          <TextInput
+            onChange={handleChangeValue}
+            value={value}
+          />
         </NetworkLabelContainer>
-
-        <Box pt="16px">
+        <Box pt='16px'>
           <Icon
             Asset={SvgChecklistFilled}
-            style={{ cursor: 'pointer' }}
-            onClick={() => handleSetValue()}
-            color="polyPink"
+            color='polyPink'
             height={24}
+            onClick={handleSetValue}
+            style={{ cursor: 'pointer' }}
             width={24}
           />
         </Box>

@@ -1,4 +1,6 @@
-import React, { FC } from 'react';
+import type { FC } from 'react';
+
+import React from 'react';
 
 import { BaseInputArea } from '../BaseInputArea';
 
@@ -12,5 +14,11 @@ export interface Props extends BaseInputProps {
 export const TextArea: FC<Props> = (props) => {
   const { name, ...otherProps } = props;
 
-  return <BaseInputArea id={name} name={name} {...otherProps} />;
+  return (
+    <BaseInputArea
+      id={name}
+      name={name}
+      {...otherProps}
+    />
+  );
 };

@@ -1,7 +1,9 @@
-import React, { FC, InputHTMLAttributes } from 'react';
+import type { FC, InputHTMLAttributes } from 'react';
+import type * as typeHelpers from '../../typings/helpers';
+
+import React, { useCallback } from 'react';
 
 import { SvgCheckmark, SvgMinusBox } from '../../assets/images/icons';
-import * as typeHelpers from '../../typings/helpers';
 import { InlineFlex } from '../InlineFlex';
 import { Label } from './Label';
 import * as sc from './styles';
@@ -22,15 +24,13 @@ export interface Props
   indeterminate?: boolean;
 }
 
-export const Checkbox: FC<Props> = ({
-  checked,
+export const Checkbox: FC<Props> = ({ checked,
   defaultChecked,
   indeterminate,
   label,
   name,
   onChange,
-  ...other
-}) => {
+  ...other }) => {
   let checkedProps;
 
   if (typeof checked !== 'undefined') {
@@ -39,11 +39,11 @@ export const Checkbox: FC<Props> = ({
     checkedProps = { defaultChecked };
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
       onChange(e.currentTarget.checked);
     }
-  };
+  }, [onChange]);
 
   return (
     <Label htmlFor={name}>
@@ -54,24 +54,24 @@ export const Checkbox: FC<Props> = ({
           id={name}
           name={name}
           onChange={handleChange}
-          type="checkbox"
+          type='checkbox'
         />
         <sc.CheckboxInput
           {...(indeterminate ? { className: 'indeterminate' } : {})}
         >
           <sc.CheckStateIcon
             Asset={SvgMinusBox}
-            className="minusIcon"
-            color="brandMain"
-            height="1.3em"
-            width="1.3em"
+            className='minusIcon'
+            color='brandMain'
+            height='1.3em'
+            width='1.3em'
           />
           <sc.CheckStateIcon
             Asset={SvgCheckmark}
-            className="checkIcon"
-            color="white"
-            height="0.9em"
-            width="0.9em"
+            className='checkIcon'
+            color='white'
+            height='0.9em'
+            width='0.9em'
           />
         </sc.CheckboxInput>
         {label && <InlineFlex ml={2}>{label}</InlineFlex>}

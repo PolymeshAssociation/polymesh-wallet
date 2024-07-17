@@ -1,16 +1,15 @@
-import {
-  AuthUrlInfo,
-  AuthUrls,
-} from '@polkadot/extension-base/background/handlers/State';
+import type { AuthUrlInfo, AuthUrls } from '@polkadot/extension-base/background/types';
+
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { SvgFileLockOutline } from '@polymeshassociation/extension-ui/assets/images/icons';
 import { Box, Flex, Header, Hr, Text } from '@polymeshassociation/extension-ui/ui';
-import React, { useCallback, useEffect, useState } from 'react';
 
 import { InputFilter } from '../../components';
 import { getAuthList, removeAuthorization } from '../../messaging';
 import WebsiteEntry from './WebsiteEntry';
 
-export function AuthManagement(): JSX.Element {
+export function AuthManagement (): React.ReactElement {
   const [authList, setAuthList] = useState<AuthUrls | null>(null);
   const [filter, setFilter] = useState('');
 
@@ -33,20 +32,32 @@ export function AuthManagement(): JSX.Element {
   const hasAuthList = !!(authList && Object.entries(authList)?.length);
 
   return (
-    <Flex flexDirection="column" height="100%">
+    <Flex
+      flexDirection='column'
+      height='100%'
+    >
       <Header
-        headerText="Manage connected dApps"
+        headerText='Manage connected dApps'
         iconAsset={SvgFileLockOutline}
-        width="100%"
+        width='100%'
       >
-        <Box mb="m" mt="s">
-          <Text color="gray.0" variant="b2">
+        <Box
+          mb='m'
+          mt='s'
+        >
+          <Text
+            color='gray.0'
+            variant='b2'
+          >
             Allow or deny these applications to connect to your Polymesh Wallet.
           </Text>
         </Box>
       </Header>
       {hasAuthList && (
-        <Box p="s" width="100%">
+        <Box
+          p='s'
+          width='100%'
+        >
           <InputFilter
             onChange={_onChangeFilter}
             placeholder={'Search by website name...'}
@@ -54,26 +65,36 @@ export function AuthManagement(): JSX.Element {
           />
         </Box>
       )}
-      <Box py="s" style={{ overflowY: 'auto' }} width="100%">
-        {hasAuthList ? (
-          Object.entries(authList)
-            .filter(([url]: [string, AuthUrlInfo]) => url.includes(filter))
-            .map(([url, info]: [string, AuthUrlInfo]) => (
-              <>
-                <WebsiteEntry
-                  info={info}
-                  key={url}
-                  removeAuth={removeAuth}
-                  url={url}
-                />
-                <Hr />
-              </>
-            ))
-        ) : (
-          <Text as="div" textAlign="center" variant="b1m">
+      <Box
+        py='s'
+        style={{ overflowY: 'auto' }}
+        width='100%'
+      >
+        {hasAuthList
+          ? (
+            Object.entries(authList)
+              .filter(([url]: [string, AuthUrlInfo]) => url.includes(filter))
+              .map(([url, info]: [string, AuthUrlInfo]) => (
+                <>
+                  <WebsiteEntry
+                    info={info}
+                    key={url}
+                    removeAuth={removeAuth}
+                    url={url}
+                  />
+                  <Hr />
+                </>
+              ))
+          )
+          : (
+            <Text
+              as='div'
+              textAlign='center'
+              variant='b1m'
+            >
             No website requests yet!
-          </Text>
-        )}
+            </Text>
+          )}
       </Box>
     </Flex>
   );

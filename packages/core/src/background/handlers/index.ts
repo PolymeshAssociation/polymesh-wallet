@@ -1,24 +1,31 @@
-import { assert } from '@polkadot/util';
-import { PORTS } from '@polymeshassociation/extension-core/constants';
-import DotState from '@polkadot/extension-base/background/handlers/State';
+/* global chrome */
 
-import { PolyMessageTypes, PolyTransportRequestMessage } from '../types';
+import type { PolyMessageTypes, PolyTransportRequestMessage } from '../types';
+
+import DotState from '@polkadot/extension-base/background/handlers/State';
+import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
+import { assert } from '@polkadot/util';
+
 import Extension from './Extension';
 import Tabs from './Tabs';
 
 const state = new DotState();
+
+await state.init();
 const extension = new Extension(state); // handles messages coming from the extension popup
 const tabs = new Tabs(state); // handles messages coming from the app running in the currently open tab
 
-export default function handler<TMessageType extends PolyMessageTypes>(
-  { id, message, request }: PolyTransportRequestMessage<TMessageType>,
-  port: chrome.runtime.Port
-): void {
-  const isExtension = port.name === PORTS.EXTENSION;
-  const sender = port.sender as chrome.runtime.MessageSender;
+export default function handler<TMessageType extends PolyMessageTypes> ({ id, message, request }: PolyTransportRequestMessage<TMessageType>, port?: chrome.runtime.Port, extensionPortName = PORT_EXTENSION): void {
+  const isExtension = !port || port?.name === extensionPortName;
+  const sender = port?.sender;
+
+  if (!isExtension && !sender) {
+    throw new Error('Unable to extract message sender');
+  }
+
   const from = isExtension
-    ? PORTS.EXTENSION
-    : sender.url || sender.tab?.url || '<unknown>';
+    ? 'extension'
+    : sender?.url || sender?.tab?.url || '<unknown>';
   const source = `${from}: ${id}: ${message}`;
 
   console.log(` [in] ${source}`); // :: ${JSON.stringify(request)}`);
@@ -28,7 +35,7 @@ export default function handler<TMessageType extends PolyMessageTypes>(
     : tabs._handle(id, message, request, from, port);
 
   promise
-    .then((response): void => {
+    .then((response: unknown): void => {
       console.log(`[out] ${source}`); // :: ${JSON.stringify(response)}`);
 
       // between the start and the end of the promise, the user may have closed

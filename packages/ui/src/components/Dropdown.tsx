@@ -1,6 +1,6 @@
 import type { ThemeProps } from '../types';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 import arrow from '../assets/arrow-down.svg';
@@ -24,8 +24,7 @@ interface Props extends ThemeProps {
   value?: string;
 }
 
-function Dropdown({
-  className,
+function Dropdown ({ className,
   defaultValue,
   isDisabled,
   isFocussed,
@@ -33,17 +32,17 @@ function Dropdown({
   onBlur,
   onChange,
   options,
-  value,
-}: Props): React.ReactElement<Props> {
-  const _onChange = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLSelectElement>): void => {
+  value }: Props): React.ReactElement<Props> {
+  const _onChange = useCallback(({ target: { value } }: React.ChangeEvent<HTMLSelectElement>): void => {
     onChange && onChange(value.trim());
-  };
+  }, [onChange]);
 
   return (
     <>
-      <Label className={className} label={label}>
+      <Label
+        className={className}
+        label={label}
+      >
         <select
           autoFocus={isFocussed}
           defaultValue={defaultValue || undefined}
@@ -54,7 +53,10 @@ function Dropdown({
         >
           {options.map(
             ({ text, value }): React.ReactNode => (
-              <option key={value} value={value}>
+              <option
+                key={value}
+                value={value}
+              >
                 {text}
               </option>
             )

@@ -1,5 +1,6 @@
-import { ButtonHTMLAttributes } from 'react';
-import { WidthProps } from 'styled-system';
+import type { ButtonHTMLAttributes } from 'react';
+import type React from 'react';
+import type { WidthProps } from 'styled-system';
 
 export type HtmlButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 export type ButtonIconPosition = 'left' | 'right' | 'top' | 'bottom';
@@ -26,16 +27,17 @@ export type ButtonProps = HtmlButtonProps & {
    * Optionally specify an href for your Button
    */
   href?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   RouterLink?: React.ComponentType<any>;
   iconPosition?: ButtonIconPosition;
 } & WidthProps;
 
 export const ButtonDefaultProps = {
+  busy: false,
+  fluid: false,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onClick: (): void => {},
-  variant: 'primary' as variants,
-  fluid: false,
-  busy: false,
   tabIndex: 0,
-  type: 'button' as HtmlButtonProps['type'],
+  type: ('button' as HtmlButtonProps['type']),
+  variant: ('primary' as variants)
 };

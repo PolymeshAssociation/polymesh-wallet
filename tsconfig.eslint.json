@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./packages",
+    "composite": false
+  },
+  "include": [
+    "packages/**/src/**/*",
+    "packages/**/webpack.*.cjs",
+    ".prettierrc.cjs",
+    "eslint.config.js",
+    "eslint-custom-config.js",
+    "eslint.rules.js"
+  ],
+  "exclude": ["**/node_modules/**/*"]
+}

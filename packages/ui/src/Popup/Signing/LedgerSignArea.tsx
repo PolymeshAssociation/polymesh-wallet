@@ -1,11 +1,9 @@
 import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
 
-import {
-  ActionContext,
-  Warning,
-} from '@polymeshassociation/extension-ui/components';
-import { Button, Flex } from '@polymeshassociation/extension-ui/ui';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
+
+import { ActionContext, Warning } from '@polymeshassociation/extension-ui/components';
+import { Button, Flex } from '@polymeshassociation/extension-ui/ui';
 
 import { Status, useLedger } from '../../hooks/useLedger';
 import { cancelSignRequest } from '../../messaging';
@@ -15,31 +13,27 @@ interface Props {
   addressOffset?: number;
   className?: string;
   error: string | null;
-  genesisHash?: string;
+  genesisHash?: `0x${string}`;
   onSignature?: ({ signature }: { signature: `0x${string}` }) => void;
   payload?: ExtrinsicPayload;
   setError: (value: string | null) => void;
   signId: string;
 }
 
-function LedgerSignArea({
-  accountIndex,
+function LedgerSignArea ({ accountIndex,
   addressOffset,
   error,
   genesisHash,
   onSignature,
   payload,
   setError,
-  signId,
-}: Props): React.ReactElement<Props> {
+  signId }: Props): React.ReactElement<Props> {
   const [isBusy, setIsBusy] = useState(false);
-  const {
-    error: ledgerError,
+  const { error: ledgerError,
     isLoading: ledgerLoading,
     ledger,
     refresh,
-    status: ledgerStatus,
-  } = useLedger(genesisHash, accountIndex, addressOffset);
+    status: ledgerStatus } = useLedger(genesisHash, accountIndex, addressOffset);
   const onAction = useContext(ActionContext);
 
   const _onRefresh = useCallback(() => {
@@ -65,13 +59,12 @@ function LedgerSignArea({
       });
   }, [accountIndex, addressOffset, ledger, onSignature, payload, setError]);
 
-  const _onCancel = useCallback(
-    (): Promise<void> =>
-      cancelSignRequest(signId)
-        .then(() => onAction())
-        .catch((error: Error) => console.error(error)),
-    [onAction, signId]
-  );
+  const _onCancel = useCallback(() => {
+    (async () => {
+      await cancelSignRequest(signId);
+      onAction();
+    })().catch(console.error);
+  }, [onAction, signId]);
 
   const warning = useMemo(() => {
     if (ledgerStatus === Status.Device) {
@@ -90,35 +83,51 @@ function LedgerSignArea({
   }, [ledgerStatus, ledgerError]);
 
   return (
-    <Flex flexDirection="column" p="s">
+    <Flex
+      flexDirection='column'
+      p='s'
+    >
       {error && <Warning isDanger>{error}</Warning>}
       {warning && <Warning>{warning}</Warning>}
-
-      <Flex alignItems="stretch" flexDirection="row" mt="s" width="100%">
+      <Flex
+        alignItems='stretch'
+        flexDirection='row'
+        mt='s'
+        width='100%'
+      >
         <Flex flex={1}>
-          <Button fluid onClick={_onCancel} variant="secondary">
+          <Button
+            fluid
+            onClick={_onCancel}
+            variant='secondary'
+          >
             Reject
           </Button>
         </Flex>
-        <Flex flex={1} ml="xs">
-          {warning ? (
-            <Button
-              busy={isBusy || ledgerLoading}
-              fluid
-              onClick={_onRefresh}
-              type="submit"
-            >
-              {'Refresh'}
-            </Button>
-          ) : (
-            <Button
-              fluid
-              busy={isBusy || ledgerLoading}
-              onClick={_onSignLedger}
-            >
-              {'Sign on Ledger'}
-            </Button>
-          )}
+        <Flex
+          flex={1}
+          ml='xs'
+        >
+          {warning
+            ? (
+              <Button
+                busy={isBusy || ledgerLoading}
+                fluid
+                onClick={_onRefresh}
+                type='submit'
+              >
+                {'Refresh'}
+              </Button>
+            )
+            : (
+              <Button
+                busy={isBusy || ledgerLoading}
+                fluid
+                onClick={_onSignLedger}
+              >
+                {'Sign on Ledger'}
+              </Button>
+            )}
         </Flex>
       </Flex>
     </Flex>

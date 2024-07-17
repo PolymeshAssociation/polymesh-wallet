@@ -1,4 +1,5 @@
 build/
+build-*/
 master-build/
 coverage/
 node_modules/
@@ -17,10 +18,18 @@ cc-test-reporter
 lerna-debug.log*
 master-build.zip
 master-src.zip
+master-firefox-build.zip
+master-firefox-src.zip
+master-build.zip
+master-src.zip
 npm-debug.log*
+tsconfig.*buildinfo
 yarn-debug.log*
 yarn-error.log*
 package-lock.json
 _book
 docs/html
 .idea
+.vscode
+packages/extension/manifest.json
+

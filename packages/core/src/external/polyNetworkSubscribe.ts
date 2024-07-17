@@ -1,10 +1,10 @@
-import { Unsubscribe } from '@reduxjs/toolkit';
+import type { Unsubscribe } from '@reduxjs/toolkit';
+import type { NetworkMeta, NetworkName } from '../types';
 
 import { networkLabels } from '../constants';
+import { getNetwork, getNetworkUrl } from '../store/getters';
 import reduxSubscribe from '../store/reduxSubscribe';
 import { customNetworkUrl, selectedNetwork } from '../store/selectors';
-import { NetworkMeta, NetworkName } from '../types';
-import { getNetwork, getNetworkUrl } from '../store/getters';
 
 export default function (cb: (networkMeta: NetworkMeta) => void): Unsubscribe {
   let firstCall = true;
@@ -13,9 +13,9 @@ export default function (cb: (networkMeta: NetworkMeta) => void): Unsubscribe {
     const wssUrl = getNetworkUrl();
 
     const networkMeta = {
-      name: networkName,
       label: networkLabels[networkName],
-      wssUrl,
+      name: networkName,
+      wssUrl
     };
 
     cb(networkMeta);
@@ -25,15 +25,17 @@ export default function (cb: (networkMeta: NetworkMeta) => void): Unsubscribe {
     // Skip the first callback so the subscription doesn't return twice initially.
     if (firstCall) {
       firstCall = false;
+
       return;
     }
+
     const networkName = getNetwork();
     const wssUrl = getNetworkUrl();
 
     const networkMeta = {
-      name: networkName,
       label: networkLabels[networkName],
-      wssUrl,
+      name: networkName,
+      wssUrl
     };
 
     cb(networkMeta);

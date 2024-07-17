@@ -1,44 +1,57 @@
-import React, { FC, useCallback, useRef, useState } from 'react';
+import type { FC } from 'react';
+import type { BaseInputAreaProps } from './BaseInputAreaProps';
 
-import { BaseInputAreaProps } from './BaseInputAreaProps';
+import React, { useCallback, useRef, useState } from 'react';
+
 import { Input, Wrapper } from './styles';
 
 export const BaseInputArea: FC<BaseInputAreaProps> = (props) => {
-  const {
-    className,
+  const { className,
     disabled,
     inputRef: inputRefFromProps,
     invalid,
     onBlur,
     onFocus,
     readOnly,
-    ...restProps
-  } = props;
+    ...restProps } = props;
 
   const inputRefInternal = useRef<HTMLTextAreaElement>(null);
   const inputRef = inputRefFromProps || inputRefInternal;
 
   const [focused, setFocusedState] = useState(false);
   const handleBlur = useCallback(
-    (e: any) => {
-      if (onBlur) onBlur(e);
+    (e: React.FocusEvent<HTMLTextAreaElement, Element>) => {
+      if (onBlur) {
+        onBlur(e);
+      }
+
       setFocusedState(false);
     },
     [onBlur, setFocusedState]
   );
 
   const handleFocus = useCallback(
-    (e: any) => {
-      if (onFocus) onFocus(e);
+    (e: React.FocusEvent<HTMLTextAreaElement, Element>) => {
+      if (onFocus) {
+        onFocus(e);
+      }
+
       setFocusedState(true);
     },
     [onFocus, setFocusedState]
   );
 
   return (
-    <Wrapper {...{ focused, disabled, invalid, readOnly, className }}>
+    <Wrapper {...{
+      className,
+      disabled,
+      focused,
+      invalid,
+      readOnly
+    }}
+    >
       <Input
-        data-testid="base-input"
+        data-testid='base-input'
         disabled={disabled}
         onBlur={handleBlur}
         onFocus={handleFocus}

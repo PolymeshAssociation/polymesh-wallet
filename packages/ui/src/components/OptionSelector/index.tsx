@@ -1,42 +1,35 @@
-import { Box, Text } from '@polymeshassociation/extension-ui/ui';
-import { BoxProps } from '@polymeshassociation/extension-ui/ui/Box';
-import React, {
-  CSSProperties,
-  Fragment,
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import type { CSSProperties, RefObject } from 'react';
+import type { BoxProps } from '@polymeshassociation/extension-ui/ui/Box';
+import type { Coordinates, CssPosition, Option, PositionType } from './types';
+
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
+
+import { Box, Text } from '@polymeshassociation/extension-ui/ui';
 
 import { OptionListItem } from './OptionItem';
 import { Options } from './styles';
-import { Coordinates, CssPosition, Option, PositionType } from './types';
 
 const SELECTOR_SPACING = 4;
 const OPTION_SELECTOR_PORTAL_ID = 'option-selector-portal';
 
 type OptionSelectorProps = BoxProps & {
   options: Option[];
-  selector: string | JSX.Element;
+  selector: string | React.ReactElement;
   onSelect: (value: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
   position?: PositionType;
   style?: CSSProperties;
   className?: string;
 };
 
-export function OptionSelector(props: OptionSelectorProps): JSX.Element {
-  const {
-    className,
+export function OptionSelector (props: OptionSelectorProps): React.ReactElement {
+  const { className,
     onSelect,
     options,
     position = 'context',
     selector,
     style,
-    ...boxProps
-  } = props;
+    ...boxProps } = props;
 
   const [showOptions, setShowOptions] = useState(false);
   const [cssPosition, setCssPosition] = useState<CssPosition>({});
@@ -47,7 +40,7 @@ export function OptionSelector(props: OptionSelectorProps): JSX.Element {
 
   // Using a callback ref to set optionsRef since it is rendered conditionally
   const [optionsRef, setOptionsRef] = useState<RefObject<HTMLDivElement>>({
-    current: null,
+    current: null
   });
   const optionsCallbackRef = useCallback((node: HTMLDivElement) => {
     setOptionsRef({ current: node });
@@ -55,7 +48,7 @@ export function OptionSelector(props: OptionSelectorProps): JSX.Element {
 
   const shouldRenderOptions = !!(showOptions && portalRoot);
 
-  const toggleOptions: React.MouseEventHandler = (event) => {
+  const toggleOptions: React.MouseEventHandler = useCallback((event) => {
     event.stopPropagation();
 
     if (showOptions) {
@@ -69,12 +62,12 @@ export function OptionSelector(props: OptionSelectorProps): JSX.Element {
 
       setClickCoords({
         x: event.clientX,
-        y: event.clientY,
+        y: event.clientY
       });
       setPortalRoot(createdPortalRoot);
       setShowOptions(true);
     }
-  };
+  }, [showOptions]);
 
   const handleClicks = useCallback(
     (event: MouseEvent) => {
@@ -82,19 +75,25 @@ export function OptionSelector(props: OptionSelectorProps): JSX.Element {
         selectorRef.current === event.target ||
         selectorRef.current?.contains(event.target as Node);
 
-      if (hasClickedSelector) return; // Handled by toggleOptions
+      if (hasClickedSelector) {
+        return;
+      } // Handled by toggleOptions
 
       const hasClickedOutside =
         optionsRef.current !== event.target &&
         !optionsRef.current?.contains(event.target as Node);
 
-      if (hasClickedOutside) setShowOptions(false);
+      if (hasClickedOutside) {
+        setShowOptions(false);
+      }
     },
     [optionsRef]
   );
 
   const positionOptionsEl = useCallback(() => {
-    if (!selectorRef.current || !optionsRef.current || !clickCoords) return;
+    if (!selectorRef.current || !optionsRef.current || !clickCoords) {
+      return;
+    }
 
     const selectorRect = selectorRef.current.getBoundingClientRect();
     const optionsRect = optionsRef.current.getBoundingClientRect();
@@ -110,30 +109,39 @@ export function OptionSelector(props: OptionSelectorProps): JSX.Element {
         const isOverflowingRight =
           clickCoords.x + optionsRect.width > document.body.clientWidth;
 
-        if (isOverflowingBottom) top -= optionsRect.height; // Flip on y-axis
-        if (isOverflowingRight) left -= optionsRect.width; // Flip on x-axis
+        if (isOverflowingBottom) {
+          top -= optionsRect.height;
+        } // Flip on y-axis
 
-        return setCssPosition({ top, left });
+        if (isOverflowingRight) {
+          left -= optionsRect.width;
+        } // Flip on x-axis
+
+        return setCssPosition({
+          left,
+          top
+        });
       }
 
       case 'bottom-right':
         return setCssPosition({
-          top: selectorRect.bottom + SELECTOR_SPACING,
           left: selectorRect.left + selectorRect.width - optionsRect.width,
+          top: selectorRect.bottom + SELECTOR_SPACING
         });
 
       case 'bottom-left':
         return setCssPosition({
-          top: selectorRect.bottom + SELECTOR_SPACING,
           left: selectorRect.left,
+          top: selectorRect.bottom + SELECTOR_SPACING
         });
     }
   }, [clickCoords, optionsRef, position]);
 
   // Add and remove click listener to hide options when clicked outside
   useEffect(() => {
-    if (shouldRenderOptions)
+    if (shouldRenderOptions) {
       document.addEventListener('mousedown', handleClicks);
+    }
 
     return () => {
       document.removeEventListener('mousedown', handleClicks);
@@ -147,22 +155,28 @@ export function OptionSelector(props: OptionSelectorProps): JSX.Element {
 
   // Reset cssPosition after hiding options
   useEffect(() => {
-    if (!shouldRenderOptions && Object.values(cssPosition).length)
+    if (!shouldRenderOptions && Object.values(cssPosition).length) {
       setCssPosition({});
+    }
   }, [cssPosition, shouldRenderOptions]);
+
+  const handleClick = useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => event.stopPropagation(), []);
 
   return (
     <>
-      <Box className={className} onClick={toggleOptions} ref={selectorRef}>
+      <Box
+        className={className}
+        onClick={toggleOptions}
+        ref={selectorRef}
+      >
         {selector}
       </Box>
-
       {shouldRenderOptions &&
         ReactDOM.createPortal(
           <Options
             {...boxProps}
             cssPosition={cssPosition}
-            onClick={(event) => event.stopPropagation()}
+            onClick={handleClick}
             ref={optionsCallbackRef}
             style={style}
           >
@@ -170,8 +184,14 @@ export function OptionSelector(props: OptionSelectorProps): JSX.Element {
             {options.map((option, optionIndex) => (
               <Fragment key={optionIndex}>
                 {option.category && (
-                  <Box mx="16px" textAlign="left">
-                    <Text color="gray.2" variant="b2m">
+                  <Box
+                    mx='16px'
+                    textAlign='left'
+                  >
+                    <Text
+                      color='gray.2'
+                      variant='b2m'
+                    >
                       {option.category}
                     </Text>
                   </Box>

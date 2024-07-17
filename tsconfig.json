@@ -1,16 +1,13 @@
 {
-  "extends": "@polkadot/dev/config/tsconfig.json",
-  "exclude": ["build/**/*", "**/build/*", "**/build/**/*"],
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@polymeshassociation/extension": ["packages/extension/src"],
-      "@polymeshassociation/extension/*": ["packages/extension/src/*"],
-      "@polymeshassociation/extension-ui": ["packages/ui/src"],
-      "@polymeshassociation/extension-ui/*": ["packages/ui/src/*"],
-      "@polymeshassociation/extension-core": ["packages/core/src"],
-      "@polymeshassociation/extension-core/*": ["packages/core/src/*"]
-    },
-    "skipLibCheck": true
-  }
+    "baseUrl": "./packages",
+    "composite": false
+  },
+  "include": [
+    "packages/**/src/**/*"
+  ],
+  "exclude": [
+    "**/node_modules/**/*"
+  ]
 }

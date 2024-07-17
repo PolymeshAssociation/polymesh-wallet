@@ -11,13 +11,11 @@ interface Props extends ThemeProps {
   className?: string;
 }
 
-function Switch({
-  checked,
+function Switch ({ checked,
   checkedLabel,
   className,
   onChange,
-  uncheckedLabel,
-}: Props): React.ReactElement<Props> {
+  uncheckedLabel }: Props): React.ReactElement<Props> {
   const _onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) =>
       onChange(event.target.checked),
@@ -29,11 +27,11 @@ function Switch({
       <label>
         <input
           checked={checked}
-          className="checkbox"
+          className='checkbox'
           onChange={_onChange}
-          type="checkbox"
+          type='checkbox'
         />
-        <span className="slider" />
+        <span className='slider' />
       </label>
       <span>{checked ? checkedLabel : uncheckedLabel}</span>
     </div>

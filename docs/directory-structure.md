@@ -8,10 +8,11 @@ Glues the wallet extension together by providing Webpack config files, as well a
 entry points for each [chrome extension script](https://developer.chrome.com/docs/extensions/mv2/getstarted/)
 
 ```
-├── background.ts   // Entry point to background script, which is responsible for request handling and data fetching.
+├── background-init.ts   // Entry point to service worker script, runs first before background.ts.
+├── background.ts   // Entry point to service worker script, which is responsible for request handling and data fetching.
 ├── content.ts    // Script to be injected into web page.
-├── creator.ts
 ├── extension.ts    // Pop UI
+├── migrations.ts    // contains any storage migrations that may be required when updating the extension
 └── page.ts   // Message relayer
 ```
 
@@ -36,7 +37,7 @@ Polymesh models and business logic.
 │   ├── index.ts
 │   ├── polyNetworkGet.ts
 │   ├── polyNetworkSubscribe.ts
-├── index.ts
+├── index.ts // Contains the main functions to subscribe to Polymesh Accounts
 ├── page    // API injected in browser page.
 │   ├── Network.ts  // Network API methods
 │   ├── index.ts
@@ -48,6 +49,7 @@ Polymesh models and business logic.
 │   │   ├── identities.ts   // Polymesh identities associated with accounts
 │   │   ├── network.ts    // The currently selected network
 │   │   └── status.ts   // Application readiness and loading state
+|   ├── accountMigrations.ts // migrates non prefixed account to prefixed accounts
 │   ├── getters.ts    // Utilities to read data from Redux store.
 │   ├── index.ts
 │   ├── reduxSubscribe.ts
@@ -55,7 +57,6 @@ Polymesh models and business logic.
 │   ├── selectors.ts    // Memoised Redux selector
 │   ├── setters.ts    // Redux data setters
 │   ├── subscribers.ts    // Redux subscription
-│   └── utils.ts
 ├── types
 │   ├── index.ts
 │   └── types.d.ts

@@ -1,19 +1,11 @@
-import {
-  SvgAlertCircle,
-  SvgOpenInNew,
-} from '@polymeshassociation/extension-ui/assets/images/icons';
-import {
-  Box,
-  Button,
-  Flex,
-  Header,
-  Icon,
-  Text,
-  TextInput,
-} from '@polymeshassociation/extension-ui/ui';
-import React, { FC, useContext } from 'react';
+import type { FC } from 'react';
+
+import React, { useCallback, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
+
+import { SvgAlertCircle, SvgOpenInNew } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { Box, Button, Flex, Header, Icon, Text, TextInput } from '@polymeshassociation/extension-ui/ui';
 
 import { ActionContext, ActivityContext } from '../../components';
 import { exportAccount } from '../../messaging';
@@ -26,16 +18,17 @@ export const ExportAccount: FC = () => {
   const onAction = useContext(ActionContext);
   const { address } = useParams<AddressState>();
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, handleSubmit, register, setError } = useForm({
     defaultValues: {
-      currentPassword: '',
-      newPassword: '',
       confirmPassword: '',
-    },
+      currentPassword: '',
+      newPassword: ''
+    }
   });
   const isBusy = useContext(ActivityContext);
 
-  const onSubmit = async (data: { [x: string]: string }) => {
+  const onSubmit = useCallback(async (data: Record<string, string>) => {
     if (!address) {
       return;
     }
@@ -56,58 +49,85 @@ export const ExportAccount: FC = () => {
       element.click();
 
       onAction('/');
-    } catch (e) {
+    } catch (_e) {
       setError('currentPassword', { type: 'WrongPassword' });
     }
-  };
+  }, [address, onAction, setError]);
+
+  const handleFormSubmit = useCallback((e: React.FormEvent) => {
+    handleSubmit(onSubmit)(e).catch(console.error);
+  }, [handleSubmit, onSubmit]);
 
   return (
     <>
-      <Header headerText="Export account" iconAsset={SvgOpenInNew}></Header>
-      <Flex alignItems="stretch" flexDirection="column" height="100%" p="s">
+      <Header
+        headerText='Export account'
+        iconAsset={SvgOpenInNew}
+      ></Header>
+      <Flex
+        alignItems='stretch'
+        flexDirection='column'
+        height='100%'
+        p='s'
+      >
         <Box
-          borderColor="gray.4"
+          borderColor='gray.4'
           borderRadius={3}
-          borderStyle="solid"
+          borderStyle='solid'
           borderWidth={2}
-          p="s"
+          p='s'
         >
           <Flex>
             <Icon
               Asset={SvgAlertCircle}
-              color="warning"
+              color='warning'
               height={20}
               width={20}
             />
-            <Box ml="s">
-              <Text color="warning" variant="b3m">
+            <Box ml='s'>
+              <Text
+                color='warning'
+                variant='b3m'
+              >
                 Attention
               </Text>
             </Box>
           </Flex>
-          <Text color="gray.1" variant="b2m">
+          <Text
+            color='gray.1'
+            variant='b2m'
+          >
             Please remember the password you enter below as you will need it to
             recover your account. You are exporting your account details as a
             JSON file. Keep this file safe and secured.
           </Text>
         </Box>
-        <form id="passwordForm" onSubmit={handleSubmit(onSubmit)}>
-          <Box mt="m">
+        <form
+          id='passwordForm'
+          onSubmit={handleFormSubmit}
+        >
+          <Box mt='m'>
             <Box>
-              <Text color="gray.1" variant="b2m">
+              <Text
+                color='gray.1'
+                variant='b2m'
+              >
                 Wallet password
               </Text>
             </Box>
             <Box>
               <TextInput
-                inputRef={register({ required: true, minLength: 8 })}
-                name="currentPassword"
-                placeholder="Enter your wallet password"
-                type="password"
+                inputRef={register({ minLength: 8, required: true })}
+                name='currentPassword'
+                placeholder='Enter your wallet password'
+                type='password'
               />
               {errors.currentPassword && (
                 <Box>
-                  <Text color="alert" variant="b3">
+                  <Text
+                    color='alert'
+                    variant='b3'
+                  >
                     {errors.currentPassword.type === 'required' &&
                       'Required field'}
                     {errors.currentPassword.type === 'minLength' &&
@@ -120,8 +140,13 @@ export const ExportAccount: FC = () => {
             </Box>
           </Box>
         </form>
-        <Box mt="auto">
-          <Button busy={isBusy} fluid form="passwordForm" type="submit">
+        <Box mt='auto'>
+          <Button
+            busy={isBusy}
+            fluid
+            form='passwordForm'
+            type='submit'
+          >
             Export account
           </Button>
         </Box>

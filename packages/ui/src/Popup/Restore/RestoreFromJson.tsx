@@ -1,10 +1,11 @@
-import { KeyringPair$Json } from '@polkadot/keyring/types';
-import {
-  AccountForm,
-  AccountInfo,
-} from '@polymeshassociation/extension-ui/components/AccountForm';
-import React, { FC, useContext, useState } from 'react';
+import type { KeyringPair$Json } from '@polkadot/keyring/types';
+import type { FC } from 'react';
+import type { AccountInfo } from '@polymeshassociation/extension-ui/components/AccountForm';
+
+import React, { useCallback, useContext, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
+
+import { AccountForm } from '@polymeshassociation/extension-ui/components/AccountForm';
 
 import { ActionContext } from '../../components';
 import { changePassword, jsonRestore } from '../../messaging';
@@ -18,15 +19,15 @@ export const RestoreFromJson: FC = () => {
   const onAction = useContext(ActionContext);
   const errorHandler = useErrorHandler();
 
-  const nextStep = () => {
+  const nextStep = useCallback(() => {
     setStep(step + 1);
-  };
+  }, [step]);
 
-  const prevStep = () => {
+  const prevStep = useCallback(() => {
     step > 0 && setStep(step - 1);
-  };
+  }, [step]);
 
-  const setJsonData = (
+  const setJsonData = useCallback((
     accountJson: KeyringPair$Json,
     jsonPassword: string,
     accountName: string
@@ -35,18 +36,17 @@ export const RestoreFromJson: FC = () => {
     setJsonPassword(jsonPassword);
     setAccountName(accountName);
     nextStep();
-  };
+  }, [nextStep]);
 
-  const restoreAccount = async (newAccountInfo: AccountInfo) => {
-    if (accountJson && accountJson.address && jsonPassword) {
-      try {
+  const restoreAccount = useCallback((newAccountInfo: AccountInfo) => {
+    if (accountJson?.address && jsonPassword) {
+      (async () => {
         // Accounts should be visible by default.
         accountJson.meta.isHidden = undefined;
         accountJson.meta.name = newAccountInfo.accountName;
 
         await jsonRestore(accountJson, jsonPassword);
-
-        // Change from the original JSON password, to the password user has just provided
+        // Change from the original JSON password to the password the user has just provided
         // by AccountForm.
         await changePassword(
           accountJson.address,
@@ -55,15 +55,13 @@ export const RestoreFromJson: FC = () => {
         );
 
         onAction('/');
-      } catch (error) {
-        errorHandler(error);
-      }
+      })().catch(errorHandler);
     } else {
       errorHandler(
         new Error('An unexpected error has occurred. Please try again.')
       );
     }
-  };
+  }, [accountJson, errorHandler, jsonPassword, onAction]);
 
   const renderStep = () => {
     switch (step) {
@@ -71,11 +69,11 @@ export const RestoreFromJson: FC = () => {
         return (
           <AccountForm
             defaultName={accountName}
-            headerText="Import account using JSON file"
+            headerText='Import account using JSON file'
             noHeader={true}
             onBack={prevStep}
             onContinue={restoreAccount}
-            submitText="Import"
+            submitText='Import'
           />
         );
       default:

@@ -45,7 +45,7 @@ export const NetworkLabelContainer = styled.label`
   margin-right: 8px;
   display: block;
   width: 100%;
-`
+`;
 export const NetworkLabel = styled.span`
   font-size: 10px;
   line-height: 14px;
@@ -55,4 +55,4 @@ export const NetworkLabel = styled.span`
   text-transform: uppercase;
   display: block;
   margin-bottom: 4px;
-`
+`;

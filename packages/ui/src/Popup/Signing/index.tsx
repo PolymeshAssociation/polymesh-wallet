@@ -1,14 +1,9 @@
 import type { SignerPayloadJSON } from '@polkadot/types/types';
 
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
 import { getIdentifiedAccounts } from '@polymeshassociation/extension-core/store/getters';
 import { recodeAddress } from '@polymeshassociation/extension-core/utils';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
 
 import { Loading, SigningReqContext } from '../../components';
 import { AccountMain } from '../Accounts/AccountMain';
@@ -16,7 +11,7 @@ import { AppHeader } from '../AppHeader';
 import Request from './Request';
 import TransactionIndex from './TransactionIndex';
 
-export default function Signing(): React.ReactElement {
+export default function Signing (): React.ReactElement {
   const requests = useContext(SigningReqContext);
   const [requestIndex, setRequestIndex] = useState(0);
 
@@ -64,31 +59,36 @@ export default function Signing(): React.ReactElement {
     return undefined;
   }, [request]);
 
-  return request ? (
-    <>
-      <AppHeader text={isTransaction ? 'Transaction' : 'Sign message'}>
-        {requests.length > 1 && (
-          <TransactionIndex
-            index={requestIndex}
-            onNextClick={_onNextClick}
-            onPreviousClick={_onPreviousClick}
-            totalItems={requests.length}
-          />
-        )}
-        {signingAccount && (
-          <AccountMain account={signingAccount} details={false} />
-        )}
-      </AppHeader>
-      <Request
-        account={request.account}
-        buttonText={'Sign'}
-        isFirst={requestIndex === 0}
-        request={request.request}
-        signId={request.id}
-        url={request.url}
-      />
-    </>
-  ) : (
-    <Loading />
-  );
+  return request
+    ? (
+      <>
+        <AppHeader text={isTransaction ? 'Transaction' : 'Sign message'}>
+          {requests.length > 1 && (
+            <TransactionIndex
+              index={requestIndex}
+              onNextClick={_onNextClick}
+              onPreviousClick={_onPreviousClick}
+              totalItems={requests.length}
+            />
+          )}
+          {signingAccount && (
+            <AccountMain
+              account={signingAccount}
+              details={false}
+            />
+          )}
+        </AppHeader>
+        <Request
+          account={request.account}
+          buttonText={'Sign'}
+          isFirst={requestIndex === 0}
+          request={request.request}
+          signId={request.id}
+          url={request.url}
+        />
+      </>
+    )
+    : (
+      <Loading />
+    );
 }

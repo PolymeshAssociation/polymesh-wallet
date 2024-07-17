@@ -1,8 +1,11 @@
+import type { FC } from 'react';
+import type { TooltipProps } from './definitions';
+
 import Tippy from '@tippyjs/react';
-import React, { FC } from 'react';
+import React from 'react';
 
 import { styled } from '../../styles';
-import { TooltipDefaultProps, TooltipProps } from './definitions';
+import { TooltipDefaultProps } from './definitions';
 import { getVariant, TippyStyles, tooltipStyles } from './styles';
 
 export const TooltipComponent: FC<TooltipProps> = ({ children, ...props }) => (
@@ -17,6 +20,6 @@ export const TooltipComponent: FC<TooltipProps> = ({ children, ...props }) => (
 TooltipComponent.defaultProps = TooltipDefaultProps;
 
 export const Tooltip = styled(TooltipComponent)<TooltipProps>(
-  tooltipStyles as any,
+  tooltipStyles,
   getVariant
 );

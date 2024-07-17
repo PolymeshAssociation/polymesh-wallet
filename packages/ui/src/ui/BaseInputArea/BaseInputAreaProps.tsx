@@ -1,4 +1,5 @@
-import { TextareaHTMLAttributes } from 'react';
+import type { TextareaHTMLAttributes } from 'react';
+import type React from 'react';
 
 export interface BaseInputAreaProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
