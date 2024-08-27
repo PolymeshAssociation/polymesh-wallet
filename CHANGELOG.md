@@ -1,3 +1,20 @@
+# [2.0.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.8.3...2.0.0) (2024-08-27)
+
+
+### Bug Fixes
+
+* enable corepack ([f8a0391](https://github.com/PolymeshAssociation/polymesh-wallet/commit/f8a03918b368d331555a463f0fca6720356ec13a))
+
+
+### Features
+
+* migrate to Manifest V3 and align with upstream polkadot extension ([5d7198d](https://github.com/PolymeshAssociation/polymesh-wallet/commit/5d7198dc97874bb28089ada602b85d7944ed8774))
+
+
+### BREAKING CHANGES
+
+* Updated Polymesh wallet to support Manifest V3, with significant updates aligning configurations, dependencies, and architecture to match upstream polkadot wallet. This may affect compatibility with environments relying on Manifest V2.
+
 ## [1.8.3](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.8.2...1.8.3) (2024-04-05)
 
 
