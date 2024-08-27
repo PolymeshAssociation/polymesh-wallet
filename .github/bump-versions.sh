@@ -1,12 +1,28 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Check if a version argument is provided
+if [ -z "$1" ]; then
+  echo "Usage: $0 <version>"
+  exit 1
+fi
+
+VERSION=${1}
+
+echo "Updating to version $VERSION"
+
 git pull
 
-yarn workspace @polymeshassociation/extension-core version --no-git-tag-version --no-commit-hooks --new-version ${1}
-yarn workspace @polymeshassociation/extension-ui version --no-git-tag-version --no-commit-hooks --new-version ${1}
-yarn workspace @polymeshassociation/extension version --no-git-tag-version --no-commit-hooks --new-version ${1}
-yarn workspace @polymeshassociation/extension add @polymeshassociation/extension-core@${1} @polymeshassociation/extension-ui@${1} 
+yarn workspace @polymeshassociation/extension-core version "$VERSION"
+yarn workspace @polymeshassociation/extension-ui version "$VERSION"
+yarn workspace @polymeshassociation/extension version "$VERSION"
+
+yarn workspace @polymeshassociation/extension add @polymeshassociation/extension-core@"$VERSION" @polymeshassociation/extension-ui@"$VERSION"
 
 yarn build
 
 git add -A
-git commit -m "chore(release): update package versions to ${1} [skip ci]"
+git commit -m "chore(release): update package versions to $VERSION [skip ci]"
 git push
