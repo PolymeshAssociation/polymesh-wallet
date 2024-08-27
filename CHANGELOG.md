@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.0.0...2.0.1) (2024-08-27)
+
+
+### Bug Fixes
+
+* update bump-versions.sh to work with yarn@4.4.0 ([7e32b13](https://github.com/PolymeshAssociation/polymesh-wallet/commit/7e32b13e369e1ab684b72fb4e57c09b4680d148d))
+
 # [2.0.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/1.8.3...2.0.0) (2024-08-27)
 
 
