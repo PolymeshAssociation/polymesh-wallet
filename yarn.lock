@@ -2167,7 +2167,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polymeshassociation/extension-core@npm:2.0.2, @polymeshassociation/extension-core@workspace:packages/core":
+"@polymeshassociation/extension-core@npm:2.0.3, @polymeshassociation/extension-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@polymeshassociation/extension-core@workspace:packages/core"
   dependencies:
@@ -2192,7 +2192,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@polymeshassociation/extension-ui@npm:2.0.2, @polymeshassociation/extension-ui@workspace:packages/ui":
+"@polymeshassociation/extension-ui@npm:2.0.3, @polymeshassociation/extension-ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@polymeshassociation/extension-ui@workspace:packages/ui"
   dependencies:
@@ -2246,8 +2246,8 @@ __metadata:
     "@polkadot/extension-base": "npm:^0.51.1"
     "@polkadot/extension-inject": "npm:^0.51.1"
     "@polkadot/ui-keyring": "npm:^3.8.3"
-    "@polymeshassociation/extension-core": "npm:2.0.2"
-    "@polymeshassociation/extension-ui": "npm:2.0.2"
+    "@polymeshassociation/extension-core": "npm:2.0.3"
+    "@polymeshassociation/extension-ui": "npm:2.0.3"
     browser-resolve: "npm:^2.0.0"
     buffer: "npm:^6.0.3"
     copy-webpack-plugin: "npm:^11.0.0"
