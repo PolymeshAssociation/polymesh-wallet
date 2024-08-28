@@ -15,14 +15,14 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "dependencies": {
     "@polkadot/api": "^12.3.1",
     "@polkadot/extension-base": "^0.51.1",
     "@polkadot/extension-inject": "^0.51.1",
     "@polkadot/ui-keyring": "^3.8.3",
-    "@polymeshassociation/extension-core": "2.0.2",
-    "@polymeshassociation/extension-ui": "2.0.2",
+    "@polymeshassociation/extension-core": "2.0.3",
+    "@polymeshassociation/extension-ui": "2.0.3",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
