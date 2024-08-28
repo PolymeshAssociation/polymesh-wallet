@@ -234,15 +234,15 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
                         };
                       }
 
-                      const isSecKeyAdded = identityStateData[did].secKeys.includes(encodeAddress(account, api.registry.chainSS58));
-                      const isMsKeyAdded = identityStateData[did].msKeys.includes(encodeAddress(account, api.registry.chainSS58));
+                      const isSecKeyAdded = identityStateData[did].secKeys.includes(encodeAddress(account));
+                      const isMsKeyAdded = identityStateData[did].msKeys.includes(encodeAddress(account));
 
                       if (isPrimary) {
-                        identityStateData[did].priKey = encodeAddress(account, api.registry.chainSS58);
+                        identityStateData[did].priKey = encodeAddress(account);
                       } else if (isSecondary && !isSecKeyAdded) {
-                        identityStateData[did].secKeys = [...identityStateData[did].secKeys, encodeAddress(account, api.registry.chainSS58)];
+                        identityStateData[did].secKeys = [...identityStateData[did].secKeys, encodeAddress(account)];
                       } else if (isMultiSig && !isMsKeyAdded) {
-                        identityStateData[did].msKeys = [...identityStateData[did].msKeys, encodeAddress(account, api.registry.chainSS58)];
+                        identityStateData[did].msKeys = [...identityStateData[did].msKeys, encodeAddress(account)];
                       }
 
                       const claimData = await api.query.identity.claims.entries(
