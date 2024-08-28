@@ -54,11 +54,11 @@ Besides the [API interface](https://github.com/polkadot-js/extension) of Polkado
 
 ```js
 enum NetworkName {
-  pmf = 'pmf',
-  alcyone = 'alcyone',
-  pme = 'pme',
-  local = 'local'
-  itn = 'itn'
+  mainnet = "mainnet",
+  testnet = "testnet",
+  staging = "staging",
+  local = "local",
+  custom = "custom"
 }
 
 type NetworkMeta = {
