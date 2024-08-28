@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.0.1...2.0.2) (2024-08-28)
+
+
+### Bug Fixes
+
+* update README ([c9f101d](https://github.com/PolymeshAssociation/polymesh-wallet/commit/c9f101d8d4f2173eb2a110cb5f318b34109861ed))
+
 ## [2.0.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.0.0...2.0.1) (2024-08-27)
 
 
