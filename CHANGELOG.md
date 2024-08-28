@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.0.2...2.0.3) (2024-08-28)
+
+
+### Bug Fixes
+
+* store did key addresses in the default SS58 format used by the keyring ([7f1425a](https://github.com/PolymeshAssociation/polymesh-wallet/commit/7f1425aaba1a24906ed6f4bc09376cd73a7933c4))
+
 ## [2.0.2](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.0.1...2.0.2) (2024-08-28)
 
 
