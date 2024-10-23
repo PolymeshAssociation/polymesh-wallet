@@ -1,3 +1,16 @@
+# [2.1.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.0.3...2.1.0) (2024-10-23)
+
+
+### Bug Fixes
+
+* update github action ([0b0e40d](https://github.com/PolymeshAssociation/polymesh-wallet/commit/0b0e40df2bb95f9a2de20b0b355e6ee607926a86))
+* use github actions/upload-artifact@v4 ([e57751e](https://github.com/PolymeshAssociation/polymesh-wallet/commit/e57751ead548b8cfeb36563f168e7235789c6ec6))
+
+
+### Features
+
+* add dual compatibility with polymesh v6 and v7 ([e51f12d](https://github.com/PolymeshAssociation/polymesh-wallet/commit/e51f12d3d2271e428353dd6191ebeb76d4dd3b50))
+
 ## [2.0.3](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.0.2...2.0.3) (2024-08-28)
 
 
