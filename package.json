@@ -58,7 +58,7 @@
     "@polkadot/dev": "^0.79.3",
     "@polkadot/dev-test": "^0.79.3",
     "@polkadot/types": "^12.3.1",
-    "@polymeshassociation/polymesh-sdk": "^24.6.0",
+    "@polymeshassociation/polymesh-sdk": "^26.0.0-beta.2",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
