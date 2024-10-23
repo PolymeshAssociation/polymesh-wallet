@@ -19,5 +19,5 @@ jobs:
           yarn
       - name: Semantic release
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.ASSOCIATION_RELEASE_TOKEN }}
         run: npx semantic-release@18
