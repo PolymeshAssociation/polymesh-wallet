@@ -217,11 +217,23 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
 
                         did = isMsPrimaryKey
                           ? msLinkedKeyInfoObj.asPrimaryKey.toString()
-                          : msLinkedKeyInfoObj.asSecondaryKey[0].toString();
+                          : (
+                            // This check is required for backwards compatibility with Polymesh v6
+                            // TODO: remove after v7 update
+                            msLinkedKeyInfoObj.asSecondaryKey.length === 32
+                              ? msLinkedKeyInfoObj.asSecondaryKey.toString()
+                              : msLinkedKeyInfoObj.asSecondaryKey[0].toString()
+                          );
                       } else {
                         did = isPrimary
                           ? linkedKeyInfoObj.asPrimaryKey.toString()
-                          : linkedKeyInfoObj.asSecondaryKey[0].toString();
+                          : (
+                            // This check is required for backwards compatibility with Polymesh v6
+                            // TODO: remove after v7 update
+                            linkedKeyInfoObj.asSecondaryKey.length === 32
+                              ? linkedKeyInfoObj.asSecondaryKey.toString()
+                              : linkedKeyInfoObj.asSecondaryKey[0].toString()
+                          );
                       }
 
                       // Initialize identity state for network:did pair

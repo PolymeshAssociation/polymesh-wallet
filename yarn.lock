@@ -2268,9 +2268,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@polymeshassociation/polymesh-sdk@npm:^24.6.0":
-  version: 24.6.0
-  resolution: "@polymeshassociation/polymesh-sdk@npm:24.6.0"
+"@polymeshassociation/polymesh-sdk@npm:^26.0.0-beta.2":
+  version: 26.0.0-beta.2
+  resolution: "@polymeshassociation/polymesh-sdk@npm:26.0.0-beta.2"
   dependencies:
     "@apollo/client": "npm:^3.8.1"
     "@polkadot/api": "npm:11.2.1"
@@ -2288,7 +2288,7 @@ __metadata:
     patch-package: "npm:^8.0.0"
     semver: "npm:^7.5.4"
     websocket: "npm:^1.0.34"
-  checksum: 10c0/6c604be2cf0cc465613225e511b84b886b17087a966ae6166fe84022029bb6ada10c1d9b7c31efa3036e1a0d1d5615e547d38a94c2d2aea998462880df7812d8
+  checksum: 10c0/4d4065328aeefa4b947fde8e8d037024b7af38283a5117651c043c3ef509a34520b52ee91487157b8a17a87a18a58e011f85ab39a03e1512afb40ed0d5947c6a
   languageName: node
   linkType: hard
 
@@ -14811,7 +14811,7 @@ __metadata:
     "@polkadot/dev": "npm:^0.79.3"
     "@polkadot/dev-test": "npm:^0.79.3"
     "@polkadot/types": "npm:^12.3.1"
-    "@polymeshassociation/polymesh-sdk": "npm:^24.6.0"
+    "@polymeshassociation/polymesh-sdk": "npm:^26.0.0-beta.2"
     "@semantic-release/changelog": "npm:^6.0.3"
     "@semantic-release/exec": "npm:^6.0.3"
     "@semantic-release/git": "npm:^10.0.1"
