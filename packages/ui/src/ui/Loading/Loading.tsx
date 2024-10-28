@@ -6,9 +6,6 @@ import * as sc from './styles';
 
 export const Loading = (props: LoadingProps) => {
   return (
-    <sc.Wrapper {...props}>
-      <span />
-      <span />
-    </sc.Wrapper>
+    <sc.Wrapper {...props} />
   );
 };
