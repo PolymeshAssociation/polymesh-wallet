@@ -3,10 +3,11 @@ import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 
 import { ActionContext, Warning } from '@polymeshassociation/extension-ui/components';
+import useIsPopup from '@polymeshassociation/extension-ui/hooks/useIsPopup';
+import { cancelSignRequest, windowOpen } from '@polymeshassociation/extension-ui/messaging';
 import { Button, Flex } from '@polymeshassociation/extension-ui/ui';
 
 import { Status, useLedger } from '../../hooks/useLedger';
-import { cancelSignRequest } from '../../messaging';
 
 interface Props {
   accountIndex?: number;
@@ -35,11 +36,17 @@ function LedgerSignArea ({ accountIndex,
     refresh,
     status: ledgerStatus } = useLedger(genesisHash, accountIndex, addressOffset);
   const onAction = useContext(ActionContext);
+  const isPopup = useIsPopup();
 
-  const _onRefresh = useCallback(() => {
-    refresh();
-    setError(null);
-  }, [refresh, setError]);
+  const _onRefresh = useCallback(async () => {
+    if (isPopup && ledgerStatus === Status.Device) {
+      await windowOpen('/').catch(console.error);
+      window.close();
+    } else {
+      refresh();
+      setError(null);
+    }
+  }, [isPopup, ledgerStatus, refresh, setError]);
 
   const _onSignLedger = useCallback((): void => {
     if (!ledger || !payload || !onSignature) {
@@ -68,7 +75,9 @@ function LedgerSignArea ({ accountIndex,
 
   const warning = useMemo(() => {
     if (ledgerStatus === Status.Device) {
-      return 'Please make sure that Ledger device is plugged and unlocked';
+      return isPopup
+        ? 'Please ensure your Ledger device is plugged in and unlocked. Then go full screen and click the refresh button to connect your device.'
+        : 'Please ensure your Ledger device is plugged in and unlocked. Then click the connect button.';
     } else if (ledgerStatus === Status.App) {
       return 'Please make sure that Ledger Polymesh App is installed on your device, and is open.';
     } else if (ledgerStatus === Status.Pending) {
@@ -80,7 +89,23 @@ function LedgerSignArea ({ accountIndex,
     } else {
       return null;
     }
-  }, [ledgerStatus, ledgerError]);
+  }, [ledgerStatus, ledgerError, isPopup]);
+
+  const buttonLabel = useMemo(() => {
+    if (warning) {
+      if (isPopup && ledgerStatus === Status.Device) {
+        return 'Open Full Screen';
+      }
+
+      if (ledgerStatus === Status.Device) {
+        return 'Connect';
+      }
+
+      return 'Refresh';
+    }
+
+    return 'Sign on Ledger';
+  }, [isPopup, ledgerStatus, warning]);
 
   return (
     <Flex
@@ -108,26 +133,14 @@ function LedgerSignArea ({ accountIndex,
           flex={1}
           ml='xs'
         >
-          {warning
-            ? (
-              <Button
-                busy={isBusy || ledgerLoading}
-                fluid
-                onClick={_onRefresh}
-                type='submit'
-              >
-                {'Refresh'}
-              </Button>
-            )
-            : (
-              <Button
-                busy={isBusy || ledgerLoading}
-                fluid
-                onClick={_onSignLedger}
-              >
-                {'Sign on Ledger'}
-              </Button>
-            )}
+          <Button
+            busy={isBusy || ledgerLoading}
+            fluid
+            onClick={warning ? _onRefresh : _onSignLedger}
+            type={warning ? 'submit' : undefined}
+          >
+            {buttonLabel}
+          </Button>
         </Flex>
       </Flex>
     </Flex>

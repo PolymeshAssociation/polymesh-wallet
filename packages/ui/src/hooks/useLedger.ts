@@ -164,9 +164,19 @@ export function useLedger (
           ? 'Is your ledger locked?'
           : null;
 
-        const errorMessage = e.message.includes('App does not seem to be open')
-          ? `App ${network} does not seem to be open`
-          : e.message;
+        let errorMessage;
+
+        switch (true) {
+          case e.message.includes('Code: 26628'):
+          case e.message.includes('Code: 21781'):
+            errorMessage = 'Ensure your device is unlocked';
+            break;
+          case e.message.includes('App does not seem to be open'):
+            errorMessage = `App ${network} does not seem to be open`;
+            break;
+          default:
+            errorMessage = e.message;
+        }
 
         setIsLocked(true);
         setWarning(warningMessage);
