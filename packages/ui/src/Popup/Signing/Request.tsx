@@ -7,6 +7,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Box, Heading } from '@polymeshassociation/extension-ui/ui';
+import polymeshSignedExtensions from '@polymeshassociation/polymesh-types/signedExtensions';
 
 import { ActionContext, VerticalSpace } from '../../components';
 import { approveSignSignature } from '../../messaging';
@@ -61,7 +62,7 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
       });
     } else {
       try {
-        registry.setSignedExtensions(payload.signedExtensions);
+        registry.setSignedExtensions(payload.signedExtensions, polymeshSignedExtensions);
 
         setData({
           hexBytes: null,
