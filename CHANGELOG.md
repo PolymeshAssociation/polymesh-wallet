@@ -1,3 +1,17 @@
+# [2.2.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.1.0...2.2.0) (2024-12-09)
+
+
+### Bug Fixes
+
+* update loading animation ([866123f](https://github.com/PolymeshAssociation/polymesh-wallet/commit/866123f88bac06c51695e6b72372ec9214f5ba7d))
+
+
+### Features
+
+* include steps to connect  a ledger device in the signing flow if not connected ([5a28506](https://github.com/PolymeshAssociation/polymesh-wallet/commit/5a285061cdce5313253c1a820eceb52f800a2231))
+* remove the ping messages from PolymeshInjected ([edf381f](https://github.com/PolymeshAssociation/polymesh-wallet/commit/edf381f4eb6035af81dabff286f3abb516be5d50))
+* show protocol fees for nested calls + bump SDK and Polymesh types dependencies ([c1d3967](https://github.com/PolymeshAssociation/polymesh-wallet/commit/c1d39678af4ddaf865286072409f0a9521e59f0b))
+
 # [2.1.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.0.3...2.1.0) (2024-10-23)
 
 
