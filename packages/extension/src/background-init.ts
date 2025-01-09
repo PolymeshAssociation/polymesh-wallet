@@ -25,8 +25,9 @@ async function initializeCryptoAndKeyring () {
 
 chrome.runtime.onInstalled.addListener((details) => {
   checkForUpdateAndMigrate(details)
-    .then(() => {
-      return initializeCryptoAndKeyring();
-    })
     .catch(fatalErrorHandler);
 });
+
+// Run initialization immediately
+initializeCryptoAndKeyring()
+  .catch(fatalErrorHandler);

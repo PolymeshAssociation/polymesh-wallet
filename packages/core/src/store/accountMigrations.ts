@@ -10,9 +10,10 @@ export default class AccountMigrations extends BaseStore<KeyringJson> implements
 
   // Migrates accounts stored without an extension prefix to be stored with the
   // EXTENSION_PREFIX configured in webpack.shared.cjs
-  public async migrateUnPrefixedAccounts (): Promise<void> {
+  public async migrateUnPrefixedAccounts (): Promise<boolean> {
     const accountsStore = new AccountsStore();
     const migrationPromises: Promise<void>[] = [];
+    let needsReload = false;
 
     const migrateAccount = async (key: string, value: KeyringJson): Promise<void> => {
       let existingValue: KeyringJson | null = null;
@@ -31,6 +32,8 @@ export default class AccountMigrations extends BaseStore<KeyringJson> implements
 
       // migrate the account to the new storage key
       await accountsStore.set(key, value);
+      // Only reload if migrations actually happened this ensure the keyring reinitialized from the migrated storage
+      needsReload = true;
 
       // Verify the migration was successful
       await accountsStore.get(key, (value) => {
@@ -53,5 +56,7 @@ export default class AccountMigrations extends BaseStore<KeyringJson> implements
     });
 
     await Promise.all(migrationPromises);
+
+    return needsReload;
   }
 }

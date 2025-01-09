@@ -24,8 +24,15 @@ function isVersionEarlierOrEqual (version: string, compareTo: string): boolean {
 async function runMigrations () {
   const migrate = new AccountMigrations();
 
-  await migrate.migrateUnPrefixedAccounts();
+  const shouldReload = await migrate.migrateUnPrefixedAccounts();
+
   console.log('Migration completed');
+
+  // if required, reloading should only be triggered after all migrations are complete
+  if (shouldReload) {
+    console.log('Reloading extension');
+    chrome.runtime.reload();
+  }
 }
 
 // Check for version update and perform migration if needed
@@ -33,8 +40,8 @@ export async function checkForUpdateAndMigrate (details: chrome.runtime.Installe
   if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
     const previousVersion = details.previousVersion;
 
-    // Migrate Account Prefixes. Runs when no lastVersion or a previous version of 2.0.2 or earlier
-    if (!previousVersion || isVersionEarlierOrEqual(previousVersion, '2.2.0')) {
+    // Migrate Account Prefixes. Runs when no lastVersion or a previous version of 2.3.0 or earlier
+    if (!previousVersion || isVersionEarlierOrEqual(previousVersion, '2.3.0')) {
       await runMigrations();
     }
   }
