@@ -1,6 +1,21 @@
 /* global chrome */
 
+import { AccountsStore } from '@polkadot/extension-base/stores';
+import { keyring } from '@polkadot/ui-keyring';
+import { cryptoWaitReady } from '@polkadot/util-crypto';
+
+import { fatalErrorHandler } from '@polymeshassociation/extension-core/utils';
+
 import { checkForUpdateAndMigrate } from './migrations';
+
+// Ensure crypto is ready and load all keyring data
+async function initializeCryptoAndKeyring () {
+  await cryptoWaitReady();
+  console.log('crypto initialized');
+
+  keyring.loadAll({ store: new AccountsStore(), type: 'sr25519' });
+  console.log('initialization completed');
+}
 
 /*
  This is placed in a separate file to ensure that the listener is registered immediately,
@@ -9,5 +24,9 @@ import { checkForUpdateAndMigrate } from './migrations';
 */
 
 chrome.runtime.onInstalled.addListener((details) => {
-  checkForUpdateAndMigrate(details).catch(console.error);
+  checkForUpdateAndMigrate(details)
+    .then(() => {
+      return initializeCryptoAndKeyring();
+    })
+    .catch(fatalErrorHandler);
 });

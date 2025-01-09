@@ -8,14 +8,10 @@ import type { PolyRequestSignatures, PolyTransportRequestMessage } from '@polyme
 
 import { withErrorLog } from '@polkadot/extension-base/background';
 import { PORT_CONTENT, PORT_EXTENSION } from '@polkadot/extension-base/defaults';
-import { AccountsStore } from '@polkadot/extension-base/stores';
-import { keyring } from '@polkadot/ui-keyring';
 import { assert } from '@polkadot/util';
-import { cryptoWaitReady } from '@polkadot/util-crypto';
 
 import subscribePolymesh, { accountsSynchronizer } from '@polymeshassociation/extension-core';
 import handlers from '@polymeshassociation/extension-core/background/handlers';
-import { fatalErrorHandler } from '@polymeshassociation/extension-core/utils';
 
 // setup the notification (same a FF default background, white text)
 withErrorLog(() => chrome.action.setBadgeBackgroundColor({ color: '#d90000' }));
@@ -114,15 +110,3 @@ chrome.tabs.onActivated.addListener(() => {
 chrome.tabs.onRemoved.addListener(() => {
   getActiveTabs();
 });
-
-// initial setup
-cryptoWaitReady()
-  .then((): void => {
-    console.log('crypto initialized');
-
-    // load all the keyring data
-    keyring.loadAll({ store: new AccountsStore(), type: 'sr25519' });
-
-    console.log('initialization completed');
-  })
-  .catch(fatalErrorHandler);

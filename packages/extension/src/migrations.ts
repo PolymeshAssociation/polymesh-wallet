@@ -20,7 +20,7 @@ function isVersionEarlierOrEqual (version: string, compareTo: string): boolean {
   return true;
 }
 
-// Run the migration applicable to version 2.0.2 or earlier
+// Run the migration applicable to version 2.2.0 or earlier
 async function runMigrations () {
   const migrate = new AccountMigrations();
 
@@ -29,12 +29,12 @@ async function runMigrations () {
 }
 
 // Check for version update and perform migration if needed
-export async function checkForUpdateAndMigrate (details: chrome.runtime.InstalledDetails) {
+export async function checkForUpdateAndMigrate (details: chrome.runtime.InstalledDetails): Promise<void> {
   if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
     const previousVersion = details.previousVersion;
 
     // Migrate Account Prefixes. Runs when no lastVersion or a previous version of 2.0.2 or earlier
-    if (previousVersion && isVersionEarlierOrEqual(previousVersion, '2.0.2')) {
+    if (!previousVersion || isVersionEarlierOrEqual(previousVersion, '2.2.0')) {
       await runMigrations();
     }
   }
