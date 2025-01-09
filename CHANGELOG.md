@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.2.0...2.3.0) (2025-01-09)
+
+
+### Features
+
+* enhance account migration process and ensure complete before loading keys ([8360249](https://github.com/PolymeshAssociation/polymesh-wallet/commit/83602490915cae778f7612954076bf15c8427c57))
+
 # [2.2.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.1.0...2.2.0) (2024-12-09)
 
 
