@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.3.0...2.3.1) (2025-01-20)
+
+
+### Bug Fixes
+
+* ensure keyring is always initialized ([29b86bc](https://github.com/PolymeshAssociation/polymesh-wallet/commit/29b86bc4d054142544bbea02ec8810a74f23c5e0))
+
 # [2.3.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.2.0...2.3.0) (2025-01-09)
 
 
