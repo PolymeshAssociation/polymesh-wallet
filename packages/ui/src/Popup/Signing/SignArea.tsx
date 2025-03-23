@@ -122,7 +122,7 @@ function SignArea ({ buttonText,
                 onClick={_onCancel}
                 variant='secondary'
               >
-                Reject
+                Cancel
               </Button>
             </Flex>
             {!rejectOnly && (

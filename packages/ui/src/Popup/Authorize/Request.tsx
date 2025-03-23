@@ -142,7 +142,7 @@ function Request ({ authId,
               onClick={_onReject}
               variant='secondary'
             >
-              Reject
+              Cancel
             </Button>
           </Flex>
           {isFirst && (
