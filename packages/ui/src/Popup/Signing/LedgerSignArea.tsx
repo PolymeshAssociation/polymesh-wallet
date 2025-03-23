@@ -126,7 +126,7 @@ function LedgerSignArea ({ accountIndex,
             onClick={_onCancel}
             variant='secondary'
           >
-            Reject
+            Cancel
           </Button>
         </Flex>
         <Flex
