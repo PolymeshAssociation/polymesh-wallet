@@ -216,8 +216,12 @@ export async function updateAuthorization (authorizedAccounts: string[], url: st
   return sendMessage('pri(authorize.update)', { authorizedAccounts, url });
 }
 
-export async function deleteAuthRequest (requestId: string): Promise<void> {
-  return sendMessage('pri(authorize.delete.request)', requestId);
+export async function rejectAuthRequest (requestId: string): Promise<void> {
+  return sendMessage('pri(authorize.reject)', requestId);
+}
+
+export async function cancelAuthRequest (requestId: string): Promise<void> {
+  return sendMessage('pri(authorize.cancel)', requestId);
 }
 
 export async function subscribeMetadataRequests (cb: (accounts: MetadataRequest[]) => void): Promise<boolean> {

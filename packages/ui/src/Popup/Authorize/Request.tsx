@@ -8,7 +8,7 @@ import { SvgAlertCircle } from '@polymeshassociation/extension-ui/assets/images/
 import { truncateString } from '@polymeshassociation/extension-ui/util/formatters';
 
 import { AccountContext, ActionContext, PolymeshContext } from '../../components';
-import { approveAuthRequest, deleteAuthRequest } from '../../messaging';
+import { approveAuthRequest, cancelAuthRequest } from '../../messaging';
 import { Box, Button, Flex, Header, Heading, Icon, Text } from '../../ui';
 import { AccountMain } from '../Accounts/AccountMain';
 
@@ -44,7 +44,7 @@ function Request ({ authId,
 
   const _onReject = useCallback(
     () => {
-      deleteAuthRequest(authId)
+      cancelAuthRequest(authId)
         .then(() => onAction())
         .catch((error: Error) => console.error(error));
     }, [authId, onAction]);

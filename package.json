@@ -20,7 +20,7 @@
   ],
   "license": "Apache-2.0",
   "name": "polymesh-wallet",
-  "packageManager": "yarn@4.4.0",
+  "packageManager": "yarn@4.6.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -55,16 +55,16 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.7.0",
-    "@polkadot/dev": "^0.79.3",
-    "@polkadot/dev-test": "^0.79.3",
-    "@polkadot/types": "^12.3.1",
-    "@polymeshassociation/polymesh-sdk": "^27.0.0",
+    "@polkadot/dev": "^0.83.2",
+    "@polkadot/dev-test": "^0.83.2",
+    "@polkadot/types": "^15.8.1",
+    "@polymeshassociation/polymesh-sdk": "^27.4.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@types/jest": "^26.0.15",
     "@types/lodash": "^4.17.7",
-    "@types/node": "^22.1.0",
+    "@types/node": "^22.10.5",
     "@types/puppeteer": "^5.4.0",
     "@types/react-copy-to-clipboard": "^5",
     "@typescript-eslint/eslint-plugin": "7.18.0",
@@ -96,14 +96,15 @@
     "webpack": "^5.93.0"
   },
   "resolutions": {
-    "@polkadot/api": "^12.3.1",
-    "@polkadot/keyring": "^13.0.2",
-    "@polkadot/networks": "^13.0.2",
-    "@polkadot/util": "^13.0.2",
-    "@polkadot/util-crypto": "^13.0.2",
-    "@polkadot/x-fetch": "^13.0.2",
+    "@polkadot/api": "^15.8.1",
+    "@polkadot/keyring": "^13.4.3",
+    "@polkadot/networks": "^13.4.3",
+    "@polkadot/types": "^15.8.1",
+    "@polkadot/util": "^13.4.3",
+    "@polkadot/util-crypto": "^13.4.3",
+    "@polkadot/x-fetch": "^13.4.3",
     "rxjs": "^7.8.1",
     "safe-buffer": "^5.2.1",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   }
 }
