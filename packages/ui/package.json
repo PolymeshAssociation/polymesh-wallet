@@ -1,7 +1,7 @@
 {
   "name": "@polymeshassociation/extension-ui",
   "description": "A sample signer extension for the @polkadot/api",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "license": "Apache-2",
   "type": "module",
   "dependencies": {
