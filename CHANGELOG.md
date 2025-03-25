@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.3.1...2.4.0) (2025-03-25)
+
+
+### Features
+
+* change "Reject" buttons to "Cancel" ([757a90d](https://github.com/PolymeshAssociation/polymesh-wallet/commit/757a90d26ea9af71a89a9e8b645f61e98997b49b))
+
 ## [2.3.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.3.0...2.3.1) (2025-01-20)
 
 
