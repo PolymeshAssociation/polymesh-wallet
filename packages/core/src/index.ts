@@ -217,11 +217,11 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
 
                         did = isMsPrimaryKey
                           ? msLinkedKeyInfoObj.asPrimaryKey.toString()
-                          : msLinkedKeyInfoObj.asSecondaryKey[0].toString();
+                          : msLinkedKeyInfoObj.asSecondaryKey.toString();
                       } else {
                         did = isPrimary
                           ? linkedKeyInfoObj.asPrimaryKey.toString()
-                          : linkedKeyInfoObj.asSecondaryKey[0].toString();
+                          : linkedKeyInfoObj.asSecondaryKey.toString();
                       }
 
                       // Initialize identity state for network:did pair
