@@ -1,3 +1,10 @@
+## [2.4.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.4.0...2.4.1) (2025-04-10)
+
+
+### Bug Fixes
+
+* update secondary key handling to use the correct format ([b597db3](https://github.com/PolymeshAssociation/polymesh-wallet/commit/b597db3c3e36a58a67fbd9bb269ab4e1ba478eb2))
+
 # [2.4.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.3.1...2.4.0) (2025-03-25)
 
 
