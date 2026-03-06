@@ -7,8 +7,7 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { SvgPlus } from '@polymeshassociation/extension-ui/assets/images/icons';
-import useIsPopup from '@polymeshassociation/extension-ui/hooks/useIsPopup';
-import { useLedger } from '@polymeshassociation/extension-ui/hooks/useLedger';
+import { useIsPopup, useLedger } from '@polymeshassociation/extension-ui/hooks';
 import { windowOpen } from '@polymeshassociation/extension-ui/messaging';
 import { hasKey } from '@polymeshassociation/extension-ui/styles/utils';
 

@@ -1,3 +1,4 @@
+import type { HexString } from '@polkadot/util/types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { NetworkName } from '../../types';
 
@@ -16,6 +17,9 @@ const networkSlice = createSlice({
     },
     setFormat (state, action: PayloadAction<number | undefined>) {
       state.ss58Format = action.payload || defaultSs58Format;
+    },
+    setGenesisHash (state, action: PayloadAction<HexString | undefined>) {
+      state.genesisHash = action.payload;
     },
     setNetwork (state, action: PayloadAction<NetworkName>) {
       state.selected = action.payload;

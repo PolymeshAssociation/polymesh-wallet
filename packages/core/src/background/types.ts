@@ -1,6 +1,8 @@
-import type { RequestSignatures as DotRequestSignatures } from '@polkadot/extension-base/background/types';
+import type { RequestAccountCreateHardware, RequestSignatures as DotRequestSignatures } from '@polkadot/extension-base/background/types';
 import type { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import type { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
+import type { HexString } from '@polkadot/util/types';
+import type { KeypairType } from '@polkadot/util-crypto/types';
 import type { IdentifiedAccount, NetworkMeta, NetworkName, NetworkState, StoreStatus } from '../types';
 
 export interface ResponsePolyCallDetails {
@@ -67,6 +69,12 @@ export interface RequestPolyIdentityRename {
   name: string;
 }
 
+export interface RequestPolyAccountCreateHardware extends Omit<RequestAccountCreateHardware, 'genesisHash'> {
+  // Optional for future flexibility; currently omitted in the ledger flow.
+  genesisHash?: HexString;
+  type?: KeypairType; // TODO: remove once extension-base is updated and all account types are supported in the UI
+}
+
 export interface RequestPolyChangePass {
   oldPass: string;
   newPass: string;
@@ -94,6 +102,7 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
   'poly:pri(global.changePass)': [RequestPolyGlobalChangePass, boolean];
   'poly:pri(password.isSet)': [RequestPolyIsPasswordSet, boolean];
   'poly:pri(password.validate)': [RequestPolyValidatePassword, boolean];
+  'poly:pri(accounts.create.hardware)': [RequestPolyAccountCreateHardware, boolean];
   'poly:pri(window.open)': [AllowedPath, boolean];
   // public/external requests, i.e. from a page
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
@@ -149,6 +158,7 @@ export type PolyTransportResponseMessage< TMessageType extends PolyMessageTypes>
 export const ALLOWED_PATH = [
   '/',
   '/account/import-ledger',
+  '/account/ledger-settings',
   '/account/restore/json',
   '/account/restore/seed',
   '/account/change-password',

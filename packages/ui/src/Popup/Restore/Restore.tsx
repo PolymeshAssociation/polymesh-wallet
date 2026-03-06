@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router';
 
 import { SvgAccountReactivate } from '@polymeshassociation/extension-ui/assets/images/icons';
-import useIsPopup from '@polymeshassociation/extension-ui/hooks/useIsPopup';
+import { useIsPopup } from '@polymeshassociation/extension-ui/hooks';
 import { windowOpen } from '@polymeshassociation/extension-ui/messaging';
 import { Box, Flex, Header, Text } from '@polymeshassociation/extension-ui/ui';
 

@@ -99,8 +99,12 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
       console.log(`Poly: Connected to ${network}, via ${networkUrl}`);
       // Clear errors
       store.dispatch(statusActions.apiReady());
-      // Set the ss58Format that'll be used for address rendering.
+      // Set the ss58Format and genesisHash from the connected chain.
       store.dispatch(networkActions.setFormat(api.registry.chainSS58));
+      store.dispatch(networkActions.setGenesisHash(api.genesisHash.toHex()));
+
+      // Fetch existential deposit for balance calculations
+      const existentialDeposit = api.consts.balances.existentialDeposit.toBn();
 
       setTimeout(() => {
         store.dispatch(statusActions.populated(network));
@@ -170,7 +174,8 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
                     ]) => {
                       // Store account metadata
                       const { locked, total, transferrable } = accountBalances(
-                        accData.data
+                        accData.data,
+                        existentialDeposit
                       );
 
                       store.dispatch(

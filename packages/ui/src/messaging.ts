@@ -3,6 +3,7 @@
 
 import type { AccountJson, AuthorizeRequest, ConnectedTabsUrlResponse, MetadataRequest, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSigningIsLocked, SeedLengths, SigningRequest } from '@polkadot/extension-base/background/types';
 import type { Message } from '@polkadot/extension-base/types';
+import type { Chain } from '@polkadot/extension-chains/types';
 import type { MetadataDef } from '@polkadot/extension-inject/types';
 import type { KeyringPair$Json } from '@polkadot/keyring/types';
 import type { SignerPayloadJSON } from '@polkadot/types/types';
@@ -15,6 +16,7 @@ import type { IdentifiedAccount, NetworkName, NetworkState, StoreStatus } from '
 import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
 import { getId } from '@polkadot/extension-base/utils/getId';
 import { ensurePortConnection } from '@polkadot/extension-base/utils/portUtils';
+import { metadataExpand } from '@polkadot/extension-chains';
 
 interface Handler {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -164,16 +166,17 @@ export async function approveSignPassword (id: string, savePass: boolean, passwo
   return sendMessage('pri(signing.approve.password)', { id, password, savePass });
 }
 
-export async function approveSignSignature (id: string, signature: HexString): Promise<boolean> {
-  return sendMessage('pri(signing.approve.signature)', { id, signature });
+export async function approveSignSignature (id: string, signature: HexString, signedTransaction?: HexString): Promise<boolean> {
+  return sendMessage('pri(signing.approve.signature)', { id, signature, signedTransaction });
 }
 
 export async function createAccountExternal (name: string, address: string, genesisHash: HexString | null): Promise<boolean> {
   return sendMessage('pri(accounts.create.external)', { address, genesisHash, name });
 }
 
-export async function createAccountHardware (address: string, hardwareType: string, accountIndex: number, addressOffset: number, name: string, genesisHash: HexString): Promise<boolean> {
-  return sendMessage('pri(accounts.create.hardware)', { accountIndex, address, addressOffset, genesisHash, hardwareType, name });
+// This mirrors the functionality from the polkadot extension but makes genesis hash optional to allow for chain-agnostic accounts in Polywallet
+export async function createAccountHardware (address: string, hardwareType: string, accountIndex: number, addressOffset: number, name: string, genesisHash?: HexString, type?: KeypairType): Promise<boolean> {
+  return sendMessage('poly:pri(accounts.create.hardware)', { accountIndex, address, addressOffset, genesisHash, hardwareType, name, type });
 }
 
 export async function createAccountSuri (name: string, password: string, suri: string, type?: KeypairType, genesisHash?: HexString | null): Promise<boolean> {
@@ -186,6 +189,20 @@ export async function createSeed (length?: SeedLengths, seed?: string, type?: Ke
 
 export async function getAllMetadata (): Promise<MetadataDef[]> {
   return sendMessage('pri(metadata.list)');
+}
+
+export async function getMetadata (genesisHash?: string | null, isPartial = false): Promise<Chain | null> {
+  if (!genesisHash) {
+    return null;
+  }
+
+  const def = await sendMessage('pri(metadata.get)', genesisHash || null);
+
+  if (def) {
+    return metadataExpand(def, isPartial);
+  }
+
+  return null;
 }
 
 export async function getConnectedTabsUrl (): Promise<ConnectedTabsUrlResponse> {

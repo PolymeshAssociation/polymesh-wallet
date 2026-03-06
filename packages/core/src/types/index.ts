@@ -1,6 +1,7 @@
 import type { Unsubcall } from '@polkadot/extension-inject/types';
 import type { Call } from '@polkadot/types/interfaces';
 import type { AnyJson } from '@polkadot/types/types';
+import type { HexString } from '@polkadot/util/types';
 
 export enum DidType {
   primary = 'primary',
@@ -73,6 +74,7 @@ export type CDD = null | {
 export interface NetworkState {
   selected: NetworkName;
   ss58Format: number;
+  genesisHash?: HexString;
   isDeveloper: boolean;
   customNetworkUrl: string;
 }

@@ -8,9 +8,9 @@ import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 
 import { networkLinks } from '@polymeshassociation/extension-core/constants';
-import { SvgDotsVertical, SvgLockOutline, SvgOpenInNew, SvgSettingsOutline, SvgViewDashboard } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { SvgDotsVertical, SvgLedger, SvgLockOutline, SvgOpenInNew, SvgSettingsOutline, SvgViewDashboard } from '@polymeshassociation/extension-ui/assets/images/icons';
 import { AccountContext, OptionSelector, PolymeshContext } from '@polymeshassociation/extension-ui/components';
-import useIsPopup from '@polymeshassociation/extension-ui/hooks/useIsPopup';
+import { useIsPopup } from '@polymeshassociation/extension-ui/hooks';
 import { togglePolyIsDev, windowOpen } from '@polymeshassociation/extension-ui/messaging';
 import { Checkbox, Flex, GrowingButton, Icon } from '@polymeshassociation/extension-ui/ui';
 import { Header } from '@polymeshassociation/extension-ui/ui/Header/Header';
@@ -69,6 +69,18 @@ const AppHeader = (props: Props): ReactElement<Props> => {
         {
           icon: (
             <Icon
+              Asset={SvgLedger}
+              color='gray5'
+              height={24}
+              width={24}
+            />
+          ),
+          label: 'Ledger Settings',
+          value: 'ledgerSettings'
+        },
+        {
+          icon: (
+            <Icon
               Asset={SvgSettingsOutline}
               color='gray5'
               height={24}
@@ -110,6 +122,8 @@ const AppHeader = (props: Props): ReactElement<Props> => {
           return togglePolyIsDev();
         case 'manageUrlAuth':
           return history.push('/settings/url-auth');
+        case 'ledgerSettings':
+          return history.push('/account/ledger-settings');
       }
     })().catch(console.error);
   }, [history, isPopup]);

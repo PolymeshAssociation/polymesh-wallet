@@ -1210,6 +1210,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/hashes@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@noble/hashes@npm:2.0.1"
+  checksum: 10c0/e81769ce21c3b1c80141a3b99bd001f17edea09879aa936692ae39525477386d696101cd573928a304806efb2b9fa751e1dd83241c67d0c84d30091e85c79bdb
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -1419,6 +1426,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@polkadot-api/merkleize-metadata@npm:^1.1.27":
+  version: 1.1.31
+  resolution: "@polkadot-api/merkleize-metadata@npm:1.1.31"
+  dependencies:
+    "@polkadot-api/metadata-builders": "npm:0.13.11"
+    "@polkadot-api/substrate-bindings": "npm:0.19.0"
+    "@polkadot-api/utils": "npm:0.3.0"
+  checksum: 10c0/4b8f8a0866d3751185757da27ea5c7ac35db193849748c0663c604539ec4269acf48769b11da17bd365b35c27ee185bac33d2944921ed3b00a670f2a8ee4a7bb
+  languageName: node
+  linkType: hard
+
+"@polkadot-api/metadata-builders@npm:0.13.11":
+  version: 0.13.11
+  resolution: "@polkadot-api/metadata-builders@npm:0.13.11"
+  dependencies:
+    "@polkadot-api/substrate-bindings": "npm:0.19.0"
+    "@polkadot-api/utils": "npm:0.3.0"
+  checksum: 10c0/744479a37f1070cbfcdac1114ab2617c47666c6abdb4b327352a3d5cc821a1f9f132e911189daa2937218abbaf1034d71f1053e35eb4e6a14ae2708c3a6411b3
+  languageName: node
+  linkType: hard
+
 "@polkadot-api/metadata-builders@npm:0.3.2":
   version: 0.3.2
   resolution: "@polkadot-api/metadata-builders@npm:0.3.2"
@@ -1440,6 +1468,18 @@ __metadata:
     "@polkadot-api/substrate-client": 0.1.4
     rxjs: ">=7.8.0"
   checksum: 10c0/9f93fab03c37af0483f5c8487ec5250d366eb401a2c9744c014dfb4c7aa524645ae71f6b0e60761e2bca89bdcd862c119e4ac0e798123d8ee9f037eb2f4aaef3
+  languageName: node
+  linkType: hard
+
+"@polkadot-api/substrate-bindings@npm:0.19.0":
+  version: 0.19.0
+  resolution: "@polkadot-api/substrate-bindings@npm:0.19.0"
+  dependencies:
+    "@noble/hashes": "npm:^2.0.1"
+    "@polkadot-api/utils": "npm:0.3.0"
+    "@scure/base": "npm:^2.0.0"
+    scale-ts: "npm:^1.6.1"
+  checksum: 10c0/f7975460ea0bd6e43cb5964175831f2370f06d86aad96e11bbde8bfb0fcf8148be83293d621828a065fa2378169a5404d67e1acb16fa1ffafbab0fad4251b45b
   languageName: node
   linkType: hard
 
@@ -1469,6 +1509,13 @@ __metadata:
   version: 0.1.0
   resolution: "@polkadot-api/utils@npm:0.1.0"
   checksum: 10c0/9b24522a30d0519df2d2bbfc65f7dbc94233950f829c4a6b042e02cc43b70c0ec43a7d06056cd7084d09e32d7c42caa2695732d25f673a31430391bed116fcae
+  languageName: node
+  linkType: hard
+
+"@polkadot-api/utils@npm:0.3.0":
+  version: 0.3.0
+  resolution: "@polkadot-api/utils@npm:0.3.0"
+  checksum: 10c0/d366102b2eb6406cb0add04c896882d200f5725eeda922db36a2f7f4a39869b9c8586c006759ff7791c31364bf6d22636e45827240245fed4e00844a117a91e9
   languageName: node
   linkType: hard
 
@@ -2220,6 +2267,8 @@ __metadata:
   resolution: "@polymeshassociation/extension-ui@workspace:packages/ui"
   dependencies:
     "@hookform/error-message": "npm:^0.0.5"
+    "@polkadot-api/merkleize-metadata": "npm:^1.1.27"
+    "@polkadot/extension-chains": "npm:0.58.6"
     "@polkadot/hw-ledger": "npm:^13.4.3"
     "@polkadot/keyring": "npm:^13.4.3"
     "@polkadot/networks": "npm:^13.4.3"
@@ -2600,6 +2649,13 @@ __metadata:
   version: 1.2.4
   resolution: "@scure/base@npm:1.2.4"
   checksum: 10c0/469c8aee80d6d6973e1aac6184befa04568f1b4016e40c889025f4a721575db9c1ca0c2ead80613896cce929392740322a18da585a427f157157e797dc0a42a9
+  languageName: node
+  linkType: hard
+
+"@scure/base@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@scure/base@npm:2.0.0"
+  checksum: 10c0/7d999c7bebf053bb49cb706fdc6c5366737cff0f7f7518f52d32d7f7ad7b898904f03673648a2af5c4f22396f5c05f1d8bddbf010d6595052d07ba8163d506ad
   languageName: node
   linkType: hard
 
@@ -16363,6 +16419,13 @@ __metadata:
   version: 1.6.0
   resolution: "scale-ts@npm:1.6.0"
   checksum: 10c0/ce4ea3559c6b6bdf2a62454aac83cc3151ae93d1a507ddb8e95e83ce1190085aed61c46901bd42d41d8f8ba58279d7e37057c68c2b674c2d39b8cf5d169e90dd
+  languageName: node
+  linkType: hard
+
+"scale-ts@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "scale-ts@npm:1.6.1"
+  checksum: 10c0/bbcf476029095152189c5bd210922b43342e8bfb712bf56237de172d55b528e090419e80da67c627a8f706a228237346b82de527755d7f197bb4d822c6383dfd
   languageName: node
   linkType: hard
 

@@ -34,6 +34,14 @@ const polyGenesisHashes = [
       '0x2ace05e703aa50b48c0ccccfc8b424f7aab9a1e2c424ed12e45d20b1e8ffd0d6'
     ],
     networkName: NetworkName.testnet
+  },
+  // Staging
+  {
+    displayName: 'Polymesh - Staging',
+    genesisHash: [
+      '0x3c3183f6d701500766ff7d147b79c4f10014a095eaaa98e960dcef6b3ead50ee'
+    ],
+    networkName: NetworkName.staging
   }
 ];
 

@@ -1,9 +1,7 @@
 import type { AccountJson, AccountsContext, AuthorizeRequest, MetadataRequest, SigningRequest } from '@polkadot/extension-base/background/types';
-import type { SettingsStruct } from '@polkadot/ui-settings/types';
 import type { IdentifiedAccount, NetworkState, StoreStatus } from '@polymeshassociation/extension-core/types';
 import type { PolymeshContext as PolymeshContextType } from '../types';
 
-import uiSettings from '@polkadot/ui-settings';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useErrorHandler } from 'react-error-boundary';
 import { Route, Switch, useHistory } from 'react-router';
@@ -15,7 +13,7 @@ import { subscribeOnlineStatus } from '@polymeshassociation/extension-core/utils
 
 import { SvgCloseCircle } from '../assets/images/icons';
 import { Loading } from '../components';
-import { AccountContext, ActionContext, ActivityContext, AuthorizeReqContext, MetadataReqContext, PolymeshContext, SettingsContext, SigningReqContext } from '../components/contexts';
+import { AccountContext, ActionContext, ActivityContext, AuthorizeReqContext, MetadataReqContext, PolymeshContext, SigningReqContext } from '../components/contexts';
 import { busySubscriber, ping, subscribeAccounts, subscribeAuthorizeRequests, subscribeMetadataRequests, subscribeNetworkState, subscribePolyAccounts, subscribePolySelectedAccount, subscribePolyStatus, subscribeSigningRequests } from '../messaging';
 import { Box, Flex, Icon } from '../ui';
 import { Toast } from '../ui/Toast';
@@ -28,11 +26,10 @@ import Authorize from './Authorize';
 import { ChangePassword } from './ChangePassword';
 import { ExportAccount } from './ExportAccount';
 import { ForgetAccount } from './ForgetAccount';
+import LedgerSettings from './LedgerSettings';
 import { NewAccount } from './NewAccount';
 import { Restore } from './Restore';
 import Signing from './Signing';
-
-const startSettings = uiSettings.get();
 
 function initAccountContext (accounts: AccountJson[]): AccountsContext {
   const hierarchy = buildHierarchy(accounts);
@@ -78,7 +75,6 @@ export default function Popup (): React.ReactElement {
   const [signRequests, setSignRequests] = useState<null | SigningRequest[]>(
     null
   );
-  const [settingsCtx, setSettingsCtx] = useState<SettingsStruct>(startSettings);
   const [polymeshAccounts, setPolymeshAccounts] = useState<IdentifiedAccount[]>(
     []
   );
@@ -177,10 +173,6 @@ export default function Popup (): React.ReactElement {
       .then(() => undefined, handleError)
       .catch(handleError);
 
-    uiSettings.on('change', (settings): void => {
-      setSettingsCtx(settings);
-    });
-
     _onAction();
   }, [_onAction, handleError]);
 
@@ -233,51 +225,52 @@ export default function Popup (): React.ReactElement {
         isReady && (
         <ActivityContext.Provider value={isBusy}>
           <ActionContext.Provider value={_onAction}>
-            <SettingsContext.Provider value={settingsCtx}>
-              <AccountContext.Provider value={accountCtx}>
-                <AuthorizeReqContext.Provider value={authRequests}>
-                  <MetadataReqContext.Provider value={metaRequests}>
-                    <SigningReqContext.Provider value={signRequests}>
-                      <PolymeshContext.Provider value={polymeshCtx}>
-                        <Switch>
-                          <Route path='/account/create'>
-                            <NewAccount />
-                          </Route>
-                          <Route path='/account/forget/:address'>
-                            <ForgetAccount />
-                          </Route>
-                          <Route path='/account/export/:address'>
-                            <ExportAccount />
-                          </Route>
-                          <Route path='/account/restore/:method'>
-                            <Restore />
-                          </Route>
-                          <Route path='/account/import-ledger'>
-                            <ImportLedger />
-                          </Route>
-                          <Route path='/account/change-password'>
-                            <ChangePassword />
-                          </Route>
-                          <Route path='/account/details/:address'>
-                            <AccountDetails />
-                          </Route>
-                          <Route path='/settings/url-auth'>
-                            <AuthManagement />
-                          </Route>
-                          <Route
-                            exact
-                            path='/'
-                          >
-                            <Root />
-                          </Route>
-                        </Switch>
-                        <Toast />
-                      </PolymeshContext.Provider>
-                    </SigningReqContext.Provider>
-                  </MetadataReqContext.Provider>
-                </AuthorizeReqContext.Provider>
-              </AccountContext.Provider>
-            </SettingsContext.Provider>
+            <AccountContext.Provider value={accountCtx}>
+              <AuthorizeReqContext.Provider value={authRequests}>
+                <MetadataReqContext.Provider value={metaRequests}>
+                  <SigningReqContext.Provider value={signRequests}>
+                    <PolymeshContext.Provider value={polymeshCtx}>
+                      <Switch>
+                        <Route path='/account/create'>
+                          <NewAccount />
+                        </Route>
+                        <Route path='/account/forget/:address'>
+                          <ForgetAccount />
+                        </Route>
+                        <Route path='/account/export/:address'>
+                          <ExportAccount />
+                        </Route>
+                        <Route path='/account/restore/:method'>
+                          <Restore />
+                        </Route>
+                        <Route path='/account/import-ledger'>
+                          <ImportLedger />
+                        </Route>
+                        <Route path='/account/ledger-settings'>
+                          <LedgerSettings />
+                        </Route>
+                        <Route path='/account/change-password'>
+                          <ChangePassword />
+                        </Route>
+                        <Route path='/account/details/:address'>
+                          <AccountDetails />
+                        </Route>
+                        <Route path='/settings/url-auth'>
+                          <AuthManagement />
+                        </Route>
+                        <Route
+                          exact
+                          path='/'
+                        >
+                          <Root />
+                        </Route>
+                      </Switch>
+                      <Toast />
+                    </PolymeshContext.Provider>
+                  </SigningReqContext.Provider>
+                </MetadataReqContext.Provider>
+              </AuthorizeReqContext.Provider>
+            </AccountContext.Provider>
           </ActionContext.Provider>
         </ActivityContext.Provider>
       )}

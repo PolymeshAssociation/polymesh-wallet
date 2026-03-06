@@ -1,6 +1,11 @@
+import type { MetadataDef } from '@polkadot/extension-inject/types';
+
 import { ApiPromise, WsProvider } from '@polkadot/api';
+import { MetadataStore } from '@polkadot/extension-base/stores';
+import { addMetadata } from '@polkadot/extension-chains';
 
 import { typesBundle } from '@polymeshassociation/polymesh-types';
+import polymeshSignedExtensions from '@polymeshassociation/polymesh-types/signedExtensions';
 
 import { apiConnTimeout } from '../../constants';
 
@@ -8,9 +13,33 @@ let api: ApiPromise | null = null;
 let provider: WsProvider;
 let currentNetworkUrl: string;
 
+const metaStore = new MetadataStore();
 const metadata: Record<string, `0x${string}`> = {};
+let metadataCacheInitialized = false;
+
+// Load persisted metadata from chrome.storage into the in-memory caches.
+// Called once before the first ApiPromise.create so that subsequent connections
+// for the same chain/specVersion don't need to re-fetch metadata from the node.
+async function initMetadataCache (): Promise<void> {
+  if (metadataCacheInitialized) {
+    return;
+  }
+
+  metadataCacheInitialized = true;
+
+  await metaStore.all((_, def: MetadataDef) => {
+    if (def?.rawMetadata) {
+      const key = `${def.genesisHash}-${def.specVersion}`;
+
+      metadata[key] = def.rawMetadata;
+      addMetadata(def);
+    }
+  });
+}
 
 async function apiPromise (networkUrl: string): Promise<ApiPromise> {
+  await initMetadataCache();
+
   const shouldReinitialize = currentNetworkUrl !== networkUrl;
 
   if (!shouldReinitialize && api && provider?.isConnected) {
@@ -59,7 +88,27 @@ async function apiPromise (networkUrl: string): Promise<ApiPromise> {
   const key = `${api.genesisHash.toHex()}-${api.runtimeVersion.specVersion.toString()}`;
 
   // Cache metadata to speed up following Api creations.
-  metadata[key] = api.runtimeMetadata.toHex();
+  if (!metadata[key]) {
+    // Build and persist the MetadataDef so it survives extension restarts and
+    // is available to pri(metadata.get) for Ledger generic app signing.
+    const rawMetadata = api.runtimeMetadata.toHex();
+    const def: MetadataDef = {
+      chain: api.runtimeChain.toString(),
+      genesisHash: api.genesisHash.toHex(),
+      icon: 'substrate',
+      rawMetadata,
+      specVersion: api.runtimeVersion.specVersion.toNumber(),
+      ss58Format: api.registry.chainSS58 ?? 42,
+      tokenDecimals: api.registry.chainDecimals[0] ?? 6,
+      tokenSymbol: api.registry.chainTokens[0] ?? 'POLYX',
+      types: {},
+      userExtensions: polymeshSignedExtensions
+    };
+
+    metadata[key] = rawMetadata;
+    addMetadata(def);
+    await metaStore.set(api.genesisHash.toHex(), def);
+  }
 
   return api;
 }

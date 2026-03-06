@@ -202,19 +202,10 @@ export default class Tabs extends DotTabs {
           request as RequestPolyAccountUnsubscribe
         );
 
-      case 'pub(metadata.list)': {
-        // Deny app's request to provide metadata because Polymesh wallet
-        // is fully aware of network metadata via ApiPromise objects.
-
-        return [];
-      }
-
-      case 'pub(metadata.provide)': {
-        // Deny app's request to provide metadata because Polymesh wallet
-        // is fully aware of network metadata via ApiPromise objects.
-
+      case 'pub(metadata.provide)':
+        // Deny dApp requests to provide metadata. The Polymesh wallet fetches
+        // authoritative metadata directly from the connected chain endpoint.
         return false;
-      }
 
       default:
         return super.handle(

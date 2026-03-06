@@ -6,6 +6,8 @@
   "type": "module",
   "dependencies": {
     "@hookform/error-message": "^0.0.5",
+    "@polkadot-api/merkleize-metadata": "^1.1.27",
+    "@polkadot/extension-chains": "0.58.6",
     "@polkadot/hw-ledger": "^13.4.3",
     "@polkadot/keyring": "^13.4.3",
     "@polkadot/networks": "^13.4.3",

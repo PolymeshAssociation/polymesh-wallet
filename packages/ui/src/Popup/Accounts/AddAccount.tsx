@@ -5,8 +5,7 @@ import { useHistory } from 'react-router';
 
 import { SvgLedger } from '@polymeshassociation/extension-ui/assets/images/icons';
 import SvgWalletLogo from '@polymeshassociation/extension-ui/assets/images/SvgWalletLogo';
-import useIsPopup from '@polymeshassociation/extension-ui/hooks/useIsPopup';
-import { useLedger } from '@polymeshassociation/extension-ui/hooks/useLedger';
+import { useIsPopup, useLedger } from '@polymeshassociation/extension-ui/hooks';
 import { windowOpen } from '@polymeshassociation/extension-ui/messaging';
 
 import { ActionContext } from '../../components';
