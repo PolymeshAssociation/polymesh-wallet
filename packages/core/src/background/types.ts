@@ -1,4 +1,4 @@
-import type { RequestAccountCreateHardware, RequestSignatures as DotRequestSignatures } from '@polkadot/extension-base/background/types';
+import type { RequestSignatures as DotRequestSignatures } from '@polkadot/extension-base/background/types';
 import type { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import type { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 import type { HexString } from '@polkadot/util/types';
@@ -69,10 +69,14 @@ export interface RequestPolyIdentityRename {
   name: string;
 }
 
-export interface RequestPolyAccountCreateHardware extends Omit<RequestAccountCreateHardware, 'genesisHash'> {
-  // Optional for future flexibility; currently omitted in the ledger flow.
+export interface RequestPolyAccountCreateHardware {
+  accountIndex: number;
+  address: string;
+  addressOffset: number;
   genesisHash?: HexString;
-  type?: KeypairType; // TODO: remove once extension-base is updated and all account types are supported in the UI
+  hardwareType: string;
+  name: string;
+  type: KeypairType;
 }
 
 export interface RequestPolyChangePass {

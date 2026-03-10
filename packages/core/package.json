@@ -10,9 +10,9 @@
   "author": "",
   "license": "Apache-2",
   "dependencies": {
-    "@polkadot/api-augment": "^15.8.1",
-    "@polkadot/types-codec": "^15.8.1",
-    "@polkadot/ui-keyring": "^3.12.2",
+    "@polkadot/api-augment": "^16.5.3",
+    "@polkadot/types-codec": "^16.5.3",
+    "@polkadot/ui-keyring": "^3.16.4",
     "@polymeshassociation/polymesh-types": "^5.15.0",
     "@reduxjs/toolkit": "^1.9.7",
     "crypto-js": "^4.2.0",

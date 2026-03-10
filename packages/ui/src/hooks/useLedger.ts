@@ -280,6 +280,7 @@ export default function useLedger (
         .then((res) => {
           setIsLoading(false);
           setAddress(res.address);
+          setType('ed25519');
         }).catch((e: Error) => {
           handleGetAddressError(e);
         });

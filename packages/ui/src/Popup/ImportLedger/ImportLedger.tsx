@@ -59,7 +59,7 @@ function ImportLedger (): React.ReactElement {
     isLoading: ledgerLoading,
     refresh,
     status,
-    type: ledgerType } = ledgerData;
+    type: keyType } = ledgerData;
 
   const address: string | null = useMemo(() => {
     if (ledgerAddress) {
@@ -138,15 +138,16 @@ function ImportLedger (): React.ReactElement {
   }, []);
 
   const saveAccount = useCallback(() => {
-    if (address && name) {
+    if (address && name && keyType) {
       createAccountHardware(
         address,
         'ledger',
         accountIndex,
         addressOffset,
         name,
-        undefined, // genesisHash is intentionally omitted for Ledger accounts to keep them chain-agnostic
-        ledgerType ?? undefined
+        keyType,
+        undefined // genesisHash is intentionally omitted for Ledger accounts to keep them chain-agnostic
+
       )
         .then(() => onAction('/'))
         .catch((error: Error) => {
@@ -155,7 +156,7 @@ function ImportLedger (): React.ReactElement {
           setError(error.message);
         });
     }
-  }, [accountIndex, address, addressOffset, ledgerType, name, onAction]);
+  }, [accountIndex, address, addressOffset, keyType, name, onAction]);
 
   const toggleShowingSettings = useCallback(() => {
     setIsShowingSettings(!isShowingSettings);

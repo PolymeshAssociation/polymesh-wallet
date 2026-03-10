@@ -175,7 +175,7 @@ export async function createAccountExternal (name: string, address: string, gene
 }
 
 // This mirrors the functionality from the polkadot extension but makes genesis hash optional to allow for chain-agnostic accounts in Polywallet
-export async function createAccountHardware (address: string, hardwareType: string, accountIndex: number, addressOffset: number, name: string, genesisHash?: HexString, type?: KeypairType): Promise<boolean> {
+export async function createAccountHardware (address: string, hardwareType: string, accountIndex: number, addressOffset: number, name: string, type: KeypairType, genesisHash?: HexString): Promise<boolean> {
   return sendMessage('poly:pri(accounts.create.hardware)', { accountIndex, address, addressOffset, genesisHash, hardwareType, name, type });
 }
 
