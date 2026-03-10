@@ -186,7 +186,7 @@ export default function useLedger (
 ): State {
   const [isLoading, setIsLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
-  const [refreshLock, setRefreshLock] = useState(false);
+  const [refreshNonce, setRefreshNonce] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [rawError, setRawError] = useState<string | null>(null);
   const [address, setAddress] = useState<string | null>(null);
@@ -220,36 +220,62 @@ export default function useLedger (
     setAddress(null);
   }
 
-  const ledger = useMemo(() => {
-    setError(null);
-    setRawError(null);
-    setIsLocked(false);
-    setRefreshLock(false);
-
-    // this trick allows to refresh the ledger on demand
-    // when it is shown as locked and the user has actually
-    // unlocked it, which we can't know.
-    if (refreshLock || genesis) {
-      if (!genesis) {
-        return null;
-      }
-
-      try {
-        return retrieveLedger(genesis, specVersion);
-      } catch (error) {
-        setError((error as Error).message);
-      }
+  const { initError, ledger } = useMemo(() => {
+    if (!genesis) {
+      return { initError: null, ledger: null, refreshNonce };
     }
 
-    return null;
-  }, [genesis, refreshLock, specVersion]);
+    try {
+      return {
+        initError: null,
+        ledger: retrieveLedger(genesis, specVersion),
+        refreshNonce
+      };
+    } catch (error) {
+      return {
+        initError: (error as Error).message,
+        ledger: null,
+        refreshNonce
+      };
+    }
+  }, [genesis, refreshNonce, specVersion]);
+
+  useEffect(() => {
+    setAddress(null);
+    setError(initError);
+    setIsLoading(false);
+    setIsLocked(false);
+    setRawError(null);
+    setType(null);
+  }, [genesis, initError, ledger, specVersion]);
 
   useEffect(() => {
     if (!ledger || !genesis) {
       setAddress(null);
+      setType(null);
 
       return;
     }
+
+    let isStale = false;
+
+    const handleGetAddressSuccess = (nextAddress: string, nextType: KeypairType) => {
+      if (isStale) {
+        return;
+      }
+
+      setIsLoading(false);
+      setAddress(nextAddress);
+      setType(nextType);
+    };
+
+    const handleGetAddressFailure = (e: Error) => {
+      if (isStale) {
+        return;
+      }
+
+      handleGetAddressError(e);
+    };
 
     setIsLoading(true);
     setError(null);
@@ -269,28 +295,31 @@ export default function useLedger (
       //       ETH-style derivation instead of the Substrate ss58 prefix path.
       (ledger as LedgerGeneric).getAddress(def?.prefix ?? 42, false, accountIndex, addressOffset)
         .then((res) => {
-          setIsLoading(false);
-          setAddress(res.address);
-          setType('ed25519');
+          handleGetAddressSuccess(res.address, 'ed25519');
         }).catch((e: Error) => {
-          handleGetAddressError(e);
+          handleGetAddressFailure(e);
         });
     } else if (effectiveApp === 'legacy') {
       (ledger as Ledger).getAddress(false, accountIndex, addressOffset)
         .then((res) => {
-          setIsLoading(false);
-          setAddress(res.address);
-          setType('ed25519');
+          handleGetAddressSuccess(res.address, 'ed25519');
         }).catch((e: Error) => {
-          handleGetAddressError(e);
+          handleGetAddressFailure(e);
         });
     }
+
+    return () => {
+      isStale = true;
+    };
   }, [accountIndex, addressOffset, genesis, ledger, isEthereum, specVersion]);
 
   const refresh = useCallback(() => {
-    setRefreshLock(true);
+    setRefreshNonce((value) => value + 1);
     setError(null);
     setRawError(null);
+    setIsLocked(false);
+    setAddress(null);
+    setType(null);
   }, []);
 
   return {
