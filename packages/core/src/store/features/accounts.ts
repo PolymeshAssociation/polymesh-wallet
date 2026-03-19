@@ -2,7 +2,6 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import type { AccountData } from '../../types';
 
 import { createSlice } from '@reduxjs/toolkit';
-import merge from 'lodash/merge';
 import isEqual from 'lodash-es/isEqual';
 
 export interface AccountsState { selected?: string; keys: Record<string, AccountData> }
@@ -29,7 +28,10 @@ const accountsSlice = createSlice({
     setAccount (state, action: PayloadAction<AccountData>) {
       const data = action.payload;
       const prev = state.keys[data.address];
-      const next = merge(prev, data);
+      const next = {
+        ...prev,
+        ...data
+      };
 
       if (!isEqual(next, prev)) {
         state.keys[data.address] = next;

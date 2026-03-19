@@ -3,7 +3,7 @@ import type { Call } from '@polkadot/types/interfaces';
 import type { AnyJson } from '@polkadot/types/types';
 import type { HexString } from '@polkadot/util/types';
 
-export enum DidType {
+export enum KeyType {
   primary = 'primary',
   secondary = 'secondary',
   multisig = 'multisig'
@@ -17,7 +17,7 @@ export interface AccountBalances {
 
 export interface AccountData {
   address: string;
-  didType?: DidType;
+  keyType?: KeyType;
   name?: string;
   balance?: AccountBalances;
 }
@@ -34,10 +34,9 @@ export interface IdentityData {
 export interface IdentifiedAccount {
   name?: string;
   did?: string;
-  keyType?: DidType;
+  keyType?: KeyType;
   cdd?: CDD;
   address: string;
-  didType?: DidType;
   didAlias?: string;
   balance?: {
     total: string;
@@ -50,7 +49,7 @@ export type UnsubCallback = () => void;
 
 export type ReversedDidList = Record<
 string,
-{ did: string; keyType: DidType; cdd?: CDD; didAlias: string }
+{ did: string; keyType: KeyType; cdd?: CDD; didAlias: string }
 >;
 
 export enum NetworkName {

@@ -33,9 +33,9 @@ export const AccountView: FC<Props> = ({ address,
     const color = keyType === 'primary' ? 'red' : 'blue';
     const text = keyType === 'primary' ? 'Primary' : keyType === 'secondary' ? 'Secondary' : 'MultiSigSigner';
 
-    return (
-      selectedAccount?.did && <StatusBadge variant={color}>{text}</StatusBadge>
-    );
+    return keyType
+      ? <StatusBadge variant={color}>{text}</StatusBadge>
+      : null;
   };
 
   return (

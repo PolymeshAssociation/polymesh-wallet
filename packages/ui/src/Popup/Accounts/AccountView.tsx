@@ -178,7 +178,7 @@ export const AccountView: FC<Props> = ({ account, isSelected }) => {
             height='100%'
             justifyContent='flex-end'
           >
-            {did && <AccountType keyType={keyType} />}
+            {keyType && <AccountType keyType={keyType} />}
           </Flex>
         </GridItem>
         <GridItem area='address'>

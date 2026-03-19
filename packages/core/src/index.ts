@@ -19,6 +19,7 @@ import { getAccountsList, getNetwork, getNetworkUrl } from './store/getters';
 import { subscribeCustomNetworkUrl, subscribeSelectedNetwork } from './store/subscribers';
 import { populatedDelay } from './constants';
 import store from './store';
+import { KeyType } from './types';
 import { accountBalances, apiErrorHandler, observeAccounts } from './utils';
 
 const unsubCallbacks: Record<string, UnsubCallback> = {};
@@ -192,6 +193,12 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
 
                       if (linkedKeyInfo?.isEmpty) {
                         store.dispatch(
+                          accountActions.setAccount({
+                            address: account,
+                            keyType: undefined
+                          })
+                        );
+                        store.dispatch(
                           identityActions.removeCurrentIdentity(account)
                         );
 
@@ -204,6 +211,21 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
                       const isSecondary = linkedKeyInfoObj.isSecondaryKey;
                       const isMultiSig = linkedKeyInfoObj.isMultiSigSignerKey;
 
+                      const keyType = isPrimary
+                        ? KeyType.primary
+                        : isSecondary
+                          ? KeyType.secondary
+                          : isMultiSig
+                            ? KeyType.multisig
+                            : undefined;
+
+                      store.dispatch(
+                        accountActions.setAccount({
+                          address: account,
+                          keyType
+                        })
+                      );
+
                       let did: string;
 
                       // MultiSigs require one additional query to get their DIDs
@@ -214,11 +236,24 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
                           )) as Option<PolymeshPrimitivesSecondaryKeyKeyRecord>;
 
                         if (msLinkedKeyInfo?.isEmpty) {
-                          throw new Error('msLinkedKeyInfo is missing');
+                          // Signer key can point to a multisig that is no longer linked to a DID.
+                          store.dispatch(
+                            identityActions.removeCurrentIdentity(account)
+                          );
+
+                          return;
                         }
 
                         const msLinkedKeyInfoObj = msLinkedKeyInfo.unwrap();
                         const isMsPrimaryKey = msLinkedKeyInfoObj.isPrimaryKey;
+
+                        if (!isMsPrimaryKey && !msLinkedKeyInfoObj.isSecondaryKey) {
+                          store.dispatch(
+                            identityActions.removeCurrentIdentity(account)
+                          );
+
+                          return;
+                        }
 
                         did = isMsPrimaryKey
                           ? msLinkedKeyInfoObj.asPrimaryKey.toString()

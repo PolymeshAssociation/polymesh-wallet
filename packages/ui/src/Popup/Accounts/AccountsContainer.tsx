@@ -2,7 +2,7 @@ import type { FC, KeyboardEvent } from 'react';
 
 import React, { useCallback, useContext, useState } from 'react';
 
-import { DidType, type IdentifiedAccount } from '@polymeshassociation/extension-core/types';
+import { type IdentifiedAccount, KeyType } from '@polymeshassociation/extension-core/types';
 import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymeshassociation/extension-ui/assets/images/icons';
 import { ActionContext, PolymeshContext } from '@polymeshassociation/extension-ui/components';
 import { CddStatus } from '@polymeshassociation/extension-ui/components/CddStatus';
@@ -167,7 +167,7 @@ export const AccountsContainer: FC<Props> = ({ accounts,
     return (
       <>
         {accounts
-          .sort((a) => (a.keyType === DidType.primary ? -1 : 1))
+          .sort((a) => (a.keyType === KeyType.primary ? -1 : 1))
           .map((account: IdentifiedAccount, index) => {
             return (
               <AccountView

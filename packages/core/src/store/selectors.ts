@@ -4,7 +4,7 @@ import type { RootState } from './rootReducer';
 import { createSelector } from '@reduxjs/toolkit';
 
 import { networkURLs } from '../constants';
-import { DidType, NetworkName } from '../types';
+import { KeyType, NetworkName } from '../types';
 
 export const network = createSelector(
   (state: RootState) => state.network,
@@ -50,14 +50,14 @@ export const reversedDidList = createSelector(
           didAlias: identity.alias || ''
         };
 
-        reversedList[identity.priKey] = { ...data, keyType: DidType.primary };
+        reversedList[identity.priKey] = { ...data, keyType: KeyType.primary };
 
         identity.secKeys?.forEach((secKey) => {
-          reversedList[secKey] = { ...data, keyType: DidType.secondary };
+          reversedList[secKey] = { ...data, keyType: KeyType.secondary };
         });
 
         identity.msKeys?.forEach((msKey) => {
-          reversedList[msKey] = { ...data, keyType: DidType.multisig };
+          reversedList[msKey] = { ...data, keyType: KeyType.multisig };
         });
 
         return reversedList;
@@ -85,10 +85,14 @@ export const identifiedAccounts = createSelector(
   accounts,
   reversedDidList,
   (accounts, reversedDidList: ReversedDidList) =>
-    Object.values(accounts).map((account) => ({
-      ...account,
-      ...reversedDidList[account.address]
-    }))
+    Object.values(accounts).map((account) => {
+      const didData = reversedDidList[account.address];
+
+      return {
+        ...account,
+        ...didData
+      };
+    })
 );
 
 export const selectedAccount = createSelector(
