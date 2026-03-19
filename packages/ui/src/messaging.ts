@@ -18,6 +18,8 @@ import { getId } from '@polkadot/extension-base/utils/getId';
 import { ensurePortConnection } from '@polkadot/extension-base/utils/portUtils';
 import { metadataExpand } from '@polkadot/extension-chains';
 
+import { clearSavedMeta, getSavedMeta, setSavedMeta } from './MetadataCache';
+
 interface Handler {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resolve: (data: any) => void;
@@ -196,7 +198,22 @@ export async function getMetadata (genesisHash?: string | null, isPartial = fals
     return null;
   }
 
-  const def = await sendMessage('pri(metadata.get)', genesisHash || null);
+  let request = getSavedMeta(genesisHash);
+
+  if (!request) {
+    request = sendMessage('pri(metadata.get)', genesisHash || null);
+    setSavedMeta(genesisHash, request);
+  }
+
+  let def: MetadataDef | null;
+
+  try {
+    def = await request;
+  } catch (error) {
+    clearSavedMeta(genesisHash);
+
+    throw error;
+  }
 
   if (def) {
     return metadataExpand(def, isPartial);

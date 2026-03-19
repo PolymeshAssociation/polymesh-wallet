@@ -6,20 +6,19 @@ import { TypeRegistry } from '@polkadot/types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { Box, Heading } from '@polymeshassociation/extension-ui/ui';
 import polymeshSignedExtensions from '@polymeshassociation/polymesh-types/signedExtensions';
 
-import { ActionContext, VerticalSpace } from '../../components';
+import { ActionContext } from '../../components';
 import { approveSignSignature } from '../../messaging';
 import Bytes from './Bytes';
 import Extrinsic from './Extrinsic';
+import FeeSummary from './FeeSummary';
 import LedgerSignArea from './LedgerSignArea';
 import SignArea from './SignArea';
 
 interface Props {
   account: AccountJson;
   buttonText: string;
-  isFirst: boolean;
   request: RequestSign;
   signId: string;
   url: string;
@@ -28,6 +27,17 @@ interface Props {
 interface Data {
   hexBytes: string | null;
   payload: ExtrinsicPayload | null;
+}
+
+interface FeeState {
+  feeLoading: boolean;
+  feeNotice?: string;
+  networkFee: string;
+  protocolFee: string;
+}
+
+interface DecodeState {
+  warningMessage?: string;
 }
 
 // keep it global, we can and will re-use this across requests
@@ -41,7 +51,6 @@ function isRawPayload (
 
 export default function Request ({ account: { accountIndex, addressOffset, isExternal, isHardware },
   buttonText,
-  isFirst,
   request,
   signId,
   url }: Props): React.ReactElement<Props> | null {
@@ -51,6 +60,12 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
     payload: null
   });
   const [error, setError] = useState<string | null>(null);
+  const [feeState, setFeeState] = useState<FeeState>({
+    feeLoading: false,
+    networkFee: '',
+    protocolFee: ''
+  });
+  const [decodeState, setDecodeState] = useState<DecodeState>({});
 
   useEffect((): void => {
     const payload = request.payload;
@@ -88,67 +103,97 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
     [onAction, signId]
   );
 
-  // @TODO show an error
-  if (isExternal && !isHardware) {
-    return null;
-  }
+  const _onWarningStateChange = useCallback((warningMessage?: string): void => {
+    setDecodeState({ warningMessage });
+  }, []);
+
+  const externalRejectMessage = isExternal && !isHardware
+    ? 'This external account cannot sign in the wallet.'
+    : undefined;
+  const shouldRejectOnly = !!externalRejectMessage;
 
   if (payload !== null) {
     const json = request.payload as SignerPayloadJSON;
+    const footerExtra = (
+      <FeeSummary
+        feeLoading={feeState.feeLoading}
+        feeNotice={feeState.feeNotice}
+        networkFee={feeState.networkFee}
+        protocolFee={feeState.protocolFee}
+      />
+    );
+
+    if (isHardware) {
+      return (
+        <>
+          <RequestContent>
+            <Extrinsic
+              onFeeStateChange={setFeeState}
+              onWarningStateChange={_onWarningStateChange}
+              payloadExt={payload}
+              request={json}
+            />
+          </RequestContent>
+          <LedgerSignArea
+            accountIndex={(accountIndex) || 0}
+            addressOffset={(addressOffset) || 0}
+            error={error}
+            footerExtra={footerExtra}
+            genesisHash={json.genesisHash}
+            onSignature={_onSignature}
+            payloadExt={payload}
+            payloadJson={json}
+            setError={setError}
+            signId={signId}
+            warningMessage={decodeState.warningMessage}
+          />
+        </>
+      );
+    }
 
     return (
       <>
-        <RequestContent isFirst={isFirst}>
-          <Box
-            mt='xs'
-            mx='s'
-          >
-            <Heading variant='h5'>Signing Request</Heading>
-          </Box>
-          <Extrinsic request={json} />
+        <RequestContent>
+          <Extrinsic
+            onFeeStateChange={setFeeState}
+            onWarningStateChange={_onWarningStateChange}
+            payloadExt={payload}
+            request={json}
+          />
         </RequestContent>
-        {isHardware
-          ? (
-            <LedgerSignArea
-              accountIndex={(accountIndex) || 0}
-              addressOffset={(addressOffset) || 0}
-              error={error}
-              genesisHash={json.genesisHash}
-              onSignature={_onSignature}
-              payloadExt={payload}
-              payloadJson={json}
-              setError={setError}
-              signId={signId}
-            />
-          )
-          : (
-            <SignArea
-              buttonText={buttonText}
-              error={error}
-              isExternal={isExternal}
-              isFirst={isFirst}
-              setError={setError}
-              signId={signId}
-            />
-          )}
+        <SignArea
+          buttonText={buttonText}
+          error={error}
+          footerExtra={footerExtra}
+          isExternal={isExternal}
+          rejectMessage={externalRejectMessage}
+          rejectOnly={shouldRejectOnly}
+          setError={setError}
+          signId={signId}
+          warningMessage={decodeState.warningMessage}
+        />
       </>
     );
   } else if (hexBytes !== null) {
     const raw = request.payload as SignerPayloadRaw;
+    const rejectMessage = isHardware
+      ? 'Ledger devices do not support signing raw data.'
+      : externalRejectMessage;
 
     return (
       <>
-        <Bytes
-          bytes={raw.data}
-          url={url}
-        />
-        <VerticalSpace />
+        <RequestContent>
+          <Bytes
+            bytes={raw.data}
+            url={url}
+          />
+        </RequestContent>
         <SignArea
           buttonText={buttonText}
           error={error}
           isExternal={isExternal}
-          isFirst={isFirst}
-          rejectOnly={!!isHardware}
+          rejectMessage={rejectMessage}
+          rejectOnly={!!rejectMessage}
           setError={setError}
           signId={signId}
         />
@@ -159,10 +204,10 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
   return null;
 }
 
-const RequestContent = styled.div<{ isFirst: boolean | undefined }>`
-  display: ${({ isFirst }) => (isFirst ? 'flex' : 'none')};
+const RequestContent = styled.div`
+  display: flex;
   flex-direction: column;
-  overflow-y: scroll;
-  height: 100%;
-  min-width: 100%;
+  overflow-y: auto;
+  flex: 1;
+  width: 100%;
 `;

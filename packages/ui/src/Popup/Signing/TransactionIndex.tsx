@@ -1,7 +1,5 @@
-import type { ThemeProps } from '../../types';
-
 import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import ArrowLeftImage from '../../assets/arrowLeft.svg';
 import { Svg } from '../../components';
@@ -14,7 +12,7 @@ interface Props {
   onPreviousClick: () => void;
 }
 
-interface ArrowProps extends ThemeProps {
+interface ArrowProps {
   isActive: boolean;
 }
 
@@ -26,23 +24,24 @@ function TransactionIndex ({ className,
   const previousClickActive = index !== 0;
   const nextClickActive = index < totalItems - 1;
 
-  const handleLeftCLick = useCallback(() => previousClickActive && onPreviousClick(), [onPreviousClick, previousClickActive]);
-  const handleRightCLick = useCallback(() => nextClickActive && onNextClick(), [nextClickActive, onNextClick]);
+  const handleLeftClick = useCallback(() => previousClickActive && onPreviousClick(), [onPreviousClick, previousClickActive]);
+  const handleRightClick = useCallback(() => nextClickActive && onNextClick(), [nextClickActive, onNextClick]);
 
   return (
     <div className={className}>
-      <div>
-        <span className='currentStep'>{index + 1}</span>
-        <span className='totalSteps'>/{totalItems}</span>
-      </div>
-      <div>
+      <div className='arrowWrap left'>
         <ArrowLeft
           isActive={previousClickActive}
-          onClick={handleLeftCLick}
+          onClick={handleLeftClick}
         />
+      </div>
+      <div className='requestLabel'>
+        {`Request ${index + 1} of ${totalItems}`}
+      </div>
+      <div className='arrowWrap right'>
         <ArrowRight
           isActive={nextClickActive}
-          onClick={handleRightCLick}
+          onClick={handleRightClick}
         />
       </div>
     </div>
@@ -53,43 +52,43 @@ const ArrowLeft = styled(Svg).attrs(() => ({
   src: ArrowLeftImage
 }))<ArrowProps>`
   display: inline-block;
-  background: ${({ isActive, theme }: ArrowProps): string =>
-    isActive ? theme.primaryColor : theme.iconNeutralColor};
+  background: ${({ isActive }): string =>
+    isActive ? 'white' : 'rgba(255, 255, 255, 0.4)'};
   cursor: ${({ isActive }): string => (isActive ? 'pointer' : 'default')};
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
 `;
 
 ArrowLeft.displayName = 'ArrowLeft';
 
 const ArrowRight = styled(ArrowLeft)`
-  margin-left: 6px;
   transform: rotate(180deg);
 `;
 
 ArrowRight.displayName = 'ArrowRight';
 
 export default styled(TransactionIndex)(
-  ({ theme }: ThemeProps) => `
+  () => css`
   align-items: center;
+  column-gap: 12px;
   display: flex;
   justify-content: space-between;
-  flex-grow: 1;
-  padding-right: 24px;
+  width: 100%;
 
-  .currentStep {
-    color: ${theme.primaryColor};
-    font-size: ${theme.labelFontSize};
-    line-height: ${theme.labelLineHeight};
+  .requestLabel {
+    color: white;
+    flex: 1;
+    font-size: 14px;
+    line-height: 18px;
     font-weight: 600;
-    margin-left: 10px;
+    text-align: center;
   }
 
-  .totalSteps {
-    font-size: ${theme.labelFontSize};
-    line-height: ${theme.labelLineHeight};
-    color: ${theme.textColor};
-    font-weight: 600;
+  .arrowWrap {
+    align-items: center;
+    display: flex;
+    flex: 0 0 24px;
+    justify-content: center;
   }
 `
 );

@@ -107,7 +107,9 @@ async function apiPromise (networkUrl: string): Promise<ApiPromise> {
 
     metadata[key] = rawMetadata;
     addMetadata(def);
-    await metaStore.set(api.genesisHash.toHex(), def);
+    const genesisHash = api.genesisHash.toHex();
+
+    await metaStore.set(genesisHash, def);
   }
 
   return api;

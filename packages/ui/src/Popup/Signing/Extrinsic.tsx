@@ -1,100 +1,216 @@
-import type { SignerPayloadJSON } from '@polkadot/types/types';
-import type { ResponsePolyCallDetails } from '@polymeshassociation/extension-core/background/types';
+import type { Call, ExtrinsicPayload } from '@polkadot/types/interfaces';
+import type { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 
-// import { genesisToNetworkName } from '@polymeshassociation/extension-ui/util/chains';
-import React, { useEffect, useState } from 'react';
+import { Metadata } from '@polkadot/types';
+import { hexToBn, hexToU8a } from '@polkadot/util';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 
-// import { networkLabels } from '@polymeshassociation/extension-core/constants';
-// import { SvgAlertCircle } from '@polymeshassociation/extension-ui/assets/images/icons';
-// import { PolymeshContext } from '@polymeshassociation/extension-ui/components';
+import { PolymeshContext } from '@polymeshassociation/extension-ui/components';
 import { getPolyCallDetails } from '@polymeshassociation/extension-ui/messaging';
-// import { Box, Flex, Icon, Loading, Text } from '@polymeshassociation/extension-ui/ui';
-import { Flex, Loading } from '@polymeshassociation/extension-ui/ui';
+import { Box, ExpandableDetails, Text } from '@polymeshassociation/extension-ui/ui';
 
-// import { toast } from 'react-toastify';
+import useMetadata from '../../hooks/useMetadata';
 import Method from './Method';
-
-// const toastId = 'network-mismatch';
+import NetworkInfo from './NetworkInfo';
+import PayloadDetails from './PayloadDetails';
 
 interface Props {
+  onFeeStateChange?: (state: {
+    feeLoading: boolean;
+    feeNotice?: string;
+    networkFee: string;
+    protocolFee: string;
+  }) => void;
+  onWarningStateChange?: (warningMessage?: string) => void;
   request: SignerPayloadJSON;
+  payloadExt?: ExtrinsicPayload;
 }
 
-function Extrinsic ({ request }: Props): React.ReactElement<Props> {
-  // const { networkState: { selected: selectedNetwork } } = useContext(PolymeshContext);
-  const [callDetails, setCallDetails] = useState<ResponsePolyCallDetails>();
-  const [loading, setLoading] = useState(false);
+interface DecodedCall {
+  args: AnyJson;
+  call: Call;
+}
 
-  // @TODO: determine how to detect network mismatch differently. Since genesis hash can be the same for different networks.
-  // useEffect(() => {
-  //   const targetNetwork = genesisToNetworkName(request.genesisHash);
-  //   const networkMismatch = targetNetwork !== selectedNetwork;
-  //   const selectedLabel = networkLabels[selectedNetwork];
-  //   const targetLabel = !!targetNetwork && targetNetwork in networkLabels
-  //     ? networkLabels[targetNetwork]
-  //     : 'Unknown network';
-  //   const msg = `"${selectedLabel}" is selected on wallet while submitting an extrinsic to "${targetLabel}".
-  //   Network and Protocol fee estimation might not be accurate.`;
+function Extrinsic ({ onFeeStateChange, onWarningStateChange, payloadExt, request }: Props): React.ReactElement<Props> {
+  const { networkState } = useContext(PolymeshContext);
+  const { chain, isLoading: isMetadataLoading } = useMetadata(request.genesisHash);
+  const requestSpec = useMemo(() => hexToBn(request.specVersion), [request.specVersion]);
+  const [networkFee, setNetworkFee] = useState('');
+  const [protocolFee, setProtocolFee] = useState('');
+  const [feeLoading, setFeeLoading] = useState(false);
+  const [feeError, setFeeError] = useState<string | null>(null);
 
-  //   if (networkMismatch) {
-  //     toast.error(
-  //       <Flex alignItems='flex-start'
-  //         flexDirection='column'>
-  //         <Flex>
-  //           <Icon Asset={SvgAlertCircle}
-  //             color='yellow.0'
-  //             height={20}
-  //             width={20} />
-  //           <Box ml='s'>
-  //             <Text color='white'
-  //               variant='b1m'>
-  //               Network mismatch detected
-  //             </Text>
-  //           </Box>
-  //         </Flex>
-  //         <Box mt='4px'>
-  //           <Text color='gray.4'
-  //             variant='b3'>
-  //             {msg}
-  //           </Text>
-  //         </Box>
-  //       </Flex>, {
-  //         toastId,
-  //         hideProgressBar: true,
-  //         closeButton: true,
-  //         autoClose: false
-  //       }
-  //     );
-  //   } else {
-  //     toast.dismiss(toastId);
-  //   }
-  // }, [request, selectedNetwork]);
+  const isRequestChainSelected =
+    !!networkState.genesisHash &&
+    networkState.genesisHash === request.genesisHash;
+
+  const decodeResult = useMemo((): DecodedCall | null => {
+    if (!chain) {
+      return null;
+    }
+
+    const hasUsableMetadata = chain.hasMetadata || !!chain.definition.rawMetadata;
+
+    if (!hasUsableMetadata) {
+      return null;
+    }
+
+    if (!requestSpec.eqn(chain.specVersion)) {
+      return null;
+    }
+
+    try {
+      if (!chain.hasMetadata && chain.definition.rawMetadata) {
+        chain.registry.setMetadata(
+          new Metadata(chain.registry, hexToU8a(chain.definition.rawMetadata)),
+          request.signedExtensions,
+          chain.definition.userExtensions
+        );
+      }
+
+      const call = chain.registry.createType('Call', request.method);
+      const humanArgs = (call.toHuman() as { args: AnyJson }).args;
+
+      return {
+        args: humanArgs,
+        call
+      };
+    } catch (error) {
+      console.error('Error decoding transaction from metadata', error);
+
+      return null;
+    }
+  }, [chain, request.method, request.signedExtensions, requestSpec]);
+
+  const metadataAvailable = !!chain && (chain.hasMetadata || !!chain.definition.rawMetadata);
+  const specMatches = !!chain && requestSpec.eqn(chain.specVersion);
+  const networkName = chain?.name;
 
   useEffect(() => {
-    setLoading(true);
+    setNetworkFee('');
+    setProtocolFee('');
+    setFeeError(null);
+
+    if (!isRequestChainSelected) {
+      setFeeLoading(false);
+
+      return;
+    }
+
+    let cancelled = false;
+
+    setFeeLoading(true);
+
     getPolyCallDetails(request)
-      .then((callDetails) => {
-        setCallDetails(callDetails);
-        setLoading(false);
+      .then((details) => {
+        if (cancelled) {
+          return;
+        }
+
+        setNetworkFee(details.networkFee || '');
+        setProtocolFee(details.protocolFee || '');
       })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
+      .catch((error) => {
+        if (cancelled) {
+          return;
+        }
+
+        console.error('Failed to estimate transaction fee', error);
+        setFeeError('Estimated transaction fee unavailable.');
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setFeeLoading(false);
+        }
       });
-  }, [request]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isRequestChainSelected, request]);
+
+  const feeNotice = !isRequestChainSelected
+    ? 'Connect to the correct chain to estimate fees.'
+    : feeError;
+
+  useEffect(() => {
+    onFeeStateChange?.({
+      feeLoading,
+      feeNotice: feeNotice || undefined,
+      networkFee,
+      protocolFee
+    });
+  }, [feeLoading, feeNotice, networkFee, onFeeStateChange, protocolFee]);
+
+  useEffect(() => {
+    const hasDecodeFailed = !isMetadataLoading && !decodeResult;
+
+    onWarningStateChange?.(
+      hasDecodeFailed
+        ? 'Cannot decode transaction details. Connect the extension to the correct chain or review raw payload before signing.'
+        : undefined
+    );
+  }, [decodeResult, isMetadataLoading, onWarningStateChange]);
 
   return (
     <>
-      {loading && (
-        <Flex
-          alignItems='center'
-          justifyContent='center'
-          my='l'
-        >
-          <Loading />
-        </Flex>
+      <NetworkInfo
+        chainName={networkName}
+        genesisHash={request.genesisHash}
+        hasMetadata={metadataAvailable}
+        hasSpecMatch={specMatches}
+        isLoading={isMetadataLoading}
+      />
+      {decodeResult && (
+        <Method
+          call={{
+            args: decodeResult.args,
+            meta: decodeResult.call.meta,
+            method: decodeResult.call.method,
+            networkFee,
+            protocolFee,
+            section: decodeResult.call.section
+          }}
+          payload={request}
+          payloadExt={payloadExt}
+        />
       )}
-      {callDetails && <Method call={callDetails} />}
+      {!decodeResult && (
+        <Box
+          mb='m'
+          mt='xs'
+          mx='s'
+        >
+          <Box mt='xs'>
+            <ExpandableDetails title='Raw SCALE Payload'>
+              <Box
+                mt='xs'
+                mx='s'
+              >
+                <Text
+                  color='gray.2'
+                  variant='b3'
+                >
+                  Method bytes
+                </Text>
+                <Text
+                  color='gray.1'
+                  style={{ display: 'block', wordBreak: 'break-all' }}
+                  variant='code'
+                >
+                  {request.method}
+                </Text>
+              </Box>
+            </ExpandableDetails>
+          </Box>
+          <Box mt='xs'>
+            <PayloadDetails
+              payload={request}
+              payloadExt={payloadExt}
+            />
+          </Box>
+        </Box>
+      )}
     </>
   );
 }

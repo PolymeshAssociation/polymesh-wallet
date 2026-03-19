@@ -7,13 +7,19 @@ import { Icon } from '../Icon';
 import * as sc from './styles';
 
 export interface GrowingButtonProps {
+  hoverLabel?: string;
   icon: React.ComponentType<React.SVGAttributes<SVGElement>>;
   onClick: () => void;
 }
 
-export const GrowingButton: FC<GrowingButtonProps> = ({ icon, onClick }) => {
+export const GrowingButton: FC<GrowingButtonProps> = ({ hoverLabel = 'Go to portal',
+  icon,
+  onClick }) => {
   return (
-    <sc.Wrapper onClick={onClick}>
+    <sc.Wrapper
+      $hoverLabel={hoverLabel}
+      onClick={onClick}
+    >
       <Flex mr='xs'>
         <Icon
           Asset={icon}

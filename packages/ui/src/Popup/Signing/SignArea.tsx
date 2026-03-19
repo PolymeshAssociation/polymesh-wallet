@@ -1,8 +1,8 @@
 import { PASSWORD_EXPIRY_MIN } from '@polkadot/extension-base/defaults';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
-import { ActionContext } from '@polymeshassociation/extension-ui/components';
-import { Box, Button, Checkbox, Flex } from '@polymeshassociation/extension-ui/ui';
+import { ActionContext, Warning } from '@polymeshassociation/extension-ui/components';
+import { Button, Checkbox, Flex, Text } from '@polymeshassociation/extension-ui/ui';
 
 import { approveSignPassword, cancelSignRequest, isSignLocked } from '../../messaging';
 import Unlock from './Unlock';
@@ -11,20 +11,24 @@ interface Props {
   buttonText: string;
   className?: string;
   error: string | null;
+  footerExtra?: React.ReactNode;
   isExternal?: boolean;
-  isFirst: boolean;
+  rejectMessage?: string;
   setError: (value: string | null) => void;
   signId: string;
   rejectOnly?: boolean;
+  warningMessage?: string;
 }
 
 function SignArea ({ buttonText,
   error,
+  footerExtra,
   isExternal,
-  isFirst,
+  rejectMessage,
   rejectOnly = false,
   setError,
-  signId }: Props): React.ReactElement {
+  signId,
+  warningMessage }: Props): React.ReactElement {
   const [savePass, setSavePass] = useState(false);
   const [isLocked, setIsLocked] = useState<boolean | null>(null);
   const [password, setPassword] = useState('');
@@ -32,6 +36,10 @@ function SignArea ({ buttonText,
   const onAction = useContext(ActionContext);
 
   useEffect(() => {
+    if (rejectOnly) {
+      return;
+    }
+
     setIsLocked(null);
     let timeout: ReturnType<typeof setTimeout>;
 
@@ -51,7 +59,7 @@ function SignArea ({ buttonText,
     return () => {
       !!timeout && clearTimeout(timeout);
     };
-  }, [isExternal, signId]);
+  }, [isExternal, rejectOnly, signId]);
 
   const _onSign = useCallback(
     (): void => {
@@ -79,71 +87,82 @@ function SignArea ({ buttonText,
     [onAction, signId]
   );
 
-  const RememberPasswordCheckbox = () => (
-    <Checkbox
-      checked={savePass}
-      label={
-        isLocked
-          ? `Remember my password for the next ${PASSWORD_EXPIRY_MIN} minutes`
-          : `Extend the period without password by ${PASSWORD_EXPIRY_MIN} minutes`
-      }
-      onChange={setSavePass}
-    />
-  );
+  const showRejectMessage = rejectOnly && !!rejectMessage;
+  const canSignInWallet = !isExternal && !rejectOnly;
+  const showUnlock = canSignInWallet && !!isLocked;
+  const showSavePassword = canSignInWallet;
 
   return (
     <>
-      {isFirst && !isExternal && (
-        <Flex
-          flexDirection='column'
-          p='s'
-        >
-          {isLocked && (
-            <Unlock
-              error={error}
-              isBusy={isBusy}
-              onSign={_onSign}
-              password={password}
-              setError={setError}
-              setPassword={setPassword}
-            />
-          )}
-          <Box mb='s'>
-            <RememberPasswordCheckbox />
-          </Box>
+      <Flex
+        flexDirection='column'
+      >
+        {footerExtra}
+        {!!warningMessage && <Warning isDanger>{warningMessage}</Warning>}
+        {showRejectMessage && <Warning>{rejectMessage}</Warning>}
+        {showUnlock && (
+          <Unlock
+            error={error}
+            isBusy={isBusy}
+            onSign={_onSign}
+            password={password}
+            setError={setError}
+            setPassword={setPassword}
+          />
+        )}
+        {showSavePassword && (
           <Flex
-            alignItems='stretch'
-            flexDirection='row'
+            pl='15px'
+            pr='s'
+            pt='5px'
             width='100%'
           >
-            <Flex flex={1}>
+            <Checkbox
+              checked={savePass}
+              label={
+                <Text variant='b3'>
+                  {isLocked
+                    ? `Remember my password for the next ${PASSWORD_EXPIRY_MIN} minutes`
+                    : `Extend the period without password by ${PASSWORD_EXPIRY_MIN} minutes`}
+                </Text>
+              }
+              onChange={setSavePass}
+            />
+          </Flex>
+        )}
+        <Flex
+          alignItems='stretch'
+          flexDirection='row'
+          p='s'
+          width='100%'
+        >
+          <Flex flex={1}>
+            <Button
+              fluid
+              onClick={_onCancel}
+              variant='secondary'
+            >
+              Cancel
+            </Button>
+          </Flex>
+          {canSignInWallet && (
+            <Flex
+              flex={1}
+              ml='xs'
+            >
               <Button
+                busy={isBusy}
+                disabled={(!!isLocked && !password) || !!error}
                 fluid
-                onClick={_onCancel}
-                variant='secondary'
+                onClick={_onSign}
+                type='submit'
               >
-                Cancel
+                {buttonText}
               </Button>
             </Flex>
-            {!rejectOnly && (
-              <Flex
-                flex={1}
-                ml='xs'
-              >
-                <Button
-                  busy={isBusy}
-                  disabled={(!!isLocked && !password) || !!error}
-                  fluid
-                  onClick={_onSign}
-                  type='submit'
-                >
-                  {buttonText}
-                </Button>
-              </Flex>
-            )}
-          </Flex>
+          )}
         </Flex>
-      )}
+      </Flex>
     </>
   );
 }

@@ -16,35 +16,53 @@ export type Props = PropsWithChildren<{
 export function ExpandableDetails ({ children, title }: Props) {
   const [expanded, setExpanded] = useState(false);
 
-  const toggle = useCallback(() => setExpanded(!expanded), [expanded]);
+  const toggle = useCallback(() => setExpanded((prev) => !prev), []);
+
+  const handleHeaderKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggle();
+    }
+  }, [toggle]);
 
   return (
-    <Box style={{ position: 'relative' }}>
-      <Box style={{
-        overflowY: 'scroll',
-        position: 'absolute'
-      }}
+    <Box>
+      <Flex
+        alignItems='center'
+        aria-expanded={expanded}
+        justifyContent='space-between'
+        onClick={toggle}
+        onKeyDown={handleHeaderKeyDown}
+        px='s'
+        py='xs'
+        role='button'
+        style={{ cursor: 'pointer' }}
+        tabIndex={0}
       >
-        <Flex
-          justifyContent='space-between'
-          mx='s'
+        <Box style={{ flex: 1, minWidth: 0 }}>
+          <Text
+            color='gray.2'
+            variant='b3m'
+          >
+            {title}
+          </Text>
+        </Box>
+        <Box style={{ flexShrink: 0 }}>
+          <Icon
+            Asset={expanded ? SvgChevronUp : SvgChevronDown}
+            color='gray.3'
+            height={24}
+            width={24}
+          />
+        </Box>
+      </Flex>
+      {expanded && (
+        <Box
+          pb='xs'
         >
-          <Box>
-            <Text variant='code'>{title}</Text>
-          </Box>
-          <Box>
-            <Icon
-              Asset={expanded ? SvgChevronUp : SvgChevronDown}
-              color='gray.3'
-              height={24}
-              onClick={toggle}
-              style={{ cursor: 'pointer' }}
-              width={24}
-            />
-          </Box>
-        </Flex>
-        {expanded && <Box>{children}</Box>}
-      </Box>
+          {children}
+        </Box>
+      )}
     </Box>
   );
 }

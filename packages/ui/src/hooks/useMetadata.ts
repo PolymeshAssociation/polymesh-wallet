@@ -4,21 +4,49 @@ import { useEffect, useState } from 'react';
 
 import { getMetadata } from '../messaging';
 
-export default function useMetadata (genesisHash?: string | null, isPartial?: boolean): Chain | null {
-  const [chain, setChain] = useState<Chain | null>(null);
+interface UseMetadataResult {
+  chain: Chain | null;
+  isLoading: boolean;
+}
 
-  useEffect((): void => {
+export default function useMetadata (genesisHash?: string | null, isPartial?: boolean): UseMetadataResult {
+  const [chain, setChain] = useState<Chain | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    let isCancelled = false;
+
     if (genesisHash) {
+      setChain(null);
+      setIsLoading(true);
+
       getMetadata(genesisHash, isPartial)
-        .then(setChain)
+        .then((storedChain): void => {
+          if (!isCancelled) {
+            setChain(storedChain);
+          }
+        })
         .catch((error): void => {
           console.error(error);
-          setChain(null);
+
+          if (!isCancelled) {
+            setChain(null);
+          }
+        })
+        .finally((): void => {
+          if (!isCancelled) {
+            setIsLoading(false);
+          }
         });
     } else {
       setChain(null);
+      setIsLoading(false);
     }
+
+    return (): void => {
+      isCancelled = true;
+    };
   }, [genesisHash, isPartial]);
 
-  return chain;
+  return { chain, isLoading };
 }

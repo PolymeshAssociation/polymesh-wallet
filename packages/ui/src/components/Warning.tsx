@@ -34,10 +34,11 @@ function Warning ({ children,
 export default React.memo(
   styled(Warning)(
     ({ isDanger, theme }: Props) => `
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   flex-direction: row;
-  padding-left: ${isDanger ? '16px' : '20px'};
+  padding: 5px 10px 0 ${isDanger ? '6px' : '10px'} ;
   color: ${theme.subTextColor};
   border-left: ${isDanger ? `4px solid ${theme.buttonBackgroundDanger}` : ''};
   width: 100%;

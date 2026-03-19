@@ -1,18 +1,22 @@
-import type { SignerPayloadJSON } from '@polkadot/types/types';
+import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { getIdentifiedAccounts } from '@polymeshassociation/extension-core/store/getters';
 import { recodeAddress } from '@polymeshassociation/extension-core/utils';
 
-import { Loading, SigningReqContext } from '../../components';
-import { AccountMain } from '../Accounts/AccountMain';
-import { AppHeader } from '../AppHeader';
+import { Loading, PolymeshContext, SigningReqContext } from '../../components';
 import Request from './Request';
-import TransactionIndex from './TransactionIndex';
+import SigningHeader from './SigningHeader';
+
+function isRawPayload (
+  payload: SignerPayloadJSON | SignerPayloadRaw
+): payload is SignerPayloadRaw {
+  return !!(payload as SignerPayloadRaw).data;
+}
 
 export default function Signing (): React.ReactElement {
   const requests = useContext(SigningReqContext);
+  const { networkState, polymeshAccounts = [] } = useContext(PolymeshContext);
   const [requestIndex, setRequestIndex] = useState(0);
 
   const _onNextClick = useCallback(
@@ -42,14 +46,28 @@ export default function Signing (): React.ReactElement {
       : null;
   const isTransaction = !!(request?.request?.payload as SignerPayloadJSON)
     ?.blockNumber;
-  // The singing account, whose details will be displayed in the header.
+  const requestPayload = request?.request.payload;
+  const requestGenesisHash = useMemo(() => {
+    if (!requestPayload || isRawPayload(requestPayload)) {
+      return null;
+    }
+
+    return requestPayload.genesisHash;
+  }, [requestPayload]);
+
+  const isRequestChainSelected =
+    !!requestGenesisHash &&
+    !!networkState.genesisHash &&
+    networkState.genesisHash === requestGenesisHash;
+
+  // The signing account, whose details will be displayed in the header.
   const signingAccount = useMemo(() => {
     if (request?.account.address) {
       // Polkadot App actually respects chain ss58format and will encode polymesh public
       // keys into an address that starts with '2'. However, our stored addresses start with '5'.
       // Hence, we'll re-encode request address to make sure it could be found in our store.
       const _address = recodeAddress(request?.account.address);
-      const polymeshAccount = getIdentifiedAccounts().find(
+      const polymeshAccount = polymeshAccounts.find(
         (account) => account.address === _address
       );
 
@@ -57,31 +75,28 @@ export default function Signing (): React.ReactElement {
     }
 
     return undefined;
-  }, [request]);
+  }, [polymeshAccounts, request]);
+
+  const canShowBalance = !!signingAccount && !!requestGenesisHash && isRequestChainSelected;
+  const displayAddress = request?.account.address;
 
   return request
     ? (
       <>
-        <AppHeader text={isTransaction ? 'Transaction' : 'Sign message'}>
-          {requests.length > 1 && (
-            <TransactionIndex
-              index={requestIndex}
-              onNextClick={_onNextClick}
-              onPreviousClick={_onPreviousClick}
-              totalItems={requests.length}
-            />
-          )}
-          {signingAccount && (
-            <AccountMain
-              account={signingAccount}
-              details={false}
-            />
-          )}
-        </AppHeader>
+        <SigningHeader
+          account={signingAccount}
+          canShowBalance={canShowBalance}
+          displayAddress={displayAddress}
+          onNextClick={_onNextClick}
+          onPreviousClick={_onPreviousClick}
+          requestIndex={requestIndex}
+          showBalanceSection={isTransaction}
+          title={isTransaction ? 'Transaction' : 'Sign message'}
+          totalRequests={requests.length}
+        />
         <Request
           account={request.account}
           buttonText={'Sign'}
-          isFirst={requestIndex === 0}
           request={request.request}
           signId={request.id}
           url={request.url}

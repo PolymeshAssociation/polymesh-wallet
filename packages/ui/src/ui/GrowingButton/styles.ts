@@ -4,7 +4,11 @@ import { styled } from '@polymeshassociation/extension-ui/styles';
 
 import { Flex } from '../Flex';
 
-export const Wrapper = styled(Flex)<ThemeProps>`
+interface WrapperProps extends ThemeProps {
+  $hoverLabel: string;
+}
+
+export const Wrapper = styled(Flex)<WrapperProps>`
   width: 24px;
   height: 24px;
   padding: 0 30px 0 0;
@@ -20,6 +24,6 @@ export const Wrapper = styled(Flex)<ThemeProps>`
     width: 150px;
   }
   &:hover:after {
-    content: 'Go to portal';
+    content: ${({ $hoverLabel }: WrapperProps) => JSON.stringify($hoverLabel)};
   }
 `;

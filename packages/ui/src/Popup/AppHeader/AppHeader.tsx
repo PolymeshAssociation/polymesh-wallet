@@ -54,18 +54,22 @@ const AppHeader = (props: Props): ReactElement<Props> => {
             }
           ]
           : []),
-        {
-          icon: (
-            <Icon
-              Asset={SvgOpenInNew}
-              color='gray5'
-              height={24}
-              width={24}
-            />
-          ),
-          label: 'Open in a new tab',
-          value: 'newWindow'
-        },
+        ...(isPopup
+          ? [
+            {
+              icon: (
+                <Icon
+                  Asset={SvgOpenInNew}
+                  color='gray5'
+                  height={24}
+                  width={24}
+                />
+              ),
+              label: 'Open in browser',
+              value: 'newWindow'
+            }
+          ]
+          : []),
         {
           icon: (
             <Icon
@@ -116,8 +120,17 @@ const AppHeader = (props: Props): ReactElement<Props> => {
           return isPopup
             ? windowOpen('/account/change-password')
             : history.push('/account/change-password');
-        case 'newWindow':
-          return windowOpen('/');
+
+        case 'newWindow': {
+          await windowOpen('/');
+
+          if (isPopup) {
+            window.close();
+          }
+
+          return;
+        }
+
         case 'toggleIsDev':
           return togglePolyIsDev();
         case 'manageUrlAuth':
@@ -142,6 +155,7 @@ const AppHeader = (props: Props): ReactElement<Props> => {
           justifyContent='center'
         >
           <GrowingButton
+            hoverLabel='Go to portal'
             icon={SvgViewDashboard}
             onClick={openDashboard}
           />

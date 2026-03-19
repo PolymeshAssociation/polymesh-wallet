@@ -29,7 +29,7 @@ function Unlock ({ className,
   return (
     <div
       className={className}
-      style={{ width: '100%' }}
+      style={{ boxSizing: 'border-box', padding: '5px 10px 0', width: '100%' }}
     >
       <Box>
         <Text
@@ -39,7 +39,7 @@ function Unlock ({ className,
           Wallet password
         </Text>
       </Box>
-      <Box mb='s'>
+      <Box>
         <TextInput
           autoFocus={true}
           disabled={isBusy}

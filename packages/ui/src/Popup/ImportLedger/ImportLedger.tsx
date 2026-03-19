@@ -47,7 +47,7 @@ function ImportLedger (): React.ReactElement {
 
   const genesis = networkState.genesisHash;
 
-  const chain = useMetadata(genesis);
+  const { chain } = useMetadata(genesis);
   // Defer Ledger init until chain metadata resolves so specVersion is known on the
   // first attempt. Passing null keeps useLedger in Status.Pending (no connection
   // attempt) until we have the correct app selection for this chain.

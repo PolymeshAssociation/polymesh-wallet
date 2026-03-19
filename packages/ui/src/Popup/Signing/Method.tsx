@@ -1,110 +1,87 @@
+import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
+import type { SignerPayloadJSON } from '@polkadot/types/types';
 import type { FC } from 'react';
 import type { ResponsePolyCallDetails } from '@polymeshassociation/extension-core/background/types';
 
-import { BN } from '@polkadot/util';
 import React from 'react';
 
-import { Box, ExpandableDetails, Flex, Hr, Text } from '@polymeshassociation/extension-ui/ui';
-import { formatAmount } from '@polymeshassociation/extension-ui/util/formatters';
+import { Box, ExpandableDetails, Text } from '@polymeshassociation/extension-ui/ui';
 
-const Method: FC<{ call: ResponsePolyCallDetails }> = ({ call }) => {
-  const { args, meta, method, networkFee, protocolFee, section } = call;
+import PayloadDetails from './PayloadDetails';
 
-  const fees: [string, string][] = [];
+interface MethodProps {
+  call: ResponsePolyCallDetails;
+  payload?: SignerPayloadJSON;
+  payloadExt?: ExtrinsicPayload;
+}
 
-  if (networkFee?.length) {
-    fees.push(['Network fee', formatAmount(networkFee)]);
-  }
+const Method: FC<MethodProps> = ({ call, payload, payloadExt }) => {
+  const { args, meta, method, section } = call;
 
-  if (protocolFee && protocolFee !== '0') {
-    fees.push(['Protocol fee', formatAmount(protocolFee)]);
-    const totalFees = new BN(networkFee).add(new BN(protocolFee));
-
-    fees.push(['Total fees', formatAmount(totalFees)]);
-  }
+  const docLines = meta?.docs
+    ?.map((d) => d.toString().trim())
+    .filter((d) => d.length > 0) ?? [];
 
   return (
-    <Flex
-      alignItems='stretch'
-      flexDirection='column'
-      height='100%'
-    >
+    <Box>
       <Box
-        height='100%'
-        mt='m'
-        style={{ overflowY: 'scroll' }}
+        px='s'
+        py='xs'
       >
-        <ExpandableDetails
-          title={`${section}: ${method}${
-            meta ? `(${meta.args.map(({ name }) => name).join(', ')})` : ''
-          }`}
+        <Text
+          as='div'
+          color='gray.2'
+          variant='b3m'
         >
+          Method
+        </Text>
+        <Text
+          as='div'
+          color='gray.1'
+          variant='code'
+        >
+          {`${section}: ${method}${meta ? `(${meta.args.map(({ name }) => name).join(', ')})` : ''}`}
+        </Text>
+      </Box>
+      <ExpandableDetails title='Parameters'>
+        <Box
+          mt='xs'
+          mx='s'
+        >
+          <Box style={{ overflowX: 'auto', width: '100%' }}>
+            <Text
+              color='gray.1'
+              style={{ display: 'block', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}
+              variant='code'
+            >
+              {JSON.stringify(args, null, 2).slice(1, -1).trim()}
+            </Text>
+          </Box>
+        </Box>
+      </ExpandableDetails>
+      {docLines.length > 0 && (
+        <ExpandableDetails title='Documentation'>
           <Box
-            mt='m'
+            mt='xs'
             mx='s'
           >
-            <Box>
-              <Text
-                color='gray.2'
-                variant='b2'
-              >
-                Parameters
-              </Text>
-            </Box>
-            <Box>
-              <Text
-                color='gray.1'
-                variant='code'
-              >
-                {JSON.stringify(args, null, 2).slice(1, -1).trim()}
-              </Text>
-            </Box>
+            <Text
+              color='gray.2'
+              style={{ display: 'block', whiteSpace: 'pre-wrap' }}
+              variant='b3'
+            >
+              {docLines.join(' ')}
+            </Text>
           </Box>
         </ExpandableDetails>
-      </Box>
-      <Box mt='auto'>
-        {fees.length > 1 && <Hr color='gray.4' />}
-        <Box>
-          {fees.map((tuple, index) => {
-            return (
-              <Box
-                {...(index === fees.length - 1 ? { bg: 'gray.5' } : {})}
-                key={index}
-              >
-                <Flex
-                  justifyContent='space-between'
-                  mx='s'
-                >
-                  <Box>
-                    <Text
-                      color='gray.1'
-                      variant='b3m'
-                    >
-                      {tuple[0]}
-                    </Text>
-                  </Box>
-                  <Box>
-                    <Text
-                      color='gray.1'
-                      variant='b2m'
-                    >
-                      {tuple[1]}
-                    </Text>
-                    <Text
-                      color='gray.2'
-                      ml={1}
-                      variant='b2m'
-                    >
-                      POLYX
-                    </Text>
-                  </Box>
-                </Flex>
-              </Box>
-            );
-          })}
-        </Box>
-      </Box>
-    </Flex>
+      )}
+      {payload && payloadExt && (
+        <PayloadDetails
+          payload={payload}
+          payloadExt={payloadExt}
+        />
+      )}
+    </Box>
   );
 };
 

@@ -26,12 +26,14 @@ interface Props {
   addressOffset?: number;
   className?: string;
   error: string | null;
+  footerExtra?: React.ReactNode;
   genesisHash?: `0x${string}`;
   onSignature?: ({ signature }: { signature: `0x${string}` }, signedTransaction?: HexString) => void;
   payloadExt?: ExtrinsicPayload;
   payloadJson?: SignerPayloadJSON;
   setError: (value: string | null) => void;
   signId: string;
+  warningMessage?: string;
 }
 
 function getMetadataProof (chain: Chain, payload: SignerPayloadJSON) {
@@ -59,14 +61,16 @@ function getMetadataProof (chain: Chain, payload: SignerPayloadJSON) {
 function LedgerSignArea ({ accountIndex,
   addressOffset,
   error,
+  footerExtra,
   genesisHash,
   onSignature,
   payloadExt,
   payloadJson,
   setError,
-  signId }: Props): React.ReactElement<Props> {
+  signId,
+  warningMessage }: Props): React.ReactElement<Props> {
   const [isBusy, setIsBusy] = useState(false);
-  const chain = useMetadata(genesisHash);
+  const { chain } = useMetadata(genesisHash);
   // Read specVersion directly from the payload (always available) so the correct app is
   // selected immediately without waiting for useMetadata to resolve asynchronously.
   // hexToNumber returns NaN for invalid input; fall back to chain?.specVersion in that case.
@@ -114,7 +118,7 @@ function LedgerSignArea ({ accountIndex,
     if (currApp === 'generic' || currApp === 'polymesh') {
       if (!payloadJson || !chain || !payloadExt) {
         if (!chain) {
-          setError('Chain information not found. Ensure the wallet is connected to the correct network and try again.');
+          setError('Chain metadata not found. Ensure the wallet is connected to the correct network and try again.');
         }
 
         setIsBusy(false);
@@ -256,15 +260,16 @@ function LedgerSignArea ({ accountIndex,
   return (
     <Flex
       flexDirection='column'
-      p='s'
     >
+      {footerExtra}
+      {!!warningMessage && <Warning isDanger>{warningMessage}</Warning>}
       {error && <Warning isDanger>{error}</Warning>}
       {mismatchWarning && <Warning isDanger>{mismatchWarning}</Warning>}
       {warning && <Warning>{warning}</Warning>}
       <Flex
         alignItems='stretch'
         flexDirection='row'
-        mt='s'
+        p='s'
         width='100%'
       >
         <Flex flex={1}>
