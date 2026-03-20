@@ -21,28 +21,44 @@ function isVersionEarlierOrEqual (version: string, compareTo: string): boolean {
 }
 
 // Run the migration applicable to version 2.2.0 or earlier
-async function runMigrations () {
-  const migrate = new AccountMigrations();
-
+async function runUnPrefixedAccountsMigration (migrate: AccountMigrations): Promise<boolean> {
   const shouldReload = await migrate.migrateUnPrefixedAccounts();
 
-  console.log('Migration completed');
+  console.log('Account Prefix Migration completed');
 
-  // if required, reloading should only be triggered after all migrations are complete
+  return shouldReload;
+}
+
+async function runAuthUrlMigration (migrate: AccountMigrations): Promise<boolean> {
+  const shouldReload = await migrate.migrateAuthUrls();
+
   if (shouldReload) {
-    console.log('Reloading extension');
-    chrome.runtime.reload();
+    console.log('Auth URL Migration completed');
   }
+
+  return shouldReload;
 }
 
 // Check for version update and perform migration if needed
 export async function checkForUpdateAndMigrate (details: chrome.runtime.InstalledDetails): Promise<void> {
   if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
     const previousVersion = details.previousVersion;
+    const migrate = new AccountMigrations();
+    let shouldReload = false;
 
     // Migrate Account Prefixes. Runs when no lastVersion or a previous version of 2.3.0 or earlier
     if (!previousVersion || isVersionEarlierOrEqual(previousVersion, '2.3.0')) {
-      await runMigrations();
+      shouldReload = (await runUnPrefixedAccountsMigration(migrate)) || shouldReload;
+    }
+
+    // Migrate legacy auth URL keys without protocol to origin-style keys.
+    if (!previousVersion || isVersionEarlierOrEqual(previousVersion, '2.4.1')) {
+      shouldReload = (await runAuthUrlMigration(migrate)) || shouldReload;
+    }
+
+    if (shouldReload) {
+      console.log('Reloading extension after migrations');
+      chrome.runtime.reload();
     }
   }
 }
