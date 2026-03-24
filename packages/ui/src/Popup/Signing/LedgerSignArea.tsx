@@ -7,7 +7,8 @@ import type { SignerPayloadJSON } from '@polkadot/types/types';
 import type { HexString } from '@polkadot/util/types';
 
 import { Metadata } from '@polkadot/types';
-import { assert, hexToU8a, objectSpread, u8aToHex } from '@polkadot/util';
+import { assert, hexToNumber, hexToU8a, objectSpread, stringShorten, u8aEq, u8aToHex } from '@polkadot/util';
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { merkleizeMetadata } from '@polkadot-api/merkleize-metadata';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 
@@ -68,9 +69,13 @@ function LedgerSignArea ({ accountIndex,
   const chain = useMetadata(genesisHash);
   // Read specVersion directly from the payload (always available) so the correct app is
   // selected immediately without waiting for useMetadata to resolve asynchronously.
-  const payloadSpecVersion = payloadJson ? parseInt(payloadJson.specVersion, 16) : undefined;
-  const specVersion = payloadSpecVersion ?? chain?.specVersion;
-  const { error: ledgerError,
+  // hexToNumber returns NaN for invalid input; fall back to chain?.specVersion in that case.
+  const payloadSpecVersion = payloadJson ? hexToNumber(payloadJson.specVersion) : undefined;
+  const specVersion = (payloadSpecVersion !== undefined && !Number.isNaN(payloadSpecVersion))
+    ? payloadSpecVersion
+    : chain?.specVersion;
+  const { address: ledgerAddress,
+    error: ledgerError,
     isLoading: ledgerLoading,
     ledger,
     refresh,
@@ -165,15 +170,12 @@ function LedgerSignArea ({ accountIndex,
             { version: 4 }
           );
 
-          (ledger as LedgerGeneric).getAddress(chain.ss58Format, false, accountIndex, addressOffset)
-            .then(({ address }) => {
-              extrinsic.addSignature(address, signature.signature, raw.toHex());
-              onSignature(signature, extrinsic.toHex());
-            })
-            .catch((e: Error) => {
-              setError(formatLedgerError(e.message));
-              setIsBusy(false);
-            });
+          assert(ledgerAddress, 'Ledger address is not available. Please reconnect your device.');
+          // Re-encode using the ss58Format from the authoritative chain metadata to be safe.
+          const address = encodeAddress(decodeAddress(ledgerAddress), chain.ss58Format);
+
+          extrinsic.addSignature(address, signature.signature, raw.toHex());
+          onSignature(signature, extrinsic.toHex());
         })
         .catch((e: Error) => {
           setError(formatLedgerError(e.message));
@@ -199,7 +201,7 @@ function LedgerSignArea ({ accountIndex,
           setIsBusy(false);
         });
     }
-  }, [accountIndex, addressOffset, chain, effectiveLedgerApp, ledger, onSignature, payloadExt, payloadJson, setError]);
+  }, [accountIndex, addressOffset, chain, effectiveLedgerApp, ledger, ledgerAddress, onSignature, payloadExt, payloadJson, setError]);
 
   const _onCancel = useCallback(() => {
     (async () => {
@@ -207,6 +209,23 @@ function LedgerSignArea ({ accountIndex,
       onAction();
     })().catch(console.error);
   }, [onAction, signId]);
+
+  // Compare raw public keys so SS58 prefix differences don't cause false positives.
+  // A mismatch means the wrong ledger device is connected or wrong Ledger app mode
+  // or account derivation is active.
+  const mismatchWarning = useMemo(() => {
+    if (!ledgerAddress || !payloadJson?.address) {
+      return null;
+    }
+
+    try {
+      return !u8aEq(decodeAddress(ledgerAddress), decodeAddress(payloadJson.address))
+        ? `Address mismatch: derived ${stringShorten(ledgerAddress, 8)}, expected ${stringShorten(payloadJson.address, 8)}. Check that the correct Ledger device is connected and the correct app is selected in Settings.`
+        : null;
+    } catch {
+      return null;
+    }
+  }, [ledgerAddress, payloadJson?.address]);
 
   const warning = useMemo(() => {
     if (ledgerStatus === Status.Device) {
@@ -240,6 +259,7 @@ function LedgerSignArea ({ accountIndex,
       p='s'
     >
       {error && <Warning isDanger>{error}</Warning>}
+      {mismatchWarning && <Warning isDanger>{mismatchWarning}</Warning>}
       {warning && <Warning>{warning}</Warning>}
       <Flex
         alignItems='stretch'
@@ -262,6 +282,7 @@ function LedgerSignArea ({ accountIndex,
         >
           <Button
             busy={isBusy || ledgerLoading}
+            disabled={!!mismatchWarning}
             fluid
             onClick={warning ? _onRefresh : _onSignLedger}
             type={warning ? 'submit' : undefined}
