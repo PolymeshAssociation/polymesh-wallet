@@ -34,8 +34,8 @@ function ImportLedger (): React.ReactElement {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, handleSubmit, register } = methods;
 
-  const [accountIndex, setAccountIndex] = useState<number>(0);
-  const [addressOffset, setAddressOffset] = useState<number>(0);
+  const [accountIndex, setAccountIndex] = useState<number>();
+  const [addressOffset, setAddressOffset] = useState<number>();
   const [, setError] = useState<string | null>(null);
   const [name, setName] = useState<string>('');
   const [isShowingSettings, setIsShowingSettings] = useState(false);
@@ -47,13 +47,20 @@ function ImportLedger (): React.ReactElement {
 
   const genesis = networkState.genesisHash;
 
-  const { chain } = useMetadata(genesis);
-  // Defer Ledger init until chain metadata resolves so specVersion is known on the
-  // first attempt. Passing null keeps useLedger in Status.Pending (no connection
-  // attempt) until we have the correct app selection for this chain.
-  // TODO: Pass the actual Ethereum flag once Ethereum/EVM account type selection is
-  //       supported in the import flow.
-  const ledgerData = useLedger(chain ? genesis : null, accountIndex, addressOffset, false, chain?.specVersion);
+  const { chain, isLoading: metadataLoading } = useMetadata(genesis);
+  // Pass undefined while metadata is still loading or derivation-path values
+  // are not yet resolved to skip ledger creation. This prevents a premature
+  // instance that would race with the corrected values and trigger a duplicate
+  // getAddress call on the same transport.
+  const isDerivationPathReady = accountIndex !== undefined && addressOffset !== undefined;
+  const ledgerGenesis = metadataLoading || !isDerivationPathReady ? undefined : (genesis ?? null);
+  const ledgerData = useLedger(
+    ledgerGenesis,
+    accountIndex,
+    addressOffset,
+    false,
+    chain?.specVersion
+  );
 
   const { address: ledgerAddress,
     isLoading: ledgerLoading,
@@ -138,7 +145,7 @@ function ImportLedger (): React.ReactElement {
   }, []);
 
   const saveAccount = useCallback(() => {
-    if (address && name && keyType) {
+    if (address && name && keyType && accountIndex !== undefined && addressOffset !== undefined) {
       createAccountHardware(
         address,
         'ledger',
@@ -333,7 +340,7 @@ function ImportLedger (): React.ReactElement {
                               disabled={ledgerLoading}
                               onChange={updateAccountIndex}
                               options={accOps.current}
-                              value={accountIndex}
+                              value={accountIndex ?? 0}
                             />
                           </Box>
                         </Box>
@@ -350,7 +357,7 @@ function ImportLedger (): React.ReactElement {
                               disabled={ledgerLoading}
                               onChange={updateAddressOffset}
                               options={addOps.current}
-                              value={addressOffset}
+                              value={addressOffset ?? 0}
                             />
                           </Box>
                         </Box>

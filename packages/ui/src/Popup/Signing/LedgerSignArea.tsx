@@ -19,7 +19,7 @@ import { cancelSignRequest, windowOpen } from '@polymeshassociation/extension-ui
 import { Button, Flex } from '@polymeshassociation/extension-ui/ui';
 import polymeshSignedExtensions from '@polymeshassociation/polymesh-types/signedExtensions';
 
-import { formatLedgerError, getStoredLedgerApp, Status } from '../../hooks/useLedger';
+import { formatLedgerError, Status } from '../../hooks/useLedger';
 
 interface Props {
   accountIndex?: number;
@@ -82,6 +82,7 @@ function LedgerSignArea ({ accountIndex,
     error: ledgerError,
     isLoading: ledgerLoading,
     ledger,
+    ledgerApp,
     refresh,
     // TODO: Pass isEthereum and add an Ethereum signing path in _onSignLedger once
     //       Ethereum/EVM Ledger account support is implemented.
@@ -93,15 +94,15 @@ function LedgerSignArea ({ accountIndex,
   //       to spec version >= POLYMESH_GENERIC_SPEC_VERSION.
   const effectiveLedgerApp = (specVersion !== undefined && specVersion < POLYMESH_GENERIC_SPEC_VERSION)
     ? 'legacy'
-    : getStoredLedgerApp() ?? 'polymesh';
+    : ledgerApp;
 
   const _onRefresh = useCallback(async () => {
     if (isPopup && ledgerStatus === Status.Device) {
       await windowOpen('/').catch(console.error);
       window.close();
     } else {
-      refresh();
       setError(null);
+      refresh();
     }
   }, [isPopup, ledgerStatus, refresh, setError]);
 

@@ -5,7 +5,7 @@ import type { KeypairType } from '@polkadot/util-crypto/types';
 import { Ledger, LedgerGeneric } from '@polkadot/hw-ledger';
 import { knownLedger } from '@polkadot/networks/defaults';
 import { assert } from '@polkadot/util';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { POLYMESH_GENERIC_SPEC_VERSION } from '@polymeshassociation/extension-core/constants';
 
@@ -31,6 +31,7 @@ interface State extends StateBase {
   address: string | null;
   error: string | null;
   rawError: string | null;
+  ledgerApp: string;
   isLedgerCapable: boolean;
   isLedgerEnabled: boolean;
   isLoading: boolean;
@@ -45,6 +46,11 @@ function getNetwork (genesis: string): Network | undefined {
   return ledgerChains.find(({ genesisHash }) => genesisHash[0] === genesis);
 }
 
+function getTransportType (): 'hid' | 'webusb' {
+  // Prefer WebHID because WebUSB interface claiming can fail on some devices.
+  return ('hid' in navigator) ? 'hid' : 'webusb';
+}
+
 export function getStoredLedgerApp (): string | null {
   const stored = localStorage.getItem('poly:ledgerApp');
 
@@ -57,6 +63,10 @@ export function getStoredLedgerApp (): string | null {
 
 export function setStoredLedgerApp (app: string): void {
   localStorage.setItem('poly:ledgerApp', app);
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('poly:ledgerAppChanged'));
+  }
 }
 
 /**
@@ -114,10 +124,13 @@ function processLedgerError (rawMessage: string): { message: string; status: Sta
     return { message: 'Your Ledger is already in use by another application or browser tab. Close any other app or tab using the device, then try again. If the issue persists, disconnect and reconnect your Ledger.', status: Status.Busy };
   }
 
-  // No device connected or browser requires a user gesture to select a USB device.
+  // No device connected, browser requires a user gesture to select a USB/HID device,
+  // or access was denied (e.g. after a failed gesture-gated request in a popup).
   if (
     rawMessage.includes('No device selected') ||
-    rawMessage.includes("Failed to execute 'requestDevice' on 'USB'")
+    rawMessage.includes("Failed to execute 'requestDevice' on 'USB'") ||
+    rawMessage.includes("Failed to execute 'requestDevice' on 'HID'") ||
+    rawMessage.includes('Access denied to use Ledger device')
   ) {
     return { message: rawMessage, status: Status.Device };
   }
@@ -134,7 +147,8 @@ export function formatLedgerError (message: string): string {
 }
 
 function getState (): StateBase {
-  const isLedgerCapable = !!(window as unknown as { USB?: unknown }).USB;
+  const w = window as unknown as { USB?: unknown; hid?: unknown };
+  const isLedgerCapable = !!(w.hid || w.USB);
 
   return {
     isLedgerCapable,
@@ -142,14 +156,14 @@ function getState (): StateBase {
   };
 }
 
-function retrieveLedger (genesis: string, specVersion?: number): LedgerGeneric | Ledger {
-  const currApp = getStoredLedgerApp() ?? 'polymesh';
+function retrieveLedger (genesis: string | null, ledgerApp: string, specVersion?: number): LedgerGeneric | Ledger {
   const { isLedgerCapable } = getState();
 
   assert(isLedgerCapable, 'Incompatible browser, only Chrome is supported');
+  const transport = getTransportType();
 
   // def may be undefined for development/unknown chains — only legacy (chainSpecific) requires it.
-  const def = getNetwork(genesis);
+  const def = genesis ? getNetwork(genesis) : undefined;
   const network = def?.network ?? 'polymesh';
 
   // Chains below the threshold do not support Polkadot/Polymesh app signing.
@@ -157,22 +171,22 @@ function retrieveLedger (genesis: string, specVersion?: number): LedgerGeneric |
   // TODO: Remove this branch and the legacy Ledger class once all supported chains
   //       have been upgraded to spec version >= POLYMESH_GENERIC_SPEC_VERSION.
   if (specVersion !== undefined && specVersion < POLYMESH_GENERIC_SPEC_VERSION) {
-    return new Ledger('webusb', network);
+    return new Ledger(transport, network);
   }
 
-  if (currApp === 'generic') {
+  if (ledgerApp === 'generic') {
     // Polkadot Generic app: always uses the Polkadot SLIP44 derivation path.
-    return new LedgerGeneric('webusb', network, knownLedger.polkadot);
-  } else if (currApp === 'polymesh') {
+    return new LedgerGeneric(transport, 'polkadot', knownLedger.polkadot);
+  } else if (ledgerApp === 'polymesh') {
     // Polymesh app with explicit user selection: uses the Polymesh SLIP44 derivation path.
-    return new LedgerGeneric('webusb', network, knownLedger.polymesh);
+    return new LedgerGeneric(transport, network, knownLedger.polymesh);
   }
 
   // Shouldn't happen that the app selection is invalid, but fall back to the chain's native SLIP44
   // entry, defaulting to the Polymesh SLIP44 if none is registered.
   const slip44 = knownLedger[network] ?? knownLedger.polymesh;
 
-  return new LedgerGeneric('webusb', network, slip44);
+  return new LedgerGeneric(transport, network, slip44);
 }
 
 export default function useLedger (
@@ -181,7 +195,7 @@ export default function useLedger (
   addressOffset = 0,
   // TODO: Implement Ethereum/EVM account support — when true, use the Ethereum Ledger
   //       app with secp256k1 derivation (SLIP44 coin type 60) instead of the Substrate path.
-  isEthereum = false,
+  _isEthereum = false,
   specVersion?: number
 ): State {
   const [isLoading, setIsLoading] = useState(false);
@@ -191,6 +205,31 @@ export default function useLedger (
   const [rawError, setRawError] = useState<string | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [type, setType] = useState<KeypairType | null>(null);
+  const [ledgerApp, setLedgerApp] = useState<string>(getStoredLedgerApp() ?? 'polymesh');
+  // Holds the ledger from the previous effect run so we can close its
+  // transport when the network changes and a new instance is created.
+  const prevLedgerRef = useRef<LedgerGeneric | Ledger | null>(null);
+
+  // Sync ledgerApp from storage events (cross-tab and same-tab).
+  useEffect(() => {
+    const syncLedgerApp = (): void => {
+      setLedgerApp(getStoredLedgerApp() ?? 'polymesh');
+    };
+
+    const onStorage = (event: StorageEvent): void => {
+      if (event.key === 'poly:ledgerApp') {
+        syncLedgerApp();
+      }
+    };
+
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('poly:ledgerAppChanged', syncLedgerApp);
+
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('poly:ledgerAppChanged', syncLedgerApp);
+    };
+  }, []);
 
   const status: Status = useMemo((): Status => {
     if (rawError) {
@@ -208,7 +247,7 @@ export default function useLedger (
     }
   }, [rawError, error, address, isLoading]);
 
-  function handleGetAddressError (e: Error) {
+  const handleGetAddressError = useCallback((e: Error) => {
     setIsLoading(false);
 
     const { message } = processLedgerError(e.message);
@@ -218,109 +257,152 @@ export default function useLedger (
     setError(message);
     console.error(e);
     setAddress(null);
-  }
+  }, []);
 
   const { initError, ledger } = useMemo(() => {
-    if (!genesis) {
-      return { initError: null, ledger: null, refreshNonce };
+    // undefined means no ledger connection attempt.
+    // null means connect without a specific chain genesis.
+    // When genesis is a specific chain (string), wait for specVersion so we
+    // create the correct Ledger class on the first attempt — otherwise the
+    // premature instance opens the transport and the replacement instance
+    // races against it, causing "device is already open" errors.
+    if (refreshNonce < 0 || genesis === undefined || (genesis !== null && specVersion === undefined)) {
+      return { initError: null, ledger: null };
     }
 
     try {
+      const nextLedger = retrieveLedger(genesis, ledgerApp, specVersion);
+
       return {
         initError: null,
-        ledger: retrieveLedger(genesis, specVersion),
-        refreshNonce
+        ledger: nextLedger
       };
     } catch (error) {
       return {
         initError: (error as Error).message,
-        ledger: null,
-        refreshNonce
+        ledger: null
       };
     }
-  }, [genesis, refreshNonce, specVersion]);
+  }, [genesis, ledgerApp, refreshNonce, specVersion]);
 
   useEffect(() => {
-    setAddress(null);
     setError(initError);
-    setIsLoading(false);
-    setIsLocked(false);
     setRawError(null);
-    setType(null);
-  }, [genesis, initError, ledger, specVersion]);
+  }, [initError]);
 
   useEffect(() => {
-    if (!ledger || !genesis) {
-      setAddress(null);
-      setType(null);
-
-      return;
-    }
-
     let isStale = false;
 
-    const handleGetAddressSuccess = (nextAddress: string, nextType: KeypairType) => {
-      if (isStale) {
-        return;
+    if (!ledger) {
+      if (prevLedgerRef.current) {
+        prevLedgerRef.current.disconnect().catch(console.error);
+        prevLedgerRef.current = null;
       }
 
       setIsLoading(false);
-      setAddress(nextAddress);
-      setType(nextType);
-    };
+      setIsLocked(false);
+      setAddress(null);
+      setType(null);
 
-    const handleGetAddressFailure = (e: Error) => {
-      if (isStale) {
-        return;
+      return () => {
+        isStale = true;
+      };
+    }
+
+    const handleGetAddressSuccess = (nextAddress: string, nextType: KeypairType): void => {
+      if (!isStale) {
+        setIsLoading(false);
+        setIsLocked(false);
+        setAddress(nextAddress);
+        setType(nextType);
       }
-
-      handleGetAddressError(e);
     };
 
+    const handleGetAddressFailure = (e: Error): void => {
+      if (!isStale) {
+        handleGetAddressError(e);
+      }
+    };
+
+    const prevLedger = prevLedgerRef.current;
+
+    prevLedgerRef.current = ledger;
     setIsLoading(true);
     setError(null);
     setRawError(null);
 
-    const currApp = getStoredLedgerApp() ?? 'polymesh';
-    const def = getNetwork(genesis);
+    const def = genesis ? getNetwork(genesis) : undefined;
     // Use the same app-selection logic as retrieveLedger: force legacy for old chains.
     // TODO: Remove the 'legacy' branch once all supported chains have been upgraded
     //       to spec version >= POLYMESH_GENERIC_SPEC_VERSION.
     const effectiveApp = (specVersion !== undefined && specVersion < POLYMESH_GENERIC_SPEC_VERSION)
       ? 'legacy'
-      : currApp;
+      : ledgerApp;
 
-    if (effectiveApp === 'generic' || effectiveApp === 'polymesh') {
-      // TODO: When isEthereum is true, derive via the Ethereum Ledger app using
-      //       ETH-style derivation instead of the Substrate ss58 prefix path.
-      (ledger as LedgerGeneric).getAddress(def?.prefix ?? 42, false, accountIndex, addressOffset)
-        .then((res) => {
-          handleGetAddressSuccess(res.address, 'ed25519');
-        }).catch((e: Error) => {
-          handleGetAddressFailure(e);
-        });
-    } else if (effectiveApp === 'legacy') {
-      (ledger as Ledger).getAddress(false, accountIndex, addressOffset)
-        .then((res) => {
-          handleGetAddressSuccess(res.address, 'ed25519');
-        }).catch((e: Error) => {
-          handleGetAddressFailure(e);
-        });
+    const fetchLedgerAddress = (): void => {
+      if (isStale) {
+        return;
+      }
+
+      if (effectiveApp === 'generic' || effectiveApp === 'polymesh') {
+        // TODO: When isEthereum is true, derive via the Ethereum Ledger app using
+        //       ETH-style derivation instead of the Substrate ss58 prefix path.
+        (ledger as LedgerGeneric).getAddress(def?.prefix ?? 42, false, accountIndex, addressOffset)
+          .then((res) => {
+            handleGetAddressSuccess(res.address, 'ed25519');
+          }).catch((e: Error) => {
+            handleGetAddressFailure(e);
+          });
+      } else if (effectiveApp === 'legacy') {
+        (ledger as Ledger).getAddress(false, accountIndex, addressOffset)
+          .then((res) => {
+            handleGetAddressSuccess(res.address, 'ed25519');
+          }).catch((e: Error) => {
+            handleGetAddressFailure(e);
+          });
+      }
+    };
+
+    // Disconnect the previous instance before opening the new one (network or ledger app change).
+    if (prevLedger && prevLedger !== ledger) {
+      prevLedger.disconnect()
+        .catch(console.error)
+        .finally(fetchLedgerAddress);
+    } else {
+      fetchLedgerAddress();
     }
 
     return () => {
       isStale = true;
     };
-  }, [accountIndex, addressOffset, genesis, ledger, isEthereum, specVersion]);
+  }, [accountIndex, addressOffset, genesis, handleGetAddressError, ledger, ledgerApp, specVersion]);
+
+  const ledgerRef = useRef(ledger);
+
+  // Keep in sync so the unmount cleanup always closes the latest instance.
+  ledgerRef.current = ledger;
+
+  // On unmount, release the transport so the next session can open it.
+  useEffect(() => {
+    return () => {
+      ledgerRef.current?.disconnect()
+        .catch(console.error);
+    };
+  }, []);
 
   const refresh = useCallback(() => {
-    setRefreshNonce((value) => value + 1);
-    setError(null);
-    setRawError(null);
-    setIsLocked(false);
-    setAddress(null);
-    setType(null);
-  }, []);
+    if (ledger) {
+      // Prevent the address-fetch effect from disconnecting this instance again.
+      prevLedgerRef.current = null;
+      ledger.disconnect()
+        .catch(console.error)
+        .finally(() => {
+          setRefreshNonce((value) => value + 1);
+        });
+    } else {
+      setRefreshNonce((value) => value + 1);
+    }
+  }, [ledger]);
 
   return {
     ...getState(),
@@ -329,6 +411,7 @@ export default function useLedger (
     isLoading,
     isLocked,
     ledger,
+    ledgerApp,
     rawError,
     refresh,
     status,

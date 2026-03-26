@@ -1755,32 +1755,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/hw-ledger-transports@npm:13.5.9":
-  version: 13.5.9
-  resolution: "@polkadot/hw-ledger-transports@npm:13.5.9"
+"@polkadot/hw-ledger-transports@npm:14.0.3":
+  version: 14.0.3
+  resolution: "@polkadot/hw-ledger-transports@npm:14.0.3"
   dependencies:
     "@ledgerhq/hw-transport": "npm:^6.31.4"
     "@ledgerhq/hw-transport-node-hid-singleton": "npm:^6.31.5"
     "@ledgerhq/hw-transport-webhid": "npm:^6.29.4"
     "@ledgerhq/hw-transport-webusb": "npm:^6.29.4"
-    "@polkadot/util": "npm:13.5.9"
+    "@polkadot/util": "npm:14.0.3"
     tslib: "npm:^2.8.0"
   dependenciesMeta:
     "@ledgerhq/hw-transport-node-hid-singleton":
       optional: true
-  checksum: 10c0/b6f656a0f9303e79c092ceb10da00e45bfcc04e4a82da8e88d2270787c88e3ed899546d169df17aae2e277894bc1a1cef5d907217bdb70bb65202b2b88ae39e1
+  checksum: 10c0/c46f983e95a1dcc3d4edb223e007c21dbdf92c6ab4add838dda1bae8d2c353e2389531275555c0cd1d6149675cc71e33db8bd94fc440576f7cb9b871da1ba6b5
   languageName: node
   linkType: hard
 
-"@polkadot/hw-ledger@npm:^13.5.9":
-  version: 13.5.9
-  resolution: "@polkadot/hw-ledger@npm:13.5.9"
+"@polkadot/hw-ledger@npm:^14.0.3":
+  version: 14.0.3
+  resolution: "@polkadot/hw-ledger@npm:14.0.3"
   dependencies:
-    "@polkadot/hw-ledger-transports": "npm:13.5.9"
-    "@polkadot/util": "npm:13.5.9"
+    "@polkadot/hw-ledger-transports": "npm:14.0.3"
+    "@polkadot/util": "npm:14.0.3"
     "@zondax/ledger-substrate": "npm:1.1.1"
     tslib: "npm:^2.8.0"
-  checksum: 10c0/2745c2492b1fad697508572c64cf007d89079b7d7d7456f3f17091d9075d25061c4dd39ea9aafbc534bd84ca621446e27912ec12cbb5f6e0519622b8124df916
+  checksum: 10c0/152249dfd1fcc727201a02c00a155e03632ecf4ffdae0ef5fee39a8a4dcb7f96b23bed90d5f4d349bc7aa2218f35c775a82ff7e44eac871026f77916baa8ede4
   languageName: node
   linkType: hard
 
@@ -2284,7 +2284,7 @@ __metadata:
     "@hookform/error-message": "npm:^0.0.5"
     "@polkadot-api/merkleize-metadata": "npm:^1.1.27"
     "@polkadot/extension-chains": "npm:0.62.6"
-    "@polkadot/hw-ledger": "npm:^13.5.9"
+    "@polkadot/hw-ledger": "npm:^14.0.3"
     "@polkadot/keyring": "npm:^13.5.9"
     "@polkadot/networks": "npm:^13.5.9"
     "@polkadot/react-identicon": "npm:^3.16.4"
