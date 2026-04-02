@@ -1,4 +1,4 @@
-import type { AccountData, Balance } from '@polkadot/types/interfaces';
+import type { Balance } from '@polkadot/types/interfaces';
 import type { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import type { BN } from '@polkadot/util';
 import type { Subscription } from 'rxjs';
@@ -117,7 +117,7 @@ export const recodeAddress = (
  * @param ed - Existential deposit (from api.consts.balances.existentialDeposit), optional
  */
 export const accountBalances = (
-  { feeFrozen, free, frozen, miscFrozen, reserved }: AccountData & { feeFrozen?: Balance; frozen?: Balance },
+  { feeFrozen, free, frozen, miscFrozen, reserved }: { free: Balance; reserved: Balance; feeFrozen?: Balance; frozen?: Balance; miscFrozen?: Balance },
   ed?: BN
 ): AccountBalances => {
   const total = free.add(reserved).toString();
