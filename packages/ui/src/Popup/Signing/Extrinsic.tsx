@@ -1,8 +1,7 @@
 import type { Call, ExtrinsicPayload } from '@polkadot/types/interfaces';
 import type { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 
-import { Metadata } from '@polkadot/types';
-import { hexToBn, hexToU8a } from '@polkadot/util';
+import { hexToBn } from '@polkadot/util';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import { PolymeshContext } from '@polymeshassociation/extension-ui/components';
@@ -49,9 +48,7 @@ function Extrinsic ({ onFeeStateChange, onWarningStateChange, payloadExt, reques
       return null;
     }
 
-    const hasUsableMetadata = chain.hasMetadata || !!chain.definition.rawMetadata;
-
-    if (!hasUsableMetadata) {
+    if (!chain.hasMetadata) {
       return null;
     }
 
@@ -60,14 +57,6 @@ function Extrinsic ({ onFeeStateChange, onWarningStateChange, payloadExt, reques
     }
 
     try {
-      if (!chain.hasMetadata && chain.definition.rawMetadata) {
-        chain.registry.setMetadata(
-          new Metadata(chain.registry, hexToU8a(chain.definition.rawMetadata)),
-          request.signedExtensions,
-          chain.definition.userExtensions
-        );
-      }
-
       const call = chain.registry.createType('Call', request.method);
       const humanArgs = (call.toHuman() as { args: AnyJson }).args;
 
@@ -80,9 +69,9 @@ function Extrinsic ({ onFeeStateChange, onWarningStateChange, payloadExt, reques
 
       return null;
     }
-  }, [chain, request.method, request.signedExtensions, requestSpec]);
+  }, [chain, request.method, requestSpec]);
 
-  const metadataAvailable = !!chain && (chain.hasMetadata || !!chain.definition.rawMetadata);
+  const metadataAvailable = !!chain && chain.hasMetadata;
   const specMatches = !!chain && requestSpec.eqn(chain.specVersion);
   const networkName = chain?.name;
 

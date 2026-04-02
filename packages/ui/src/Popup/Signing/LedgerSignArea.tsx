@@ -6,8 +6,7 @@ import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
 import type { SignerPayloadJSON } from '@polkadot/types/types';
 import type { HexString } from '@polkadot/util/types';
 
-import { Metadata } from '@polkadot/types';
-import { assert, hexToNumber, hexToU8a, objectSpread, stringShorten, u8aEq, u8aToHex } from '@polkadot/util';
+import { assert, hexToNumber, objectSpread, stringShorten, u8aEq, u8aToHex } from '@polkadot/util';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { merkleizeMetadata } from '@polkadot-api/merkleize-metadata';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
@@ -17,7 +16,6 @@ import { ActionContext, Warning } from '@polymeshassociation/extension-ui/compon
 import { useIsPopup, useLedger, useMetadata } from '@polymeshassociation/extension-ui/hooks';
 import { cancelSignRequest, windowOpen } from '@polymeshassociation/extension-ui/messaging';
 import { Button, Flex } from '@polymeshassociation/extension-ui/ui';
-import polymeshSignedExtensions from '@polymeshassociation/polymesh-types/signedExtensions';
 
 import { formatLedgerError, Status } from '../../hooks/useLedger';
 
@@ -141,16 +139,6 @@ function LedgerSignArea ({ accountIndex,
 
         return;
       }
-
-      // Load full metadata into the registry so it can encode/decode call data.
-      // metadataExpand (extension-chains) only uses metaCalls (base64 legacy format),
-      // but we store rawMetadata (hex). Without this, createType('Extrinsic') fails
-      // because the registry has no call index mappings.
-      chain.registry.setMetadata(
-        new Metadata(chain.registry, hexToU8a(chain.definition.rawMetadata)),
-        payloadJson.signedExtensions,
-        polymeshSignedExtensions
-      );
 
       let raw: ReturnType<typeof getMetadataProof>['raw'];
       let metaBuff: Buffer;
