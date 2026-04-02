@@ -106,7 +106,6 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
   'poly:pri(global.changePass)': [RequestPolyGlobalChangePass, boolean];
   'poly:pri(password.isSet)': [RequestPolyIsPasswordSet, boolean];
   'poly:pri(password.validate)': [RequestPolyValidatePassword, boolean];
-  'poly:pri(accounts.create.hardware)': [RequestPolyAccountCreateHardware, boolean];
   'poly:pri(window.open)': [AllowedPath, boolean];
   // public/external requests, i.e. from a page
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];

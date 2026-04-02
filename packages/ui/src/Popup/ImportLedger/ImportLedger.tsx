@@ -152,8 +152,8 @@ function ImportLedger (): React.ReactElement {
         accountIndex,
         addressOffset,
         name,
-        keyType,
-        undefined // genesisHash is intentionally omitted for Ledger accounts to keep them chain-agnostic
+        null, // genesisHash is intentionally omitted for Ledger accounts to keep them chain-agnostic
+        keyType
 
       )
         .then(() => onAction('/'))

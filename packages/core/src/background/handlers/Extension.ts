@@ -2,7 +2,7 @@
 
 import type { MessageTypes, RequestRpcUnsubscribe, ResponseType } from '@polkadot/extension-base/background/types';
 import type { KeyringPair } from '@polkadot/keyring/types';
-import type { AllowedPath, PolyMessageTypes, PolyRequestTypes, PolyResponseType, RequestPolyAccountCreateHardware, RequestPolyCallDetails, RequestPolyCustomNetworkUrlSet, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolySelectedAccountSet, RequestPolyValidatePassword, ResponsePolyCallDetails } from '../types';
+import type { AllowedPath, PolyMessageTypes, PolyRequestTypes, PolyResponseType, RequestPolyCallDetails, RequestPolyCustomNetworkUrlSet, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolySelectedAccountSet, RequestPolyValidatePassword, ResponsePolyCallDetails } from '../types';
 
 import { withErrorLog } from '@polkadot/extension-base/background';
 import DotExtension from '@polkadot/extension-base/background/handlers/Extension';
@@ -130,18 +130,6 @@ export default class Extension extends DotExtension {
     const networkUrl = getNetworkUrl();
 
     return callDetails(request, networkUrl);
-  }
-
-  private polyAccountCreateHardware ({ accountIndex,
-    address,
-    addressOffset,
-    genesisHash,
-    hardwareType,
-    name,
-    type }: RequestPolyAccountCreateHardware): boolean {
-    keyring.addHardware(address, hardwareType, { accountIndex, addressOffset, genesisHash, name, type });
-
-    return true;
   }
 
   private polyIsDevToggle (): boolean {
@@ -275,11 +263,6 @@ export default class Extension extends DotExtension {
 
       case 'poly:pri(password.validate)':
         return this.validatePassword(request as RequestPolyValidatePassword);
-
-      case 'poly:pri(accounts.create.hardware)':
-        return this.polyAccountCreateHardware(
-          request as RequestPolyAccountCreateHardware
-        );
 
       case 'poly:pri(network.subscribe)':
         return port && this.polyNetworkSubscribe(id, port);

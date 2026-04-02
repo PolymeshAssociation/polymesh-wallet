@@ -3,7 +3,7 @@ import '@polkadot/api-augment';
 import type { StorageKey } from '@polkadot/types';
 import type { Option, Vec } from '@polkadot/types/codec';
 import type { FrameSystemAccountInfo, PalletIdentityClaim1stKey, PalletIdentityClaim2ndKey, PolymeshPrimitivesIdentityClaim, PolymeshPrimitivesIdentityId, PolymeshPrimitivesSecondaryKeyKeyRecord } from '@polkadot/types/lookup';
-import type {} from '@polymeshassociation/polymesh-types/polkadot/types-lookup';
+import type {} from '@polymeshassociation/polymesh-types/polkadot/types-lookup'; // required for declaration merging with @polkadot/types/lookup
 import type { AccountData, KeyringAccountData, NetworkName, UnsubCallback } from './types';
 
 import { encodeAddress } from '@polkadot/util-crypto';
