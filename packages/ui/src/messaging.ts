@@ -219,6 +219,8 @@ export async function getMetadata (genesisHash?: string | null, isPartial = fals
     return metadataExpand(def, isPartial);
   }
 
+  clearSavedMeta(genesisHash);
+
   return null;
 }
 
