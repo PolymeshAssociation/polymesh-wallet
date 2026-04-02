@@ -18,7 +18,16 @@ export default class AccountMigrations extends BaseStore<KeyringJson> implements
   public async migrateAuthUrls (): Promise<boolean> {
     const stored = await chrome.storage.local.get(AUTH_URLS_KEY);
     const authString = (stored[AUTH_URLS_KEY] as string | undefined) ?? '{}';
-    const authUrls = JSON.parse(authString) as Record<string, AuthUrlInfo>;
+    let authUrls: Record<string, AuthUrlInfo>;
+
+    try {
+      authUrls = JSON.parse(authString) as Record<string, AuthUrlInfo>;
+    } catch (error) {
+      console.error('Unable to parse authUrls from storage, skipping auth URL migration', error);
+
+      return false;
+    }
+
     let changed = false;
 
     Object.keys(authUrls).forEach((key) => {
