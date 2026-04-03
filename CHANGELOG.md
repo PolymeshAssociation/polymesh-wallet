@@ -1,3 +1,21 @@
+# [2.5.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.4.1...2.5.0) (2026-04-03)
+
+
+### Bug Fixes
+
+* display correct key type for multisig signers unlinked from a DID ([7a5a518](https://github.com/PolymeshAssociation/polymesh-wallet/commit/7a5a5186194964302c812d71451044d4b593cd0a))
+* **messaging:** clear saved metadata if def is null ([6883770](https://github.com/PolymeshAssociation/polymesh-wallet/commit/688377092b8ab992b13ec6336f021479f822646d))
+* **migrations:** handle JSON parsing errors in auth URL migration ([4efbfd3](https://github.com/PolymeshAssociation/polymesh-wallet/commit/4efbfd3a3e7415297b66fff55331ab682d953d1a))
+* refactor ledger state management to use refreshNonce for better handling ([75814c9](https://github.com/PolymeshAssociation/polymesh-wallet/commit/75814c957cb0f7affd917900d32c7753384e61d3))
+
+
+### Features
+
+* add ledger metadata-hash signing support with v8 compatibility ([547ff5a](https://github.com/PolymeshAssociation/polymesh-wallet/commit/547ff5a417a8867dc21246630a0f894b754ee6a5))
+* **ledger:** add WebHID support and improve device connection reliability ([2bdc482](https://github.com/PolymeshAssociation/polymesh-wallet/commit/2bdc482cf24d8fed1091df6f1be63a995f77ce04))
+* **migrations:** implement migration for legacy auth URL keys ([06e151e](https://github.com/PolymeshAssociation/polymesh-wallet/commit/06e151ecf4400cf30e9861e3155816032105acb1))
+* **signing:** improve transaction decoding, fee summaries, and clearer chain safety states ([eff7703](https://github.com/PolymeshAssociation/polymesh-wallet/commit/eff77034b1909719432f3f3173d87b3e05fc73ad))
+
 ## [2.4.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.4.0...2.4.1) (2025-04-10)
 
 
