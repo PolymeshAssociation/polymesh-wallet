@@ -17,29 +17,37 @@ import handlers from '@polymeshassociation/extension-core/background/handlers';
 withErrorLog(() => chrome.action.setBadgeBackgroundColor({ color: '#d90000' }));
 withErrorLog(() => chrome.action.setBadgeText({ text: '' }));
 
+let sharedAccountsUnsub: (() => void) | null = null;
+let sharedPolyUnsub: (() => void) | null = null;
+
+function ensureSharedAccountsSynchronizer (): void {
+  if (!sharedAccountsUnsub) {
+    sharedAccountsUnsub = accountsSynchronizer();
+  }
+}
+
+function ensureSharedPolymeshSubscription (): void {
+  if (!sharedPolyUnsub) {
+    sharedPolyUnsub = subscribePolymesh();
+  }
+}
+
 // listen to all messages and handle appropriately
 chrome.runtime.onConnect.addListener((port): void => {
   // shouldn't happen, however... only listen to what we know about
   assert([PORT_CONTENT, PORT_EXTENSION].includes(port.name), `Unknown connection from ${port.name}`);
 
-  let polyUnsub: () => void;
-  const accountsUnsub = accountsSynchronizer();
+  // Keep background synchronizers process-scoped instead of per-port to avoid
+  // reconnect churn when multiple popup windows connect/disconnect.
+  ensureSharedAccountsSynchronizer();
 
   if (port.name === PORT_EXTENSION) {
-    polyUnsub = subscribePolymesh();
+    ensureSharedPolymeshSubscription();
   }
 
   // disconnect handler
   port.onDisconnect.addListener((): void => {
     console.log(`Disconnected from ${port.name}`);
-
-    if (port.name === PORT_EXTENSION && polyUnsub) {
-      polyUnsub();
-    }
-
-    if (accountsUnsub) {
-      accountsUnsub();
-    }
   });
 
   // message handler
@@ -109,4 +117,16 @@ chrome.tabs.onActivated.addListener(() => {
 // when deleting a tab this will be fired
 chrome.tabs.onRemoved.addListener(() => {
   getActiveTabs();
+});
+
+chrome.runtime.onSuspend.addListener(() => {
+  if (sharedPolyUnsub) {
+    sharedPolyUnsub();
+    sharedPolyUnsub = null;
+  }
+
+  if (sharedAccountsUnsub) {
+    sharedAccountsUnsub();
+    sharedAccountsUnsub = null;
+  }
 });

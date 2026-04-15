@@ -9,7 +9,7 @@ import type { HexString } from '@polkadot/util/types';
 import { assert, hexToNumber, objectSpread, stringShorten, u8aEq, u8aToHex } from '@polkadot/util';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { merkleizeMetadata } from '@polkadot-api/merkleize-metadata';
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { POLYMESH_GENERIC_SPEC_VERSION } from '@polymeshassociation/extension-core/constants';
 import { ActionContext, Warning } from '@polymeshassociation/extension-ui/components';
@@ -68,6 +68,41 @@ function LedgerSignArea ({ accountIndex,
   signId,
   warningMessage }: Props): React.ReactElement<Props> {
   const [isBusy, setIsBusy] = useState(false);
+  const [isRemoteBusy, setIsRemoteBusy] = useState(false);
+  const isLocalSigningRef = useRef(false);
+
+  // Sync signing-busy state across windows via BroadcastChannel.
+  const signingChannel = useMemo(() => new BroadcastChannel('poly:ledger-signing'), []);
+
+  useEffect(() => {
+    const onMessage = (e: MessageEvent): void => {
+      if (e.data === 'signing-start') {
+        setIsRemoteBusy(true);
+      } else if (e.data === 'signing-end') {
+        setIsRemoteBusy(false);
+      }
+    };
+
+    signingChannel.addEventListener('message', onMessage);
+
+    return () => {
+      // Only broadcast signing-end if this window initiated signing,
+      // so closing a non-signing window doesn't unblock other windows.
+      if (isLocalSigningRef.current) {
+        signingChannel.postMessage('signing-end');
+      }
+
+      signingChannel.removeEventListener('message', onMessage);
+      signingChannel.close();
+    };
+  }, [signingChannel]);
+
+  const endSigning = useCallback(() => {
+    setIsBusy(false);
+    isLocalSigningRef.current = false;
+    signingChannel.postMessage('signing-end');
+  }, [signingChannel]);
+
   const { chain } = useMetadata(genesisHash);
   // Read specVersion directly from the payload (always available) so the correct app is
   // selected immediately without waiting for useMetadata to resolve asynchronously.
@@ -111,6 +146,8 @@ function LedgerSignArea ({ accountIndex,
 
     setError(null);
     setIsBusy(true);
+    isLocalSigningRef.current = true;
+    signingChannel.postMessage('signing-start');
 
     const currApp = effectiveLedgerApp;
 
@@ -120,14 +157,14 @@ function LedgerSignArea ({ accountIndex,
           setError('Chain metadata not found. Ensure the wallet is connected to the correct network and try again.');
         }
 
-        setIsBusy(false);
+        endSigning();
 
         return;
       }
 
       if (!chain.definition.rawMetadata) {
         setError('Metadata for this chain is not yet available. Ensure the wallet is connected to the correct network and try again.');
-        setIsBusy(false);
+        endSigning();
 
         return;
       }
@@ -135,7 +172,7 @@ function LedgerSignArea ({ accountIndex,
       // Chains below spec version 8_000_000 do not support metadata hash signing.
       if (chain.specVersion < POLYMESH_GENERIC_SPEC_VERSION) {
         setError(`Chain spec version ${chain.specVersion} is below the minimum required (${POLYMESH_GENERIC_SPEC_VERSION}) for Generic Ledger app signing. Please switch to the Legacy app in Ledger Settings.`);
-        setIsBusy(false);
+        endSigning();
 
         return;
       }
@@ -150,7 +187,7 @@ function LedgerSignArea ({ accountIndex,
         metaBuff = Buffer.from(proof.txMetadata);
       } catch (e) {
         setError(formatLedgerError((e as Error).message));
-        setIsBusy(false);
+        endSigning();
 
         return;
       }
@@ -172,14 +209,14 @@ function LedgerSignArea ({ accountIndex,
         })
         .catch((e: Error) => {
           setError(formatLedgerError(e.message));
-          setIsBusy(false);
+          endSigning();
         });
     } else {
       // TODO: Remove this legacy signing branch once all supported chains have been
       //       upgraded to spec version >= POLYMESH_GENERIC_SPEC_VERSION.
       // legacy (old Polymesh chainSpecific Ledger app)
       if (!payloadExt) {
-        setIsBusy(false);
+        endSigning();
 
         return;
       }
@@ -191,10 +228,10 @@ function LedgerSignArea ({ accountIndex,
         })
         .catch((e: Error) => {
           setError(formatLedgerError(e.message));
-          setIsBusy(false);
+          endSigning();
         });
     }
-  }, [accountIndex, addressOffset, chain, effectiveLedgerApp, ledger, ledgerAddress, onSignature, payloadExt, payloadJson, setError]);
+  }, [accountIndex, addressOffset, chain, effectiveLedgerApp, endSigning, ledger, ledgerAddress, onSignature, payloadExt, payloadJson, setError, signingChannel]);
 
   const _onCancel = useCallback(() => {
     (async () => {
@@ -275,8 +312,8 @@ function LedgerSignArea ({ accountIndex,
           ml='xs'
         >
           <Button
-            busy={isBusy || ledgerLoading}
-            disabled={!!mismatchWarning}
+            busy={isBusy || ledgerLoading || isRemoteBusy}
+            disabled={!!mismatchWarning || isRemoteBusy}
             fluid
             onClick={warning ? _onRefresh : _onSignLedger}
             type={warning ? 'submit' : undefined}
