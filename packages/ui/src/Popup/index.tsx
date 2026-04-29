@@ -19,7 +19,6 @@ import { Box, Flex, Icon } from '../ui';
 import { Toast } from '../ui/Toast';
 import { buildHierarchy } from '../util/buildHierarchy';
 import ImportLedger from './ImportLedger/ImportLedger';
-import { AccountDetails } from './AccountDetails';
 import Accounts from './Accounts';
 import { AuthManagement } from './AuthManagement';
 import Authorize from './Authorize';
@@ -251,9 +250,6 @@ export default function Popup (): React.ReactElement {
                         </Route>
                         <Route path='/account/change-password'>
                           <ChangePassword />
-                        </Route>
-                        <Route path='/account/details/:address'>
-                          <AccountDetails />
                         </Route>
                         <Route path='/settings/url-auth'>
                           <AuthManagement />

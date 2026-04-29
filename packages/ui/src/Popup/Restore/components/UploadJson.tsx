@@ -23,6 +23,11 @@ interface Props {
   ) => void;
 }
 
+interface UploadJsonFormData {
+  jsonFile: FileList | null;
+  jsonPassword: string;
+}
+
 export const UploadJson: FC<Props> = ({ onContinue }) => {
   const [filename, setFilename] = useState('');
   const fileRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -31,7 +36,7 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
   const [accountJson, setAccountJson] = useState<
   KeyringPair$Json | undefined
   >();
-  const methods = useForm({
+  const methods = useForm<UploadJsonFormData>({
     defaultValues: {
       jsonFile: null,
       jsonPassword: ''
@@ -43,7 +48,7 @@ export const UploadJson: FC<Props> = ({ onContinue }) => {
   const handleError = useErrorHandler();
   const { networkState: { ss58Format } } = useContext(PolymeshContext);
 
-  const onSubmit = useCallback((data: Record<string, string>) => {
+  const onSubmit = useCallback((data: UploadJsonFormData) => {
     if (accountJson) {
       try {
         const password = data.jsonPassword;

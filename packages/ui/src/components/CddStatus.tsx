@@ -1,9 +1,10 @@
 import type { FC } from 'react';
 import type { CDD } from '@polymeshassociation/extension-core/types';
 
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { SvgAlertCircle, SvgCheckboxMarkedCircle, SvgProgressClock } from '@polymeshassociation/extension-ui/assets/images/icons';
+import { PolymeshContext } from '@polymeshassociation/extension-ui/components';
 import { Flex, Icon, Text } from '@polymeshassociation/extension-ui/ui';
 
 interface Props {
@@ -38,6 +39,13 @@ React.ComponentType<React.SVGAttributes<SVGElement>>
 };
 
 export const CddStatus: FC<Props> = ({ cdd, withText = false }) => {
+  const { networkState: { isV8 } } = useContext(PolymeshContext);
+
+  // TODO: Remove this component once all supported chains are on Polymesh v8.
+  if (isV8) {
+    return null;
+  }
+
   const status: Status =
     cdd === undefined
       ? 'checking'

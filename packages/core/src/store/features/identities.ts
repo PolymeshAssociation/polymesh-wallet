@@ -37,9 +37,14 @@ const identitiesSlice = createSlice({
       const { account, data } = action.payload;
       const currentDid = data.did;
 
-      state.dids[currentDid] = state.dids[currentDid] || {};
+      const nextIdentity = Object.assign(state.dids[currentDid] || {}, data);
 
-      state.dids[currentDid] = Object.assign(state.dids[currentDid], data);
+      if (!('cdd' in data)) {
+        // TODO: Remove this legacy field cleanup once v7 compatibility is dropped.
+        delete nextIdentity.cdd;
+      }
+
+      state.dids[currentDid] = nextIdentity;
       state.currentDids[account] = currentDid;
     },
     renameIdentity (state, action: PayloadAction<RenameIdentityPayload>) {

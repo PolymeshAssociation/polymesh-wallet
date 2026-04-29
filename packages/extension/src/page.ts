@@ -9,7 +9,7 @@ import { enable, handleResponse, redirectIfPhishing } from '@polymeshassociation
 function inject () {
   injectExtension(enable, {
     name: 'polywallet',
-    version: process.env.PKG_VERSION || 'unknown'
+    version: process.env['PKG_VERSION'] || 'unknown'
   });
 }
 

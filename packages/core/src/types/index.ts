@@ -75,6 +75,8 @@ export interface NetworkState {
   ss58Format: number;
   genesisHash?: HexString;
   isDeveloper: boolean;
+  // TODO: Remove this temporary compatibility flag once all supported chains are on Polymesh v8.
+  isV8: boolean;
   customNetworkUrl: string;
 }
 

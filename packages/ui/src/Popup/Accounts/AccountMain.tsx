@@ -3,8 +3,7 @@
 import type { FC } from 'react';
 import type { IdentifiedAccount } from '@polymeshassociation/extension-core/types';
 
-import React, { useCallback, useContext } from 'react';
-import { useHistory } from 'react-router';
+import React, { useContext } from 'react';
 
 import { recodeAddress } from '@polymeshassociation/extension-core/utils';
 // import { SvgCheck, SvgPencilOutline, SvgWindowClose } from '@polymeshassociation/extension-ui/assets/images/icons';
@@ -16,20 +15,14 @@ import { formatAmount } from '../../util/formatters';
 
 export interface Props {
   account: IdentifiedAccount;
-  details?: boolean;
 }
 
-export const AccountMain: FC<Props> = ({ account, details = true }) => {
-  const history = useHistory();
+export const AccountMain: FC<Props> = ({ account }) => {
   // const [editing, setEditing] = useState(false);
   // const [newAlias, setNewAlias] = useState('');
   // const [hover, setHover] = useState(false);
   const { networkState: { ss58Format } } = useContext(PolymeshContext);
   // const onAction = useContext(ActionContext);
-
-  const showAccountDetails = useCallback(() => {
-    history.push(`/account/details/${account?.address}`);
-  }, [account?.address, history]);
 
   // const startEdit = () => {
   //   setHover(false);
@@ -122,6 +115,7 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
                     <TextEllipsis size={29}>{account?.did}</TextEllipsis>
                   </Text>
                 </Flex>
+                {/* TODO: Remove this legacy CDD badge once all supported chains are on Polymesh v8. */}
                 <CddStatus
                   cdd={account.cdd}
                   withText
@@ -215,27 +209,6 @@ export const AccountMain: FC<Props> = ({ account, details = true }) => {
           </Text>
         </Box>
       </Flex>
-      {details && (
-        <Box mt='m'>
-          <Flex
-            borderColor='gray.0'
-            borderRadius='100px'
-            borderStyle='solid'
-            borderWidth={1}
-            height='32px'
-            justifyContent='center'
-            onClick={showAccountDetails}
-            style={{ cursor: 'pointer' }}
-          >
-            <Text
-              color='white'
-              variant='b2m'
-            >
-              View details
-            </Text>
-          </Flex>
-        </Box>
-      )}
     </>
   );
 };

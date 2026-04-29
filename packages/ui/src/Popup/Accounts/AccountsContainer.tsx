@@ -143,6 +143,7 @@ export const AccountsContainer: FC<Props> = ({ accounts,
                     width={16}
                   />
                 </Flex>
+                {/* TODO: Remove this legacy CDD badge once all supported chains are on Polymesh v8. */}
                 <CddStatus cdd={accounts[0].cdd} />
               </Flex>
             </Flex>

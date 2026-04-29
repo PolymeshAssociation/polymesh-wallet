@@ -208,15 +208,15 @@ function retrieveLedger (genesis: string | null, ledgerApp: string, specVersion?
 
   if (ledgerApp === 'generic') {
     // Polkadot Generic app: always uses the Polkadot SLIP44 derivation path.
-    return new LedgerGeneric(transport, 'polkadot', knownLedger.polkadot);
+    return new LedgerGeneric(transport, 'polkadot', knownLedger['polkadot']);
   } else if (ledgerApp === 'polymesh') {
     // Polymesh app with explicit user selection: uses the Polymesh SLIP44 derivation path.
-    return new LedgerGeneric(transport, network, knownLedger.polymesh);
+    return new LedgerGeneric(transport, network, knownLedger['polymesh']);
   }
 
   // Shouldn't happen that the app selection is invalid, but fall back to the chain's native SLIP44
   // entry, defaulting to the Polymesh SLIP44 if none is registered.
-  const slip44 = knownLedger[network] ?? knownLedger.polymesh;
+  const slip44 = knownLedger[network] ?? knownLedger['polymesh'];
 
   return new LedgerGeneric(transport, network, slip44);
 }

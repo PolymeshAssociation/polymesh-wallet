@@ -14,12 +14,18 @@ interface AddressState {
   address: string;
 }
 
+interface ExportAccountFormData {
+  confirmPassword: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
 export const ExportAccount: FC = () => {
   const onAction = useContext(ActionContext);
   const { address } = useParams<AddressState>();
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { errors, handleSubmit, register, setError } = useForm({
+  const { errors, handleSubmit, register, setError } = useForm<ExportAccountFormData>({
     defaultValues: {
       confirmPassword: '',
       currentPassword: '',
@@ -28,7 +34,7 @@ export const ExportAccount: FC = () => {
   });
   const isBusy = useContext(ActivityContext);
 
-  const onSubmit = useCallback(async (data: Record<string, string>) => {
+  const onSubmit = useCallback(async (data: ExportAccountFormData) => {
     if (!address) {
       return;
     }

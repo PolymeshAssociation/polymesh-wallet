@@ -1,6 +1,6 @@
 import type { Call } from '@polkadot/types/interfaces';
+import type { PolymeshPrimitivesProtocolFeeProtocolOp } from '@polkadot/types/lookup';
 import type { AnyJson, Codec, SignerPayloadJSON } from '@polkadot/types/types';
-import type { Enum } from '@polkadot/types-codec';
 import type { ResponsePolyCallDetails } from '@polymeshassociation/extension-core/background/types';
 
 import { Vec } from '@polkadot/types-codec';
@@ -36,7 +36,7 @@ async function callDetails (
     const { method, section } = call;
     let opName = upperFirst(section) + upperFirst(method);
 
-    const protocolFeeOpEnum: Enum = api.registry.createType('PolymeshCommonUtilitiesProtocolFeeProtocolOp');
+    const protocolFeeOpEnum: PolymeshPrimitivesProtocolFeeProtocolOp = api.registry.createType('PolymeshPrimitivesProtocolFeeProtocolOp');
 
     // TODO: Remove once AssetRegisterUniqueTicker is added to PolymeshCommonUtilitiesProtocolFeeProtocolOp
     if (opName === 'AssetRegisterUniqueTicker') {
@@ -46,7 +46,11 @@ async function callDetails (
     }
 
     if (protocolFeeOpEnum.defKeys.includes(opName)) {
-      const fee = (await api.query.protocolFee.baseFees(opName)).toString();
+      const protocolFeeOp = api.registry.createType<PolymeshPrimitivesProtocolFeeProtocolOp>(
+        'PolymeshPrimitivesProtocolFeeProtocolOp',
+        opName
+      );
+      const fee = (await api.query.protocolFee.baseFees(protocolFeeOp)).toString();
 
       totalProtocolFee = (BigInt(totalProtocolFee) + BigInt(fee)).toString();
     }

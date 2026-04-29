@@ -72,6 +72,8 @@ export const defaultSs58Format = 42;
 export const defaultNetworkState: NetworkState = {
   customNetworkUrl: '',
   isDeveloper: false,
+  // TODO: Remove once the temporary v7/v8 compatibility layer is no longer needed.
+  isV8: false,
   selected: defaultNetwork,
   ss58Format: defaultSs58Format
 };
