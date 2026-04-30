@@ -115,7 +115,6 @@ export default function Accounts (): React.ReactElement {
               {currentAccount && (
                 <AccountMain
                   account={currentAccount}
-                  details={true}
                 />
               )}
             </AppHeader>

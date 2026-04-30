@@ -21,6 +21,10 @@ const networkSlice = createSlice({
     setGenesisHash (state, action: PayloadAction<HexString | undefined>) {
       state.genesisHash = action.payload;
     },
+    // TODO: Remove this action once the wallet no longer needs a temporary v7 compatibility path.
+    setIsV8 (state, action: PayloadAction<boolean>) {
+      state.isV8 = action.payload;
+    },
     setNetwork (state, action: PayloadAction<NetworkName>) {
       state.selected = action.payload;
     },
@@ -31,5 +35,7 @@ const networkSlice = createSlice({
 });
 
 export const actions = networkSlice.actions;
+
+export const { setIsV8 } = networkSlice.actions;
 
 export default networkSlice.reducer;

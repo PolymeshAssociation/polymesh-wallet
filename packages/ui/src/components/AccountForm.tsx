@@ -53,7 +53,7 @@ export const AccountForm: FC<Props> = ({ defaultName,
     isPasswordSet().then(setPassIsSet).catch(console.error);
   }, []);
 
-  const onSubmit = useCallback(async (data: Record<string, string>) => {
+  const onSubmit = useCallback(async (data: FormInputs) => {
     if (passIsSet) {
       const isValidPassword = await validatePassword(data.password);
 

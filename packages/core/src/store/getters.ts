@@ -1,10 +1,14 @@
 import type { IdentifiedAccount, NetworkName } from '../types';
 
-import { accountsAddresses, accountsCount, customNetworkUrl, didsList, identifiedAccounts, networkUrl, selectedAccount, selectedNetwork } from './selectors';
+import { accountsAddresses, accountsCount, customNetworkUrl, didsList, identifiedAccounts, isV8Network, networkUrl, selectedAccount, selectedNetwork } from './selectors';
 import store from '.';
 
 function getNetwork (): NetworkName {
   return selectedNetwork(store.getState());
+}
+
+function getIsV8Network (): boolean {
+  return isV8Network(store.getState());
 }
 
 function getNetworkUrl (): string {
@@ -40,6 +44,7 @@ export { getAccountsCount,
   getCustomNetworkUrl,
   getDids,
   getIdentifiedAccounts,
+  getIsV8Network,
   getNetwork,
   getNetworkUrl,
   getSelectedAccount };

@@ -62,7 +62,6 @@ function Request ({ authId,
             {currentAccount && (
               <AccountMain
                 account={currentAccount}
-                details={false}
               />
             )}
           </Header>

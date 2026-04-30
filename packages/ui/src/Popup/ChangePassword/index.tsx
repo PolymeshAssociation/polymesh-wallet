@@ -9,10 +9,16 @@ import { Box, Button, Flex, Header, Text, TextInput } from '@polymeshassociation
 
 import { ActionContext, ActivityContext, ValidationError } from '../../components';
 
+interface ChangePasswordFormData {
+  confirmPassword: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
 export const ChangePassword: FC = () => {
   const onAction = useContext(ActionContext);
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { errors, handleSubmit, register, setError } = useForm({
+  const { errors, handleSubmit, register, setError } = useForm<ChangePasswordFormData>({
     defaultValues: {
       confirmPassword: '',
       currentPassword: '',
@@ -21,7 +27,7 @@ export const ChangePassword: FC = () => {
   });
   const isBusy = useContext(ActivityContext);
 
-  const onSubmit = useCallback(async (data: Record<string, string>) => {
+  const onSubmit = useCallback(async (data: ChangePasswordFormData) => {
     const isValidPassword = await validatePassword(data.currentPassword);
 
     if (!isValidPassword) {

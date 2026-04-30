@@ -4,7 +4,6 @@ import type { PolyMessageTypes, PolyTransportRequestMessage } from '../types';
 
 import DotState from '@polkadot/extension-base/background/handlers/State';
 import { PORT_EXTENSION } from '@polkadot/extension-base/defaults';
-import { assert } from '@polkadot/util';
 
 import Extension from './Extension';
 import Tabs from './Tabs';
@@ -38,9 +37,10 @@ export default function handler<TMessageType extends PolyMessageTypes> ({ id, me
     .then((response: unknown): void => {
       console.log(`[out] ${source}`); // :: ${JSON.stringify(response)}`);
 
-      // between the start and the end of the promise, the user may have closed
-      // the tab, in which case port will be undefined
-      assert(port, 'Port has been disconnected');
+      // Background-originated updates may not have a response port.
+      if (!port) {
+        return;
+      }
 
       port.postMessage({ id, response });
     })

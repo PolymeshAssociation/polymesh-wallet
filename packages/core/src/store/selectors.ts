@@ -16,6 +16,11 @@ export const selectedNetwork = createSelector(
   (network) => network.selected
 );
 
+export const isV8Network = createSelector(
+  network,
+  (network) => network.isV8
+);
+
 export const networkUrl = createSelector(
   network,
   ({ customNetworkUrl, selected }) =>

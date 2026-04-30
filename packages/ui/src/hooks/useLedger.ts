@@ -42,6 +42,25 @@ interface State extends StateBase {
   status: Status | null;
 }
 
+function withTimeout<T> (promise: Promise<T>, ms: number, errorMessage: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(errorMessage));
+    }, ms);
+
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error: unknown) => {
+        clearTimeout(timer);
+        reject(error);
+      }
+    );
+  });
+}
+
 function getNetwork (genesis: string): Network | undefined {
   return ledgerChains.find(({ genesisHash }) => genesisHash[0] === genesis);
 }
@@ -124,6 +143,19 @@ function processLedgerError (rawMessage: string): { message: string; status: Sta
     return { message: 'Your Ledger is already in use by another application or browser tab. Close any other app or tab using the device, then try again. If the issue persists, disconnect and reconnect your Ledger.', status: Status.Busy };
   }
 
+  // WebHID can hang without rejecting when the transport is wedged; surface it as recoverable Busy.
+  if (rawMessage.includes('timed out')) {
+    return { message: 'Ledger did not respond in time. Ensure the device is unlocked with the correct app open, then try again. If the issue persists, disconnect and reconnect your Ledger.', status: Status.Busy };
+  }
+
+  if (rawMessage.includes('already open')) {
+    return { message: 'Ledger connection is stale. Reload the page or close and reopen the wallet popup.', status: Status.Busy };
+  }
+
+  if (rawMessage.includes('another wallet window')) {
+    return { message: 'Another wallet window is already using the Ledger device. Use that window, or refresh this popup after it finishes.', status: Status.Busy };
+  }
+
   // No device connected, browser requires a user gesture to select a USB/HID device,
   // or access was denied (e.g. after a failed gesture-gated request in a popup).
   if (
@@ -176,15 +208,15 @@ function retrieveLedger (genesis: string | null, ledgerApp: string, specVersion?
 
   if (ledgerApp === 'generic') {
     // Polkadot Generic app: always uses the Polkadot SLIP44 derivation path.
-    return new LedgerGeneric(transport, 'polkadot', knownLedger.polkadot);
+    return new LedgerGeneric(transport, 'polkadot', knownLedger['polkadot']);
   } else if (ledgerApp === 'polymesh') {
     // Polymesh app with explicit user selection: uses the Polymesh SLIP44 derivation path.
-    return new LedgerGeneric(transport, network, knownLedger.polymesh);
+    return new LedgerGeneric(transport, network, knownLedger['polymesh']);
   }
 
   // Shouldn't happen that the app selection is invalid, but fall back to the chain's native SLIP44
   // entry, defaulting to the Polymesh SLIP44 if none is registered.
-  const slip44 = knownLedger[network] ?? knownLedger.polymesh;
+  const slip44 = knownLedger[network] ?? knownLedger['polymesh'];
 
   return new LedgerGeneric(transport, network, slip44);
 }
@@ -209,6 +241,7 @@ export default function useLedger (
   // Holds the ledger from the previous effect run so we can close its
   // transport when the network changes and a new instance is created.
   const prevLedgerRef = useRef<LedgerGeneric | Ledger | null>(null);
+  const requestInFlightRef = useRef(false);
 
   // Sync ledgerApp from storage events (cross-tab and same-tab).
   useEffect(() => {
@@ -344,23 +377,57 @@ export default function useLedger (
         return;
       }
 
-      if (effectiveApp === 'generic' || effectiveApp === 'polymesh') {
-        // TODO: When isEthereum is true, derive via the Ethereum Ledger app using
-        //       ETH-style derivation instead of the Substrate ss58 prefix path.
-        (ledger as LedgerGeneric).getAddress(def?.prefix ?? 42, false, accountIndex, addressOffset)
-          .then((res) => {
+      const requestLedgerAddress = (): void => {
+        if (requestInFlightRef.current) {
+          return;
+        }
+
+        requestInFlightRef.current = true;
+
+        // Web Locks API provides cross-window mutual exclusion: only one popup
+        // can probe the Ledger device at a time. The lock is automatically
+        // released when the callback promise settles or the window closes.
+        // eslint-disable-next-line no-void
+        void navigator.locks.request('poly:ledger-probe', { ifAvailable: true }, async (lock) => {
+          if (!lock) {
+            requestInFlightRef.current = false;
+            handleGetAddressFailure(new Error('Ledger address request already in progress in another wallet window'));
+
+            return;
+          }
+
+          try {
+            let res: { address: string };
+
+            if (effectiveApp === 'generic' || effectiveApp === 'polymesh') {
+              // TODO: When isEthereum is true, derive via the Ethereum Ledger app using
+              //       ETH-style derivation instead of the Substrate ss58 prefix path.
+              res = await withTimeout(
+                (ledger as LedgerGeneric).getAddress(def?.prefix ?? 42, false, accountIndex, addressOffset),
+                10000,
+                'Ledger getAddress timed out'
+              );
+            } else if (effectiveApp === 'legacy') {
+              res = await withTimeout(
+                (ledger as Ledger).getAddress(false, accountIndex, addressOffset),
+                10000,
+                'Ledger getAddress timed out'
+              );
+            } else {
+              return;
+            }
+
             handleGetAddressSuccess(res.address, 'ed25519');
-          }).catch((e: Error) => {
-            handleGetAddressFailure(e);
-          });
-      } else if (effectiveApp === 'legacy') {
-        (ledger as Ledger).getAddress(false, accountIndex, addressOffset)
-          .then((res) => {
-            handleGetAddressSuccess(res.address, 'ed25519');
-          }).catch((e: Error) => {
-            handleGetAddressFailure(e);
-          });
-      }
+          } catch (e) {
+            handleGetAddressFailure(e as Error);
+          } finally {
+            requestInFlightRef.current = false;
+            ledger.disconnect().catch(console.error);
+          }
+        });
+      };
+
+      requestLedgerAddress();
     };
 
     // Disconnect the previous instance before opening the new one (network or ledger app change).

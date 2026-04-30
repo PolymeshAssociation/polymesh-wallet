@@ -4,8 +4,7 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "node",
-    "noPropertyAccessFromIndexSignature": false,
-    "paths": {
+  "paths": {
       "@polymeshassociation/extension": ["extension/src"],
       "@polymeshassociation/extension/*": ["extension/src/*"],
       "@polymeshassociation/extension-ui": ["ui/src"],
