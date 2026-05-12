@@ -1,3 +1,15 @@
+# [2.6.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.5.0...2.6.0) (2026-05-12)
+
+
+### Bug Fixes
+
+* prevent Ledger contention across multiple wallet windows ([ce7ed02](https://github.com/PolymeshAssociation/polymesh-wallet/commit/ce7ed02a4e5710f86abb329f2b48dd7edf7e5002))
+
+
+### Features
+
+* remove CDD status for v8+ chains ([ad9ad36](https://github.com/PolymeshAssociation/polymesh-wallet/commit/ad9ad36a360bcd456fe1f1272da279995b24e89a))
+
 # [2.5.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.4.1...2.5.0) (2026-04-03)
 
 
