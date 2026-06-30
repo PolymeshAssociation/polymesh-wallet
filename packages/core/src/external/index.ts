@@ -1,5 +1,5 @@
-import apiPromise from './apiPromise';
+import apiPromise, { refreshMetadata } from './apiPromise';
 import callDetails from './callDetails';
 import polyNetworkGet from './polyNetworkGet';
 
-export { apiPromise, callDetails, polyNetworkGet };
+export { apiPromise, callDetails, polyNetworkGet, refreshMetadata };

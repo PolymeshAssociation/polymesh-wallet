@@ -1,14 +1,15 @@
 /* global chrome */
 
 import type { MessageTypes, RequestRpcUnsubscribe, ResponseType } from '@polkadot/extension-base/background/types';
+import type { MetadataDef } from '@polkadot/extension-inject/types';
 import type { KeyringPair } from '@polkadot/keyring/types';
-import type { AllowedPath, PolyMessageTypes, PolyRequestTypes, PolyResponseType, RequestPolyCallDetails, RequestPolyCustomNetworkUrlSet, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyNetworkSet, RequestPolySelectedAccountSet, RequestPolyValidatePassword, ResponsePolyCallDetails } from '../types';
+import type { AllowedPath, PolyMessageTypes, PolyRequestTypes, PolyResponseType, RequestPolyCallDetails, RequestPolyCustomNetworkUrlSet, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyMetadataRefresh, RequestPolyNetworkSet, RequestPolySelectedAccountSet, RequestPolyValidatePassword, ResponsePolyCallDetails } from '../types';
 
 import { withErrorLog } from '@polkadot/extension-base/background';
 import DotExtension from '@polkadot/extension-base/background/handlers/Extension';
 import keyring from '@polkadot/ui-keyring';
 
-import { callDetails } from '@polymeshassociation/extension-core/external';
+import { callDetails, refreshMetadata } from '@polymeshassociation/extension-core/external';
 import { getNetworkUrl } from '@polymeshassociation/extension-core/store/getters';
 import { renameIdentity, setCustomNetworkUrl, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymeshassociation/extension-core/store/setters';
 import { subscribeIdentifiedAccounts, subscribeNetworkState, subscribeSelectedAccount, subscribeSelectedNetwork, subscribeStatus } from '@polymeshassociation/extension-core/store/subscribers';
@@ -130,6 +131,10 @@ export default class Extension extends DotExtension {
     const networkUrl = getNetworkUrl();
 
     return callDetails(request, networkUrl);
+  }
+
+  private polyMetadataRefresh ({ genesisHash }: RequestPolyMetadataRefresh): Promise<MetadataDef | null> {
+    return refreshMetadata(genesisHash);
   }
 
   private polyIsDevToggle (): boolean {
@@ -286,6 +291,9 @@ export default class Extension extends DotExtension {
 
       case 'poly:pri(callDetails.get)':
         return this.polyCallDetailsGet(request as RequestPolyCallDetails);
+
+      case 'poly:pri(metadata.refresh)':
+        return this.polyMetadataRefresh(request as RequestPolyMetadataRefresh);
 
       case 'poly:pri(status.subscribe)':
         return port && this.polyStoreStatusSubscribe(id, port);

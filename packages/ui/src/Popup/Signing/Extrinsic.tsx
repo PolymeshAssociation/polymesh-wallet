@@ -32,8 +32,9 @@ interface DecodedCall {
 
 function Extrinsic ({ onFeeStateChange, onWarningStateChange, payloadExt, request }: Props): React.ReactElement<Props> {
   const { networkState } = useContext(PolymeshContext);
-  const { chain, isLoading: isMetadataLoading } = useMetadata(request.genesisHash);
   const requestSpec = useMemo(() => hexToBn(request.specVersion), [request.specVersion]);
+  const requestSpecNumber = useMemo(() => requestSpec.toNumber(), [requestSpec]);
+  const { chain, isLoading: isMetadataLoading } = useMetadata(request.genesisHash, false, requestSpecNumber);
   const [networkFee, setNetworkFee] = useState('');
   const [protocolFee, setProtocolFee] = useState('');
   const [feeLoading, setFeeLoading] = useState(false);

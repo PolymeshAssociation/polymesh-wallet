@@ -103,14 +103,15 @@ function LedgerSignArea ({ accountIndex,
     signingChannel.postMessage('signing-end');
   }, [signingChannel]);
 
-  const { chain } = useMetadata(genesisHash);
   // Read specVersion directly from the payload (always available) so the correct app is
   // selected immediately without waiting for useMetadata to resolve asynchronously.
   // hexToNumber returns NaN for invalid input; fall back to chain?.specVersion in that case.
   const payloadSpecVersion = payloadJson ? hexToNumber(payloadJson.specVersion) : undefined;
-  const specVersion = (payloadSpecVersion !== undefined && !Number.isNaN(payloadSpecVersion))
+  const requestedSpecVersion = (payloadSpecVersion !== undefined && !Number.isNaN(payloadSpecVersion))
     ? payloadSpecVersion
-    : chain?.specVersion;
+    : undefined;
+  const { chain } = useMetadata(genesisHash, false, requestedSpecVersion);
+  const specVersion = requestedSpecVersion ?? chain?.specVersion;
   const { address: ledgerAddress,
     error: ledgerError,
     isLoading: ledgerLoading,

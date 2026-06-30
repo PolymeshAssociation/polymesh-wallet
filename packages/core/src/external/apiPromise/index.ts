@@ -115,6 +115,48 @@ async function apiPromise (networkUrl: string): Promise<ApiPromise> {
   return api;
 }
 
+export async function refreshMetadata (genesisHash: string): Promise<MetadataDef | null> {
+  if (!api || !provider?.isConnected) {
+    return null;
+  }
+
+  if (api.genesisHash.toHex() !== genesisHash) {
+    return null;
+  }
+
+  try {
+    // The polkadot-js API subscribes to runtime version changes internally and
+    // keeps api.runtimeMetadata / api.runtimeVersion up-to-date automatically,
+    // so no extra RPC call is needed here.
+    const rawMetadata = api.runtimeMetadata.toHex();
+    const specVersion = api.runtimeVersion.specVersion.toNumber();
+    const key = `${genesisHash}-${specVersion}`;
+
+    const def: MetadataDef = {
+      chain: api.runtimeChain.toString(),
+      genesisHash,
+      icon: 'substrate',
+      rawMetadata,
+      specVersion,
+      ss58Format: api.registry.chainSS58 ?? 42,
+      tokenDecimals: api.registry.chainDecimals[0] ?? 6,
+      tokenSymbol: api.registry.chainTokens[0] ?? 'POLYX',
+      types: {},
+      userExtensions: polymeshSignedExtensions
+    };
+
+    metadata[key] = rawMetadata;
+    addMetadata(def);
+    await metaStore.set(genesisHash, def);
+
+    return def;
+  } catch (error) {
+    console.error('Failed to refresh metadata from chain:', error);
+
+    return null;
+  }
+}
+
 export async function disconnect (): Promise<void> {
   if (api) {
     try {

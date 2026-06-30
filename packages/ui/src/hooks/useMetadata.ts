@@ -2,14 +2,14 @@ import type { Chain } from '@polkadot/extension-chains/types';
 
 import { useEffect, useState } from 'react';
 
-import { getMetadata } from '../messaging';
+import { getMetadata, refreshMetadataFromChain } from '../messaging';
 
 interface UseMetadataResult {
   chain: Chain | null;
   isLoading: boolean;
 }
 
-export default function useMetadata (genesisHash?: string | null, isPartial?: boolean): UseMetadataResult {
+export default function useMetadata (genesisHash?: string | null, isPartial?: boolean, requestedSpecVersion?: number): UseMetadataResult {
   const [chain, setChain] = useState<Chain | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -20,10 +20,26 @@ export default function useMetadata (genesisHash?: string | null, isPartial?: bo
       setChain(null);
       setIsLoading(true);
 
-      getMetadata(genesisHash, isPartial)
-        .then((storedChain): void => {
+      const fetchChain = async (): Promise<Chain | null> => {
+        const storedChain = await getMetadata(genesisHash, isPartial);
+
+        // When a specVersion is provided and the stored metadata is outdated,
+        // try refreshing directly from the connected chain before giving up.
+        if (
+          requestedSpecVersion !== undefined &&
+          storedChain !== null &&
+          storedChain.specVersion !== requestedSpecVersion
+        ) {
+          return refreshMetadataFromChain(genesisHash, isPartial);
+        }
+
+        return storedChain;
+      };
+
+      fetchChain()
+        .then((resolvedChain): void => {
           if (!isCancelled) {
-            setChain(storedChain);
+            setChain(resolvedChain);
           }
         })
         .catch((error): void => {
@@ -46,7 +62,7 @@ export default function useMetadata (genesisHash?: string | null, isPartial?: bo
     return (): void => {
       isCancelled = true;
     };
-  }, [genesisHash, isPartial]);
+  }, [genesisHash, isPartial, requestedSpecVersion]);
 
   return { chain, isLoading };
 }

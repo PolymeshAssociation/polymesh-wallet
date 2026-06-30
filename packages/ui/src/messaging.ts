@@ -223,6 +223,26 @@ export async function getMetadata (genesisHash?: string | null, isPartial = fals
   return null;
 }
 
+// Fetch fresh metadata from the connected chain, update the background store,
+// and return the expanded Chain. Used when cached metadata has a stale specVersion
+// (e.g. after a runtime upgrade without a wallet restart).
+export async function refreshMetadataFromChain (genesisHash: string, isPartial = false): Promise<Chain | null> {
+  let def: MetadataDef | null = null;
+
+  try {
+    def = await sendMessage('poly:pri(metadata.refresh)', { genesisHash });
+
+    return def ? metadataExpand(def, isPartial) : null;
+  } finally {
+    // Clear cached getMetadata promise so subsequent calls don't reuse stale data.
+    clearSavedMeta(genesisHash);
+
+    if (def) {
+      setSavedMeta(genesisHash, Promise.resolve(def));
+    }
+  }
+}
+
 export async function getConnectedTabsUrl (): Promise<ConnectedTabsUrlResponse> {
   return sendMessage('pri(connectedTabsUrl.get)', null);
 }

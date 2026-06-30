@@ -1,4 +1,5 @@
 import type { RequestSignatures as DotRequestSignatures } from '@polkadot/extension-base/background/types';
+import type { MetadataDef } from '@polkadot/extension-inject/types';
 import type { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import type { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 import type { HexString } from '@polkadot/util/types';
@@ -89,6 +90,10 @@ export interface RequestPolyGlobalChangePass {
   newPass: string;
 }
 
+export interface RequestPolyMetadataRefresh {
+  genesisHash: string;
+}
+
 export interface PolyRequestSignatures extends DotRequestSignatures {
   // private/internal requests, i.e. from a popup
   'poly:pri(accounts.subscribe)': [ RequestPolyAccountsSubscribe, boolean, IdentifiedAccount[] ];
@@ -107,6 +112,7 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
   'poly:pri(password.isSet)': [RequestPolyIsPasswordSet, boolean];
   'poly:pri(password.validate)': [RequestPolyValidatePassword, boolean];
   'poly:pri(window.open)': [AllowedPath, boolean];
+  'poly:pri(metadata.refresh)': [RequestPolyMetadataRefresh, MetadataDef | null];
   // public/external requests, i.e. from a page
   'poly:pub(network.get)': [RequestPolyNetworkGet, NetworkMeta];
   'poly:pub(network.subscribe)': [ RequestPolyNetworkMetaSubscribe, string, NetworkMeta ];
