@@ -138,6 +138,20 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
       let prevAccounts: string[] = [];
 
       const subscribeAccounts = (activeIssuers: Set<string>) => {
+        // Flush any per-account chain subscriptions left over from a previous network
+        // connection. prevAccounts resets to [] on each initApiPromise call, so the
+        // observeAccounts callback would never clean these up on its first fire,
+        // allowing stale queryMulti callbacks to dispatch wrong-chain data.
+        for (const key in accountUnsubCallbacks) {
+          try {
+            accountUnsubCallbacks[key]?.();
+          } catch (e) {
+            console.error(e);
+          }
+
+          delete accountUnsubCallbacks[key];
+        }
+
         /**
          * Accounts
          */
@@ -186,6 +200,10 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
                     FrameSystemAccountInfo,
                     Option<PolymeshPrimitivesSecondaryKeyKeyRecord>
                   ]) => {
+                    if (network !== getNetwork()) {
+                      return;
+                    }
+
                     // Store account metadata
                     const { locked, total, transferrable } = accountBalances(
                       accData.data,
@@ -248,6 +266,10 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
                           linkedKeyInfoObj.asMultiSigSignerKey
                         ));
 
+                      if (network !== getNetwork()) {
+                        return;
+                      }
+
                       if (msLinkedKeyInfo?.isEmpty) {
                         // Signer key can point to a multisig that is no longer linked to a DID.
                         store.dispatch(
@@ -306,6 +328,11 @@ const initApiPromise = (network: NetworkName, networkUrl: string) =>
                           target: did
                         }
                       );
+
+                      if (network !== getNetwork()) {
+                        return;
+                      }
+
                       const cddData = claimData
                         .map(([, claim]) => claim)
                         .filter((claim) => !claim.isEmpty)
@@ -423,6 +450,9 @@ function subscribePolymesh (): () => void {
         if (network) {
           console.log('Poly: Selected network', network);
           store.dispatch(statusActions.init());
+          // Eagerly clear stale identity mappings so the UI never shows
+          // previous-network identity data while waiting for the first new callbacks.
+          store.dispatch(identityActions.clearCurrentIdentities());
           const networkUrl = getNetworkUrl();
 
           await initApiPromise(network, networkUrl);
@@ -446,6 +476,8 @@ function subscribePolymesh (): () => void {
       if (customNetworkUrl && !firstCall) {
         console.log('Poly: Custom rpc url', customNetworkUrl);
         store.dispatch(statusActions.init());
+        // Eagerly clear stale identity mappings (mirrors network-switch handler).
+        store.dispatch(identityActions.clearCurrentIdentities());
         const network = getNetwork();
 
         await initApiPromise(network, customNetworkUrl);
