@@ -1,3 +1,15 @@
+# [2.7.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.6.0...2.7.0) (2026-07-03)
+
+
+### Bug Fixes
+
+* clear stale account subscriptions and identity state on network changes ([b48ed36](https://github.com/PolymeshAssociation/polymesh-wallet/commit/b48ed365dc7376dae433b0bc8c8d1cd9de2f1ca2))
+
+
+### Features
+
+* refresh metadata if the available metadata specVersion mismatches ([15ab8d6](https://github.com/PolymeshAssociation/polymesh-wallet/commit/15ab8d6fb0cf6d250c370141016ff9eb37ec2ea6))
+
 # [2.6.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.5.0...2.6.0) (2026-05-12)
 
 
