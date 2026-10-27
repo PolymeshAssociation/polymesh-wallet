@@ -30,7 +30,7 @@ export default function Accounts (): React.ReactElement {
   const { currentAccount, polymeshAccounts, selectedAccount } =
     useContext(PolymeshContext);
   const history = useHistory();
-  const { isLedgerCapable, isLedgerEnabled } = useLedger();
+  const { isLedgerCapable } = useLedger();
 
   const isPopup = useIsPopup();
 
@@ -74,15 +74,11 @@ export default function Accounts (): React.ReactElement {
         { label: 'Create new account', value: 'new' },
         { label: 'Restore with recovery phrase', value: 'fromSeed' },
         { label: 'Import account with JSON file', value: 'fromJson' },
-        ...(isLedgerEnabled
-          ? [
-            {
-              disabled: !isLedgerCapable,
-              label: isLedgerCapable ? 'Attach Ledger account' : 'Chrome browser is required to use Ledger',
-              value: 'fromLedger'
-            }
-          ]
-          : [{ label: 'Connect Ledger device', value: 'connectLedger' }])
+        {
+          disabled: !isLedgerCapable,
+          label: isLedgerCapable ? 'Attach Ledger account' : 'Chrome browser is required to use Ledger',
+          value: 'fromLedger'
+        }
       ]
     }
   ];
@@ -97,7 +93,6 @@ export default function Accounts (): React.ReactElement {
         case 'fromJson':
           return isPopup ? _openWindow(jsonPath) : history.push(jsonPath);
         case 'fromLedger':
-        case 'connectLedger':
           return isPopup ? _openWindow(ledgerPath) : history.push(ledgerPath);
       }
     })().catch(console.error);

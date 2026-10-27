@@ -179,8 +179,8 @@ export function formatLedgerError (message: string): string {
 }
 
 function getState (): StateBase {
-  const w = window as unknown as { USB?: unknown; hid?: unknown };
-  const isLedgerCapable = !!(w.hid || w.USB);
+  // WebHID and WebUSB live on navigator; window.hid never exists.
+  const isLedgerCapable = 'hid' in navigator || 'usb' in navigator;
 
   return {
     isLedgerCapable,

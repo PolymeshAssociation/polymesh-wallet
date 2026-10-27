@@ -16,7 +16,7 @@ function AddAccount (): React.ReactElement {
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const isPopup = useIsPopup();
-  const { isLedgerEnabled } = useLedger();
+  const { isLedgerCapable } = useLedger();
   const history = useHistory();
 
   const _openWindow = useCallback((path: AllowedPath) => windowOpen(path), []);
@@ -37,15 +37,15 @@ function AddAccount (): React.ReactElement {
     [onCreateOrImportAccount]
   );
 
+  // The browser only shows the HID/USB device prompt in a full tab, never in the popup.
   const onConnectLedger = useCallback((): void => {
-    if (!isLedgerEnabled && isPopup) {
+    if (isPopup) {
       _openWindow('/account/import-ledger')
-        .then(console.log)
         .catch(console.error);
     } else {
       onAction('/account/import-ledger');
     }
-  }, [_openWindow, isLedgerEnabled, isPopup, onAction]);
+  }, [_openWindow, isPopup, onAction]);
 
   const handleClickPolicy = useCallback(() => setPolicyAccepted(!policyAccepted), [policyAccepted]);
   const handleClickTerms = useCallback(() => setTermsAccepted(!termsAccepted), [termsAccepted]);
@@ -172,7 +172,7 @@ function AddAccount (): React.ReactElement {
             mx='xs'
           >
             <Button
-              disabled={!(policyAccepted && termsAccepted)}
+              disabled={!(policyAccepted && termsAccepted) || !isLedgerCapable}
               fluid
               onClick={onConnectLedger}
               variant='secondary'
@@ -184,7 +184,7 @@ function AddAccount (): React.ReactElement {
                   width={24}
                 />
               </Box>
-              Connect your Ledger
+              {isLedgerCapable ? 'Connect your Ledger' : 'Chrome browser is required to use Ledger'}
             </Button>
           </Box>
         </Box>
