@@ -11,11 +11,6 @@ import { POLYMESH_GENERIC_SPEC_VERSION } from '@polymeshassociation/extension-co
 
 import { ledgerChains } from '../util/chains';
 
-interface StateBase {
-  isLedgerCapable: boolean;
-  isLedgerEnabled: boolean;
-}
-
 export enum Status {
   Loading = 'Loading',
   Device = 'Device',
@@ -27,13 +22,11 @@ export enum Status {
   Ok = 'Ok',
 }
 
-interface State extends StateBase {
+interface State {
   address: string | null;
   error: string | null;
   rawError: string | null;
   ledgerApp: string;
-  isLedgerCapable: boolean;
-  isLedgerEnabled: boolean;
   isLoading: boolean;
   isLocked: boolean;
   ledger: LedgerGeneric | Ledger | null;
@@ -178,20 +171,13 @@ export function formatLedgerError (message: string): string {
   return processLedgerError(message).message;
 }
 
-function getState (): StateBase {
-  const w = window as unknown as { USB?: unknown; hid?: unknown };
-  const isLedgerCapable = !!(w.hid || w.USB);
-
-  return {
-    isLedgerCapable,
-    isLedgerEnabled: isLedgerCapable
-  };
+export function isLedgerCapable (): boolean {
+  // WebHID and WebUSB live on navigator; window.hid never exists.
+  return 'hid' in navigator || 'usb' in navigator;
 }
 
 function retrieveLedger (genesis: string | null, ledgerApp: string, specVersion?: number): LedgerGeneric | Ledger {
-  const { isLedgerCapable } = getState();
-
-  assert(isLedgerCapable, 'Incompatible browser, only Chrome is supported');
+  assert(isLedgerCapable(), 'Incompatible browser, only Chrome is supported');
   const transport = getTransportType();
 
   // def may be undefined for development/unknown chains — only legacy (chainSpecific) requires it.
@@ -472,7 +458,6 @@ export default function useLedger (
   }, [ledger]);
 
   return {
-    ...getState(),
     address,
     error,
     isLoading,

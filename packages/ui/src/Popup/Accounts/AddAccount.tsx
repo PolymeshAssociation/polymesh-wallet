@@ -1,22 +1,21 @@
 import type { AllowedPath } from '@polymeshassociation/extension-core/background/types';
 
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import { SvgLedger } from '@polymeshassociation/extension-ui/assets/images/icons';
 import SvgWalletLogo from '@polymeshassociation/extension-ui/assets/images/SvgWalletLogo';
-import { useIsPopup, useLedger } from '@polymeshassociation/extension-ui/hooks';
+import { useIsPopup } from '@polymeshassociation/extension-ui/hooks';
+import { isLedgerCapable } from '@polymeshassociation/extension-ui/hooks/useLedger';
 import { windowOpen } from '@polymeshassociation/extension-ui/messaging';
 
-import { ActionContext } from '../../components';
 import { Box, Button, Checkbox, Flex, Header, Heading, Icon, Link, Text } from '../../ui';
 
 function AddAccount (): React.ReactElement {
-  const onAction = useContext(ActionContext);
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const isPopup = useIsPopup();
-  const { isLedgerEnabled } = useLedger();
+  const isLedgerSupported = isLedgerCapable();
   const history = useHistory();
 
   const _openWindow = useCallback((path: AllowedPath) => windowOpen(path), []);
@@ -37,15 +36,11 @@ function AddAccount (): React.ReactElement {
     [onCreateOrImportAccount]
   );
 
-  const onConnectLedger = useCallback((): void => {
-    if (!isLedgerEnabled && isPopup) {
-      _openWindow('/account/import-ledger')
-        .then(console.log)
-        .catch(console.error);
-    } else {
-      onAction('/account/import-ledger');
-    }
-  }, [_openWindow, isLedgerEnabled, isPopup, onAction]);
+  // The browser only shows the HID/USB device prompt in a full tab, never in the popup.
+  const onConnectLedger = useCallback(
+    () => onCreateOrImportAccount('/account/import-ledger'),
+    [onCreateOrImportAccount]
+  );
 
   const handleClickPolicy = useCallback(() => setPolicyAccepted(!policyAccepted), [policyAccepted]);
   const handleClickTerms = useCallback(() => setTermsAccepted(!termsAccepted), [termsAccepted]);
@@ -172,7 +167,7 @@ function AddAccount (): React.ReactElement {
             mx='xs'
           >
             <Button
-              disabled={!(policyAccepted && termsAccepted)}
+              disabled={!(policyAccepted && termsAccepted) || !isLedgerSupported}
               fluid
               onClick={onConnectLedger}
               variant='secondary'
@@ -184,7 +179,7 @@ function AddAccount (): React.ReactElement {
                   width={24}
                 />
               </Box>
-              Connect your Ledger
+              {isLedgerSupported ? 'Connect your Ledger' : 'Chrome browser is required to use Ledger'}
             </Button>
           </Box>
         </Box>
