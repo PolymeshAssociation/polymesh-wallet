@@ -8,7 +8,7 @@ import { useErrorHandler } from 'react-error-boundary';
 import { AccountForm } from '@polymeshassociation/extension-ui/components/AccountForm';
 
 import { ActionContext } from '../../components';
-import { changePassword, jsonRestore } from '../../messaging';
+import { polyJsonRestore } from '../../messaging';
 import { UploadJson } from './components/UploadJson';
 
 export const RestoreFromJson: FC = () => {
@@ -45,14 +45,9 @@ export const RestoreFromJson: FC = () => {
         accountJson.meta.isHidden = undefined;
         accountJson.meta.name = newAccountInfo.accountName;
 
-        await jsonRestore(accountJson, jsonPassword);
-        // Change from the original JSON password to the password the user has just provided
-        // by AccountForm.
-        await changePassword(
-          accountJson.address,
-          jsonPassword,
-          newAccountInfo.password
-        );
+        // Decrypt with the JSON password and store with the wallet password in one step,
+        // so a failure never leaves the account on the JSON file's password.
+        await polyJsonRestore(accountJson, jsonPassword, newAccountInfo.password);
 
         onAction('/');
       })().catch(errorHandler);

@@ -383,6 +383,10 @@ export async function getPolyCallDetails (
   return sendMessage('poly:pri(callDetails.get)', { request });
 }
 
+export async function polyJsonRestore (file: KeyringPair$Json, password: string, walletPassword: string): Promise<boolean> {
+  return sendMessage('poly:pri(json.restore)', { file, password, walletPassword });
+}
+
 export async function globalChangePass (oldPass: string, newPass: string): Promise<boolean> {
   return sendMessage('poly:pri(global.changePass)', { newPass, oldPass });
 }

@@ -2,8 +2,7 @@
 
 import type { MessageTypes, RequestRpcUnsubscribe, ResponseType } from '@polkadot/extension-base/background/types';
 import type { MetadataDef } from '@polkadot/extension-inject/types';
-import type { KeyringPair } from '@polkadot/keyring/types';
-import type { AllowedPath, PolyMessageTypes, PolyRequestTypes, PolyResponseType, RequestPolyCallDetails, RequestPolyCustomNetworkUrlSet, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyMetadataRefresh, RequestPolyNetworkSet, RequestPolySelectedAccountSet, RequestPolyValidatePassword, ResponsePolyCallDetails } from '../types';
+import type { AllowedPath, PolyMessageTypes, PolyRequestTypes, PolyResponseType, RequestPolyCallDetails, RequestPolyCustomNetworkUrlSet, RequestPolyGlobalChangePass, RequestPolyIdentityRename, RequestPolyJsonRestore, RequestPolyMetadataRefresh, RequestPolyNetworkSet, RequestPolySelectedAccountSet, RequestPolyValidatePassword, ResponsePolyCallDetails } from '../types';
 
 import { withErrorLog } from '@polkadot/extension-base/background';
 import DotExtension from '@polkadot/extension-base/background/handlers/Extension';
@@ -13,9 +12,9 @@ import { callDetails, refreshMetadata } from '@polymeshassociation/extension-cor
 import { getNetworkUrl } from '@polymeshassociation/extension-core/store/getters';
 import { renameIdentity, setCustomNetworkUrl, setNetwork, setSelectedAccount, toggleIsDeveloper } from '@polymeshassociation/extension-core/store/setters';
 import { subscribeIdentifiedAccounts, subscribeNetworkState, subscribeSelectedAccount, subscribeSelectedNetwork, subscribeStatus } from '@polymeshassociation/extension-core/store/subscribers';
-import { recodeAddress } from '@polymeshassociation/extension-core/utils';
 
 import { ALLOWED_PATH } from '../types';
+import { canUnlock, changeAllPasswords } from './passwords';
 import { createSubscription, unsubscribe } from './subscriptions';
 
 /**
@@ -143,59 +142,37 @@ export default class Extension extends DotExtension {
     return true;
   }
 
-  private _changePassword (
-    pair: KeyringPair,
-    oldPass: string,
-    newPass: string
-  ): boolean {
-    try {
-      if (!pair.isLocked) {
-        pair.lock();
-      }
-
-      pair.decodePkcs8(oldPass);
-    } catch (_error) {
-      return false;
-    }
-
-    keyring.encryptAccount(pair, newPass);
-
-    return true;
-  }
-
   private globalChangePassword ({ newPass,
     oldPass }: RequestPolyGlobalChangePass): boolean {
     const pairs = keyring
       .getPairs()
       .filter((account) => !account.meta.isHardware);
 
-    let i = 0;
+    return changeAllPasswords(pairs, oldPass, newPass, (pair, password) => keyring.encryptAccount(pair, password));
+  }
 
-    // Change passwords of all keys one by one.
-    for (i; i < pairs.length; i++) {
-      const ret = this._changePassword(pairs[i], oldPass, newPass);
-
-      // If password change for key "i" failed, do NOT change password
-      // for the remaining accounts.
-
-      if (!ret) {
-        console.error(
-          'Changing password of account',
-          recodeAddress(pairs[i].address, 12),
-          'has failed. Rolling back...'
-        );
-        break;
-      }
+  /**
+   * Imports an account from a JSON backup and stores it encrypted with the wallet password,
+   * in one step. Nothing is stored unless the backup password and the wallet password both
+   * check out, so a failed import never leaves an account on a different password.
+   */
+  private polyJsonRestore ({ file, password, walletPassword }: RequestPolyJsonRestore): boolean {
+    if (this.isPasswordSet() && !this.validatePassword({ password: walletPassword })) {
+      throw new Error('Invalid wallet password');
     }
 
-    // If one or more attempts to change passwords failed:
-    if (i < pairs.length - 1) {
-      // Rollback whatever password we managed to change.
-      for (let j = 0; j < i; j++) {
-        this._changePassword(pairs[j], newPass, oldPass);
-      }
+    const pair = keyring.createFromJson(file);
 
-      return false;
+    try {
+      pair.decodePkcs8(password);
+    } catch (_error) {
+      throw new Error('Unable to decode using the supplied passphrase');
+    }
+
+    try {
+      keyring.addPair(pair, walletPassword);
+    } finally {
+      pair.lock();
     }
 
     return true;
@@ -222,21 +199,7 @@ export default class Extension extends DotExtension {
       .filter((pair) => !pair.meta.isHardware)[0];
 
     // Try to validate against an existing pair.
-    if (nonLedgerPair) {
-      try {
-        if (!nonLedgerPair.isLocked) {
-          nonLedgerPair.lock();
-        }
-
-        nonLedgerPair.decodePkcs8(password);
-
-        return true;
-      } catch (_error) {
-        return false;
-      }
-    }
-
-    return false;
+    return !!nonLedgerPair && canUnlock(nonLedgerPair, password);
   }
 
   private _windowOpen (path: AllowedPath): boolean {
@@ -308,6 +271,9 @@ export default class Extension extends DotExtension {
         return this.globalChangePassword(
           request as RequestPolyGlobalChangePass
         );
+
+      case 'poly:pri(json.restore)':
+        return this.polyJsonRestore(request as RequestPolyJsonRestore);
 
       case 'poly:pri(window.open)':
         return this._windowOpen(request as AllowedPath);

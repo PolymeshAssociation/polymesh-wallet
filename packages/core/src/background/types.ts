@@ -1,5 +1,6 @@
 import type { RequestSignatures as DotRequestSignatures } from '@polkadot/extension-base/background/types';
 import type { MetadataDef } from '@polkadot/extension-inject/types';
+import type { KeyringPair$Json } from '@polkadot/keyring/types';
 import type { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import type { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 import type { HexString } from '@polkadot/util/types';
@@ -90,6 +91,14 @@ export interface RequestPolyGlobalChangePass {
   newPass: string;
 }
 
+export interface RequestPolyJsonRestore {
+  file: KeyringPair$Json;
+  // Password the JSON backup is encrypted with.
+  password: string;
+  // Password to store the account with: the current wallet password, or a new one if none is set.
+  walletPassword: string;
+}
+
 export interface RequestPolyMetadataRefresh {
   genesisHash: string;
 }
@@ -111,6 +120,7 @@ export interface PolyRequestSignatures extends DotRequestSignatures {
   'poly:pri(global.changePass)': [RequestPolyGlobalChangePass, boolean];
   'poly:pri(password.isSet)': [RequestPolyIsPasswordSet, boolean];
   'poly:pri(password.validate)': [RequestPolyValidatePassword, boolean];
+  'poly:pri(json.restore)': [RequestPolyJsonRestore, boolean];
   'poly:pri(window.open)': [AllowedPath, boolean];
   'poly:pri(metadata.refresh)': [RequestPolyMetadataRefresh, MetadataDef | null];
   // public/external requests, i.e. from a page
