@@ -7,7 +7,8 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 import { SvgPlus } from '@polymeshassociation/extension-ui/assets/images/icons';
-import { useIsPopup, useLedger } from '@polymeshassociation/extension-ui/hooks';
+import { useIsPopup } from '@polymeshassociation/extension-ui/hooks';
+import { isLedgerCapable } from '@polymeshassociation/extension-ui/hooks/useLedger';
 import { windowOpen } from '@polymeshassociation/extension-ui/messaging';
 import { hasKey } from '@polymeshassociation/extension-ui/styles/utils';
 
@@ -30,7 +31,7 @@ export default function Accounts (): React.ReactElement {
   const { currentAccount, polymeshAccounts, selectedAccount } =
     useContext(PolymeshContext);
   const history = useHistory();
-  const { isLedgerCapable, isLedgerEnabled } = useLedger();
+  const isLedgerSupported = isLedgerCapable();
 
   const isPopup = useIsPopup();
 
@@ -74,15 +75,11 @@ export default function Accounts (): React.ReactElement {
         { label: 'Create new account', value: 'new' },
         { label: 'Restore with recovery phrase', value: 'fromSeed' },
         { label: 'Import account with JSON file', value: 'fromJson' },
-        ...(isLedgerEnabled
-          ? [
-            {
-              disabled: !isLedgerCapable,
-              label: isLedgerCapable ? 'Attach Ledger account' : 'Chrome browser is required to use Ledger',
-              value: 'fromLedger'
-            }
-          ]
-          : [{ label: 'Connect Ledger device', value: 'connectLedger' }])
+        {
+          disabled: !isLedgerSupported,
+          label: isLedgerSupported ? 'Attach Ledger account' : 'Chrome browser is required to use Ledger',
+          value: 'fromLedger'
+        }
       ]
     }
   ];
@@ -97,7 +94,6 @@ export default function Accounts (): React.ReactElement {
         case 'fromJson':
           return isPopup ? _openWindow(jsonPath) : history.push(jsonPath);
         case 'fromLedger':
-        case 'connectLedger':
           return isPopup ? _openWindow(ledgerPath) : history.push(ledgerPath);
       }
     })().catch(console.error);
