@@ -1,5 +1,4 @@
-import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
-
+import { isExtrinsicRequest } from '@polkadot/extension-base/utils';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { recodeAddress } from '@polymeshassociation/extension-core/utils';
@@ -7,12 +6,6 @@ import { recodeAddress } from '@polymeshassociation/extension-core/utils';
 import { Loading, PolymeshContext, SigningReqContext } from '../../components';
 import Request from './Request';
 import SigningHeader from './SigningHeader';
-
-function isRawPayload (
-  payload: SignerPayloadJSON | SignerPayloadRaw
-): payload is SignerPayloadRaw {
-  return !!(payload as SignerPayloadRaw).data;
-}
 
 export default function Signing (): React.ReactElement {
   const requests = useContext(SigningReqContext);
@@ -44,16 +37,17 @@ export default function Signing (): React.ReactElement {
           : requests[requests.length - 1]
         : requests[0]
       : null;
-  const isTransaction = !!(request?.request?.payload as SignerPayloadJSON)
-    ?.blockNumber;
-  const requestPayload = request?.request.payload;
+  const signRequest = request?.request;
+  // Must use the same check as Request, which picks the message or transaction view, so the
+  // title and the body can never disagree.
+  const isTransaction = !!signRequest && isExtrinsicRequest(signRequest);
   const requestGenesisHash = useMemo(() => {
-    if (!requestPayload || isRawPayload(requestPayload)) {
+    if (!signRequest || !isExtrinsicRequest(signRequest)) {
       return null;
     }
 
-    return requestPayload.genesisHash;
-  }, [requestPayload]);
+    return signRequest.payload.genesisHash;
+  }, [signRequest]);
 
   const isRequestChainSelected =
     !!requestGenesisHash &&

@@ -1,7 +1,7 @@
 import type { AccountJson, RequestSign } from '@polkadot/extension-base/background/types';
 import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
-import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 
+import { isExtrinsicRequest } from '@polkadot/extension-base/utils';
 import { TypeRegistry } from '@polkadot/types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -43,12 +43,6 @@ interface DecodeState {
 // keep it global, we can and will re-use this across requests
 const registry = new TypeRegistry();
 
-function isRawPayload (
-  payload: SignerPayloadJSON | SignerPayloadRaw
-): payload is SignerPayloadRaw {
-  return !!(payload as SignerPayloadRaw).data;
-}
-
 export default function Request ({ account: { accountIndex, addressOffset, isExternal, isHardware },
   buttonText,
   request,
@@ -68,26 +62,33 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
   const [decodeState, setDecodeState] = useState<DecodeState>({});
 
   useEffect((): void => {
-    const payload = request.payload;
+    // Message or transaction follows the channel the request arrived on, never the payload
+    // fields, which come from the dApp and can describe either shape.
+    if (isExtrinsicRequest(request)) {
+      const json = request.payload;
 
-    if (isRawPayload(payload)) {
-      setData({
-        hexBytes: payload.data,
-        payload: null
-      });
-    } else {
       try {
-        registry.setSignedExtensions(payload.signedExtensions, polymeshSignedExtensions);
+        registry.setSignedExtensions(json.signedExtensions, polymeshSignedExtensions);
 
         setData({
           hexBytes: null,
-          payload: registry.createType('ExtrinsicPayload', payload, {
-            version: payload.version
+          payload: registry.createType('ExtrinsicPayload', json, {
+            version: json.version
           })
         });
       } catch (error) {
+        // Don't leave the previous request's payload to render against this one.
+        setData({
+          hexBytes: null,
+          payload: null
+        });
         setError((error as Error).toString());
       }
+    } else {
+      setData({
+        hexBytes: request.payload.data,
+        payload: null
+      });
     }
   }, [request]);
 
@@ -112,8 +113,15 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
     : undefined;
   const shouldRejectOnly = !!externalRejectMessage;
 
-  if (payload !== null) {
-    const json = request.payload as SignerPayloadJSON;
+  // Branch on the request rather than the decoded state, so a render that lands before the
+  // effect has caught up shows nothing instead of the previous request's view.
+  if (isExtrinsicRequest(request)) {
+    const json = request.payload;
+
+    if (payload === null) {
+      return null;
+    }
+
     const footerExtra = (
       <FeeSummary
         feeLoading={feeState.feeLoading}
@@ -174,8 +182,13 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
         />
       </>
     );
-  } else if (hexBytes !== null) {
-    const raw = request.payload as SignerPayloadRaw;
+  } else {
+    const raw = request.payload;
+
+    if (hexBytes === null) {
+      return null;
+    }
+
     const rejectMessage = isHardware
       ? 'Ledger devices do not support signing raw data.'
       : externalRejectMessage;
@@ -200,8 +213,6 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
       </>
     );
   }
-
-  return null;
 }
 
 const RequestContent = styled.div`
