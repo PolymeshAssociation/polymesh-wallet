@@ -3,6 +3,7 @@
 import type DotState from '@polkadot/extension-base/background/handlers/State';
 import type { MessageTypes, RequestRpcUnsubscribe } from '@polkadot/extension-base/background/types';
 import type { InjectedAccount } from '@polkadot/extension-inject/types';
+import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import type { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import type { Subscription } from 'rxjs';
 import type { NetworkMeta } from '@polymeshassociation/extension-core/types';
@@ -18,6 +19,7 @@ import { getSelectedAccount } from '@polymeshassociation/extension-core/store/ge
 import { subscribeSelectedAccount } from '@polymeshassociation/extension-core/store/subscribers';
 import { prioritize } from '@polymeshassociation/extension-core/utils';
 
+import { assertExtrinsicPayload, assertRawPayload } from './signingPayloads';
 import { createSubscription, unsubscribe } from './subscriptions';
 
 interface AccountSub {
@@ -201,6 +203,16 @@ export default class Tabs extends DotTabs {
           url,
           request as RequestPolyAccountUnsubscribe
         );
+
+      case 'pub(extrinsic.sign)':
+        assertExtrinsicPayload(request as SignerPayloadJSON);
+
+        return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, url, port);
+
+      case 'pub(bytes.sign)':
+        assertRawPayload(request as SignerPayloadRaw);
+
+        return super.handle(id, type as MessageTypes, request as RequestRpcUnsubscribe, url, port);
 
       case 'pub(metadata.provide)':
         // Deny dApp requests to provide metadata. The Polymesh wallet fetches

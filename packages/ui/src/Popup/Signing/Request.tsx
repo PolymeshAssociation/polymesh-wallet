@@ -3,7 +3,7 @@ import type { ExtrinsicPayload } from '@polkadot/types/interfaces';
 
 import { isExtrinsicRequest } from '@polkadot/extension-base/utils';
 import { TypeRegistry } from '@polkadot/types';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import polymeshSignedExtensions from '@polymeshassociation/polymesh-types/signedExtensions';
@@ -22,11 +22,6 @@ interface Props {
   request: RequestSign;
   signId: string;
   url: string;
-}
-
-interface Data {
-  hexBytes: string | null;
-  payload: ExtrinsicPayload | null;
 }
 
 interface FeeState {
@@ -49,10 +44,6 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
   signId,
   url }: Props): React.ReactElement<Props> | null {
   const onAction = useContext(ActionContext);
-  const [{ hexBytes, payload }, setData] = useState<Data>({
-    hexBytes: null,
-    payload: null
-  });
   const [error, setError] = useState<string | null>(null);
   const [feeState, setFeeState] = useState<FeeState>({
     feeLoading: false,
@@ -61,35 +52,21 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
   });
   const [decodeState, setDecodeState] = useState<DecodeState>({});
 
-  useEffect((): void => {
-    // Message or transaction follows the channel the request arrived on, never the payload
-    // fields, which come from the dApp and can describe either shape.
-    if (isExtrinsicRequest(request)) {
-      const json = request.payload;
-
-      try {
-        registry.setSignedExtensions(json.signedExtensions, polymeshSignedExtensions);
-
-        setData({
-          hexBytes: null,
-          payload: registry.createType('ExtrinsicPayload', json, {
-            version: json.version
-          })
-        });
-      } catch (error) {
-        // Don't leave the previous request's payload to render against this one.
-        setData({
-          hexBytes: null,
-          payload: null
-        });
-        setError((error as Error).toString());
-      }
-    } else {
-      setData({
-        hexBytes: request.payload.data,
-        payload: null
-      });
+  // Message or transaction follows the channel the request arrived on, never the payload fields,
+  // which come from the dApp and can describe either shape. Decoding during render keeps the view
+  // and the request in step; a failure throws to the error boundary in Signing, which offers Cancel.
+  const payload = useMemo((): ExtrinsicPayload | null => {
+    if (!isExtrinsicRequest(request)) {
+      return null;
     }
+
+    const json = request.payload;
+
+    registry.setSignedExtensions(json.signedExtensions, polymeshSignedExtensions);
+
+    return registry.createType('ExtrinsicPayload', json, {
+      version: json.version
+    });
   }, [request]);
 
   const _onSignature = useCallback(
@@ -113,8 +90,6 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
     : undefined;
   const shouldRejectOnly = !!externalRejectMessage;
 
-  // Branch on the request rather than the decoded state, so a render that lands before the
-  // effect has caught up shows nothing instead of the previous request's view.
   if (isExtrinsicRequest(request)) {
     const json = request.payload;
 
@@ -184,11 +159,6 @@ export default function Request ({ account: { accountIndex, addressOffset, isExt
     );
   } else {
     const raw = request.payload;
-
-    if (hexBytes === null) {
-      return null;
-    }
-
     const rejectMessage = isHardware
       ? 'Ledger devices do not support signing raw data.'
       : externalRejectMessage;

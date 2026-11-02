@@ -1,11 +1,13 @@
 import { isExtrinsicRequest } from '@polkadot/extension-base/utils';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { recodeAddress } from '@polymeshassociation/extension-core/utils';
 
 import { Loading, PolymeshContext, SigningReqContext } from '../../components';
 import Request from './Request';
 import SigningHeader from './SigningHeader';
+import UnreadableRequest from './UnreadableRequest';
 
 export default function Signing (): React.ReactElement {
   const requests = useContext(SigningReqContext);
@@ -71,6 +73,11 @@ export default function Signing (): React.ReactElement {
     return undefined;
   }, [polymeshAccounts, request]);
 
+  const renderUnreadable = useCallback(
+    () => (request ? <UnreadableRequest signId={request.id} /> : null),
+    [request]
+  );
+
   const canShowBalance = !!signingAccount && !!requestGenesisHash && isRequestChainSelected;
   const displayAddress = request?.account.address;
 
@@ -88,13 +95,19 @@ export default function Signing (): React.ReactElement {
           title={isTransaction ? 'Transaction' : 'Sign message'}
           totalRequests={requests.length}
         />
-        <Request
-          account={request.account}
-          buttonText={'Sign'}
-          request={request.request}
-          signId={request.id}
-          url={request.url}
-        />
+        <ErrorBoundary
+          fallbackRender={renderUnreadable}
+          onError={console.error}
+          resetKeys={[request.id]}
+        >
+          <Request
+            account={request.account}
+            buttonText={'Sign'}
+            request={request.request}
+            signId={request.id}
+            url={request.url}
+          />
+        </ErrorBoundary>
       </>
     )
     : (
