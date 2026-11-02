@@ -1,7 +1,7 @@
 import type { Call, ExtrinsicPayload } from '@polkadot/types/interfaces';
 import type { AnyJson, SignerPayloadJSON } from '@polkadot/types/types';
 
-import { hexToBn } from '@polkadot/util';
+import { hexToBn, hexToU8a } from '@polkadot/util';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import { PolymeshContext } from '@polymeshassociation/extension-ui/components';
@@ -59,6 +59,13 @@ function Extrinsic ({ onFeeStateChange, onWarningStateChange, payloadExt, reques
 
     try {
       const call = chain.registry.createType('Call', request.method);
+
+      // The decoder pads a short method and ignores trailing bytes, so the call shown would not be
+      // what is signed. Treat any mismatch as a failed decode.
+      if (call.encodedLength !== hexToU8a(request.method).length) {
+        return null;
+      }
+
       const humanArgs = (call.toHuman() as { args: AnyJson }).args;
 
       return {
