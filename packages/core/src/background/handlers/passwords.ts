@@ -36,11 +36,33 @@ function reencrypt (pair: KeyringPair, oldPass: string, newPass: string, encrypt
 }
 
 /**
+ * Puts a pair back on `oldPass` after a failed change. The pair that `encrypt` threw on may
+ * or may not have been re-encoded already (ui-keyring re-encodes it in `toJson`, then can
+ * still throw while storing it), so a pair that `newPass` does not open was never changed
+ * and is left as it is.
+ */
+function restore (pair: KeyringPair, oldPass: string, newPass: string, encrypt: EncryptFn): void {
+  try {
+    pair.decodePkcs8(newPass);
+  } catch (_error) {
+    pair.lock();
+
+    return;
+  }
+
+  try {
+    encrypt(pair, oldPass);
+  } finally {
+    pair.lock();
+  }
+}
+
+/**
  * Re-encrypts every pair from `oldPass` to `newPass`.
  *
  * Every pair is checked against `oldPass` before any is changed, so a pair that the old
  * password does not open leaves the whole wallet on the old password. If `encrypt` throws
- * part way, the pairs already changed are restored to `oldPass`.
+ * part way, the pairs already changed, and the one it threw on, are restored to `oldPass`.
  *
  * This does not cover storage: ui-keyring saves accounts without waiting for the write and
  * only logs a failed write, so a write that fails here is never seen and is not rolled back.
@@ -58,15 +80,16 @@ export function changeAllPasswords (pairs: KeyringPair[], oldPass: string, newPa
 
   try {
     for (const pair of pairs) {
-      reencrypt(pair, oldPass, newPass, encrypt);
+      // Recorded before the attempt: `encrypt` can re-encode the pair and then throw.
       changed.push(pair);
+      reencrypt(pair, oldPass, newPass, encrypt);
     }
   } catch (error) {
     console.error('Changing password failed. Rolling back...', error);
 
     for (const pair of changed) {
       try {
-        reencrypt(pair, newPass, oldPass, encrypt);
+        restore(pair, oldPass, newPass, encrypt);
       } catch (rollbackError) {
         console.error('Rolling back password of account', pair.address, 'has failed', rollbackError);
       }

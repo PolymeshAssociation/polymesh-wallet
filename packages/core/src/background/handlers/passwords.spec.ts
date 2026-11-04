@@ -66,6 +66,25 @@ describe('changeAllPasswords', () => {
     expect(changeAllPasswords(pairs, OLD, NEW, failOnThird)).toBe(false);
     expect(pairs.map((pair) => canUnlock(pair, OLD))).toEqual([true, true, true]);
   });
+
+  // ui-keyring's encryptAccount re-encodes the pair in toJson before storing it, so a
+  // storage failure leaves the pair it threw on already on the new password.
+  it('restores the pair that re-encrypting failed on after re-encoding it', () => {
+    const pairs = [storedPair(keyring, OLD), storedPair(keyring, OLD), storedPair(keyring, OLD)];
+    let calls = 0;
+
+    const encodeThenFailOnSecond = (pair: KeyringPair, password: string): void => {
+      encrypt(pair, password);
+
+      if (++calls === 2) {
+        throw new Error('storage failure');
+      }
+    };
+
+    expect(changeAllPasswords(pairs, OLD, NEW, encodeThenFailOnSecond)).toBe(false);
+    expect(pairs.map((pair) => canUnlock(pair, OLD))).toEqual([true, true, true]);
+    expect(pairs.every(({ isLocked }) => isLocked)).toBe(true);
+  });
 });
 
 describe('canUnlock', () => {
