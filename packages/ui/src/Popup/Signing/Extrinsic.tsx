@@ -57,19 +57,28 @@ function Extrinsic ({ onFeeStateChange, onWarningStateChange, payloadExt, reques
       return null;
     }
 
+    let call: Call;
+
     try {
-      const call = chain.registry.createType('Call', request.method);
+      call = chain.registry.createType('Call', request.method);
+    } catch (error) {
+      console.error('Error decoding transaction from metadata', error);
 
-      // The decoder pads a short method and ignores trailing bytes, so the call shown would not be
-      // what is signed. Treat any mismatch as a failed decode.
-      if (call.encodedLength !== hexToU8a(request.method).length) {
-        return null;
-      }
+      return null;
+    }
 
-      const humanArgs = (call.toHuman() as { args: AnyJson }).args;
+    // The signed payload holds the method without a length prefix, so bytes after the call are
+    // read by the chain as the era, nonce, tip and so on that follow it, in place of the ones
+    // shown here. The decoder ignores those bytes and pads a short method. With the right
+    // metadata loaded this is not a chain mismatch, so it must not be blind signed: throwing
+    // hands it to the error boundary in Signing, which only offers Cancel.
+    if (call.encodedLength !== hexToU8a(request.method).length) {
+      throw new Error(`Transaction method is ${hexToU8a(request.method).length} bytes but decodes as a ${call.encodedLength} byte call`);
+    }
 
+    try {
       return {
-        args: humanArgs,
+        args: (call.toHuman() as { args: AnyJson }).args,
         call
       };
     } catch (error) {

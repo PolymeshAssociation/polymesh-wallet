@@ -2272,6 +2272,8 @@ __metadata:
   resolution: "@polymeshassociation/extension-core@workspace:packages/core"
   dependencies:
     "@polkadot/api-augment": "npm:^16.5.6"
+    "@polkadot/extension-base": "npm:0.64.1"
+    "@polkadot/extension-chains": "npm:0.64.1"
     "@polkadot/types-codec": "npm:^16.5.6"
     "@polkadot/ui-keyring": "npm:^3.16.7"
     "@polymeshassociation/polymesh-types": "npm:^7.3.0"

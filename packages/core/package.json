@@ -11,6 +11,8 @@
   "license": "Apache-2",
   "dependencies": {
     "@polkadot/api-augment": "^16.5.6",
+    "@polkadot/extension-base": "0.64.1",
+    "@polkadot/extension-chains": "0.64.1",
     "@polkadot/types-codec": "^16.5.6",
     "@polkadot/ui-keyring": "^3.16.7",
     "@polymeshassociation/polymesh-types": "^7.3.0",
