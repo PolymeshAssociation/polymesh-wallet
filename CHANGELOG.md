@@ -1,3 +1,14 @@
+## [2.7.1](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.7.0...2.7.1) (2026-11-05)
+
+
+### Bug Fixes
+
+* harden signing requests against malformed and spoofed payloads ([d1b4676](https://github.com/PolymeshAssociation/polymesh-wallet/commit/d1b4676ca604b3d10abeafdcbf92314549e61183)), closes [polkadot-js/extension#1624](https://github.com/polkadot-js/extension/issues/1624)
+* make global password change and JSON import all-or-nothing ([bd22ac4](https://github.com/PolymeshAssociation/polymesh-wallet/commit/bd22ac45990ce4d3c0adb2525cfd936694b973e2))
+* open Ledger import in a full tab from a fresh wallet ([55b82c4](https://github.com/PolymeshAssociation/polymesh-wallet/commit/55b82c4b34927fcd87ccb6aa56a0b3a6c72284b1))
+* refuse to sign a transaction whose method has extra or missing bytes ([c9a1eaa](https://github.com/PolymeshAssociation/polymesh-wallet/commit/c9a1eaa3e99fef4211f15d2cad043b00868951fb))
+* roll back the account a failed password change threw on ([4aa150d](https://github.com/PolymeshAssociation/polymesh-wallet/commit/4aa150de4be02006517acff94f07c6994327a055))
+
 # [2.7.0](https://github.com/PolymeshAssociation/polymesh-wallet/compare/2.6.0...2.7.0) (2026-07-03)
 
 
